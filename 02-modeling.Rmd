@@ -1,0 +1,106 @@
+# Statistical modeling
+
+Was Paul truly an oracle? Or was Paul (or his keeper more likely) just really lucky? How do we know? And what really are the chances of predicting the winner of 8 matches correct? These are questions we will focus on now.
+
+In this chapter, we will start defining statistical models.
+
+## Coin flipping: Defining a statistical model
+
+What does it mean for Paul to be an oracle? Sometimes it is easier to answer this question by considering the opposite: When would Paul _not_ be an oracle? If Paul had no way to tell the future, he would be "merely guessing". Purely random guessing between two options can be implemented by flipping a coin. Suppose Paul made his choices by "flipping a mental coin", and choosing the box on the left when the outcome was "heads", and the box on the right when the outcome was "tails". Great, we now have a model of the Data Generating Process!
+
+### Probability
+
+Let's simulate Paul's decisions for the FIFA world cup. Grab a coin and flip it `r nrow(fifa2010)` times. What are the outcomes? When I did this, the outcomes were:
+
+`r set.seed(123456); paste(sample(c("heads","tails"),size=nrow(fifa2010),replace=TRUE),collapse=", ")`
+
+Following the rules, Paul's decisions are then:
+
+`r set.seed(123456); paste(sample(c("left","right"),size=nrow(fifa2010),replace=TRUE),collapse=", ")`
+
+To know whether these guesses are correct or incorrect, we need to know which team was placed in which box. This information is provided in Table \@ref(tab:fifa2010): the first country under `Match` is the box on the left, and the second the box on the right. Using this, our simulation then provides the following:  
+
+```{r, echo=FALSE}
+library(sdamr)
+data(fifa2010)
+set.seed(123456)
+x <- sample(c(1,2),size=nrow(fifa2010),replace=TRUE)
+matchpred <- matrix(unlist(strsplit(fifa2010$Match,"-")),ncol=2,byrow=TRUE)[cbind(1:nrow(fifa2010),x)] == fifa2010$Prediction
+simcor <- matchpred & fifa2010$Outcome == "correct" | !matchpred & fifa2010$Outcome != "correct"
+simcor <- ifelse(simcor,"correct","incorrect")
+```
+
+`r paste(simcor,collapse = ", ")`
+
+Notice how we went through quite a few steps. We used our model to flip a coin, then transformed these coin flips into a variable containing the decisions to open the left or right box, and finally transformed this variable into another variable containing the accuracy of the predictions. 
+
+$$P(\text{correct}) = P(\text{incorrect}) = 0.5$$
+
+$$P(\texttt{prediction}_i = \text{correct}) = P(\texttt{prediction}_i = \text{incorrect}) = 0.5$$
+
+$$P(Y_i = \text{correct}) = P(Y_i = \text{incorrect}) = 0.5$$
+
+which you can translate to words as 
+
+> The probability that observation $i$ of variable $Y$ equals 'correct' is identical to the probability that observation $i$ of variable $Y$ equals 'incorrect', and both equal 0.5.
+
+#### The rules of probability
+
+1. $P(A) \geq 0$
+2. $P(U) = 1$
+3. If $A$ and $B$ are mutually exclusive events, then $p(A \text{ or } B) = p(A) + p(B)$ 
+
+### Distributions
+
+A probability distribution, as the name suggests, defines how probability is distributed over all possible values of a variable. You can think of "all probability" as a pie, and the probability distribution as slicing up the pie in possibly unequal pieces, and each possible value of a variable is given its own slice.  
+
+
+
+According to the coin-flipping model, it does not matter which of Paul's prediction we look at (e.g. whether the first, the second, the last...), to determine . In fact, we could generate the data in the reverse order, or start with the Germany-Austria match and then . In fancy terms, this means that the observations $Y_i$ are _independent and identically distributed_ (IID). 
+
+## Flipping a biased coin: An alternative model
+
+Suppose that Paul did not make his decisions by flipping a mental coin. Perhaps Paul had extensive knowledge of all things football, or perhaps he could see into the future. In that case, we might expect Paul to have a higher rate of correct answers than predicted by our coin flipping model. But perhaps Paul, although an oracle, wasn't so benevolent to his caretakers, or didn't want to spoil the match for them. In that case, we might expect the rate of correct answers to be lower than predicted by the coin flipping model. In both case, we'd expect the probability of a correct answer to be different from .5: $P(\text{correct}) \neq .5$. But whilst not .5, we don't otherwise know the value. We call such an unknown value which determines a probability distribution a _parameter_. We will generally use symbols from the Greek alphabet to denote such parameters. Here, we will use $\theta$ (pronounced as "thee-ta"). Our alternative to the coin flipping model can now be stated as:
+
+$$P(\text{correct}) = \theta$$
+
+Like a _variable_, a parameter such as $\theta$ can take different values. It belongs to a model, and its value can not be observed, only inferred. As our parameter reflects a probability, we know that it can never be lower than 0, and never larger than 1, so we know that:
+
+$$0 \leq \theta \leq 1$$
+
+("zero is less than or equal to $\theta$, which is less than or equal to 1"). Note that the possible values in this range includes $\theta = 0.5$. Our (unbiased) coin flipping model is actually one of the possible versions (a "special case") of our new more general model. Some other ways of saying this are that the coin flipping model is contained within, or nested under, the more general new model.  As we will see, _nested models_ play an important role in statistical modeling. In particular, we will often compare how well a special-case or nested model describes the data compared to a more general model. In such model comparisons, we will usually refer to the special-case model as `MODEL S`, and the more general model as `MODEL G`. It is important to realise that these names (like variables) are containers and we can put any models in these, as long as the one we put into `MODEL S` is a special case of the one we put into `MODEL G`.
+
+```{block2, type="definition"}
+When comparing two nested models, we will refer to these as
+- MODEL S: the special-case model of
+- MODEL G: the more general model
+```
+
+## Estimation
+
+From data produced by The Data Generating Process (TDGP), we can estimate the value of a parameter. Remember, when we collect data in real life, it is obtained from TDGP. Our model, on the other hand, merely provides "a data generating process" (adgp). See what I did there with CAPS and no caps? The TDGP is, as the name should make clear, The Truth. It is how the real world generated the data. Our model, on the other hand, is almost surely an approximation to The Truth. Think about it. Can you summarize Paul's choices by a mathematical formula with a distribution that takes a single parameter ($\theta$)? Probably not when you see Paul swimming in his tank, catching a glimmer of light shining from one of the boxes, than being distracted by the sound of a distant door opening, then going back and sensing a vibration in the water. How would all these serendipitous things not affect Paul's decision at the time? Our model ignores all these factors, and for a reason. Imagine we had to take all sensory input of Paul into account. We would not only have to take into account the actual stimuli present at the time, but also how they affected Paul's neuronal reactions to those. Even if we only take into account the neurons responding directly to external input, the number of possible neuronal excitation patterns quickly become enormous. When you think about it, you'd also want to take into account the activation state of all the neurons at the time just before (and possibly before that), which makes the number of possibilities even more enormous. And what about the chemical consistency of the water at the time? Learning a model of particular decision by a particular person at a particular time seems simply impossible without assuming that some of these things don't really matter to the decision at hand.   
+
+Estimation, in some sense, means an "educated guess". It is a guess, because we cannot be completely sure that we have picked the true value. It is educated because we didn't just pluck the value from thin air. We used information in the data to guide our guess. 
+
+### Good estimators
+
+An __estimator__ is an algorithm which takes data and produces a parameter estimate. Evaluating the quality of the resulting estimates is generally done under the assumption that our model represents the Data Generating Process accurately, i.e. our model is a true representation of the DGP. If our model has unknown parameters, that means that there are values for those parameters such that our model produces data with exactly the same distribution as the DGP. We can call those parameter values the true parameter values. is produces Even if we have access to such a true model, estimates are unlikely to be identical to the  
+
+- Unbiased
+- Efficient
+
+
+## Null-hypothesis significance testing
+
+### Types of error, significance, and power
+
+## Confidence intervals
+
+
+## Exercises
+
+1. Maybe Paul has a preference to go to the right hand container. 
+    a. Suppose Paul always opens the right container first. So $P(\text{Paul chooses right}) = 1.0$. Furthermore, suppose that his keeper has ability to predict the winner of a match, in that he is correct on 60% of his predictions, i.e. $P(\text{keeper is correct}) = .6$. Finally, let's suppose that the keeper wants to help Paul, so he always puts the flag of the country he predicts to win on the right container. What is the probability that Paul's "predictions" are correct? And what if Paul's spatial preference was less marked at $P(\text{Paul chooses right}) = .6$?
+2. 
+  
+  

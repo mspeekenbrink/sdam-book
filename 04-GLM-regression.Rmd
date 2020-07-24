@@ -1,0 +1,7 @@
+# Linear regression: Metric predictors and outcomes (GLM 2)
+
+## Simple regression
+
+## Multiple regression
+
+### Multicollinearity

@@ -1,0 +1,5 @@
+# Moderation and interactions (GLM 3)
+
+## Moderated regression
+
+

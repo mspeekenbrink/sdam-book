@@ -1,0 +1,44 @@
+# A model of a mean: Introduction to the General Linear Model
+
+## The Normal distribution
+
+```{r normal_density_plot, fig.cap="The Normal density function for $\\mu = 0$ and $\\sigma = 1$"}
+y <- seq(-4,4,by=.1)
+plot(y,dnorm(y,mean=0,sd=1),type="l",xlab="y",ylab="f(y)")
+```
+
+$$p(y) = \frac{1}{\sqrt{2 \pi} \sigma} e^{-\frac{(y-\mu)^2}{2\sigma^2}}$$
+That's looks complicated, right? Firstly, let me point out that $\pi$ refers to the mathematical constant pi, i.e. $\pi= 3.141593\ldots$, and $e$ refers to the mathematical constant also known as Euler's number, i.e. $e =  2.718282\ldots$. They are known constants and not parameters. The Normal distribution has two parameters: $\mu$ ("mu"), the mean, and $\sigma$ ("sigma"), the standard deviation. Confusingly, the formula above is not actually the formula for the Normal probability distribution. No, it is the formula of the Normal __density function__. The Normal distribution applies to continuous variables. Technically, you can't assign a probability to a particular value of a continuous variable, you can only assign probabilities to a range of values. This is because a continuous variable has an infinite number of values (even if we restrict ourself to a range). If we gave each unique value a probability of anything larger than 0, the total probability would not be 1, but infinite. If you add up an infinite amount of tiny values, at some point you would reach the sum of 1, and then you'd have to keep on adding more. No matter how large the sum becomes, you would have to keep on going. Adding up an infinite number of values is not light work.
+
+$$P(a \leq Y \leq b) = \int_a^b \frac{1}{\sqrt{2 \pi} \sigma} e^{-\frac{(y-\mu)^2}{2\sigma^2}} d y$$
+If you are unfamiliar with calculus and have never seen an integration sign ($\int$), don't worry, there won't be much more of this. It is a mathematical way of referring to the area under the curve of a function between point $a$ and $b$. A proper density function is such that $P(-\infty \leq Y \leq \infty)$. 
+
+```{r normal_distribution_plot}
+y <- seq(-4,4,by=.1)
+plot(y,dnorm(y,mean=0,sd=1),type="l",xlab="y",ylab="f(y)")
+polygon(c(-2,seq(-2,1,length=100),1),c(0,dnorm(seq(-2,1,length=100)),0),col=rgb(0,0,1,alpha=.5))
+```
+
+## The Central Limit Theorem
+
+The reason that the Normal distribution is used so often (and called "Normal", rather than "Abnormal"), is due to a mathematical fact known as the __Central Limit Theorem__:
+
+> The distribution of the sum of $N$ independent variables approaches the Normal distribution as $N \rightarrow \infty$.
+
+## Parameter estimation
+
+the maximum likelihood estimate of $\mu$ is the sample mean:
+
+$$\hat{\mu}_\text{ML} = \overline{Y}$$
+
+The maximum likelihood estimate of the variance is the sample variance:
+
+$$\hat{\sigma}^2_\text{ML} = S^2$$
+
+## Testing whether the mean has a specific value
+
+This is also called a one-sample t-test. 
+
+## The General Linear Model
+
+$$Y_i = \beta_0 + \beta_1 X_{1i} + \ldots + \beta_K X_{Ki} + \epsilon_i \quad \quad \epsilon_i \sim N(0,\sigma^2)$$

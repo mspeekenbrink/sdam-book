@@ -1,0 +1,72 @@
+# Introduction {#intro}
+
+```{r setup2, echo=FALSE}
+knitr::opts_chunk$set(echo = FALSE,
+                      fig.align = "center")
+library(sdamr)
+```
+
+In this chapter we will introduce 
+
+## Paul the octopus
+
+> We know that all octopus have nine brains so we know he has exceptional powers.  
+> _Oliver Walenciak_, Paul's keeper
+> irish source: https://www.irishcentral.com/sports/paul-the-psychic-octopus-picks-all-the-world-cup-winners-98010019-238038511)
+
+Paul the Octopus (26 January 2008 – 26 October 2010) was born in the Sea Life Centre in Weymouth, England, and subsequently moved to the aquarium chain's centre in Oberhausen, Germany. It was there he found world-wide fame as a caphalopod oracle. 
+
+```{r, fig.cap="Paul the octpopus predicts Spain to win the final of the 2010 FIFA World Cup"}
+knitr::include_graphics("https://static.guim.co.uk/sys-images/Guardian/Pix/pictures/2010/7/15/1279193684789/Paul-the-octopus-005.jpg")
+```
+
+Paul began his career during the 2008 UEFA Euro football tournament. In the lead-up to Germany's international football matches, Paul was presented with two clear plastic boxes, each containing food (a mussel or an oyster). Each container was marked with the flag of a team, one the flag of Germany, and the other the flag of Germany's opponent. The box which Paul opened first (and ate its contents) was deemed to be the predicted winner of the match. Paul predicted Germany to win all of their games, a correct prediction in 4 out of 6 cases. He failed to predict their defeats by Croatia in the group stage, and by Spain in the championship's final.
+
+```{r}
+data(uefa2008)
+knitr::kable(uefa2008,caption = "Paul's predictions for the UEFA Euro 2008",label = "uefa2008")
+```
+
+Two years later, during the 2010 FIFA World football tournament, Paul obtained celebrity status and his divinations were broadcast live on German TV. This time, Paul made correct predictions for all matches in which Germany played, as well as the final between Spain and the Netherlands. 
+
+```{r}
+data(fifa2010)
+knitr::kable(fifa2010,caption = "Paul's predictions for the FIFA World Cup 2010", label = "fifa2010")
+```
+
+Paul's record of 8/8 correct predictions in the 2010 world cup is quite amazing. The common octopus (_Octopus vulgaris_) is indeed quite an intelligent species. 
+
+## Experiments and observations
+
+We can view Paul's divinations as the result of an experiment to test his psychic abilities. Paul's predictions were derived under more or less controlled conditions. The keeper didn't put Paul's favourite food in the box representing the team he'd hope to win, and didn't always place the box representing Germany on one side of the tank. Had he done one of these things, he might have biased the results. 
+
+The paradigmatic example of an experiment is a randomized-control trial.  
+
+Data obtained under less stringent conditions is often referred to as observational data. FOr instance, rather than random assignment, we could let the doctor choose which treatment to give to which patient. The doctor might choose to give the experimental treatment to the more severe cases, and the placebo to the less severe cases. ... Severity is now __confounded__ with the treatment, and any difference in outcome success observed between the experimental and control condition might be due to the treatment or to the initial differences in severity. Or even to a third variable such as age, which is itself related to severity. In this case, we wouldn't be able to tell.   
+
+Causality
+
+## Data
+
+Data are measured or otherwise observed or known values. Paul has provided us with two sets of data. The first contains his predictions for the 2008 UEFA Cup, and the second his predictions for the 2010 FIFA Cup. 
+
+Paul's "predictions" were actually choices from two options. The options were 
+
+### Measurement scales
+
+* A __nominal scale__ allows identifying items as "identical" or "different", but nothing more. Examples of variables on a nominal scale are gender, eye colour, etc. While we can assign numbers to the values (e.g. brown = 1, blue = 2, green = 3), these are arbitrary and can be changed without much consequence (e.g. brown = 21, blue = 7, green = 1). 
+* An __ordinal scale__ allows items to be identified as "smaller", "identical", or "larger", but nothing more. Variables on an ordinal scale can be meaningfully ordered or ranked.
+* An __interval scale__ allows items to be assigned more meaningful numbers. On an interval scale, the differences between numbers can themselves be meaningfully ordered. Temperature is a common example. The difference between 16 and 14 degrees Celcius is smaller than the difference between 19 and 16 degrees Celcius. But we can not say that 30 degrees Celcius is twice as warm as 15 degrees Celcius. This is because an interval scale doesn't have a fixed 0 point. For degrees Celcius, 0 degrees is the point at which water freezes. It is not the point at which there is no temperature. 
+* A __ratio scale__ has everything an interval scale has, with the addition of an absolute 0 point. Weight is a common example. Not only can we say that the difference between 3 and 2 kilograms is smaller than the difference between 10 and 5 kilograms, we can also say that 10 kilograms is twice as heavy as 5 kilograms, and that an item with a weight of 0 kilograms has no weight whatsoever.
+
+Sometimes it is tricky to determine what the measurement scale is. For instance, are "correct" and "incorrect" ordered (correct is better than incorrect) or nominal? Most of the time, a courser distinction is enough, namely whether data is __categorical__ (nominal or ordinal) or __metric__ (interval or ratio).
+
+## Exploring and describing data
+
+## Analysis
+
+Analysing data can mean lots of things. One view I quite like is that data analysis is identifying a signal within noise. 
+
+## Modeling
+
+Statistical modeling can be viewed as describing the _data generating process_. The `DGP`  

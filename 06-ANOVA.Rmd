@@ -1,0 +1,10 @@
+# A model of means (GLM 4: ANOVA)
+
+## Two-sample t-test
+
+## Contrast coding
+
+## Oneway ANOVA
+
+## Factorial ANOVA
+

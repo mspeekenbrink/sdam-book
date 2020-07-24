@@ -1,0 +1,40 @@
+--- 
+title: "Statistics, data analysis, and modeling"
+author: "Maarten Speekenbrink"
+date: "`r Sys.Date()`"
+site: bookdown::bookdown_site
+output: bookdown::gitbook
+documentclass: book
+bibliography: [book.bib, packages.bib]
+biblio-style: apalike
+link-citations: yes
+github-repo: mspeekenbrink/sdam-book
+description: "This is a minimal example of using the bookdown package to write a book. The output format for this example is bookdown::gitbook."
+---
+
+# Preface {-}
+
+```{r setup, echo=FALSE}
+knitr::opts_chunk$set(echo = FALSE, 
+                      fig.align = "center")
+library(sdamr)
+```
+
+This book concerns __statistics__, and more specifically __data analysis__ and __modeling__. It aims to be a self-contained source, requiring little background in mathematics or statistics. That said, it is not necessarily an "easy" book. It contains some mathematical notation and ideas. I do my best to properly explain how to a read and interpret this on both an intuitive and more formal way. I don't do this to torture you. Neither you with little mathematical background, who might have to read some explanations twice or more, nor you with more mathematical background, who might find my intuitive explanations tedious, superfluous, and utterly pointless, not you in the middle, who like me, who will agree with both (but hopefully not simultaneously). What I hope to do is to bring you some sense of the beauty of a formal system that stems from its simplicity and exactness, as well as some of the excitement of grasping it. I'm under no illusion that this is an easy task, for you or for me. But I hope you will try, like I did writing this book.
+
+```{block, type="nonsense"}
+Did you actually read the previous paragraph? Sounds boring, right? No sex, rock, and roll? (some of you may think this is a dig, but hey, I'm not calling anyone out, nor do I want to start a turf-war). Well, maybe it's not something you'd want to read on the beach (that's you, I have actually read mathematical statistics book on a beach holiday in Turkey, and somewhat enjoyed it, so who is the loser now? Well, me obviously, because I probably would have enjoyed ... more, but that's on a holiday).  
+```
+
+We will focus on building models of data in order to evaluate claims about how that data came to be what it is. Statistics is often taught with a "cookbook" approach. The "ingredients" are characteristics of the data (e.g. a variable is metric) and the goal of the analysis (e.g. compare the mean of two groups) and the cookbook provides the recipe (e.g., a two-sample t-test). While straightforward to teach, the limitations of this approach become quickly apparent when you need to analyse data from a less "standard" design. The cookbook can also become something of a straightjacket, when you are forced to change the design of a study in order to allow the subsequent analysis to be covered in the cookbook. Another limitation of the approach is that the different analyses and tests are often treated in isolation, which makes it more difficult to see the often strong connections between the models and statistical principles underlying them. By contrast, the modeling approach adopted here is much more flexible. The aim is to give you the confidence to, when given the ingredients, to design your own recipe. 
+
+## Acknowledgements {-}
+
+This book is inspired by lots of other statistics books I have read over the years. 
+
+```{r}
+# automatically create a bib database for R packages
+knitr::write_bib(c(
+  .packages(), 'bookdown', 'knitr', 'rmarkdown'
+), 'packages.bib')
+```
