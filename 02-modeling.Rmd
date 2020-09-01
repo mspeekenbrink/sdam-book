@@ -2,7 +2,7 @@
 
 Was Paul truly an oracle? Or was Paul (or his keeper more likely) just really lucky? How do we know? And what really are the chances of predicting the winner of 8 matches correct? These are questions we will focus on now.
 
-In this chapter, we will start defining statistical models.
+In this chapter, we will start defining statistical models and using them to make inferences about the Data Generating Process.
 
 ## Coin flipping: Defining a statistical model
 
@@ -14,7 +14,7 @@ Let's simulate Paul's decisions for the FIFA world cup. Grab a coin and flip it 
 
 `r set.seed(123456); paste(sample(c("heads","tails"),size=nrow(fifa2010),replace=TRUE),collapse=", ")`
 
-Following the rules, Paul's decisions are then:
+Remember, Paul would go left upon heads, and right upon tails. Following these rules, Paul's decisions are then:
 
 `r set.seed(123456); paste(sample(c("left","right"),size=nrow(fifa2010),replace=TRUE),collapse=", ")`
 
@@ -32,7 +32,122 @@ simcor <- ifelse(simcor,"correct","incorrect")
 
 `r paste(simcor,collapse = ", ")`
 
-Notice how we went through quite a few steps. We used our model to flip a coin, then transformed these coin flips into a variable containing the decisions to open the left or right box, and finally transformed this variable into another variable containing the accuracy of the predictions. 
+So in our simulation, Paul made `r sum(simcor == "correct")` correct predictions out of `r length(simcor)`. Not quite as good as the real Paul, but still a reasonable performance. 
+
+Notice how we went through quite a few steps. We defined a model of non-psychic-and-guessing Paul as making decisions by flipping a coin, we then simulated Paul's decisions by flipping a coin, then transformed these coin flips into a variable containing the decisions to open the left or right box, and finally transformed this variable into another variable containing the accuracy of the predictions. The first transformation is easy. We could have simply put stickers on the coin relabeling "heads" as "left" and "tails" as "right". The second transformation is not as obvious as it depends on a second variable (whether the winning team was represented by the left or right box). In this case, we could have saved ourselves a bit of work by immediately relabeling our coin flips as "correct" or "incorrect". To see why, we need to know a bit more about how to calculate probabilities.
+
+Let's start at the beginning. For one coin flip, there are two possible outcomes: the coin lands on heads or on tails. The outcome can't be neither (we are assuming the coin is thin enough to not land on its side), nor two heads, or something else. The coin must land on either heads or tails, so there are two outcomes. We call the set of all possible outcomes the __outcome space__, and we'll use a nice curly $\mathcal{S}$ to denote it:
+
+$$\mathcal{S} = \{\text{heads},\text{tails}\}$$
+
+```{definition, outcome-space, name="outcome space", echo=TRUE}
+
+The outcome space is the set of all possible events.
+
+```
+
+Our coin flip is a __random variable__ that takes one of the values in the outcome space. It is traditional to denote random variables with capital Roman letters, and the values with small Roman letters. When we want to make generic statements that apply to different random variables (such as a coin flip, the roll of a die, the outcome of a prediction), we tend to use this notation, and $P(Y=y)$ then means 'The probability that random variable $Y$ has value $y$'. Other times, it may be easier to use more descriptive names. In this book, when we use a name for a variable, we will use a computer font, such as `coin_flip`, for the random variable. So $P(\texttt{coin_flip} = \text{heads})$ means 'The probability that random variable `coin_flip` has the value "heads"'.   
+
+### What is probability?
+
+```{r, echo=FALSE}
+library(ggplot2)
+set.seed(456)
+n_flip <- 2000
+flip <- rbinom(n_flip,size=1,prob=.5)
+dat <- data.frame(flip = 1:n_flip, y = cumsum(flip)/(1:n_flip))
+```
+
+I have just introduced the word "probability" without telling you what it means. You probably have some intuition yourself, for instance that probability is the chance of something happening. You might be surprised to know that even though statisticians can all perform probability calculations comfortably, there is quite some disagreement on what probability means. According to the traditional, __Frequentist view__, probability means _long-run relative frequency_. For instance, the probability of a coin flip landing on heads is defined as the proportion of times a coin lands heads when I flip a coin for a very, very large number of times. Table \@ref(tab:long-run-frequency-table) shows the outcome and relative frequency calculations for 15 coin flips.
+
+```{r long-run-frequency-table, echo=FALSE}
+tab <- dat[1:15,]
+tab$outcome <- c("tails","heads")[flip[1:15] + 1]
+tab$frequency <- cumsum(flip)[1:15]
+tab <- tab[,c(1,3,4,2)]
+colnames(tab) <- c(colnames(tab)[1:2],"frequency heads", "relative frequency heads")
+knitr::kable(tab, caption = "Relative frequency of heads for 1 to 15 flips. The frequency is the number of heads thus far, and the relative frequency the frequency divided by the number of flips.")
+```
+
+Figure \@ref(fig:coin-flip-relative-frequency) shows the relative frequency (i.e. the proportion) of heads after each coin flip, when flipping a coin for `r n_flip` times.  
+
+```{r coin-flip-relative-frequency, echo=FALSE,fig.cap=paste("Relative frequency of heads when flipping a coin for",n_flip,"times")}
+ggplot(dat,aes(x=flip,y=y)) + geom_line() + ylim(c(0,1)) + ylab("relative frequency of heads")
+```
+
+```{r, echo=FALSE}
+set.seed(456)
+n_flip <- 5000
+n_sim <- 5
+dat <- data.frame()
+for(i in 1:n_sim) {
+  dat <- rbind(dat,
+               data.frame(simulation=i,flip = 1:n_flip, y = cumsum(rbinom(n_flip,size=1,prob=.5))/(1:n_flip))
+  )
+}
+```
+
+As you can see, the relative frequency fluctuates quite a bit, but becomes more stable with more flips. But even after `r n_flip` flips, it is not equal to 0.5. Flipping a coin can be viewed as an experiment, that we can repeat. Figure \@ref(fig:coin-flip-relative-frequency-multiple) shows the results of flipping a coin for `r n_flip` times when repeating the experiment for `r n_sim` times. As you can see, the results of our experiments (the relative frequencies) are different each time. The differences are quite marked for a small number of flips, but become more alike after flipping the coin more times. This illustrates something known as __The Law of Large Numbers__, to which we will come back soon. For now, let's focus on a different matter. If probability is a relative frequency, then which one is it? Each repetition of the experiment, as well as each number of throws, would give us a different answer! 
+
+```{r coin-flip-relative-frequency-multiple, echo=FALSE,fig.cap=paste("Relative frequency of heads when flipping a coin",n_sim,"times for",n_flip,"times")}
+ggplot(dat,aes(x=flip,y=y,colour=factor(simulation))) + geom_line() + ylim(c(0,1)) + ylab("relative frequency of heads") + theme(legend.position="none")
+```
+
+To give a single answer, a "long-run relative frequency" must be the relative frequency when flipping the coin for an infinite number of times. That may seem disappointing. A nice aspect of the Frequentist View is that probabilities are something of the real world, but surely, we can't flip a coin for an infinite number of times in the real world. That is true, but to understand what probability is, we don't necessarily have to perform such infinite experiments. When we have to estimate the probability from a given (non-infinite) number of coin flips, we do have to worry about these issues. This, indeed, is what statistics is about: dealing with sample variability to estimate and infer unknown things. But for defining what a probability is, we can use mathematics to show that the long run relative frequency converges to a single number as the number of coin flips gets closer and closer to infinity. Which, in other words, means there is a single long-run relative frequency, and hence the probability is mathematically well-defined.     
+
+There is an alternative to the Frequentist View, called the __Bayesian view__ or __Subjective view__, according to which probability means a _rational degree of belief_. This, in a sense, takes probability out of the real world, and into our minds. By doing so, it allows statements of probabilities for single events, such as what is the probability that it will rain tomorrow. In the Frequentist View, it either rains tomorrow or not. We can ask what the probability is that it rains on the 25th of July, by considering the long-run relative frequency of rain on every 25th of July in the past, present, and future. But there is no long-run relative frequency for the 25th of July 2020.
+
+#### The rules of probability
+
+<!-- https://bolt.mph.ufl.edu/6050-6052/unit-3/module-6/ -->
+<!-- https://bolt.mph.ufl.edu/6050-6052/unit-3/module-7/ -->
+
+Although the interpretation of probability is debated, the mathematical rules of calculating probabilities are generally agreed upon. Suppose we have an outcome space $\mathcal{S} = \{E_1, E_2, E_3, \ldots\}$. That is, the outcome space consists of (abstract) events $E_1$, $E_2$, $E_3$, etc. To refer to any of these, we can use the notation $E_i$, where $i$ can equal 1, 2, 3, etc. 
+
+1. $0 \leq P(E_i) \leq 1$. The probability of any event $E_i$ is greater or equal to 0 and smaller than or equal to 1. This rule requires little further explanation. Probabilities are chosen to lie on a scale between 0 and 1.
+2. $P(E_1 \text{ or } E_2 \text{ or } E_3 \text{ or } \ldots) = P(\mathcal{S}) = 1$. In words, this means that the probability of at least one event in the outcome space occurring is 1. 
+3. If $E_i$ and $E_j$ are _mutually exclusive_ events (if one of them occurs, the other cannot occur), then $P(E_i \text{ or } E_j) = P(E_i) + P(E_j)$. This is also called the __sum rule__.
+4. $P(\neg E_i) = 1 - P(E_i)$. Here, $\neg$ means "not", so the probability of "not $E_i$" is 1 minus the probability of $E_i$ occurring. This is also called the __complement rule__.
+5. For any events $E_i$ and $E_j$, $P(E_i \text{ or } E_j) = P(E_i) + P(E_j) - P(E_i \text{ and } E_j)$. This rule holds whether the events are mutually exclusive or not, and can be called the __general sum rule__.
+
+Now, all these rules seem a little cumbersome when we are dealing with a simple coin flip. So let's consider a slightly more complex situation: betting on the outcome a roll of a six-sided die. In this betting game, like in roulette, you are allowed to bet on many things, such as the exact number, but also whether the number is odd or even, whether the number is greater than 3, whether the number is greater smaller than 1, etc. All these things are events in the outcome space:
+
+$$\mathcal{S} = \{1, 2, 3, 4, 5, 6, \text{even}, \text{odd}, >3, < 1, \geq 4, 1 \text{ or } 3, \ldots \}$$
+
+The first six events in this outcome space (the numbers 1 to 6) are called __elementary outcomes__: they are mutually exclusive (a single roll cannot result in both a 1 and a 3), and one of them _must_ occur. So we know that $P(1) + P(2) + P(3) + P(4) + P(5) + P(6) = 1$. But wait, there are more events in the outcome space, and $P(\mathcal{S}) = 1$, and these six events are only a small part of the outcome space, so does that imply that they all have probability 0? No! That is because not all events in the outcome space are mutually exclusive. For instance, if the outcome is 5, then the outcome is also odd, and it is also $>3$, $\geq 4$, etc. As you might have noticed, the other events are actually themselves sets of the elementary outcomes.  For instance,  $\text{odd} = \{1, 3, 5\}$, $\text{even} = \{2, 4, 6\}$, and $> 3 = \{4, 5, 6 \}$. Figure \@ref(fig:euler-diagram-betting-die) depicts the relations between these events, as well as the elementary outcomes.
+
+```{r euler-diagram-betting-die,fig.cap="A diagram depicting the relations between 9 events in the outcome space of the die betting game"}
+library(ggplot2)
+library(ggforce)
+library(viridis)
+
+ggplot() + theme_void() + 
+  geom_ellipse(aes(x0 = 3, y0 = 2, a = 3, b = .98, angle = 0), fill = viridis(3)[1], alpha = .4) + geom_text(aes(x=2,y=2.7,label="odd")) + 
+  geom_ellipse(aes(x0 = 3, y0 = 0, a = 3, b = .98, angle = 0), fill = viridis(3)[2], alpha = .4) + geom_text(aes(x=2,y=.7,label="even")) + 
+  geom_ellipse(aes(x0 = 4.7, y0 = .8, a = 2.8, b = 1.4, angle = pi/4.5), fill = viridis(3)[3], alpha=.4) + geom_text(aes(x=6,y=1,label=">3")) +
+  geom_circle(aes(x0=1,y0=2,r=.5)) + geom_text(aes(x=1,y=2, label="1")) +
+  geom_circle(aes(x0=1,y0=0,r=.5)) + geom_text(aes(x=1,y=0, label="2")) +
+  geom_circle(aes(x0=3,y0=2,r=.5)) + geom_text(aes(x=3,y=2, label="3")) +
+  geom_circle(aes(x0=3,y0=0,r=.5)) + geom_text(aes(x=3,y=0, label="4")) +
+  geom_circle(aes(x0=5,y0=2,r=.5)) + geom_text(aes(x=5,y=2, label="5")) +
+  geom_circle(aes(x0=5,y0=0,r=.5)) + geom_text(aes(x=5,y=0, label="6"))
+
+```
+
+We just really need one more rule and then we're done. This rule is to compute the probability of a conjunction of events (the probability of both events occurring). To be able to state this rule, we first need to consider the concept of __conditional probability__. In words, such a probability refers to the probability of one event _given that another event occurred_. For instance, we can consider the probability of the event "greater than 3" given that the event "odd" occurred (i.e., the probability that the outcome was greater than 3 given that the outcome was an odd number). If we know that the outcome was odd (i.e. 1, 3, or 5), we can rule out all occurrences where the outcome was even (i.e. 2, 4, or 6). To now consider the probability that the outcome was greater than 3, we only need the probability of an outcome greater than 3 within the set of odd numbers. If we are sure that the outcome was odd, we can set $P(\text{odd}|\text{odd}) = 1$. There are three outcomes, each with equal probability, so $P(1|\text{odd}) = P(3|\text{odd}) = P(5|\text{odd}) = \frac{1}{3}$. In the set of odd outcomes, there is only one number greater than 3, namely 5. That means that the conditional probability $P(>3|\text{odd}) = P(5|\text{odd}) = \frac{1}{3}$. Conversely, we can also work out the conditional probability $P(\leq 3| = P(5|\text{odd})) = P(1|\text{odd}) + P(3|\text{odd}) = \frac{2}{3}$. In a sense, a conditional probability is just looking at the relative occurrence of one event $E_i$ (e.g., the event "$>3$") within the set of outcomes defined by another event (e.g., the event "odd"). 
+
+$$P(E_i|E_j) = \frac{P(E_i \text{ and } E_j) }{P(E_j)}$$
+
+5. $P(E_i \text{ and } E_j) = P(E_i) \times P(E_j | E_i)$. __Multiplication rule__
+6. For two __independent__ events $E_i$ and $E_j$, $P(E_i \text{ and } E_j) = P(E_i) \times P(E_j)$
+
+Kolmogorov, a rather brilliant mathematician, showed that you only need rules 1, 2 and 3; all the other rules follow from the first three. In mathematical terms, rules 1, 2, and 3 are _axioms_, statements which we assume are true without being able to prove them, while the remaining rules are _theorems_, statements which follow from the axioms and can be proven to be true.
+
+#### Back to Paul
+
+With a balanced coin (and a not too cunning flipper), the probability of the coin landing heads should equal the probability of the coin landing tails. In mathematical notation, we can state this as
+
+$$P(\text{heads}) = P(\text{tails})$$
 
 $$P(\text{correct}) = P(\text{incorrect}) = 0.5$$
 
@@ -40,15 +155,9 @@ $$P(\texttt{prediction}_i = \text{correct}) = P(\texttt{prediction}_i = \text{in
 
 $$P(Y_i = \text{correct}) = P(Y_i = \text{incorrect}) = 0.5$$
 
-which you can translate to words as 
+which you can translate into words as 
 
 > The probability that observation $i$ of variable $Y$ equals 'correct' is identical to the probability that observation $i$ of variable $Y$ equals 'incorrect', and both equal 0.5.
-
-#### The rules of probability
-
-1. $P(A) \geq 0$
-2. $P(U) = 1$
-3. If $A$ and $B$ are mutually exclusive events, then $p(A \text{ or } B) = p(A) + p(B)$ 
 
 ### Distributions
 
@@ -82,20 +191,28 @@ From data produced by The Data Generating Process (TDGP), we can estimate the va
 
 Estimation, in some sense, means an "educated guess". It is a guess, because we cannot be completely sure that we have picked the true value. It is educated because we didn't just pluck the value from thin air. We used information in the data to guide our guess. 
 
-### Good estimators
+### Properties of good estimators
 
-An __estimator__ is an algorithm which takes data and produces a parameter estimate. Evaluating the quality of the resulting estimates is generally done under the assumption that our model represents the Data Generating Process accurately, i.e. our model is a true representation of the DGP. If our model has unknown parameters, that means that there are values for those parameters such that our model produces data with exactly the same distribution as the DGP. We can call those parameter values the true parameter values. is produces Even if we have access to such a true model, estimates are unlikely to be identical to the  
+An __estimator__ is an algorithm which takes data as input and produces a parameter estimate as output. Evaluating the quality of the resulting estimates is generally done under the assumption that our model represents the Data Generating Process accurately, i.e. our model is a true representation of the DGP. If our model has unknown parameters, that means that there are values for those parameters such that our model produces data with exactly the same distribution as the DGP. We can call those parameter values the true parameter values. Now, even if we have access to such a true model, estimates of its parameters from a given data set are unlikely to be identical to the true parameters. The main reason is that any actual data set will not cover all of the values that are possible from the Data Generating Process, and/or not in their expected proportions. But the fact is that in practice we have to rely on such limited data sets; we never have access to all the data that could be produced by the Data Generating Process. So we will have to work with estimates that are different from the true parameters. One thing we can do is quantify how much our estimates are likely to deviate from the true parameters. This, in a nutshell, is what statistical estimation theory is all about.
 
-- Unbiased
-- Efficient
+#### Unbiasedness
+
+#### Consistency
+
+#### Efficiency
+
+A good estimator should become more precise as we have more data. The larger the number of observations from the Data Generating Process, the closer the resulting estimates should be to the true parameters. 
 
 
 ## Null-hypothesis significance testing
 
-### Types of error, significance, and power
+### Decisions and types of error
+
+### Significance and power
 
 ## Confidence intervals
 
+## Summary
 
 ## Exercises
 

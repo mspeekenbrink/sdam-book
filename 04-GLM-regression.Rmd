@@ -1,7 +1,37 @@
 # Linear regression: Metric predictors and outcomes (GLM 2)
 
-## Simple regression
+## Simple (bivariate) regression
+
+### The model
+
+\begin{equation}
+Y_i = \beta_0 + \beta_1 X_{i} + \epsilon_i
+\end{equation}
+
+* The __intercept__ $\beta_0$ is 
+* The __slope__ $\beta_1$ is
+* The __error__ or __residual__ $\epsilon_i$
+
+### Estimation
+
+\begin{equation} 
+\hat{\beta}_0 = \overline{Y} - \hat{\beta}_1 \overline{X}
+\end{equation}
+
+\begin{equation} 
+\hat{\beta}_1 = 
+\end{equation}
+
+### Inference
 
 ## Multiple regression
 
+### The model
+
+### Estimation
+
+### Inference
+
 ### Multicollinearity
+
+### Polynomial regression
