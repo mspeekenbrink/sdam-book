@@ -6,7 +6,7 @@ knitr::opts_chunk$set(echo = FALSE,
 library(sdamr)
 ```
 
-In this chapter we will introduce some foundational concepts. We will also introduce you to Paul the octopus.
+In this chapter we will introduce some fundamental concepts, such as experiments, data, analysis, and modelling. We will also introduce you to Paul the octopus.
 
 ## Paul the octopus
 
@@ -40,17 +40,18 @@ Paul's record of 8/8 correct predictions in the 2010 world cup is quite amazing.
 
 We can view Paul's divinations as the result of an experiment to test his psychic abilities. Paul's predictions were derived under more or less controlled conditions: The keeper didn't put Paul's favourite food in the box representing the team he'd hope to win, and didn't always place the box representing Germany on one side of the tank. Had he done one of these things, he might have biased the results. 
 
-A paradigmatic example of an experiment is a randomized-control trial, as common in studies assessing the effectiveness of medication or other therapeutic interventions. In such experiments, a sample of participants is taken from a population of interest, and each participant is randomly assigned to either an experimental condition or control condition. For example, participants in the experimental condition might be given an experimental drug, while participants in the control condition receive a placebo. Ideally, this is done in a "double-blind" setting, where neither the participant nor the person delivering the treatment or otherwise interacting with the participant knows which condition the participant is assigned to. Randomization is key here: By letting chance determine who gets which treatment, characteristics of the participants (e.g. age, sex, severity of symptoms, __etc__) will not be tied to the treatment they get. As such, it will be reasonable to assume that the experimental and control condition differ only in their treatment, such that any differences in outcome can be attributed to the treatment, and not to other differences between the groups of participants.
-
-Data obtained under less stringent conditions is often referred to as observational data. For instance, rather than random assignment, we could let the doctor choose which treatment to give to which patient. The doctor might choose to give the experimental drug to the more severe cases, and the placebo to the less severe cases. Severity is now __confounded__ with the treatment, and any difference in outcome success observed between the experimental and control condition might be due to the treatment, or to the initial differences in severity. Or even to a third variable such as age, which is itself related to severity. In this case, we wouldn't be able to tell, and hence the conclusions we can draw about the effects of the treatment and much less straightforward. We are not completely helpless though. Using statistics, we can attempt to control for pre-existing differences. As we will see in due course, we can attempt to build a model which includes both treatment and disease severity as predictors of outcome. In doing so, we can attempt to estimate the unique effect of treatment on outcome. By considering only those differences in outcome that cannot be attributed to severity, we can still say something meaningful about treatment effects.  
+A paradigmatic example of an experiment is a randomized-control trial, as common in studies assessing the effectiveness of medication or other therapeutic interventions. In such experiments, a sample of participants is taken from a population of interest, and each participant is randomly assigned to either an experimental condition or control condition. For example, participants in the experimental condition might be given an experimental drug, while participants in the control condition receive a placebo. Ideally, this is done in a "double-blind" setting, where neither the participant nor the person delivering the treatment or otherwise interacting with the participant knows which condition the participant is assigned to. Randomization is key here: By letting chance determine who gets which treatment, characteristics of the participants (e.g. age, sex, severity of symptoms, __etc__) will not be tied to the treatment they get. As such, it will be reasonable to assume that the experimental and control condition differ only in their treatment, such that any differences in outcome can be attributed to the treatment, and not to other differences between the groups of participants. 
 
 Causality
 
+Data obtained under less stringent conditions is often referred to as observational data. For instance, rather than random assignment, we could let the doctor choose which treatment to give to which patient. The doctor might choose to give the experimental drug to the more severe cases, and the placebo to the less severe cases. Severity is now __confounded__ with the treatment, and any difference in outcome success observed between the experimental and control condition might be due to the treatment, or to the initial differences in severity. Or even to a third variable such as age, which is itself related to severity. In this case, we wouldn't be able to tell, and hence the conclusions we can draw about the effects of the treatment and much less straightforward. We are not completely helpless though. Using statistics, we can attempt to control for pre-existing differences. As we will see in due course, we can attempt to build a model which includes both treatment and disease severity as predictors of outcome. In doing so, we can attempt to estimate the unique effect of treatment on outcome. By considering only those differences in outcome that cannot be attributed to severity, we can still say something meaningful about treatment effects.  
+
 ## Data
 
-__Data__ are a collection of measured or otherwise observed or known values of variables. Paul has provided us with two sets of data. The first contains his predictions for the 2008 UEFA Cup, and the second his predictions for the 2010 FIFA Cup. 
+__Data__ are a collection of measured or otherwise observed or known values of __variables__. A variable is 
+In a statistical model, a __dependent variable__ is a variable of interest, a variable which we aim to predict, explain, or describe. An __independent variable__ is a variable which we use to help predict, explain, or describe the dependent variable. For instance, in the medical example above, the dependent variable would be the severity of symptoms, while independent variables would be the treatment (medication or placebo), and potentially other factors such as patients' age, sex, etc. Whether a variable is a dependent or independent variable may differ from model to model. As such, it is an aspect of the analysis, and not so much of the design of a study. 
 
-Paul's "predictions" were of course not directly predictions who was going to win each game. Paul made a choice which of two containers to open first. 
+Paul has provided us with two sets of data. The first contains his predictions for the 2008 UEFA Cup, and the second his predictions for the 2010 FIFA Cup. The dependent variable in both sets is the accuracy of Paul's predictions. Paul's "predictions" were of course not directly predictions who was going to win each game. Paul made a choice which of two containers to open first. But we're not really interested in whether Paul opened the left or right container in his tank, or whether Paul chose the container with the Spanish flag or the container with the Dutch flag. What we are interested in is whether the first container to be opened contained the flag of the team that would win the match played that day. If it did, Paul made a correct prediction, if not, Paul made an incorrect prediction. The data then contains information about what we deem relevant to our purposes. In a sense, looking just at the accuracy of Paul's predictions, we have already abstracted quite a bit from the experiment. We ignore whether Paul went left or right first, how long it took him to open the first container, ... These are all aspects of Paul's behaviour which we could have focused on, and hence could be variables in our data. These variables have different characteristics. For instance, accuracy (correct or incorrect) and direction (left or right container) both have only two possible values, while the duration until opening the first container has many possible values. Variables with a finite (limited) number of values are called discrete, while variables with an infinite (unlimited) number of values are called continuous.  
 
 ### Measurement scales
 
@@ -70,6 +71,22 @@ The __Data Generating Process__ (or DGP for short) is a concept we will use repe
 ## Exploring and describing data
 
 Once you have collected data, you may feel the urge to immediately apply some statistical test to it. But really, a first step should be to explore the data. Statistical tests are designed to confirm or reject hypotheses, and part of __confirmatory data analysis__. They are a very important part of scientific research, but they always rely on assumptions about the data generating process. Before conducting these analyses, it is crucial to assess whether these assumptions are reasonable, and this is where __exploratory data analysis__ can help. @Tukey1977EDA, a major proponent of exploratory data analysis, also points out that exploratory data analysis can also suggest new hypotheses about the causes of observed phenomena, and with that provide a basis for further experimentation and data collection.
+
+### Summary statistics
+
+#### Measures of location
+
+* Mean
+* Median
+* Mode
+
+#### Measures of spread
+
+* Inter-quartile range
+* Variance
+* Standard deviation
+
+### Visual exploration
 
 Exploring a data set is generally done visually, using various plots such as boxplots, histograms, scatterplots, etc. It is also useful to obtain some summary statistics.  such as averages, and measures of the spread of values, show minimum and maximum val
 

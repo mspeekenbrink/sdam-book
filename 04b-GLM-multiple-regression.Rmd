@@ -1,0 +1,13 @@
+# Multiple regression
+
+## The model
+
+## Estimation
+
+## Inference
+
+## Multicollinearity
+
+## Polynomial regression
+
+## Summary

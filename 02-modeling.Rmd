@@ -8,7 +8,7 @@ In this chapter, we will start defining statistical models and using them to mak
 
 What does it mean for Paul to be an oracle? Sometimes it is easier to answer this question by considering the opposite: When would Paul _not_ be an oracle? If Paul had no way to tell the future, he would be "merely guessing". Purely random guessing between two options can be implemented by flipping a coin. Suppose Paul made his choices by "flipping a mental coin", and choosing the box on the left when the outcome was "heads", and the box on the right when the outcome was "tails". Great, we now have a model of the Data Generating Process!
 
-### Probability
+## Probability
 
 Let's simulate Paul's decisions for the FIFA world cup. Grab a coin and flip it `r nrow(fifa2010)` times. What are the outcomes? When I did this, the outcomes were:
 
@@ -114,7 +114,7 @@ Now, all these rules seem a little cumbersome when we are dealing with a simple 
 
 $$\mathcal{S} = \{1, 2, 3, 4, 5, 6, \text{even}, \text{odd}, >3, < 1, \geq 4, 1 \text{ or } 3, \ldots \}$$
 
-The first six events in this outcome space (the numbers 1 to 6) are called __elementary outcomes__: they are mutually exclusive (a single roll cannot result in both a 1 and a 3), and one of them _must_ occur. So we know that $P(1) + P(2) + P(3) + P(4) + P(5) + P(6) = 1$. But wait, there are more events in the outcome space, and $P(\mathcal{S}) = 1$, and these six events are only a small part of the outcome space, so does that imply that they all have probability 0? No! That is because not all events in the outcome space are mutually exclusive. For instance, if the outcome is 5, then the outcome is also odd, and it is also $>3$, $\geq 4$, etc. As you might have noticed, the other events are actually themselves sets of the elementary outcomes.  For instance,  $\text{odd} = \{1, 3, 5\}$, $\text{even} = \{2, 4, 6\}$, and $> 3 = \{4, 5, 6 \}$. Figure \@ref(fig:euler-diagram-betting-die) depicts the relations between these events, as well as the elementary outcomes.
+The first six events in this outcome space (the numbers 1 to 6) are called __elementary events__: they are mutually exclusive (a single roll cannot result in both a 1 and a 3), and one of them _must_ occur. So we know that $P(1) + P(2) + P(3) + P(4) + P(5) + P(6) = 1$. But wait, there are more events in the outcome space, and $P(\mathcal{S}) = 1$, and these six events are only a small part of the outcome space, so does that imply that they all have probability 0? No! That is because not all events in the outcome space are mutually exclusive. For instance, if the outcome is 5, then the outcome is also odd, and it is also $>3$, $\geq 4$, etc. As you might have noticed, the other events are actually themselves sets of the elementary events.  For instance,  $\text{odd} = \{1, 3, 5\}$, $\text{even} = \{2, 4, 6\}$, and $> 3 = \{4, 5, 6 \}$. Figure \@ref(fig:euler-diagram-betting-die) depicts the relations between these events, as well as the elementary events.
 
 ```{r euler-diagram-betting-die,fig.cap="A diagram depicting the relations between 9 events in the outcome space of the die betting game"}
 library(ggplot2)
@@ -143,11 +143,14 @@ $$P(E_i|E_j) = \frac{P(E_i \text{ and } E_j) }{P(E_j)}$$
 
 Kolmogorov, a rather brilliant mathematician, showed that you only need rules 1, 2 and 3; all the other rules follow from the first three. In mathematical terms, rules 1, 2, and 3 are _axioms_, statements which we assume are true without being able to prove them, while the remaining rules are _theorems_, statements which follow from the axioms and can be proven to be true.
 
-#### Back to Paul
+#### A model of flipping an unbiased coin
 
 With a balanced coin (and a not too cunning flipper), the probability of the coin landing heads should equal the probability of the coin landing tails. In mathematical notation, we can state this as
 
 $$P(\text{heads}) = P(\text{tails})$$
+Furthermore, 
+
+$$P(\text{heads} \text{ or } \text{tails}) = 1$$
 
 $$P(\text{correct}) = P(\text{incorrect}) = 0.5$$
 
