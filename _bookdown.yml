@@ -1,0 +1,12 @@
+# book_filename: "sdam-book.Rmd"
+delete_merged_file: true
+language:
+  ui:
+    chapter_name: "Chapter "
+# before_chapter_script: ["script1.R", "script2.R"]
+# after_chapter_script: "script3.R"
+view: https://github.com/mspeekenbrink/sdam-book/blob/master/%s
+edit: https://github.com/mspeekenbrink/sdam-book/edit/master/%s
+#output_dir: "book-output"
+clean: ["sdam.bbl", "R-packages.bib"]
+rmd_files: ["index.Rmd", "01-intro.Rmd", "02-modeling.Rmd", "03-GLM-simple.Rmd", "04-GLM-regression.Rmd", "04b-GLM-multiple-regression.Rmd", "05-GLM-moderation.Rmd", "06-ANOVA.Rmd", "07-ANCOVA.Rmd", "08-RM-ANOVA.Rmd", "09-LMER.Rmd", "999-references.Rmd"]
