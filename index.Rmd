@@ -47,7 +47,22 @@ We will focus on building models of data in order to evaluate claims about how t
 
 ## Acknowledgements {-}
 
-This book is inspired by lots of other statistics books I have read over the years. Some books deserve special mention. "Data analysis: A model comparison approach" [@judd2011data] is a book I have used for many years as required reading for the MSc level statistics course. It is extremely clear in its coverage of the General Linear Model, and concistent in its use of the model comparison approach we adopt here as well. "Doing Bayesian data analysis" [@kruschke2014doing] gave me the idea tp cover the basics of statistical modeling with a simple binomial example. 
+This book is inspired by lots of other statistics books I have read over the years. Some books deserve special mention. "Data analysis: A model comparison approach" [@judd2011data] is a book I have used for many years as required reading for the MSc level statistics course. It is extremely clear in its coverage of the General Linear Model, and concistent in its use of the model comparison approach we adopt here as well. "Doing Bayesian data analysis" [@kruschke2014doing] gave me the idea tp cover the basics of statistical modeling with a simple binomial example.
+
+## Notation {-}
+
+In a book with mathematics, notation is important. 
+
+```{r greek-symbol-table}
+greek_symbols <- c("alpha","beta","gamma","delta","epsilon","zeta","eta","theta","iota","kappa","lambda","mu","nu","xi","omicron","pi","rho","sigma","tau","upsilon","phi","chi","psi","omega")
+knitr::kable(
+  data.frame(
+    symbol = paste0("$\\",greek_symbols,"$"),
+    name = greek_symbols,
+    usage = c("significance level","parameter (slope or intercept) in the General Linear Model","","error","","","a parameter in general","","","","mean","","","","","correlation","standard deviation","","","","","Chi-squared distribution","","")
+  )
+)
+```
 
 ```{r}
 # automatically create a bib database for R packages

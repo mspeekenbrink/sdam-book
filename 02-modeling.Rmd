@@ -145,7 +145,7 @@ Kolmogorov, a rather brilliant mathematician, showed that you only need rules 1,
 
 #### A model of flipping an unbiased coin
 
-With a balanced coin (and a not too cunning flipper), the probability of the coin landing heads should equal the probability of the coin landing tails. In mathematical notation, we can state this as
+Now that we know more about probability, let's get back to our model for Paul. With a balanced coin (and a not too cunning flipper), the probability of the coin landing heads should equal the probability of the coin landing tails. In mathematical notation, we can state this as
 
 $$P(\text{heads}) = P(\text{tails})$$
 Furthermore, 

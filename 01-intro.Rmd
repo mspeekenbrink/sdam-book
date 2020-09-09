@@ -34,15 +34,15 @@ data(fifa2010)
 knitr::kable(fifa2010,caption = "Paul's predictions for the FIFA World Cup 2010")
 ```
 
-Paul's record of 8/8 correct predictions in the 2010 world cup is quite amazing. The common octopus (_Octopus vulgaris_) is indeed quite an intelligent species. But was Paul really psychic? Could he foresee the future?
+Paul's record of 8/8 correct predictions in the 2010 world cup is quite amazing. The common octopus (_Octopus vulgaris_) is indeed quite an intelligent species. But was Paul really psychic? Could he really foresee the future?
 
 ## Experiments and observations
 
-We can view Paul's divinations as the result of an experiment to test his psychic abilities. Paul's predictions were derived under more or less controlled conditions: The keeper didn't put Paul's favourite food in the box representing the team he'd hope to win, and didn't always place the box representing Germany on one side of the tank. Had he done one of these things, he might have biased the results. 
+We can view Paul's divinations as the result of an experiment to test his psychic abilities. Paul's predictions were derived under more or less controlled conditions: The keeper didn't put Paul's favourite food in the box representing the team he'd hope to win, and didn't always place the box representing Germany on one side of the tank. Had he done one or more of these things, he might have biased the results. 
 
-A paradigmatic example of an experiment is a randomized-control trial, as common in studies assessing the effectiveness of medication or other therapeutic interventions. In such experiments, a sample of participants is taken from a population of interest, and each participant is randomly assigned to either an experimental condition or control condition. For example, participants in the experimental condition might be given an experimental drug, while participants in the control condition receive a placebo. Ideally, this is done in a "double-blind" setting, where neither the participant nor the person delivering the treatment or otherwise interacting with the participant knows which condition the participant is assigned to. Randomization is key here: By letting chance determine who gets which treatment, characteristics of the participants (e.g. age, sex, severity of symptoms, __etc__) will not be tied to the treatment they get. As such, it will be reasonable to assume that the experimental and control condition differ only in their treatment, such that any differences in outcome can be attributed to the treatment, and not to other differences between the groups of participants. 
+A paradigmatic example of an experiment is a randomized-control trial, as common in studies assessing the effectiveness of medication or other therapeutic interventions. In such experiments, a sample of participants is taken from a population of interest, and each participant is randomly assigned to either an experimental condition or control condition. For example, participants in the experimental condition might be given an experimental drug, while participants in the control condition receive a placebo. Ideally, this is done in a "double-blind" setting, where neither the participant nor the person delivering the treatment or otherwise interacting with the participant knows which condition the participant is assigned to. Randomization is key here: By letting chance determine who gets which treatment, characteristics of the participants (e.g. age, sex, severity of symptoms, _etc_) will not be tied to the treatment they get. As such, it will be reasonable to assume that the experimental and control condition differ only in their treatment, such that any differences in outcome can be attributed to the treatment, and not to other differences between the groups of participants. 
 
-Causality
+<!-- Causality -->
 
 Data obtained under less stringent conditions is often referred to as observational data. For instance, rather than random assignment, we could let the doctor choose which treatment to give to which patient. The doctor might choose to give the experimental drug to the more severe cases, and the placebo to the less severe cases. Severity is now __confounded__ with the treatment, and any difference in outcome success observed between the experimental and control condition might be due to the treatment, or to the initial differences in severity. Or even to a third variable such as age, which is itself related to severity. In this case, we wouldn't be able to tell, and hence the conclusions we can draw about the effects of the treatment and much less straightforward. We are not completely helpless though. Using statistics, we can attempt to control for pre-existing differences. As we will see in due course, we can attempt to build a model which includes both treatment and disease severity as predictors of outcome. In doing so, we can attempt to estimate the unique effect of treatment on outcome. By considering only those differences in outcome that cannot be attributed to severity, we can still say something meaningful about treatment effects.  
 
@@ -64,36 +64,50 @@ Sometimes it is tricky to determine what the measurement scale is. For instance,
 
 ### The Data Generating Process
 
-In addition to considering the type or measurement scale of the data, you will generally also need to consider the process that led to the data. As the section on experimental vs observational data indicated, the way the data were obtained can affect and limit the inferences that can be made. It is also important to consider the 
+In addition to considering the type or measurement scale of the data, you will generally also need to consider the process that in the end led to the data at hand. This process can be called the __Data Generating Process__. 
 
-The __Data Generating Process__ (or DGP for short) is a concept we will use repeatedly throughout this book, so it's worth spending a little time on what it means. 
+As the section on experimental vs observational data indicated, the way the data were obtained can affect and limit the inferences that can be made. It is also important to consider to which group or population our data speaks. This is generally related to how we have selected the subjects of a study. For instance, in the case of Paul, we have data from a single octopus, and we are mostly interested in assessing whether he was psychic. We are not interested in Paul's psychic abilities for just those games for which he made predictions though. If Paul indeed had psychic abilities (but let's restrict that to the context of football games), we would expect him to make accurate predictions for other games as well. So here, we would like to generalize beyond the data, from the games Paul actually made predictions for to all games in the UEFA 2008 and FIFA 2010 cups, or even to all international football matches. We then need to consider how __representative__ the data is for the more general group we want to make claims about. As Paul mainly made predictions for games in which one of the teams was Germany, the sample is not a good representation of all the games played in both cups. If it is in one way or the other easier to determine the winner in games involving Germany than it is to determine the winner in other games, then the test of Paul's abilities that was conducted is different than the test that would be conducted if we included other games. This, then, limits the claims we can make from the test. If we were interested in whether octopuses in general have psychic abilities, then using a single octopus would not be a great choice. Paul may be unique in many ways, so again he might not be representative of all octopuses. 
+
+As in experiments, where random assignment to conditions can avoid confounds, random sampling can be used to make it more likely that data collected is representative. If we are interested in Paul's predictions for all international matches, it is practically undoable to get him to make predictions for all of these. But by randomly sampling a set of international matches, we will not be able to let this set depend on certain characteristics (e.g. Germany playing) which might bias the results. 
+
+Determining the representativeness of available data for a larger group of possible observations is usually not something that can be done with absolute certainty. And unless we have access to more data, it is generally also not something that statistical analysis can help with. Considerations of representativeness usually rest on (ideally sound) reasoning. 
+
+The Data Generating Process (or DGP for short) is a concept we will encounter repeatedly throughout this book. The DGP contains everything of importance when considering the variability of the data in the context of other data that could have been collected. This includes how subjects were sampled (e.g. if we randomly sample octopuses, then other possible data sets would contain data from other octopuses), how subjects are assigned to conditions (if any), but most importantly also how subjects generate responses (or otherwise observable events), and any possible source of randomness in this generation. For instance, during a particular prediction, Paul might initially go for the box on the left, but then a ray of sunlight hits the box on the left, leading Paul to open that box first. Such small events can be considered a source of random noise in the experiment, that lead to variability in Paul's behaviour, and ultimately to variability in the correctness of his predictions. As a concept, the purpose of the DGP is to describe all such sources of variability as they impact the variability of a particular variable of interest. The DGP then describes not only how the data set that we have access to was generated, but also how all other possible data sets would have been generated. This makes the DGP an abstract concept.  
 
 ## Exploring and describing data
 
-Once you have collected data, you may feel the urge to immediately apply some statistical test to it. But really, a first step should be to explore the data. Statistical tests are designed to confirm or reject hypotheses, and part of __confirmatory data analysis__. They are a very important part of scientific research, but they always rely on assumptions about the data generating process. Before conducting these analyses, it is crucial to assess whether these assumptions are reasonable, and this is where __exploratory data analysis__ can help. @Tukey1977EDA, a major proponent of exploratory data analysis, also points out that exploratory data analysis can also suggest new hypotheses about the causes of observed phenomena, and with that provide a basis for further experimentation and data collection.
+Once you have collected data, you may feel the urge to immediately apply some statistical model or test to it. But really, a first step should be to explore the data. Statistical tests are designed to confirm or reject hypotheses, and part of __confirmatory data analysis__. They are a very important part of scientific research, but they always rely on assumptions about the data generating process. Before conducting these analyses, it is crucial to assess whether these assumptions are reasonable, and this is where __exploratory data analysis__ can help. @Tukey1977EDA, a major proponent of exploratory data analysis, also points out that exploratory data analysis can also suggest new hypotheses about the causes of observed phenomena, and with that provide a basis for further experimentation and data collection.
 
 ### Summary statistics
 
 #### Measures of location
 
-* Mean
-* Median
-* Mode
+* __Mean__ The average of a set of values, computed as $$\overline{Y} = \frac{\sum_{i=1}^N Y_i}{N}$$
+* __Median__ A value in the set of values such that 50% of the values are lower, and 50% of the values are higher. It is easy to compute if the number of observations ($N$) is odd. We simply order the values in increasing or decreasing magnitude. The median is then simply the middle value in this ordered set. If $N$ is  an even number, the median cannot be uniquely determined. But it is common to take the value that is halfway between  
+* __Mode__ The mode is the most frequently occurring value. This measure is really only useful for relatively large data sets with a limited number of possible values. For a continuous variable, there is generally no value that occurs more than once in a data set, and hence all values could be considered a mode. 
 
 #### Measures of spread
 
-* Inter-quartile range
-* Variance
-* Standard deviation
+* __Inter-quartile range__
+* __Variance__
+* __Standard deviation__
 
 ### Visual exploration
 
-Exploring a data set is generally done visually, using various plots such as boxplots, histograms, scatterplots, etc. It is also useful to obtain some summary statistics.  such as averages, and measures of the spread of values, show minimum and maximum val
+Exploring a data set is generally done visually, using various plots such as histograms, boxplots, 
+scatterplots, _etc_. A good plot can immediately provide a lot of information about a data set that summary measures don't. So before proceeding with statistical analysis: plot your data!
+
+* __Histogram__
+* __Boxplot__
+* __Violinplot__
+* __Scatterplot__
+* __Raincloud plot__
+
 
 ## Analysis and modeling
 
 Analysing data can mean lots of things. One view I quite like is that data analysis is identifying a signal within noise. 
 
-Statistical modeling can be viewed as describing the __Data Generating Process__. 
+Statistical modeling can be viewed as describing the Data Generating Process. 
 
 ## Summary
