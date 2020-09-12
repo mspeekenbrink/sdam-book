@@ -92,9 +92,9 @@ data.frame(value=values,probability=prob) %>%
   ggplot(aes(x=value,y=probability)) + geom_col() + ylim(c(0,1))
 ```
 
-When we repeatedly sample 5 values and calculate the mean, we can look at the distribution of these sampled means. This is shown in Figure \@ref(fig:clt-animation-1).
+When we repeatedly sample 5 values and calculate the mean, we can look at the distribution of these sampled means. This is shown in Figure \@ref(fig:clt-animation-1). Figure \@ref(fig:clt-animation-2) shows the same when we repeatedly sample 20 values and calculate the mean. 
 
-```{r clt-animation-1, dev='png', echo=FALSE, cache=TRUE, fig.cap="The distribution of the mean of 5 samples from the distribution in Figure XX"}
+```{r clt-animation-1, dev='png', echo=FALSE, cache=TRUE, fig.cap="The distribution of the mean of 5 samples (from the distribution in Figure XX", out.width='50%', fig.width=4}
 
 library(gganimate)
 library(dplyr)
