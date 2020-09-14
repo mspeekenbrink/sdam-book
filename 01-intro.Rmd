@@ -11,8 +11,8 @@ In this chapter we will introduce some fundamental concepts, such as experiments
 ## Paul the octopus
 
 > We know that all octopus have nine brains so we know he has exceptional powers.  
-> _Oliver Walenciak_, Paul's keeper
-> irish source: https://www.irishcentral.com/sports/paul-the-psychic-octopus-picks-all-the-world-cup-winners-98010019-238038511)
+> _Oliver Walenciak_, Paul's keeper 
+> source: [Irish central](https://www.irishcentral.com/sports/paul-the-psychic-octopus-picks-all-the-world-cup-winners-98010019-238038511)
 
 Paul the Octopus (26 January 2008 – 26 October 2010) was born in the Sea Life Centre in Weymouth, England, and subsequently moved to the aquarium chain's centre in Oberhausen, Germany. It was there he found world-wide fame as a caphalopod oracle. 
 
@@ -194,10 +194,10 @@ plot_raincloud(dat,y = average_goals_for, point_size=1) + ylab("Average goals fo
 
 ## Analysis and modeling
 
-Analysing data can mean lots of things. According to [WikiPedia](https://en.wikipedia.org/wiki/Data_analysis) "Data analysis is a process of inspecting, cleansing, transforming and modeling data with the goal of discovering useful information, informing conclusions and supporting decision-making." That is a reasonably accurate, but also quite lengthy and boring definition. An alternative to this I quite like is that data analysis is _identifying a signal within noise_. 
+Analysing data can mean lots of things. According to [WikiPedia](https://en.wikipedia.org/wiki/Data_analysis) "Data analysis is a process of inspecting, cleansing, transforming and modelling data with the goal of discovering useful information, informing conclusions and supporting decision-making." That is a reasonably accurate, but also quite lengthy and boring definition. An alternative to this I quite like is that data analysis is _identifying a signal within noise_. 
 
-Data is noisy for many reasons. For one thing, the data that we have is generally limited, in the sense that we could have obtained 
+Data is noisy for many reasons. For one thing, the data that we have access to is generally limited, in the sense that we could have obtained other and/or more data. Other sources of noise include measurement error. Such sources of noise imply that the data set we have only gives a limited, incomplete, and corrupted view on the process that generated it (the Data Generating Process). We are not interested solely in describing the data set we have, we generally want to infer something about the Data Generating Process. We don't just want to state that Paul made 8 out of 8 accurate predictions in the 2010 FIFA World Cup, we want to use this data to assess whether Paul had psychic abilities. Whether, had Paul's keeper allowed Paul to make predictions for other matches, he would have also been correct. Such inferences go beyond the data that we have. Perhaps Paul was just lucky in those 8 predictions, and his 100% hit rate is not a good reflection of his hit rate in general. 
 
-Statistical modeling can be viewed as describing the Data Generating Process in mathematical terms.  
+Statistical modelling can be viewed as describing the Data Generating Process in the language of mathematics. At its core, a statistical model defines the distribution of possible values of variables. In an ideal world, this model distribution is identical to the true distribution that follows from the Data Generating Process. In general, though, there will be some mismatch between the model distribution and the DGP distribution. Models are simplifications and idealizations. As statistician George Box famously noted "all models are wrong, but some are useful" [@Box1987]. 
 
 ## Summary

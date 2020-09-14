@@ -1,5 +1,5 @@
 ---
-title: "Statistics, data analysis, and modeling"
+title: "Statistics, data analysis, and modelling"
 author: "Maarten Speekenbrink"
 date: "`r Sys.Date()`"
 site: bookdown::bookdown_site

@@ -73,7 +73,7 @@ points(xp,yp)
 ```
 
 
-```{r}
+```{r simple-regression-distribution-error-plot, fig.cap="The errors in a regression model are assumed to follow a Normal distribution around the regression line." ,fig.width=4,out.width="50%"}
 plot(x,.5*x + 2,type="n",xlab="X",ylab="Y",xlim=c(-1,5),ylim=c(-1,5),fig.width=4,out.width="50%")
 abline(a=2,b=.5)
 abline(v=0,lty=2)

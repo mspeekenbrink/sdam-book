@@ -117,7 +117,7 @@ clt_dat %>%
 
 ```
 
-```{r, clt-animation-2, dev='png',cache=TRUE, fig.cap="The distribution of the mean of 20 samples from the distribution in Figure XX"}
+```{r clt-animation-2, dev='png',cache=TRUE, fig.cap="The distribution of the mean of 20 samples from the distribution in Figure XX"}
 
 set.seed(567)
 n_sim <- 1000
