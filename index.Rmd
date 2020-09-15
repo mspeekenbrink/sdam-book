@@ -53,7 +53,9 @@ This book is inspired by lots of other statistics books I have read over the yea
 
 ## Notation {-}
 
-In a book with mathematics, notation is important. We will try to be very clear when introducing notation.
+In a book with mathematics, notation is important. Mathematics can be viewed as a very precise language. For some of you, this may be a very foreign language. But languages can be learned. Like words, mathematical symbols represent important concepts and relations. The aim is to be consistent, so that each symbol has a clearly defined meaning. That isn't always easy, or possible. Another aim is to stay close to prevailing conventions, so that it will be easier to understand papers and other books. This is also not always easy, or possible, because in different areas of statistics, the same symbol may have very different meanings. In any case, we will try to be very clear when introducing notation.
+
+You will come across symbols from the Greek alphabet. Generally, these symbols are used to reflect parameters of statistical models, and sometimes to reflect other fundamental aspects of statistical analyses. So it will be useful to familiarize yourself with the Greek alphabet. In the following table, each Greek letter is shown, with the corresponding name in English (useful if you want to read the symbols aloud), as well as the common parameter or concept the symbol refers to:
 
 ```{r greek-symbol-table}
 greek_symbols <- c("alpha","beta","gamma","delta","epsilon","zeta","eta","theta","iota","kappa","lambda","mu","nu","xi","omicron","pi","rho","sigma","tau","upsilon","phi","chi","psi","omega")
@@ -61,7 +63,7 @@ knitr::kable(
   data.frame(
     symbol = paste0("$\\",greek_symbols,"$"),
     name = greek_symbols,
-    usage = c("significance level","parameter (slope or intercept) in the General Linear Model","","error","","","a parameter in general","","","","mean","","","","","correlation","standard deviation","","","","","Chi-squared distribution","","")
+    usage = c("significance level","parameter (slope or intercept) in the General Linear Model","","","error","","","a parameter in general","","","","mean","","","","","correlation","standard deviation","","","","Chi-squared distribution","","")
   )
 )
 ```

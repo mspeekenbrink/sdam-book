@@ -24,7 +24,7 @@
 <meta name="author" content="Maarten Speekenbrink" />
 
 
-<meta name="date" content="2020-09-14" />
+<meta name="date" content="2020-09-15" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -88,7 +88,7 @@
 <li class="chapter" data-level="1.4.1" data-path="intro.html"><a href="intro.html#summary-statistics"><i class="fa fa-check"></i><b>1.4.1</b> Summary statistics</a></li>
 <li class="chapter" data-level="1.4.2" data-path="intro.html"><a href="intro.html#visual-exploration"><i class="fa fa-check"></i><b>1.4.2</b> Visual exploration</a></li>
 </ul></li>
-<li class="chapter" data-level="1.5" data-path="intro.html"><a href="intro.html#analysis-and-modeling"><i class="fa fa-check"></i><b>1.5</b> Analysis and modeling</a></li>
+<li class="chapter" data-level="1.5" data-path="intro.html"><a href="intro.html#analysis-and-modelling"><i class="fa fa-check"></i><b>1.5</b> Analysis and modelling</a></li>
 <li class="chapter" data-level="1.6" data-path="intro.html"><a href="intro.html#summary"><i class="fa fa-check"></i><b>1.6</b> Summary</a></li>
 </ul></li>
 <li class="chapter" data-level="2" data-path="statistical-modeling.html"><a href="statistical-modeling.html"><i class="fa fa-check"></i><b>2</b> Statistical modeling</a><ul>
@@ -107,7 +107,7 @@
 </ul></li>
 <li class="chapter" data-level="2.6" data-path="statistical-modeling.html"><a href="statistical-modeling.html#confidence-intervals"><i class="fa fa-check"></i><b>2.6</b> Confidence intervals</a></li>
 <li class="chapter" data-level="2.7" data-path="intro.html"><a href="intro.html#summary"><i class="fa fa-check"></i><b>2.7</b> Summary</a></li>
-<li class="chapter" data-level="2.8" data-path="statistical-modeling.html"><a href="statistical-modeling.html#exercises"><i class="fa fa-check"></i><b>2.8</b> Exercises</a></li>
+<li class="chapter" data-level="2.8" data-path="statistical-modeling.html"><a href="statistical-modeling.html#epilogue"><i class="fa fa-check"></i><b>2.8</b> Epilogue</a></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="a-model-with-a-mean-introduction-to-the-general-linear-model.html"><a href="a-model-with-a-mean-introduction-to-the-general-linear-model.html"><i class="fa fa-check"></i><b>3</b> A model with a mean: Introduction to the General Linear Model</a><ul>
 <li class="chapter" data-level="3.1" data-path="a-model-with-a-mean-introduction-to-the-general-linear-model.html"><a href="a-model-with-a-mean-introduction-to-the-general-linear-model.html#numeric-judgment-and-anchoring"><i class="fa fa-check"></i><b>3.1</b> Numeric judgment and anchoring</a><ul>
@@ -178,10 +178,10 @@
 <div id="statistical-modeling" class="section level1">
 <h1><span class="header-section-number">Chapter 2</span> Statistical modeling</h1>
 <p>Was Paul truly an oracle? Or was Paul (or his keeper more likely) just really lucky? How do we know? And what really are the chances of predicting the winner of 8 matches correct? These are questions we will focus on now.</p>
-<p>In this chapter, we will start defining statistical models and using them to make inferences about the Data Generating Process.</p>
+<p>In this chapter, we will start defining statistical models and using them to make inferences about the Data Generating Process. We will cover some basic probability theory, and use this to define two alternative models of Paul’s predictions. One in which he is randomly guessing, and one in which his predictions can be more (or less) accurate than if he were randomly guessing, while we are unsure about how accurate Paul really is in that case. We will discuss how to estimate the unknown accuracy of Paul’s predictions in this model. After this. we will try to answer the question: was Paul (somewhat) psychic? Our answer will be based on whether we can refute the hypothesis that he was randomly guessing. This is generally done with a procedure called a null-hypothesis significance test. We will also consider another way in which to look at this, in the form of so-called confidence intervals.</p>
 <div id="coin-flipping-defining-a-statistical-model" class="section level2">
 <h2><span class="header-section-number">2.1</span> Coin flipping: Defining a statistical model</h2>
-<p>What does it mean for Paul to be an oracle? Sometimes it is easier to answer this question by considering the opposite: When would Paul <em>not</em> be an oracle? If Paul had no way to tell the future, he would be “merely guessing”. Purely random guessing between two options can be implemented by flipping a coin. Suppose Paul made his choices by “flipping a mental coin”, and choosing the box on the left when the outcome was “heads”, and the box on the right when the outcome was “tails”. Great, we now have a model of the Data Generating Process!</p>
+<p>What does it mean for Paul to be an oracle? Sometimes it is easier to answer this question by considering the opposite: When would Paul <em>not</em> be an oracle? If Paul had no way to tell the future, he would be “merely guessing”. Purely random guessing between two options can be implemented by flipping a coin. Suppose Paul made his choices by “flipping a mental coin”, and choosing the box on the left when the outcome was “heads”, and the box on the right when the outcome was “tails”. Great, we now have a model of the Data Generating Process! Coin flipping can be seen as a physical model. It is something that we can do in the real world, as many times as we want. Because we understand the physical properties of coin flips reasonably well – it is really difficult to predict the outcome of a coin flip – it works well as a model of random guessing. But flipping coins over and over is rather tedious. If we have a mathematical description, a statistical model, of flipping coins, we can spare ourselves this trouble. To do so, we first need to know a bit more about probability.</p>
 </div>
 <div id="probability" class="section level2">
 <h2><span class="header-section-number">2.2</span> Probability</h2>
@@ -310,14 +310,14 @@ The outcome space is the set of all possible events.</p>
 </table>
 <p>Figure <a href="statistical-modeling.html#fig:coin-flip-relative-frequency">2.1</a> shows the relative frequency (i.e. the proportion) of heads after each coin flip, when flipping a coin for 2000 times.</p>
 <div class="figure" style="text-align: center"><span id="fig:coin-flip-relative-frequency"></span>
-<img src="_main_files/figure-html/coin-flip-relative-frequency-1.png" alt="Relative frequency of heads when flipping a coin for 2000 times" width="672" />
+<img src="_main_files/figure-html/coin-flip-relative-frequency-1.gif" alt="Relative frequency of heads when flipping a coin for 2000 times"  />
 <p class="caption">
 Figure 2.1: Relative frequency of heads when flipping a coin for 2000 times
 </p>
 </div>
 <p>As you can see, the relative frequency fluctuates quite a bit, but becomes more stable with more flips. But even after 5000 flips, it is not equal to 0.5. Flipping a coin can be viewed as an experiment, that we can repeat. Figure <a href="statistical-modeling.html#fig:coin-flip-relative-frequency-multiple">2.2</a> shows the results of flipping a coin for 5000 times when repeating the experiment for 5 times. As you can see, the results of our experiments (the relative frequencies) are different each time. The differences are quite marked for a small number of flips, but become more alike after flipping the coin more times. This illustrates something known as <strong>The Law of Large Numbers</strong>, to which we will come back soon. For now, let’s focus on a different matter. If probability is a relative frequency, then which one is it? Each repetition of the experiment, as well as each number of throws, would give us a different answer!</p>
 <div class="figure" style="text-align: center"><span id="fig:coin-flip-relative-frequency-multiple"></span>
-<img src="_main_files/figure-html/coin-flip-relative-frequency-multiple-1.png" alt="Relative frequency of heads when flipping a coin 5 times for 5000 times" width="672" />
+<img src="_main_files/figure-html/coin-flip-relative-frequency-multiple-1.gif" alt="Relative frequency of heads when flipping a coin 5 times for 5000 times"  />
 <p class="caption">
 Figure 2.2: Relative frequency of heads when flipping a coin 5 times for 5000 times
 </p>
@@ -347,7 +347,7 @@ Figure 2.3: A diagram depicting the relations between 9 events in the outcome sp
 </div>
 <p>We just really need one more rule and then we’re done. This rule is to compute the probability of a conjunction of events (the probability of both events occurring). To be able to state this rule, we first need to consider the concept of <strong>conditional probability</strong>. In words, such a probability refers to the probability of one event <em>given that another event occurred</em>. For instance, we can consider the probability of the event “greater than 3” given that the event “odd” occurred (i.e., the probability that the outcome was greater than 3 given that the outcome was an odd number). If we know that the outcome was odd (i.e. 1, 3, or 5), we can rule out all occurrences where the outcome was even (i.e. 2, 4, or 6). To now consider the probability that the outcome was greater than 3, we only need the probability of an outcome greater than 3 within the set of odd numbers. If we are sure that the outcome was odd, we can set <span class="math inline">\(P(\text{odd}|\text{odd}) = 1\)</span>. There are three outcomes, each with equal probability, so <span class="math inline">\(P(1|\text{odd}) = P(3|\text{odd}) = P(5|\text{odd}) = \frac{1}{3}\)</span>. In the set of odd outcomes, there is only one number greater than 3, namely 5. That means that the conditional probability <span class="math inline">\(P(&gt;3|\text{odd}) = P(5|\text{odd}) = \frac{1}{3}\)</span>. Conversely, we can also work out the conditional probability <span class="math inline">\(P(\leq 3| = P(5|\text{odd})) = P(1|\text{odd}) + P(3|\text{odd}) = \frac{2}{3}\)</span>. In a sense, a conditional probability is just looking at the relative occurrence of one event <span class="math inline">\(E_i\)</span> (e.g., the event “<span class="math inline">\(&gt;3\)</span>”) within the set of outcomes defined by another event (e.g., the event “odd”).</p>
 <p><span class="math display">\[P(E_i|E_j) = \frac{P(E_i \text{ and } E_j) }{P(E_j)}\]</span></p>
-<ol start="5" style="list-style-type: decimal">
+<ol start="6" style="list-style-type: decimal">
 <li><span class="math inline">\(P(E_i \text{ and } E_j) = P(E_i) \times P(E_j | E_i)\)</span>. <strong>Multiplication rule</strong></li>
 <li>For two <strong>independent</strong> events <span class="math inline">\(E_i\)</span> and <span class="math inline">\(E_j\)</span>, <span class="math inline">\(P(E_i \text{ and } E_j) = P(E_i) \times P(E_j)\)</span></li>
 </ol>
@@ -356,48 +356,75 @@ Figure 2.3: A diagram depicting the relations between 9 events in the outcome sp
 <div id="a-model-of-flipping-an-unbiased-coin" class="section level4">
 <h4><span class="header-section-number">2.2.1.2</span> A model of flipping an unbiased coin</h4>
 <p>Now that we know more about probability, let’s get back to our model for Paul. With a balanced coin (and a not too cunning flipper), the probability of the coin landing heads should equal the probability of the coin landing tails. In mathematical notation, we can state this as</p>
-<p><span class="math display">\[P(\text{heads}) = P(\text{tails})\]</span>
-Furthermore,</p>
-<p><span class="math display">\[P(\text{heads} \text{ or } \text{tails}) = 1\]</span></p>
-<p><span class="math display">\[P(\text{correct}) = P(\text{incorrect}) = 0.5\]</span></p>
-<p><span class="math display">\[P(\texttt{prediction}_i = \text{correct}) = P(\texttt{prediction}_i = \text{incorrect}) = 0.5\]</span></p>
-<p><span class="math display">\[P(Y_i = \text{correct}) = P(Y_i = \text{incorrect}) = 0.5\]</span></p>
-<p>which you can translate into words as</p>
-<blockquote>
-<p>The probability that observation <span class="math inline">\(i\)</span> of variable <span class="math inline">\(Y\)</span> equals ‘correct’ is identical to the probability that observation <span class="math inline">\(i\)</span> of variable <span class="math inline">\(Y\)</span> equals ‘incorrect’, and both equal 0.5.</p>
-</blockquote>
+<p><span class="math display">\[P(\text{heads}) = P(\text{tails})\]</span></p>
+<p>Furthermore, as heads and tails the only two possible outcomes, we know that</p>
+<p><span class="math display">\[P(\text{heads} \text{ or } \text{tails}) = 1\]</span>
+Finally, because heads and tails are two mutually exclusive events, we then infer that</p>
+<p><span class="math display">\[P(\text{heads}) = P(\text{tails}) = 0.5,\]</span>
+and given the way Paul bases his decisions on this coin flip, also that
+<span class="math display">\[P(\text{paul left}) = P(\text{paul right}) = 0.5.\]</span></p>
+<p>Interestingly, if Paul made his decision for the left or right box by flipping a coin, it doesn’t really matter whether the team representing the left or right box was chosen randomly, or in some other way. Suppose that Paul’s keeper was very knowledgeable about football, or that he was the real psychic. Furthermore, let’s suppose that he thinks Paul might generally prefer the right box (as the light is particularly nice on that side of the tank, for instance). Then <span class="math inline">\(P(\text{winner right}) = 1\)</span> and <span class="math inline">\(P(\text{winner left}) = 0\)</span>. Because Paul’s decisions are independent from which team was placed in which box (he’s merely flipping a coin), we know that <span class="math inline">\(P(\text{paul left} | \text{winner left}) = P(\text{paul left})\)</span>, and similarly <span class="math inline">\(P(\text{paul right} | \text{winner left}) = P(\text{paul right})\)</span>. There are two ways in which Paul can make a correct prediction: he opens the right box, and the winning team was in the right box, or he opens the left box and the winning team was in the left box. So
+<span class="math display">\[P(\text{correct}) = P(\text{paul left} \text{ and } \text{winner left}) + P(\text{paul right} \text{ and } \text{winner right})\]</span>
+Using the multiplication rule, we can write this as
+<span class="math display">\[P(\text{correct}) = P(\text{paul left} | \text{winner left}) \times P(\text{winner left}) + \\ P(\text{paul right} | \text{winner right}) \times P(\text{winner right})\]</span>
+And from the independence between Paul’s decisions and the assignment of teams to boxes, we can simplify this further as
+<span class="math display">\[P(\text{correct}) = P(\text{paul left}) \times P(\text{winner left}) + P(\text{paul right}) \times P(\text{winner right})\]</span>
+which, filling in the appropriate values, becomes
+<span class="math display">\[P(\text{correct}) = .5 \times 0 + .5 \times 1 = .5\]</span>
+Actually, you can fill in any valid probability for <span class="math inline">\(P(\text{winner left})\)</span> and <span class="math inline">\(P(\text{winner right})\)</span>, and <span class="math inline">\(P(\text{correct})\)</span> will always be .5! Let’s say, in abstract terms, that <span class="math inline">\(P(\text{winning left}) = \theta\)</span>. From the complement rule, we know that <span class="math inline">\(P(\text{winning right}) = 1 - \theta\)</span>. Then
+<span class="math display">\[\begin{align}
+P(\text{correct}) &amp;= P(\text{paul left}) \times \theta + P(\text{paul right}) \times (1-\theta) \\
+&amp;= .5 \times \theta +  .5 \times (1-\theta) \\
+&amp;= .5 \times \theta - .5 \times \theta + .5\\
+&amp;= .5
+\end{align}\]</span>
+So according to our model, no matter what bias Paul’s keeper might have in placing winning teams in the left or right box, Paul’s accuracy for each prediction would be <span class="math inline">\(P(\text{correct}) = .5\)</span>.</p>
+<!--
+$$P(\text{correct}) = P(\text{incorrect}) = 0.5$$
+
+$$P(\texttt{prediction}_i = \text{correct}) = P(\texttt{prediction}_i = \text{incorrect}) = 0.5$$
+
+$$P(Y_i = \text{correct}) = P(Y_i = \text{incorrect}) = 0.5$$
+
+which you can translate into words as 
+
+> The probability that observation $i$ of variable $Y$ equals 'correct' is identical to the probability that observation $i$ of variable $Y$ equals 'incorrect', and both equal 0.5.
+-->
 </div>
 </div>
 <div id="distributions" class="section level3">
 <h3><span class="header-section-number">2.2.2</span> Distributions</h3>
-<p>A probability distribution, as the name suggests, defines how probability is distributed over all possible values of a variable. You can think of “all probability” as a pie, and the probability distribution as slicing up the pie in possibly unequal pieces, and each possible value of a variable is given its own slice.</p>
-<p>According to the coin-flipping model, it does not matter which of Paul’s prediction we look at (e.g. whether the first, the second, the last…), to determine . In fact, we could generate the data in the reverse order, or start with the Germany-Austria match and then . In fancy terms, this means that the observations <span class="math inline">\(Y_i\)</span> are <em>independent and identically distributed</em> (IID).</p>
+<p>A probability distribution, as the name suggests, defines how probability is distributed over all possible values of a variable. You can think of “all probability” as a pie, and the probability distribution as slicing up the pie in possibly unequal pieces, and each possible value of a variable is given its own slice. Looking at the correctness of a single prediction, the pie is divided into two equal slices: half for <span class="math inline">\(P(\text{correct})\)</span>, and the other half for <span class="math inline">\(P(\text{incorrect})\)</span>. But Paul made more than one prediction (8 in the case of the FIFA 2010 World Cup), and what we’re really interested in is Paul’s accuracy in all his predictions: What is the probability that Paul made 8 out of 8 correct predictions if he was merely guessing? Using the rules of probability, we can work out this probability as well.</p>
+<p>According to our coin-flipping model, it does not matter which of Paul’s prediction we look at (e.g. whether the first, the second, the last, or any other one). In fact, we could generate the data in the reverse order, or start with the Germany-Australia match and then the Spain-Germany match. The probability that any prediction is correct is <span class="math inline">\(P(\text{correct}) = .5\)</span>, and whether that prediction is correct is independent from whether any earlier (or later) prediction is correct. In fancy terms, this means that the observations <span class="math inline">\(Y_i\)</span> are <em>independent and identically distributed</em> (IID).</p>
+<p>When considering the probability of a sequence of events (e.g. a consecutive run of 8 correct predictions), it can be useful to draw all possible outcomes in the form of a tree.</p>
 </div>
 </div>
 <div id="flipping-a-biased-coin-an-alternative-model" class="section level2">
 <h2><span class="header-section-number">2.3</span> Flipping a biased coin: An alternative model</h2>
 <p>Suppose that Paul did not make his decisions by flipping a mental coin. Perhaps Paul had extensive knowledge of all things football, or perhaps he could see into the future. In that case, we might expect Paul to have a higher rate of correct answers than predicted by our coin flipping model. But perhaps Paul, although an oracle, wasn’t so benevolent to his caretakers, or didn’t want to spoil the match for them. In that case, we might expect the rate of correct answers to be lower than predicted by the coin flipping model. In both case, we’d expect the probability of a correct answer to be different from .5: <span class="math inline">\(P(\text{correct}) \neq .5\)</span>. But whilst not .5, we don’t otherwise know the value. We call such an unknown value which determines a probability distribution a <em>parameter</em>. We will generally use symbols from the Greek alphabet to denote such parameters. Here, we will use <span class="math inline">\(\theta\)</span> (pronounced as “thee-ta”). Our alternative to the coin flipping model can now be stated as:</p>
-<p><span class="math display">\[P(\text{correct}) = \theta\]</span></p>
+<p><span class="math display">\[P(Y_i = \text{correct}) = \theta\]</span></p>
 <p>Like a <em>variable</em>, a parameter such as <span class="math inline">\(\theta\)</span> can take different values. It belongs to a model, and its value can not be observed, only inferred. As our parameter reflects a probability, we know that it can never be lower than 0, and never larger than 1, so we know that:</p>
 <p><span class="math display">\[0 \leq \theta \leq 1\]</span></p>
 <p>(“zero is less than or equal to <span class="math inline">\(\theta\)</span>, which is less than or equal to 1”). Note that the possible values in this range includes <span class="math inline">\(\theta = 0.5\)</span>. Our (unbiased) coin flipping model is actually one of the possible versions (a “special case”) of our new more general model. Some other ways of saying this are that the coin flipping model is contained within, or nested under, the more general new model. As we will see, <em>nested models</em> play an important role in statistical modeling. In particular, we will often compare how well a special-case or nested model describes the data compared to a more general model. In such model comparisons, we will usually refer to the special-case model as <code>MODEL S</code>, and the more general model as <code>MODEL G</code>. It is important to realise that these names (like variables) are containers and we can put any models in these, as long as the one we put into <code>MODEL S</code> is a special case of the one we put into <code>MODEL G</code>.</p>
 </div>
 <div id="estimation" class="section level2">
 <h2><span class="header-section-number">2.4</span> Estimation</h2>
-<p>From data produced by The Data Generating Process (TDGP), we can estimate the value of a parameter. Remember, when we collect data in real life, it is obtained from TDGP. Our model, on the other hand, merely provides “a data generating process” (adgp). See what I did there with CAPS and no caps? The TDGP is, as the name should make clear, The Truth. It is how the real world generated the data. Our model, on the other hand, is almost surely an approximation to The Truth. Think about it. Can you summarize Paul’s choices by a mathematical formula with a distribution that takes a single parameter (<span class="math inline">\(\theta\)</span>)? Probably not when you see Paul swimming in his tank, catching a glimmer of light shining from one of the boxes, than being distracted by the sound of a distant door opening, then going back and sensing a vibration in the water. How would all these serendipitous things not affect Paul’s decision at the time? Our model ignores all these factors, and for a reason. Imagine we had to take all sensory input of Paul into account. We would not only have to take into account the actual stimuli present at the time, but also how they affected Paul’s neuronal reactions to those. Even if we only take into account the neurons responding directly to external input, the number of possible neuronal excitation patterns quickly become enormous. When you think about it, you’d also want to take into account the activation state of all the neurons at the time just before (and possibly before that), which makes the number of possibilities even more enormous. And what about the chemical consistency of the water at the time? Learning a model of particular decision by a particular person at a particular time seems simply impossible without assuming that some of these things don’t really matter to the decision at hand.</p>
+<p>From data produced by the Data Generating Process (DGP), we can estimate the value of a parameter. Remember, when we collect data in real life, it is obtained from DGP. Our model, on the other hand, provides a mathematical abstraction of the DGP. The DGP is The Truth. It is how the real world generated the data. Our model, on the other hand, is almost surely an approximation to The Truth. Think about it. Can you summarize Paul’s choices by a mathematical formula with a distribution that takes a single parameter (<span class="math inline">\(\theta\)</span>)? Probably not when you see Paul swimming in his tank, catching a glimmer of light shining from one of the boxes, than being distracted by the sound of a distant door opening, then going back and sensing a vibration in the water. How would all these serendipitous things not affect Paul’s decision at the time? Our model ignores all these factors, and for a reason. Imagine we had to take all sensory input of Paul into account. We would not only have to take into account the actual stimuli present at the time, but also how they affected Paul’s neuronal reactions to those. Even if we only take into account the neurons responding directly to external input, the number of possible neuronal excitation patterns quickly become enormous. When you think about it, you’d also want to take into account the activation state of all the neurons at the time just before (and possibly before that), which makes the number of possibilities even more enormous. And what about the chemical consistency of the water at the time? Learning a model of particular decision by a particular person at a particular time seems simply impossible without assuming that some of these things don’t really matter to the decision at hand.</p>
 <p>Estimation, in some sense, means an “educated guess”. It is a guess, because we cannot be completely sure that we have picked the true value. It is educated because we didn’t just pluck the value from thin air. We used information in the data to guide our guess.</p>
 <div id="properties-of-good-estimators" class="section level3">
 <h3><span class="header-section-number">2.4.1</span> Properties of good estimators</h3>
 <p>An <strong>estimator</strong> is an algorithm which takes data as input and produces a parameter estimate as output. Evaluating the quality of the resulting estimates is generally done under the assumption that our model represents the Data Generating Process accurately, i.e. our model is a true representation of the DGP. If our model has unknown parameters, that means that there are values for those parameters such that our model produces data with exactly the same distribution as the DGP. We can call those parameter values the true parameter values. Now, even if we have access to such a true model, estimates of its parameters from a given data set are unlikely to be identical to the true parameters. The main reason is that any actual data set will not cover all of the values that are possible from the Data Generating Process, and/or not in their expected proportions. But the fact is that in practice we have to rely on such limited data sets; we never have access to all the data that could be produced by the Data Generating Process. So we will have to work with estimates that are different from the true parameters. One thing we can do is quantify how much our estimates are likely to deviate from the true parameters. This, in a nutshell, is what statistical estimation theory is all about.</p>
 <div id="unbiasedness" class="section level4">
 <h4><span class="header-section-number">2.4.1.1</span> Unbiasedness</h4>
+<p>An unbiased estimator gives, on average, estimates which are equal to the true parameter.</p>
 </div>
 <div id="consistency" class="section level4">
 <h4><span class="header-section-number">2.4.1.2</span> Consistency</h4>
+<p>A good estimator should become more precise as we have more data. The larger the number of observations from the Data Generating Process, the closer the resulting estimates should be to the true parameters. A <strong>consistent</strong> estimator is one which provides less variable estimates if we give it more data.</p>
 </div>
 <div id="efficiency" class="section level4">
 <h4><span class="header-section-number">2.4.1.3</span> Efficiency</h4>
-<p>A good estimator should become more precise as we have more data. The larger the number of observations from the Data Generating Process, the closer the resulting estimates should be to the true parameters.</p>
+<p>An <strong>efficient</strong> estimator is an estimator which is both unbiased <em>and</em> the most consistent possible. Such an estimator is, in some sense, the Holy Grail of statistical estimation.</p>
 </div>
 </div>
 </div>
@@ -416,15 +443,16 @@ Furthermore,</p>
 <div id="summary" class="section level2">
 <h2><span class="header-section-number">2.7</span> Summary</h2>
 </div>
-<div id="exercises" class="section level2">
-<h2><span class="header-section-number">2.8</span> Exercises</h2>
-<ol style="list-style-type: decimal">
-<li>Maybe Paul has a preference to go to the right hand container.
-<ol style="list-style-type: lower-alpha">
-<li>Suppose Paul always opens the right container first. So <span class="math inline">\(P(\text{Paul chooses right}) = 1.0\)</span>. Furthermore, suppose that his keeper has ability to predict the winner of a match, in that he is correct on 60% of his predictions, i.e. <span class="math inline">\(P(\text{keeper is correct}) = .6\)</span>. Finally, let’s suppose that the keeper wants to help Paul, so he always puts the flag of the country he predicts to win on the right container. What is the probability that Paul’s “predictions” are correct? And what if Paul’s spatial preference was less marked at <span class="math inline">\(P(\text{Paul chooses right}) = .6\)</span>?</li>
-</ol></li>
-<li></li>
-</ol>
+<div id="epilogue" class="section level2">
+<h2><span class="header-section-number">2.8</span> Epilogue</h2>
+<!--
+## Exercises
+
+1. Maybe Paul has a preference to go to the right hand container. 
+    a. Suppose Paul always opens the right container first. So $P(\text{Paul chooses right}) = 1.0$. Furthermore, suppose that his keeper has ability to predict the winner of a match, in that he is correct on 60% of his predictions, i.e. $P(\text{keeper is correct}) = .6$. Finally, let's suppose that the keeper wants to help Paul, so he always puts the flag of the country he predicts to win on the right container. What is the probability that Paul's "predictions" are correct? And what if Paul's spatial preference was less marked at $P(\text{Paul chooses right}) = .6$?
+2. 
+  
+-->
 
 </div>
 </div>

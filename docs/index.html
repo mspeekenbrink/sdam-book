@@ -24,7 +24,7 @@
 <meta name="author" content="Maarten Speekenbrink" />
 
 
-<meta name="date" content="2020-09-14" />
+<meta name="date" content="2020-09-15" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -88,7 +88,7 @@
 <li class="chapter" data-level="1.4.1" data-path="intro.html"><a href="intro.html#summary-statistics"><i class="fa fa-check"></i><b>1.4.1</b> Summary statistics</a></li>
 <li class="chapter" data-level="1.4.2" data-path="intro.html"><a href="intro.html#visual-exploration"><i class="fa fa-check"></i><b>1.4.2</b> Visual exploration</a></li>
 </ul></li>
-<li class="chapter" data-level="1.5" data-path="intro.html"><a href="intro.html#analysis-and-modeling"><i class="fa fa-check"></i><b>1.5</b> Analysis and modeling</a></li>
+<li class="chapter" data-level="1.5" data-path="intro.html"><a href="intro.html#analysis-and-modelling"><i class="fa fa-check"></i><b>1.5</b> Analysis and modelling</a></li>
 <li class="chapter" data-level="1.6" data-path="intro.html"><a href="intro.html#summary"><i class="fa fa-check"></i><b>1.6</b> Summary</a></li>
 </ul></li>
 <li class="chapter" data-level="2" data-path="statistical-modeling.html"><a href="statistical-modeling.html"><i class="fa fa-check"></i><b>2</b> Statistical modeling</a><ul>
@@ -107,7 +107,7 @@
 </ul></li>
 <li class="chapter" data-level="2.6" data-path="statistical-modeling.html"><a href="statistical-modeling.html#confidence-intervals"><i class="fa fa-check"></i><b>2.6</b> Confidence intervals</a></li>
 <li class="chapter" data-level="2.7" data-path="intro.html"><a href="intro.html#summary"><i class="fa fa-check"></i><b>2.7</b> Summary</a></li>
-<li class="chapter" data-level="2.8" data-path="statistical-modeling.html"><a href="statistical-modeling.html#exercises"><i class="fa fa-check"></i><b>2.8</b> Exercises</a></li>
+<li class="chapter" data-level="2.8" data-path="statistical-modeling.html"><a href="statistical-modeling.html#epilogue"><i class="fa fa-check"></i><b>2.8</b> Epilogue</a></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="a-model-with-a-mean-introduction-to-the-general-linear-model.html"><a href="a-model-with-a-mean-introduction-to-the-general-linear-model.html"><i class="fa fa-check"></i><b>3</b> A model with a mean: Introduction to the General Linear Model</a><ul>
 <li class="chapter" data-level="3.1" data-path="a-model-with-a-mean-introduction-to-the-general-linear-model.html"><a href="a-model-with-a-mean-introduction-to-the-general-linear-model.html#numeric-judgment-and-anchoring"><i class="fa fa-check"></i><b>3.1</b> Numeric judgment and anchoring</a><ul>
@@ -178,7 +178,7 @@
 <div id="header">
 <h1 class="title">Statistics, data analysis, and modelling</h1>
 <p class="author"><em>Maarten Speekenbrink</em></p>
-<p class="date"><em>2020-09-14</em></p>
+<p class="date"><em>2020-09-15</em></p>
 </div>
 <div id="preface" class="section level1 unnumbered">
 <h1>Preface</h1>
@@ -191,7 +191,8 @@
 </div>
 <div id="notation" class="section level2 unnumbered">
 <h2>Notation</h2>
-<p>In a book with mathematics, notation is important. We will try to be very clear when introducing notation.</p>
+<p>In a book with mathematics, notation is important. Mathematics can be viewed as a very precise language. For some of you, this may be a very foreign language. But languages can be learned. Like words, mathematical symbols represent important concepts and relations. The aim is to be consistent, so that each symbol has a clearly defined meaning. That isn’t always easy, or possible. Another aim is to stay close to prevailing conventions, so that it will be easier to understand papers and other books. This is also not always easy, or possible, because in different areas of statistics, the same symbol may have very different meanings. In any case, we will try to be very clear when introducing notation.</p>
+<p>You will come across symbols from the Greek alphabet. Generally, these symbols are used to reflect parameters of statistical models, and sometimes to reflect other fundamental aspects of statistical analyses. So it will be useful to familiarize yourself with the Greek alphabet. In the following table, each Greek letter is shown, with the corresponding name in English (useful if you want to read the symbols aloud), as well as the common parameter or concept the symbol refers to:</p>
 <table>
 <thead>
 <tr class="header">
@@ -219,12 +220,12 @@
 <tr class="even">
 <td align="left"><span class="math inline">\(\delta\)</span></td>
 <td align="left">delta</td>
-<td align="left">error</td>
+<td align="left"></td>
 </tr>
 <tr class="odd">
 <td align="left"><span class="math inline">\(\epsilon\)</span></td>
 <td align="left">epsilon</td>
-<td align="left"></td>
+<td align="left">error</td>
 </tr>
 <tr class="even">
 <td align="left"><span class="math inline">\(\zeta\)</span></td>
@@ -234,12 +235,12 @@
 <tr class="odd">
 <td align="left"><span class="math inline">\(\eta\)</span></td>
 <td align="left">eta</td>
-<td align="left">a parameter in general</td>
+<td align="left"></td>
 </tr>
 <tr class="even">
 <td align="left"><span class="math inline">\(\theta\)</span></td>
 <td align="left">theta</td>
-<td align="left"></td>
+<td align="left">a parameter in general</td>
 </tr>
 <tr class="odd">
 <td align="left"><span class="math inline">\(\iota\)</span></td>
@@ -254,12 +255,12 @@
 <tr class="odd">
 <td align="left"><span class="math inline">\(\lambda\)</span></td>
 <td align="left">lambda</td>
-<td align="left">mean</td>
+<td align="left"></td>
 </tr>
 <tr class="even">
 <td align="left"><span class="math inline">\(\mu\)</span></td>
 <td align="left">mu</td>
-<td align="left"></td>
+<td align="left">mean</td>
 </tr>
 <tr class="odd">
 <td align="left"><span class="math inline">\(\nu\)</span></td>
@@ -279,17 +280,17 @@
 <tr class="even">
 <td align="left"><span class="math inline">\(\pi\)</span></td>
 <td align="left">pi</td>
-<td align="left">correlation</td>
+<td align="left"></td>
 </tr>
 <tr class="odd">
 <td align="left"><span class="math inline">\(\rho\)</span></td>
 <td align="left">rho</td>
-<td align="left">standard deviation</td>
+<td align="left">correlation</td>
 </tr>
 <tr class="even">
 <td align="left"><span class="math inline">\(\sigma\)</span></td>
 <td align="left">sigma</td>
-<td align="left"></td>
+<td align="left">standard deviation</td>
 </tr>
 <tr class="odd">
 <td align="left"><span class="math inline">\(\tau\)</span></td>

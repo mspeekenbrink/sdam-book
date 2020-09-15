@@ -24,7 +24,7 @@
 <meta name="author" content="Maarten Speekenbrink" />
 
 
-<meta name="date" content="2020-09-14" />
+<meta name="date" content="2020-09-15" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -88,7 +88,7 @@
 <li class="chapter" data-level="1.4.1" data-path="intro.html"><a href="intro.html#summary-statistics"><i class="fa fa-check"></i><b>1.4.1</b> Summary statistics</a></li>
 <li class="chapter" data-level="1.4.2" data-path="intro.html"><a href="intro.html#visual-exploration"><i class="fa fa-check"></i><b>1.4.2</b> Visual exploration</a></li>
 </ul></li>
-<li class="chapter" data-level="1.5" data-path="intro.html"><a href="intro.html#analysis-and-modeling"><i class="fa fa-check"></i><b>1.5</b> Analysis and modeling</a></li>
+<li class="chapter" data-level="1.5" data-path="intro.html"><a href="intro.html#analysis-and-modelling"><i class="fa fa-check"></i><b>1.5</b> Analysis and modelling</a></li>
 <li class="chapter" data-level="1.6" data-path="intro.html"><a href="intro.html#summary"><i class="fa fa-check"></i><b>1.6</b> Summary</a></li>
 </ul></li>
 <li class="chapter" data-level="2" data-path="statistical-modeling.html"><a href="statistical-modeling.html"><i class="fa fa-check"></i><b>2</b> Statistical modeling</a><ul>
@@ -107,7 +107,7 @@
 </ul></li>
 <li class="chapter" data-level="2.6" data-path="statistical-modeling.html"><a href="statistical-modeling.html#confidence-intervals"><i class="fa fa-check"></i><b>2.6</b> Confidence intervals</a></li>
 <li class="chapter" data-level="2.7" data-path="intro.html"><a href="intro.html#summary"><i class="fa fa-check"></i><b>2.7</b> Summary</a></li>
-<li class="chapter" data-level="2.8" data-path="statistical-modeling.html"><a href="statistical-modeling.html#exercises"><i class="fa fa-check"></i><b>2.8</b> Exercises</a></li>
+<li class="chapter" data-level="2.8" data-path="statistical-modeling.html"><a href="statistical-modeling.html#epilogue"><i class="fa fa-check"></i><b>2.8</b> Epilogue</a></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="a-model-with-a-mean-introduction-to-the-general-linear-model.html"><a href="a-model-with-a-mean-introduction-to-the-general-linear-model.html"><i class="fa fa-check"></i><b>3</b> A model with a mean: Introduction to the General Linear Model</a><ul>
 <li class="chapter" data-level="3.1" data-path="a-model-with-a-mean-introduction-to-the-general-linear-model.html"><a href="a-model-with-a-mean-introduction-to-the-general-linear-model.html#numeric-judgment-and-anchoring"><i class="fa fa-check"></i><b>3.1</b> Numeric judgment and anchoring</a><ul>
@@ -186,10 +186,10 @@
 source: <a href="https://www.irishcentral.com/sports/paul-the-psychic-octopus-picks-all-the-world-cup-winners-98010019-238038511">Irish central</a></p>
 </blockquote>
 <p>Paul the Octopus (26 January 2008 – 26 October 2010) was born in the Sea Life Centre in Weymouth, England, and subsequently moved to the aquarium chain’s centre in Oberhausen, Germany. It was there he found world-wide fame as a caphalopod oracle.</p>
-<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-2"></span>
-<img src="https://static.guim.co.uk/sys-images/Guardian/Pix/pictures/2010/7/15/1279193684789/Paul-the-octopus-005.jpg" alt="Paul the octpopus predicts Spain to win the final of the 2010 FIFA World Cup"  />
+<div class="figure" style="text-align: center"><span id="fig:paul-the-octopus-image"></span>
+<img src="https://static.guim.co.uk/sys-images/Guardian/Pix/pictures/2010/7/15/1279193684789/Paul-the-octopus-005.jpg" alt="Paul the octpopus predicts Spain to win the final of the 2010 FIFA World Cup. Source: [The Guardian](https://www.theguardian.com/football/2010/jul/09/psychic-octopus-paul-picks-spain)"  />
 <p class="caption">
-Figure 1.1: Paul the octpopus predicts Spain to win the final of the 2010 FIFA World Cup
+Figure 1.1: Paul the octpopus predicts Spain to win the final of the 2010 FIFA World Cup. Source: <a href="https://www.theguardian.com/football/2010/jul/09/psychic-octopus-paul-picks-spain">The Guardian</a>
 </p>
 </div>
 <p>Paul began his career during the 2008 UEFA Euro football tournament. In the lead-up to Germany’s international football matches, Paul was presented with two clear plastic boxes, each containing food (a mussel or an oyster). Each container was marked with the flag of a team, one the flag of Germany, and the other the flag of Germany’s opponent. The box which Paul opened first (and ate its contents) was deemed to be the predicted winner of the match. Paul predicted Germany to win all of their games, a correct prediction in 4 out of 6 cases. He failed to predict their defeats by Croatia in the group stage, and by Spain in the championship’s final.</p>
@@ -731,14 +731,22 @@ Figure 1.4: A raincloud plot of the average goals scored per match
 </div>
 </div>
 </div>
-<div id="analysis-and-modeling" class="section level2">
-<h2><span class="header-section-number">1.5</span> Analysis and modeling</h2>
+<div id="analysis-and-modelling" class="section level2">
+<h2><span class="header-section-number">1.5</span> Analysis and modelling</h2>
 <p>Analysing data can mean lots of things. According to <a href="https://en.wikipedia.org/wiki/Data_analysis">WikiPedia</a> “Data analysis is a process of inspecting, cleansing, transforming and modelling data with the goal of discovering useful information, informing conclusions and supporting decision-making.” That is a reasonably accurate, but also quite lengthy and boring definition. An alternative to this I quite like is that data analysis is <em>identifying a signal within noise</em>.</p>
 <p>Data is noisy for many reasons. For one thing, the data that we have access to is generally limited, in the sense that we could have obtained other and/or more data. Other sources of noise include measurement error. Such sources of noise imply that the data set we have only gives a limited, incomplete, and corrupted view on the process that generated it (the Data Generating Process). We are not interested solely in describing the data set we have, we generally want to infer something about the Data Generating Process. We don’t just want to state that Paul made 8 out of 8 accurate predictions in the 2010 FIFA World Cup, we want to use this data to assess whether Paul had psychic abilities. Whether, had Paul’s keeper allowed Paul to make predictions for other matches, he would have also been correct. Such inferences go beyond the data that we have. Perhaps Paul was just lucky in those 8 predictions, and his 100% hit rate is not a good reflection of his hit rate in general.</p>
-<p>Statistical modelling can be viewed as describing the Data Generating Process in the language of mathematics. At its core, a statistical model defines the distribution of possible values of variables. In an ideal world, this model distribution is identical to the true distribution that follows from the Data Generating Process. In general, though, there will be some mismatch between the model distribution and the DGP distribution. Models are simplifications and idealizations. As statistician George Box famously noted “all models are wrong, but some are useful” <span class="citation">(Box and Draper <a href="#ref-Box1987" role="doc-biblioref">1987</a>)</span>.</p>
+<p>Statistical modelling can be viewed as describing the Data Generating Process in the language of mathematics. At its core, a statistical model defines the distribution of possible values of variables. In an ideal world, this model distribution is identical to the true distribution that follows from the Data Generating Process. In general, though, there will be some mismatch between the model distribution and the DGP distribution. Models are simplifications and idealizations. As statistician George Box famously noted “all models are wrong, but some are useful” <span class="citation">(Box and Draper <a href="#ref-Box1987" role="doc-biblioref">1987</a>)</span>. What do we mean by this? Consider the famous London tube map (<a href="#fig:london-tugbe-map"><strong>??</strong></a>). This map is “wrong” because as any map, it is a simplification of reality. It does not provide a completely accurate representation of the world. But what is special about the tube map is that, unlike standard maps, it does not even attempt to reflect the geographical location of the different underground (or “tube”) lines and stations. Its initial designer, Harry Beck, realised that realised that because the lines run mostly underground, the exact physical locations of the stations were largely irrelevant to the traveller wanting to know how to get from one station to another. What matters to them is the relation between the stations, and which lines connect them. Hence, he designed the map as a schematic diagram which clearly shows the lines connecting stations. If you used the map to determine the walking distance between stations, you’d be very disappointed. But to determine your underground journey, the map is very useful.</p>
+<div class="figure" style="text-align: center"><span id="fig:london-tube-map"></span>
+<img src="https://tfl.gov.uk/cdn/static/cms/images/tube-map.gif" alt="London tube map. Source: [TfL](https://tfl.gov.uk/maps/track/tube)"  />
+<p class="caption">
+Figure 1.5: London tube map. Source: <a href="https://tfl.gov.uk/maps/track/tube">TfL</a>
+</p>
+</div>
+<p>Statistical models are a bit like the London tube map: their usefulness will depend on your goals. In order to derive properties of various statistical analyses and tests, we have to assume that a model is true (in the sense that it truly reflects the DGP distribution). While this assumption is inherently uncertain, the derived properties may hold, at least approximately, as long is the model distribution is an “accurate enough” representation of the DGP distribution. While in mathematics, statements are either true or false, in applied statistics, we have to deal with statements that are only approximately true.</p>
 </div>
 <div id="summary" class="section level2">
 <h2><span class="header-section-number">1.6</span> Summary</h2>
+<p>The objective of statistical data analysis is to go beyond a given data set, and make claims about aspects of the process that generated the data (the Data Generating Process). To make inferences beyond the limited data we have collected, we need statistical models which aim to describe the distribution of all possible data that we could have collected. Data can be of different types. The measurement scale of a variable determines the way in which numbers assigned to values of the variable can be interpreted and manipulated. Aspects of the data collection, such as whether data was collected in an experiment with random assignment, or whether the data was observed in a more naturalistic setting, are important aspects of the Data Generating Process, and determine to what extent we can rule out confounds that may bias our conclusions. Paul was one amazing octopus.</p>
 
 </div>
 </div>
