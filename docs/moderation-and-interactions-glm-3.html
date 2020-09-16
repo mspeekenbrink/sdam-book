@@ -4,27 +4,27 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 6 Moderation and interactions (GLM 3) | Statistics, data analysis, and modelling</title>
-  <meta name="description" content="Book/course notes" />
+  <title>Chapter 6 Moderation and interactions (GLM 3) | Statistics: data analysis and modelling</title>
+  <meta name="description" content="A book about statistics for data analysis, with a main focus on statistical modelling." />
   <meta name="generator" content="bookdown 0.20 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapter 6 Moderation and interactions (GLM 3) | Statistics, data analysis, and modelling" />
+  <meta property="og:title" content="Chapter 6 Moderation and interactions (GLM 3) | Statistics: data analysis and modelling" />
   <meta property="og:type" content="book" />
   
   
-  <meta property="og:description" content="Book/course notes" />
+  <meta property="og:description" content="A book about statistics for data analysis, with a main focus on statistical modelling." />
   <meta name="github-repo" content="mspeekenbrink/sdam-book" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 6 Moderation and interactions (GLM 3) | Statistics, data analysis, and modelling" />
+  <meta name="twitter:title" content="Chapter 6 Moderation and interactions (GLM 3) | Statistics: data analysis and modelling" />
   
-  <meta name="twitter:description" content="Book/course notes" />
+  <meta name="twitter:description" content="A book about statistics for data analysis, with a main focus on statistical modelling." />
   
 
 <meta name="author" content="Maarten Speekenbrink" />
 
 
-<meta name="date" content="2020-09-15" />
+<meta name="date" content="2020-09-16" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -52,6 +52,13 @@
 
 <script src="book_assets/accessible-code-block-0.0.1/empty-anchor.js"></script>
 <script src="book_assets/htmlwidgets-1.5.1/htmlwidgets.js"></script>
+<script src="book_assets/d3-3.3.8/d3.min.js"></script>
+<script src="book_assets/dagre-0.4.0/dagre-d3.min.js"></script>
+<link href="book_assets/mermaid-0.3.0/dist/mermaid.css" rel="stylesheet" />
+<script src="book_assets/mermaid-0.3.0/dist/mermaid.slim.min.js"></script>
+<link href="book_assets/DiagrammeR-styles-0.2/styles.css" rel="stylesheet" />
+<script src="book_assets/chromatography-0.1/chromatography.js"></script>
+<script src="book_assets/DiagrammeR-binding-1.0.6.1/DiagrammeR.js"></script>
 <script src="book_assets/plotly-binding-4.9.2.1/plotly.js"></script>
 <script src="book_assets/typedarray-0.1/typedarray.min.js"></script>
 <link href="book_assets/crosstalk-1.1.0.1/css/crosstalk.css" rel="stylesheet" />
@@ -61,6 +68,7 @@
 
 
 
+<link rel="stylesheet" href="style.css" type="text/css" />
 </head>
 
 <body>
@@ -91,23 +99,24 @@
 <li class="chapter" data-level="1.5" data-path="intro.html"><a href="intro.html#analysis-and-modelling"><i class="fa fa-check"></i><b>1.5</b> Analysis and modelling</a></li>
 <li class="chapter" data-level="1.6" data-path="intro.html"><a href="intro.html#summary"><i class="fa fa-check"></i><b>1.6</b> Summary</a></li>
 </ul></li>
-<li class="chapter" data-level="2" data-path="statistical-modeling.html"><a href="statistical-modeling.html"><i class="fa fa-check"></i><b>2</b> Statistical modeling</a><ul>
-<li class="chapter" data-level="2.1" data-path="statistical-modeling.html"><a href="statistical-modeling.html#coin-flipping-defining-a-statistical-model"><i class="fa fa-check"></i><b>2.1</b> Coin flipping: Defining a statistical model</a></li>
-<li class="chapter" data-level="2.2" data-path="statistical-modeling.html"><a href="statistical-modeling.html#probability"><i class="fa fa-check"></i><b>2.2</b> Probability</a><ul>
-<li class="chapter" data-level="2.2.1" data-path="statistical-modeling.html"><a href="statistical-modeling.html#what-is-probability"><i class="fa fa-check"></i><b>2.2.1</b> What is probability?</a></li>
-<li class="chapter" data-level="2.2.2" data-path="statistical-modeling.html"><a href="statistical-modeling.html#distributions"><i class="fa fa-check"></i><b>2.2.2</b> Distributions</a></li>
+<li class="chapter" data-level="2" data-path="statistical-modelling.html"><a href="statistical-modelling.html"><i class="fa fa-check"></i><b>2</b> Statistical modelling</a><ul>
+<li class="chapter" data-level="2.1" data-path="statistical-modelling.html"><a href="statistical-modelling.html#coin-flipping-defining-a-statistical-model"><i class="fa fa-check"></i><b>2.1</b> Coin flipping: Defining a statistical model</a></li>
+<li class="chapter" data-level="2.2" data-path="statistical-modelling.html"><a href="statistical-modelling.html#probability"><i class="fa fa-check"></i><b>2.2</b> Probability</a><ul>
+<li class="chapter" data-level="2.2.1" data-path="statistical-modelling.html"><a href="statistical-modelling.html#what-is-probability"><i class="fa fa-check"></i><b>2.2.1</b> What is probability?</a></li>
+<li class="chapter" data-level="2.2.2" data-path="statistical-modelling.html"><a href="statistical-modelling.html#distributions"><i class="fa fa-check"></i><b>2.2.2</b> Distributions</a></li>
 </ul></li>
-<li class="chapter" data-level="2.3" data-path="statistical-modeling.html"><a href="statistical-modeling.html#flipping-a-biased-coin-an-alternative-model"><i class="fa fa-check"></i><b>2.3</b> Flipping a biased coin: An alternative model</a></li>
-<li class="chapter" data-level="2.4" data-path="statistical-modeling.html"><a href="statistical-modeling.html#estimation"><i class="fa fa-check"></i><b>2.4</b> Estimation</a><ul>
-<li class="chapter" data-level="2.4.1" data-path="statistical-modeling.html"><a href="statistical-modeling.html#properties-of-good-estimators"><i class="fa fa-check"></i><b>2.4.1</b> Properties of good estimators</a></li>
+<li class="chapter" data-level="2.3" data-path="statistical-modelling.html"><a href="statistical-modelling.html#flipping-a-biased-coin-an-alternative-model"><i class="fa fa-check"></i><b>2.3</b> Flipping a biased coin: An alternative model</a></li>
+<li class="chapter" data-level="2.4" data-path="statistical-modelling.html"><a href="statistical-modelling.html#estimation"><i class="fa fa-check"></i><b>2.4</b> Estimation</a><ul>
+<li class="chapter" data-level="2.4.1" data-path="statistical-modelling.html"><a href="statistical-modelling.html#maximum-likelihood-estimation"><i class="fa fa-check"></i><b>2.4.1</b> Maximum likelihood estimation</a></li>
+<li class="chapter" data-level="2.4.2" data-path="statistical-modelling.html"><a href="statistical-modelling.html#properties-of-good-estimators"><i class="fa fa-check"></i><b>2.4.2</b> Properties of good estimators</a></li>
 </ul></li>
-<li class="chapter" data-level="2.5" data-path="statistical-modeling.html"><a href="statistical-modeling.html#null-hypothesis-significance-testing"><i class="fa fa-check"></i><b>2.5</b> Null-hypothesis significance testing</a><ul>
-<li class="chapter" data-level="2.5.1" data-path="statistical-modeling.html"><a href="statistical-modeling.html#decisions-and-types-of-error"><i class="fa fa-check"></i><b>2.5.1</b> Decisions and types of error</a></li>
-<li class="chapter" data-level="2.5.2" data-path="statistical-modeling.html"><a href="statistical-modeling.html#significance-and-power"><i class="fa fa-check"></i><b>2.5.2</b> Significance and power</a></li>
+<li class="chapter" data-level="2.5" data-path="statistical-modelling.html"><a href="statistical-modelling.html#null-hypothesis-significance-testing"><i class="fa fa-check"></i><b>2.5</b> Null-hypothesis significance testing</a><ul>
+<li class="chapter" data-level="2.5.1" data-path="statistical-modelling.html"><a href="statistical-modelling.html#decisions-and-types-of-error"><i class="fa fa-check"></i><b>2.5.1</b> Decisions and types of error</a></li>
+<li class="chapter" data-level="2.5.2" data-path="statistical-modelling.html"><a href="statistical-modelling.html#significance-and-power"><i class="fa fa-check"></i><b>2.5.2</b> Significance and power</a></li>
+<li class="chapter" data-level="2.5.3" data-path="statistical-modelling.html"><a href="statistical-modelling.html#testing-whether-paul-was-guessing"><i class="fa fa-check"></i><b>2.5.3</b> Testing whether Paul was guessing</a></li>
 </ul></li>
-<li class="chapter" data-level="2.6" data-path="statistical-modeling.html"><a href="statistical-modeling.html#confidence-intervals"><i class="fa fa-check"></i><b>2.6</b> Confidence intervals</a></li>
-<li class="chapter" data-level="2.7" data-path="intro.html"><a href="intro.html#summary"><i class="fa fa-check"></i><b>2.7</b> Summary</a></li>
-<li class="chapter" data-level="2.8" data-path="statistical-modeling.html"><a href="statistical-modeling.html#epilogue"><i class="fa fa-check"></i><b>2.8</b> Epilogue</a></li>
+<li class="chapter" data-level="2.6" data-path="intro.html"><a href="intro.html#summary"><i class="fa fa-check"></i><b>2.6</b> Summary</a></li>
+<li class="chapter" data-level="2.7" data-path="statistical-modelling.html"><a href="statistical-modelling.html#epilogue"><i class="fa fa-check"></i><b>2.7</b> Epilogue</a></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="a-model-with-a-mean-introduction-to-the-general-linear-model.html"><a href="a-model-with-a-mean-introduction-to-the-general-linear-model.html"><i class="fa fa-check"></i><b>3</b> A model with a mean: Introduction to the General Linear Model</a><ul>
 <li class="chapter" data-level="3.1" data-path="a-model-with-a-mean-introduction-to-the-general-linear-model.html"><a href="a-model-with-a-mean-introduction-to-the-general-linear-model.html#numeric-judgment-and-anchoring"><i class="fa fa-check"></i><b>3.1</b> Numeric judgment and anchoring</a><ul>
@@ -128,18 +137,18 @@
 </ul></li>
 <li class="chapter" data-level="4" data-path="linear-regression.html"><a href="linear-regression.html"><i class="fa fa-check"></i><b>4</b> Linear regression</a><ul>
 <li class="chapter" data-level="4.1" data-path="linear-regression.html"><a href="linear-regression.html#the-model"><i class="fa fa-check"></i><b>4.1</b> The model</a></li>
-<li class="chapter" data-level="4.2" data-path="statistical-modeling.html"><a href="statistical-modeling.html#estimation"><i class="fa fa-check"></i><b>4.2</b> Estimation</a></li>
+<li class="chapter" data-level="4.2" data-path="statistical-modelling.html"><a href="statistical-modelling.html#estimation"><i class="fa fa-check"></i><b>4.2</b> Estimation</a></li>
 <li class="chapter" data-level="4.3" data-path="linear-regression.html"><a href="linear-regression.html#hypothesis-testing"><i class="fa fa-check"></i><b>4.3</b> Hypothesis testing</a><ul>
 <li class="chapter" data-level="4.3.1" data-path="linear-regression.html"><a href="linear-regression.html#sampling-distribution-of-estimates"><i class="fa fa-check"></i><b>4.3.1</b> Sampling distribution of estimates</a></li>
 <li class="chapter" data-level="4.3.2" data-path="linear-regression.html"><a href="linear-regression.html#model-comparison"><i class="fa fa-check"></i><b>4.3.2</b> Model comparison</a></li>
 </ul></li>
-<li class="chapter" data-level="4.4" data-path="statistical-modeling.html"><a href="statistical-modeling.html#confidence-intervals"><i class="fa fa-check"></i><b>4.4</b> Confidence intervals</a></li>
+<li class="chapter" data-level="4.4" data-path="linear-regression.html"><a href="linear-regression.html#confidence-intervals"><i class="fa fa-check"></i><b>4.4</b> Confidence intervals</a></li>
 <li class="chapter" data-level="4.5" data-path="linear-regression.html"><a href="linear-regression.html#assumptions-and-outliers"><i class="fa fa-check"></i><b>4.5</b> Assumptions and outliers</a></li>
 <li class="chapter" data-level="4.6" data-path="intro.html"><a href="intro.html#summary"><i class="fa fa-check"></i><b>4.6</b> Summary</a></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="multiple-regression.html"><a href="multiple-regression.html"><i class="fa fa-check"></i><b>5</b> Multiple regression</a><ul>
 <li class="chapter" data-level="5.1" data-path="linear-regression.html"><a href="linear-regression.html#the-model"><i class="fa fa-check"></i><b>5.1</b> The model</a></li>
-<li class="chapter" data-level="5.2" data-path="statistical-modeling.html"><a href="statistical-modeling.html#estimation"><i class="fa fa-check"></i><b>5.2</b> Estimation</a></li>
+<li class="chapter" data-level="5.2" data-path="statistical-modelling.html"><a href="statistical-modelling.html#estimation"><i class="fa fa-check"></i><b>5.2</b> Estimation</a></li>
 <li class="chapter" data-level="5.3" data-path="multiple-regression.html"><a href="multiple-regression.html#inference"><i class="fa fa-check"></i><b>5.3</b> Inference</a></li>
 <li class="chapter" data-level="5.4" data-path="multiple-regression.html"><a href="multiple-regression.html#multicollinearity"><i class="fa fa-check"></i><b>5.4</b> Multicollinearity</a></li>
 <li class="chapter" data-level="5.5" data-path="multiple-regression.html"><a href="multiple-regression.html#polynomial-regression"><i class="fa fa-check"></i><b>5.5</b> Polynomial regression</a></li>
@@ -167,7 +176,7 @@
       <div class="body-inner">
         <div class="book-header" role="navigation">
           <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Statistics, data analysis, and modelling</a>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Statistics: data analysis and modelling</a>
           </h1>
         </div>
 
@@ -215,8 +224,8 @@ gitbook.start({
 },
 "fontsettings": {
 "theme": "white",
-"family": "sans",
-"size": 2
+"family": "serif",
+"size": 3
 },
 "edit": {
 "link": "https://github.com/mspeekenbrink/sdam-book/edit/master/05-GLM-moderation.Rmd",
@@ -233,7 +242,9 @@ gitbook.start({
 "download": null,
 "toc": {
 "collapse": "subsection"
-}
+},
+"source": null,
+"search": true
 });
 });
 </script>

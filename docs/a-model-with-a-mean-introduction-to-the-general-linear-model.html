@@ -4,34 +4,34 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 3 A model with a mean: Introduction to the General Linear Model | Statistics, data analysis, and modelling</title>
-  <meta name="description" content="Book/course notes" />
+  <title>Chapter 3 A model with a mean: Introduction to the General Linear Model | Statistics: data analysis and modelling</title>
+  <meta name="description" content="A book about statistics for data analysis, with a main focus on statistical modelling." />
   <meta name="generator" content="bookdown 0.20 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapter 3 A model with a mean: Introduction to the General Linear Model | Statistics, data analysis, and modelling" />
+  <meta property="og:title" content="Chapter 3 A model with a mean: Introduction to the General Linear Model | Statistics: data analysis and modelling" />
   <meta property="og:type" content="book" />
   
   
-  <meta property="og:description" content="Book/course notes" />
+  <meta property="og:description" content="A book about statistics for data analysis, with a main focus on statistical modelling." />
   <meta name="github-repo" content="mspeekenbrink/sdam-book" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 3 A model with a mean: Introduction to the General Linear Model | Statistics, data analysis, and modelling" />
+  <meta name="twitter:title" content="Chapter 3 A model with a mean: Introduction to the General Linear Model | Statistics: data analysis and modelling" />
   
-  <meta name="twitter:description" content="Book/course notes" />
+  <meta name="twitter:description" content="A book about statistics for data analysis, with a main focus on statistical modelling." />
   
 
 <meta name="author" content="Maarten Speekenbrink" />
 
 
-<meta name="date" content="2020-09-15" />
+<meta name="date" content="2020-09-16" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="statistical-modeling.html"/>
+<link rel="prev" href="statistical-modelling.html"/>
 <link rel="next" href="linear-regression.html"/>
 <script src="book_assets/jquery-2.2.3/jquery.min.js"></script>
 <link href="book_assets/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -52,6 +52,13 @@
 
 <script src="book_assets/accessible-code-block-0.0.1/empty-anchor.js"></script>
 <script src="book_assets/htmlwidgets-1.5.1/htmlwidgets.js"></script>
+<script src="book_assets/d3-3.3.8/d3.min.js"></script>
+<script src="book_assets/dagre-0.4.0/dagre-d3.min.js"></script>
+<link href="book_assets/mermaid-0.3.0/dist/mermaid.css" rel="stylesheet" />
+<script src="book_assets/mermaid-0.3.0/dist/mermaid.slim.min.js"></script>
+<link href="book_assets/DiagrammeR-styles-0.2/styles.css" rel="stylesheet" />
+<script src="book_assets/chromatography-0.1/chromatography.js"></script>
+<script src="book_assets/DiagrammeR-binding-1.0.6.1/DiagrammeR.js"></script>
 <script src="book_assets/plotly-binding-4.9.2.1/plotly.js"></script>
 <script src="book_assets/typedarray-0.1/typedarray.min.js"></script>
 <link href="book_assets/crosstalk-1.1.0.1/css/crosstalk.css" rel="stylesheet" />
@@ -61,6 +68,7 @@
 
 
 
+<link rel="stylesheet" href="style.css" type="text/css" />
 </head>
 
 <body>
@@ -91,23 +99,24 @@
 <li class="chapter" data-level="1.5" data-path="intro.html"><a href="intro.html#analysis-and-modelling"><i class="fa fa-check"></i><b>1.5</b> Analysis and modelling</a></li>
 <li class="chapter" data-level="1.6" data-path="intro.html"><a href="intro.html#summary"><i class="fa fa-check"></i><b>1.6</b> Summary</a></li>
 </ul></li>
-<li class="chapter" data-level="2" data-path="statistical-modeling.html"><a href="statistical-modeling.html"><i class="fa fa-check"></i><b>2</b> Statistical modeling</a><ul>
-<li class="chapter" data-level="2.1" data-path="statistical-modeling.html"><a href="statistical-modeling.html#coin-flipping-defining-a-statistical-model"><i class="fa fa-check"></i><b>2.1</b> Coin flipping: Defining a statistical model</a></li>
-<li class="chapter" data-level="2.2" data-path="statistical-modeling.html"><a href="statistical-modeling.html#probability"><i class="fa fa-check"></i><b>2.2</b> Probability</a><ul>
-<li class="chapter" data-level="2.2.1" data-path="statistical-modeling.html"><a href="statistical-modeling.html#what-is-probability"><i class="fa fa-check"></i><b>2.2.1</b> What is probability?</a></li>
-<li class="chapter" data-level="2.2.2" data-path="statistical-modeling.html"><a href="statistical-modeling.html#distributions"><i class="fa fa-check"></i><b>2.2.2</b> Distributions</a></li>
+<li class="chapter" data-level="2" data-path="statistical-modelling.html"><a href="statistical-modelling.html"><i class="fa fa-check"></i><b>2</b> Statistical modelling</a><ul>
+<li class="chapter" data-level="2.1" data-path="statistical-modelling.html"><a href="statistical-modelling.html#coin-flipping-defining-a-statistical-model"><i class="fa fa-check"></i><b>2.1</b> Coin flipping: Defining a statistical model</a></li>
+<li class="chapter" data-level="2.2" data-path="statistical-modelling.html"><a href="statistical-modelling.html#probability"><i class="fa fa-check"></i><b>2.2</b> Probability</a><ul>
+<li class="chapter" data-level="2.2.1" data-path="statistical-modelling.html"><a href="statistical-modelling.html#what-is-probability"><i class="fa fa-check"></i><b>2.2.1</b> What is probability?</a></li>
+<li class="chapter" data-level="2.2.2" data-path="statistical-modelling.html"><a href="statistical-modelling.html#distributions"><i class="fa fa-check"></i><b>2.2.2</b> Distributions</a></li>
 </ul></li>
-<li class="chapter" data-level="2.3" data-path="statistical-modeling.html"><a href="statistical-modeling.html#flipping-a-biased-coin-an-alternative-model"><i class="fa fa-check"></i><b>2.3</b> Flipping a biased coin: An alternative model</a></li>
-<li class="chapter" data-level="2.4" data-path="statistical-modeling.html"><a href="statistical-modeling.html#estimation"><i class="fa fa-check"></i><b>2.4</b> Estimation</a><ul>
-<li class="chapter" data-level="2.4.1" data-path="statistical-modeling.html"><a href="statistical-modeling.html#properties-of-good-estimators"><i class="fa fa-check"></i><b>2.4.1</b> Properties of good estimators</a></li>
+<li class="chapter" data-level="2.3" data-path="statistical-modelling.html"><a href="statistical-modelling.html#flipping-a-biased-coin-an-alternative-model"><i class="fa fa-check"></i><b>2.3</b> Flipping a biased coin: An alternative model</a></li>
+<li class="chapter" data-level="2.4" data-path="statistical-modelling.html"><a href="statistical-modelling.html#estimation"><i class="fa fa-check"></i><b>2.4</b> Estimation</a><ul>
+<li class="chapter" data-level="2.4.1" data-path="statistical-modelling.html"><a href="statistical-modelling.html#maximum-likelihood-estimation"><i class="fa fa-check"></i><b>2.4.1</b> Maximum likelihood estimation</a></li>
+<li class="chapter" data-level="2.4.2" data-path="statistical-modelling.html"><a href="statistical-modelling.html#properties-of-good-estimators"><i class="fa fa-check"></i><b>2.4.2</b> Properties of good estimators</a></li>
 </ul></li>
-<li class="chapter" data-level="2.5" data-path="statistical-modeling.html"><a href="statistical-modeling.html#null-hypothesis-significance-testing"><i class="fa fa-check"></i><b>2.5</b> Null-hypothesis significance testing</a><ul>
-<li class="chapter" data-level="2.5.1" data-path="statistical-modeling.html"><a href="statistical-modeling.html#decisions-and-types-of-error"><i class="fa fa-check"></i><b>2.5.1</b> Decisions and types of error</a></li>
-<li class="chapter" data-level="2.5.2" data-path="statistical-modeling.html"><a href="statistical-modeling.html#significance-and-power"><i class="fa fa-check"></i><b>2.5.2</b> Significance and power</a></li>
+<li class="chapter" data-level="2.5" data-path="statistical-modelling.html"><a href="statistical-modelling.html#null-hypothesis-significance-testing"><i class="fa fa-check"></i><b>2.5</b> Null-hypothesis significance testing</a><ul>
+<li class="chapter" data-level="2.5.1" data-path="statistical-modelling.html"><a href="statistical-modelling.html#decisions-and-types-of-error"><i class="fa fa-check"></i><b>2.5.1</b> Decisions and types of error</a></li>
+<li class="chapter" data-level="2.5.2" data-path="statistical-modelling.html"><a href="statistical-modelling.html#significance-and-power"><i class="fa fa-check"></i><b>2.5.2</b> Significance and power</a></li>
+<li class="chapter" data-level="2.5.3" data-path="statistical-modelling.html"><a href="statistical-modelling.html#testing-whether-paul-was-guessing"><i class="fa fa-check"></i><b>2.5.3</b> Testing whether Paul was guessing</a></li>
 </ul></li>
-<li class="chapter" data-level="2.6" data-path="statistical-modeling.html"><a href="statistical-modeling.html#confidence-intervals"><i class="fa fa-check"></i><b>2.6</b> Confidence intervals</a></li>
-<li class="chapter" data-level="2.7" data-path="intro.html"><a href="intro.html#summary"><i class="fa fa-check"></i><b>2.7</b> Summary</a></li>
-<li class="chapter" data-level="2.8" data-path="statistical-modeling.html"><a href="statistical-modeling.html#epilogue"><i class="fa fa-check"></i><b>2.8</b> Epilogue</a></li>
+<li class="chapter" data-level="2.6" data-path="intro.html"><a href="intro.html#summary"><i class="fa fa-check"></i><b>2.6</b> Summary</a></li>
+<li class="chapter" data-level="2.7" data-path="statistical-modelling.html"><a href="statistical-modelling.html#epilogue"><i class="fa fa-check"></i><b>2.7</b> Epilogue</a></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="a-model-with-a-mean-introduction-to-the-general-linear-model.html"><a href="a-model-with-a-mean-introduction-to-the-general-linear-model.html"><i class="fa fa-check"></i><b>3</b> A model with a mean: Introduction to the General Linear Model</a><ul>
 <li class="chapter" data-level="3.1" data-path="a-model-with-a-mean-introduction-to-the-general-linear-model.html"><a href="a-model-with-a-mean-introduction-to-the-general-linear-model.html#numeric-judgment-and-anchoring"><i class="fa fa-check"></i><b>3.1</b> Numeric judgment and anchoring</a><ul>
@@ -128,18 +137,18 @@
 </ul></li>
 <li class="chapter" data-level="4" data-path="linear-regression.html"><a href="linear-regression.html"><i class="fa fa-check"></i><b>4</b> Linear regression</a><ul>
 <li class="chapter" data-level="4.1" data-path="linear-regression.html"><a href="linear-regression.html#the-model"><i class="fa fa-check"></i><b>4.1</b> The model</a></li>
-<li class="chapter" data-level="4.2" data-path="statistical-modeling.html"><a href="statistical-modeling.html#estimation"><i class="fa fa-check"></i><b>4.2</b> Estimation</a></li>
+<li class="chapter" data-level="4.2" data-path="statistical-modelling.html"><a href="statistical-modelling.html#estimation"><i class="fa fa-check"></i><b>4.2</b> Estimation</a></li>
 <li class="chapter" data-level="4.3" data-path="linear-regression.html"><a href="linear-regression.html#hypothesis-testing"><i class="fa fa-check"></i><b>4.3</b> Hypothesis testing</a><ul>
 <li class="chapter" data-level="4.3.1" data-path="linear-regression.html"><a href="linear-regression.html#sampling-distribution-of-estimates"><i class="fa fa-check"></i><b>4.3.1</b> Sampling distribution of estimates</a></li>
 <li class="chapter" data-level="4.3.2" data-path="linear-regression.html"><a href="linear-regression.html#model-comparison"><i class="fa fa-check"></i><b>4.3.2</b> Model comparison</a></li>
 </ul></li>
-<li class="chapter" data-level="4.4" data-path="statistical-modeling.html"><a href="statistical-modeling.html#confidence-intervals"><i class="fa fa-check"></i><b>4.4</b> Confidence intervals</a></li>
+<li class="chapter" data-level="4.4" data-path="linear-regression.html"><a href="linear-regression.html#confidence-intervals"><i class="fa fa-check"></i><b>4.4</b> Confidence intervals</a></li>
 <li class="chapter" data-level="4.5" data-path="linear-regression.html"><a href="linear-regression.html#assumptions-and-outliers"><i class="fa fa-check"></i><b>4.5</b> Assumptions and outliers</a></li>
 <li class="chapter" data-level="4.6" data-path="intro.html"><a href="intro.html#summary"><i class="fa fa-check"></i><b>4.6</b> Summary</a></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="multiple-regression.html"><a href="multiple-regression.html"><i class="fa fa-check"></i><b>5</b> Multiple regression</a><ul>
 <li class="chapter" data-level="5.1" data-path="linear-regression.html"><a href="linear-regression.html#the-model"><i class="fa fa-check"></i><b>5.1</b> The model</a></li>
-<li class="chapter" data-level="5.2" data-path="statistical-modeling.html"><a href="statistical-modeling.html#estimation"><i class="fa fa-check"></i><b>5.2</b> Estimation</a></li>
+<li class="chapter" data-level="5.2" data-path="statistical-modelling.html"><a href="statistical-modelling.html#estimation"><i class="fa fa-check"></i><b>5.2</b> Estimation</a></li>
 <li class="chapter" data-level="5.3" data-path="multiple-regression.html"><a href="multiple-regression.html#inference"><i class="fa fa-check"></i><b>5.3</b> Inference</a></li>
 <li class="chapter" data-level="5.4" data-path="multiple-regression.html"><a href="multiple-regression.html#multicollinearity"><i class="fa fa-check"></i><b>5.4</b> Multicollinearity</a></li>
 <li class="chapter" data-level="5.5" data-path="multiple-regression.html"><a href="multiple-regression.html#polynomial-regression"><i class="fa fa-check"></i><b>5.5</b> Polynomial regression</a></li>
@@ -167,7 +176,7 @@
       <div class="body-inner">
         <div class="book-header" role="navigation">
           <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Statistics, data analysis, and modelling</a>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Statistics: data analysis and modelling</a>
           </h1>
         </div>
 
@@ -188,7 +197,7 @@ and Humanities Campus in Sopot, Poland. In particular, we will focus on the judg
 <h3><span class="header-section-number">3.1.1</span> Exploring the data</h3>
 <p>Before diving into statistical modeling, as discussed, it is always good to explore the data. A graphical overview in the form of a histogram and combined violin and boxplot, is given in Figure <a href="a-model-with-a-mean-introduction-to-the-general-linear-model.html#fig:anchoring-eda-plots">3.1</a>. The minimum was judged height was 650 meters (so quite close to the anchor), and the maximum was 12,459 meters. The median judgment was 8000 and the mean 6312.193.</p>
 <div class="figure" style="text-align: center"><span id="fig:anchoring-eda-plots"></span>
-<img src="_main_files/figure-html/anchoring-eda-plots-1.png" alt="Histogram and boxplot of participants' judgments" width="48%" /><img src="_main_files/figure-html/anchoring-eda-plots-2.png" alt="Histogram and boxplot of participants' judgments" width="48%" />
+<img src="_main_files/figure-html/anchoring-eda-plots-1.svg" alt="Histogram and boxplot of participants' judgments" width="48%" /><img src="_main_files/figure-html/anchoring-eda-plots-2.svg" alt="Histogram and boxplot of participants' judgments" width="48%" />
 <p class="caption">
 Figure 3.1: Histogram and boxplot of participants’ judgments
 </p>
@@ -199,7 +208,7 @@ Figure 3.1: Histogram and boxplot of participants’ judgments
 <h2><span class="header-section-number">3.2</span> The Normal distribution</h2>
 <p>The Normal distribution has the well-known bell-shaped curve depicted in Figure <a href="a-model-with-a-mean-introduction-to-the-general-linear-model.html#fig:normal-density-plot">3.2</a>.</p>
 <div class="figure" style="text-align: center"><span id="fig:normal-density-plot"></span>
-<img src="_main_files/figure-html/normal-density-plot-1.png" alt="The Normal density function for $\mu = 0$ and $\sigma = 1$" width="80%" />
+<img src="_main_files/figure-html/normal-density-plot-1.svg" alt="The Normal density function for $\mu = 0$ and $\sigma = 1$" width="80%" />
 <p class="caption">
 Figure 3.2: The Normal density function for <span class="math inline">\(\mu = 0\)</span> and <span class="math inline">\(\sigma = 1\)</span>
 </p>
@@ -213,7 +222,7 @@ p(y) = \frac{1}{\sqrt{2 \pi} \sigma} e^{-\frac{(y-\mu)^2}{2\sigma^2}}
 <p><span class="math display">\[P(a \leq Y \leq b) = \int_a^b \frac{1}{\sqrt{2 \pi} \sigma} e^{-\frac{(y-\mu)^2}{2\sigma^2}} d y\]</span>
 If you are unfamiliar with calculus and have never seen an integration sign (<span class="math inline">\(\int\)</span>), don’t worry, there won’t be much more of this. It is a mathematical way of referring to the “area under the curve” between point <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span>. A proper probability density function respects the rule of total probability, such that <span class="math inline">\(P(-\infty \leq Y \leq \infty) = 1\)</span>. Figure <a href="a-model-with-a-mean-introduction-to-the-general-linear-model.html#fig:normal-distribution-plot">3.3</a> shows the probability of three of such ranges, each symmetrical around the mean. The probability of a value falling in the range between <span class="math inline">\(\mu - 3 \times \sigma\)</span> and <span class="math inline">\(\mu + 3 \times \sigma\)</span> is very close to 1. Hence, values more than three standard deviations from the mean are very unlikely.</p>
 <div class="figure" style="text-align: center"><span id="fig:normal-distribution-plot"></span>
-<img src="_main_files/figure-html/normal-distribution-plot-1.png" alt="Normal distribution and the probability of a value falling in one of three overlapping ranges. Note that the ranges are overlapping, so that the range between $\mu - 3 \sigma$ and $\mu + 3 \sigma$ also covers the range between $\mu - 2 \sigma$ and $\mu + 2 \sigma$, but that this isn't shown in the colours." width="672" />
+<img src="_main_files/figure-html/normal-distribution-plot-1.svg" alt="Normal distribution and the probability of a value falling in one of three overlapping ranges. Note that the ranges are overlapping, so that the range between $\mu - 3 \sigma$ and $\mu + 3 \sigma$ also covers the range between $\mu - 2 \sigma$ and $\mu + 2 \sigma$, but that this isn't shown in the colours." width="672" />
 <p class="caption">
 Figure 3.3: Normal distribution and the probability of a value falling in one of three overlapping ranges. Note that the ranges are overlapping, so that the range between <span class="math inline">\(\mu - 3 \sigma\)</span> and <span class="math inline">\(\mu + 3 \sigma\)</span> also covers the range between <span class="math inline">\(\mu - 2 \sigma\)</span> and <span class="math inline">\(\mu + 2 \sigma\)</span>, but that this isn’t shown in the colours.
 </p>
@@ -234,7 +243,7 @@ Figure 3.3: Normal distribution and the probability of a value falling in one of
 <h3><span class="header-section-number">3.3.1</span> The Central Limit Theorem in action</h3>
 <p>To see the central limit theorem in action, let’s pick an arbitrary probability distribution over 5 values, as shown in Figure <a href="a-model-with-a-mean-introduction-to-the-general-linear-model.html#fig:weird-prob-dist">3.4</a>. This will be the true distribution (i.e. the Data Generating Process) from which we can sample values.</p>
 <div class="figure" style="text-align: center"><span id="fig:weird-prob-dist"></span>
-<img src="_main_files/figure-html/weird-prob-dist-1.png" alt="An aribitrary probability distribution over 5 values, clearly not a Normal distribution!" width="50%" />
+<img src="_main_files/figure-html/weird-prob-dist-1.svg" alt="An aribitrary probability distribution over 5 values, clearly not a Normal distribution!" width="50%" />
 <p class="caption">
 Figure 3.4: An aribitrary probability distribution over 5 values, clearly not a Normal distribution!
 </p>
@@ -273,7 +282,7 @@ Figure 3.6: The distribution of the mean of 20 samples from the distribution in 
 <h3><span class="header-section-number">3.4.1</span> Sampling distribution of the estimated mean</h3>
 <p>Remember that the estimator of the mean is an algorithm that provides estimates from data. Different data sets will give different estimates, even when these are generated from the same Data Generating Process. Our model of the Data Generating Process is the Normal distribution, which has two parameters: <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\sigma\)</span>. Let’s pick some values for these parameters, so that we can use our model to simulate data. For instance, suppose the judgments are on average equal to the true value, so <span class="math inline">\(\mu = 8848\)</span>. Individual judgments are quite variable, however, so let’s take <span class="math inline">\(\sigma = 2000\)</span>. Figure~@ref{fig:histogram-sampling-mean-simple} shows the distribution of the estimated mean of 10,000 data sets each consisting of <span class="math inline">\(N=109\)</span> observations (just like in the anchoring data). Also shown (as a dotted line) is the Normal distribution of the model we used to generate the data. Clearly, the estimated means are much less variable than the simulated judgments.</p>
 <div class="figure" style="text-align: center"><span id="fig:histogram-sampling-mean-simple"></span>
-<img src="_main_files/figure-html/histogram-sampling-mean-simple-1.png" alt="Estimated means for 10000 simulated data sets of N = 109, drawn from a Normal distribution with mean 8848 and standard deviation 2000. The dotted line is represents the Normal distribution from which the data sets were generated, and the solid line the theoretical distribution of the estimated means." width="672" />
+<img src="_main_files/figure-html/histogram-sampling-mean-simple-1.svg" alt="Estimated means for 10000 simulated data sets of N = 109, drawn from a Normal distribution with mean 8848 and standard deviation 2000. The dotted line is represents the Normal distribution from which the data sets were generated, and the solid line the theoretical distribution of the estimated means." width="672" />
 <p class="caption">
 Figure 3.7: Estimated means for 10000 simulated data sets of N = 109, drawn from a Normal distribution with mean 8848 and standard deviation 2000. The dotted line is represents the Normal distribution from which the data sets were generated, and the solid line the theoretical distribution of the estimated means.
 </p>
@@ -320,7 +329,7 @@ https://www.math.arizona.edu/~jwatkins/v-anova.pdf</code></pre>
           </div>
         </div>
       </div>
-<a href="statistical-modeling.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="statistical-modelling.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
 <a href="linear-regression.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
@@ -348,8 +357,8 @@ gitbook.start({
 },
 "fontsettings": {
 "theme": "white",
-"family": "sans",
-"size": 2
+"family": "serif",
+"size": 3
 },
 "edit": {
 "link": "https://github.com/mspeekenbrink/sdam-book/edit/master/03-GLM-simple.Rmd",
@@ -366,7 +375,9 @@ gitbook.start({
 "download": null,
 "toc": {
 "collapse": "subsection"
-}
+},
+"source": null,
+"search": true
 });
 });
 </script>

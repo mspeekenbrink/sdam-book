@@ -52,7 +52,8 @@ If you are unfamiliar with calculus and have never seen an integration sign ($\i
 library(scales)
 library(dplyr)
 library(tidyr)
-levels <- c(expression("mu %+-% sigma %~~% .683"),expression("mu %+-% 2 %*% sigma %~~% .954"),expression("mu %+-% 3 %*% sigma %~~% .997"))[3:1]
+#levels <- c(bquote("mu %+-% sigma %~~% .683"),bquote("mu %+-% 2 %*% sigma %~~% .954"),bquote("mu %+-% 3 %*% sigma %~~% .997"))[3:1]
+levels <- c(bquote(mu %+-% sigma %~~% .683),bquote(mu %+-% 2 %*% sigma %~~% .954),bquote(mu %+-% 3 %*% sigma %~~% .997))[3:1]
 rbind(data.frame(interval=1,x=c(-3,seq(-3,3,length=100),1),y=c(0,dnorm(seq(-3,3,length=100)),0)),
       data.frame(interval=2,x=c(-2,seq(-2,2,length=100),2),y=c(0,dnorm(seq(-2,2,length=100)),0)),
       data.frame(interval=3,x=c(-1,seq(-1,1,length=100),1),y=c(0,dnorm(seq(-1,1,length=100)),0))) %>%

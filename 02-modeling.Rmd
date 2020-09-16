@@ -1,12 +1,12 @@
-# Statistical modeling
+# Statistical modelling
 
-Was Paul truly an oracle? Or was Paul (or his keeper more likely) just really lucky? How do we know? And what really are the chances of predicting the winner of 8 matches correct? These are questions we will focus on now.
+Was Paul truly psychic, an oracle of some kind? Or was Paul -- or his keeper, as what does fame really mean to an octopus? -- just really lucky? How do we know? And what really are the chances of predicting the winner of 8 matches correct? These are questions we will focus on now.
 
 In this chapter, we will start defining statistical models and using them to make inferences about the Data Generating Process. We will cover some basic probability theory, and use this to define two alternative models of Paul's predictions. One in which he is randomly guessing, and one in which his predictions can be more (or less) accurate than if he were randomly guessing, while we are unsure about how accurate Paul really is in that case. We will discuss how to estimate the unknown accuracy of Paul's predictions in this model. After this. we will try to answer the question: was Paul (somewhat) psychic? Our answer will be based on whether we can refute the hypothesis that he was randomly guessing. This is generally done with a procedure called a null-hypothesis significance test. We will also consider another way in which to look at this, in the form of so-called confidence intervals. 
 
 ## Coin flipping: Defining a statistical model
 
-What does it mean for Paul to be an oracle? Sometimes it is easier to answer this question by considering the opposite: When would Paul _not_ be an oracle? If Paul had no way to tell the future, he would be "merely guessing". Purely random guessing between two options can be implemented by flipping a coin. Suppose Paul made his choices by "flipping a mental coin", and choosing the box on the left when the outcome was "heads", and the box on the right when the outcome was "tails". Great, we now have a model of the Data Generating Process! Coin flipping can be seen as a physical model. It is something that we can do in the real world, as many times as we want. Because we understand the physical properties of coin flips reasonably well -- it is really difficult to predict the outcome of a coin flip -- it works well as a model of random guessing. But flipping coins over and over is rather tedious. If we have a mathematical description, a statistical model, of flipping coins, we can spare ourselves this trouble. To do so, we first need to know a bit more about probability.  
+What does it mean for Paul to be psychic, to be an oracle? Sometimes it is easier to answer this question by considering the opposite: When would Paul _not_ be an oracle? If Paul had no way to tell the future, he would be "merely guessing". Purely random guessing between two options can be implemented by flipping a coin. Suppose Paul made his choices by "flipping a mental coin", and choosing the box on the left when the outcome was "heads", and the box on the right when the outcome was "tails". Great, we now have a model of the Data Generating Process! Coin flipping can be seen as a physical model. It is something that we can do in the real world, as many times as we want. Because we understand the physical properties of coin flips reasonably well -- it is really difficult to predict the outcome of a coin flip -- it works well as a model of random guessing. But flipping coins over and over is rather tedious. If we have a mathematical description, a statistical model, of flipping coins, we can spare ourselves this trouble. To do so, we first need to know a bit more about probability.  
 
 ## Probability
 
@@ -34,19 +34,21 @@ simcor <- ifelse(simcor,"correct","incorrect")
 
 So in our simulation, Paul made `r sum(simcor == "correct")` correct predictions out of `r length(simcor)`. Not quite as good as the real Paul, but still a reasonable performance. 
 
-Notice how we went through quite a few steps. We defined a model of non-psychic-and-guessing Paul as making decisions by flipping a coin, we then simulated Paul's decisions by flipping a coin, then transformed these coin flips into a variable containing the decisions to open the left or right box, and finally transformed this variable into another variable containing the accuracy of the predictions. The first transformation is easy. We could have simply put stickers on the coin relabeling "heads" as "left" and "tails" as "right". The second transformation is not as obvious as it depends on a second variable (whether the winning team was represented by the left or right box). In this case, we could have saved ourselves a bit of work by immediately relabeling our coin flips as "correct" or "incorrect". To see why, we need to know a bit more about how to calculate probabilities.
+Notice how we went through quite a few steps. We defined a model of non-psychic-and-guessing Paul as making decisions by flipping a coin, we then simulated Paul's decisions by flipping a coin, then transformed these coin flips into a variable containing the decisions to open the left or right box, and finally transformed this variable into another variable containing the accuracy of the predictions. The first transformation is easy. We could have simply put stickers on the coin relabelling "heads" as "left" and "tails" as "right". The second transformation is not as obvious as it depends on a second variable (whether the winning team was represented by the left or right box). In this case, we could have saved ourselves a bit of work by immediately relabelling our coin flips as "correct" or "incorrect". To see why, we need to know a bit more about how to calculate probabilities.
 
 Let's start at the beginning. For one coin flip, there are two possible outcomes: the coin lands on heads or on tails. The outcome can't be neither (we are assuming the coin is thin enough to not land on its side), nor two heads, or something else. The coin must land on either heads or tails, so there are two outcomes. We call the set of all possible outcomes the __outcome space__, and we'll use a nice curly $\mathcal{S}$ to denote it:
 
 $$\mathcal{S} = \{\text{heads},\text{tails}\}$$
 
+<!--
 ```{definition, outcome-space, name="outcome space", echo=TRUE}
 
 The outcome space is the set of all possible events.
 
 ```
+-->
 
-Our coin flip is a __random variable__ that takes one of the values in the outcome space. It is traditional to denote random variables with capital Roman letters, and the values with small Roman letters. When we want to make generic statements that apply to different random variables (such as a coin flip, the roll of a die, the outcome of a prediction), we tend to use this notation, and $P(Y=y)$ then means 'The probability that random variable $Y$ has value $y$'. Other times, it may be easier to use more descriptive names. In this book, when we use a name for a variable, we will use a computer font, such as `coin_flip`, for the random variable. So $P(\texttt{coin_flip} = \text{heads})$ means 'The probability that random variable `coin_flip` has the value "heads"'.   
+Our coin flip is a __random variable__ that takes one of the values in the outcome space. It is traditional to denote random variables with capital Roman letters, and the values with small Roman letters. When we want to make generic statements that apply to different random variables (such as a coin flip, the roll of a die, the outcome of a prediction), we tend to use this notation, and $P(Y=y)$ then means 'The probability that random variable $Y$ has value $y$'. Other times, it may be easier to use more descriptive names. In this book, when we use a name for a variable, we will use a computer font, such as `coin_flip`, for the random variable. So $P(\texttt{coin\_flip} = \text{heads})$ means 'The probability that random variable `coin_flip` has the value "heads"'.   
 
 ### What is probability?
 
@@ -90,7 +92,7 @@ for(i in 1:n_sim) {
 
 As you can see, the relative frequency fluctuates quite a bit, but becomes more stable with more flips. But even after `r n_flip` flips, it is not equal to 0.5. Flipping a coin can be viewed as an experiment, that we can repeat. Figure \@ref(fig:coin-flip-relative-frequency-multiple) shows the results of flipping a coin for `r n_flip` times when repeating the experiment for `r n_sim` times. As you can see, the results of our experiments (the relative frequencies) are different each time. The differences are quite marked for a small number of flips, but become more alike after flipping the coin more times. This illustrates something known as __The Law of Large Numbers__, to which we will come back soon. For now, let's focus on a different matter. If probability is a relative frequency, then which one is it? Each repetition of the experiment, as well as each number of throws, would give us a different answer! 
 
-```{r coin-flip-relative-frequency-multiple, echo=FALSE,fig.cap=paste("Relative frequency of heads when flipping a coin",n_sim,"times for",n_flip,"times"), cache=TRUE}
+```{r coin-flip-relative-frequency-multiple, dev='png', echo=FALSE,fig.cap=paste("Relative frequency of heads when flipping a coin",n_sim,"times for",n_flip,"times"), cache=TRUE}
 ggplot(dat,aes(x=flip,y=y,colour=factor(simulation))) + geom_line() + ylim(c(0,1)) + ylab("relative frequency of heads") + theme(legend.position="none") + transition_reveal(flip)
 ```
 
@@ -111,7 +113,7 @@ Although the interpretation of probability is debated, the mathematical rules of
 4. $P(\neg E_i) = 1 - P(E_i)$. Here, $\neg$ means "not", so the probability of "not $E_i$" is 1 minus the probability of $E_i$ occurring. This is also called the __complement rule__.
 5. For any events $E_i$ and $E_j$, $P(E_i \text{ or } E_j) = P(E_i) + P(E_j) - P(E_i \text{ and } E_j)$. This rule holds whether the events are mutually exclusive or not, and can be called the __general sum rule__.
 
-Now, all these rules seem a little cumbersome when we are dealing with a simple coin flip. So let's consider a slightly more complex situation: betting on the outcome a roll of a six-sided die. In this betting game, like in roulette, you are allowed to bet on many things, such as the exact number, but also whether the number is odd or even, whether the number is greater than 3, whether the number is greater smaller than 1, etc. All these things are events in the outcome space:
+Now, all these rules seem overkill when we are dealing with a simple coin flip. So let's consider a slightly more complex situation: betting on the outcome a roll of a six-sided die. In this betting game, like in roulette, you are allowed to bet on many things, such as the exact number, but also whether the number is odd or even, whether the number is greater than 3, whether the number is greater smaller than 1, etc. All these things are events in the outcome space:
 
 $$\mathcal{S} = \{1, 2, 3, 4, 5, 6, \text{even}, \text{odd}, >3, < 1, \geq 4, 1 \text{ or } 3, \ldots \}$$
 
@@ -190,59 +192,192 @@ which you can translate into words as
 
 ### Distributions
 
-A probability distribution, as the name suggests, defines how probability is distributed over all possible values of a variable. You can think of "all probability" as a pie, and the probability distribution as slicing up the pie in possibly unequal pieces, and each possible value of a variable is given its own slice. Looking at the correctness of a single prediction, the pie is divided into two equal slices: half for $P(\text{correct})$, and the other half for $P(\text{incorrect})$. But Paul made more than one prediction (8 in the case of the FIFA 2010 World Cup), and what we're really interested in is Paul's accuracy in all his predictions: What is the probability that Paul made 8 out of 8 correct predictions if he was merely guessing? Using the rules of probability, we can work out this probability as well. 
+A probability distribution, as the name suggests, defines how probability is distributed over all possible values of a variable. You can think of "all probability" as a pie, and the probability distribution as slicing up the pie in (possibly unequal) pieces. Each possible value of a variable is given its own slice, and the size of the slice relative to the overall pie is the probability. Looking at the correctness of a single prediction, the pie is divided into two equal slices: half for $P(\text{correct})$, and the other half for $P(\text{incorrect})$. But Paul made more than one prediction (8 in the case of the FIFA 2010 World Cup), and what we're really interested in is Paul's accuracy in all his predictions: What is the probability that Paul made 8 out of 8 correct predictions if he was merely guessing? Using the rules of probability, we can work out this probability as well. 
 
-According to our coin-flipping model, it does not matter which of Paul's prediction we look at (e.g. whether the first, the second, the last, or any other one). In fact, we could generate the data in the reverse order, or start with the Germany-Australia match and then the Spain-Germany match. The probability that any prediction is correct is $P(\text{correct}) = .5$, and whether that prediction is correct is independent from whether any earlier (or later) prediction is correct. In fancy terms, this means that the observations $Y_i$ are _independent and identically distributed_ (IID).
+According to our coin-flipping model, it does not matter which of Paul's prediction we look at (e.g. whether the first, the second, the last, or any other one). In fact, we could generate the data in the reverse order, or start with the Germany-Australia match and then the Spain-Germany match. Let's write Paul's predictions as a variable $\texttt{pred}_i$, where the index $i$ can be a value between 1 and 8, corresponding to the first, second, _etc_, prediction he made. The probability that any prediction is correct is $P(\texttt{pred}_i = \text{correct}) = .5$, and whether that prediction is correct is independent from whether any earlier (or later) prediction is correct. In fancy terms, this means that the observations $Y_i$ are _independent and identically distributed_ (IID).
 
-When considering the probability of a sequence of events (e.g. a consecutive run of 8 correct predictions), it can be useful to draw all possible outcomes in the form of a tree.
+When considering the probability of a sequence of events (e.g. a consecutive run of 8 correct predictions), it can be useful to draw all possible outcomes in the form of a tree. In Figure \@ref(fig:heads-tails-tree), we show such a tree for the first three of Paul's predictions according to our model in which he was randomly guessing. Starting at the "root node" on the left, the first guess can be either correct or incorrect, and these two outcomes are represented as separate branches. If the first guess was correct, we take the "Cor" branch. The next guess can be either correct or incorrect, which splits this branch into two further branches, and so forth. 
+
+```{r heads-tails-tree, fig.cap="Outcome tree for three random guesses."}
+library(DiagrammeR)
+
+treePlot <- "
+  graph LR
+    
+  S[start]--.5-->H(Cor)
+  S--.5-->T(Inc)
+  H--.5-->HH(Cor)
+  H--.5-->HT(Inc)
+  T--.5-->TH(Cor)
+  T--.5-->TT(Inc)
+  HH--.5-->HHH(Cor)
+  HH--.5-->HHT(Inc)
+  HT--.5-->HTH(Cor)
+  HT--.5-->HTT(Inc)
+  TH--.5-->THH(Cor)
+  TH--.5-->THT(Inc)
+  TT--.5-->TTH(Cor)
+  TT--.5-->TTT(Inc)
+  HHH---HHHe[3 Cor]
+  HHT---HHTe[2 Cor 1 Inc]
+  HTH---HTHe[2 Cor 1 Inc]
+  HTT---HTTe[1 Cor 2 Inc]
+  THH---THHe[2 Cor 1 Inc]
+  THT---THTe[1 Cor 2 Inc]
+  TTH---TTHe[1 Cor 2 Inc]
+  TTT---TTTe[3 Inc]
+"
+#if(knitr::is_html_output()) {
+DiagrammeR(treePlot)
+#} else {
+  #treePlot <- mermaid(treePlot)
+#  export_graph(render_graph(mermaid(treePlot)),file_name = "g.pdf")
+  #tmp <- capture.output(rsvg::rsvg_png(charToRaw(DiagrammeRsvg::export_svg(mermaid(treePlot))),file='g.png'))
+  #tmp<-capture.output(rsvg_png(charToRaw(export_svg(stnds.qa.d2)),'stnds.qa.png'))
+#  cat('![](g.pdf)\n\n')
+#}
+  
+```
+
+For three coin flips, there are 8 unique sequences of outcomes (the tree ends in 8 branches). Because the probability of "heads" and "tails" are identical, and each coin flip is independent of the others, each unique sequence such as "`r set.seed(45); paste0(sample(c("Cor","Inc"),size=3,replace=TRUE),collapse=", ")`" has exactly the same probability, namely $0.5 \times 0.5 \times 0.5 = (0.5)^3 = `r (.5)^3`$. However, if we are not interested in the probability of a unique sequence of outcomes, but rather the total number of correct guesses, the corresponding probabilities are not equal. For example, there is only one sequence in which the number of correct guesses is 3, but there are three sequences in which the number of correct guesses equals 2. Each of these sequences has the sample probability, so we can just add these up
+$$P(\text{2 correct and 1 incorrect}) = 3 \times `r (.5)^3` = `r 3*.5^3`$$
+Similarly, the probability $P(\text{1 Cor 2 Inc}) = `r 3*.5^3`$, as there are three sequences in which the number of correct guesses equals 1. 
+
+Note that we have used a distribution over the outcomes of a single variable (a single prediction) to effectively construct three variables ($\texttt{pred}_1$, $\texttt{pred}_2$, and $\texttt{pred}_3$) reflecting Pauls first, second, and third prediction, respectively. We can take the outcomes of each of these three variables and turn this into a new variable reflecting the outcome of all three predictions. This new variable has 8 possible outcomes (unique sequences), each with an equal probability of occurring. Finally, we can then use this sequence variable to construct yet a new variable, the one we are really interested in, reflecting the number of correct predictions. This variable (in the case of three predictions), has four unique outcomes (0, 1, 2, or 3 correct) with _unequal_ probabilities. Perhaps all these variables make your head spin. But a main thing to realize is that from a quite simple model of the Data Generating Process (the outcome of each prediction is an independent coin flip), we can start to say something about how likely Paul's performance of 8 out of 8 correct predictions really was.
+
+To work out the probability distribution of the number of correct predictions out of 8, we could expand the tree of \@ref(fig:heads-tails-tree), but the tree would become very large. There is a simpler way to count the number of sequences with a particular number of correct predictions in them. The number of sequences of $n$ predictions where $k$ predictions are correct can be computed as
+$$\frac{n!}{k!(n-k)!} ,$$
+where the exclamation mark refers to the so-called factorial function, where a positive integer is multiplied by all positive integers which are smaller than it. So
+$$n! = n \times (n-1) \times (n-2) \times (n-3) \times \ldots \times 2 \times 1$$
+So we can write 
+$$P(k \text { correct and }  n-k \text{ incorrect}) = \frac{n!}{k! \times (n-k)!} (0.5)^n$$
+The resulting distribution is depicted in Figure \@ref(fig:distribution-8-coin-flips-correct).
+```{r distribution-8-coin-flips-correct, fig.cap="probability distribution over the number of correct predictions out of 8, assuming random guessing."}
+ggplot(data.frame(x=0:8,y=dbinom(0:8,size=8,prob=.5)),aes(x=as.factor(x),y=y)) + geom_col(width=1,col="black") + xlab("Number correct") + ylab("Probability")
+```
 
 ## Flipping a biased coin: An alternative model
 
-Suppose that Paul did not make his decisions by flipping a mental coin. Perhaps Paul had extensive knowledge of all things football, or perhaps he could see into the future. In that case, we might expect Paul to have a higher rate of correct answers than predicted by our coin flipping model. But perhaps Paul, although an oracle, wasn't so benevolent to his caretakers, or didn't want to spoil the match for them. In that case, we might expect the rate of correct answers to be lower than predicted by the coin flipping model. In both case, we'd expect the probability of a correct answer to be different from .5: $P(\text{correct}) \neq .5$. But whilst not .5, we don't otherwise know the value. We call such an unknown value which determines a probability distribution a _parameter_. We will generally use symbols from the Greek alphabet to denote such parameters. Here, we will use $\theta$ (pronounced as "thee-ta"). Our alternative to the coin flipping model can now be stated as:
+Suppose that Paul did not make his decisions by flipping a mental coin. Perhaps Paul had extensive knowledge of all things football, or perhaps he could see into the future. In that case, we might expect Paul to have a higher rate of correct answers than predicted by our coin flipping model. But perhaps Paul, although an oracle, wasn't so benevolent to his caretakers, or didn't want to spoil the match for them. In that case, we might expect the rate of correct answers to be lower than predicted by the coin flipping model. In both case, we'd expect the probability of a correct answer to be different from .5: $P(\text{correct}) \neq .5$. But whilst not .5, we don't otherwise know the value. We call such an unknown value which determines a probability distribution a __parameter__. We will generally use symbols from the Greek alphabet to denote such parameters. Here, we will use $\theta$ (pronounced as "thee-ta"). Our alternative to the coin flipping model can now be stated as:
 
-$$P(Y_i = \text{correct}) = \theta$$
+$$P(\texttt{pred}_i = \text{correct}) = \theta$$
 
-Like a _variable_, a parameter such as $\theta$ can take different values. It belongs to a model, and its value can not be observed, only inferred. As our parameter reflects a probability, we know that it can never be lower than 0, and never larger than 1, so we know that:
+Like a _variable_, a parameter such as $\theta$ can take different values. It belongs to a model, and its value can not be observed, only inferred. As our parameter reflects a probability, we know that it can never be lower than 0, and never larger than 1. So we know that:
 
-$$0 \leq \theta \leq 1$$
+$$0 \leq \theta \leq 1 .$$
 
-("zero is less than or equal to $\theta$, which is less than or equal to 1"). Note that the possible values in this range includes $\theta = 0.5$. Our (unbiased) coin flipping model is actually one of the possible versions (a "special case") of our new more general model. Some other ways of saying this are that the coin flipping model is contained within, or nested under, the more general new model.  As we will see, _nested models_ play an important role in statistical modeling. In particular, we will often compare how well a special-case or nested model describes the data compared to a more general model. In such model comparisons, we will usually refer to the special-case model as `MODEL S`, and the more general model as `MODEL G`. It is important to realise that these names (like variables) are containers and we can put any models in these, as long as the one we put into `MODEL S` is a special case of the one we put into `MODEL G`.
+<!-- ("zero is less than or equal to $\theta$, which is less than or equal to 1").--> Note that the possible values in this range includes $\theta = 0.5$. Our (unbiased) coin flipping model is actually one of the possible versions (a "special case") of our new, more general model. Some other ways of saying this are that the coin flipping model is contained within, or nested under, the more general new model.  As we will see, __nested models__ play an important role in statistical modelling. In particular, we will often compare how well a special-case or nested model describes the data compared to a more general model. In such model comparisons, we will usually refer to the special-case model as __MODEL S__, and the more general model as __MODEL G__. It is important to realise that these names (like variables) are containers and we can put any models in these, as long as the one we put into MODEL S is a special case of the one we put into MODEL G.
 
-```{block2, type="definition"}
-When comparing two nested models, we will refer to these as
-- MODEL S: the special-case model of
-- MODEL G: the more general model
-```
+To work out the probability of the number of correct predictions according to this model, we can draw a similar tree as in Figure \@ref(fig:heads-tails-tree), but instead of the probability of each branch being 0.5, we'd use $\theta$ for any branch that leads to correct, and $1-\theta$ for any branch leading to incorrect. That means that the probability of a particular sequence, such as "Cor, Inc, Cor" is not $(0.5)^{3}$, but rather $\theta \times (1-\theta) \times \theta = \theta^2 \times (1-\theta)$. Apart from this, the logic of constructing the probability distribution of $k$ out of $n$ correct predictions is the same, and can be computed as
+\begin{equation}
+P(k \text { correct and }  n-k \text{ incorrect}) = \frac{n!}{k! \times (n-k)!} (\theta)^k \times (1-\theta)^{(n-k)}
+(\#eq:definition-binomial-distribution)
+\end{equation}
+This distribution is quite common in statistics, and is called the __Binomial distribution__. Note that if we fill in $\theta = 0.5$, then $(1-\theta) = 0.5$ and the resulting distribution is exactly the one we worked out for the unbiased coin-flipping model earlier. So our new, more general model can indeed exactly produce the distribution of the simpler model, and this is what we mean when we say that the simpler model is nested under the more general model.
+
+To work out the probability that Paul made 8 out of 8 correct predictions according this new model, we need to know the value of the parameter $\theta$. But what should this be? There are infinite possible values that might be reasonable (e.g., $\theta = .9$, or $\theta = .947873$). Luckily, we don't need to pluck one of these values out of thin air: we can use the data we have to estimate the value of this parameter.
 
 ## Estimation
 
+<!-- 
 From data produced by the Data Generating Process (DGP), we can estimate the value of a parameter. Remember, when we collect data in real life, it is obtained from DGP. Our model, on the other hand, provides a mathematical abstraction of the DGP. The DGP is The Truth. It is how the real world generated the data. Our model, on the other hand, is almost surely an approximation to The Truth. Think about it. Can you summarize Paul's choices by a mathematical formula with a distribution that takes a single parameter ($\theta$)? Probably not when you see Paul swimming in his tank, catching a glimmer of light shining from one of the boxes, than being distracted by the sound of a distant door opening, then going back and sensing a vibration in the water. How would all these serendipitous things not affect Paul's decision at the time? Our model ignores all these factors, and for a reason. Imagine we had to take all sensory input of Paul into account. We would not only have to take into account the actual stimuli present at the time, but also how they affected Paul's neuronal reactions to those. Even if we only take into account the neurons responding directly to external input, the number of possible neuronal excitation patterns quickly become enormous. When you think about it, you'd also want to take into account the activation state of all the neurons at the time just before (and possibly before that), which makes the number of possibilities even more enormous. And what about the chemical consistency of the water at the time? Learning a model of particular decision by a particular person at a particular time seems simply impossible without assuming that some of these things don't really matter to the decision at hand.
 
-Estimation, in some sense, means an "educated guess". It is a guess, because we cannot be completely sure that we have picked the true value. It is educated because we didn't just pluck the value from thin air. We used information in the data to guide our guess. 
+So we can view our biased coin-flipping model as a simplification, but potentially useful model of Paul's accuracy if he was (somewhat) psychic. 
+-->
+
+Estimation, in some sense, means an "educated guess". It is a guess, because we cannot be completely sure that we have picked the true value. It is educated because we don't just pluck the value from thin air: we use information in the data to guide our guess.
+
+### Maximum likelihood estimation
+
+It can be summarized as follows: Find the value of $\theta$ such that the probability assigned to the data at hand by the model is highest. 
+
+Let's think this through. If we pick any particular value for $\theta$, we can use the Binomial distribution (Equation \@ref(eq:definition-binomial-distribution)) to work out the probability that Paul made 8 out of 8 predictions. For instance, if we pick $\theta = .4$, then 
+\begin{align}
+P(\text{8 correct and 0 incorrect}) &= \frac{8!}{8!0!} (0.4)^8 \times (0.6)^0 \\
+&= 1 \times (0.4)^8 \times 1 = `r format(dbinom(8,8,.4), scientific=FALSE)`
+\end{align}
+If we pick $\theta = .95$, on the other hand, we'd get
+$$P(\text{8 correct and 0 incorrect}) = 1 \times (0.95)^8 \times 1 = `r format(dbinom(8,8,.95), scientific=FALSE)`$$
+which is obviously higher. If we plot $P(\text{8 correct} | \theta)$, the probability of 8 correct _given_ or _conditional upon_ a particular value of $\theta$, for all possible values of $\theta$, we get the curve shown in Figure \@ref(fig:plot-likelihood-fifa2010). 
+
+```{r plot-likelihood-fifa2010, fig.cap = "Probability of Paul's performance in the 2010 FIFA World Cup for all possible values of $\\theta$ in the biased coin-flipping model", out.width='50%',fig.width=4, fig.height=3}
+ggplot(data.frame(x=seq(0,1,length=100), y = dbinom(8,8,seq(0,1,length=100))),aes(x=x,y=y)) + geom_line() + xlab(expression(theta)) + ylab(expression("P(8 correct | " * theta * ")"))
+```
+
+Looking at this plot, is it obvious that the probability of Paul's observed performance is highest in the model with $\theta = 1$, thus, our maximum likelihood estimate becomes $\hat{\theta} = 1$. As can be shown mathematically, the maximum likelihood estimate of $\theta$ for our model and any data set with $k$ correct out of $n$ is _always_
+\begin{equation}
+\hat{\theta} = \frac{k}{n} ,
+(\#eq:maximum-likelihood-estimator-binomial)
+\end{equation}
+i.e. equal to the proportion of correct. Estimating a probability as a proportion seems intuitively reasonable. But how good is it really? 
+
 
 ### Properties of good estimators
 
-An __estimator__ is an algorithm which takes data as input and produces a parameter estimate as output. Evaluating the quality of the resulting estimates is generally done under the assumption that our model represents the Data Generating Process accurately, i.e. our model is a true representation of the DGP. If our model has unknown parameters, that means that there are values for those parameters such that our model produces data with exactly the same distribution as the DGP. We can call those parameter values the true parameter values. Now, even if we have access to such a true model, estimates of its parameters from a given data set are unlikely to be identical to the true parameters. The main reason is that any actual data set will not cover all of the values that are possible from the Data Generating Process, and/or not in their expected proportions. But the fact is that in practice we have to rely on such limited data sets; we never have access to all the data that could be produced by the Data Generating Process. So we will have to work with estimates that are different from the true parameters. One thing we can do is quantify how much our estimates are likely to deviate from the true parameters. This, in a nutshell, is what statistical estimation theory is all about.
+An __estimator__ like specified in Equation \@ref(eq:maximum-likelihood-estimator-binomial) is an algorithm which takes data as input and produces a parameter estimate as output. Evaluating the quality of the resulting estimates is generally done under the assumption that our model represents the Data Generating Process accurately, i.e. our model is a true representation of the DGP. If our model has unknown parameters, that means that there are values for those parameters such that our model produces data with exactly the same distribution as the DGP. We can call those parameter values the true parameter values. Now, even if we have access to such a true model, estimates of its parameters from a given data set are unlikely to be identical to the true parameters. The main reason is that any actual data set will not cover all of the values that are possible from the Data Generating Process, and/or not in their expected proportions. But the fact is that in practice we have to rely on such limited data sets; we never have access to all the data that could be produced by the Data Generating Process. So we will have to work with estimates that are different from the true parameters. One thing we can do is quantify how much our estimates are likely to deviate from the true parameters. This, in a nutshell, is what statistical estimation theory is all about.
 
-#### Unbiasedness
+Let's focus on the estimator of $\theta$ in Equation \@(eq:maximum-likelihood-estimator-binomial) a bit more. For any fixed sample size $n$ and a particular true value of $\theta$, the variability in the estimates will be completely determined by the variability in $k$, the number correct. The variability in $k$ directly follows from the Binomial distribution itself. If you look at the distribution depicted in Figure \@ref(distribution-8-coin-flips-correct), which is the distribution of $k$ for $\theta = .5$, you can see there are 9 possible values for $k$, and hence also 9 possible values of $\frac{k}{n}$, the estimator of $\theta$. So when the true $\theta = .5$, when we generate a new data set of 8 predictions, it is possible that the estimate of $\theta$ will equal any value $\left\{\frac{0}{8}, \frac{1}{8}, \frac{2}{8}, \ldots, \frac{7}{8}, \frac{8}{8}\right\}$, because in this new data set, the value of $k$ can be any value between 0 and 8. Exactly like the values of $k$, not each of these estimates will be equally likely. For most of the new data sets, the estimate will equal $\hat{\theta} = frac{4}{8}$, the true value of $\theta$. If the true $\theta = 1$, then there would be no variability in $k$. It is simply impossible to make a wrong prediction, and hence the estimate would always equal the true value. In this case, how variable the estimates are depends on the true value of $\theta$. There is no variability whenever $\theta = 0$ or $\theta = 1$, and the variability increases the closer $\theta$ gets to .5. 
 
-An unbiased estimator gives, on average, estimates which are equal to the true parameter.  
+Because in this case, the variability in the estimates depends on the true value of $\theta$, which is unknown and the reason we have to estimate this parameter in the first place, we cannot easily say how far off we might expect our estimate to be from the true parameter. Nevertheless, we can still assess how good our estimator is by considering some important properties good estimators in general: unbiasedness, consistency, and efficiency.
 
-#### Consistency
+An __unbiased__ estimator gives, on average, estimates which are equal to the true parameter.  
 
 A good estimator should become more precise as we have more data. The larger the number of observations from the Data Generating Process, the closer the resulting estimates should be to the true parameters. A __consistent__ estimator is one which provides less variable estimates if we give it more data.
 
-#### Efficiency
+An __efficient__ estimator is an estimator which provides the least possible variable estimates, meaning it is the most consistent possible. Variability in estimates is unavoidable, as data sets are always limited samples from the Data Generating Process. It can be proven mathematically that there a variance of the estimates that no unbiased estimator can go below, or no biased estimator with a given level of bias can go below. An estimator for which the variance in the estimates is equal to this lower bound is called efficient. Such an estimator is, in some sense, the Holy Grail of statistical estimation, especially an unbiased one.
 
-An __efficient__ estimator is an estimator which is both unbiased _and_ the most consistent possible. Such an estimator is, in some sense, the Holy Grail of statistical estimation. 
+In general, maximum likelihood estimators are consistent and (asymptotically) efficient. They are not always unbiased though, although the bias (the difference between the mean estimate and the true value) decreases when the number of observations increases. Given these desirable properties, maximum likelihood estimators are often the estimators of choice.
 
 ## Null-hypothesis significance testing
 
+So, at this point, we have three models of Paul's accuracy in predictions. The biased coin-flipping model with an unknown parameter $\theta$. The unbiased coin-flipping, or random guessing, model (which is a special case of the first one, with $\theta = 0.5$). And an _estimated_ version of the biased coin-flipping model, with $\hat{\theta} = 1$ (which is also a special case). Now what?
+
+What we would like to know is whether Paul was randomly guessing, or whether he had some psychic abilities. In other words, whether the unbiased coin-flipping model or the biased coin-flipping model provides a better description of the Data Generating Process. While it is reasonable to define a model as providing a better description of the DGP when the distribution it proposes is a better match to the true DGP distribution, this definition is not usable in practice, as we simply don't know the true DGP distribution. We have to work with the data at hand, and there are many possible ways in which we can use the data to evaluate whether one statistical model to provide a better description of the DGP. On principled way is to compare the probability assigned to the observed data by each model. This is usually done by computing what is called the likelihood ratio. Suppose we have two versions of the general biased-coin flipping model, one where we assume that the parameter $\theta$ has a particular value $\tilde{\theta}$, and one where we assume $\theta$ takes a different specified value $\tilde{\theta}'$. Note that by placing a "tilde" over a parameter, we denote that it is a particular value of interest. In this case, we are interested in a single variable, namely the number of correct predictions Paul made, which we will denote by $Y$, our general symbol for the dependent variable. We can then write the likelihood ratio as:
+$$\frac{P(Y = k | n, \theta = \tilde{\theta})}{P(Y = k | n, \theta = \tilde{\theta}')}$$
+At the top (the _numerator_), is the probability of $k$ out of $n$ correct when the probability of a single prediction correct equals $\tilde{\theta}$. The bottom part (the _denominator_), is the same probability if the probability of a single correct prediction equals another value $\tilde{\theta}$'. Suppose $\tilde{\theta} = .5$ (as in the random guessing model), and $\tilde{\theta}' = 1$, as in the _estimated_ biased coin-tossing model. The likelihood ratio is then
+$$\frac{P(Y = 8 | n = 8, \theta = 0.5)}{P(Y = 8 | n = 8, \theta = 1)} = \frac{`r format(dbinom(8,8,.5),scientific=FALSE)`}{`r format(dbinom(8,8,1),scientific=FALSE)`} = `r format(dbinom(8,8,.5)/dbinom(8,8,1),scientific=FALSE)`$$
+What does this mean? Well, if both models assigned the same probability to the observed data, the likelihood ratio would equal one. If the probability according to the model of the numerator is higher, the value of the likelihood ratio would be _greater_ than 1. And if the probability according to the model of the denominator is higher, the value of the likelihood ratio would be _smaller_ than 1. So, as is clear, the model with the estimated value of $\theta$ assigns a higher probability to the observed data. But that is no wonder! We estimated $\theta$ by maximum likelihood, meaning that no other value of $\theta$ could assign a higher probability to the data! If it did, our estimate would simply _not_ be the maximum likelihood estimate. So, if the model in the denominator is the one estimated by maximum likelihood, we know the likelihood ratio could _never_ be larger than 1. 
+
+So that's a little annoying. What seemed like a reasonable way to compare two models describe a particular data set, now seems pretty useless. We cannot use the general biased coin-flipping model to compute the likelihood ratio, because without choosing a particular value for $\theta$, the model can not be used to compute the probability of the data. And we can not just use the estimated value of $\theta$, because then that model would always win the "likelihood competition". But computing likelihood ratio's is not, in fact, completely useless. We just need to take into account the fact that the estimated model will always win. What then matters is: by how much?
+
+The null-hypothesis significance test provides an answer to "by how much should the estimated model be better to refute an alternative model?". The logic is roughly as follows: Suppose the restricted model (MODEL R, e.g. the one where $\tilde{\theta} = .5$) is the true model. Then we can use this model to simulate lots of data sets. For each data set, we can estimate $\theta$ to give us an estimated version of the general model (i.e. MODEL G, the one with $\theta$ unknown). Then we can use both models to compute a value of the likelihood ratio. For each data set, the likelihood ratio may take a different value. What we end up with is thus a distribution of values of the likelihood ratio, produced by MODEL R. We will know that this likelihood ratio is always below 1, but by inspecting this distribution, we will roughly know what the usual values are, in the case where MODEL R is true. We can then try to find a range of values which are relatively _unusual_, given that MODEL R is true. If the value of the likelihood ratio we found for the real data is within this range, we might reason that this value is "unusual enough" to reject MODEL R, and accept that MDOEL G provides a better description.
+
+So let's do this. I used MODEL R (the one with $\theta = .5$) to simulate 100,000 data sets in which Paul made 8 predictions. For each of these, I estimated MODEL G, and then computed the likelihood ratio for that dataset. I then determined the proportion (out of all 100,000) simulations of each value of the likelihood ratio
+$$\frac{P(Y = k | n = 8, \theta = 0.5)}{P(Y = k | n = 8, \theta = \frac{k}{8})}$$
+Note that $k$ is the main thing that varies from simulated dataset to simulated dataset, and that for $\theta$ in the model of the denominator, I have filled in the maximum likelihood estimate $\frac{k}{8}$, which also varies over the simulations. You can see the result in Figure \@ref(fig:simulate-LR-coin-flipping).
+
+```{r simulate-LR-coin-flipping, fig.cap = "Likelihood ratio values for 100,000 simulated data sets from MODEL R with $\\theta = .5$"}
+set.seed(123)
+sim <- rbinom(100000,size=8,prob=.5)
+LR <- dbinom(sim,size=8,prob=.5)/dbinom(sim,size=8,prob=sim/8)
+LRvals <- table(LR)/1000
+ggplot(data.frame(k=sim,LR=LR),aes(x=LR)) + stat_count() + xlab("likelihood ratio") +  ylab("proportion") + scale_y_continuous(labels=function(x) x/100000)
+```
+
+A first thing to notice is that there are only 5 unique values of the likelihood ratio in all 100,000 simulations. This is not a strange coincidence. While there are 9 possible values of $k$ for datasets with $n=8$, some of these will provide exactly the same likelihood ratio. For example, the likelihood ratio is identical for $k=3$ and $k=5$:
+$$\frac{P(Y = 3 | n = 8, \theta = 0.5)}{P(Y = 3 | n = 8, \theta = \frac{3}{8})} = \frac{P(Y = 5 | n = 8, \theta = 0.5)}{P(Y = 5 | n = 8, \theta = \frac{5}{8})} = `r dbinom(5,8,.5)/dbinom(5,8,5/8)`$$
+Similarly, the value of the likelihood ratio is identical for $k=2$ and $k=6$, $k=1$ and $k=7$, and $k=0$ and $k=8$. With that out of the way, let's look at how often each of these 5 values occurred. As MODEL R was the true model (we used it as the Data Generating Process for our simulations), you might expect that a likelihood ratio of 1 would be the most frequent value, as that would imply that MODEL R and (estimated) MODEL G provide an equally good description of a data set. But while this value occurs relatively frequently (`r LRvals[5]`%), the most common value is actually `r dbinom(5,8,.5)/dbinom(5,8,3/8)` (`r LRvals[4]`%). Only the value of `r format(dbinom(0,8,.5)/dbinom(0,8,0/8),scientific=FALSE)` is rather unlikely (`r LRvals[1]`%). In all our simulations, less than 1% had a value of the likelihood ratio as low as the one we found for the real data. If MODEL R is true, we would not expect an estimated MODEL G as well very often. But is that reasonable grounds to conclude MODEL G provides a better description than the random-guessing MODEL R?
+
 ### Decisions and types of error
+
+
+```{r table-decisions-errors}
+tab <- data.frame(x = c("correct","error (Type II)"),
+                  y= c("error (Type I)", "correct"))
+colnames(tab) <- c("accept $H_0$","reject $H_0$")
+rownames(tab) <- c("$H_0$ is true","$H_0$ is false")
+knitr::kable(tab, escape = FALSE)
+```
 
 ### Significance and power
 
-## Confidence intervals
+The significance level, usually denoted by $\alpha$, is defined as:
+$$\alpha = P(\text{reject } H_0| H_0 \text{ is true})$$
+It is thus the probability of a Type I error. In a null-hypothesis significance test, the probability of making this particular error is under our control. We can set it to some desired value; usually the conventional value of $\alpha = .05$ is chosen. What about the other error? How probable is that one?
+
+<!-- ## Confidence intervals -->
+
+### Testing whether Paul was guessing
 
 ## Summary
 
