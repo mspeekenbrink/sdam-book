@@ -1,4 +1,4 @@
-# Linear regression
+# Simple linear regression
 
 ```{r load-trump-data}
 library(sdamr)

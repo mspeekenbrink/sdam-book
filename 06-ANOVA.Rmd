@@ -1,4 +1,4 @@
-# A model of means (GLM 4: ANOVA)
+# A model of means (ANOVA)
 
 ## Two-sample t-test
 

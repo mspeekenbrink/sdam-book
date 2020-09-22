@@ -1,15 +1,15 @@
-# A model with a mean: Introduction to the General Linear Model
+# A model with a mean (one sample t-test)
 
-In this chapter, we will start our journey into the General Linear Model with the most basic example within the GLM: a model concerning a single Normal distribution, where we are interested in statements about the mean of that distribution. We will look at the Normal distribution in detail, and cover estimation of its parameters, before focusing on testing hypotheses about the mean. We end the chapter with a look ahead towards the other chapters, by providing a brief overview of the General Linear Model. but first, let's discuss the research example used throughout the chapter.
+In this chapter, we will start our journey into the General Linear Model with the most basic example within the GLM: a model concerning a single Normal distribution, where we are interested in statements about the mean of that distribution. We will look at the Normal distribution in detail, and cover estimation of its parameters, before focusing on testing hypotheses about the mean. We end the chapter with a look ahead towards the other chapters, by providing a brief overview of the General Linear Model.
 
-## Numeric judgment and anchoring
+## Numeric judgement and anchoring
 
-In 1906, Sir Francis Galton attended The West of England Fat Stock and Poultry Exhibition in Plymouth.  One of the attractions at the fair was a contest to guess the weight of a "dressed" ox on display. The nearest guess to the actual weight of the ox would win a prize, and a total of 800 attendees participated for a small fee. Not only was Francis Galton a now-viled eugenicist (founder of the Galton Laboratory of National Eugenics at UCL), he was also a statistician, and bought the used tickets off the stall holder. Back home he analysed the 787 usable tickets and published his findings in @galton1907vox. What surprised Galton was that while the individual guesses were often far from the true weight of the ox, the average guess of the group as a whole was highly accurate. Such findings are now often referred to as the "Wisdom of the crowds".
+In 1906, Sir Francis Galton attended The West of England Fat Stock and Poultry Exhibition in Plymouth. One of the attractions at the fair was a contest to guess the weight of a "dressed" ox on display. The nearest guess to the actual weight of the ox would win a prize, and a total of 800 attendees participated for a small fee. Not only was Francis Galton a eugenicist (founder of the Galton Laboratory of National Eugenics at UCL), and rightly condemned for this in more modern times, he was also a statistician, and bought the used tickets off the stall holder. Back home he analysed the 787 usable tickets and later published his findings [@galton1907vox]. What surprised Galton was that while the individual guesses were often far from the true weight of the ox, the average guess of the group as a whole was highly accurate. Such findings are now often referred to as the "Wisdom of the crowds".
 
-Although the wisdom of the crowds has been demonstrated in various domains, from decades of research, we also know that human judgment is subject to a long list of biases. One such bias is called "anchoring", and it pertains to the influence of prior exposure to a more or less arbitrary numerical value on the subsequent numerical judgment. For instance, if I ask you "to estimate the height of"How tall do you think Mount Everest is?", but first state that Mount Everest is taller than 2000 feet, you are likely to give a smaller number than if I first state that Mount Everest is shorter than 45,500 feet. 
+Although the wisdom of the crowds has been demonstrated in various domains, from decades of research, we also know that human judgement is subject to a long list of biases. One such bias is called "anchoring", and it pertains to the influence of prior exposure to a more or less arbitrary numerical value on the subsequent numerical judgement. For instance, if I ask you "to estimate the height of"How tall do you think Mount Everest is?", but first state that Mount Everest is taller than 2000 feet, you are likely to give a smaller number than if I first state that Mount Everest is shorter than 45,500 feet. 
 
 In this example, we will focus on data obtained from a large scale replication study, covering the above described anchoring manipulation, as well as many other experiments [@klein2014investigating]. This "Many Labs" study contained data collected by a large number of labs from different countries, and here we will use data collected by Konrad Bocian and Natalia Frankowska from the University of Social Sciences
-and Humanities Campus in Sopot, Poland. In particular, we will focus on the judged height of Mount Everest (in meters) after a low anchor. From the wisdow of the crowds idea, we might expect the average judgment to be identical (or at least very close) to the true height of Mount Everest, which is 8848 meters above sea level. On the other hand, if the low anchor biased the judgments, we might expect the average judgment to deviate from the true height.
+and Humanities Campus in Sopot, Poland. In particular, we will focus on the judged height of Mount Everest (in meters) after a low anchor. From the wisdom of the crowds idea, we might expect the average judgement to be identical (or at least very close) to the true height of Mount Everest, which is 8848 meters above sea level. On the other hand, if the low anchor biased the judgements, we might expect the average judgement to deviate from the true height.
 
 ```{r load-anchoring, echo = FALSE}
 library(sdamr)
@@ -145,13 +145,13 @@ The maximum likelihood estimate of $\mu$ is the sample mean:
 The maximum likelihood estimate of the variance is the sample variance $\hat{\sigma}^2_\text{ML} = \frac{\sum_{i=1}^N (Y_i - \overline{Y})}{N}$. However, this estimator of the variance is biased. It is therefore common to estimate the variance with the unbiased estimator:
 
 \begin{equation}
-\hat{\sigma}^2 = S^2 = \frac{\sum_{i=1}^N (Y_i - \overline{Y})}{N-1}
+\hat{\sigma}^2 = \frac{\sum_{i=1}^N (Y_i - \overline{Y})}{N-1}
 (\#eq:unbiased-estimator-variance-simple-model)
 \end{equation}
 
 The estimator above is for $\sigma^2$ (sigma squared, i.e. sigma raised to the power of 2). If we want an estimator of $\sigma$, we can simply take the square-root to get the following estimator of $\sigma$:
 
-$$\hat{\sigma} = S = \sqrt{S^2}$$
+$$\hat{\sigma} = \sqrt{\hat{\sigma}^2}$$
 
 ### Sampling distribution of the estimated mean
 

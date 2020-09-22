@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 3 A model with a mean: Introduction to the General Linear Model | Statistics: data analysis and modelling</title>
+  <title>Chapter 3 A model with a mean (one sample t-test) | Statistics: data analysis and modelling</title>
   <meta name="description" content="A book about statistics for data analysis, with a main focus on statistical modelling." />
   <meta name="generator" content="bookdown 0.20 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapter 3 A model with a mean: Introduction to the General Linear Model | Statistics: data analysis and modelling" />
+  <meta property="og:title" content="Chapter 3 A model with a mean (one sample t-test) | Statistics: data analysis and modelling" />
   <meta property="og:type" content="book" />
   
   
@@ -16,7 +16,7 @@
   <meta name="github-repo" content="mspeekenbrink/sdam-book" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 3 A model with a mean: Introduction to the General Linear Model | Statistics: data analysis and modelling" />
+  <meta name="twitter:title" content="Chapter 3 A model with a mean (one sample t-test) | Statistics: data analysis and modelling" />
   
   <meta name="twitter:description" content="A book about statistics for data analysis, with a main focus on statistical modelling." />
   
@@ -24,7 +24,7 @@
 <meta name="author" content="Maarten Speekenbrink" />
 
 
-<meta name="date" content="2020-09-16" />
+<meta name="date" content="2020-09-22" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -32,7 +32,7 @@
   
   
 <link rel="prev" href="statistical-modelling.html"/>
-<link rel="next" href="linear-regression.html"/>
+<link rel="next" href="simple-linear-regression.html"/>
 <script src="book_assets/jquery-2.2.3/jquery.min.js"></script>
 <link href="book_assets/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="book_assets/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -110,7 +110,7 @@
 <li class="chapter" data-level="2.4.1" data-path="statistical-modelling.html"><a href="statistical-modelling.html#maximum-likelihood-estimation"><i class="fa fa-check"></i><b>2.4.1</b> Maximum likelihood estimation</a></li>
 <li class="chapter" data-level="2.4.2" data-path="statistical-modelling.html"><a href="statistical-modelling.html#properties-of-good-estimators"><i class="fa fa-check"></i><b>2.4.2</b> Properties of good estimators</a></li>
 </ul></li>
-<li class="chapter" data-level="2.5" data-path="statistical-modelling.html"><a href="statistical-modelling.html#null-hypothesis-significance-testing"><i class="fa fa-check"></i><b>2.5</b> Null-hypothesis significance testing</a><ul>
+<li class="chapter" data-level="2.5" data-path="statistical-modelling.html"><a href="statistical-modelling.html#comparing-models-null-hypothesis-significance-testing"><i class="fa fa-check"></i><b>2.5</b> Comparing models: Null-hypothesis significance testing</a><ul>
 <li class="chapter" data-level="2.5.1" data-path="statistical-modelling.html"><a href="statistical-modelling.html#decisions-and-types-of-error"><i class="fa fa-check"></i><b>2.5.1</b> Decisions and types of error</a></li>
 <li class="chapter" data-level="2.5.2" data-path="statistical-modelling.html"><a href="statistical-modelling.html#significance-and-power"><i class="fa fa-check"></i><b>2.5.2</b> Significance and power</a></li>
 <li class="chapter" data-level="2.5.3" data-path="statistical-modelling.html"><a href="statistical-modelling.html#testing-whether-paul-was-guessing"><i class="fa fa-check"></i><b>2.5.3</b> Testing whether Paul was guessing</a></li>
@@ -118,53 +118,54 @@
 <li class="chapter" data-level="2.6" data-path="intro.html"><a href="intro.html#summary"><i class="fa fa-check"></i><b>2.6</b> Summary</a></li>
 <li class="chapter" data-level="2.7" data-path="statistical-modelling.html"><a href="statistical-modelling.html#epilogue"><i class="fa fa-check"></i><b>2.7</b> Epilogue</a></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="a-model-with-a-mean-introduction-to-the-general-linear-model.html"><a href="a-model-with-a-mean-introduction-to-the-general-linear-model.html"><i class="fa fa-check"></i><b>3</b> A model with a mean: Introduction to the General Linear Model</a><ul>
-<li class="chapter" data-level="3.1" data-path="a-model-with-a-mean-introduction-to-the-general-linear-model.html"><a href="a-model-with-a-mean-introduction-to-the-general-linear-model.html#numeric-judgment-and-anchoring"><i class="fa fa-check"></i><b>3.1</b> Numeric judgment and anchoring</a><ul>
-<li class="chapter" data-level="3.1.1" data-path="a-model-with-a-mean-introduction-to-the-general-linear-model.html"><a href="a-model-with-a-mean-introduction-to-the-general-linear-model.html#exploring-the-data"><i class="fa fa-check"></i><b>3.1.1</b> Exploring the data</a></li>
+<li class="chapter" data-level="3" data-path="a-model-with-a-mean-one-sample-t-test.html"><a href="a-model-with-a-mean-one-sample-t-test.html"><i class="fa fa-check"></i><b>3</b> A model with a mean (one sample t-test)</a><ul>
+<li class="chapter" data-level="3.1" data-path="a-model-with-a-mean-one-sample-t-test.html"><a href="a-model-with-a-mean-one-sample-t-test.html#numeric-judgement-and-anchoring"><i class="fa fa-check"></i><b>3.1</b> Numeric judgement and anchoring</a><ul>
+<li class="chapter" data-level="3.1.1" data-path="a-model-with-a-mean-one-sample-t-test.html"><a href="a-model-with-a-mean-one-sample-t-test.html#exploring-the-data"><i class="fa fa-check"></i><b>3.1.1</b> Exploring the data</a></li>
 </ul></li>
-<li class="chapter" data-level="3.2" data-path="a-model-with-a-mean-introduction-to-the-general-linear-model.html"><a href="a-model-with-a-mean-introduction-to-the-general-linear-model.html#the-normal-distribution"><i class="fa fa-check"></i><b>3.2</b> The Normal distribution</a></li>
-<li class="chapter" data-level="3.3" data-path="a-model-with-a-mean-introduction-to-the-general-linear-model.html"><a href="a-model-with-a-mean-introduction-to-the-general-linear-model.html#the-central-limit-theorem"><i class="fa fa-check"></i><b>3.3</b> The Central Limit Theorem</a><ul>
-<li class="chapter" data-level="3.3.1" data-path="a-model-with-a-mean-introduction-to-the-general-linear-model.html"><a href="a-model-with-a-mean-introduction-to-the-general-linear-model.html#the-central-limit-theorem-in-action"><i class="fa fa-check"></i><b>3.3.1</b> The Central Limit Theorem in action</a></li>
+<li class="chapter" data-level="3.2" data-path="a-model-with-a-mean-one-sample-t-test.html"><a href="a-model-with-a-mean-one-sample-t-test.html#the-normal-distribution"><i class="fa fa-check"></i><b>3.2</b> The Normal distribution</a></li>
+<li class="chapter" data-level="3.3" data-path="a-model-with-a-mean-one-sample-t-test.html"><a href="a-model-with-a-mean-one-sample-t-test.html#the-central-limit-theorem"><i class="fa fa-check"></i><b>3.3</b> The Central Limit Theorem</a><ul>
+<li class="chapter" data-level="3.3.1" data-path="a-model-with-a-mean-one-sample-t-test.html"><a href="a-model-with-a-mean-one-sample-t-test.html#the-central-limit-theorem-in-action"><i class="fa fa-check"></i><b>3.3.1</b> The Central Limit Theorem in action</a></li>
 </ul></li>
-<li class="chapter" data-level="3.4" data-path="a-model-with-a-mean-introduction-to-the-general-linear-model.html"><a href="a-model-with-a-mean-introduction-to-the-general-linear-model.html#parameter-estimation"><i class="fa fa-check"></i><b>3.4</b> Parameter estimation</a><ul>
-<li class="chapter" data-level="3.4.1" data-path="a-model-with-a-mean-introduction-to-the-general-linear-model.html"><a href="a-model-with-a-mean-introduction-to-the-general-linear-model.html#sampling-distribution-of-the-estimated-mean"><i class="fa fa-check"></i><b>3.4.1</b> Sampling distribution of the estimated mean</a></li>
+<li class="chapter" data-level="3.4" data-path="a-model-with-a-mean-one-sample-t-test.html"><a href="a-model-with-a-mean-one-sample-t-test.html#parameter-estimation"><i class="fa fa-check"></i><b>3.4</b> Parameter estimation</a><ul>
+<li class="chapter" data-level="3.4.1" data-path="a-model-with-a-mean-one-sample-t-test.html"><a href="a-model-with-a-mean-one-sample-t-test.html#sampling-distribution-of-the-estimated-mean"><i class="fa fa-check"></i><b>3.4.1</b> Sampling distribution of the estimated mean</a></li>
 </ul></li>
-<li class="chapter" data-level="3.5" data-path="a-model-with-a-mean-introduction-to-the-general-linear-model.html"><a href="a-model-with-a-mean-introduction-to-the-general-linear-model.html#testing-whether-mu-has-an-specific-value"><i class="fa fa-check"></i><b>3.5</b> Testing whether <span class="math inline">\(\mu\)</span> has an specific value</a><ul>
-<li class="chapter" data-level="3.5.1" data-path="a-model-with-a-mean-introduction-to-the-general-linear-model.html"><a href="a-model-with-a-mean-introduction-to-the-general-linear-model.html#the-classical-way"><i class="fa fa-check"></i><b>3.5.1</b> The classical way</a></li>
-<li class="chapter" data-level="3.5.2" data-path="a-model-with-a-mean-introduction-to-the-general-linear-model.html"><a href="a-model-with-a-mean-introduction-to-the-general-linear-model.html#the-model-comparison-way"><i class="fa fa-check"></i><b>3.5.2</b> The model comparison way</a></li>
+<li class="chapter" data-level="3.5" data-path="a-model-with-a-mean-one-sample-t-test.html"><a href="a-model-with-a-mean-one-sample-t-test.html#testing-whether-mu-has-an-specific-value"><i class="fa fa-check"></i><b>3.5</b> Testing whether <span class="math inline">\(\mu\)</span> has an specific value</a><ul>
+<li class="chapter" data-level="3.5.1" data-path="a-model-with-a-mean-one-sample-t-test.html"><a href="a-model-with-a-mean-one-sample-t-test.html#the-classical-way"><i class="fa fa-check"></i><b>3.5.1</b> The classical way</a></li>
+<li class="chapter" data-level="3.5.2" data-path="a-model-with-a-mean-one-sample-t-test.html"><a href="a-model-with-a-mean-one-sample-t-test.html#the-model-comparison-way"><i class="fa fa-check"></i><b>3.5.2</b> The model comparison way</a></li>
 </ul></li>
-<li class="chapter" data-level="3.6" data-path="a-model-with-a-mean-introduction-to-the-general-linear-model.html"><a href="a-model-with-a-mean-introduction-to-the-general-linear-model.html#the-general-linear-model"><i class="fa fa-check"></i><b>3.6</b> The General Linear Model</a></li>
+<li class="chapter" data-level="3.6" data-path="a-model-with-a-mean-one-sample-t-test.html"><a href="a-model-with-a-mean-one-sample-t-test.html#the-general-linear-model"><i class="fa fa-check"></i><b>3.6</b> The General Linear Model</a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="linear-regression.html"><a href="linear-regression.html"><i class="fa fa-check"></i><b>4</b> Linear regression</a><ul>
-<li class="chapter" data-level="4.1" data-path="linear-regression.html"><a href="linear-regression.html#the-model"><i class="fa fa-check"></i><b>4.1</b> The model</a></li>
+<li class="chapter" data-level="4" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html"><i class="fa fa-check"></i><b>4</b> Simple linear regression</a><ul>
+<li class="chapter" data-level="4.1" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#the-model"><i class="fa fa-check"></i><b>4.1</b> The model</a></li>
 <li class="chapter" data-level="4.2" data-path="statistical-modelling.html"><a href="statistical-modelling.html#estimation"><i class="fa fa-check"></i><b>4.2</b> Estimation</a></li>
-<li class="chapter" data-level="4.3" data-path="linear-regression.html"><a href="linear-regression.html#hypothesis-testing"><i class="fa fa-check"></i><b>4.3</b> Hypothesis testing</a><ul>
-<li class="chapter" data-level="4.3.1" data-path="linear-regression.html"><a href="linear-regression.html#sampling-distribution-of-estimates"><i class="fa fa-check"></i><b>4.3.1</b> Sampling distribution of estimates</a></li>
-<li class="chapter" data-level="4.3.2" data-path="linear-regression.html"><a href="linear-regression.html#model-comparison"><i class="fa fa-check"></i><b>4.3.2</b> Model comparison</a></li>
+<li class="chapter" data-level="4.3" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#hypothesis-testing"><i class="fa fa-check"></i><b>4.3</b> Hypothesis testing</a><ul>
+<li class="chapter" data-level="4.3.1" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#sampling-distribution-of-estimates"><i class="fa fa-check"></i><b>4.3.1</b> Sampling distribution of estimates</a></li>
+<li class="chapter" data-level="4.3.2" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#model-comparison"><i class="fa fa-check"></i><b>4.3.2</b> Model comparison</a></li>
 </ul></li>
-<li class="chapter" data-level="4.4" data-path="linear-regression.html"><a href="linear-regression.html#confidence-intervals"><i class="fa fa-check"></i><b>4.4</b> Confidence intervals</a></li>
-<li class="chapter" data-level="4.5" data-path="linear-regression.html"><a href="linear-regression.html#assumptions-and-outliers"><i class="fa fa-check"></i><b>4.5</b> Assumptions and outliers</a></li>
+<li class="chapter" data-level="4.4" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#confidence-intervals"><i class="fa fa-check"></i><b>4.4</b> Confidence intervals</a></li>
+<li class="chapter" data-level="4.5" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#assumptions-and-outliers"><i class="fa fa-check"></i><b>4.5</b> Assumptions and outliers</a></li>
 <li class="chapter" data-level="4.6" data-path="intro.html"><a href="intro.html#summary"><i class="fa fa-check"></i><b>4.6</b> Summary</a></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="multiple-regression.html"><a href="multiple-regression.html"><i class="fa fa-check"></i><b>5</b> Multiple regression</a><ul>
-<li class="chapter" data-level="5.1" data-path="linear-regression.html"><a href="linear-regression.html#the-model"><i class="fa fa-check"></i><b>5.1</b> The model</a></li>
+<li class="chapter" data-level="5.1" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#the-model"><i class="fa fa-check"></i><b>5.1</b> The model</a></li>
 <li class="chapter" data-level="5.2" data-path="statistical-modelling.html"><a href="statistical-modelling.html#estimation"><i class="fa fa-check"></i><b>5.2</b> Estimation</a></li>
 <li class="chapter" data-level="5.3" data-path="multiple-regression.html"><a href="multiple-regression.html#inference"><i class="fa fa-check"></i><b>5.3</b> Inference</a></li>
 <li class="chapter" data-level="5.4" data-path="multiple-regression.html"><a href="multiple-regression.html#multicollinearity"><i class="fa fa-check"></i><b>5.4</b> Multicollinearity</a></li>
 <li class="chapter" data-level="5.5" data-path="multiple-regression.html"><a href="multiple-regression.html#polynomial-regression"><i class="fa fa-check"></i><b>5.5</b> Polynomial regression</a></li>
 <li class="chapter" data-level="5.6" data-path="intro.html"><a href="intro.html#summary"><i class="fa fa-check"></i><b>5.6</b> Summary</a></li>
 </ul></li>
-<li class="chapter" data-level="6" data-path="moderation-and-interactions-glm-3.html"><a href="moderation-and-interactions-glm-3.html"><i class="fa fa-check"></i><b>6</b> Moderation and interactions (GLM 3)</a><ul>
-<li class="chapter" data-level="6.1" data-path="moderation-and-interactions-glm-3.html"><a href="moderation-and-interactions-glm-3.html#moderated-regression"><i class="fa fa-check"></i><b>6.1</b> Moderated regression</a></li>
+<li class="chapter" data-level="6" data-path="moderation-and-mediation.html"><a href="moderation-and-mediation.html"><i class="fa fa-check"></i><b>6</b> Moderation and mediation</a><ul>
+<li class="chapter" data-level="6.1" data-path="moderation-and-mediation.html"><a href="moderation-and-mediation.html#moderated-regression"><i class="fa fa-check"></i><b>6.1</b> Moderated regression</a></li>
+<li class="chapter" data-level="6.2" data-path="moderation-and-mediation.html"><a href="moderation-and-mediation.html#mediation"><i class="fa fa-check"></i><b>6.2</b> Mediation</a></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="a-model-of-means-glm-4-anova.html"><a href="a-model-of-means-glm-4-anova.html"><i class="fa fa-check"></i><b>7</b> A model of means (GLM 4: ANOVA)</a><ul>
-<li class="chapter" data-level="7.1" data-path="a-model-of-means-glm-4-anova.html"><a href="a-model-of-means-glm-4-anova.html#two-sample-t-test"><i class="fa fa-check"></i><b>7.1</b> Two-sample t-test</a></li>
-<li class="chapter" data-level="7.2" data-path="a-model-of-means-glm-4-anova.html"><a href="a-model-of-means-glm-4-anova.html#contrast-coding"><i class="fa fa-check"></i><b>7.2</b> Contrast coding</a></li>
-<li class="chapter" data-level="7.3" data-path="a-model-of-means-glm-4-anova.html"><a href="a-model-of-means-glm-4-anova.html#oneway-anova"><i class="fa fa-check"></i><b>7.3</b> Oneway ANOVA</a></li>
-<li class="chapter" data-level="7.4" data-path="a-model-of-means-glm-4-anova.html"><a href="a-model-of-means-glm-4-anova.html#factorial-anova"><i class="fa fa-check"></i><b>7.4</b> Factorial ANOVA</a></li>
+<li class="chapter" data-level="7" data-path="a-model-of-means-anova.html"><a href="a-model-of-means-anova.html"><i class="fa fa-check"></i><b>7</b> A model of means (ANOVA)</a><ul>
+<li class="chapter" data-level="7.1" data-path="a-model-of-means-anova.html"><a href="a-model-of-means-anova.html#two-sample-t-test"><i class="fa fa-check"></i><b>7.1</b> Two-sample t-test</a></li>
+<li class="chapter" data-level="7.2" data-path="a-model-of-means-anova.html"><a href="a-model-of-means-anova.html#contrast-coding"><i class="fa fa-check"></i><b>7.2</b> Contrast coding</a></li>
+<li class="chapter" data-level="7.3" data-path="a-model-of-means-anova.html"><a href="a-model-of-means-anova.html#oneway-anova"><i class="fa fa-check"></i><b>7.3</b> Oneway ANOVA</a></li>
+<li class="chapter" data-level="7.4" data-path="a-model-of-means-anova.html"><a href="a-model-of-means-anova.html#factorial-anova"><i class="fa fa-check"></i><b>7.4</b> Factorial ANOVA</a></li>
 </ul></li>
-<li class="chapter" data-level="8" data-path="mixing-categorical-and-metric-predictors-glm-5-ancova.html"><a href="mixing-categorical-and-metric-predictors-glm-5-ancova.html"><i class="fa fa-check"></i><b>8</b> Mixing categorical and metric predictors (GLM 5: ANCOVA)</a></li>
-<li class="chapter" data-level="9" data-path="repeated-measures-glm-6-repeated-measures-anova.html"><a href="repeated-measures-glm-6-repeated-measures-anova.html"><i class="fa fa-check"></i><b>9</b> Repeated-measures (GLM 6: Repeated-measures ANOVA)</a></li>
+<li class="chapter" data-level="8" data-path="mixing-categorical-and-metric-predictors-ancova.html"><a href="mixing-categorical-and-metric-predictors-ancova.html"><i class="fa fa-check"></i><b>8</b> Mixing categorical and metric predictors (ANCOVA)</a></li>
+<li class="chapter" data-level="9" data-path="repeated-measures-anova.html"><a href="repeated-measures-anova.html"><i class="fa fa-check"></i><b>9</b> Repeated-measures ANOVA</a></li>
 <li class="chapter" data-level="10" data-path="linear-mixed-effects-models.html"><a href="linear-mixed-effects-models.html"><i class="fa fa-check"></i><b>10</b> Linear mixed-effects models</a></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 </ul>
@@ -184,18 +185,18 @@
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="a-model-with-a-mean-introduction-to-the-general-linear-model" class="section level1">
-<h1><span class="header-section-number">Chapter 3</span> A model with a mean: Introduction to the General Linear Model</h1>
-<p>In this chapter, we will start our journey into the General Linear Model with the most basic example within the GLM: a model concerning a single Normal distribution, where we are interested in statements about the mean of that distribution. We will look at the Normal distribution in detail, and cover estimation of its parameters, before focusing on testing hypotheses about the mean. We end the chapter with a look ahead towards the other chapters, by providing a brief overview of the General Linear Model. but first, let’s discuss the research example used throughout the chapter.</p>
-<div id="numeric-judgment-and-anchoring" class="section level2">
-<h2><span class="header-section-number">3.1</span> Numeric judgment and anchoring</h2>
-<p>In 1906, Sir Francis Galton attended The West of England Fat Stock and Poultry Exhibition in Plymouth. One of the attractions at the fair was a contest to guess the weight of a “dressed” ox on display. The nearest guess to the actual weight of the ox would win a prize, and a total of 800 attendees participated for a small fee. Not only was Francis Galton a now-viled eugenicist (founder of the Galton Laboratory of National Eugenics at UCL), he was also a statistician, and bought the used tickets off the stall holder. Back home he analysed the 787 usable tickets and published his findings in <span class="citation">Galton (<a href="#ref-galton1907vox" role="doc-biblioref">1907</a>)</span>. What surprised Galton was that while the individual guesses were often far from the true weight of the ox, the average guess of the group as a whole was highly accurate. Such findings are now often referred to as the “Wisdom of the crowds”.</p>
-<p>Although the wisdom of the crowds has been demonstrated in various domains, from decades of research, we also know that human judgment is subject to a long list of biases. One such bias is called “anchoring”, and it pertains to the influence of prior exposure to a more or less arbitrary numerical value on the subsequent numerical judgment. For instance, if I ask you “to estimate the height of”How tall do you think Mount Everest is?", but first state that Mount Everest is taller than 2000 feet, you are likely to give a smaller number than if I first state that Mount Everest is shorter than 45,500 feet.</p>
+<div id="a-model-with-a-mean-one-sample-t-test" class="section level1">
+<h1><span class="header-section-number">Chapter 3</span> A model with a mean (one sample t-test)</h1>
+<p>In this chapter, we will start our journey into the General Linear Model with the most basic example within the GLM: a model concerning a single Normal distribution, where we are interested in statements about the mean of that distribution. We will look at the Normal distribution in detail, and cover estimation of its parameters, before focusing on testing hypotheses about the mean. We end the chapter with a look ahead towards the other chapters, by providing a brief overview of the General Linear Model.</p>
+<div id="numeric-judgement-and-anchoring" class="section level2">
+<h2><span class="header-section-number">3.1</span> Numeric judgement and anchoring</h2>
+<p>In 1906, Sir Francis Galton attended The West of England Fat Stock and Poultry Exhibition in Plymouth. One of the attractions at the fair was a contest to guess the weight of a “dressed” ox on display. The nearest guess to the actual weight of the ox would win a prize, and a total of 800 attendees participated for a small fee. Not only was Francis Galton a eugenicist (founder of the Galton Laboratory of National Eugenics at UCL), and rightly condemned for this in more modern times, he was also a statistician, and bought the used tickets off the stall holder. Back home he analysed the 787 usable tickets and later published his findings <span class="citation">(Galton <a href="#ref-galton1907vox" role="doc-biblioref">1907</a>)</span>. What surprised Galton was that while the individual guesses were often far from the true weight of the ox, the average guess of the group as a whole was highly accurate. Such findings are now often referred to as the “Wisdom of the crowds”.</p>
+<p>Although the wisdom of the crowds has been demonstrated in various domains, from decades of research, we also know that human judgement is subject to a long list of biases. One such bias is called “anchoring”, and it pertains to the influence of prior exposure to a more or less arbitrary numerical value on the subsequent numerical judgement. For instance, if I ask you “to estimate the height of”How tall do you think Mount Everest is?", but first state that Mount Everest is taller than 2000 feet, you are likely to give a smaller number than if I first state that Mount Everest is shorter than 45,500 feet.</p>
 <p>In this example, we will focus on data obtained from a large scale replication study, covering the above described anchoring manipulation, as well as many other experiments <span class="citation">(Klein et al. <a href="#ref-klein2014investigating" role="doc-biblioref">2014</a>)</span>. This “Many Labs” study contained data collected by a large number of labs from different countries, and here we will use data collected by Konrad Bocian and Natalia Frankowska from the University of Social Sciences
-and Humanities Campus in Sopot, Poland. In particular, we will focus on the judged height of Mount Everest (in meters) after a low anchor. From the wisdow of the crowds idea, we might expect the average judgment to be identical (or at least very close) to the true height of Mount Everest, which is 8848 meters above sea level. On the other hand, if the low anchor biased the judgments, we might expect the average judgment to deviate from the true height.</p>
+and Humanities Campus in Sopot, Poland. In particular, we will focus on the judged height of Mount Everest (in meters) after a low anchor. From the wisdom of the crowds idea, we might expect the average judgement to be identical (or at least very close) to the true height of Mount Everest, which is 8848 meters above sea level. On the other hand, if the low anchor biased the judgements, we might expect the average judgement to deviate from the true height.</p>
 <div id="exploring-the-data" class="section level3">
 <h3><span class="header-section-number">3.1.1</span> Exploring the data</h3>
-<p>Before diving into statistical modeling, as discussed, it is always good to explore the data. A graphical overview in the form of a histogram and combined violin and boxplot, is given in Figure <a href="a-model-with-a-mean-introduction-to-the-general-linear-model.html#fig:anchoring-eda-plots">3.1</a>. The minimum was judged height was 650 meters (so quite close to the anchor), and the maximum was 12,459 meters. The median judgment was 8000 and the mean 6312.193.</p>
+<p>Before diving into statistical modeling, as discussed, it is always good to explore the data. A graphical overview in the form of a histogram and combined violin and boxplot, is given in Figure <a href="a-model-with-a-mean-one-sample-t-test.html#fig:anchoring-eda-plots">3.1</a>. The minimum was judged height was 650 meters (so quite close to the anchor), and the maximum was 12,459 meters. The median judgment was 8000 and the mean 6312.193.</p>
 <div class="figure" style="text-align: center"><span id="fig:anchoring-eda-plots"></span>
 <img src="_main_files/figure-html/anchoring-eda-plots-1.svg" alt="Histogram and boxplot of participants' judgments" width="48%" /><img src="_main_files/figure-html/anchoring-eda-plots-2.svg" alt="Histogram and boxplot of participants' judgments" width="48%" />
 <p class="caption">
@@ -206,7 +207,7 @@ Figure 3.1: Histogram and boxplot of participants’ judgments
 </div>
 <div id="the-normal-distribution" class="section level2">
 <h2><span class="header-section-number">3.2</span> The Normal distribution</h2>
-<p>The Normal distribution has the well-known bell-shaped curve depicted in Figure <a href="a-model-with-a-mean-introduction-to-the-general-linear-model.html#fig:normal-density-plot">3.2</a>.</p>
+<p>The Normal distribution has the well-known bell-shaped curve depicted in Figure <a href="a-model-with-a-mean-one-sample-t-test.html#fig:normal-density-plot">3.2</a>.</p>
 <div class="figure" style="text-align: center"><span id="fig:normal-density-plot"></span>
 <img src="_main_files/figure-html/normal-density-plot-1.svg" alt="The Normal density function for $\mu = 0$ and $\sigma = 1$" width="80%" />
 <p class="caption">
@@ -220,7 +221,7 @@ p(y) = \frac{1}{\sqrt{2 \pi} \sigma} e^{-\frac{(y-\mu)^2}{2\sigma^2}}
 \end{equation}\]</span></p>
 <p>If that looks complicated, don’t worry. First, let me point out that <span class="math inline">\(\pi\)</span> refers to the mathematical constant pi, i.e. <span class="math inline">\(\pi= 3.141593\ldots\)</span>, and <span class="math inline">\(e\)</span> refers to the mathematical constant also known as Euler’s number, i.e. <span class="math inline">\(e = 2.718282\ldots\)</span>. They are known constants and not parameters. The Normal distribution does have two parameters: <span class="math inline">\(\mu\)</span> (“mu”), the mean, and <span class="math inline">\(\sigma\)</span> (“sigma”), also called the standard deviation. Confusingly, the formula above is not actually the formula for the Normal probability distribution. Rather, it is the formula of the Normal <strong>density function</strong>. The Normal distribution applies to continuous variables. Technically, you can’t assign a probability to a particular value of a continuous variable, you can only assign probabilities to ranges of values. This is because a continuous variable has an infinite number of values (even if we restrict ourselves to a range). If we gave each unique value a probability of anything larger than 0, the total probability would not be 1, but infinite. If you add up an infinite amount of values, no matter how tiny they are, at some point you would reach the sum of 1, and then you’d have to keep on adding more. No matter how large the sum becomes, you would have to keep on going. Adding up an infinite number of values is not light work…</p>
 <p><span class="math display">\[P(a \leq Y \leq b) = \int_a^b \frac{1}{\sqrt{2 \pi} \sigma} e^{-\frac{(y-\mu)^2}{2\sigma^2}} d y\]</span>
-If you are unfamiliar with calculus and have never seen an integration sign (<span class="math inline">\(\int\)</span>), don’t worry, there won’t be much more of this. It is a mathematical way of referring to the “area under the curve” between point <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span>. A proper probability density function respects the rule of total probability, such that <span class="math inline">\(P(-\infty \leq Y \leq \infty) = 1\)</span>. Figure <a href="a-model-with-a-mean-introduction-to-the-general-linear-model.html#fig:normal-distribution-plot">3.3</a> shows the probability of three of such ranges, each symmetrical around the mean. The probability of a value falling in the range between <span class="math inline">\(\mu - 3 \times \sigma\)</span> and <span class="math inline">\(\mu + 3 \times \sigma\)</span> is very close to 1. Hence, values more than three standard deviations from the mean are very unlikely.</p>
+If you are unfamiliar with calculus and have never seen an integration sign (<span class="math inline">\(\int\)</span>), don’t worry, there won’t be much more of this. It is a mathematical way of referring to the “area under the curve” between point <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span>. A proper probability density function respects the rule of total probability, such that <span class="math inline">\(P(-\infty \leq Y \leq \infty) = 1\)</span>. Figure <a href="a-model-with-a-mean-one-sample-t-test.html#fig:normal-distribution-plot">3.3</a> shows the probability of three of such ranges, each symmetrical around the mean. The probability of a value falling in the range between <span class="math inline">\(\mu - 3 \times \sigma\)</span> and <span class="math inline">\(\mu + 3 \times \sigma\)</span> is very close to 1. Hence, values more than three standard deviations from the mean are very unlikely.</p>
 <div class="figure" style="text-align: center"><span id="fig:normal-distribution-plot"></span>
 <img src="_main_files/figure-html/normal-distribution-plot-1.svg" alt="Normal distribution and the probability of a value falling in one of three overlapping ranges. Note that the ranges are overlapping, so that the range between $\mu - 3 \sigma$ and $\mu + 3 \sigma$ also covers the range between $\mu - 2 \sigma$ and $\mu + 2 \sigma$, but that this isn't shown in the colours." width="672" />
 <p class="caption">
@@ -241,14 +242,14 @@ Figure 3.3: Normal distribution and the probability of a value falling in one of
 <p>So the central limit theorem implies that as long as the number of samples is large enough, the sample mean will follow a Normal distribution.</p>
 <div id="the-central-limit-theorem-in-action" class="section level3">
 <h3><span class="header-section-number">3.3.1</span> The Central Limit Theorem in action</h3>
-<p>To see the central limit theorem in action, let’s pick an arbitrary probability distribution over 5 values, as shown in Figure <a href="a-model-with-a-mean-introduction-to-the-general-linear-model.html#fig:weird-prob-dist">3.4</a>. This will be the true distribution (i.e. the Data Generating Process) from which we can sample values.</p>
+<p>To see the central limit theorem in action, let’s pick an arbitrary probability distribution over 5 values, as shown in Figure <a href="a-model-with-a-mean-one-sample-t-test.html#fig:weird-prob-dist">3.4</a>. This will be the true distribution (i.e. the Data Generating Process) from which we can sample values.</p>
 <div class="figure" style="text-align: center"><span id="fig:weird-prob-dist"></span>
 <img src="_main_files/figure-html/weird-prob-dist-1.svg" alt="An aribitrary probability distribution over 5 values, clearly not a Normal distribution!" width="50%" />
 <p class="caption">
 Figure 3.4: An aribitrary probability distribution over 5 values, clearly not a Normal distribution!
 </p>
 </div>
-<p>When we repeatedly sample 5 values and calculate the mean, we can look at the distribution of these sampled means. This is shown in Figure <a href="a-model-with-a-mean-introduction-to-the-general-linear-model.html#fig:clt-animation-1">3.5</a>. Figure <a href="a-model-with-a-mean-introduction-to-the-general-linear-model.html#fig:clt-animation-2">3.6</a> shows the same when we repeatedly sample 20 values and calculate the mean.</p>
+<p>When we repeatedly sample 5 values and calculate the mean, we can look at the distribution of these sampled means. This is shown in Figure <a href="a-model-with-a-mean-one-sample-t-test.html#fig:clt-animation-1">3.5</a>. Figure <a href="a-model-with-a-mean-one-sample-t-test.html#fig:clt-animation-2">3.6</a> shows the same when we repeatedly sample 20 values and calculate the mean.</p>
 <div class="figure" style="text-align: center"><span id="fig:clt-animation-1"></span>
 <img src="_main_files/figure-html/clt-animation-1-1.gif" alt="The distribution of the mean of 5 samples (from the distribution in Figure XX" width="50%" />
 <p class="caption">
@@ -273,11 +274,11 @@ Figure 3.6: The distribution of the mean of 20 samples from the distribution in 
 \end{equation}\]</span></p>
 <p>The maximum likelihood estimate of the variance is the sample variance <span class="math inline">\(\hat{\sigma}^2_\text{ML} = \frac{\sum_{i=1}^N (Y_i - \overline{Y})}{N}\)</span>. However, this estimator of the variance is biased. It is therefore common to estimate the variance with the unbiased estimator:</p>
 <p><span class="math display" id="eq:unbiased-estimator-variance-simple-model">\[\begin{equation}
-\hat{\sigma}^2 = S^2 = \frac{\sum_{i=1}^N (Y_i - \overline{Y})}{N-1}
+\hat{\sigma}^2 = \frac{\sum_{i=1}^N (Y_i - \overline{Y})}{N-1}
 \tag{3.3}
 \end{equation}\]</span></p>
 <p>The estimator above is for <span class="math inline">\(\sigma^2\)</span> (sigma squared, i.e. sigma raised to the power of 2). If we want an estimator of <span class="math inline">\(\sigma\)</span>, we can simply take the square-root to get the following estimator of <span class="math inline">\(\sigma\)</span>:</p>
-<p><span class="math display">\[\hat{\sigma} = S = \sqrt{S^2}\]</span></p>
+<p><span class="math display">\[\hat{\sigma} = \sqrt{\hat{\sigma}^2}\]</span></p>
 <div id="sampling-distribution-of-the-estimated-mean" class="section level3">
 <h3><span class="header-section-number">3.4.1</span> Sampling distribution of the estimated mean</h3>
 <p>Remember that the estimator of the mean is an algorithm that provides estimates from data. Different data sets will give different estimates, even when these are generated from the same Data Generating Process. Our model of the Data Generating Process is the Normal distribution, which has two parameters: <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\sigma\)</span>. Let’s pick some values for these parameters, so that we can use our model to simulate data. For instance, suppose the judgments are on average equal to the true value, so <span class="math inline">\(\mu = 8848\)</span>. Individual judgments are quite variable, however, so let’s take <span class="math inline">\(\sigma = 2000\)</span>. Figure~@ref{fig:histogram-sampling-mean-simple} shows the distribution of the estimated mean of 10,000 data sets each consisting of <span class="math inline">\(N=109\)</span> observations (just like in the anchoring data). Also shown (as a dotted line) is the Normal distribution of the model we used to generate the data. Clearly, the estimated means are much less variable than the simulated judgments.</p>
@@ -330,7 +331,7 @@ https://www.math.arizona.edu/~jwatkins/v-anova.pdf</code></pre>
         </div>
       </div>
 <a href="statistical-modelling.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="linear-regression.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="simple-linear-regression.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="book_assets/gitbook-2.6.7/js/app.min.js"></script>
@@ -360,16 +361,13 @@ gitbook.start({
 "family": "serif",
 "size": 3
 },
-"edit": {
-"link": "https://github.com/mspeekenbrink/sdam-book/edit/master/03-GLM-simple.Rmd",
-"text": "Edit"
-},
+"edit": null,
 "history": {
 "link": null,
 "text": null
 },
 "view": {
-"link": "https://github.com/mspeekenbrink/sdam-book/blob/master/03-GLM-simple.Rmd",
+"link": null,
 "text": null
 },
 "download": null,

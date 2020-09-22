@@ -1,5 +1,6 @@
-# Moderation and interactions (GLM 3)
+# Moderation and mediation
 
 ## Moderated regression
 
+## Mediation
 

@@ -2,7 +2,7 @@
 
 Was Paul truly psychic, an oracle of some kind? Or was Paul -- or his keeper, as what does fame really mean to an octopus? -- just really lucky? How do we know? And what really are the chances of predicting the winner of 8 matches correct? These are questions we will focus on now.
 
-In this chapter, we will start defining statistical models and using them to make inferences about the Data Generating Process. We will cover some basic probability theory, and use this to define two alternative models of Paul's predictions. One in which he is randomly guessing, and one in which his predictions can be more (or less) accurate than if he were randomly guessing, while we are unsure about how accurate Paul really is in that case. We will discuss how to estimate the unknown accuracy of Paul's predictions in this model. After this. we will try to answer the question: was Paul (somewhat) psychic? Our answer will be based on whether we can refute the hypothesis that he was randomly guessing. This is generally done with a procedure called a null-hypothesis significance test. We will also consider another way in which to look at this, in the form of so-called confidence intervals. 
+In this chapter, we will start defining statistical models and using them to make inferences about the Data Generating Process. We will cover some basic probability theory, and use this to define two alternative models of Paul's predictions. One in which he is randomly guessing, and one in which his predictions can be more (or less) accurate than if he were randomly guessing, while we are unsure about how accurate Paul really is in that case. We will discuss how to estimate the unknown accuracy of Paul's predictions in this model. After this. we will try to answer the question: was Paul (somewhat) psychic? Our answer will be based on whether we can refute the hypothesis that he was randomly guessing. This is generally done with a procedure called a null-hypothesis significance test. <!-- We will also consider another way in which to look at this, in the form of so-called confidence intervals. -->
 
 ## Coin flipping: Defining a statistical model
 
@@ -48,7 +48,7 @@ The outcome space is the set of all possible events.
 ```
 -->
 
-Our coin flip is a __random variable__ that takes one of the values in the outcome space. It is traditional to denote random variables with capital Roman letters, and the values with small Roman letters. When we want to make generic statements that apply to different random variables (such as a coin flip, the roll of a die, the outcome of a prediction), we tend to use this notation, and $P(Y=y)$ then means 'The probability that random variable $Y$ has value $y$'. Other times, it may be easier to use more descriptive names. In this book, when we use a name for a variable, we will use a computer font, such as `coin_flip`, for the random variable. So $P(\texttt{coin\_flip} = \text{heads})$ means 'The probability that random variable `coin_flip` has the value "heads"'.   
+Our coin flip is a __random variable__ that takes one of the values in the outcome space. It is traditional to denote random variables with capital Roman letters, and the values with small Roman letters. When we want to make generic statements that apply to different random variables (such as a coin flip, the roll of a die, the outcome of a prediction), we tend to use this notation, and $P(Y=y)$ then means 'The probability that random variable $Y$ has value $y$'. Other times, it may be easier to use more descriptive names. In this book, when we use a name for a variable, we will use a computer font, such as `coin_flip`, for the random variable. So $P(\texttt{coin_flip} = \text{heads})$ means 'The probability that random variable `coin_flip` has the value "heads"'.   
 
 ### What is probability?
 
@@ -268,7 +268,7 @@ $$0 \leq \theta \leq 1 .$$
 
 <!-- ("zero is less than or equal to $\theta$, which is less than or equal to 1").--> Note that the possible values in this range includes $\theta = 0.5$. Our (unbiased) coin flipping model is actually one of the possible versions (a "special case") of our new, more general model. Some other ways of saying this are that the coin flipping model is contained within, or nested under, the more general new model.  As we will see, __nested models__ play an important role in statistical modelling. In particular, we will often compare how well a special-case or nested model describes the data compared to a more general model. In such model comparisons, we will usually refer to the special-case model as __MODEL S__, and the more general model as __MODEL G__. It is important to realise that these names (like variables) are containers and we can put any models in these, as long as the one we put into MODEL S is a special case of the one we put into MODEL G.
 
-To work out the probability of the number of correct predictions according to this model, we can draw a similar tree as in Figure \@ref(fig:heads-tails-tree), but instead of the probability of each branch being 0.5, we'd use $\theta$ for any branch that leads to correct, and $1-\theta$ for any branch leading to incorrect. That means that the probability of a particular sequence, such as "Cor, Inc, Cor" is not $(0.5)^{3}$, but rather $\theta \times (1-\theta) \times \theta = \theta^2 \times (1-\theta)$. Apart from this, the logic of constructing the probability distribution of $k$ out of $n$ correct predictions is the same, and can be computed as
+To work out the probability of the number of correct predictions according to this model, we can draw a similar tree as in Figure \@ref(fig:heads-tails-tree), but instead of the probability of each branch being 0.5, we'd use $\theta$ for any branch that leads to correct, and $1-\theta$ for any branch leading to incorrect. That means that the probability of a particular sequence, such as correct, incorrect, correct, is not $(0.5)^{3}$, but rather $\theta \times (1-\theta) \times \theta = \theta^2 \times (1-\theta)$. Apart from this, the logic of constructing the probability distribution of $k$ out of $n$ correct predictions is the same, and can be computed as
 \begin{equation}
 P(k \text { correct and }  n-k \text{ incorrect}) = \frac{n!}{k! \times (n-k)!} (\theta)^k \times (1-\theta)^{(n-k)}
 (\#eq:definition-binomial-distribution)
@@ -287,13 +287,15 @@ So we can view our biased coin-flipping model as a simplification, but potential
 
 Estimation, in some sense, means an "educated guess". It is a guess, because we cannot be completely sure that we have picked the true value. It is educated because we don't just pluck the value from thin air: we use information in the data to guide our guess.
 
+There are different ways in which we can use the information in the data to estimate parameters, such as the method of moments, minimum mean square estimation, and maximum likelihood estimation. Here, we will focus on the latter. 
+
 ### Maximum likelihood estimation
 
-It can be summarized as follows: Find the value of $\theta$ such that the probability assigned to the data at hand by the model is highest. 
+The general idea of maximum likelihood estimation can be summarized as follows: Find that value of a parameter $\theta$ such that the probability assigned to the data at hand by the model based on $\theta$ is highest. 
 
 Let's think this through. If we pick any particular value for $\theta$, we can use the Binomial distribution (Equation \@ref(eq:definition-binomial-distribution)) to work out the probability that Paul made 8 out of 8 predictions. For instance, if we pick $\theta = .4$, then 
 \begin{align}
-P(\text{8 correct and 0 incorrect}) &= \frac{8!}{8!0!} (0.4)^8 \times (0.6)^0 \\
+P(\text{8 correct and 0 incorrect}) &= \frac{8!}{8! \times 0!} (0.4)^8 \times (0.6)^0 \\
 &= 1 \times (0.4)^8 \times 1 = `r format(dbinom(8,8,.4), scientific=FALSE)`
 \end{align}
 If we pick $\theta = .95$, on the other hand, we'd get
@@ -316,7 +318,7 @@ i.e. equal to the proportion of correct. Estimating a probability as a proportio
 
 An __estimator__ like specified in Equation \@ref(eq:maximum-likelihood-estimator-binomial) is an algorithm which takes data as input and produces a parameter estimate as output. Evaluating the quality of the resulting estimates is generally done under the assumption that our model represents the Data Generating Process accurately, i.e. our model is a true representation of the DGP. If our model has unknown parameters, that means that there are values for those parameters such that our model produces data with exactly the same distribution as the DGP. We can call those parameter values the true parameter values. Now, even if we have access to such a true model, estimates of its parameters from a given data set are unlikely to be identical to the true parameters. The main reason is that any actual data set will not cover all of the values that are possible from the Data Generating Process, and/or not in their expected proportions. But the fact is that in practice we have to rely on such limited data sets; we never have access to all the data that could be produced by the Data Generating Process. So we will have to work with estimates that are different from the true parameters. One thing we can do is quantify how much our estimates are likely to deviate from the true parameters. This, in a nutshell, is what statistical estimation theory is all about.
 
-Let's focus on the estimator of $\theta$ in Equation \@(eq:maximum-likelihood-estimator-binomial) a bit more. For any fixed sample size $n$ and a particular true value of $\theta$, the variability in the estimates will be completely determined by the variability in $k$, the number correct. The variability in $k$ directly follows from the Binomial distribution itself. If you look at the distribution depicted in Figure \@ref(distribution-8-coin-flips-correct), which is the distribution of $k$ for $\theta = .5$, you can see there are 9 possible values for $k$, and hence also 9 possible values of $\frac{k}{n}$, the estimator of $\theta$. So when the true $\theta = .5$, when we generate a new data set of 8 predictions, it is possible that the estimate of $\theta$ will equal any value $\left\{\frac{0}{8}, \frac{1}{8}, \frac{2}{8}, \ldots, \frac{7}{8}, \frac{8}{8}\right\}$, because in this new data set, the value of $k$ can be any value between 0 and 8. Exactly like the values of $k$, not each of these estimates will be equally likely. For most of the new data sets, the estimate will equal $\hat{\theta} = frac{4}{8}$, the true value of $\theta$. If the true $\theta = 1$, then there would be no variability in $k$. It is simply impossible to make a wrong prediction, and hence the estimate would always equal the true value. In this case, how variable the estimates are depends on the true value of $\theta$. There is no variability whenever $\theta = 0$ or $\theta = 1$, and the variability increases the closer $\theta$ gets to .5. 
+Let's focus on the estimator of $\theta$ in Equation \@(eq:maximum-likelihood-estimator-binomial) a bit more. For any fixed sample size $n$ and a particular true value of $\theta$, the variability in the estimates will be completely determined by the variability in $k$, the number correct. The variability in $k$ directly follows from the Binomial distribution itself. If you look at the distribution depicted in Figure \@ref(distribution-8-coin-flips-correct), which is the distribution of $k$ for $\theta = .5$, you can see there are 9 possible values for $k$, and hence also 9 possible values of $\frac{k}{n}$, the estimator of $\theta$. So when the true $\theta = .5$, when we generate a new data set of 8 predictions, it is possible that the estimate of $\theta$ will equal any value $\left\{\frac{0}{8}, \frac{1}{8}, \frac{2}{8}, \ldots, \frac{7}{8}, \frac{8}{8}\right\}$, because in this new data set, the value of $k$ can be any value between 0 and 8. Exactly like the values of $k$, not each of these estimates will be equally likely. For most of the new data sets, the estimate will equal $\hat{\theta} = \frac{4}{8}$, the true value of $\theta$. If the true $\theta = 1$, then there would be no variability in $k$. It is simply impossible to make a wrong prediction, and hence the estimate would always equal the true value. In this case, how variable the estimates are depends on the true value of $\theta$. There is no variability whenever $\theta = 0$ or $\theta = 1$, and the variability increases the closer $\theta$ gets to .5. 
 
 Because in this case, the variability in the estimates depends on the true value of $\theta$, which is unknown and the reason we have to estimate this parameter in the first place, we cannot easily say how far off we might expect our estimate to be from the true parameter. Nevertheless, we can still assess how good our estimator is by considering some important properties good estimators in general: unbiasedness, consistency, and efficiency.
 
@@ -328,61 +330,216 @@ An __efficient__ estimator is an estimator which provides the least possible var
 
 In general, maximum likelihood estimators are consistent and (asymptotically) efficient. They are not always unbiased though, although the bias (the difference between the mean estimate and the true value) decreases when the number of observations increases. Given these desirable properties, maximum likelihood estimators are often the estimators of choice.
 
-## Null-hypothesis significance testing
+## Comparing models: Null-hypothesis significance testing
 
 So, at this point, we have three models of Paul's accuracy in predictions. The biased coin-flipping model with an unknown parameter $\theta$. The unbiased coin-flipping, or random guessing, model (which is a special case of the first one, with $\theta = 0.5$). And an _estimated_ version of the biased coin-flipping model, with $\hat{\theta} = 1$ (which is also a special case). Now what?
 
-What we would like to know is whether Paul was randomly guessing, or whether he had some psychic abilities. In other words, whether the unbiased coin-flipping model or the biased coin-flipping model provides a better description of the Data Generating Process. While it is reasonable to define a model as providing a better description of the DGP when the distribution it proposes is a better match to the true DGP distribution, this definition is not usable in practice, as we simply don't know the true DGP distribution. We have to work with the data at hand, and there are many possible ways in which we can use the data to evaluate whether one statistical model to provide a better description of the DGP. On principled way is to compare the probability assigned to the observed data by each model. This is usually done by computing what is called the likelihood ratio. Suppose we have two versions of the general biased-coin flipping model, one where we assume that the parameter $\theta$ has a particular value $\tilde{\theta}$, and one where we assume $\theta$ takes a different specified value $\tilde{\theta}'$. Note that by placing a "tilde" over a parameter, we denote that it is a particular value of interest. In this case, we are interested in a single variable, namely the number of correct predictions Paul made, which we will denote by $Y$, our general symbol for the dependent variable. We can then write the likelihood ratio as:
-$$\frac{P(Y = k | n, \theta = \tilde{\theta})}{P(Y = k | n, \theta = \tilde{\theta}')}$$
-At the top (the _numerator_), is the probability of $k$ out of $n$ correct when the probability of a single prediction correct equals $\tilde{\theta}$. The bottom part (the _denominator_), is the same probability if the probability of a single correct prediction equals another value $\tilde{\theta}$'. Suppose $\tilde{\theta} = .5$ (as in the random guessing model), and $\tilde{\theta}' = 1$, as in the _estimated_ biased coin-tossing model. The likelihood ratio is then
+What we would like to know is whether Paul was randomly guessing, or whether he had some psychic abilities. In other words, whether the unbiased coin-flipping model or the biased coin-flipping model provides a better description of the Data Generating Process. While it is reasonable to define a model as providing a better description of the DGP when the distribution it proposes is a better match to the true DGP distribution, this definition is not usable in practice, as we simply don't know the true DGP distribution. We have to work with the data at hand, and there are many possible ways in which we can use the data to evaluate whether one statistical model to provide a better description of the DGP. On principled way is to compare the probability assigned to the observed data by each model. This is usually done by computing what is called the likelihood ratio. Suppose we have two versions of the general biased-coin flipping model, one where we assume that the parameter $\theta$ has a particular value $\underline{\theta}$, and one where we assume $\theta$ takes a different specified value $\underline{\theta}'$. Note that by placing a line underneath a parameter, we denote that it is a particular value of interest. In this case, we are interested in a single variable, namely the number of correct predictions Paul made, which we will denote by $Y$, our general symbol for the dependent variable. We can then write the likelihood ratio as:
+$$\frac{P(Y = k | n, \theta = \underline{\theta})}{P(Y = k | n, \theta = \underline{\theta}')}$$
+At the top (the _numerator_), is the probability of $k$ out of $n$ correct when the probability of a single prediction correct equals $\underline{\theta}$. The bottom part (the _denominator_), is the same probability if the probability of a single correct prediction equals another value $\underline{\theta}'$. Suppose $\underline{\theta} = .5$ (as in the random guessing model), and $\underline{\theta}' = 1$, as in the _estimated_ biased coin-tossing model. The likelihood ratio is then
 $$\frac{P(Y = 8 | n = 8, \theta = 0.5)}{P(Y = 8 | n = 8, \theta = 1)} = \frac{`r format(dbinom(8,8,.5),scientific=FALSE)`}{`r format(dbinom(8,8,1),scientific=FALSE)`} = `r format(dbinom(8,8,.5)/dbinom(8,8,1),scientific=FALSE)`$$
 What does this mean? Well, if both models assigned the same probability to the observed data, the likelihood ratio would equal one. If the probability according to the model of the numerator is higher, the value of the likelihood ratio would be _greater_ than 1. And if the probability according to the model of the denominator is higher, the value of the likelihood ratio would be _smaller_ than 1. So, as is clear, the model with the estimated value of $\theta$ assigns a higher probability to the observed data. But that is no wonder! We estimated $\theta$ by maximum likelihood, meaning that no other value of $\theta$ could assign a higher probability to the data! If it did, our estimate would simply _not_ be the maximum likelihood estimate. So, if the model in the denominator is the one estimated by maximum likelihood, we know the likelihood ratio could _never_ be larger than 1. 
 
 So that's a little annoying. What seemed like a reasonable way to compare two models describe a particular data set, now seems pretty useless. We cannot use the general biased coin-flipping model to compute the likelihood ratio, because without choosing a particular value for $\theta$, the model can not be used to compute the probability of the data. And we can not just use the estimated value of $\theta$, because then that model would always win the "likelihood competition". But computing likelihood ratio's is not, in fact, completely useless. We just need to take into account the fact that the estimated model will always win. What then matters is: by how much?
 
-The null-hypothesis significance test provides an answer to "by how much should the estimated model be better to refute an alternative model?". The logic is roughly as follows: Suppose the restricted model (MODEL R, e.g. the one where $\tilde{\theta} = .5$) is the true model. Then we can use this model to simulate lots of data sets. For each data set, we can estimate $\theta$ to give us an estimated version of the general model (i.e. MODEL G, the one with $\theta$ unknown). Then we can use both models to compute a value of the likelihood ratio. For each data set, the likelihood ratio may take a different value. What we end up with is thus a distribution of values of the likelihood ratio, produced by MODEL R. We will know that this likelihood ratio is always below 1, but by inspecting this distribution, we will roughly know what the usual values are, in the case where MODEL R is true. We can then try to find a range of values which are relatively _unusual_, given that MODEL R is true. If the value of the likelihood ratio we found for the real data is within this range, we might reason that this value is "unusual enough" to reject MODEL R, and accept that MDOEL G provides a better description.
+The null-hypothesis significance test provides an answer to "by how much should the estimated model be better to refute an alternative model?". The logic is roughly as follows: Suppose the restricted model (MODEL R, e.g. the one where $\theta = .5$) is the true model. Then we can use this model to simulate lots of data sets. For each data set, we can estimate $\theta$ to give us an estimated version of the general model (i.e. MODEL G, the one with $\theta$ unknown). Then we can use both models to compute a value of the likelihood ratio. For each data set, the likelihood ratio may take a different value. What we end up with is thus a distribution of values of the likelihood ratio, produced by MODEL R. We will know that this likelihood ratio is always below 1, but by inspecting this distribution, we will roughly know what the usual values are, in the case where MODEL R is true. We can then try to find a range of values which are relatively _unusual_, given that MODEL R is true. If the value of the likelihood ratio we found for the real data is within this range, we might reason that this value is "unusual enough" to reject MODEL R, and accept that MODEL G provides a better description.
 
-So let's do this. I used MODEL R (the one with $\theta = .5$) to simulate 100,000 data sets in which Paul made 8 predictions. For each of these, I estimated MODEL G, and then computed the likelihood ratio for that dataset. I then determined the proportion (out of all 100,000) simulations of each value of the likelihood ratio
+So let's do this. I used MODEL R (the one with $\theta = .5$) to simulate 100,000 data sets in which Paul made 8 predictions. For each of these, I estimated MODEL G, and then computed the likelihood ratio for that dataset, comparing MODEL R to the estimated MODEL G:
 $$\frac{P(Y = k | n = 8, \theta = 0.5)}{P(Y = k | n = 8, \theta = \frac{k}{8})}$$
-Note that $k$ is the main thing that varies from simulated dataset to simulated dataset, and that for $\theta$ in the model of the denominator, I have filled in the maximum likelihood estimate $\frac{k}{8}$, which also varies over the simulations. You can see the result in Figure \@ref(fig:simulate-LR-coin-flipping).
+Note that $k$ is the main thing that varies from simulated dataset to simulated dataset, and that for $\theta$ in the model of the denominator, I have filled in the maximum likelihood estimate $\frac{k}{8}$, which also varies over the simulations. I then determined the proportion (out of all 100,000) simulations of each value of the likelihood ratio. You can see the result in Figure \@ref(fig:simulate-LR-coin-flipping).
 
-```{r simulate-LR-coin-flipping, fig.cap = "Likelihood ratio values for 100,000 simulated data sets from MODEL R with $\\theta = .5$"}
+```{r simulate-LR-coin-flipping, fig.cap = "Likelihood ratio values for 100,000 simulated data sets from MODEL R with $\\theta = .5$", out.width="60%",fig.width=4.5,fig.height=3.5}
 set.seed(123)
 sim <- rbinom(100000,size=8,prob=.5)
 LR <- dbinom(sim,size=8,prob=.5)/dbinom(sim,size=8,prob=sim/8)
 LRvals <- table(LR)/1000
-ggplot(data.frame(k=sim,LR=LR),aes(x=LR)) + stat_count() + xlab("likelihood ratio") +  ylab("proportion") + scale_y_continuous(labels=function(x) x/100000)
+ggplot(data.frame(k=sim,LR=LR),aes(x=LR)) + stat_count(width=.01) + xlab("likelihood ratio") +  ylab("proportion") + scale_y_continuous(labels=function(x) x/100000)
 ```
 
 A first thing to notice is that there are only 5 unique values of the likelihood ratio in all 100,000 simulations. This is not a strange coincidence. While there are 9 possible values of $k$ for datasets with $n=8$, some of these will provide exactly the same likelihood ratio. For example, the likelihood ratio is identical for $k=3$ and $k=5$:
 $$\frac{P(Y = 3 | n = 8, \theta = 0.5)}{P(Y = 3 | n = 8, \theta = \frac{3}{8})} = \frac{P(Y = 5 | n = 8, \theta = 0.5)}{P(Y = 5 | n = 8, \theta = \frac{5}{8})} = `r dbinom(5,8,.5)/dbinom(5,8,5/8)`$$
-Similarly, the value of the likelihood ratio is identical for $k=2$ and $k=6$, $k=1$ and $k=7$, and $k=0$ and $k=8$. With that out of the way, let's look at how often each of these 5 values occurred. As MODEL R was the true model (we used it as the Data Generating Process for our simulations), you might expect that a likelihood ratio of 1 would be the most frequent value, as that would imply that MODEL R and (estimated) MODEL G provide an equally good description of a data set. But while this value occurs relatively frequently (`r LRvals[5]`%), the most common value is actually `r dbinom(5,8,.5)/dbinom(5,8,3/8)` (`r LRvals[4]`%). Only the value of `r format(dbinom(0,8,.5)/dbinom(0,8,0/8),scientific=FALSE)` is rather unlikely (`r LRvals[1]`%). In all our simulations, less than 1% had a value of the likelihood ratio as low as the one we found for the real data. If MODEL R is true, we would not expect an estimated MODEL G as well very often. But is that reasonable grounds to conclude MODEL G provides a better description than the random-guessing MODEL R?
+Similarly, the value of the likelihood ratio is identical for $k=2$ and $k=6$, $k=1$ and $k=7$, and $k=0$ and $k=8$. With that out of the way, let's look at how often each of these 5 values occurred. As MODEL R was the true model (we used it as the Data Generating Process for our simulations), you might expect that a likelihood ratio of 1 would be the most frequent value, as that would imply that MODEL R and (estimated) MODEL G provide an equally good description of a data set. But while this value occurs relatively frequently (`r LRvals[5]`%), the most common value is actually `r dbinom(5,8,.5)/dbinom(5,8,3/8)` (`r LRvals[4]`%). Only the value of `r format(dbinom(0,8,.5)/dbinom(0,8,0/8),scientific=FALSE)` is rather unlikely (`r LRvals[1]`%). In all our simulations, less than 1% had a value of the likelihood ratio as low as the one we found for the real data. Thus, if MODEL R is true, we would not expect an estimated MODEL G as well very often. But is that reasonable grounds to conclude MODEL G provides a better description than the random-guessing MODEL R?
+
+Before we go into this, let me point out that I used the idea of simulating data sets mainly for educational purposes. Although simulation is useful, it is imprecise. Even if we simulate 100,000 data sets, this is still a limited number, and hence any results will differ (even if only slightly) when we simulate 100,000 other data sets. In this case, it is actually quite straightforward to avoid simulation completely. Using the Binomial distribution, it is -- with a little thinking -- quite easy to work out the distribution of the likelihood ratio comparing MODEL R to estimated versions of MODEL G. Recall that for $n=8$, there are 9 possible values of $k$. If MODEL R is true, we know the probability of each of these values from the Binomial distribution. Moreover, each of these values will lead to a different estimate of $\theta$ in MODEL G, which in turn, paired with the corresponding value of $k$, each provide a value of the likelihood ratio. Let's collect all these things in a table:
+
+```{r table-binomial-likelihood-ratio}
+tab <- data.frame(
+  k = 0:8,
+  lik1 = dbinom(0:8,size=8,prob=.5),
+  est = 0:8/8,
+  lik2 = dbinom(0:8,size=8,prob=0:8/8)
+)
+tab$LR <- tab$lik1/tab$lik2
+colnames(tab) <- c("$k$","$P(k \\mid \\theta = .5)$", "$\\hat{\\theta}$", "$P(k \\mid \\theta = \\hat{\\theta})$", "likelihood ratio")
+knitr::kable(tab, escape=FALSE, digits = 6, caption = "Possible outcomes and their probabilities according to MODEL R, and estimates of $\\theta$$, probabilities of outcomes according to estimated MODEL G, and likelihood ratio values.")
+```
+
+The column $P(k|\theta = .5)$ contains the probability of each possible value of $k$ according to MODEL R. As this is for the moment the true model, it is both the actual probability of $k$, and the "model assigned" value which goes into the likelihood ratio. In the table, we see that $k=0$ and $k=8$ both give the same value of the likelihood ratio. We know the probability of each value of $k$ is $P(k|\theta = .5)$ (because MODEL R generated the data), and therefore we can work out that the probability of obtaining this value of the likelihood is simply the sum of the probabilities of $k=0$ and $k=8$:
+\begin{align}
+P(\text{likelihood ratio} &= P(k=0) + P(k=8) \\
+&= `r format(tab[1,5], digits=3)`) = `r format(tab[1,2], digits=3)` + `r format(tab[9,2], digits=3)` = `r format(tab[1,2] + tab[9,2], digits=3)`
+\end{align}
+Similarly, for the other possible values of the likelihood, we can work out the probabilities as:
+\begin{align}
+P(\text{likelihood ratio} = `r format(tab[2,5], digits=4)`) &= `r format(tab[2,2], digits=4)` + `r format(tab[8,2], digits=4)` = `r format(tab[2,2] + tab[8,2], digits=4)` \\
+P(\text{likelihood ratio} = `r format(tab[3,5], digits=5)`) &= `r format(tab[3,2], digits=5)` + `r format(tab[7,2], digits=5)` = `r format(tab[3,2] + tab[7,2], digits=5)` \\
+P(\text{likelihood ratio} = `r format(tab[4,5], digits=5)`) &= `r format(tab[4,2], digits=5)` + `r format(tab[6,2], digits=5)` = `r format(tab[4,2] + tab[6,2], digits=5)` \\
+P(\text{likelihood ratio} = `r format(tab[5,5], digits=5)`) &= `r format(tab[5,2], digits=5)` 
+\end{align}
+This is similar to the example of throwing dice before. There, we had elementary events (each number that can be thrown), but we also had other events, such as "greater than 3", which we could compute the probability of by using the probability of the elementary events. Here, the number of correct guesses $k$ are the elementary events, and values of the likelihood ratio can be considered compound events. You can view a plot of the resulting distribution of likelihood ratio values in Figure \@ref(fig:true-likelihood-ratio-distribution-coin-flip).
+```{r true-likelihood-ratio-distribution-coin-flip, fig.width=4.5,fig.height=3.5,out.width="60%",fig.cap="The true distibution of likelihood ratio's comparing MODEL R with estimated MODEL G, when the true model is MODEL R."}
+ggplot(data.frame(
+  lr = tab[1:5,5],
+  p = tab[1:5,2] + c(tab[9:6,2],0)  
+),aes(x=lr,y=p)) + geom_col(width=.01) + xlab("likelihood ratio") + ylab("P(likelihood ratio | MODEL R)")
+```
+When you compare this plot to Figure \@ref(fig:simulate-LR-coin-flipping), you see there are indeed very alike. So we don't need to simulate data to determine what values of the likelihood ratio we might see -- and how often -- if MODEL R is true. MODEL R allows us to easily compute the probability of each possible number of correct guesses, $k$. This number, in turn, determines everything else of interest: the estimates of $\theta$ for MODEL G, the probability of the data according to (the estimated) MODEL G, and the likelihood ratio between MODEL R and (the estimated) MODEL G. When possible, it is better to work out the distribution like we did here, instead of relying on simulation. Simulation is inherently noisy, even with 100,000 samples. 
+
+<!-- As I indicated before, each value of $k$ leads to a different estimate of $\theta$ in MODEL G. So $P(k|\theta = .5)$ is identical to the probability of that estimate, i.e. 
+$$P(k|\theta = .5) = P\left(\hat{\theta} = \frac{k}{8}|\theta = .5\right).$$
+In other words, because MODEL R is the true model, it is the one that generates the data, and with that the estimates of $\theta$ in MODEL G. Because we need an estimate of $\theta$ to determine the probability of the data according to (the estimated) MODEL G, MODEL R also determines the probability of the data assigned by (the estimated) MODEL G. And with that, MODEL R also determines the likelihood ratio between MODEL R and (the estimated) MODEL G. I have said this now about three times, but that is because it is really important to understand this. By assuming MODEL R is true, we assume we know the Data Generating Process, and this will generate not only data, but also distributions of many things, including estimates, and likelihood ratio's.   
+
+Right, so if we go back to the table above,-->
+
+That's all well and good, you might object, but you have done all this by assuming that MODEL R is true. But we don't know whether MODEL R is true, we don't know that Paul was randomly guessing. In fact, the question whether he was actually psychic (and not randomly guessing) is what brought us to this point in the first place! That is indeed very true. The issue is that there are many ways in which MODEL R can be false and MODEL G true. In fact, there are an infinite number of values for $\theta$ which aren't equal to 0.5. Each of these implies a different distribution of the likelihood ratio where we compare MODEL R (with $\theta = .5$) to the _estimated_ MODEL G (with $\hat{\theta} = \frac{k}{n}$). Some examples are given in Figure \@ref(fig:true-likelihood-ratio-distribution-biased-coin-flip). If we assume that MODEL R is false, then any of these distributions would be the true distribution of the likelihood ratio. But without knowing the exact value of $\theta$, we simply don't know which one. <!--Such indeterminism makes it practically impossible to derive -->
+
+```{r true-likelihood-ratio-distribution-biased-coin-flip, fig.cap="The true distibution of likelihood ratio's comparing MODEL R with estimated MODEL G, when the true model is MODEL G with different values of $\\theta$."}
+ggplot(data.frame(
+  theta = factor(c(rep(.6,5),rep(.7,5),rep(.8,5),rep(.9,5)),labels=c(expression(theta == .6),expression(theta == .7),expression(theta == .8),expression(theta == .9))),
+  lr = c(tab[1:5,5]),
+  p = c(c(dbinom(0:3,size=8,prob=.6) + dbinom(8:5,size=8,prob=.6),dbinom(4,size=8,prob=.6)),
+        c(dbinom(0:3,size=8,prob=.7) + dbinom(8:5,size=8,prob=.7),dbinom(4,size=8,prob=.7)),
+        c(dbinom(0:3,size=8,prob=.8) + dbinom(8:5,size=8,prob=.8),dbinom(4,size=8,prob=.8)),
+        c(dbinom(0:3,size=8,prob=.9) + dbinom(8:5,size=8,prob=.9), dbinom(4,size=8,prob=.9)))
+),aes(x=lr,y=p)) + geom_col(width=.01) + xlab("likelihood ratio") + ylab(expression("P(likelihood ratio | " * theta * ")")) + facet_wrap(~theta) + facet_wrap(~theta,labeller = label_parsed)
+
+```
 
 ### Decisions and types of error
 
+Let's relocate ourselves. We started by defining a model in which Paul was randomly guessing (MODEL R). We then defined another model in which Paul could be (somewhat) psychic, but as we don't know _how_ psychic and  whether Paul would want to make correct predictions or incorrect predictions. In this model, Paul's probability of making a correct prediction could be anything. Because it is so general, MODEL G can effectively predict anything. We can use the data to estimate MODEL G. But doing that, it makes MODEL G a bit like an annoying friend, who always says "I knew that was going to happen" _after_ it happened, but never before. Because MODEL G is so fickle, our procedure focuses almost exclusively on MODEL R, the version of MODEL G (remember, MODEL R is a special case of MODEL G) which is much more strident, and does tell us how likely things are to happen _before_ they happen.
+
+In the null hypothesis significance test, the hypothesis that MODEL R is true is called the __null hypothesis__, or $H_0$, in the conventional notation:
+$$H_0: \text{MODEL R is true}$$
+This hypothesis itself may be either true or false. If $H_0$ is true, then MODEL R is true. If $H_0$ is false, then the statement "MODEL R is true" is false, so MODEL R is false. These are the two possibilities that we are faced with, but we don't know which of these is actually the case.^[Perhaps it is a little confusing to first talk about models being true, and then about hypotheses stating that these models are true. As it is conventional to talk about the null hypothesis ($H_0$) in the context of significance testing, it is important to know what this concept implies though, hence that's why I'm using it here also.] Based on data, we can decide to accept $H_0$ as a true statement, or reject $H_0$. But these decisions can be correct, or incorrect. Combining the actual state of the world with our decisions, we have the following four possibilities: 
 
 ```{r table-decisions-errors}
-tab <- data.frame(x = c("correct","error (Type II)"),
-                  y= c("error (Type I)", "correct"))
+tab <- data.frame(x = c("correct","error (Type 2)"),
+                  y= c("error (Type 1)", "correct"))
 colnames(tab) <- c("accept $H_0$","reject $H_0$")
 rownames(tab) <- c("$H_0$ is true","$H_0$ is false")
 knitr::kable(tab, escape = FALSE)
 ```
 
+If $H_0$ is actually true, and we accept $H_0$, we can rejoice, as we made a correct decision. Similarly, if $H_0$ is actually not true, and we reject $H_0$, we can also rejoice, as this is another correct decision. If, on the other hand, $H_0$ is true, but we reject $H_0$, we made a wrong decision. This is called a Type 1 error. A type 2 error refers to making the other wrong decision, namely if we accept $H_0$, but $H_0$ is in fact false.
+
+__Null hypothesis significance testing__ is a procedure to make a decision based on data such that we can limit the chances of making one of these errors, namely the Type 1 error. 
+
 ### Significance and power
 
-The significance level, usually denoted by $\alpha$, is defined as:
-$$\alpha = P(\text{reject } H_0| H_0 \text{ is true})$$
-It is thus the probability of a Type I error. In a null-hypothesis significance test, the probability of making this particular error is under our control. We can set it to some desired value; usually the conventional value of $\alpha = .05$ is chosen. What about the other error? How probable is that one?
+In null hypothesis significance testing, we focus on the probability of making a Type 1 error, which is usually denoted as $\alpha$:
+\begin{equation}
+\alpha = P(\text{reject } H_0| H_0 \text{ is true})
+(\#eq:significance-definition)
+\end{equation}
+It is also referred to as the __significance level__. If $H_0$ is true, then we can define a decision procedure to either accept or reject $H_0$, such that we know the probability of a Type 1 error, and moreover, we can set this probability to a desired value.
+
+Let's consider Figure \@ref(fig:true-likelihood-ratio-distribution-coin-flip) again. This is the theoretical distribution of the likelihood ratio values when MODEL R is true, i.e., when $H_0$ is true. Large values of the likelihood ratio indicate that MODEL G does not provide a much better fit to the data than MODEL R, so it makes sense that such large values should not persuade us to reject MODEL R. Values close to 0, on the other hand, indicate that MODEL G does provide a substantially better fit to the data than MODEL R. Hence, it makes sense to decide to reject $H_0$ if the likelihood ratio is "close enough" to 0. Clearly, such low values can occur even if $H_0$ is true (as Figure \@ref(fig:true-likelihood-ratio-distribution-coin-flip) attests). But they are unlikely to do so. If $H_0$ is false, such low values become more likely (see Figure \@ref(fig:true-likelihood-ratio-distribution-biased-coin-flip)).
+
+The idea is now to pick a cutoff value for the likelihood ratio such that if we find a value equal to or smaller than it, we reject the null hypothesis. We choose this cutoff value, called the __critical value__,  by considering the probability of the values, _assuming MODEL R is true_ (as this is the only model that can provide us with a proper distribution). More precisely, we choose the critical value such that the probability of making a Type 1 error does not exceed a chosen value, called the significance level, which is usually set to $\alpha = .05$. That means that, if $H_0$ is true, we are allowing at most 5% of our tests to result in a Type 1 error. So how do we pick this critical value? Let's again consider the theoretical distribution of the likelihood ratio we worked out and depicted in Figure \@ref(fig:true-likelihood-ratio-distribution-coin-flip). As it is difficult to see the precise probabilities in this figure, let's first create another table like the one we did before, but now focussing specifically on the values of the likelihood ratio. Table \@ref(tab:cumulative-distribution-likelihood-ratio) doesn't really contain any more information than Table \@ref(tab:table-binomial-likelihood-ratio). We have simply added some of the numbers in that table up. A new concept though is that of a __cumulative probability__, by which we mean _the probability of a given value or any lower value_. Here, we focus on the cumulative probability for the likelihood ratio, $P(\text{likelihood ratio} \leq \text{value})$. Such cumulative probabilities are interesting here, because we want to find a cutoff value, and then limit the probability of getting any values lower than it to the significance level $\alpha$. 
+
+```{r cumulative-distribution-likelihood-ratio-table}
+tab <- data.frame(
+  k = 0:8,
+  lik1 = dbinom(0:8,size=8,prob=.5),
+  est = 0:8/8,
+  lik2 = dbinom(0:8,size=8,prob=0:8/8)
+)
+tab$LR <- tab$lik1/tab$lik2
+colnames(tab) <- c("$k$","$P(k \\mid \\theta = .5)$", "$\\hat{\\theta}$", "$P(k \\mid \\theta = \\hat{\\theta})$", "likelihood ratio")
+
+tab2 <- data.frame(
+  lr = tab[1:5,5],
+  p = tab[1:5,2] + c(tab[9:6,2],0),
+  ps = cumsum(tab[1:5,2] + c(tab[9:6,2],0))
+)
+knitr::kable(
+  tab2,col.names = c("value","$P(\\text{likelihood ratio} = \\text{value})$","$P(\\text{likelihood ratio} \\leq \\text{value})$"), caption="Possible values of the likelihood ratio, their probability and cumulative probability, assuming MODEL R is true.", digits=6)
+```
+
+Let's look at the cumulative probabilities (simply computed by adding, on each row of the table, the value of $P(\text{likelihood ratio} = \text{value})$ on that row, and all rows above it). How should we place our critical value to ensure that $\alpha \leq .05$? If we picked the value `r format(tab2[2,1],digits=4)`, and rejected the null hypothesis if we obtained a value equal to or lower than that, then the probability of a Type I error would be `r format(tab2[2,3],digits=4)`. Thus, if we don't want that probability to be higher than .05, then we can't pick that value. If, on the other hand, we pick the value `r format(tab2[1,1],digits=4)`, then the probability of a Type I error would be `r format(tab2[2,3],digits=4)`, which is lower than $\alpha = .05$. As we should not go higher than our desired value of $\alpha$, that would be the appropriate critical value.^[Of course, another way to ensure that we never go above $\alpha$ is to set the critical value to 0. But that would mean we _never_ reject $H_0$, which makes the test pointless.] Indeed, we could place the critical value somewhere between `r format(tab2[1,1],digits=4)` and `r format(tab2[2,1],digits=4)`, as I have done in Figure \@ref(fig:critical-value-likelihood-ratio-coin-flip) to make the plot easier to read. As, with $n=8$, there are not possible values of the likelihood ratio between `r format(tab2[1,1],digits=4)` and `r format(tab2[2,1],digits=4)` anyway, the precise placement of the critical value does not really matter. 
+
+```{r critical-value-likelihood-ratio-coin-flip, fig.cap="Critical values (dotted lines) and the true distibution of likelihood ratios comparing MODEL R with estimated MODEL G, when the true model is MODEL R (left) and the true model is one particular version of MODEL G (right).", fig.height=3}
+ggplot(data.frame(
+  theta = factor(c(rep(.5,5),rep(.9,5)), labels=c(expression(theta == .5),expression(theta == .9))),
+  lr = c(tab[1:5,5],tab[1:5,5]),
+  p = c(tab[1:5,2] + c(tab[9:6,2],0),c(dbinom(0:3,size=8,prob=.9) + dbinom(8:5,size=8,prob=.9), dbinom(4,size=8,prob=.9)))
+),aes(x=lr,y=p)) + geom_col(width=.01) + xlab("likelihood ratio") + ylab("P(likelihood ratio | MODEL R)") + facet_wrap(~theta, labeller=label_parsed) + geom_vline(xintercept=.04,lty=2)
+```
+
+The plot on the left of Figure \@ref(fig:critical-value-likelihood-ratio-coin-flip) shows the situation considered by the null hypothesis significance test, namely the situation in which MDOEL R is true. If MODEL R is false, then $\theta$ can, in principle, take any value $\theta \neq 0.5$. If $\theta$ does not equal 0.5, the probability $P(\text{likelihood ratio} \leq \text{critical value})$ will be _higher_ than when $\theta = 0.5$. As an example, the right side of Figure \@ref(fig:critical-value-likelihood-ratio-coin-flip) shows that 
+$$P(\text{likelihood ratio} \leq \text{critical value} | \theta = 0.9) = `r dbinom(0,8,.9) + dbinom(8,8,.9)`$$
+This probability of obtaining a value equal to or lower than the critical value, _given that $H_0$ is false_, is also called the __power__ of a test:
+
+\begin{equation}
+\text{power} = P(\text{test value} \leq \text{critical value} | H_0 \text{is false} )
+(\#eq:power_definition)
+\end{equation}
+Note that I'm using "test value" rather than likelihood ratio, because there will be times when we use a different test statistic than the likelihood ratio, and I want the definition of power here to cover those situations too. Furthermore, the complementary probability, $P(\text{value} \leq \text{critical value} | H_0 \text{is false})$, is the probability of a Type 2 error. Now, while power is a very important concept in hypothesis testing, it is also elusive. If you look at Figure \@ref(fig:true-likelihood-ratio-distribution-biased-coin-flip), you can see that the power is different for different values of $\theta$. 
+
+Power is an important concept because usually, it is less interesting if the null hypothesis is true than if it is false. For instance, it is less interesting if Paul was merely guessing than if he was psychic. So usually, we are more interested in rejecting the null hypothesis than in accepting it. Disappointingly, in this case, the power is pretty low even when $\theta = .9$, and it is even lower for values of $\theta$ closer to 0.5. We can increase the power by increasing $\alpha$. You can visualize this in Figure \@ref(fig:critical-value-likelihood-ratio-coin-flip) as moving the critical value to the right, for instance to the right of the second possible value of the likelihood ratio. If $\theta = .9$, that would increase the power to `r dbinom(0,8,.9) + dbinom(8,8,.9) + dbinom(1,8,.9) + dbinom(7,8,.9)`. But conversely, the probability of a Type 1 error would now be `r dbinom(0,8,.5) + dbinom(8,8,.5) + dbinom(1,8,.5) + dbinom(7,8,.5)`. Generally speaking, we don't want the probability of a Type 1 error so high. A better way of increasing the power of a test is to collect more data; e.g., by letting Paul make more predictions than 8.
+
+```{r}
+pwr_theta <- optimise(function(x) {(dbinom(0,8,x) + dbinom(8,8,x) - .8)^2}, c(0.5,1))$minimum
+```
+
+The tricky thing about the power of a test is that it depends on the unknown parameter $\theta$, and can never really be known. We can calculate the power of a test for various values of $\theta$, but in a sense, the choice of such values is arbitrary if we don't know the true value of $\theta$. Of course, using our data, we could estimate $\theta$, and then calculate what some have called the "observed power" of a test. In this example, $\hat{\theta} = \frac{8}{8} = 1$, and the "observed power" is 1. But, as we know, the estimate of $\theta$ is not identical to the true value of $\theta$, and hence the estimated power is unlikely to be equal to the true power, unless we have a lot of data, but then the power would be reasonably large in the first place. As such, "observed power" is rather useless. Perhaps the most useful way (at least in my opinion) to consider power is to determine the value of $\theta$ that would provide a reasonable level of power. Conventionally, a power of $P(\text{test value} \leq \text{critical value} | H_0 \text{ is false} ) = 0.8$ is considered reasonable. By plotting the power for different values of $\theta$, as done in Figure \@ref(fig:power-curve-biased-coin-flip), we can then determine the values of $\theta$ which would obtain this level of power. Such a plot is also called a power-curve. As you can see, values of $\theta$ close to 0 and 1 provide a high power. To reach a power of at least 0.8, it would need to be the case that $\theta \leq `r 1-pwr_theta`$ or $\theta \geq `r pwr_theta`$. Thus, Paul would have to be rather good at giving correct predictions (or very good at giving incorrect predictions), to make it reasonably likely that we would reject the null hypothesis. If you consider $\theta \leq `r 1-pwr_theta`$ or $\theta \geq `r pwr_theta`$ too extreme to be likely, then it would be a good idea to get more data in order to make the required value of $\theta$ more reasonable.
+
+```{r power-curve-biased-coin-flip, fig.width=4, fig.height=3,out.width='60%', fig.cap="A power-curve, plotting the power of the test for different values of $\\theta$$. The broken line indicates a power of 0.8, and the dotted lines indicate the values of $\\theta$ which obtain this power."}
+ggplot(
+  data.frame(
+    theta = seq(0,1,length=100),
+    power = dbinom(0,8,seq(0,1,length=100)) + dbinom(8,8,seq(0,1,length=100))
+  ),
+  aes(x=theta,y=power)
+) + geom_line() + geom_hline(yintercept=.8,lty=2) + geom_line(data = data.frame(theta = c(1-pwr_theta,1-pwr_theta),power=c(0,.8)),aes(x=theta, y = power),lty=3) + geom_line(data = data.frame(theta = c(pwr_theta,pwr_theta),power=c(0,.8)),aes(x=theta, y = power),lty=3) + xlab(expression(theta))
+```
 
 <!-- ## Confidence intervals -->
 
 ### Testing whether Paul was guessing
 
+Finally then, let's actually test the null hypothesis that Paul was guessing. When just considering his performance in the FIFA 2010 World Cup, Paul made $n=8$ predictions and $k=8$ of these were correct. This gives a likelihood ratio of MODEL R ($\theta = .5$) over estimated MODEL G ($\hat{\theta} = 1$) of `r format(tab[1,5], digits=3)`. Using a significance level of $\alpha = .05$, the critical value is set to `r format(tab[1,5], digits=3)`, and as the likelihood ratio is equal to or smaller than this value, we reject $H_0: \theta = .5$, and conclude that it is rather unlikely that Paul was merely guessing. In fact, $P(\text{likelihood ratio} \leq `r format(tab[1,5], digits=3)` | \theta = .5) = `r format(dbinom(0,8,.5) + dbinom(8,8,.5), digits=3)`$. This latter probability, the probability of a test value equal to more extreme than the test value calculated for the data, is generally also called the __p-value__. If the p-value is smaller than the required significance level, the test result is called significant, and we reject $H_0$. What "more extreme" means can vary, depending on how the test is performed.
+
+Now, in the preceding discussion, we have completely ignored Paul's performance in the UEFA 2008 Euro cup. If we can assume that Paul's psychic abilities did not change between the UEFA 2008 Euro and the 2010 FIFA World cup, it makes sense to pool both data sets to get a more reliable and more powerful test. As the logic is entirely the same as before, we will go through this quickly. Pooling both datasets, we now have $n=14$ predictions, of which $k= 12$ were correct. This provides a likelihood ratio of
+$$\text{likelihood ratio} = \frac{P(k=14|n=16, \theta = .5)}{P(k=14|n=16, \hat{\theta} = \frac{12}{14})} = `r dbinom(12,14,.5)/dbinom(12,14,12/14)`$$
+```{r theoretical-likelihood-ratio-distribution-pooled-data, eval=FALSE}
+tab <- data.frame(
+  k = 0:14,
+  lik1 = dbinom(0:14,size=14,prob=.5),
+  est = 0:14/14,
+  lik2 = dbinom(0:14,size=14,prob=0:14/14)
+)
+tab$LR <- tab$lik1/tab$lik2
+colnames(tab) <- c("$k$","$P(k \\mid \\theta = .5)$", "$\\hat{\\theta}$", "$P(k \\mid \\theta = \\hat{\\theta})$", "likelihood ratio")
+ggplot(data.frame(
+  theta = factor(c(rep(.5,8),rep(.9,8)), labels=c(expression(theta == .5),expression(theta == .9))),
+  lr = c(tab[1:8,5],tab[1:8,5]),
+  p = c(tab[1:8,2] + c(tab[15:9,2],0),c(dbinom(0:6,size=14,prob=.9) + dbinom(14:8,size=14,prob=.9), dbinom(7,size=14,prob=.9)))
+),aes(x=lr,y=p)) + geom_col(width=.005) + xlab("likelihood ratio") + ylab("P(likelihood ratio | MODEL R)") + facet_wrap(~theta, labeller=label_parsed) + geom_vline(xintercept=sum(tab[c(3,4),5])/2,lty=2)
+
+```
+
+For $\alpha = .05$, the critical value is `dbinom(2,14,.5)/dbinom(2,2,12/14)`, so again, we can reject 
+$H_0: \theta - .5$. In fact, the probability of obtaining a likelihood ratio of `r dbinom(2,14,.5)/dbinom(2,2,12/14)` or smaller if $H_0$ is true, the p-value, is `r 2*pbinom(2,14,.5)`. 
+
 ## Summary
+
+
 
 ## Epilogue
 
+Was Paul really psychic?
 
 <!--
 ## Exercises
