@@ -10,7 +10,7 @@ What does it mean for Paul to be psychic, to be an oracle? Sometimes it is easie
 
 ## Probability
 
-Let's simulate Paul's decisions for the FIFA world cup. Grab a coin and flip it `r nrow(fifa2010)` times. What are the outcomes? When I did this, the outcomes were:
+Let's simulate Paul's decisions for the 2010 FIFA World cup. Grab a coin and flip it `r nrow(fifa2010)` times. What are the outcomes? When I did this, the outcomes were:
 
 `r set.seed(123456); paste(sample(c("heads","tails"),size=nrow(fifa2010),replace=TRUE),collapse=", ")`
 
@@ -192,7 +192,7 @@ which you can translate into words as
 
 ### Distributions
 
-A probability distribution, as the name suggests, defines how probability is distributed over all possible values of a variable. You can think of "all probability" as a pie, and the probability distribution as slicing up the pie in (possibly unequal) pieces. Each possible value of a variable is given its own slice, and the size of the slice relative to the overall pie is the probability. Looking at the correctness of a single prediction, the pie is divided into two equal slices: half for $P(\text{correct})$, and the other half for $P(\text{incorrect})$. But Paul made more than one prediction (8 in the case of the FIFA 2010 World Cup), and what we're really interested in is Paul's accuracy in all his predictions: What is the probability that Paul made 8 out of 8 correct predictions if he was merely guessing? Using the rules of probability, we can work out this probability as well. 
+A probability distribution, as the name suggests, defines how probability is distributed over all possible values of a variable. You can think of "all probability" as a pie, and the probability distribution as slicing up the pie in (possibly unequal) pieces. Each possible value of a variable is given its own slice, and the size of the slice relative to the overall pie is the probability. Looking at the correctness of a single prediction, the pie is divided into two equal slices: half for $P(\text{correct})$, and the other half for $P(\text{incorrect})$. But Paul made more than one prediction (8 in the case of the 2010 FIFA World cup), and what we're really interested in is Paul's accuracy in all his predictions: What is the probability that Paul made 8 out of 8 correct predictions if he was merely guessing? Using the rules of probability, we can work out this probability as well. 
 
 According to our coin-flipping model, it does not matter which of Paul's prediction we look at (e.g. whether the first, the second, the last, or any other one). In fact, we could generate the data in the reverse order, or start with the Germany-Australia match and then the Spain-Germany match. Let's write Paul's predictions as a variable $\texttt{pred}_i$, where the index $i$ can be a value between 1 and 8, corresponding to the first, second, _etc_, prediction he made. The probability that any prediction is correct is $P(\texttt{pred}_i = \text{correct}) = .5$, and whether that prediction is correct is independent from whether any earlier (or later) prediction is correct. In fancy terms, this means that the observations $Y_i$ are _independent and identically distributed_ (IID).
 
@@ -202,33 +202,92 @@ When considering the probability of a sequence of events (e.g. a consecutive run
 library(DiagrammeR)
 
 treePlot <- "
-  graph LR
+  digraph tree_plot {
+
+    graph [layout = dot,
+           rankdir = LR]
+
+    node [shape = box] 
+    S [label = 'start']
     
-  S[start]--.5-->H(Cor)
-  S--.5-->T(Inc)
-  H--.5-->HH(Cor)
-  H--.5-->HT(Inc)
-  T--.5-->TH(Cor)
-  T--.5-->TT(Inc)
-  HH--.5-->HHH(Cor)
-  HH--.5-->HHT(Inc)
-  HT--.5-->HTH(Cor)
-  HT--.5-->HTT(Inc)
-  TH--.5-->THH(Cor)
-  TH--.5-->THT(Inc)
-  TT--.5-->TTH(Cor)
-  TT--.5-->TTT(Inc)
-  HHH---HHHe[3 Cor]
-  HHT---HHTe[2 Cor 1 Inc]
-  HTH---HTHe[2 Cor 1 Inc]
-  HTT---HTTe[1 Cor 2 Inc]
-  THH---THHe[2 Cor 1 Inc]
-  THT---THTe[1 Cor 2 Inc]
-  TTH---TTHe[1 Cor 2 Inc]
-  TTT---TTTe[3 Inc]
+    node [shape = oval, style = filled]
+    H [label = 'correct', fillcolor = purple ]
+    T [label = 'incorrect', fillcolor = yellow]
+    HH [label = 'correct', fillcolor = purple ]
+    HT [label = 'incorrect', fillcolor = yellow]
+    TH [label = 'correct', fillcolor = purple ]
+    TT [label = 'incorrect', fillcolor = yellow]
+    HHH [label = 'correct', fillcolor = purple ]
+    HHT [label = 'incorrect', fillcolor = yellow]
+    HTH [label = 'correct', fillcolor = purple ]
+    HTT [label = 'incorrect', fillcolor = yellow]
+    THH [label = 'correct', fillcolor = purple ]
+    THT [label = 'incorrect', fillcolor = yellow]
+    TTH [label = 'correct', fillcolor = purple ]
+    TTT [label = 'incorrect', fillcolor = yellow]
+    
+    node [shape = plaintext, style = unfilled]
+    HHHe [label = '3 correct']
+    HHTe [label = '2 correct, 1 incorrect']
+    HTHe [label = '2 correct, 1 incorrect']
+    HTTe [label = '1 correct, 2 incorrect']
+    THHe [label = '2 correct, 1 incorrect']
+    THTe [label = '1 correct, 2 incorrect']
+    TTHe [label = '1 correct, 2 incorrect']
+    TTTe [label = '3 incorrect']
+    
+    edge [label = '.5']
+    S -> {H T}
+    H -> {HH HT}
+    T -> {TH TT}
+    HH -> {HHH HHT}
+    HT -> {HTH HTT}
+    TH -> {THH THT}
+    TT -> {TTH TTT}
+    
+    edge [label = '']
+    
+    HHH -> HHHe
+    HHT -> HHTe
+    HTH -> HTHe
+    HTT -> HTTe
+    THH -> THHe
+    THT -> THTe
+    TTH -> TTHe
+    TTT -> TTTe
+    
+}
 "
+DiagrammeR::grViz(treePlot)
+
+# treePlot <- "
+#   graph LR
+#     
+#   S[start]--.5-->H(Cor)
+#   S--.5-->T(Inc)
+#   H--.5-->HH(Cor)
+#   H--.5-->HT(Inc)
+#   T--.5-->TH(Cor)
+#   T--.5-->TT(Inc)
+#   HH--.5-->HHH(Cor)
+#   HH--.5-->HHT(Inc)
+#   HT--.5-->HTH(Cor)
+#   HT--.5-->HTT(Inc)
+#   TH--.5-->THH(Cor)
+#   TH--.5-->THT(Inc)
+#   TT--.5-->TTH(Cor)
+#   TT--.5-->TTT(Inc)
+#   HHH---HHHe[3 Cor]
+#   HHT---HHTe[2 Cor 1 Inc]
+#   HTH---HTHe[2 Cor 1 Inc]
+#   HTT---HTTe[1 Cor 2 Inc]
+#   THH---THHe[2 Cor 1 Inc]
+#   THT---THTe[1 Cor 2 Inc]
+#   TTH---TTHe[1 Cor 2 Inc]
+#   TTT---TTTe[3 Inc]
+# "
 #if(knitr::is_html_output()) {
-DiagrammeR(treePlot)
+# DiagrammeR(treePlot)
 #} else {
   #treePlot <- mermaid(treePlot)
 #  export_graph(render_graph(mermaid(treePlot)),file_name = "g.pdf")
@@ -239,9 +298,9 @@ DiagrammeR(treePlot)
   
 ```
 
-For three coin flips, there are 8 unique sequences of outcomes (the tree ends in 8 branches). Because the probability of "heads" and "tails" are identical, and each coin flip is independent of the others, each unique sequence such as "`r set.seed(45); paste0(sample(c("Cor","Inc"),size=3,replace=TRUE),collapse=", ")`" has exactly the same probability, namely $0.5 \times 0.5 \times 0.5 = (0.5)^3 = `r (.5)^3`$. However, if we are not interested in the probability of a unique sequence of outcomes, but rather the total number of correct guesses, the corresponding probabilities are not equal. For example, there is only one sequence in which the number of correct guesses is 3, but there are three sequences in which the number of correct guesses equals 2. Each of these sequences has the sample probability, so we can just add these up
+For three coin flips, there are 8 unique sequences of outcomes (the tree ends in 8 branches). Because the probability of "heads" and "tails" are identical, and each coin flip is independent of the others, each unique sequence such as "`r set.seed(45); paste0(sample(c("correct","incorrect"),size=3,replace=TRUE),collapse=", ")`" has exactly the same probability, namely $0.5 \times 0.5 \times 0.5 = (0.5)^3 = `r (.5)^3`$. However, if we are not interested in the probability of a unique sequence of outcomes, but rather the total number of correct guesses, the corresponding probabilities are not equal. For example, there is only one sequence in which the number of correct guesses is 3, but there are three sequences in which the number of correct guesses equals 2. Each of these sequences has the sample probability, so we can just add these up
 $$P(\text{2 correct and 1 incorrect}) = 3 \times `r (.5)^3` = `r 3*.5^3`$$
-Similarly, the probability $P(\text{1 Cor 2 Inc}) = `r 3*.5^3`$, as there are three sequences in which the number of correct guesses equals 1. 
+Similarly, the probability $P(\text{1 correct and 2 incorrect}) = `r 3*.5^3`$, as there are three sequences in which the number of correct guesses equals 1. 
 
 Note that we have used a distribution over the outcomes of a single variable (a single prediction) to effectively construct three variables ($\texttt{pred}_1$, $\texttt{pred}_2$, and $\texttt{pred}_3$) reflecting Pauls first, second, and third prediction, respectively. We can take the outcomes of each of these three variables and turn this into a new variable reflecting the outcome of all three predictions. This new variable has 8 possible outcomes (unique sequences), each with an equal probability of occurring. Finally, we can then use this sequence variable to construct yet a new variable, the one we are really interested in, reflecting the number of correct predictions. This variable (in the case of three predictions), has four unique outcomes (0, 1, 2, or 3 correct) with _unequal_ probabilities. Perhaps all these variables make your head spin. But a main thing to realize is that from a quite simple model of the Data Generating Process (the outcome of each prediction is an independent coin flip), we can start to say something about how likely Paul's performance of 8 out of 8 correct predictions really was.
 
@@ -482,10 +541,10 @@ $$P(\text{likelihood ratio} \leq \text{critical value} | \theta = 0.9) = `r dbin
 This probability of obtaining a value equal to or lower than the critical value, _given that $H_0$ is false_, is also called the __power__ of a test:
 
 \begin{equation}
-\text{power} = P(\text{test value} \leq \text{critical value} | H_0 \text{is false} )
-(\#eq:power_definition)
+\text{power} = P(\text{test value} \leq \text{critical value} | H_0 \text{ is false} )
+(\#eq:power-definition)
 \end{equation}
-Note that I'm using "test value" rather than likelihood ratio, because there will be times when we use a different test statistic than the likelihood ratio, and I want the definition of power here to cover those situations too. Furthermore, the complementary probability, $P(\text{value} \leq \text{critical value} | H_0 \text{is false})$, is the probability of a Type 2 error. Now, while power is a very important concept in hypothesis testing, it is also elusive. If you look at Figure \@ref(fig:true-likelihood-ratio-distribution-biased-coin-flip), you can see that the power is different for different values of $\theta$. 
+Note that I'm using "test value" rather than likelihood ratio, because there will be times when we use a different test statistic than the likelihood ratio, and I want the definition of power here to cover those situations too. Furthermore, the complementary probability, $P(\text{value} \leq \text{critical value} | H_0 \text{ is false})$, is the probability of a Type 2 error. Now, while power is a very important concept in hypothesis testing, it is also elusive. If you look at Figure \@ref(fig:true-likelihood-ratio-distribution-biased-coin-flip), you can see that the power is different for different values of $\theta$. 
 
 Power is an important concept because usually, it is less interesting if the null hypothesis is true than if it is false. For instance, it is less interesting if Paul was merely guessing than if he was psychic. So usually, we are more interested in rejecting the null hypothesis than in accepting it. Disappointingly, in this case, the power is pretty low even when $\theta = .9$, and it is even lower for values of $\theta$ closer to 0.5. We can increase the power by increasing $\alpha$. You can visualize this in Figure \@ref(fig:critical-value-likelihood-ratio-coin-flip) as moving the critical value to the right, for instance to the right of the second possible value of the likelihood ratio. If $\theta = .9$, that would increase the power to `r dbinom(0,8,.9) + dbinom(8,8,.9) + dbinom(1,8,.9) + dbinom(7,8,.9)`. But conversely, the probability of a Type 1 error would now be `r dbinom(0,8,.5) + dbinom(8,8,.5) + dbinom(1,8,.5) + dbinom(7,8,.5)`. Generally speaking, we don't want the probability of a Type 1 error so high. A better way of increasing the power of a test is to collect more data; e.g., by letting Paul make more predictions than 8.
 
@@ -509,37 +568,68 @@ ggplot(
 
 ### Testing whether Paul was guessing
 
-Finally then, let's actually test the null hypothesis that Paul was guessing. When just considering his performance in the FIFA 2010 World Cup, Paul made $n=8$ predictions and $k=8$ of these were correct. This gives a likelihood ratio of MODEL R ($\theta = .5$) over estimated MODEL G ($\hat{\theta} = 1$) of `r format(tab[1,5], digits=3)`. Using a significance level of $\alpha = .05$, the critical value is set to `r format(tab[1,5], digits=3)`, and as the likelihood ratio is equal to or smaller than this value, we reject $H_0: \theta = .5$, and conclude that it is rather unlikely that Paul was merely guessing. In fact, $P(\text{likelihood ratio} \leq `r format(tab[1,5], digits=3)` | \theta = .5) = `r format(dbinom(0,8,.5) + dbinom(8,8,.5), digits=3)`$. This latter probability, the probability of a test value equal to more extreme than the test value calculated for the data, is generally also called the __p-value__. If the p-value is smaller than the required significance level, the test result is called significant, and we reject $H_0$. What "more extreme" means can vary, depending on how the test is performed.
+Finally then, let's actually test the null hypothesis that Paul was guessing. When just considering his performance in the 2010 FIFA World cup, Paul made $n=8$ predictions and $k=8$ of these were correct. This gives a likelihood ratio of MODEL R ($\theta = .5$) over estimated MODEL G ($\hat{\theta} = 1$) of `r format(tab[1,5], digits=3)`. Using a significance level of $\alpha = .05$, the critical value is set to `r format(tab[1,5], digits=3)`, and as the likelihood ratio is equal to or smaller than this value, we reject $H_0: \theta = .5$, and conclude that it is rather unlikely that Paul was merely guessing. In fact, $P(\text{likelihood ratio} \leq `r format(tab[1,5], digits=3)` | \theta = .5) = `r format(dbinom(0,8,.5) + dbinom(8,8,.5), digits=3)`$. This latter probability, the probability of a test value equal to more extreme than the test value calculated for the data, is generally also called the __p-value__. If the p-value is smaller than the required significance level, the test result is called significant, and we reject $H_0$. What "more extreme" means can vary, depending on how the test is performed.
 
-Now, in the preceding discussion, we have completely ignored Paul's performance in the UEFA 2008 Euro cup. If we can assume that Paul's psychic abilities did not change between the UEFA 2008 Euro and the 2010 FIFA World cup, it makes sense to pool both data sets to get a more reliable and more powerful test. As the logic is entirely the same as before, we will go through this quickly. Pooling both datasets, we now have $n=14$ predictions, of which $k= 12$ were correct. This provides a likelihood ratio of
+Now, in the preceding discussion, we have completely ignored Paul's performance in the UEFA Euro 2008 cup. If we can assume that Paul's psychic abilities did not change between the UEFA Euro 2008 and the 2010 FIFA World cup, it makes sense to pool both data sets to get a more reliable and more powerful test. As the logic is entirely the same as before, we will go through this quickly. Pooling both datasets, we now have $n=14$ predictions, of which $k= 12$ were correct. This provides a likelihood ratio of
 $$\text{likelihood ratio} = \frac{P(k=14|n=16, \theta = .5)}{P(k=14|n=16, \hat{\theta} = \frac{12}{14})} = `r dbinom(12,14,.5)/dbinom(12,14,12/14)`$$
 ```{r theoretical-likelihood-ratio-distribution-pooled-data, eval=FALSE}
-tab <- data.frame(
+tab3 <- data.frame(
   k = 0:14,
   lik1 = dbinom(0:14,size=14,prob=.5),
   est = 0:14/14,
   lik2 = dbinom(0:14,size=14,prob=0:14/14)
 )
-tab$LR <- tab$lik1/tab$lik2
-colnames(tab) <- c("$k$","$P(k \\mid \\theta = .5)$", "$\\hat{\\theta}$", "$P(k \\mid \\theta = \\hat{\\theta})$", "likelihood ratio")
+tab3$LR <- tab3$lik1/tab3$lik2
+colnames(tab3) <- c("$k$","$P(k \\mid \\theta = .5)$", "$\\hat{\\theta}$", "$P(k \\mid \\theta = \\hat{\\theta})$", "likelihood ratio")
 ggplot(data.frame(
   theta = factor(c(rep(.5,8),rep(.9,8)), labels=c(expression(theta == .5),expression(theta == .9))),
-  lr = c(tab[1:8,5],tab[1:8,5]),
-  p = c(tab[1:8,2] + c(tab[15:9,2],0),c(dbinom(0:6,size=14,prob=.9) + dbinom(14:8,size=14,prob=.9), dbinom(7,size=14,prob=.9)))
-),aes(x=lr,y=p)) + geom_col(width=.005) + xlab("likelihood ratio") + ylab("P(likelihood ratio | MODEL R)") + facet_wrap(~theta, labeller=label_parsed) + geom_vline(xintercept=sum(tab[c(3,4),5])/2,lty=2)
+  lr = c(tab3[1:8,5],tab3[1:8,5]),
+  p = c(tab3[1:8,2] + c(tab3[15:9,2],0),c(dbinom(0:6,size=14,prob=.9) + dbinom(14:8,size=14,prob=.9), dbinom(7,size=14,prob=.9)))
+),aes(x=lr,y=p)) + geom_col(width=.005) + xlab("likelihood ratio") + ylab("P(likelihood ratio | MODEL R)") + facet_wrap(~theta, labeller=label_parsed) + geom_vline(xintercept=sum(tab3[c(3,4),5])/2,lty=2)
 
 ```
 
-For $\alpha = .05$, the critical value is `dbinom(2,14,.5)/dbinom(2,2,12/14)`, so again, we can reject 
-$H_0: \theta - .5$. In fact, the probability of obtaining a likelihood ratio of `r dbinom(2,14,.5)/dbinom(2,2,12/14)` or smaller if $H_0$ is true, the p-value, is `r 2*pbinom(2,14,.5)`. 
+For $\alpha = .05$, the critical value is `r dbinom(2,14,.5)/dbinom(2,2,12/14)`, so again, we can reject 
+$H_0: \theta = .5$. In fact, the probability of obtaining a likelihood ratio of `r dbinom(2,14,.5)/dbinom(2,2,12/14)` or smaller if $H_0$ is true, the p-value, is `r 2*pbinom(2,14,.5)`. 
+
+## Hypothesis testing directly with the Binomial distribution
+
+In the preceding, we have focused on the likelihood ratio as the test statistic for our hypothesis tests. The likelihood ratio is a very general measure to compare how well two models describe the data. And it clearly shows how hypothesis testing can be seen as a form of model comparison. That said, the likelihood ratio can also be a bit cumbersome to work with, and deriving the distribution of the likelihood ratio under the null hypothesis is not always straightforward. As we will see later, we can often use a different measure in place of the likelihood ratio, which will provide testing procedures which are equivalent to it.
+
+As we saw when we worked out the theoretical distribution of the likelihood ratio (Table \@ref(tab:table-binomial-likelihood-ratio)), there is a direct relation between the number of correct guesses and the value of the likelihood ratio. In a way, you can think of the likelihood ratio as a transformation of the number of correct guesses into a new measure (the likelihood ratio). For example, $k=8$ out of $n=8$ correct guesses becomes a likelihood ratio of `r tab[9,5]`, and $7$ out of $8$ correct guesses becomes a likelihood ratio of `r tab[8,5]`. Similarly, $k=0$ out of $n=8$ correct guesses becomes a likelihood ratio of `r tab[0,5]`, and $1$ out of $8$ correct guesses becomes a likelihood ratio of `r tab[1,5]`. So different values of $k$ may provide the same likelihood ratio value (in mathematical terms, this is also called a many-to-one mapping). This is similar to outcomes 1, 3, and 5 of a die roll all mapping onto "odd number". 
+
+Because both the value and the probability of likelihood ratio values depend solely on the number of correct guesses, the number of correct guesses contains all the information about the likelihood ratio. Because of this, we can define our hypothesis tests directly in terms of correct guesses, without losing any information. For instance, when we considered the pooled data from the UEFA Euro 2008 cup and the 2010 FIFA World cup, we determined that any likelihood ratio equal to or smaller than `dbinom(2,14,.5)/dbinom(2,2,12/14)` would lead to a rejection of the null hypothesis. There are three possible values of the likelihood ratio in this critical region (values between 0 and `dbinom(2,14,.5)/dbinom(2,2,12/14)`), and these are associated with $k=0,1,2,12,13,\text{ or}, 14$. Thus, we can equivalently define the critical region in terms of the number of correct guesses: $k \leq 2$ and $k \geq 12$. Figure \@ref(fig:binomial-distribution-critical-values-pooled) depicts the distribution of $k$ under $H_0$ and the critical region for $\alpha=.05$.  
+
+```{r binomial-distribution-critical-values-pooled, fig.cap = "Distribution of the number of correct predictions ($k$) out of $n=14$ under MODEL R ($\\theta = .5$), and the critical region for $\\alpha = .05$."}
+ggplot(data.frame(x=0:14,y=dbinom(0:14,size=14,prob=.5),critical = c(rep("yes",3),rep("no",9),rep("yes",3))),aes(x=as.factor(x),y=y,fill=critical)) + geom_col(width=1,col="black") + xlab("Number correct (k)") + ylab("Probability") + theme(legend.position = "none") + geom_vline(xintercept=3.5, lty=2) + geom_vline(xintercept=12.5, lty=2) + annotate("text", x=2,y=.20,hjust = 0.5, vjust=0,label="critical region") + annotate("text", x=14,y=.20,hjust = .5, vjust=0,label="critical region")
+```
+
+Note that both this new way of testing $H_0$, and the likelihood ratio test we performed earlier, both base their decisions on Paul's number of correct guesses (i.e. $Y = 12$). This new way checks directly whether the value of $Y$ is in the critical region, while the likelihood ratio test first transforms $Y$ into a likelihood ratio, and then checks whether this value is in the critical region. Both ways of testing provide exactly the same decisions. But testing $Y$ directly is somewhat easier, as we don't have to compute anything else. In addition, using $Y$ directly also makes it more straightforward to perform a one-sided hypothesis test.
+
+Up to now, we have compared a model with $\theta = .5$ to a model that merely assumed $0 \leq \theta \leq 1$. The latter model can not only account for Paul making very accurate predictions, but also for Paul making very inaccurate predictions. But perhaps it is more reasonable to expect that if Paul was indeed psychic, that he would make correct predictions, rather than deceiving his keeper by making inaccurate predictions. In other words, if Paul was psychic, we would expect the probability of him making a correct prediction to be larger than if he were just guessing, so $\theta > .5$. Wer can still test this model against the null hypothesis of random guessing, but now small numbers of correct guesses should not move us to reject the null hypothesis, as such small numbers would be even less likely if a model with $\theta > .5$ were true. If we'd use the right critical region of Figure \@ref(fig:binomial-distribution-critical-values-pooled), the actual significance level would be only $\alpha = `r 1-pbinom(11,14,.5)`$ (the probability $P(k \geq 12 | \theta = .5)$). If we'd like a significance level of $\alpha = .05$, we can actually move the critical value to 11, as $P(k \geq 11 | \theta = .5) = 1-pbinom(10,14,.5)`$, which is still below the desired $\alpha = .05$, but it is as close as we can get here. The resulting right-sided test of the hypothesis $H_0: \theta = .5$ versus the alternative that $\theta > .5$ is depcted in Figure \@ref(fig:binomial-distribution-critical-values-pooled-one-sided). The result of this test, with $Y = 12$, is again to reject $H_0$.
+
+```{r binomial-distribution-critical-values-pooled-one-sided, fig.cap="Distribution of the number of correct predictions ($k$) out of $n=14$ under MODEL R ($\\theta = .5$), and the critical region for a one-sided test and $\\alpha = .05$."}
+ggplot(data.frame(x=0:14,y=dbinom(0:14,size=14,prob=.5),critical = c(rep("no",11),rep("yes",4))),aes(x=as.factor(x),y=y,fill=critical)) + geom_col(width=1,col="black") + xlab("Number correct (k)") + ylab("Probability") + theme(legend.position = "none") + geom_vline(xintercept=11.5, lty=2) + annotate("text", x=13.5,y=.20,hjust = .5, vjust=0,label="critical region")
+```
+
+It is possible to formulate this one-sided test in terms of a likelihood ratio test as well, but that wouldn't necessarily make things clearer, and I think this chapter is long enough already. 
 
 ## Summary
 
+Statistical models define a probability distribution for the Data Generating Process. To test a particular hypothesis about an aspect of the DGP, such as that the probability of a correct prediction by Paul equals .5, we can define two alternative models, one which assumes the DGP has that characteristic, and one which doesn't. When it is difficult to decide upon a reasonable alternative value for the hypothesised characteristic of the DGP, the model can leave this value unspecified as a parameter. Generally, apart from the value of the parameter(s), the models are identical in other respects. In that case, the model where we assume we know the value of the parameter(s) is a special case of the more general model where we leave the parameter(s) unspecified. The specified model (e.g., one in which the probability of a correct prediction is $\theta = .5$) is then said to be nested within the more general model (e.g., the one in which $\theta$ can take any value between 0 and 1). We refer to the more general model as MODEL G (the "general" model), and the specified model as MODEL R (the "restricted" model, in which we restrict the value of a parameter to have a specified value). 
 
+Unknown parameters of statistical models can be estimated from the data. Maximum likelihood estimation is a widely used and useful method to estimate parameters of statistical models. It estimates parameters by finding the value which maximises the probability of the observed data according to the model. Maximum likelihood estimators are consistent and efficient, although they can be biased. 
+
+When comparing statistical models, we want to know how good each is in describing the data. A useful and general measure for this is the likelihood ratio. However, when comparing an estimated model to a model where we restrict the value of the parameter(s) to take a particular value, we know the likelihood ratio will never show the estimated model is worse than the restricted model, as we estimated the model to maximise the likelihood. The idea of null hypothesis significance testing is to consider how the parameter estimates and the likelihood ratio values are distributed if the null hypothesis (the restricted model) is true. The procedure relies on a critical value such that the null hypothesis is rejected if the likelihood ratio is equal to or more extreme than the critical value. the critical value is chosen such that the probability of rejecting the null hypothesis when it is true (a Type 1 error) does not exceed a particular value, called the significance level ($\alpha$). The power of a test, the probability of rejecting the null hypothesis when it is false, is also an important concept, but in practice, it is difficult to determine, as it requires knowing the true value of the parameter(s) of the general model.  
 
 ## Epilogue
 
-Was Paul really psychic?
+Was Paul really psychic? Quite likely not. Paul's accuracy is quite unlikely if he were randomly guessing, and we have rejected this null hypothesis. That doesn't mean that the null hypothesis is definitely not true; the null hypothesis significance test merely limits the probability of a wrong rejection to a maximum of e.g. $\alpha = .05$. In statistics, we can never really be sure of anything. But we shouldn't use this argument to allow us to conclude whatever we want, because then it becomes rather pointless to test a hypothesis in the first place. So we should really conclude that Paul's performance was higher than expected if he were guessing. But there are various ways to explain his performance which don't involve him being psychic. For instance, Germany was a team in a rather disproportionate number of the matches for which Paul provided predictions, and in many of these, he opened the box with the German flag on it first. Perhaps Paul preferred the German flag over most other flags? Germany was also a strong team in both the UEFA Euro 2008 and the 2010 FIFA World cup. These factors could easily combine to allow Paul a large number of correct predictions. You can probably think of other confounds to explain his performance as well.
+
+Paul was not the only animal making predictions about sports matches. Mani the parakeet, Nelly the elephant, Flopsy the kangaroo, Madame Shiva the guinea pig, Big Head the sea turtle, Shaheen the camel, and Achilles the cat, are some other ones with more or less success. And there are probably many more who no one has heard about. If you think of all these animals making predictions as repetitions of a larger experiment (e.g. testing whether animals in general are psychic), it does not seem surprising that in some of these, an animal will make a large number of correct predictions. 
+
+But then again, Paul was not just any animal... He was an octopus...with nine brains...
+
 
 <!--
 ## Exercises
