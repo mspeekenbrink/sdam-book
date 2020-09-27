@@ -6,7 +6,9 @@ data("trump2016")
 dat <- subset(trump2016,state != "District of Columbia")
 ```
 
-Donald Trump is perhaps the most divisive president in American history.
+## Voting and hate groups
+
+Donald Trump is perhaps the most divisive president in American history. The 2016 US elections were mired in controversy.
 
 ```{r scatterplot-trump-votes-hate-groups,fig.cap="Percentage of votes for Trump in the 2016 elections for 50 US states and the number of hate groups per 1 million citizens"}
 library(ggplot2)
@@ -32,7 +34,7 @@ To assess the relation between Trump votes and hate groups, we will use a linear
 
 The bivariate regression model can be defined as follows:
 \begin{equation}
-Y_i = \beta_0 + \beta_1 X_{i} + \epsilon_i \quad \quad \quad \epsilon_i \sim \mathcal{N}(0,\sigma)
+Y_i = \beta_0 + \beta_1 X_{i} + \epsilon_i \quad \quad \quad \epsilon_i \sim \mathbf{Normal}(0,\sigma)
 (\#eq:bivariate-regression-model-definition)
 \end{equation}
 
@@ -101,7 +103,7 @@ The maximum likelihood estimates of the model parameters are
 \end{equation}
 for the intercept, and
 \begin{equation}
-\hat{\beta}_1 = \frac{\sum_{i=1}^N (X_i - \overline{X})(Y_i - \overline{Y})}{\sum_{i=1}^N (X_i - \overline{X})^2} .
+\hat{\beta}_1 = \frac{\sum_{i=1}^n (X_i - \overline{X})(Y_i - \overline{Y})}{\sum_{i=1}^n (X_i - \overline{X})^2} .
 (\#eq:simple-regression-slope-estimate)
 \end{equation}
 for the slope. Note that to estimate the intercept, we need the estimate of the slope. Let's focus on
@@ -112,12 +114,12 @@ multiplied deviations a little further. Each deviation is positive (larger than 
 higher than the average, and negative (smaller than 0), when the value is lower than the average.
 So the multiplied deviations are positive whenever both values are larger than their average, and 
 whenever both values are below their average (a negative value multiplied by another negative value 
-is positive). If we were to divide the sum of the multiplied deviations by $N$ (the number of observations), 
+is positive). If we were to divide the sum of the multiplied deviations by $n$ (the number of observations), 
 we'd get the average of these multiplied deviations. This average is also called the __covariance__ between 
 $X$ and $Y$: 
-$$\text{Cov}(X,Y) =  \frac{\sum_{i=1}^N (X_i - \overline{X})(Y_i - \overline{Y})}{N}$$
+$$\text{Cov}(X,Y) =  \frac{\sum_{i=1}^n (X_i - \overline{X})(Y_i - \overline{Y})}{n}$$
 Note that, as an estimator, this provides biased estimates of the true covariance. An unbiased estimator
-of the true covariance is obtained by dividing by $N-1$ instead of $N$ (just as for the variance). Going back to our example, the covariance between trump votes and hate groups would be positive whenever states with higher-than-average Trump votes are generally also states with higher-than-average hate groups, and whenever
+of the true covariance is obtained by dividing by $n-1$ instead of $n$ (just as for the variance). Going back to our example, the covariance between trump votes and hate groups would be positive whenever states with higher-than-average Trump votes are generally also states with higher-than-average hate groups, and whenever
 states with lower-than-average Trump votes are generally also states with lower-than-average hate groups. 
 The covariance would be negative, on the other hand, whenever states with higher-than-average Trump votes are generally states with lower-than-average hate groups, and whenever
 states with lower-than-average Trump votes are generally states with higher-than-average hate groups. A positive or negative covariance is indicative of a relation between $X$ and $Y$. Indeed, the well-known
@@ -126,10 +128,10 @@ to always be between -1 and 1 and involves dividing the covariance by the produc
 of both variables:
 \begin{align}
 r_{X,Y} &= \frac{\text{Cov}(X,Y)}{S_X \times S_Y} \\
-&= \frac{\frac{\sum_{i=1}^N (X_i - \overline{X})(Y_i - \overline{Y})}{N}}{\sqrt{\frac{\sum_{i=1}^N (X_i - \overline{X})^2}{N}} \times \sqrt{\frac{\sum_{i=1}^N (Y_i - \overline{Y})^2}{N}}}
+&= \frac{\frac{\sum_{i=1}^n (X_i - \overline{X})(Y_i - \overline{Y})}{n}}{\sqrt{\frac{\sum_{i=1}^n (X_i - \overline{X})^2}{n}} \times \sqrt{\frac{\sum_{i=1}^n (Y_i - \overline{Y})^2}{n}}}
 \end{align}
 
-Going back to the estimate of the slope (Equation \@ref(eq:simple-regression-slope-estimate)), we can view this as a different way of standardizing the covariance. Looking at the bottom part of the division (the denominator), we can see it consists of the sum of squared deviations of the predictor values from its mean. If we were to divide this sum by the number of observations, we'd get the variance of $X$. As dividing both the top part (numerator) and bottom part (denominator) in a division by the same value does not affect the outcome of the division (i.e. $\frac{a}{b} = \frac{a/c}{b/c}$), we can choose to divide both by $N$ so the numerator becomes the covariance and the denominator the variance (we could also divide both by $N-1$ so they become unbiased estimators of the covariance and variance). So an alternative way of computing the estimate of the slope is
+Going back to the estimate of the slope (Equation \@ref(eq:simple-regression-slope-estimate)), we can view this as a different way of standardizing the covariance. Looking at the bottom part of the division (the denominator), we can see it consists of the sum of squared deviations of the predictor values from its mean. If we were to divide this sum by the number of observations, we'd get the variance of $X$. As dividing both the top part (numerator) and bottom part (denominator) in a division by the same value does not affect the outcome of the division (i.e. $\frac{a}{b} = \frac{a/c}{b/c}$), we can choose to divide both by $n$ so the numerator becomes the covariance and the denominator the variance (we could also divide both by $n-1$ so they become unbiased estimators of the covariance and variance). So an alternative way of computing the estimate of the slope is
 $$\hat{\beta}_1 = \frac{\text{Cov}(X,Y)}{\text{Var}(X)}$$
 Note that the variance of $X$ equals the product of the standard deviation of $X$ and itself, as $S^2_X = S_X \times S_X$. So the slope estimate looks quite a bit like the correlation coefficient, where instead of the standard deviation of $Y$, we use the standard deviation of $X$ twice. With a little algebraic manipulation, we can also state the slope estimate in terms of the correlation as 
 $$\hat{\beta}_1 = \frac{S_Y}{S_X} r_{X,Y}$$
@@ -168,9 +170,9 @@ Remember, an estimate (whether of the mean or of another parameter) is a noisy r
 Y_i &= \beta_0 + 0 \times X_i + \epsilon \\
 &= \beta_0 + \epsilon_i
 \end{align}
-which is identical to the simple model of the previous chapter. Then, the true value of the intercept would be $\beta_0 = \mu$. If we'd know the true value of the standard deviation $\sigma$, we'd have a fully specified model (a Normal distribution) which we can use to generate as many alternative data sets as we'd like. By generating these data sets, and estimating the slope of our model for each, we can get an overview of the variability of the estimates when the true slope equals $\beta_1 = 0$. An unbiased estimator ensures that on average, these estimates equal the true value. The main thing of interest is then the variability around this value. A consistent estimator ensures that this variability becomes smaller with the larger data sets. But to understand how well we can estimate the parameter for the present data, we would simulate data sets with the same number of observations (so $N=`r nrow(dat)`$). Unfortunately, we don't know the true value of $\sigma$. Our data provides an estimate of $\sigma$, but we know this estimate is noisy itself. Thinking first in the same way about the sampling distribution of $\hat{\sigma}$, we could first sample a values of $\sigma$, and then use each of these to generate a data set for which to estimate $\beta_1$. Doing this many (many many!) times would give us a good overview of the variability of the estimates. As before, we don't have to actually simulate the data sets. If the null model is true, then we can derive that the sampling distribution of the estimates follows a t-distribution. Thus, we should look for the $t$ value our data provides, and evaluate this value within the context of the sampling distribution derived under the model where $\beta_1 = 0$. For both paraneters (intercept and slope), the same logic applies. In general then, for parameters $\beta_j$ (where $j = 0$ or 1), the $t$-value of our data is computed as 
+which is identical to the simple model of the previous chapter. Then, the true value of the intercept would be $\beta_0 = \mu$. If we'd know the true value of the standard deviation $\sigma$, we'd have a fully specified model (a Normal distribution) which we can use to generate as many alternative data sets as we'd like. By generating these data sets, and estimating the slope of our model for each, we can get an overview of the variability of the estimates when the true slope equals $\beta_1 = 0$. An unbiased estimator ensures that on average, these estimates equal the true value. The main thing of interest is then the variability around this value. A consistent estimator ensures that this variability becomes smaller with the larger data sets. But to understand how well we can estimate the parameter for the present data, we would simulate data sets with the same number of observations (so $n=`r nrow(dat)`$). Unfortunately, we don't know the true value of $\sigma$. Our data provides an estimate of $\sigma$, but we know this estimate is noisy itself. Thinking first in the same way about the sampling distribution of $\hat{\sigma}$, we could first sample a values of $\sigma$, and then use each of these to generate a data set for which to estimate $\beta_1$. Doing this many (many many!) times would give us a good overview of the variability of the estimates. As before, we don't have to actually simulate the data sets. If the null model is true, then we can derive that the sampling distribution of the estimates follows a t-distribution. Thus, we should look for the $t$ value our data provides, and evaluate this value within the context of the sampling distribution derived under the model where $\beta_1 = 0$. For both paraneters (intercept and slope), the same logic applies. In general then, for parameters $\beta_j$ (where $j = 0$ or 1), the $t$-value of our data is computed as 
 \begin{equation}
-t_{N-2} = \frac{\hat{\beta}_j}{\text{SE}(\hat{\beta}_j)} \quad \quad \quad t_{N-1} \sim \mathcal{T}(N-2)
+t_{n-2} = \frac{\hat{\beta}_j}{\text{SE}(\hat{\beta}_j)} \quad \quad \quad t_{n-1} \sim \mathbf{T}(n-2)
 \end{equation}
 where $\text{SE}(\hat{\beta}_j)$ is the standard error of the estimate, which you should remember is the standard deviation of the sampling distribution of the estimates. I won't bore you with how to compute this standard error; statistical software does a good job at this. One thing to realise though is that the computation assumes that the data always have the same values for the predictor. 
 
@@ -187,8 +189,8 @@ knitr::kable(anova(mod))
 ## Confidence intervals
 
 The formula to compute confidence intervals for the two parameters can be written as:
-$$\hat{\beta}_j \pm t_{1-\alpha/2,N-2} \times \text{SE}(\hat{\beta}_j)$$
-where $t_{1-\alpha/2,N-2}$ is the right-critical value in a t-distribution with $N-2$ degrees of freedom and a significance level of $\alpha$. Using $\alpha=.05$ gives us the conventional 95%-confidence interval. 
+$$\hat{\beta}_j \pm t_{1-\alpha/2,n-2} \times \text{SE}(\hat{\beta}_j)$$
+where $t_{1-\alpha/2,n-2}$ is the right-critical value in a t-distribution with $n-2$ degrees of freedom and a significance level of $\alpha$. Using $\alpha=.05$ gives us the conventional 95%-confidence interval. 
 
 ## Assumptions and outliers
 
