@@ -14,7 +14,7 @@ output:
       fontsettings:
         theme: white
         family: serif
-        size: 3
+        size: 2
     css: style.css
     lib_dir: "book_assets"
   bookdown::pdf_book:
