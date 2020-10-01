@@ -151,7 +151,7 @@ You can see a comparison of the t-distribution and the Normal distribution in Fi
 
 ## Testing whether $\mu$ has an specific value
 
-
+Now we know what happens to 
 
 ### The classical way
 
