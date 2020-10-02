@@ -24,7 +24,7 @@
 <meta name="author" content="Maarten Speekenbrink" />
 
 
-<meta name="date" content="2020-10-01" />
+<meta name="date" content="2020-10-02" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -683,9 +683,9 @@ Perhaps this is the first time you have seen the “summation operator” <span 
 <div id="measures-of-spread" class="section level4">
 <h4><span class="header-section-number">1.4.1.2</span> Measures of spread</h4>
 <p>There are three common measures of spread: the inter-quartile range, the variance, and the standard deviation.</p>
-<p>The <strong>inter-quartile range</strong> is the distance between the 25% and the 75% percentile. A percentile is a value such that a specified proportion of the values are lower than it. So the 25% percentile is the lowest value in the data such that 25% are even lower. If you go back to the definition of the median, you may notice that the median is actually the 50% percentile. The 25%, 50%, 75% and 100% percentiles are also respectively called the 1st, 2nd, 3rd, and 4th quartile, hence the name inter-quartile range. To compute percentiles, it is handy to order the values in increasing magnitude (just like we did for computing the median).
+<p>The <strong>inter-quartile range</strong> is the distance between the 25% and the 75% percentile. A percentile is a value such that a specified proportion of the values are lower than it. So the 25% percentile is the lowest value in the data such that 25% are even lower. If you go back to the definition of the median, you may notice that the median is actually the 50% percentile. The 25%, 50%, 75% and 100% percentiles are also respectively called the 1st, 2nd, 3rd, and 4th quartile, hence the name inter-quartile range. To compute percentiles, it is handy to order the values in increasing magnitude (just like we did for computing the median). A sample percentile can then be computed by determining the appropriate rank (the place of a value in the ordering) that corresponds to the required percentile:
 <span class="math display">\[\text{rank}(P) = \text{ceiling}\left(\frac{P}{100} \times n\right)\]</span>
-The ceiling function stands for rounding up to the nearest integer, so e.g. <span class="math inline">\(\text{ceiling}(2.1) = 3\)</span>. To compute the inter-quartile range for total points scored, we compute the needed ordinal ranks as
+Here, <span class="math inline">\(P\)</span>, is the required percentile (e.g. 25, or 75). The ceiling function stands for rounding up to the nearest integer, so e.g. <span class="math inline">\(\text{ceiling}(2.1) = 3\)</span>. To compute the inter-quartile range for total points scored, we compute the needed ordinal ranks as
 <span class="math display">\[\text{rank}(25) = \text{ceiling}\left(\frac{25}{100} \times 32 \right) = 8\]</span>
 which means we can take the 8th value in the ordered list as the 25% percentile, which equals 2, and
 <span class="math display">\[\text{rank}(75) = \text{ceiling}\left(\frac{75}{100} \times 32 \right) = 24\]</span>
