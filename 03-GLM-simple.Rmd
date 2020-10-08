@@ -20,7 +20,7 @@ dat <- subset(anchoring,referrer %in% c("swps","swpson") & anchor == "low")
 
 ### Exploring the data
 
-Before diving into statistical modelling, as discussed, it is always good to explore the data. A graphical overview in the form of a histogram and raincloud plot is given in Figure \@ref(fig:anchoring-eda-plots). The minimum was judged height was `r min(dat$everest_meters)` meters (so quite close to the anchor), and the maximum was `r pretNum(max(dat$everest_meters))` meters. The median judgement was `r median(dat$everest_meters)` and the mean `r mean(dat$everest_meters)`. The sample variance of the judgements was `r pretNum((length(dat$everest_meters) -1)*var(dat$everest_meters)/length(dat$everest_meters))` and the sample standard deviation `r sqrt((length(dat$everest_meters) -1)*var(dat$everest_meters)/length(dat$everest_meters))`. 
+Before diving into statistical modelling, as discussed, it is always good to explore the data. There were judgements by $n=`r nrow(dat)`$ people in this dataset. A graphical overview in the form of a histogram and raincloud plot is given in Figure \@ref(fig:anchoring-eda-plots). The minimum was judged height was `r min(dat$everest_meters)` meters (so quite close to the anchor), and the maximum was `r pretNum(max(dat$everest_meters))` meters. The median judgement was `r median(dat$everest_meters)` and the mean `r mean(dat$everest_meters)`. The sample variance of the judgements was `r pretNum((length(dat$everest_meters) -1)*var(dat$everest_meters)/length(dat$everest_meters))` and the sample standard deviation `r sqrt((length(dat$everest_meters) -1)*var(dat$everest_meters)/length(dat$everest_meters))`. 
 
 ```{r anchoring-eda-plots, echo=FALSE, fig.cap="Histogram and boxplot of participants' judgments", fig.show="hold", out.width="48%", fig.width=3, fig.height=3}
 ggplot(dat,aes(x=everest_meters)) + geom_histogram(binwidth=500) + xlab("Height of Mount Everest in meters")
@@ -40,7 +40,7 @@ Clearly, not everyone gave a correct answer, and there is substantial variation 
 The __Normal distribution__ is the well-known bell-shaped curve depicted in Figure \@ref(fig:normal-density-plot).
 
 ```{r normal-density-plot, fig.cap="The Normal density function for $\\mu = 0$ and $\\sigma = 1$", fig.height=4,out.width="80%"}
-ggplot() + stat_function(fun=function(x) dnorm(x,mean=0,sd=1)) + xlim(-4,4) + ylab("f(y)") + xlab("y")
+ggplot() + stat_function(fun=function(x) dnorm(x,mean=0,sd=1)) + xlim(-4,4) + ylab("p(y)") + xlab("y")
 ```
 
 The curve is given by the following function:
@@ -67,18 +67,39 @@ levels <- c(bquote(mu %+-% sigma %~~% .683),bquote(mu %+-% 2 %*% sigma %~~% .954
 rbind(data.frame(interval=1,x=c(-3,seq(-3,3,length=100),1),y=c(0,dnorm(seq(-3,3,length=100)),0)),
       data.frame(interval=2,x=c(-2,seq(-2,2,length=100),2),y=c(0,dnorm(seq(-2,2,length=100)),0)),
       data.frame(interval=3,x=c(-1,seq(-1,1,length=100),1),y=c(0,dnorm(seq(-1,1,length=100)),0))) %>%
-  ggplot(aes(x=x,y=y,fill=factor(interval,labels=levels))) + stat_function(aes(fill=NULL),fun=function(x) dnorm(x,mean=0,sd=1)) + xlim(-4,4) + ylab("f(y)") + xlab("y") + geom_polygon(alpha=.8) + scale_fill_discrete(name="interval",labels = parse_format()) + theme(legend.title=element_text("interval"))
+  ggplot(aes(x=x,y=y,fill=factor(interval,labels=levels))) + stat_function(aes(fill=NULL),fun=function(x) dnorm(x,mean=0,sd=1)) + xlim(-4,4) + ylab("p(y)") + xlab("y") + geom_polygon(alpha=.8) + scale_fill_discrete(name="interval",labels = parse_format()) + theme(legend.title=element_text("interval"))
 ```
 
-Because the Normal distribution is symmetric, with a single peak in the middle at $\mu$, the parameter $\mu$ not only equals the mean, but also the median (50% of all values are lower than $\mu$, and 50% are higher), and the mode. 
+Because the Normal distribution is symmetric, with a single peak in the middle at $\mu$, the parameter $\mu$ not only equals the mean, but also the median (50% of all values are lower than $\mu$, and 50% are higher), and the mode.
 
-If the judgements are on average correct, this implies that $\mu = 8848$. Alternatively, the average judgement might be biased, for instance because of the low anchor. If this is so, what would the average judgement be? It is difficult to make a clear prediction about this. As for Paul's probability of a correct prediction if he were (somewhat) psychic, we can then simply assume that this parameter can have any value.
-
-Before we continue, let's introduce some new notation. As before, we will use $Y$ to denote the dependent variable (i.e. people's judgements of the height of Mount Everest), and $Y_i$ to denote the $i$-th value of the dependent variable (i.e. the judgement by participant $i$), where $i=1,\ldots,n$. We will state the assumption that $Y$ follows a Normal distribution as
+The Normal distribution is rather popular in statistical modelling. One important reason we'll mention later (the Central Limit Theorem). Here, we'll focus on two properties that make the Normal distribution quite convenient to work with. Before we continue, let's introduce some new notation. As before, we will use $Y$ to denote the dependent variable (i.e. people's judgements of the height of Mount Everest), and $Y_i$ to denote the $i$-th value of the dependent variable (i.e. the judgement by participant $i$), where $i=1,\ldots,n$. We will state the assumption that $Y$ follows a Normal distribution as
 $$Y_i \sim \mathbf{Normal}(\mu,\sigma)$$
 You can read this as "$Y_i$ is sampled from a Normal distribution with mean $\mu$ and standard deviation $\sigma$". So the tilde ($\sim$) stands for "sampled from". When we denote distributions, such as the Normal distribution, we will use a bold font for the name of the distribution, and between the parentheses that follow we will indicate the parameters of the distribution.
 
-Using this notation, we can describe our two alternative models for people's judgements as:
+### Two useful properties of the Normal distribution
+
+__A linear transformation of a Normal-distributed variable also follows a Normal distribution__. More formally, if 
+$$Y \sim \mathbf{Normal}(\mu_y, \sigma_y)$$
+then if $$Y' = a + b \times Y$$ i.e. a new variable $Y'$ is constructed by multiplying $Y$ by $b$ and then adding a constant $a$, the distribution of this new variable $Y'$ is
+$$Y' \sim \mathbf{Normal}\left(a + b \times \mu_y, | b | \times \sigma_y\right)$$
+i.e. a Normal distribution with mean equal to the linear transformation of the mean of $Y$, and standard deviation equal to the standard deviation of $Y$ multiplied by the absolute value of $b$. For example, suppose a fast-food chain is known for its "mega-megalicious" burger. The weight of each handmade patty is Normally distributed with a mean of 1.2 pounds, and a standard deviation of .16 pounds. We can work out the distribution of the weight in kilograms by first noting that 1 kilogram = 2.2046 pounds and conversely, that one pound is $1/2.2046 = 0.4536$ kilograms. Weight in kilograms is thus a linear transformation of weight in pounds: 
+$$\text{kg} = 0 + 0.4536 \times \text{lbs}$$ so $a=0$ and $b=0.4536$ The distribution of the weight in kilograms is then a Normal distribution with mean $0 + 0.4536 \times 1.2 = 0.5443$ kilograms, and standard deviation $|0.4536| \times .16 = 0.0725$ kilograms. As another example, we can standardize a Normal variable by subtracting the mean and then dividing by the standard deviation. The resulting variable is conventionally denoted as 
+\begin{equation}
+Z = \frac{Y-\mu}{\sigma}
+(\#eq:standardized-Z-definition)
+\end{equation}
+We can view $Z$ as a linear transformation of $Y$ with $a=-\frac{\mu_y}{\sigma_y}$ and $b = \frac{1}{\sigma_y}$. So $Z$ has a mean of $\mu_z = -\frac{\mu_y}{\sigma_y} + \frac{1}{\sigma_y} \times \mu_y= 0$ and a standard deviation of $\sigma_z = |\frac{1}{\sigma_y}|\sigma_y = 1$. A Normal-distribution with a mean of 0 and a standard deviation of 1 is also called a __standard Normal distribution__. 
+
+__The sum of two Normal-distributed variables also follows a Normal distribution__. More formally, if $$Y_1 \sim \mathbf{Normal}(\mu_1,\sigma_1)$$ and $$Y_2 \sim \mathbf{Normal}(\mu_2,\sigma_2)$$
+then if $Y_s$ is the sum of $Y_1$ and $Y_2$, i.e. $Y_s = Y_1 + Y_2$, then $Y_s$ is distributed as 
+$$Y_s \sim \mathbf{Normal}\left(\mu_1 + \mu_2, \sqrt{\sigma_1^2 + \sigma^2_2}\right)$$
+i.e. a Normal distribution with mean being the sum of the mean of $Y_1$ and the mean of $Y_2$, and standard deviation the square-root of the sum of the variance of $Y_1$ and the variance of $Y_2$.
+
+### Back to anchoring
+
+If the judgements are on average correct, this implies that $\mu = 8848$. Alternatively, the average judgement might be biased, for instance because of the low anchor. If this is so, what would the average judgement be? It is difficult to make a clear prediction about this. As for Paul's probability of a correct prediction if he were (somewhat) psychic, we can then simply assume that this parameter can have any value.
+
+We can describe our two alternative models for people's judgements as:
 
 - MODEL R: $\quad Y_i \sim \mathbf{Normal}(8848, \sigma)$
 - MODEL G: $\quad Y_i \sim \mathbf{Normal}(\mu, \sigma)$
@@ -109,7 +130,7 @@ If the mean is known to equal a particular value, $\mu = \underline{\mu}$, as in
 $$\hat{\sigma}_R = \sqrt{\frac{\sum_{i=1}^n (Y_i - \underline{\mu})^2}{n}}$$
 Perhaps confusingly, we can now divide by $n$ instead of by $n-1$ to get an unbiased estimate. The reason for this is that when we know the true mean, there is no estimation error like we had for $\overline{Y}$, and hence no additional source of variability which would bias the estimate. 
 
-Usually, the mean $\mu$ is of more interest than the standard deviation $\sigma$. The standard deviation (or equivalently, the variance) are often so-called _nuisance parameters_.
+<!-- Usually, the mean $\mu$ is of more interest than the standard deviation $\sigma$. The standard deviation (or equivalently, the variance) are often so-called _nuisance parameters_. -->
 
 ### Sampling distribution of the estimated mean
 
@@ -129,7 +150,10 @@ ggplot(data.frame(estimates=estimates),aes(x=estimates)) + geom_histogram(binwid
 
 ```
 
-Simulating data and then looking at the resulting distribution of estimates is straightforward, but also noisy. Luckily, it is quite easy to derive the true distribution of the estimated means (i.e. the sample means). It is also a Normal distribution, with a mean equal to $\mu$ (so the estimator is  unbiased), and a standard deviation equal to $\frac{\sigma}{\sqrt{n}}$, i.e. the standard deviation of the dependent variable divided by $\sqrt{n}$. Dividing by $\sqrt{n}$ implies that the standard deviation of the sample means is smaller than the standard deviation of the dependent variable. And, as $n$ increases, it becomes smaller and smaller, so the estimator is consistent. Using our new notation, we can write the sampling distribution of the estimated means as
+Simulating data and then looking at the resulting distribution of estimates is straightforward, but also noisy. Luckily, it is quite easy to derive the true distribution of the estimated means (i.e. the sample means). Using the two properties of the Normal distribution, we know that the sum of two Normal-distributed variables also follows a Normal distribution. This is easily generalized to the sum of any number of Normal-distributed variables. For instance, we can construct the distribution of the sum of three variables as the sum of two Normal-distributed variables (which we know is a Normal-distributed variable) and a third Normal-distributed variable. So, if each $Y_i \sim \mathbf{Normal}(\mu,\sigma)$, then $$\sum_{i=1}^n Y_i \sim \mathbf{Normal}(n \mu, \sqrt{n}\sigma)$$
+Moreover, we can view the mean as a linear transformation of this sum with $a = 0$ and $b=\frac{1}{n}$, from which we can derive that
+ $$\overline{Y} = \frac{\sum_{i=1}^n Y_i}{n} \sim \mathbf{Normal}\left(\mu, \frac{\sigma}{\sqrt{n}}\right)$$
+So the sampling distribution of the mean is a Normal distribution with a mean equal to $\mu$ (so the estimator is  unbiased), and a standard deviation equal to $\frac{\sigma}{\sqrt{n}}$, i.e. the standard deviation of the dependent variable divided by $\sqrt{n}$. Dividing by $\sqrt{n}$ implies that the standard deviation of the sample means is smaller than the standard deviation of the dependent variable. And, as $n$ increases, it becomes smaller and smaller, so the estimator is consistent. Using our new notation, we can write the sampling distribution of the estimated means as
 \begin{equation}
 \overline{Y} \sim \mathbf{Normal}(\mu, \frac{\sigma}{\sqrt{n}})
 (\#eq:sampling-distribution-mean-simple)
@@ -140,7 +164,7 @@ To simulate judgements, we had to pick an arbitrary value of $\sigma$. But how c
 
 Suppose that MODEL R is true, that the Data Generating Process indeed results in a Normal distribution of people's judgements with a mean $\mu = 8848$ and a standard deviation $\sigma$. If we knew the value of $\sigma$, then we'd know everything there is to know about the distribution of the DGP. And knowing this, we'd know everything there is to know about the distribution of the sample means. But we don't know $\sigma$. While it makes sense to use an estimate of $\sigma$, this estimate will be noisy. We shouldn't just pretend that our estimate $\hat{\sigma}$ is identical to the true $\sigma$. The problem is that different values of $\sigma$ lead to different sampling distributions of the mean. Key to working out the sampling distribution of the mean when $\sigma$ is unknown is to also take into account the sampling distribution of the estimates of $\sigma$. Roughly, the idea is that, for a given data set, we can work out how likely different values of $\sigma$ are, and we can then derive the average of all the Normal distributions that follow from each possible value of $\sigma$. The resulting distribution is not a Normal distribution. It was derived by William Sealy Gosset  (1876–1937) in 1904. Gosset worked as Head Experimental Brewer for Guinness in Dublin, and the company had a rule forbidding their chemists to publish their findings [@zabell2008student]. Gosset was able to convince his boss that his mathematical work was of no practical use to competing brewers, and was allowed to publish them in @student1908probable, but under a pseudonym to avoid his colleagues getting similar ideas. "Student" was the pseudonym chosen by the managing director of Guinness, and hence the distribution is now known as Student's t-distribution. 
 
-```{r comparing-normal-and-t-simple, fig.cap=paste0("Student t-distribution which is the true sampling distribution of the mean under MODEL R with unknown $\\sigma$ (solid line) and the Normal distribution that would be the sampling distribution if it is known that $\\sigma = \\hat{\\sigma}$ (broken line). Note that these curves are drawn for the case of $n=10$ observations, to make the differences between the distributions more marked. For $n=",nrow(dat),"$, the t-distribution is almost identical to the Normal distribution.")}
+```{r comparing-normal-and-t-simple, fig.cap=paste0("(Understandardized) Student t-distribution which is the true sampling distribution of the mean under MODEL R with unknown $\\sigma$ (solid line) and the Normal distribution that would be the sampling distribution if it is known that $\\sigma = \\hat{\\sigma}$ (broken line). Note that these curves are drawn for the case of $n=10$ observations, to make the differences between the distributions more marked. For $n=",nrow(dat),"$, the t-distribution is almost identical to the Normal distribution.")}
 mu <- 8848
 sigma <- sqrt(sum((dat$everest_meters - mu)^2)/nrow(dat))
 n <- 10
@@ -151,27 +175,111 @@ You can see a comparison of the t-distribution and the Normal distribution in Fi
 
 ## Testing whether $\mu$ has an specific value
 
-Now we know what happens to 
-
 ### The classical way
 
+Now we know what happens to the estimate $\hat{\mu}$ of MODEL G when MODEL R is in fact true, we can use a similar logic as before to decide when $\hat{\mu}$ is different enough from $\underline{\mu}$ to reject MODEL R. To work this out, it is convenient to standardize the sample mean as
 \begin{equation}
-t = \frac{\hat{\mu} - \underline{\mu}}{\hat{\sigma}/\sqrt{n}} = \frac{\overline{Y} - \underset{\sim}{\mu}}{S/\sqrt{n}}
+t = \frac{\hat{\mu} - \underline{\mu}}{\hat{\sigma}/\sqrt{n}} = \frac{\overline{Y} - \underline{\mu}}{S/\sqrt{n}}
+(\#eq:definition-one-sample-t)
 \end{equation}
+which is much like the $Z$-transformation, but now using an _estimated_ $\hat{\sigma}$ rather than a known value. The standardized $t$ statistic follows a $t$ distribution with $n-1$ "degrees of freedom". What we showed in Figure \@ref(fig:comparing-normal-and-t-simple) was an "unstandardized" t-distribution, which also has a location and scale parameter. By standardizing $t$, we don't need to worry about these. Generally, when someone mentions the $t$-distribution, they refer to the standardized version, which has a single parameter, the degrees of freedom (commonly denoted with the Greek symbol $\nu$). Back in the times of Gosset, this was particularly important, as there was no access to modern computers to quickly work out the probabilities for different versions of unstandardized t-distributions. Statisticians had to rely on tables for a standard version of a distribution, which were painstakingly computed by hand. In fact, the term "computer" originally referred to a person performing mathematical calculations. Complex, long, and often rather tedious calculations were performed by teams of such computers.
 
-This is also called a one-sample t-test. 
+I won't bore you with the mathematical details of the t-distribution. As I already mentioned, it looks quite a bit like a Normal distribution. When the degrees of freedom gets larger, the distributions looks more and more like the standard Normal distribution. Because we know that, if MODEL R is true, the $t$ statistic follows a $t$-distribution with $n-1$ degrees of freedom, we know all there is to know about the sampling distribution of $t$. If $t$ is far away from 0, that means that the estimate $\hat{\mu}$ of MODEL G is far away from the assumed value $\underline{\mu}$ of MODEL R, and hence we have reason to reject MODEL R. Following thel logic of the null-hypothesis significace test, we will limit the number of errors we make in thos rejections when MODEL R is actually true, but choosing critical values such that
+$$P(t \leq \text{lower critical value} | \text{MODEL R}) + P(t \geq \text{upper critical value} | \text{MODEL R}) = \alpha$$
 
-#### Two-tailed and one-tailed tests
+```{r critical-values-t-distribution}
+library(scales)
+library(dplyr)
+library(tidyr)
+#levels <- c(bquote("mu %+-% sigma %~~% .683"),bquote("mu %+-% 2 %*% sigma %~~% .954"),bquote("mu %+-% 3 %*% sigma %~~% .997"))[3:1]
+levels <- c(bquote(mu %+-% sigma %~~% .683),bquote(mu %+-% 2 %*% sigma %~~% .954),bquote(mu %+-% 3 %*% sigma %~~% .997))[3:1]
+data.frame(interval=1,x=c(-5,seq(-5,qt(.025,nrow(dat)-1),length=100),qt(.025,nrow(dat)-1),qt(.975,nrow(dat)-1),seq(qt(.975,df=nrow(dat)-1),5,length=100),5),y=c(0,dt(seq(-5,qt(.025,nrow(dat)-1),length=100),df=nrow(dat)-1),0,0,dt(seq(qt(.975,nrow(dat)-1),5,length=100),df=nrow(dat)-1),0)) %>%
+  ggplot(aes(x=x,y=y,fill=factor(interval,labels=""))) + stat_function(aes(fill=NULL),fun=function(x) dt(x,df=nrow(dat)-1)) + xlim(-4,4) + ylab("p(y)") + xlab("y") + geom_polygon(alpha=.8) + theme(legend.position="none") + xlab("t") + ylab("p(t)")
+
+
+```
+
 
 ### The model comparison way
 
+There is an equivalent way to perform the hypothesis test that $\mu = \underline{\mu}$, by comparing two versions of a statistical model, one in which we assume we know the value of $\mu$ to be $\underline{\mu}$ (Model R), and one in which we don't (Model G). As we did for Paul the octopus, we then look at the likelihood ratio to see whether Model R is tenable. Note that in both models, the standard deviation is considered unknown and will have to be estimated. 
+
+The procedure is essentially the same as before. We find a way to calculate the likelihood ratio, and work out the distribution of the likelihood ratio values we would get for repetitions of an experiment _assuming MODEL R is true_. Using this distribution, we can then work out a critical value, such that the probability of obtaining a likelihood ratio value equal to or smaller than it is to a significance level $\alpha$, i.e. , $P(\text{likelihood ratio } \leq \text{critical value} | \text{MODEL R}) = \alpha$. The derivation of the likelihood ratio is a little more complicated than before though. Feel free to glance over the following, as the derivation is not that important. The paragraphs marked with a line in the left margin are more advanced and can be skipped without too much consequence.
+
+:::{.advanced-text}
+When all observations $Y_i$, $i=1, \ldots, n$ are independent draws from a Normal distribution, then we can use the product rule to work out the joint "probability" (density value really) of all observations. That is, we use Equation \@ref(eq:normal-density-function) to compute $p(Y_i)$, the density value of each observation, and then multiply these together:
+$$
+\begin{align}
+p(Y_1, Y_2, \ldots, Y_n) &= p(Y_1) \times p(Y_2) \times \ldots \times p(Y_n) \\
+&= \prod_{i=1}^n \frac{1}{\sqrt{2 \pi} \sigma} e^{-\frac{(Y_i-\mu)^2}{2\sigma^2}} \\
+&= \left( \frac{1}{\sqrt{2 \pi} \sigma} \right)^n e^{ \frac{n}{2\sigma^2} \sum_{i=1}^n (Y_i - \mu)^2}
+\end{align}
+$$
+The $\prod$ sign on the second line is similar to the summation sign, but tells you to _multiply_ all the values that follow it, so e.g.
+$$\prod_{i=1}^3 Y_i = Y_1 \times Y_2 \times Y_3$$
+On the third line, we make use of the fact that $e^a \times e^b = e^{a + b}$. We can then write the likelihood ratio of MODEL R over MODEL G as
+$$
+\begin{align}
+L\!R(R,G) &= \frac{\left( \frac{1}{\sqrt{2 \pi} \hat{\sigma}_{ml,R}} \right)^n e^{ \frac{n}{2\hat{\sigma}^2_{ml,R}} \sum_{i=1}^n (Y_i - \mu)^2}}{\left( \frac{1}{\sqrt{2 \pi} \hat{\sigma}_{ml,G}} \right)^n e^{ \frac{n}{2\hat{\sigma}^2_{ml,G}} \sum_{i=1}^n (Y_i - \mu)^2}} \\
+&=  \frac{ \left(\sqrt{\frac{2\pi}{n} \sum_{i=1}^n(Y_i - \underline{\mu})^2}\right)^{-n} e^{\frac{\sum_{i=1}^n(Y_i - \underline{\mu})^2}{2 \sum_{i=1}^n(Y_i - \underline{\mu})^2/n}}}{\left(\sqrt{\frac{2\pi}{n} \sum_{i=1}^n(Y_i - \overline{Y})^2}\right)^{-n} e^{ \frac{\sum_{i=1}^n (Y_i - \overline{Y})^2}{2 \sum_{i=1}^n (Y_i - \overline{Y})^2/n}} } \\
+&= \left(\frac{\sum_{i=1}^n(Y_i - \underline{\mu})^2}{\sum_{i=1}^n(Y_i - \overline{Y})^2}\right)^{-n/2}
+\end{align}
+$$
+:::
+
+What is interesting to point out  is that, on the last line of the equation above, we see that the two main ingredients of the likelihood ratio are sums of squared deviations. Moreover, as the deviations are between observations and the mean (either assumed mean or sample mean), these sums of squared deviations are very closely related to variances. As we will see later, "sums of squares" are important quantities when comparing General Linear Models.
+
+:::{.advanced-text}
+While the likelihood ratio is reasonably straightforward to compute, it is not easy to derive the sampling distribution of the likelihood ratio when MODEL R is true. Previously, we could work out the distribution of the likelihood ratio relatively easily from the Binomial distribution of the outcomes. We can do something similar here, which effectively means transforming the likelihood ratio into something we know the distribution of, or conversely, transforming something we know the distribution of into the likelihood ratio. To do this, first we can rewrite 
+$$\sum_{i=1}^n(Y_i - \underline{\mu})^2 = \sum_{i=1}^n(Y_i - \overline{Y} + \overline{Y} - \underline{\mu})^2 = n(\overline{Y} - \underline{\mu})^2 + \sum_{i=1}^n(Y_i - \overline{Y})^2$$
+and filling this in the numerator of the likelihood ratio gives
+$$L\!R(R,G) = \left(1 + \frac{n(\overline{Y} - \underline{\mu})^2}{\sum_{i=1}^n(Y_i - \overline{Y})^2}\right)^{-n/2}$$
+For a given experiment or study, we can treat the number of observations $n$ as a given fixed number. What we are really interested in is the part of the likelihood ratio that depends on the data. If we take the square root of this part, we have  
+$$\frac{|\overline{Y} - \underline{\mu}|}{\sqrt{\sum_{i=1}^n(Y_i - \overline{Y})^2}} = \sqrt{n (n-1)} \times | t |$$
+with $t$ defined as in Equation \@ref(eq:definition-one-sample-t). When the absolute value of the $t$ statistic becomes larger, the likelihood ratio value becomes smaller (more indicative of MODEL G). We can thus view the likelihood ratio as a (rather complicated) transformation of the absolute value of the $t$ statistic. The distribution of the likelihood ratio is then also a (rather complicated) transformation of the distribution of the $t$-statistic. Just like for the coin tossing model, the distribution of the likelihood ratio was also a transformation of the Binomial distribution.
+
+:::
+
+What all this means is that the one-sample t-test, as worked out before, is equivalent to a likelihood ratio test comparing MODEL R to MODEL G. Whether you perform the test in the "classic" way by computing the $t$ statistic and assessing the magnitude of this in the $t$ distribution, or whether you compute a likelihood ratio and assess the magnitude of this in the distribution of the likelihood ratio under MODEL R, you will get exactly the same outcome.  
+
 ## Confidence intervals
 
-You can view a particularly nice animation of the confidence intervals on the [Seeing Theory](https://seeing-theory.brown.edu/frequentist-inference/index.html#section2) website.
+Confidence intervals are __interval estimates__. That is, rather than providing a single point estimate of a parameter, they specify a range of values for a parameter. That range is chosen in a precise, but somewhat counter-intuitive and difficult to understand manner. Ideally, what you might want to obtain is a range such that you can be certain that, with a specified probability, the true parameter is within this range. Unfortunately, this is __not__ what confidence intervals do. Like much of Frequentist statistics, confidence intervals are based on the idea of an infinite number of possible (simulated) datasets from a true model. Confidence intervals are the result of an algorithm which is constructed in such a way that the ranges it produces will, for a specified proportion of all those possible datasets, contain the true value of the parameter. 
 
+While difficult to interpret properly, the confidence interval for the mean of Normal interval with unknown standard deviation is straightforward to compute:
+\begin{equation}
+\hat{\mu} \pm t_{n-1; \frac{\alpha}{2}} \frac{\hat{\sigma}}{\sqrt{n}}
+(\#eq:confidence-interval-one-sample-t-test)
+\end{equation}
+where $t_{n-1; \frac{\alpha}{2}}$ stands for left critical value with significance level $\alpha$. In other words, we take our estimate of the mean (i.e. $\hat{\mu} = \overline{Y}$), and add or subtract from that a multiple of the __estimated standard error of the mean__ (which is $\frac{\hat{\sigma}}{\sqrt{n}}$; remember that the standard error of a statistic is the standard deviation of the sampling distribution of that statistic). The multiple is derived from the $t$-distribution. As explained earlier, for the Normal distribution, we know that 95% of the observations lie in the range between $\mu - 1.96 \times \sigma$ and $\mu + 1.96 \times \sigma$. Similarly, for the Normal distribution, 95% of the sample means lie in the range between $\mu - 1.96 \times \frac{\sigma}{\sqrt{n}}$ and $\mu + 1.96 \times \frac{\sigma}{\sqrt{n}}$. The value  $t_{n-1; \frac{\alpha}{2}}$ is effectively a replacement for 1.96, which takes into account that we have estimated $\sigma$. 
+```{r simulated-confidence-intervals-one-sample-t-test, fig.cap=""}
+set.seed(238476234)
+n <- nrow(dat)
+nsim <- 100
+mu <- 8848
+sigma <- 2000
+conf_dat <- data.frame(sim=1:nsim,lower=rep(0.0,nsim),est=rep(0.0,nsim),upper=rep(0.0,nsim),contains=TRUE)
+for(sim in 1:nsim) {
+  x <- rnorm(n,mean=mu,sd=sigma)
+  conf_dat$lower[sim] <- mean(x) + qt(.025,n-1)*sd(x)/sqrt(n)
+  conf_dat$est[sim] <- mean(x)
+  conf_dat$upper[sim] <- mean(x) + qt(.975,n-1)*sd(x)/sqrt(n)
+}
+conf_dat$contains <- (conf_dat$lower <= mu & conf_dat$upper >= mu)
+conf_dat$contains <- !conf_dat$contains
+ggplot(conf_dat,aes(x=sim,y=est,ymax=upper,ymin=lower,colour=contains)) + geom_point() + geom_linerange() + geom_hline(yintercept = mu,lty=2) + xlab("data set") + ylab("confidence interval") + theme(legend.position = "none")
+```
+Earlier on, we simulated datasets of size $n=`r nrow(dat)`$ from a Normal distribution with mean $\mu = 8848$ and $\sigma = 2000$. In Figure \@ref(fig:simulated-confidence-intervals-one-sample-t-test) we show the resulting 95% confidence intervals (now estimating $\sigma$ from the data) for `r nsim` of such simulated datasets. As you can see, the location, and the width of each confidence interval is different. Moreover, you can see that while most of the confidence intervals contain the true value $\mu = 8848$, some don't. Indeed, `r sum(conf_dat$contains)` out of `r nsim` confidence intervals do not include the true value of $\mu$, which is pretty close to 5%. You can see a particularly nice animation of how  confidence intervals work on the [Seeing Theory](https://seeing-theory.brown.edu/frequentist-inference/index.html#section2) website.
+
+Confidence intervals can be used to perform null hypothesis significance tests. In fact, a confidence interval contains all values of $\underline{\mu}$ for which MODEL R would not be rejected with the current data. In other words, if the confidence interval includes the value of $\underline{\mu}$ of interest (i.e. $\underline{\mu} = 8848$ in our example), that means that the null hypothesis would _not_ be rejected. In addition, we can also determine a whole range of other values of $\underline{\mu}$ which, if purported as a null hypothesis, would also not be rejected. In that sense, a confidence interval provides more information than a simple "reject" or "not reject" decision of a null hypothesis significance test. If a confidence interval is very wide, that implies the significance test has low power. Of course, what "very wide" is, depends on the scale of the data, and a subjective evaluation from the researcher.
+
+There have been calls to abandon all null hypothesis significance tests, and only allow reporting of confidence intervals. Given the tricky interpretation of confidence intervals, and their rather close ties to significance tests, I think such calls are ultimately mistaken. 
 
 ## Assumptions
 
+When we started modelling the data, we assumed each judgement was effectively an independent random draw from a Normal distribution. In MODEL R, we assumed that the mean of that Normal distribution was $\mu = 8848$, while in MODEL G, we left both the mean and the standard deviation unknown.  
+
+Normal distribution. Shapiro Wilk test, Kolmogorov-Smirnov test
 
 ## The Central Limit Theorem
 
@@ -248,13 +356,16 @@ clt_dat %>%
 
 So according to the Central Limit Theorem, if we focus on the mean of a sufficiently large number of independent observations, we can reasonably assume that the sampling distribution of the mean will follow a Normal distribution, even if the distribution from which the actual values were drawn is far from Normal. We might also imagine that if a variable is the outcome of a process in which lots of independent sources of noise are added, that the resulting variable will follow a Normal distribution. [todo: add example]
 
+Now, 
+
+## Summary
+
 <!--
 http://www.stats.ox.ac.uk/~dlunn/b8_02/b8pdf_8.pdf
 http://www.stat.ucla.edu/~hqxu/stat105/pdf/ch09.pdf
 https://www.math.arizona.edu/~jwatkins/v-anova.pdf
 -->
 
-There is an equivalent way to perform the hypothesis test that $\mu = \underline{\mu}$, by comparing two versions of a statistical model, one in which we assume we know the value of $\mu$ to be $\underline{\mu}$ (Model R), and one in which we don't (Model G). As we did for Paul the Octopus, we then look at the likelihood ratio to see whether Model R is tenable. Note that in both models, the standard deviation is considered unknown and will have to be estimated. 
 
 
 
