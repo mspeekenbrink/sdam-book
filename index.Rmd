@@ -34,6 +34,7 @@ output:
 documentclass: book
 bibliography: [book.bib, packages.bib]
 biblio-style: apalike
+csl: apa-no-doi-no-issue.csl
 link-citations: yes
 github-repo: mspeekenbrink/sdam-book
 description: "A book about statistics for data analysis, with a main focus on statistical modelling."

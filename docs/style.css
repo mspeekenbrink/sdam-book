@@ -21,3 +21,8 @@ pre code {
 .book.font-family-1 {
   font-family: 'Source Sans Pro', "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
+
+.advanced-text {
+  border-left: 6px solid #8C8279;
+  padding-left: 6px;
+}
