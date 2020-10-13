@@ -168,7 +168,7 @@ S_{Y} = \sqrt{\frac{\sum_{i=1}^n (Y_i - \overline{Y})^2}{n}}
 (\#eq:definition-sample-standard-deviation)
 \end{equation}
 For the total goals scored, the standard deviation is
-$$S^2_Y = \sqrt{`r sum((y - mean(y))^2)/length(y)`} = `r sqrt(sum((y - mean(y))^2)/length(y))`$$
+$$S_Y = \sqrt{`r sum((y - mean(y))^2)/length(y)`} = `r sqrt(sum((y - mean(y))^2)/length(y))`$$
 
 
 ### Visual exploration
