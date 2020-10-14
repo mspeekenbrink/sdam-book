@@ -604,8 +604,8 @@ ggplot(data.frame(
 
 ```
 
-For $\alpha = .05$, the critical value is `r dbinom(2,14,.5)/dbinom(2,2,12/14)`, so again, we can reject 
-$H_0: \theta = .5$. In fact, the probability of obtaining a likelihood ratio of `r dbinom(2,14,.5)/dbinom(2,2,12/14)` or smaller if $H_0$ is true, the p-value, is `r pvalue(2*pbinom(2,14,.5))`. 
+For $\alpha = .05$, the critical value is `r dbinom(2,14,.5)/dbinom(2,14,2/14)`, so again, we can reject 
+$H_0: \theta = .5$. In fact, the probability of obtaining a likelihood ratio of `r dbinom(2,14,.5)/dbinom(2,14,2/14)` or smaller if $H_0$ is true, the p-value, is `r pvalue(2*pbinom(2,14,.5))`. 
 
 ## Hypothesis testing directly with the Binomial distribution
 

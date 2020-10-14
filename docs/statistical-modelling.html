@@ -24,7 +24,7 @@
 <meta name="author" content="Maarten Speekenbrink" />
 
 
-<meta name="date" content="2020-10-13" />
+<meta name="date" content="2020-10-14" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -762,8 +762,8 @@ Figure 2.11: A power-curve, plotting the power of the test for different values 
 <p>Finally then, let’s actually test the null hypothesis that Paul was guessing. When just considering his performance in the 2010 FIFA World cup, Paul made <span class="math inline">\(n=8\)</span> predictions and <span class="math inline">\(k=8\)</span> of these were correct. This gives a likelihood ratio of MODEL R (<span class="math inline">\(\theta = .5\)</span>) over estimated MODEL G (<span class="math inline">\(\hat{\theta} = 1\)</span>) of 0.00391. Using a significance level of <span class="math inline">\(\alpha = .05\)</span>, the critical value is set to 0.00391, and as the likelihood ratio is equal to or smaller than this value, we reject <span class="math inline">\(H_0: \theta = .5\)</span>, and conclude that it is rather unlikely that Paul was merely guessing. In fact, <span class="math inline">\(P(\text{likelihood ratio} \leq 0.00391 | \theta = .5) = 0.00781\)</span>. This latter probability, the probability of a test value equal to more extreme than the test value calculated for the data, is generally also called the <strong>p-value</strong>. If the p-value is smaller than the required significance level, the test result is called significant, and we reject <span class="math inline">\(H_0\)</span>. What “more extreme” means can vary, depending on how the test is performed.</p>
 <p>Now, in the preceding discussion, we have completely ignored Paul’s performance in the UEFA Euro 2008 cup. If we can assume that Paul’s psychic abilities did not change between the UEFA Euro 2008 and the 2010 FIFA World cup, it makes sense to pool both data sets to get a more reliable and more powerful test. As the logic is entirely the same as before, we will go through this quickly. Pooling both datasets, we now have <span class="math inline">\(n=14\)</span> predictions, of which <span class="math inline">\(k= 12\)</span> were correct. This provides a likelihood ratio of
 <span class="math display">\[\text{likelihood ratio} = \frac{P(k=12|n=14, \theta = .5)}{P(k=12|n=14, \hat{\theta} = \frac{12}{14})} = 0.019\]</span></p>
-<p>For <span class="math inline">\(\alpha = .05\)</span>, the critical value is 0.008, so again, we can reject
-<span class="math inline">\(H_0: \theta = .5\)</span>. In fact, the probability of obtaining a likelihood ratio of 0.008 or smaller if <span class="math inline">\(H_0\)</span> is true, the p-value, is .0129.</p>
+<p>For <span class="math inline">\(\alpha = .05\)</span>, the critical value is 0.019, so again, we can reject
+<span class="math inline">\(H_0: \theta = .5\)</span>. In fact, the probability of obtaining a likelihood ratio of 0.019 or smaller if <span class="math inline">\(H_0\)</span> is true, the p-value, is .0129.</p>
 </div>
 </div>
 <div id="hypothesis-testing-directly-with-the-binomial-distribution" class="section level2">
