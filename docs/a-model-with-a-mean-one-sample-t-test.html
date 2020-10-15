@@ -24,7 +24,7 @@
 <meta name="author" content="Maarten Speekenbrink" />
 
 
-<meta name="date" content="2020-10-14" />
+<meta name="date" content="2020-10-15" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -443,17 +443,17 @@ Figure 3.9: A bimodal distribution, arising when there are two groups of partici
 <p><span id="def:clt" class="definition"><strong>Definition 3.1  (Central Limit Theorem)  </strong></span>The distribution of the sum of <span class="math inline">\(n\)</span> independent variables approaches the Normal distribution as the number of variables approaches infinity (<span class="math inline">\(n \rightarrow \infty\)</span>).</p>
 </div>
 
-<p>This is quite an amazing theorem. Although you might wonder why you should care about sums of an infinite number of random variables, there are two things to note. Firstly, the rate at which the distribution “approaches” the normal distribution can be rather fast. Secondly, as we showed when we discussed two useful properties of the Normal distribution, the sample mean can be viewed as a normalized sum of <span class="math inline">\(n\)</span> variables: <span class="math inline">\(\overline{Y} = \frac{1}{n} \sum_{i=1}^n Y_i\)</span>. So the Central Limit Theorem applies also to the sample mean, and implies that as long as the number of samples is large enough, the sample mean will follow a Normal distribution.</p>
+<p>This is quite an amazing theorem. Although you might wonder why you should care about sums of an infinite number of random variables, there are two things to note. Firstly, the rate at which the distribution “approaches” the normal distribution can be rather fast. Secondly, as we showed when we discussed two useful properties of the Normal distribution, the sample mean can be viewed as a normalized sum of <span class="math inline">\(n\)</span> variables: <span class="math inline">\(\overline{Y} = \frac{1}{n} \sum_{i=1}^n Y_i\)</span>. So the Central Limit Theorem applies also to the sample mean, and implies that as long as the size of the samples is large enough, the sample mean will follow a Normal distribution.</p>
 <div id="the-central-limit-theorem-in-action" class="section level3">
 <h3><span class="header-section-number">3.7.1</span> The Central Limit Theorem in action</h3>
-<p>To see the central limit theorem in action, let’s pick an arbitrary probability distribution over 5 values, as shown in Figure <a href="a-model-with-a-mean-one-sample-t-test.html#fig:weird-prob-dist">3.10</a>. This will be the true distribution (i.e. the Data Generating Process) from which we can sample values.</p>
+<p>To see the central limit theorem in action, let’s pick an arbitrary probability distribution over 5 values, as shown in Figure <a href="a-model-with-a-mean-one-sample-t-test.html#fig:weird-prob-dist">3.10</a>. This will be the true distribution (i.e. the Data Generating Process) from which we can draw of simulate values.</p>
 <div class="figure" style="text-align: center"><span id="fig:weird-prob-dist"></span>
 <img src="_main_files/figure-html/weird-prob-dist-1.svg" alt="An aribitrary probability distribution over 5 values, clearly not a Normal distribution!" width="50%" />
 <p class="caption">
 Figure 3.10: An aribitrary probability distribution over 5 values, clearly not a Normal distribution!
 </p>
 </div>
-<p>When we repeatedly sample 5 values and calculate the mean, we can look at the distribution of these sampled means. This is shown in Figure <a href="a-model-with-a-mean-one-sample-t-test.html#fig:clt-animation-1">3.11</a>. You can see that even when we sample just 5 values from a decidedly non-Normal distribution, the sample distribution of the resulting average already has the characteristic bell-shaped curve.
+<p>When we repeatedly draw 5 values and calculate the mean over these 5 observations, we can look at the distribution of these sampled means. This is shown in Figure <a href="a-model-with-a-mean-one-sample-t-test.html#fig:clt-animation-1">3.11</a>. You can see that even when we draw just 5 values from a decidedly non-Normal distribution, the sample distribution of the resulting average already has the characteristic bell-shaped curve.
 <!-- Figure \@ref(fig:clt-animation-2) shows the same when we repeatedly sample 20 values and calculate the mean. --></p>
 <div class="figure" style="text-align: center"><span id="fig:clt-animation-1"></span>
 <img src="_main_files/figure-html/clt-animation-1-1.gif" alt="The distribution of the mean of 5 observations by simulating 200 data sets (from the distribution in Figure \@ref(fig:weird-prob-dist))" width="50%" />

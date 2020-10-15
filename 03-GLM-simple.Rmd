@@ -334,11 +334,11 @@ The distribution of the sum of $n$ independent variables approaches the Normal d
 
 ```
 
-This is quite an amazing theorem. Although you might wonder why you should care about sums of an infinite number of random variables, there are two things to note. Firstly, the rate at which the distribution "approaches" the normal distribution can be rather fast. Secondly, as we showed when we discussed two useful properties of the Normal distribution, the sample mean can be viewed as a normalized sum of $n$ variables: $\overline{Y} = \frac{1}{n} \sum_{i=1}^n Y_i$. So the Central Limit Theorem applies also to the sample mean, and implies that as long as the number of samples is large enough, the sample mean will follow a Normal distribution.
+This is quite an amazing theorem. Although you might wonder why you should care about sums of an infinite number of random variables, there are two things to note. Firstly, the rate at which the distribution "approaches" the normal distribution can be rather fast. Secondly, as we showed when we discussed two useful properties of the Normal distribution, the sample mean can be viewed as a normalized sum of $n$ variables: $\overline{Y} = \frac{1}{n} \sum_{i=1}^n Y_i$. So the Central Limit Theorem applies also to the sample mean, and implies that as long as the size of the samples is large enough, the sample mean will follow a Normal distribution.
 
 ### The Central Limit Theorem in action
 
-To see the central limit theorem in action, let's pick an arbitrary probability distribution over 5 values, as shown in Figure \@ref(fig:weird-prob-dist). This will be the true distribution (i.e. the Data Generating Process) from which we can sample values.   
+To see the central limit theorem in action, let's pick an arbitrary probability distribution over 5 values, as shown in Figure \@ref(fig:weird-prob-dist). This will be the true distribution (i.e. the Data Generating Process) from which we can draw of simulate values.   
 
 ```{r weird-prob-dist,fig.cap="An aribitrary probability distribution over 5 values, clearly not a Normal distribution!",fig.width=4,fig.height=3,out.width="50%"}
 library(dplyr)
@@ -353,7 +353,7 @@ data.frame(value=values,probability=prob) %>%
   ggplot(aes(x=value,y=probability)) + geom_col() + ylim(c(0,1))
 ```
 
-When we repeatedly sample 5 values and calculate the mean, we can look at the distribution of these sampled means. This is shown in Figure \@ref(fig:clt-animation-1). You can see that even when we sample just 5 values from a decidedly non-Normal distribution, the sample distribution of the resulting average already has the characteristic bell-shaped curve. 
+When we repeatedly draw 5 values and calculate the mean over these 5 observations, we can look at the distribution of these sampled means. This is shown in Figure \@ref(fig:clt-animation-1). You can see that even when we draw just 5 values from a decidedly non-Normal distribution, the sample distribution of the resulting average already has the characteristic bell-shaped curve. 
 <!-- Figure \@ref(fig:clt-animation-2) shows the same when we repeatedly sample 20 values and calculate the mean. -->
 
 ```{r clt-animation-1, dev='png', echo=FALSE, cache=TRUE, fig.cap="The distribution of the mean of 5 observations by simulating 200 data sets (from the distribution in Figure \\@ref(fig:weird-prob-dist))", out.width='50%', fig.width=4}
