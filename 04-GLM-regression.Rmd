@@ -237,7 +237,7 @@ R would for instance provide the following results for this regression model:
 ```{r simple-regression-trump2016-model-summary}
 knitr::kable(summary(mod)$coefficients, digits=c(3,3,3,3))
 ```
-The values listed for `(intercept)` concern $\beta_0$, and the values listed for `hate_groups_per_million` concern the slope $\beta_1$. You can see the estimates are identical to those computed earlier (phew, no mistakes there! :-). You can see that the standard errors for the two parameters are quite different in magnitude. This is not so surprising, as they reflect quite different things, the intercept being a particular value of the dependent variable, while the slope represents an increase in the dependent variable for an increase in the predictor. If you'd change the scale of the predictor (e.g., from hate groups per million to hate groups per 10,000 citizens), the slope would change, as well as the corresponding standard error. Changing the scale in this way would not affect the standard error of the intercept. If you divide each estimate by the standard error, you obtain the value of the $t$-statistic (just like we did earlier in Equation \@ref(eq:definition-one-sample-t)). In a manner analogous to that depicted in Figure \@ref(fig:critical-values-t-distribution), you then determine critical values for the t-statistic (based on the degrees of freedom and the significance level $\alpha$), and determine whether the value you computed for the parameters lies within the critical range. If it does, the test result is called significant, and you reject the null hypothesis. If not, then the result is called insignificant, and you don't reject the null hypothesis. Now that these are easy to compute with statistical software, it is more common to check the $p$-values. Remember, the $p$-value is the probability of the computed $t$-statistic _or a more extreme value_, assuming the null hypothesis is true. If the $p$-value is smaller than the chosen significance level (e.g. $\alpha = .05$), that means that the test is significant, and the null hypothesis rejected. In the results above, you can see that both p-values are below $\alpha = .05$. Hence, we can reject the null hypothesis that $\beta_0 = 0$ and the null hypothesis that $\beta_1 = 0$. In other words, there is good evidence that, in the absence of hate groups, the percentage of people voting for Trump is not equal to 0.^[It's probably unwise to mix statistics and politics, but that would be utopia to me.] Also, there is good evidence that there is a relation between the number of hate groups and Trump votes.
+The values listed for `(intercept)` concern $\beta_0$, and the values listed for `hate_groups_per_million` concern the slope $\beta_1$. You can see the estimates are identical to those computed earlier (phew, no mistakes there! :-). You can see that the standard errors for the two parameters are quite different in magnitude. This is not so surprising, as they reflect quite different things, the intercept being a particular value of the dependent variable, while the slope represents an increase in the dependent variable for an increase in the predictor. If you'd change the scale of the predictor (e.g., from hate groups per million to hate groups per 10,000 citizens), the slope would change, as well as the corresponding standard error. Changing the scale in this way would not affect the standard error of the intercept. If you divide each estimate by the standard error, you obtain the value of the $t$-statistic (just like we did earlier in Equation \@ref(eq:definition-one-sample-t)). In a manner analogous to that depicted in Figure \@ref(fig:critical-values-t-distribution), you then determine critical values for the t-statistic (based on the degrees of freedom and the significance level $\alpha$), and determine whether the value you computed for the parameters lies within the critical range. If it does, the test result is called significant, and you reject the null hypothesis. If not, then the result is called insignificant, and you don't reject the null hypothesis. Now that these are easy to compute with statistical software, it is more common to check the $p$-values. Remember, the $p$-value is the probability of the computed $t$-statistic _or a more extreme value_, assuming the null hypothesis is true. If the $p$-value is smaller than the chosen significance level (e.g. $\alpha = .05$), that means that the test is significant, and the null hypothesis rejected. In the results above, you can see that both p-values are below $\alpha = .05$. Hence, we can reject the null hypothesis that $\beta_0 = 0$ and the null hypothesis that $\beta_1 = 0$. In other words, there is good evidence that, in the absence of hate groups, the percentage of people voting for Trump is not equal to 0.^[It's probably unwise to mix statistics and politics, but wouldn't that be an utopia?] Also, there is good evidence that there is a relation between the number of hate groups and Trump votes.
 
 Personally, I find the $t$ statistic quite intuitive in the context of a one-sample t-test. Generalizing the concept to a standardized estimate (dividing the estimate by its standard error) is also reasonably intuitive. However, in a multi-parameter model such as here, the sampling distribution of a single parameter is dependent on the estimation of all the other parameters. For instance, the test of the null hypothesis $H_0: \beta_1 = 0$ (i.e., no effect of hate groups on Trump votes) is based on deriving the sampling distribution of $\hat{\beta}_1$ in a model where $\beta_1 = 0$, but all the other parameters (i.e. $\beta_0$ and $\sigma_\epsilon$) cannot be assumed known). This uncertainty is dealt with similarly as before, resulting in a t-distribution, but now there are two sources of uncertainty (two parameters to estimate). Hence, the degrees of freedom are $n-2$ here.
 
@@ -262,7 +262,102 @@ Now we have two models to make predictions, we can write the corresponding Sum o
 \text{SSE}(M) = \sum_{i=1}^n \left(Y_i - \hat{Y}_{M,i} \right)^2
 (\#eq:SSE-GLM-general)
 \end{equation}
-where we can replace the general letter $M$ (for Model) with either $G$ of $R$, to get $\text{SSE}(G)$ or $\text{SSE}(R)$, respectively. I would like to point out that the discrepancy $Y_i - \hat{Y}_{M,i}$ is  a reasonable estimate of the error term $\epsilon_i$, as it is straightforward to rewrite the model as 
+where we can replace the general letter $M$ (for Model) with either $G$ of $R$, to get $\text{SSE}(G)$ or $\text{SSE}(R)$, respectively. So the Sum of Squares is based on a difference between each observation and the model prediction for that observation. These are thus the _prediction errors_. If the prediction was equal to the true model (e.g. $\beta_0 + \beta_1 X_{i}$), then they would be the error terms $\epsilon_i$. But because we only have an estimated model, they are effectively estimates of the true errors. You can see these errors for the two models in Figure \@ref(fig:scatterplot-trump-votes-hate-groups-with-regression-model-comparison). 
+
+```{r scatterplot-trump-votes-hate-groups-with-regression-model-comparison, fig.cap="Estimated regression lines for MODEL G (left) and MODEL R (right) with $\\beta_1 = 0$ and the errors.", fig.width=8, fig.height=4, out.width="100%", fig.show="hold"}
+library(ggplot2)
+library(dplyr)
+
+mod0 <- lm(percent_Trump_votes ~ 1, data=dat)
+
+ldat <- data.frame(model = rep(c("MODEL G","MODEL R"), each = 2), hate_groups_per_million = rep(c(min(dat$hate_groups_per_million),max(dat$hate_groups_per_million)),2), percent_Trump_votes = c(coef(mod)[1] + coef(mod)[2]*min(dat$hate_groups_per_million), coef(mod)[1] + coef(mod)[2]*max(dat$hate_groups_per_million), coef(mod0)[1], coef(mod0)[1]), ymin=50,ymax=50)
+
+rbind(dat %>% mutate(model = "MODEL G", ymin = if_else(percent_Trump_votes > predict(mod), predict(mod), percent_Trump_votes),
+               ymax = if_else(percent_Trump_votes < predict(mod), predict(mod), percent_Trump_votes)),
+      dat %>% mutate(model = "MODEL R", ymin = if_else(percent_Trump_votes > predict(mod0), predict(mod0), percent_Trump_votes),
+               ymax = if_else(percent_Trump_votes < predict(mod0), predict(mod0), percent_Trump_votes))) %>%
+        ggplot(aes(x=hate_groups_per_million,y=percent_Trump_votes, ymin = ymin, ymax = ymax)) + geom_point() + xlab("Hate groups per million citizens") + ylab("% votes for Trump") + geom_line(data=ldat) + geom_linerange(alpha=.5) + facet_wrap(~model)
+
+# 
+# dat %>% mutate(ymin = if_else(percent_Trump_votes > predict(mod), predict(mod), percent_Trump_votes),
+#                ymax = if_else(percent_Trump_votes < predict(mod), predict(mod), percent_Trump_votes)) %>%
+#   ggplot(aes(x=hate_groups_per_million,y=percent_Trump_votes, ymin = ymin, ymax = ymax)) + geom_point() + xlab("Hate groups per million citizens") + ylab("% votes for Trump") + geom_abline(slope = coef(mod)[2], intercept = coef(mod)[1]) + geom_linerange(alpha=.5) + ggtitle("MODEL G")
+#            
+# 
+# mod0 <- lm(percent_Trump_votes ~ 1, data=dat)
+# dat %>% mutate(ymin = if_else(percent_Trump_votes > predict(mod0), predict(mod0), percent_Trump_votes),
+#                ymax = if_else(percent_Trump_votes < predict(mod0), predict(mod0), percent_Trump_votes)) %>%
+#   ggplot(aes(x=hate_groups_per_million,y=percent_Trump_votes, ymin = ymin, ymax = ymax)) + geom_point() + xlab("Hate groups per million citizens") + ylab("% votes for Trump") + geom_abline(slope = 0, intercept = coef(mod0)[1]) + geom_linerange(alpha=.5) + ggtitle("MODEL R")
+
+```
+
+When you compare the errors between the models, you can see that MODEL G does not provide a better prediction for each observation. Sometimes the distance from an observation to the regression line is larger for MODEL G than for MODEL R. However, MODEL G does seem to provide a better prediction for most observations. This is unsurprising, as MODEL G, by maximising the likelihood, should be at least as good as MODEL R. This means that it is _always the case that_
+$$\text{SSE}(R) \geq \text{SSE}(G)$$
+The Sum of Squared Errors of MODEL G will never be higher than that of MODEL R. So we cannot just select the model with the lowest SSE, as this would mean we'd always select MODEL G. We need to find a way to determine whether the SSE of MODEL G is sufficiently lower than that of MODEL R to make us believe that MODEL G is indeed superior to MODEL R.
+
+In the previous chapter, we discussed that the $t$ statistic can be used to perform a test which is equivalent to the likelihood ratio test, and that this was useful because the sampling distribution of the $t$ statistic is known, while the sampling distribution of the likelihood ratio is difficult to determine. For the case of linear models, there is a similar argument that leads to a new statistic, which can be viewed as a generalization of the $t$ statistic. This is the $F$ statistic. If was given letter in honour of Sir Ronald A. Fisher, a rather brilliant and very influential statistician, who developed it in the 1920s.
+
+For comparing two linear models, where MODEL R is a special case of MODEL G, we can define the $F$ statistic as:
+\begin{equation}
+F = \frac{\frac{\text{SSE}(R) -  \text{SSE}(G)}{\text{npar}(G) - \text{npar}(R)}}{\frac{\text{SSE}(G)}{n-\text{npar(G)}}}
+(\#eq:glm-f-definition)
+\end{equation}
+Here, $\text{npar}(G)$ stands for the number of parameters which are estimated in MODEL G, and $\text{npar}(R)$ for the number of parameters which are estimated in MODEL R. In counting the number of estimated parameters, we are excluding the error variance $\sigma^2_\epsilon$. Although this is really also a parameter of the models, it is generally not of direct interest. It is a so-called "nuisance parameter", something that we need to take into account, but we'd rather forget about. In the present example, MODEL G then has two estimated parameters: $\hat{\beta}_{G,0}$ and $\hat{\beta}_{G,1}$, while MODEL R has just one: $\hat{\beta}_{R,0}$. If we compute the SSE for each model (i.e. taking the vertical lines to the regression line in Figure \@ref(fig:scatterplot-trump-votes-hate-groups-with-regression-model-comparison) and squaring them), we get $\text{SSE}(G) = `r sum(residuals(mod)^2)`$ and $\text{SSE}(R) = `r sum(residuals(mod0)^2)`$. 
+
+\begin{align}
+F &= \frac{\frac{`r sum(residuals(mod0)^2)` -  `r sum(residuals(mod)^2)`}{`r length(coef(mod))` - `r length(coef(mod0))`}}{\frac{`r sum(residuals(mod)^2)`}{`r nrow(dat)` - `r length(coef(mod))`}} \\
+&= \frac{`r  (sum(residuals(mod0)^2) -  sum(residuals(mod)^2))/(length(coef(mod)) - length(coef(mod0)))`}{`r sum(residuals(mod)^2)/(nrow(dat) - length(coef(mod)))`} \\
+&= `r  ((sum(residuals(mod0)^2) -  sum(residuals(mod)^2))/(length(coef(mod)) - length(coef(mod0))))/(sum(residuals(mod)^2)/(nrow(dat) - length(coef(mod))))`
+\end{align}
+
+If MODEL R is true, the sampling distribution of the $F$ statistic follows an $F$ distribution. This distribution has two parameters, both degrees of freedom, which we'll refer to as $\text{df}_1$ and $\text{df}_2$. The first one reflects the difference in the number of estimated parameters between the models
+$$\text{df}_1 = \text{npar}(G) - \text{npar}(R)$$
+and the second one the number of observations minus the number of estimated parameters of the more general model
+$$\text{df}_2 = n - \text{npar}(G)$$
+```{r f-distribution-plot, fig.cap="The F distribution with $\\text{df}_1 = 1$ and $\\text{df}_2 = 48$, and the critical value for $\\alpha = .05$", out.width="70%", fig.width=6, fig.height=.75*6}
+xlim <- c(0,5)
+data.frame(interval=1,x=c(qf(.95,1,48), seq(qf(.95,1,48),xlim[2],100),xlim[2]), y = c(0,df( seq(qf(.95,1,48),xlim[2],100),1,48),0)) %>%
+  ggplot(aes(x=x,y=y,fill=factor(interval,labels=""))) + stat_function(aes(fill=NULL),fun=function(x) df(x,1,48), n=500) + xlim(xlim) + ylab("p(F)") + xlab("F") + geom_polygon(alpha=.8) + theme(legend.position="none") + geom_vline(xintercept = qf(.95, 1, 48), lty=2) + annotate("text", x=xlim[2]-.5, xmax=xlim[2], xmin=qf(.95,1,48),y=2,hjust = .5, vjust=1,label="upper \n critical region") + ylim(c(0,3))
+#ggplot() + stat_function(fun=function(x) df(x,1,48), n=500) + xlim(c(0,5)) + xlab("F") + ylab("p(F)") + geom_vline(xintercept = qf(.95, 1, 48), lty=2)
+```
+
+Note that the value of the $F$ statistic can never be negative; the distribution is thus defined only over positive values of $F$. High values of $F$ indicate that the MODEL G has substantially less error than MODEL R. Another thing to note is that, __whenever $\text{df}_1 = 1$, there is a direct relation between the $F$ statistic and the $t$ statistic__: $F = t^2$, or conversely, $\sqrt{F} = t$. It is easy to check that this is indeed the case here: $\sqrt{`r  ((sum(residuals(mod0)^2) -  sum(residuals(mod)^2))/(length(coef(mod)) - length(coef(mod0))))/(sum(residuals(mod)^2)/(nrow(dat) - length(coef(mod))))`} = `r  sqrt(((sum(residuals(mod0)^2) -  sum(residuals(mod)^2))/(length(coef(mod)) - length(coef(mod0))))/(sum(residuals(mod)^2)/(nrow(dat) - length(coef(mod)))))`$, which is the value of the $t$ statistic we computed earlier.
+
+The critical value of the $F$ statistic, with $\alpha = .05$ and $\text{df}_1 = 2-1 = 1$ and $\text{df}_2 = 50 - 2 = 48$, is `r qf(.95,1,48)`, and any value of $F$ above this critical value would result in a rejection of the null hypothesis. So, because the $F$ value we computed was `r  ((sum(residuals(mod0)^2) -  sum(residuals(mod)^2))/(length(coef(mod)) - length(coef(mod0))))/(sum(residuals(mod)^2)/(nrow(dat) - length(coef(mod))))`, which is larger than the critical value, we reject the null hypothesis $H_0: \beta_1 = 0$, and conclude that there is evidence of a relation between the number of hate groups and Trump votes. Instead of checking whether the $F$ value is larger than a critical value, we can also compute the p-value, which is the probability of an $F$ value equal to or larger than `r  ((sum(residuals(mod0)^2) -  sum(residuals(mod)^2))/(length(coef(mod)) - length(coef(mod0))))/(sum(residuals(mod)^2)/(nrow(dat) - length(coef(mod))))` in the distribution depicted in Figure , More formally, the p-value can be defined as $P(F \geq `r  ((sum(residuals(mod0)^2) -  sum(residuals(mod)^2))/(length(coef(mod)) - length(coef(mod0))))/(sum(residuals(mod)^2)/(nrow(dat) - length(coef(mod))))` | \text{df}_1 = 1, \text{df}_2 = 48) =  `r format(1-pf(((sum(residuals(mod0)^2) -  sum(residuals(mod)^2))/(length(coef(mod)) - length(coef(mod0))))/(sum(residuals(mod)^2)/(nrow(dat) - length(coef(mod)))),1,48),digits=3)`$. As this probability is smaller than the significance level, this again implies we reject the null hypothesis.
+
+```{r}
+mod00 <- lm(percent_Trump_votes ~ hate_groups_per_million - 1, data=dat)
+```
+A nice thing about the $F$ statistic is that it is general, and can be used to compare any nested linear models. For instance, we can also compare MODEL G to a different MODEL R in which we assume the intercept equals $\beta_0 = 0$, whilst allowing the slope to take any value. This model forces the regression line to go through the (0,0) point. Estimating this MODEL R gives:
+$$\begin{align}
+Y_i &= 0 + \hat{\beta}_{R,1} \times X_i \\
+&= `r coef(mod00)[1]`
+\end{align}$$
+You can see the resulting regression line and error terms in Figure \@ref(fig:scatterplot-trump-votes-hate-groups-with-regression-model-comparison-2). 
+```{r scatterplot-trump-votes-hate-groups-with-regression-model-comparison-2, fig.cap="Estimated regression lines for MODEL G (left) and MODEL R (right) with $\\beta_1 = 0$ and the errors.", fig.width=8, fig.height=4, out.width="100%"}
+library(ggplot2)
+library(dplyr)
+
+ldat <- data.frame(model = rep(c("MODEL G","MODEL R"), each = 2), hate_groups_per_million = rep(c(min(dat$hate_groups_per_million),max(dat$hate_groups_per_million)),2), percent_Trump_votes = c(coef(mod)[1] + coef(mod)[2]*min(dat$hate_groups_per_million), coef(mod)[1] + coef(mod)[2]*max(dat$hate_groups_per_million), coef(mod00)[1]*min(dat$hate_groups_per_million), coef(mod00)[1]*max(dat$hate_groups_per_million)), ymin=50,ymax=50)
+
+rbind(dat %>% mutate(model = "MODEL G", ymin = if_else(percent_Trump_votes > predict(mod), predict(mod), percent_Trump_votes),
+               ymax = if_else(percent_Trump_votes < predict(mod), predict(mod), percent_Trump_votes)),
+      dat %>% mutate(model = "MODEL R", ymin = if_else(percent_Trump_votes > predict(mod00), predict(mod00), percent_Trump_votes),
+               ymax = if_else(percent_Trump_votes < predict(mod00), predict(mod00), percent_Trump_votes))) %>%
+        ggplot(aes(x=hate_groups_per_million,y=percent_Trump_votes, ymin = ymin, ymax = ymax)) + geom_point() + xlab("Hate groups per million citizens") + ylab("% votes for Trump") + geom_line(data=ldat) + geom_linerange(alpha=.5) + facet_wrap(~model)
+```
+This alternative MODEL R seems clearly inferior to MODEL G. The SSE of this model is $\text{SSE}(R) = `r sum(residuals(mod00)^2)`$. Computing the $F$ statistic gives
+$$
+\begin{align}
+F &= \frac{\frac{`r sum(residuals(mod00)^2)` -  `r sum(residuals(mod)^2)`}{`r length(coef(mod))` - `r length(coef(mod00))`}}{\frac{`r sum(residuals(mod)^2)`}{`r nrow(dat)` - `r length(coef(mod))`}} \\
+&= \frac{`r  (sum(residuals(mod00)^2) -  sum(residuals(mod)^2))/(length(coef(mod)) - length(coef(mod00)))`}{`r sum(residuals(mod)^2)/(nrow(dat) - length(coef(mod)))`} \\
+&= `r  ((sum(residuals(mod00)^2) -  sum(residuals(mod)^2))/(length(coef(mod)) - length(coef(mod00))))/(sum(residuals(mod)^2)/(nrow(dat) - length(coef(mod))))`
+\end{align}
+$$
+Because the test involves the same degrees of freedom, the critical value is the same as before. So we reject the null hypothesis again, which here is $H_0: \beta_0 = 0$. The p-value now is $P(F \geq `r  ((sum(residuals(mod00)^2) -  sum(residuals(mod)^2))/(length(coef(mod)) - length(coef(mod00))))/(sum(residuals(mod)^2)/(nrow(dat) - length(coef(mod))))` | \text{df}_1 = 1, \text{df}_2 = 48) = `r pvalue(1-pf(((sum(residuals(mod00)^2) -  sum(residuals(mod)^2))/(length(coef(mod)) - length(coef(mod00))))/(sum(residuals(mod)^2)/(nrow(dat) - length(coef(mod)))),1,48),limit=TRUE,limit_below = 1e-4)`.$
+
+<!--
+I would like to point out that the discrepancy $Y_i - \hat{Y}_{M,i}$ is  a reasonable estimate of the error term $\epsilon_i$, as it is straightforward to rewrite the model as 
 $$\begin{align}
 \epsilon_i &= Y_i - (\beta_0 + \beta_1 \times X_i) \\
 &= Y_i - \mu_{Y|X{_{i}}}
@@ -270,16 +365,17 @@ $$\begin{align}
 and we have just indicated that $\hat{Y}_i = \hat{\mu}_{Y|X{_{i}}}$. Replacing the conditional mean by its estimate, and realizing that ny using an estimate for this, we than also can't be certain about the true value of $\epsilon$, which would also turn that into an estimate, we then write this formally as:  
 $$\hat{\epsilon}_{M,i} = Y_i - \hat{Y}_{M,i}$$
 This in turn is a somewhat convoluted way to say that the prediction errors would be a reasonable way to estimate the error variance or standard deviation $\sigma_\epsilon$.
+-->
 
-\begin{equation}
-F = \frac{\frac{\text{SSE}(R) -  \text{SSE}(G)}{\text{npar}(G) - \text{npar}(R)}}{\frac{\text{SSE}(G)}{n-\text{npar(G)}}}
-(\#eq:glm-f-definition)
-\end{equation}
+
+<!--
 
 
 ```{r simple-regression-trump2016-anova}
 knitr::kable(anova(mod))
 ```
+
+-->
 
 <!--
 ### Confidence interval
