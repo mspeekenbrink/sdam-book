@@ -1,13 +1,122 @@
 # Multiple regression
 
-## The model
 
-## Estimation
+```{r load-trump-data-again}
+library(sdamr)
+data("trump2016")
+dat <- subset(trump2016,state != "District of Columbia")
+```
 
-## Inference
+## Trump, votes, and hate groups (again)
 
-## Multicollinearity
+In the previous chapter, we found evidence for a relation between the number of hate groups and votes for Trump. This relation was found with an observational study, not an experimental one. Because the number of hate groups was not randomly assigned to states, there are possible confounding factors that could account for the result. The well-known phrase "correlation does not imply causation" should be taken seriously. For instance, it could be that hate groups are especially prevalent in places with relatively low levels of education. And it might be that those with a relatively low level of education are also more likely to vote for Trump. In other words, education level might be a __common cause__ of both hate groups and Trump votes, whilst there is no direct relation between hate groups and Trump votes. The difference between a direct relation, and a spurious one through a common cause, is depicted in Figure \@ref(fig:direct-relation-vs-common-cause). You can see more, often rather amusing examples of spurious relations on the [spurious correlation](https://www.tylervigen.com/spurious-correlations) website.
 
+```{tikz direct-relation-vs-common-cause, device='svg', fig.cap="A direct relation between hate groups and Trump votes vs a spurious relation through a common cause (education)."}
+  \usetikzlibrary{arrows}
+	\begin{tikzpicture}
+	\pgfsetxvec{\pgfpoint{3cm}{0cm}}
+	\pgfsetyvec{\pgfpoint{0cm}{3cm}}
+  \tikzstyle{every node}=[minimum size=2cm]
+
+  \draw node at (0,1.5) {\textbf{direct relation}};
+	\draw node[circle,draw, align=center] (x1) at (0,0.5) {\texttt{hate} \\ \texttt{groups}};
+	\draw node[circle,draw, align=center] (y) at (1.5,0.5) {\texttt{Trump} \\ \texttt{votes}};
+
+  \draw node at (3,1.5) {\textbf{common cause}};
+	\draw node[circle,draw, align=center] (x1b) at (0+3,0) {\texttt{hate} \\ \texttt{groups}};
+	\draw node[circle,draw, align=center] (yb) at (1.5+3,0) {\texttt{Trump} \\ \texttt{votes}};
+	\draw node[circle,draw, align=center] (x2b) at (.75+3,1) {\texttt{education}};
+
+	\draw[->, line width=.5mm] (x1) -- (y);
+
+	\draw[->, line width=.5mm] (x2b) -- (yb);
+	\draw[->, line width=.5mm] (x2b) -- (x1b);
+
+	\end{tikzpicture}
+```
+
+To assess the relation between hate groups and Trump votes in the possible presence of common causes and other confounds, ideally, we would like to "eliminate" the effect of such confounds from both the "hate groups" predictor, and the "Trump votes" dependent variable. If, after statistically controlling for confounds in such a way, we still find evidence for a relation between hate groups and Trump votes, that would strengthen our belief that the relation is real, rather than spurious. Multiple regression is a way in which to determine _unique effects_ of predictor variables on the dependent variable. Before we move on to define the multiple regression model, we will work through an indirect way to control for a third variable (e.g. a possible common cause), which will provide insight into what is meant by unique effects in a multiple regression model.
+
+### Controlling for education level
+
+We have indicated that, potentially, the level of education might be a common cause for both the prevalence of hate groups, and voter support for Trump. What if we could assess the relation between hate groups and Trump votes after eliminating the effect of education level from both? One reasonable way to do this, using the tools we already have, is by means of simple regression models. The idea is reasonably straightforward. In a regression model predicting Trump votes from education level, the error terms (residuals) of that model reflect that part of the variation in Trump votes which can not be predicted from education level. Similarly, in a regression model predicting hate groups from education level, the error terms (residuals) of that model reflect the variation in hate groups which can not be predicted from education level. So, if there is still a relation between the _residual_ Trump vote, and the _residual_ hate groups, then the relation can not be due to education level as a common cause.
+
+```{r}
+mod1 <- lm(percent_Trump_votes ~ percent_bachelors_degree_or_higher, data=dat)
+mod2 <- lm(hate_groups_per_million ~ percent_bachelors_degree_or_higher, data=dat)
+```
+
+When we estimate a regression model predicting Trump votes from education level (defined as the percentage of citizens who obtained a Bachelors degree or higher), we obtain the following estimated model
+$$\texttt{Trump_votes}_i = `r coefficients(mod1)[1]` `r ifelse(coefficients(mod1)[2] >= 0, "+", "-")` `r abs(coefficients(mod1)[2])` \times \texttt{education}_i + \hat{\epsilon}_{\texttt{votes},i}$$
+and for the hate groups we obtain
+$$\texttt{hate_groups}_i = `r coefficients(mod2)[1]` `r ifelse(coefficients(mod1)[2] >= 0, "+", "-")` `r abs(coefficients(mod2)[2])` \times \texttt{education}_i + \hat{\epsilon}_{\texttt{hate},i}$$
+Note that I'm labelling the error terms for both models with a subscript (either $\texttt{votes}$ or $\texttt{hate}$) to denote these are the residual terms for a model predicting Trump votes and hate groups from education levels respectively. Also, I'm adding the hat above them to indicate that these are not the "true errors" (from a model with the true values of the slope and intercept) but rather estimates of these resulting from using estimated parameters. The residuals, as well as the estimated regression lines, are depicted in in Figure \@ref(fig:regressions-controlling-for-education).
+
+```{r regressions-controlling-for-education, fig.show="hold", out.width="50%", fig.width=5, fig.height=4, fig.cap="Predicting Trump votes and hate groups by linear regression models with education level as predictor. The residuals of each model are depicted as vertical lines from the observations to the regression line."}
+library(ggplot2)
+library(dplyr)
+dat %>% mutate(ymin = if_else(percent_Trump_votes > predict(mod1), predict(mod1), percent_Trump_votes),
+               ymax = if_else(percent_Trump_votes < predict(mod1), predict(mod1), percent_Trump_votes)) %>%
+  ggplot(aes(x=percent_bachelors_degree_or_higher, y=percent_Trump_votes, ymin=ymin, ymax=ymax)) + geom_point() + xlab("% bachelors degree or higher") + ylab("% votes for Trump") + geom_abline(intercept = coefficients(mod1)[1], slope=coefficients(mod1)[2]) + geom_linerange(alpha=.5)
+
+dat %>% mutate(ymin = if_else(hate_groups_per_million > predict(mod2), predict(mod2), hate_groups_per_million),
+               ymax = if_else(hate_groups_per_million < predict(mod2), predict(mod2), hate_groups_per_million)) %>%
+  ggplot(aes(x=percent_bachelors_degree_or_higher, y=hate_groups_per_million, ymin=ymin, ymax=ymax)) + geom_point() + xlab("% bachelors degree or higher") + ylab("Hate groups per million citizens") + geom_abline(intercept = coefficients(mod2)[1], slope=coefficients(mod2)[2]) + geom_linerange(alpha=.5)
+```
+
+The regression line in both models represents the variation in the dependent variable (Trump votes and hate groups) that is dependent on education level. In both models, the error term $\epsilon$ is assumed to be completely independent from the predictor. Hence, 
+
+```{r}
+tdat <- data.frame(res_trump_vote=residuals(mod1), res_hate_groups = residuals(mod2))
+mod3 <- lm(res_trump_vote ~ res_hate_groups, data=tdat)
+```
+
+```{r}
+tdat %>%
+  ggplot(aes(x=res_hate_groups, y=res_trump_vote)) + geom_point() + geom_abline(intercept=coefficients(mod3)[1], slope = coefficients(mod3)[2]) + xlab("Residual hate groups per million citizens") + ylab("Residual % votes for Trump")
+```
+
+## The multiple regression model
+
+The multiple regression is a straightforward extension of the simple linear regression model, including more than one predictor $X$:
+\begin{equation}
+Y_i = \beta_0 + \beta_1 \times X_{1,i} + \beta_2 \times X_{2,i} + \ldots + \beta_k \times X_{k,i} + \epsilon_i \quad \quad \quad \epsilon_i \sim \mathbf{Normal}(0,\sigma_\epsilon)
+(\#eq:multiple-regression-model-definition)
+\end{equation}
+
+Keeping all other predictors constant, it becomes a simple linear regression model. [show different lines for different values of education]
+
+3D plane.
+
+## Estimation {#sec:04b-estimation}
+
+\begin{equation} 
+\hat{\beta}_0 = \overline{Y} - \hat{\beta}_1 \times \overline{X}_1 -  \hat{\beta}_2 \times \overline{X}_2 - \ldots -  \hat{\beta}_k \times \overline{X}_k
+(\#eq:multiple-regression-intercept-estimate)
+\end{equation}
+
+\begin{equation}
+\hat{\sigma}^2_\epsilon = \frac{\sum_{i=1}^n (Y_i - \hat{\mu}_{Y|X_1, \ldots, X_k})^2}{n-(k=1)}
+(\#eq:multiple-regression-sd-error-variance-estimate)
+\end{equation}
+
+## Inference {#sec:04b-inference}
+
+
+Equation \@ref(eq:glm-f-definition)
+$$F = \frac{\frac{\text{SSE}(R) -  \text{SSE}(G)}{\text{npar}(G) - \text{npar}(R)}}{\frac{\text{SSE}(G)}{n-\text{npar(G)}}}$$
+## Assumptions {#sec:04b-assumptions}
+
+The assumptions of the multiple regression model, and with that any of the versions of the General Linear Model, are all about the distribution of the errors:
+
+$$\epsilon_i \sim \mathbf{Normal}(0, \sigma)$$
+
+## Practical issues: Multicollinearity and outliers
+
+<!-- 
 ## Polynomial regression
 
+
 ## Summary
+
+-->
