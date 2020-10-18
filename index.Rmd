@@ -55,6 +55,8 @@ knitr::opts_hooks$set(echo = function(options) {
   options
 })
 
+knitr::knit_hooks$set(webgl = rgl::hook_webgl)
+
 library(sdamr)
 ```
 
