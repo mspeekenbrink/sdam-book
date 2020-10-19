@@ -154,7 +154,7 @@ $$\begin{align}
 $$
 which is a simple regression model with a new intercept $\beta_0' = \beta_0 + \beta_2 \times `r min(dat$percent_bachelors_degree_or_higher)`$ composed as the sum of the original intercept and `r min(dat$percent_bachelors_degree_or_higher)` times the slope of $\texttt{education_level}$, and the same slope $\beta_1$ for $\texttt{hate_groups}$. You can see these simple regression lines, for three different values of education level, in Figure \@ref(fig:trump-multiple-regression-scatter-with-multiple-regression-lines). Notice that the regression lines for different education levels are parallel, because they have the same slope. However, the regression lines are at different heights, because they have a different intercept.
 
-```{r trump-multiple-regression-scatter-with-multiple-regression-lines, fig.cap="Percentage of votes for Trump in the 2016 elections for 50 US states and the number of hate groups per 1 million citizens, with regression lines for three different values of education level.", fig.width=5, fig.height=5, out.width='60%'}
+```{r trump-multiple-regression-scatter-with-multiple-regression-lines, fig.cap="Percentage of votes for Trump in the 2016 elections for 50 US states and the number of hate groups per 1 million citizens, with regression lines for three different values of education level. The colour of each data point and regression line reflects the value of education level.", fig.width=5, fig.height=5, out.width='60%'}
 ggplot(dat,aes(x=hate_groups_per_million, y=percent_Trump_votes, colour=percent_bachelors_degree_or_higher)) + geom_point() + geom_abline(intercept = coefs[1] + min(dat$percent_bachelors_degree_or_higher)*coefs[3], slope = coefs[2], colour=viridis::viridis_pal()(3)[1]) + geom_abline(intercept = coefs[1] + (min(dat$percent_bachelors_degree_or_higher) + (max(dat$percent_bachelors_degree_or_higher) - min(dat$percent_bachelors_degree_or_higher))/2) *coefs[3], slope = coefs[2], colour=viridis::viridis_pal()(3)[2]) + geom_abline(intercept = coefs[1] + max(dat$percent_bachelors_degree_or_higher)*coefs[3], slope = coefs[2], colour = viridis::viridis_pal()(3)[3]) + theme(legend.position = "bottom") + labs(colour = "% bachelors degree or higher") + xlab("Hate groups per million citizens") + ylab("% votes for Trump")
 ```
 
@@ -255,7 +255,7 @@ F &= \frac{\frac{`r sum(residuals(modr)^2)` -  `r sum(residuals(modg)^2)`}{`r le
 &= `r  ((sum(residuals(modr)^2) -  sum(residuals(modg)^2))/(length(coef(modg)) - length(coef(modr))))/(sum(residuals(modg)^2)/(nrow(dat) - length(coef(modg))))`
 \end{align}
 
-We have collect all the test results in Table \@ref(tab:trump-multiple-regression-ANOVA-table).
+The results of all three tests are collected in Table \@ref(tab:trump-multiple-regression-ANOVA-table).
 ```{r trump-multiple-regression-ANOVA-table}
 opts <- options()
 options(knitr.kable.NA = "")
@@ -266,8 +266,25 @@ knitr::kable(tab, caption = "Null-hypothesis significance tests by model compari
 options(opts)
 ```
 
-
 When performing such model comparisons, it is very important to remember that what we call MODEL G and MODEL R will depend on the null hypothesis tested. Generally, MODEL G will remain the same within the context of an analysis, but MODEL R will vary from test to test.
+
+There is one more comparison that we could perform, namely to compare MODEL G to a MODEL R without any predictors. This is a so-called __omnibus test__ of the null hypothesis about two parameters simultaneously, namely $H_0: \beta_1 = 0 \text { and } \beta_2 = 0$. This results in another vesrion of the restricted MODEL R:
+$$
+\begin{align}
+\text{MODEL R: } \quad \texttt{trump_votes}_i &= \beta_0 +  0 \times \texttt{hate_groups}_i + 0 \times \texttt{education}_i + \epsilon_i \\
+&= \beta_0 + \epsilon_i
+\end{align}
+$$  
+This is the like the alternative model of the one-sample t-test we considered earlier. Here, the model is estimated as 
+$$`r modr <- lm(percent_Trump_votes ~ 1, data=dat); write_GLM_equation(modr,dv_name = "trump_votes", digits=4)`$$ 
+with an associated $\text{SSE}(R) = `r sum(residuals(modr)^2)`$. The $F$ statistic is then computed as 
+\begin{align}
+F &= \frac{\frac{`r sum(residuals(modr)^2)` -  `r sum(residuals(modg)^2)`}{`r length(coef(modg))` - `r length(coef(modr))`}}{\frac{`r sum(residuals(modg)^2)`}{`r nrow(dat)` - `r length(coef(modg))`}} \\
+&= \frac{`r  (sum(residuals(modr)^2) -  sum(residuals(modg)^2))/(length(coef(modg)) - length(coef(modr)))`}{`r sum(residuals(modg)^2)/(nrow(dat) - length(coef(modg)))`} \\
+&= `r  ((sum(residuals(modr)^2) -  sum(residuals(modg)^2))/(length(coef(modg)) - length(coef(modr))))/(sum(residuals(modg)^2)/(nrow(dat) - length(coef(modg))))`
+\end{align}
+The critical value is different this time, because the degrees of freedom are now $\text{df}_1 = 3 - 1 = 2$ and $\text{df} = `r nrow(dat)` - 3 = `r nrow(dat) - 3`$, and equals `r qf(.95, 2, r nrow(dat) - 3)`. Clearly, the computed $F$ value is well above the critical value, hence we reject the null hypothesis (i.e. rerect MODEL R in favour of MODEL G).
+
 
 ## Partitioning and explaining variance
 
@@ -276,7 +293,20 @@ Let's have another look at the formula for the $F$ statistic:
 $$F = \frac{\frac{\text{SSE}(R) -  \text{SSE}(G)}{\text{npar}(G) - \text{npar}(R)}}{\frac{\text{SSE}(G)}{n-\text{npar(G)}}}$$
 The numerator (top part) consists of a difference between two SSE terms, divided by the difference in the number of estimated parameters. Because the comparison is between nested models, and MODEL G contains more estimated parameters than MODEL R, we can view this part as the average reduction of the SSE (per parameter) due to the additional parameters of MODEL G. The denominator (bottom part) consists of the SSE of MODEL G divided by $n-\text{npar}(G)$. This is an unbiased estimate of the error variance of MODEL G, and also referred to as the Mean Squared Error (MSE). 
 
-Each SSE term is itself related to an error variance, as the SSE is the sum of squared deviations between the observations and the model predictions (the conditional means $\mu_{Y|X_1,\ldots,X_m})$). 
+The SSE of any model $M$ is itself related to an error variance, as the SSE is the sum of squared deviations between the observations and the model predictions ($\hat{Y} = \mu_{Y|X_1,\ldots,X_m}$):
+$$\text{SSE}(M) = \sum_{i=1}^n (Y_i - \hat{Y}_{M,i})^2$$
+Dividing the SSE by $n - \text{npar}(M)$ would provide us with an unbiased estimate of the error variance of the model. Although this is only done in the denominator of the $F$ statistic, it should be clear there is a close relation between SSE terms and variances.
+
+A useful perspective on unique effects in multiple regression models and GLMs in general is to consider them as __partitioning the variance of the dependent variable__ in parts that are uniquely attributable to the predictors. If you consider the SSE of a very simple MODEL R
+$$Y_i = \beta_0 + \epsilon_i$$
+with estimate $\hat{\beta}_0 = \overline{Y}$, then for this model
+$$\text{SSE}(R) = \sum_{i=1}^n (Y_i - \hat{\beta}_0)^2 = (Y_i - \overline{Y})^2 = n S_Y^2$$
+So the SSE of a regression model without predictors is equal to $n$ times the sample variance of the dependent variable. When we add predictors to the model, we know the SSE can only decrease (or remain the same, but that is rather unlikely). The proportion of the SSE that is reduced by adding a predictor to the model can be seen as the proportion of the variance that is "explained" by the predictor. This __proportional reduction in error__ is a useful measure of the strength of the relation between a predictor and the dependent variable. As usual, this strength will have a true value for the Data Generating Process, and a value we can compute for a given limited dataset. We'll denote the true value as $\eta^2$. The sample estimate is: 
+\begin{equation}
+\hat{\eta}^2 = \frac{\text{SSE}(R) - \text{SSE}(G)}{\text{SSE}(R)}
+(\#eq:definition-eta-squared-glm)
+\end[equation}
+Because $0 \leq \text{SSE}(G) \leq \text{SSE}(R)$, the value of $\hat{\eta}^2$ is between 0 and 1 (as a proportion should be). Figure \@ref(fig:sse-partition) depicts such "proportions of variance explained" for a situation with two predictors ($X_1$ and $X_2$) of a dependent variable $Y$.
 
 ```{tikz sse-partition, device='svg', fig.cap="Partitioning the variance in a multiple regression model. Each circle represents the variance of a variable. Overlapping regions represent shared variability (e.g. covariance) between variables. ", out.width="50%"}
 \def\firstcircle{(1,1) circle (1.75cm)}
@@ -304,8 +334,11 @@ Each SSE term is itself related to an error variance, as the SSE is the sum of s
 \end{tikzpicture}	
 ```
 
-Proportional reduction in error
-$$\hat{\eta}^2 = \frac{\text{SSE}(R) - \text{SSE}(G)}{\text{SSE}(R)}$$
+In this Figure, the variance of $Y$ is represented by the circle labelled $Y$, and the variance of the predictors is represented by the circles labelled $X_1$ and $X_2$ respectively. Overlap between the circles represents shared variance (e.g. covariance) between the variables. First, let's consider a simple regression model where $X_1$ is the sole predictor of $Y$. The proportion of variance of $Y$ that this model accounts for is the total shared area between $X_1$ and $Y$, which is the sum of the regions labelled as $B$ and $D$. Similarly, if we'd consider a simple regression model where $X_2$ is the sole predictor of $Y$, the proportion of variance of $Y$ that this model accounts for is the total shared area between $X_2$ and $Y$, which is the sum of the regions labelled as $C$ and $D$. If we consider a multiple regression model with both $X_1$ and $X_2$ as predictors of $Y$, the proportion of variance of $Y$ that this model accounts for is the total shared area between $X_1$, $X_2$ and $Y$, which is the sum of the regions labelled as $B$, $C$, and $D$. The area labelled as $A$ is variance of $Y$ that cannot be accounted for by $X_1$ or $X_2$, and is the SSE (the random, unexplainable part) of a multiple regression model which includes both $X_1$ and $X_2$ as predictors.  
+
+
+Note that the area labelled as $D$ is "explained" by both $X_1$ and $X_2$ when each is used as a sole predictor of $Y$. In a multiple regression model however, the effects of predictors are _unique_ effects, meaning that we consider only that part of the variance of $Y$ which is solely explained by each predictor. For $X_1$, this unique proportion of the variance is the area labelled as $B$, and for $X_2$ it is the area labelled as $C$. The area labelled as $D$ is not uniquely attributable to either $X_1$ or $X_2$. Although it is not purely random variability of $Y$ -- in principle, it could be explained by _either_ $X_1$ or $X_2$ -- because it cannot be uniquely attributed to either $X_1$ or $X_2$, it will not contribute to a hypothesis test of the effect of $X_1$ or $X_2$. We will discuss this more when we consider the practical problem of _multicollinearity_ later on. 
+
 When MODEL R is an intercept-only model (i.e. a model without any predictors) and MODEL G a model with predictors, this estimate of the variance accounted for is often also denoted by $R^2$. In this case, $R^2$ reflects the proportion of the variance of the dependent variable $Y$ accounted for, or "explained", by the model as a whole. The $\eta^2$ is generally reserved to denote the proportion of variance explained by a single predictor.
 
 
@@ -338,7 +371,7 @@ In words, this implies the following assumptions for a multiple regression and/o
 1. __Normality__: the errors $\epsilon_i$ are Normal-distributed
 2. __Unbiasedness__: the mean of $\epsilon_i$ is 0. This means that the conditional means are indeed a linear function of the predictors, and that the model predictions are unbiased.
 3. __Homoscedasticity__: the errors $\epsilon_i$ have a constant variance $\sigma^2$ and thus also a constant standard deviation $\sigma$.
-4. __Independence__: any error term $\epsilon_i$ is independent of any other $\epsilon_j$ (for all $i \text{ and } j \neq i$). Independence here means that $p(\epsilon_j|\epsilon_i) = p(epsilon_j)$ for all $i \text{ and } j \neq i$
+4. __Independence__: any error term $\epsilon_i$ is independent of any other $\epsilon_j$ (for all $i \text{ and } j \neq i$). Independence here means that $p(\epsilon_j|\epsilon_i) = p(\epsilon_j)$ for all $i \text{ and } j \neq i$
 
 It is important to realise that the assumption of Normal-distributed errors does not necessarily translate in assuming that the dependent variable $Y$ is itself Normal-distributed. This will often to be the case. Not does the model require the predictors to be Normal-distributed. No assumption is made at all about the distribution of the predictors. 
 

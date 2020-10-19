@@ -53,11 +53,13 @@ write_GLM_equation <- function(mod, digits=NULL, include_sde = TRUE, dv_name, iv
     out <- paste0(out, format(coefs[idx],digits=digits))
     idx <- idx + 1
   }
-  for(i in idx:length(coefs)) {
-    if(i == 1) {
-      out <- paste0(out, ifelse(coefs[i] > 0,""," - "),format(abs(coefs[i]),digits=digits), " \\times \\texttt{", iv_names[ifelse(intercept_included, i - 1, i)], "}_i ")
-    } else {
-      out <- paste0(out, ifelse(coefs[i] > 0," + "," - "),format(abs(coefs[i]),digits=digits), " \\times \\texttt{", iv_names[ifelse(intercept_included, i - 1, i)], "}_i ")
+  if(intercept_included & length(coefs) > 1 | !intercept_included & length(coefs) > 0) {
+    for(i in idx:length(coefs)) {
+      if(i == 1) {
+        out <- paste0(out, ifelse(coefs[i] > 0,""," - "),format(abs(coefs[i]),digits=digits), " \\times \\texttt{", iv_names[ifelse(intercept_included, i - 1, i)], "}_i ")
+      } else {
+        out <- paste0(out, ifelse(coefs[i] > 0," + "," - "),format(abs(coefs[i]),digits=digits), " \\times \\texttt{", iv_names[ifelse(intercept_included, i - 1, i)], "}_i ")
+      }
     }
   }
   
