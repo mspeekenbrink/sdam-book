@@ -121,7 +121,7 @@ $$\begin{equation}
 \end{equation}$$
 the data can be represented in a three-dimensional space. In this space, the conditional means $\mu_{Y | X_{1,i}, X_{2,i}}$ can be represented as a __regression plane__. A visual representation is given below.
 
-```{r 3d-regression-plane, fig.cap='Three-dimensional representation of a regression model predicting Trump votes from hate groups and education level. By clicking on the image and moving your mouse, you should be able to rotate the image to explore it further. You can also click on the 'Play' button for an animation of such a rotation.", fig.align='center', cache=TRUE}
+```{r 3d-regression-plane, fig.cap="Three-dimensional representation of a regression model predicting Trump votes from hate groups and education level. By clicking on the image and moving your mouse, you should be able to rotate the image to explore it further. You can also click on the 'Play' button for an animation of such a rotation.", fig.align='center', cache=TRUE}
 library(rgl)
 #library(rglwidget)
 plot3d(x=dat$hate_groups_per_million, y=dat$percent_bachelors_degree_or_higher, z=dat$percent_Trump_votes, xlab="Hate groups", ylab="% bachelors degree or higher", zlab="% Trump votes", type = "s", col = "purple", size = 1)
@@ -239,7 +239,7 @@ F &= \frac{\frac{`r sum(residuals(modr)^2)` -  `r sum(residuals(modg)^2)`}{`r le
 \end{align}
 The critical value is the same as before, and hence we also reject this null hypothesis.
 
-To test whether the intercept $\beta_0 = 0$, we would compare MDOEL G to yet another MODEL R:
+To test whether the intercept $\beta_0 = 0$, we would compare MODEL G to yet another MODEL R:
 $$
 \begin{align}
 \text{MODEL R: } \quad \texttt{trump_votes}_i &= 0 + \beta_1 \times \texttt{hate_groups}_i + \beta_2 \times \texttt{education}_i + \epsilon_i \\
@@ -247,7 +247,7 @@ $$
 \end{align}
 $$  
 which is estimated as 
-$$`r modr <- lm(percent_Trump_votes ~ hate_groups_per_million + percent_bachelors_degree_or_higher - 1, data=dat); write_GLM_equation(modr,dv_name = "trump_votes", iv_names = c("hate_groups"), digits=4)`$$ 
+$$`r modr <- lm(percent_Trump_votes ~ hate_groups_per_million + percent_bachelors_degree_or_higher - 1, data=dat); write_GLM_equation(modr,dv_name = "trump_votes", iv_names = c("hate_groups","education"), digits=4)`$$ 
 with $\text{SSE}(R) = `r sum(coefficients(modr)^2)`$. The $F$ statistic is computed in the same way as before:
 \begin{align}
 F &= \frac{\frac{`r sum(residuals(modr)^2)` -  `r sum(residuals(modg)^2)`}{`r length(coef(modg))` - `r length(coef(modr))`}}{\frac{`r sum(residuals(modg)^2)`}{`r nrow(dat)` - `r length(coef(modg))`}} \\
@@ -259,9 +259,9 @@ We have collect all the test results in Table \@ref(tab:trump-multiple-regressio
 ```{r trump-multiple-regression-ANOVA-table}
 opts <- options()
 options(knitr.kable.NA = "")
-tmp <- cbind(estimate = c(coefficients(mod),Error=NA),car::Anova(mod, type=3))
-rownames(tab) <- c("Intercept","Hate groups per million", "% bachelors degree or higher")
-colnames(tab) <- c("$\\hat{\\beta}$","$\\text{SS}$", "$F$", "$P(\\geq \\lvert F \\rvert)$")
+tab <- cbind(estimate = c(coefficients(mod),Error=NA),car::Anova(mod, type=3))
+rownames(tab) <- c("Intercept","Hate groups per million", "% bachelors degree or higher","Error")
+colnames(tab) <- c("$\\hat{\\beta}$","$\\text{SS}$", "$\\text{df}$", "$F$",  "$P(\\geq \\lvert F \\rvert)$")
 knitr::kable(tab, caption = "Null-hypothesis significance tests by model comparisons and the F statistic.", escape = FALSE)
 options(opts)
 ```
@@ -269,7 +269,7 @@ options(opts)
 
 When performing such model comparisons, it is very important to remember that what we call MODEL G and MODEL R will depend on the null hypothesis tested. Generally, MODEL G will remain the same within the context of an analysis, but MODEL R will vary from test to test.
 
-## Partitioning variance and Sums of Squares
+## Partitioning and explaining variance
 
 Let's have another look at the formula for the $F$ statistic:
 
@@ -298,12 +298,15 @@ Each SSE term is itself related to an error variance, as the SSE is the sum of s
 	\draw (1.5,3) node {$Y$};
 	\draw (1.5,2.3) node {$A$};
 	\draw (1.1,1.6) node {$B$};
-	\draw (1.5,1.4) node {$C$};
-	\draw (1.9,1.6) node {$D$};
+	\draw (1.5,1.4) node {$D$};
+	\draw (1.9,1.6) node {$C$};
 
 \end{tikzpicture}	
 ```
 
+Proportional reduction in error
+$$\hat{\eta}^2 = \frac{\text{SSE}(R) - \text{SSE}(G)}{\text{SSE}(R)}$$
+When MODEL R is an intercept-only model (i.e. a model without any predictors) and MODEL G a model with predictors, this estimate of the variance accounted for is often also denoted by $R^2$. In this case, $R^2$ reflects the proportion of the variance of the dependent variable $Y$ accounted for, or "explained", by the model as a whole. The $\eta^2$ is generally reserved to denote the proportion of variance explained by a single predictor.
 
 
 
@@ -349,18 +352,110 @@ data.frame(predicted=predict(modg), residual=residuals(modg)) %>%
 ```
 
 For comparison, Figure shows two examples of predicted vs residual plots where the assumption of unbiasedness and homoscedasticity do not hold. 
-```{r trump-predicted-residual, fig.cap="Predicted vs residual plot, and a QQ plot, for MODEL G predicting Trump votes from hate groups and education level.", fig.show="hold", out.width="50%", fig.width=4,fig.height=4}
-tmod <- data.frame() 
-data.frame(predicted=predict(modg), residual=residuals(modg)) %>%
+```{r predicted-residual-for-violations-of-assumptions, fig.cap="Predicted vs residual plots for two cases where the assumptions of the GLM do not hold. In the plot of the left, the assumption of unbiasedness is violated. There is clearly a nonlinearity in the data, which result in the underprediction (positive residuals) for low and high predicted values, and an overprediction (negative residuals) for medium predicted values. In the plot on the right, the homoscedasticity assumption is violated. The variability of the residuals clearly increases as a function of the predicted values.", fig.show="hold", out.width="50%", fig.width=4,fig.height=4}
+set.seed(234786)
+tdat <- data.frame(x=runif(100,min=1,max=10))
+tdat$y <- (tdat$x - 5)^2 - 10 + rnorm(100,sd=2)
+tmod <- lm(y~x,data=tdat)
+data.frame(predicted=predict(tmod), residual=residuals(tmod)) %>%
   ggplot(aes(x=predicted,y=residual)) + geom_point() + geom_hline(yintercept = 0, lty=3)
-data.frame(predicted=predict(modg), residual=residuals(modg)) %>%
-  ggplot(aes(sample = residual)) + stat_qq() + stat_qq_line()
-```
 
+tdat <- data.frame(x=runif(100,min=1,max=10))
+tdat$y <- tdat$x + rnorm(100,sd=tdat$x^1.2)
+tmod <- lm(y~x,data=tdat)
+data.frame(predicted=predict(tmod), residual=residuals(tmod)) %>%
+  ggplot(aes(x=predicted,y=residual)) + geom_point() + geom_hline(yintercept = 0, lty=3)
+
+```
 
 ## Multicollinearity 
 
+```{tikz sse-partition-multicollinearity, device='svg', fig.cap="Partitioning the variance in a multiple regression model. Each circle represents the variance of a variable. Overlapping regions represent shared variability (e.g. covariance) between variables. ", out.width="60%"}
+\def\firstcircleA{(1.1,1.3) circle (1.75cm)}
+\def\secondcircleA{(2.9,1.3) circle (1.75cm)}
+\def\thirdcircleA{(2,1.7) circle (1.75cm)}
+
+\def\firstcircleB{(6.2,1) circle (1.75cm)}
+\def\secondcircleB{(6.8,1) circle (1.75cm)}
+\def\thirdcircleB{(6.5,2) circle (1.75cm)}
+
+\begin{tikzpicture}
+	\pgfsetxvec{\pgfpoint{2cm}{0cm}}
+	\pgfsetyvec{\pgfpoint{0cm}{2cm}}
+	\tikzstyle{every node}=[minimum size=.7cm]
+
+	\draw \firstcircleA;
+	\draw \secondcircleA;
+	\draw \thirdcircleA;
+	
+	\draw (0.2,0.2) node {$X_1$};
+	\draw (3.8,0.2) node {$X_2$};
+	\draw (2,3) node {$Y$};
+	\draw (2,2.3) node {$A$};
+	\draw (1.5,1.5) node {$B$};
+	\draw (2.5,1.5) node {$C$};
+
+	\draw \firstcircleB;
+	\draw \secondcircleB;
+	\draw \thirdcircleB;
+	
+	\draw (5.2,0.2) node {$X_1$};
+	\draw (7.8,0.2) node {$X_2$};
+	\draw (6.5,3) node {$Y$};
+	\draw (6.5,2.3) node {$A$};
+	\draw (5.95,1.6) node {$B$};
+	\draw (6.5,1.4) node {$D$};
+	\draw (7.05,1.6) node {$C$};
+
+\end{tikzpicture}	
+```
+
+
 ## Outliers
+
+When we analysed the data regarding Trump votes and hate groups up to now, we excluded the data from the District of Columbia (Washington D.C.), because, while it is not part of any US state, it is itself not a state either. If we had included the data from this district, the results would have been quite different. Figure \@ref(fig:scatterplot-trump-votes-hate-groups-all-data) shows the Trump votes and hate groups with the Distric of Columbia included. You can see that the data point for the District of Columnbia is far removed from all other data points. The District of Columbia has both a very high number of hate groups (`r trump2016[trump2016$state == "District of Columbia","hate_groups_per_million"]` per million citizens), and a low percentage of votes for Trump (`r trump2016[trump2016$state == "District of Columbia","percent_Trump_votes"]`%). This makes the data District of Columbia rather unusual when compared to the 50 states. The plot also shows the estimated regression line of a simple regression model (with hate groups as a single predictor) for all the data, and the data excluding the District of Columbia. After inclusion of the District of Columbia, the estimated relation goes from positive to negative!
+
+```{r scatterplot-trump-votes-hate-groups-all-data,fig.cap="Percentage of votes for Trump in the 2016 elections for 50 US states and the District of Columbia, as a function of the number of hate groups per 1 million citizens. The solid line is the estimated regression line for all data, and the dotted line the estimated regression line excluding the District of Columbia.", fig.align="center"}
+dat <- trump2016
+moda <- lm(percent_Trump_votes ~ hate_groups_per_million,data=dat)
+modb <- lm(percent_Trump_votes ~ hate_groups_per_million,data=subset(dat,state != "District of Columbia"))
+plt <- ggplot(dat,aes(x=hate_groups_per_million,y=percent_Trump_votes,name=state)) + geom_point() + xlab("Hate groups per million citizens") + ylab("% votes for Trump") + geom_abline(intercept = coefficients(moda)[1], slope = coefficients(moda)[2], alpha=.6, colour=viridis::viridis_pal()(1)[1]) + geom_abline(intercept = coefficients(modb)[1], slope = coefficients(modb)[2], lty=3, alpha=.6, colour=viridis::viridis_pal()(1)[1])
+if(knitr::is_html_output()) {
+  plotly::ggplotly(plt, tooltip=c("name","x","y"))
+} else {
+  plt
+}
+```
+
+When we estimate a multiple regression model for all the data, we obtain the results given in Table \@ref(tab:trump-multiple-regression-ANOVA-table-all-data). Instead of a significant positive relation between hate groups and Trump votes, we now find the slope is estimated close to 0, and not significant. Note that this estimated relation is not negative (as in Figure \@ref(fig:scatterplot-trump-votes-hate-groups-all-data)), which illustrates the fact that the unique relations determined in multiple regression models can differ substantially from the bivariate relations of simple regression models.
+
+```{r trump-multiple-regression-ANOVA-table-all-data}
+mod <- lm(percent_Trump_votes ~ hate_groups_per_million + percent_bachelors_degree_or_higher, data=dat)
+opts <- options()
+options(knitr.kable.NA = "")
+tab <- cbind(estimate = c(coefficients(mod),Error=NA),car::Anova(mod, type=3))
+rownames(tab) <- c("Intercept","Hate groups per million", "% bachelors degree or higher","Error")
+colnames(tab) <- c("$\\hat{\\beta}$","$\\text{SS}$", "$\\text{df}$", "$F$", "$P(\\geq \\lvert F \\rvert)$")
+knitr::kable(tab, caption = "Null-hypothesis significance tests by model comparisons and the F statistic.", escape = FALSE)
+options(opts)
+```
+
+The question now: how reasonable are these new results? When looking at all 50 states (excluding the District of Columbia), there appears to be rather good evidence for a positive relation between hate groups and Trump votes, whether assessing this relation in a simple regression model or in a multiple regression model where we control for the possible confounding effect of education level. That these results change dramatically after inclusion of a single additional data point indicates that this additional data point might be an __outlier__. An outlier can be rather imprecisely defined as an _unusual data point that does not follow the general trend of the rest of the data_. Clearly, the District of Columbia does not appear to follow the general trend in terms of Trump votes and hate groups. 
+
+```{r scatterplot-trump-votes-education-all-data,fig.cap="Percentage of votes for Trump in the 2016 elections for 50 US states and the District of Columbia, as a function of the percentage of citizens with a bachelors degree or higher. The solid line is the estimated regression line for all data, and the dotted line the estimated regression line excluding the District of Columbia."}
+moda <- lm(percent_Trump_votes ~ percent_bachelors_degree_or_higher,data=dat)
+modb <- lm(percent_Trump_votes ~ percent_bachelors_degree_or_higher,data=subset(dat,state != "District of Columbia"))
+plt <- ggplot(dat,aes(x=percent_bachelors_degree_or_higher,y=percent_Trump_votes,name=state)) + geom_point() + xlab("% bachelors degree or higher") + ylab("% votes for Trump") + geom_abline(intercept = coefficients(moda)[1], slope = coefficients(moda)[2], alpha=.8, colour = viridis::viridis_pal()(1)[1]) + geom_abline(intercept = coefficients(modb)[1], slope = coefficients(modb)[2], lty=3, alpha=.8, colour=viridis::viridis_pal()(1)[1])
+if(knitr::is_html_output()) {
+  plotly::ggplotly(plt, tooltip=c("name","x","y"))
+} else {
+  plt
+}
+```
+
+Figure \@ref(fig:scatterplot-trump-votes-education-all-data) shows the relation between Trump votes and education level for all the data. While the District of Columbia is again far removed from the other data points, it doesn't seem to "break" the negative relation between education level and Trump votes. Indeed, the estimated regression lines for a simple regression model predicting Trump votes from education level don't differ all that much whether including the District of Columbia or not.
+
+
 
 <!-- 
 ## Polynomial regression
