@@ -283,7 +283,7 @@ F &= \frac{\frac{`r sum(residuals(modr)^2)` -  `r sum(residuals(modg)^2)`}{`r le
 &= \frac{`r  (sum(residuals(modr)^2) -  sum(residuals(modg)^2))/(length(coef(modg)) - length(coef(modr)))`}{`r sum(residuals(modg)^2)/(nrow(dat) - length(coef(modg)))`} \\
 &= `r  ((sum(residuals(modr)^2) -  sum(residuals(modg)^2))/(length(coef(modg)) - length(coef(modr))))/(sum(residuals(modg)^2)/(nrow(dat) - length(coef(modg))))`
 \end{align}
-The critical value is different this time, because the degrees of freedom are now $\text{df}_1 = 3 - 1 = 2$ and $\text{df} = `r nrow(dat)` - 3 = `r nrow(dat) - 3`$, and equals `r qf(.95, 2, r nrow(dat) - 3)`. Clearly, the computed $F$ value is well above the critical value, hence we reject the null hypothesis (i.e. rerect MODEL R in favour of MODEL G).
+The critical value is different this time, because the degrees of freedom are now $\text{df}_1 = 3 - 1 = 2$ and $\text{df} = `r nrow(dat)` - 3 = `r nrow(dat) - 3`$, and equals `r qf(.95, 2, nrow(dat) - 3)`. Clearly, the computed $F$ value is well above the critical value, hence we reject the null hypothesis (i.e. rerect MODEL R in favour of MODEL G).
 
 
 ## Partitioning and explaining variance
@@ -334,12 +334,12 @@ Because $0 \leq \text{SSE}(G) \leq \text{SSE}(R)$, the value of $\hat{\eta}^2$ i
 \end{tikzpicture}	
 ```
 
-In this Figure, the variance of $Y$ is represented by the circle labelled $Y$, and the variance of the predictors is represented by the circles labelled $X_1$ and $X_2$ respectively. Overlap between the circles represents shared variance (e.g. covariance) between the variables. First, let's consider a simple regression model where $X_1$ is the sole predictor of $Y$. The proportion of variance of $Y$ that this model accounts for is the total shared area between $X_1$ and $Y$, which is the sum of the regions labelled as $B$ and $D$. Similarly, if we'd consider a simple regression model where $X_2$ is the sole predictor of $Y$, the proportion of variance of $Y$ that this model accounts for is the total shared area between $X_2$ and $Y$, which is the sum of the regions labelled as $C$ and $D$. If we consider a multiple regression model with both $X_1$ and $X_2$ as predictors of $Y$, the proportion of variance of $Y$ that this model accounts for is the total shared area between $X_1$, $X_2$ and $Y$, which is the sum of the regions labelled as $B$, $C$, and $D$. The area labelled as $A$ is variance of $Y$ that cannot be accounted for by $X_1$ or $X_2$, and is the SSE (the random, unexplainable part) of a multiple regression model which includes both $X_1$ and $X_2$ as predictors.  
+In this Figure, the variance of $Y$ is represented by the circle labelled $Y$, and the variance of the predictors is represented by the circles labelled $X_1$ and $X_2$ respectively. Overlap between the circles represents shared variance (e.g. covariance) between the variables. First, let's consider a simple regression model where $X_1$ is the sole predictor of $Y$. The proportion of variance of $Y$ that this model accounts for is the total shared area between $X_1$ and $Y$, which is the sum of the regions labelled as $B$ and $D$. Similarly, if we'd consider a simple regression model where $X_2$ is the sole predictor of $Y$, the proportion of variance of $Y$ that this model accounts for is the total shared area between $X_2$ and $Y$, which is the sum of the regions labelled as $C$ and $D$. If we consider a multiple regression model with both $X_1$ and $X_2$ as predictors of $Y$, the proportion of variance of $Y$ that this model accounts for is the total shared area between $X_1$, $X_2$ and $Y$, which is the sum of the regions labelled as $B$, $C$, and $D$. The area labelled as $A$ is variance of $Y$ that cannot be accounted for by $X_1$ or $X_2$, and is the SSE (the random, unexplainable part) of a multiple regression model which includes both $X_1$ and $X_2$ as predictors. When MODEL R is an intercept-only model (i.e. a model without any predictors) and MODEL G a model with predictors, the estimate of the variance accounted for is often denoted by $R^2$. In this case, $R^2$ reflects the proportion of the variance of the dependent variable $Y$ accounted for, or "explained", by the model as a whole. The $\eta^2$ is generally reserved to denote the proportion of variance explained by a single predictor.
 
 
 Note that the area labelled as $D$ is "explained" by both $X_1$ and $X_2$ when each is used as a sole predictor of $Y$. In a multiple regression model however, the effects of predictors are _unique_ effects, meaning that we consider only that part of the variance of $Y$ which is solely explained by each predictor. For $X_1$, this unique proportion of the variance is the area labelled as $B$, and for $X_2$ it is the area labelled as $C$. The area labelled as $D$ is not uniquely attributable to either $X_1$ or $X_2$. Although it is not purely random variability of $Y$ -- in principle, it could be explained by _either_ $X_1$ or $X_2$ -- because it cannot be uniquely attributed to either $X_1$ or $X_2$, it will not contribute to a hypothesis test of the effect of $X_1$ or $X_2$. We will discuss this more when we consider the practical problem of _multicollinearity_ later on. 
 
-When MODEL R is an intercept-only model (i.e. a model without any predictors) and MODEL G a model with predictors, this estimate of the variance accounted for is often also denoted by $R^2$. In this case, $R^2$ reflects the proportion of the variance of the dependent variable $Y$ accounted for, or "explained", by the model as a whole. The $\eta^2$ is generally reserved to denote the proportion of variance explained by a single predictor.
+
 
 
 
@@ -401,7 +401,9 @@ data.frame(predicted=predict(tmod), residual=residuals(tmod)) %>%
 
 ```
 
-## Multicollinearity 
+## Multicollinearity
+
+Come back later for this...
 
 ```{tikz sse-partition-multicollinearity, device='svg', fig.cap="Partitioning the variance in a multiple regression model. Each circle represents the variance of a variable. Overlapping regions represent shared variability (e.g. covariance) between variables. ", out.width="60%"}
 \def\firstcircleA{(1.1,1.3) circle (1.75cm)}
@@ -487,6 +489,8 @@ if(knitr::is_html_output()) {
 ```
 
 Figure \@ref(fig:scatterplot-trump-votes-education-all-data) shows the relation between Trump votes and education level for all the data. While the District of Columbia is again far removed from the other data points, it doesn't seem to "break" the negative relation between education level and Trump votes. Indeed, the estimated regression lines for a simple regression model predicting Trump votes from education level don't differ all that much whether including the District of Columbia or not.
+
+So, sometimes "unusual" data points can have a large influence on model estimates, and sometimes not. There are several measures which aim to determine undue influence of observations on the model estimates, such as the _leverage_, Studentized residuals, Studentized deleted residuals, and Cook's distance. 
 
 
 

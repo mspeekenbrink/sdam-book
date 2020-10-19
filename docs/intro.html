@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 1 Introduction | Statistics: data analysis and modelling</title>
   <meta name="description" content="A book about statistics for data analysis, with a main focus on statistical modelling." />
-  <meta name="generator" content="bookdown 0.20 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 1 Introduction | Statistics: data analysis and modelling" />
   <meta property="og:type" content="book" />
@@ -24,7 +24,7 @@
 <meta name="author" content="Maarten Speekenbrink" />
 
 
-<meta name="date" content="2020-10-16" />
+<meta name="date" content="2020-10-19" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -51,7 +51,7 @@
 
 
 <script src="book_assets/accessible-code-block-0.0.1/empty-anchor.js"></script>
-<script src="book_assets/htmlwidgets-1.5.1/htmlwidgets.js"></script>
+<script src="book_assets/htmlwidgets-1.5.2/htmlwidgets.js"></script>
 <script src="book_assets/viz-1.8.2/viz.js"></script>
 <link href="book_assets/DiagrammeR-styles-0.2/styles.css" rel="stylesheet" />
 <script src="book_assets/grViz-binding-1.0.6.1/grViz.js"></script>
@@ -61,6 +61,13 @@
 <script src="book_assets/crosstalk-1.1.0.1/js/crosstalk.min.js"></script>
 <link href="book_assets/plotly-htmlwidgets-css-1.52.2/plotly-htmlwidgets.css" rel="stylesheet" />
 <script src="book_assets/plotly-main-1.52.2/plotly-latest.min.js"></script>
+<link href="book_assets/combineWidgetStyle-0.1/combineWidgets.css" rel="stylesheet" />
+<script src="book_assets/combineWidgets-binding-0.10.1/combineWidgets.js"></script>
+<link href="book_assets/rglwidgetClass-2/rgl.css" rel="stylesheet" />
+<script src="book_assets/rglwidgetClass-2/rglClass.src.js"></script>
+<script src="book_assets/CanvasMatrix4-2016/CanvasMatrix.src.js"></script>
+<script src="book_assets/rglWebGL-binding-0.100.54/rglWebGL.js"></script>
+<script src="book_assets/rglPlayer-binding-0.100.54/rglPlayer.js"></script>
 
 
 
@@ -112,7 +119,7 @@
 <li class="chapter" data-level="2.5.3" data-path="statistical-modelling.html"><a href="statistical-modelling.html#testing-whether-paul-was-guessing"><i class="fa fa-check"></i><b>2.5.3</b> Testing whether Paul was guessing</a></li>
 </ul></li>
 <li class="chapter" data-level="2.6" data-path="statistical-modelling.html"><a href="statistical-modelling.html#hypothesis-testing-directly-with-the-binomial-distribution"><i class="fa fa-check"></i><b>2.6</b> Hypothesis testing directly with the Binomial distribution</a></li>
-<li class="chapter" data-level="2.7" data-path="intro.html"><a href="intro.html#summary"><i class="fa fa-check"></i><b>2.7</b> Summary</a></li>
+<li class="chapter" data-level="2.7" data-path="statistical-modelling.html"><a href="statistical-modelling.html#summary-1"><i class="fa fa-check"></i><b>2.7</b> Summary</a></li>
 <li class="chapter" data-level="2.8" data-path="statistical-modelling.html"><a href="statistical-modelling.html#epilogue"><i class="fa fa-check"></i><b>2.8</b> Epilogue</a></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="a-model-with-a-mean-one-sample-t-test.html"><a href="a-model-with-a-mean-one-sample-t-test.html"><i class="fa fa-check"></i><b>3</b> A model with a mean (one sample t-test)</a><ul>
@@ -132,7 +139,7 @@
 <li class="chapter" data-level="3.4.2" data-path="a-model-with-a-mean-one-sample-t-test.html"><a href="a-model-with-a-mean-one-sample-t-test.html#the-model-comparison-way"><i class="fa fa-check"></i><b>3.4.2</b> The model comparison way</a></li>
 </ul></li>
 <li class="chapter" data-level="3.5" data-path="a-model-with-a-mean-one-sample-t-test.html"><a href="a-model-with-a-mean-one-sample-t-test.html#confidence-intervals"><i class="fa fa-check"></i><b>3.5</b> Confidence intervals</a></li>
-<li class="chapter" data-level="3.6" data-path="a-model-with-a-mean-one-sample-t-test.html"><a href="a-model-with-a-mean-one-sample-t-test.html#assumptions"><i class="fa fa-check"></i><b>3.6</b> Assumptions</a></li>
+<li class="chapter" data-level="3.6" data-path="a-model-with-a-mean-one-sample-t-test.html"><a href="a-model-with-a-mean-one-sample-t-test.html#sec:02-assumptions"><i class="fa fa-check"></i><b>3.6</b> Assumptions</a></li>
 <li class="chapter" data-level="3.7" data-path="a-model-with-a-mean-one-sample-t-test.html"><a href="a-model-with-a-mean-one-sample-t-test.html#the-central-limit-theorem"><i class="fa fa-check"></i><b>3.7</b> The Central Limit Theorem</a><ul>
 <li class="chapter" data-level="3.7.1" data-path="a-model-with-a-mean-one-sample-t-test.html"><a href="a-model-with-a-mean-one-sample-t-test.html#the-central-limit-theorem-in-action"><i class="fa fa-check"></i><b>3.7.1</b> The Central Limit Theorem in action</a></li>
 </ul></li>
@@ -149,12 +156,16 @@
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="multiple-regression.html"><a href="multiple-regression.html"><i class="fa fa-check"></i><b>5</b> Multiple regression</a><ul>
-<li class="chapter" data-level="5.1" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#the-model"><i class="fa fa-check"></i><b>5.1</b> The model</a></li>
-<li class="chapter" data-level="5.2" data-path="statistical-modelling.html"><a href="statistical-modelling.html#estimation"><i class="fa fa-check"></i><b>5.2</b> Estimation</a></li>
-<li class="chapter" data-level="5.3" data-path="multiple-regression.html"><a href="multiple-regression.html#inference"><i class="fa fa-check"></i><b>5.3</b> Inference</a></li>
-<li class="chapter" data-level="5.4" data-path="multiple-regression.html"><a href="multiple-regression.html#multicollinearity"><i class="fa fa-check"></i><b>5.4</b> Multicollinearity</a></li>
-<li class="chapter" data-level="5.5" data-path="multiple-regression.html"><a href="multiple-regression.html#polynomial-regression"><i class="fa fa-check"></i><b>5.5</b> Polynomial regression</a></li>
-<li class="chapter" data-level="5.6" data-path="intro.html"><a href="intro.html#summary"><i class="fa fa-check"></i><b>5.6</b> Summary</a></li>
+<li class="chapter" data-level="5.1" data-path="multiple-regression.html"><a href="multiple-regression.html#trump-votes-and-hate-groups-again"><i class="fa fa-check"></i><b>5.1</b> Trump, votes, and hate groups (again)</a><ul>
+<li class="chapter" data-level="5.1.1" data-path="multiple-regression.html"><a href="multiple-regression.html#controlling-for-education-level"><i class="fa fa-check"></i><b>5.1.1</b> Controlling for education level</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="multiple-regression.html"><a href="multiple-regression.html#the-multiple-regression-model"><i class="fa fa-check"></i><b>5.2</b> The multiple regression model</a></li>
+<li class="chapter" data-level="5.3" data-path="multiple-regression.html"><a href="multiple-regression.html#sec:04b-estimation"><i class="fa fa-check"></i><b>5.3</b> Estimation</a></li>
+<li class="chapter" data-level="5.4" data-path="multiple-regression.html"><a href="multiple-regression.html#sec:04b-inference"><i class="fa fa-check"></i><b>5.4</b> Inference</a></li>
+<li class="chapter" data-level="5.5" data-path="multiple-regression.html"><a href="multiple-regression.html#partitioning-and-explaining-variance"><i class="fa fa-check"></i><b>5.5</b> Partitioning and explaining variance</a></li>
+<li class="chapter" data-level="5.6" data-path="multiple-regression.html"><a href="multiple-regression.html#sec:04b-assumptions"><i class="fa fa-check"></i><b>5.6</b> Assumptions</a></li>
+<li class="chapter" data-level="5.7" data-path="multiple-regression.html"><a href="multiple-regression.html#multicollinearity"><i class="fa fa-check"></i><b>5.7</b> Multicollinearity</a></li>
+<li class="chapter" data-level="5.8" data-path="multiple-regression.html"><a href="multiple-regression.html#outliers"><i class="fa fa-check"></i><b>5.8</b> Outliers</a></li>
 </ul></li>
 <li class="chapter" data-level="6" data-path="moderation-and-mediation.html"><a href="moderation-and-mediation.html"><i class="fa fa-check"></i><b>6</b> Moderation and mediation</a><ul>
 <li class="chapter" data-level="6.1" data-path="moderation-and-mediation.html"><a href="moderation-and-mediation.html#moderated-regression"><i class="fa fa-check"></i><b>6.1</b> Moderated regression</a></li>
