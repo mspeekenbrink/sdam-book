@@ -54,7 +54,7 @@ When we estimate a regression model predicting Trump votes from education level 
 $$\texttt{Trump_votes}_i = `r coefficients(mod1)[1]` `r ifelse(coefficients(mod1)[2] >= 0, "+", "-")` `r abs(coefficients(mod1)[2])` \times \texttt{education}_i + \hat{\epsilon}_{\texttt{votes},i}$$
 and for the hate groups we obtain
 $$\texttt{hate_groups}_i = `r coefficients(mod2)[1]` `r ifelse(coefficients(mod1)[2] >= 0, "+", "-")` `r abs(coefficients(mod2)[2])` \times \texttt{education}_i + \hat{\epsilon}_{\texttt{hate},i}$$
-Note that I'm labelling the error terms for both models with a subscript (either $\texttt{votes}$ or $\texttt{hate}$) to denote these are the residual terms for a model predicting Trump votes and hate groups from education levels respectively. Also, I'm adding the hat above them to indicate that these are not the "true errors" (from a model with the true values of the slope and intercept) but rather estimates of these resulting from using estimated parameters. The residuals, as well as the estimated regression lines, are depicted in in Figure \@ref(fig:regressions-controlling-for-education). The slope of $\texttt{education}_i$ is significant in both models. In the model for Trump votes, $\hat{\beta}_\texttt{education} = `r tab1[2,1]`$, `r apa_print(mod1)$statistic$percent_bachelors_degree_or_higher`. In the model for hate groups, $\hat{\beta}_\texttt{education} = `r tab2[2,1]`$, `r apa_print(mod2)$statistic$percent_bachelors_degree_or_higher`.
+Note that I'm labelling the error terms for both models with a subscript (either $\texttt{votes}$ or $\texttt{hate}$) to denote these are the residual terms for a model predicting Trump votes and hate groups from education levels respectively. Also, I'm adding the hat above them to indicate that these are not the "true errors" (from a model with the true values of the slope and intercept) but rather estimates of these resulting from using estimated parameters. The residuals, as well as the estimated regression lines, are depicted in Figure \@ref(fig:regressions-controlling-for-education). The slope of $\texttt{education}_i$ is significant in both models. In the model for Trump votes, $\hat{\beta}_\texttt{education} = `r tab1[2,1]`$, `r apa_print(mod1)$statistic$percent_bachelors_degree_or_higher`. In the model for hate groups, $\hat{\beta}_\texttt{education} = `r tab2[2,1]`$, `r apa_print(mod2)$statistic$percent_bachelors_degree_or_higher`.
 This thus shows a reliable relation between education level and Trump votes, and between education level and hate groups, which is supportive of the idea of a common cause. However, significance is not a prerequisite to statistically control for a third variable.
 
 ```{r regressions-controlling-for-education, fig.show="hold", out.width="50%", fig.width=5, fig.height=4, fig.cap="Predicting Trump votes and hate groups by linear regression models with education level as predictor. The residuals of each model are depicted as vertical lines from the observations to the regression line."}
@@ -74,7 +74,7 @@ tdat <- data.frame(res_trump_vote=residuals(mod1), res_hate_groups = residuals(m
 mod3 <- lm(res_trump_vote ~ res_hate_groups, data=tdat)
 ```
 
-The regression line in both models represents the variation in the dependent variable (Trump votes and hate groups) that is dependent on education level. In both models, the error term $\epsilon$ is assumed to be completely independent from the predictor. Hence, these are the aspects of Trump votes and hate groups that cannot be explained by education level. To assess whether there is a relation between these residual terms, which would indicate a relation between Trump votes and hate groups which is independent from education level, we can estimate another linear regression model
+The regression line in both models represents the variation in the dependent variable (Trump votes and hate groups) that is dependent on education level. In both models, the error term $\epsilon$ is assumed to be completely independent from the predictor. Hence, these are the aspects of Trump votes and hate groups that cannot be explained by education level. To assess whether there is a relation between these residual terms, which would indicate a relation between Trump votes and hate groups that is independent from education level, we can estimate another linear regression model
 $$
 \begin{equation}
 \hat{\epsilon}_{\texttt{votes},i}  = 0 + `r coefficients(mod3)[2]` \times \hat{\epsilon}_{\texttt{hate},i} + \hat{\epsilon}_i
@@ -192,7 +192,7 @@ $$\hat{\epsilon}_{\text{vote},i} + \beta_0 + \beta_1 \times \hat{\epsilon}_{\tex
 
 ## Inference {#sec:04b-inference}
 
-Testing hypotheses regarding the parameters of multiple regression models is analogous to testing the parameters of simple regression models. So one approach us to look at the sampling distribution of the estimates under the null hypothesis and compute the appropriate $t$ statistic. Testing, for each parameter the null hypothesis $H_0: \beta_j = 0$, where $j = 0,\ldots,2$, we obtain the results given in \@ref(tab:t-test-results-multiple-regression-table).
+Testing hypotheses regarding the parameters of multiple regression models is analogous to testing the parameters of simple regression models. So one approach is to look at the sampling distribution of the estimates under the null hypothesis and compute the appropriate $t$ statistic. Testing, for each parameter, the null hypothesis $H_0: \beta_j = 0$, where $j = 0,\ldots,2$, we obtain the results given in \@ref(tab:t-test-results-multiple-regression-table).
 ```{r t-test-results-multiple-regression-table}
 tab <- summary(mod)$coefficients
 rownames(tab) <- c("Intercept","Hate groups per million", "% bachelors degree or higher")
@@ -268,14 +268,14 @@ options(opts)
 
 When performing such model comparisons, it is very important to remember that what we call MODEL G and MODEL R will depend on the null hypothesis tested. Generally, MODEL G will remain the same within the context of an analysis, but MODEL R will vary from test to test.
 
-There is one more comparison that we could perform, namely to compare MODEL G to a MODEL R without any predictors. This is a so-called __omnibus test__ of the null hypothesis about two parameters simultaneously, namely $H_0: \beta_1 = 0 \text { and } \beta_2 = 0$. This results in another vesrion of the restricted MODEL R:
+There is one more comparison that we could perform, namely to compare MODEL G to a MODEL R without any predictors. This is a so-called __omnibus test__ of the null hypothesis about two parameters simultaneously, namely $H_0: \beta_1 = 0 \text { and } \beta_2 = 0$. This results in another version of the restricted MODEL R:
 $$
 \begin{align}
 \text{MODEL R: } \quad \texttt{trump_votes}_i &= \beta_0 +  0 \times \texttt{hate_groups}_i + 0 \times \texttt{education}_i + \epsilon_i \\
 &= \beta_0 + \epsilon_i
 \end{align}
 $$  
-This is the like the alternative model of the one-sample t-test we considered earlier. Here, the model is estimated as 
+This is like the alternative model of the one-sample t-test we considered earlier. Here, the model is estimated as 
 $$`r modr <- lm(percent_Trump_votes ~ 1, data=dat); write_GLM_equation(modr,dv_name = "trump_votes", digits=4)`$$ 
 with an associated $\text{SSE}(R) = `r sum(residuals(modr)^2)`$. The $F$ statistic is then computed as 
 \begin{align}
@@ -283,7 +283,7 @@ F &= \frac{\frac{`r sum(residuals(modr)^2)` -  `r sum(residuals(modg)^2)`}{`r le
 &= \frac{`r  (sum(residuals(modr)^2) -  sum(residuals(modg)^2))/(length(coef(modg)) - length(coef(modr)))`}{`r sum(residuals(modg)^2)/(nrow(dat) - length(coef(modg)))`} \\
 &= `r  ((sum(residuals(modr)^2) -  sum(residuals(modg)^2))/(length(coef(modg)) - length(coef(modr))))/(sum(residuals(modg)^2)/(nrow(dat) - length(coef(modg))))`
 \end{align}
-The critical value is different this time, because the degrees of freedom are now $\text{df}_1 = 3 - 1 = 2$ and $\text{df} = `r nrow(dat)` - 3 = `r nrow(dat) - 3`$, and equals `r qf(.95, 2, nrow(dat) - 3)`. Clearly, the computed $F$ value is well above the critical value, hence we reject the null hypothesis (i.e. rerect MODEL R in favour of MODEL G).
+The critical value is different this time, because the degrees of freedom are now $\text{df}_1 = 3 - 1 = 2$ and $\text{df} = `r nrow(dat)` - 3 = `r nrow(dat) - 3`$, and equals `r qf(.95, 2, nrow(dat) - 3)`. Clearly, the computed $F$ value is well above the critical value, hence we reject the null hypothesis (i.e. reject MODEL R in favour of MODEL G).
 
 
 ## Partitioning and explaining variance
@@ -305,7 +305,7 @@ So the SSE of a regression model without predictors is equal to $n$ times the sa
 \begin{equation}
 \hat{\eta}^2 = \frac{\text{SSE}(R) - \text{SSE}(G)}{\text{SSE}(R)}
 (\#eq:definition-eta-squared-glm)
-\end[equation}
+\end{equation}
 Because $0 \leq \text{SSE}(G) \leq \text{SSE}(R)$, the value of $\hat{\eta}^2$ is between 0 and 1 (as a proportion should be). Figure \@ref(fig:sse-partition) depicts such "proportions of variance explained" for a situation with two predictors ($X_1$ and $X_2$) of a dependent variable $Y$.
 
 ```{tikz sse-partition, device='svg', fig.cap="Partitioning the variance in a multiple regression model. Each circle represents the variance of a variable. Overlapping regions represent shared variability (e.g. covariance) between variables. ", out.width="50%"}
@@ -366,16 +366,16 @@ Note that the area labelled as $D$ is "explained" by both $X_1$ and $X_2$ when e
 The assumptions of the multiple regression model, and with that any of the versions of the General Linear Model we discuss, are all really about the errors, which are assumed to be independently and identically distributed:
 $$\epsilon_i \sim \mathbf{Normal}(0, \sigma)$$
 
-In words, this implies the following assumptions for a multiple regression and/or GLM:
+In other words, this implies the following assumptions for a multiple regression and/or GLM:
 
 1. __Normality__: the errors $\epsilon_i$ are Normal-distributed
 2. __Unbiasedness__: the mean of $\epsilon_i$ is 0. This means that the conditional means are indeed a linear function of the predictors, and that the model predictions are unbiased.
 3. __Homoscedasticity__: the errors $\epsilon_i$ have a constant variance $\sigma^2$ and thus also a constant standard deviation $\sigma$.
 4. __Independence__: any error term $\epsilon_i$ is independent of any other $\epsilon_j$ (for all $i \text{ and } j \neq i$). Independence here means that $p(\epsilon_j|\epsilon_i) = p(\epsilon_j)$ for all $i \text{ and } j \neq i$
 
-It is important to realise that the assumption of Normal-distributed errors does not necessarily translate in assuming that the dependent variable $Y$ is itself Normal-distributed. This will often to be the case. Not does the model require the predictors to be Normal-distributed. No assumption is made at all about the distribution of the predictors. 
+It is important to realise that the assumption of Normal-distributed errors does not necessarily translate in assuming that the dependent variable $Y$ is itself Normal-distributed. This will often not be the case. Nor does the model require the predictors to be Normal-distributed. No assumption is made at all about the distribution of the predictors. 
 
-In Section \@ref(sec:02-assumptions) we discussed some methods to assess the assumption of Normality (i.e. histograms, QQ-plots and statistical tests such as the Shapiro-Wilk test). The assumption of unbiasedness and homoscedasticity is generally assessed visually with a so-called predicted-ny-residual plot. This plot (see Figure \@ref(fig:trump-predicted-residual)) depicts the residuals as a function of the model predictions (i.e. the estimated conditional means). The unbiasedness assumption implies that the for each predicted value $\hat{Y}$ (i.e. each conditional mean), the residual or error terms are scattered around 0. For instance, it should _not_ be the case that for relatively low and high values of the predictions, the errors are generally above 0, while for medium values of the predictions, the errors are generally below 0. Such a pattern would be indicative of biased predictions and a likely non-linear relation between predictors and the dependent variable. The homoscedasticity assumption implies that the spread of the residuals is equal for each predicted value $\hat{Y}$. Looking at the predicted vs residual plot in Figure \@ref(fig:trump-predicted-residual), there is no clear indication that either assumption is violated. In addition, the QQ-plot indicates that the expected and sample quantiles do not differ radically, at least for the middle quantiles. Note that at the extremes (low and high quantiles), you will generally find more variable results, as quantiles in the tails of a distribution are less reliable.
+In Section \@ref(sec:02-assumptions) we discussed some methods to assess the assumption of Normality (i.e. histograms, QQ-plots and statistical tests such as the Shapiro-Wilk test). The assumption of unbiasedness and homoscedasticity is generally assessed visually with a so-called predicted-by-residual plot. This plot (see Figure \@ref(fig:trump-predicted-residual)) depicts the residuals as a function of the model predictions (i.e. the estimated conditional means). The unbiasedness assumption implies that for each predicted value $\hat{Y}$ (i.e. each conditional mean), the residual or error terms are scattered around 0. For instance, it should _not_ be the case that for relatively low and high values of the predictions, the errors are generally above 0, while for medium values of the predictions, the errors are generally below 0. Such a pattern would be indicative of biased predictions and a likely non-linear relation between predictors and the dependent variable. The homoscedasticity assumption implies that the spread of the residuals is equal for each predicted value $\hat{Y}$. Looking at the predicted vs residual plot in Figure \@ref(fig:trump-predicted-residual), there is no clear indication that either assumption is violated. In addition, the QQ-plot indicates that the expected and sample quantiles do not differ radically, at least for the middle quantiles. Note that at the extremes (low and high quantiles), you will generally find more variable results, as quantiles in the tails of a distribution are less reliable.
 
 ```{r trump-predicted-residual, fig.cap="Predicted vs residual plot, and a QQ plot, for MODEL G predicting Trump votes from hate groups and education level.", fig.show="hold", out.width="50%", fig.width=4,fig.height=4}
 data.frame(predicted=predict(modg), residual=residuals(modg)) %>%
@@ -384,7 +384,7 @@ data.frame(predicted=predict(modg), residual=residuals(modg)) %>%
   ggplot(aes(sample = residual)) + stat_qq() + stat_qq_line()
 ```
 
-For comparison, Figure shows two examples of predicted vs residual plots where the assumption of unbiasedness and homoscedasticity do not hold. 
+For comparison, Figure \@ref(fig:predicted-residual-for-violations-of-assumptions) shows two examples of predicted vs residual plots where the assumption of unbiasedness and homoscedasticity do not hold. 
 ```{r predicted-residual-for-violations-of-assumptions, fig.cap="Predicted vs residual plots for two cases where the assumptions of the GLM do not hold. In the plot of the left, the assumption of unbiasedness is violated. There is clearly a nonlinearity in the data, which result in the underprediction (positive residuals) for low and high predicted values, and an overprediction (negative residuals) for medium predicted values. In the plot on the right, the homoscedasticity assumption is violated. The variability of the residuals clearly increases as a function of the predicted values.", fig.show="hold", out.width="50%", fig.width=4,fig.height=4}
 set.seed(234786)
 tdat <- data.frame(x=runif(100,min=1,max=10))
@@ -475,7 +475,7 @@ knitr::kable(tab, caption = "Null-hypothesis significance tests by model compari
 options(opts)
 ```
 
-The question now: how reasonable are these new results? When looking at all 50 states (excluding the District of Columbia), there appears to be rather good evidence for a positive relation between hate groups and Trump votes, whether assessing this relation in a simple regression model or in a multiple regression model where we control for the possible confounding effect of education level. That these results change dramatically after inclusion of a single additional data point indicates that this additional data point might be an __outlier__. An outlier can be rather imprecisely defined as an _unusual data point that does not follow the general trend of the rest of the data_. Clearly, the District of Columbia does not appear to follow the general trend in terms of Trump votes and hate groups. 
+The question now is: how reasonable are these new results? When looking at all 50 states (excluding the District of Columbia), there appears to be rather good evidence for a positive relation between hate groups and Trump votes, whether assessing this relation in a simple regression model or in a multiple regression model where we control for the possible confounding effect of education level. That these results change dramatically after inclusion of a single additional data point indicates that this additional data point might be an __outlier__. An outlier can be rather imprecisely defined as an _unusual data point that does not follow the general trend of the rest of the data_. Clearly, the District of Columbia does not appear to follow the general trend in terms of Trump votes and hate groups. 
 
 ```{r scatterplot-trump-votes-education-all-data,fig.cap="Percentage of votes for Trump in the 2016 elections for 50 US states and the District of Columbia, as a function of the percentage of citizens with a bachelors degree or higher. The solid line is the estimated regression line for all data, and the dotted line the estimated regression line excluding the District of Columbia."}
 moda <- lm(percent_Trump_votes ~ percent_bachelors_degree_or_higher,data=dat)
@@ -488,7 +488,7 @@ if(knitr::is_html_output()) {
 }
 ```
 
-Figure \@ref(fig:scatterplot-trump-votes-education-all-data) shows the relation between Trump votes and education level for all the data. While the District of Columbia is again far removed from the other data points, it doesn't seem to "break" the negative relation between education level and Trump votes. Indeed, the estimated regression lines for a simple regression model predicting Trump votes from education level don't differ all that much whether including the District of Columbia or not.
+Figure \@ref(fig:scatterplot-trump-votes-education-all-data) shows the relation between Trump votes and education level for all the data. While the District of Columbia is again far removed from the other data points, it doesn't seem to "break" the negative relation between education level and Trump votes. Indeed, the estimated regression lines for a simple regression model predicting Trump votes from education level don't differ all that much whether we include the District of Columbia or not.
 
 So, sometimes "unusual" data points can have a large influence on model estimates, and sometimes not. Outliers which do not affect the models estimates much are of relatively little concern. However, outliers which have an undue influence on the model estimates are better removed from the dataset. You don't generally want the results of an analysis to depend largely on a single observation (it just wouldn't  be fair to the other data points). For an observation to have a large effect on the model estimates, it generally has to have values on the predictor variables which are far from the average, and a value on the dependent variable which is far removed from the true regression plane (i.e. the true residual $\epsilon_i$ is large). If an observation has values on the predictor variables which are close to other observations, then those other observations generally reduce the impact of the outlier, because they will have values on the dependent variable which are not unusual (thus "pulling" the model estimates towards them and with that towards the true values). If an observation has a value on the dependent variable which is not far removed from the true regression plane, then it will not bias the solution either.
 
