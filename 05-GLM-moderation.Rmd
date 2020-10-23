@@ -57,7 +57,7 @@ modg <- lm(other_like ~ other_attr + other_intel + other_fun, data=speeddate)
 tab <- summary(modg)$coefficients
 rownames(tab) <- c("Intercept","Attractiveness","Intelligence","Fun")
 colnames(tab) <- c("$\\hat{\\beta}$","$\\text{SE}(\\hat{\\beta})$", "$t$", "$P(\\geq \\lvert t \\rvert)$")
-knitr::kable(tab, caption="Multiple regression predicting liking from attractiveness, sincerity, intelligence, fun, and ambition.")
+knitr::kable(tab, caption="Multiple regression predicting liking from attractiveness, intelligence, and fun.")
 ```
 
 ### Modeling slopes with linear models
@@ -66,6 +66,8 @@ If we were to model the relation between overall liking and physical attractiven
 $$\texttt{like}_i = \beta_0 + \beta_{\texttt{attr}} \times \texttt{attr}_i + \beta_\texttt{intel} \times \texttt{intel}_i + \epsilon_i \quad \quad \epsilon_i \sim \mathbf{Normal}(0,\sigma_\epsilon)$$
 which is estimated as 
 $$`r mod <- lm(other_like ~ other_attr + other_intel, data=speeddate); write_GLM_equation(mod, dv_name = "like", iv_names = c("attr","intel"), digits=3)`$$
+The estimates indicate a positive relation to liking of both attractiveness and intelligence. Note that the values of the slopes are different from those in Table \@ref(tab:multiple-regression-speed-dating-just-main-effects). The reason for this is that the model in the Table also includes fun as a predictor. Because the slopes reflect _unique effects_, these depend on all predictors included in the model. When there is dependence between the predictors (i.e. there is multicollinearity) both the estimates of the slopes and the corresponding significance tests will very when you add or remove predictors from the model. 
+
 ```{r}
 coef <- coefficients(mod)
 vals1 <- c(8,2)
@@ -75,20 +77,46 @@ vals2 <- c((like1 - coef[1] - coef[3]*8)/(coef[2]) , 8)
 
 In the model above, a relative lack in physical attractiveness can be overcome by high intelligence, because in the end, the general liking of someone depends on the sum of both attractiveness and intelligence (each "scaled" by there corresponding slope). For example, someone with an attractiveness rating of $\texttt{attr}_i = `r vals1[1]`$ and an intelligence rating of $\texttt{intel}_i = `r vals1[2]`$ would be expected to be liked as much as a partner as someone with an attractiveness rating of $\texttt{attr}_i = `r vals2[1]`$ and an intelligence rating of $\texttt{intel}_i = `r vals2[2]`$:
 $$\begin{align}
-\texttt{like}_i &= `r coef[1]` + `r coef[2]` \times `r vals1[1]` + `r coef[3]` \times `r vals1[2]` \\
-&= `r coef[1]` + `r coef[2]` \times `r vals2[1]` + `r coef[3]` \times `r vals2[2]` \\
-&= `r like1`
+\texttt{like}_i &= `r coef[1]` + `r coef[2]` \times `r vals1[1]` + `r coef[3]` \times `r vals1[2]` = `r like1` \\
+\texttt{like}_i &= `r coef[1]` + `r coef[2]` \times `r vals2[1]` + `r coef[3]` \times `r vals2[2]` = `r like1`
 \end{align}$$
 
 But what if for those lucky people who are very physically attractive, their intelligence doesn't matter _that much_, or even _at all_? And what if, for those lucky people who are very intelligent, their physical attractiveness doesn't really matter much or at all? In other words, what if the more attractive people are, the less intelligence determines how much other people like them as a potential partner, and conversely, the more intelligent people are, the less attractiveness determines how much others like them as a potential partner? This implies that the effect of attractiveness on liking depends on intelligence, and that the effect of intelligence on liking depends on attractiveness. Such dependence is not captured by the multiple regression model above. While a relative lack of intelligence might be overcome by a relative abundance of attractiveness, for any level of intelligence, the additional effect of attractiveness is the same (i.e., an increase in attractiveness by one unit will always result in an increase of the predicted liking of `r coef[2]`).
 
-$$\beta_{\texttt{attr},i} = \beta_{\texttt{attr},0} + \beta_{\texttt{attr},1} \times \texttt{intel}_i$$
+Let's define $\beta_{\texttt{attr}|\texttt{intel}_i}$ as the slope of $\texttt{attr}$ conditional on the value of $\texttt{intel}_i$. That is, we allow the slope of $\texttt{attr}$ to vary as a function of $\texttt{intel}$. Similarly, we can define $\beta_{\texttt{intel}|\texttt{attr}_i}$ as the slope of $\texttt{intel}$ conditional on the value of $\texttt{attr}$. Our regression model can then be written as:
+\begin{equation}
+\texttt{like}_i = \beta_0 + \beta_{\texttt{attr}|\texttt{intel}_i} \times \texttt{attr}_i + \beta_{\texttt{intel} | \texttt{attr}_i} \times \texttt{intel}_i + \epsilon_i
+(\#eq:reg-like-attr-intel-interactions)
+\end{equation}
+That's a good start, but what would the value of $\beta_{\texttt{attr}|\texttt{intel}_i}$ be? Estimating the slope of $\texttt{attr}$ for each value of $\texttt{intel}$ by fitting regression models to each subset of data with a particular value of $\texttt{intel}$ is not really doable. We'd need lots and lots of data, and furthermore, we wouldn't also be able to simultaneously estimate the value of $\beta_{\texttt{intel} | \texttt{attr}_i}$. We need to supply some structure to $\beta_{\texttt{attr}|\texttt{intel}_i}$ to allow us to estimate its value without overcomplicating things. One idea is to define $\beta_{\texttt{attr}|\texttt{intel}_i}$ with a linear model:
+$$\beta_{\texttt{attr}|\texttt{intel}_i} = \beta_{\texttt{attr},0} + \beta_{\texttt{attr},1} \times \texttt{intel}_i$$
+This is just like a simple linear regression model, but now the dependent variable is the slope of $\texttt{attr}$. Defined in this way, the slope of $\texttt{attr}$ is $\beta_{\texttt{attr},0}$ when $\texttt{intel}_i = 0$, and for every one-unit increase in $\texttt{intel}_i$, the slope of $\texttt{attr}$ increases (or decreases) by $\beta_{\texttt{attr},1}$. We can define the slope of $\texttt{intel}$ in the same way as
+$$\beta_{\texttt{intel}|\texttt{attr}_i} = \beta_{\texttt{intel},0} + \beta_{\texttt{intel},1} \times \texttt{attr}_i$$
+When we plug these definitions into Equation \@ref(eq:reg-like-attr-intel-interactions), we get
+$$\begin{align}
+\texttt{like}_i &= \beta_0 + (\beta_{\texttt{attr},0} + \beta_{\texttt{attr},1} \times \texttt{intel}_i) \times \texttt{attr}_i + (\beta_{\texttt{intel},0} + \beta_{\texttt{intel},1} \times \texttt{attr}_i) \times \texttt{intel}_i + \epsilon_i \\
+&= \beta_0 + \beta_{\texttt{attr},0} \times \texttt{attr}_i + \beta_{\texttt{intel},0} \times \texttt{intel}_i + (\beta_{\texttt{attr},1} + \beta_{\texttt{intel},1}) \times (\texttt{attr}_i \times \texttt{intel}_i) + \epsilon_i
+\end{align}$$
 
+Looking carefully at this formula, you can recognize a multiple regression model with three predictors: $\texttt{attr}$, $\texttt{intel}$, and a new predictor $\texttt{attr}_i \times \texttt{intel}_i$, which is computed as the product of these two variables. While it is thus related to both variables, we can treat this product as just another predictor in the model. The slope of this new predictor is the sum of two terms, $\beta_{\texttt{attr},1} + \beta_{\texttt{intel},1}$. Although we have defined these as different things (i.e. as the effect of $\texttt{intel}$ on the slope of $\texttt{attr}$, and the effect of $\texttt{attr}$ on the slope of $\texttt{intel}$, respectively), their value can not be estimated uniquely. We can only estimate their summed value. That means that moderation in regression is "symmetric", in the sense that each predictor determines the slope of the other one. We can not say that it is just intelligence that determines the effect of attraction on liking, nor can we say that it is just attraction that determines the effect of intelligence on liking. The two variables __interact__ and each determine the other's effect on the dependent variable.
 
-```{r speeddate_multiple-regression-interaction-exaggerated, fig.cap="Liking as a function of attractiveness for different levels of intelligence, either without moderation or with moderation of the slope of attraciveness by intelligence.", fig.width=5, fig.height=5, out.width='50%', fig.show="hold"}
-set.seed(23487610)
+With that in mind, we can simplify the notation of the resulting model somewhat, by renaming the slopes of the two predictors to $\beta_{\texttt{attr}} = \beta_{\texttt{attr},0}$ and $\beta_{\texttt{intel}} = \beta_{\texttt{intel},0}$, and using a single parameter for the sum $\beta_{\texttt{attr} \times \texttt{intel}} =  \beta_{\texttt{attr},1} + \beta_{\texttt{intel},1}$:
+
+\begin{equation}
+\texttt{like}_i = \beta_0 + \beta_{\texttt{attr}} \times \texttt{attr}_i + \beta_{\texttt{intel}} \times \texttt{intel}_i + \beta_{\texttt{attr} \times \texttt{intel}} \times (\texttt{attr} \times \texttt{intel})_i + \epsilon_i
+\end{equation}
+
+```{r}
 mod0 <- lm(other_like ~ other_attr + other_intel, data=speeddate)
 mod1 <- lm(other_like ~ other_attr*other_intel, data=speeddate)
+```
+
+Estimating this model gives
+$$`r write_GLM_equation(mod1, dv_name = "like", iv_names = c("attr","intel","attr*intel"), digits=3, include_sde = FALSE)`$$
+A graphical view of this model, and the earlier one without moderation, is provided in Figure \@ref(fig:speeddate-multiple-regression-interaction-exaggerated). The plot on the left represents the model which does not allow for interaction. You can see that, for different values of intelligence, the model predicts parallel regression lines for the relation between attractiveness and liking. While intelligence affects the intercept of these regression lines, it does not affect the slope. In the plot on the left -- although subtle -- you can see that the regression lines are _not_ parallel. This is a model with an interaction between intelligence and attractiveness. For different values of intelligence, the model predicts a linear relation between attractiveness and liking, but crucially, intelligence determines both the intercept _and_ slope of these lines.
+
+```{r speeddate-multiple-regression-interaction-exaggerated, fig.cap="Liking as a function of attractiveness (intelligence) for different levels of intelligence (attractiveness), either without moderation or with moderation of the slope of attraciveness by intelligence. Note that the actual values of liking, attractiveness, and intelligence, are whole numbers (ratings on a scale between 1 and 10). For visualization purposes, the values have been randomly jittered by adding a Normal-distributed displacement term.", fig.width=5, fig.height=5, out.width='50%', fig.show="hold"}
+set.seed(23487610)
 coefs <- coefficients(mod0)
 adj <- 5
 dat <- subset(speeddate, !(is.na(other_like) | is.na(other_attr) | is.na(other_intel))) 
@@ -100,18 +128,51 @@ ggplot(dat,aes(x=other_attr, y=other_like, colour=other_intel)) + geom_point() +
 coefs <- coefficients(mod1)
 ggplot(dat,aes(x=other_attr, y=other_like, colour=other_intel)) + geom_point() + geom_abline(intercept = coefs[1] + (min(dat$other_intel) - adj)*coefs[3], slope = coefs[2] + (min(dat$other_intel) - adj)*coefs[4], colour=viridis::viridis_pal()(3)[1]) + geom_abline(intercept = coefs[1] + (min(dat$other_intel) - adj + ((max(dat$other_intel) - min(dat$other_intel)) + 2*adj)/2) *coefs[3], slope = coefs[2] + (min(dat$other_intel) - adj + (max(dat$other_intel) - min(dat$other_intel) + 2*adj)/2) * coefs[4], colour=viridis::viridis_pal()(3)[2]) + geom_abline(intercept = coefs[1] + (max(dat$other_intel) + adj)*coefs[3], slope = coefs[2] + (max(dat$other_intel) + adj)*coefs[4], colour = viridis::viridis_pal()(3)[3]) + theme(legend.position = "bottom") + labs(colour = "intelligence") + xlab("attractiveness") + ylab("liking") + ggtitle("With moderation")  + expand_limits(colour = c(min(dat$other_intel)- adj, max(dat$other_intel) + adj))
 
+ggplot(dat,aes(x=other_intel, y=other_like, colour=other_attr)) + geom_point() + geom_abline(intercept = coefs[1] + (min(dat$other_attr)- adj)*coefs[3], slope = coefs[2], colour=viridis::viridis_pal()(3)[1]) + geom_abline(intercept = coefs[1] + (min(dat$other_attr) -adj + (max(dat$other_attr) - min(dat$other_attr) + 2*adj)/2)*coefs[3], slope = coefs[2], colour=viridis::viridis_pal()(3)[2]) + geom_abline(intercept = coefs[1] + (max(dat$other_attr) + adj)*coefs[3], slope = coefs[2], colour = viridis::viridis_pal()(3)[3]) + theme(legend.position = "bottom") + labs(colour = "attractiveness") + xlab("intelligence") + ylab("liking") + ggtitle("Without moderation") + expand_limits(colour = c(min(dat$other_attr)- adj, max(dat$other_attr) + adj))
+
+coefs <- coefficients(mod1)
+ggplot(dat,aes(x=other_intel, y=other_like, colour=other_attr)) + geom_point() + geom_abline(intercept = coefs[1] + (min(dat$other_attr) - adj)*coefs[3], slope = coefs[2] + (min(dat$other_attr) - adj)*coefs[4], colour=viridis::viridis_pal()(3)[1]) + geom_abline(intercept = coefs[1] + (min(dat$other_attr) - adj + ((max(dat$other_attr) - min(dat$other_attr)) + 2*adj)/2) *coefs[3], slope = coefs[2] + (min(dat$other_attr) - adj + (max(dat$other_attr) - min(dat$other_attr) + 2*adj)/2) * coefs[4], colour=viridis::viridis_pal()(3)[2]) + geom_abline(intercept = coefs[1] + (max(dat$other_attr) + adj)*coefs[3], slope = coefs[2] + (max(dat$other_attr) + adj)*coefs[4], colour = viridis::viridis_pal()(3)[3]) + theme(legend.position = "bottom") + labs(colour = "attractiveness") + xlab("intelligence") + ylab("liking") + ggtitle("With moderation")  + expand_limits(colour = c(min(dat$other_attr)- adj, max(dat$other_attr) + adj))
+
 ```
 
+```{r}
+tab <- summary(mod1)$coefficients
+rownames(tab) <- c("Intercept","Attractiveness","Intelligence","Attr $\\times$ Intel")
+colnames(tab) <- c("$\\hat{\\beta}$","$\\text{SE}(\\hat{\\beta})$", "$t$", "$P(\\geq \\lvert t \\rvert)$")
+knitr::kable(tab, caption="Multiple regression predicting liking from attractiveness, intelligence, and their interaction.")
+```
 
 ### Simple slopes and centering
 
-It is very important to realise that in a model with interactions, there is no single slope of any the predictors involved in an interaction that is particularly meaningful in principle. An interaction means that the slope of predictor varies as a function of another predictor. Depending on which value of that other predictor you focus on, the slope of the predictor can be positive, negative, or zero. le slopes__ 
+It is very important to realise that in a model with interactions, there is no single slope of any the predictors involved in an interaction that is particularly meaningful in principle. An interaction means that the slope of predictor varies as a function of another predictor. Depending on which value of that other predictor you focus on, the slope of the predictor can be positive, negative, or zero. Let's consider the model we estimated again:
+$$`r write_GLM_equation(mod1, dv_name = "like", iv_names = c("attr","intel","(attr}\\times\\texttt{intel)"), digits=3, include_sde = FALSE)`$$
+If we fill in a particular value for intelligence, say $\texttt{intel} = 1$, we can write this as 
+```{r}
+coef <- coefficients(mod1)
+```
+$$\begin{align}
+\texttt{intel}_i &= `r coef[1]` + `r coef[2]` \times \texttt{attr}_i + `r coef[3]` \times 1 `r coef[4]` \times (\texttt{attr} \times 1)_i + \epsilon_i \\
+&= (`r coef[1]` + `r coef[3]`) + (`r coef[2]` `r coef[4]`) \times \texttt{attr}_i + \epsilon_i \\
+&= `r coef[1] + coef[3]` + `r coef[2] + coef[4]` \times \texttt{attr}_i + \epsilon_i
+\end{align}$$
 
+If we pick a different value, say $\texttt{intel} = 10$, the the model becomes 
+$$\begin{align}
+\texttt{intel}_i &= `r coef[1]` + `r coef[2]` \times \texttt{attr}_i + `r coef[3]` \times 10  `r coef[4]` \times (\texttt{attr} \times 10)_i + \epsilon_i \\
+&= (`r coef[1]` + `r coef[3]` \times 10) + (`r coef[2]` `r coef[4]`\times 10) \times \texttt{attr}_i + \epsilon_i \\
+&= `r coef[1] + 10*coef[3]` + `r coef[2] + 10*coef[4]` \times \texttt{attr}_i + \epsilon_i
+\end{align}$$
+This shows that the higher the value of intelligence, the lower the slope of $\texttt{attr}$ becomes. If you'd pick $\texttt{intel} = `r coef[2]/(-coef[4])`$, the slope would be exactly equal to 0.^[The value for which the slope is 0 is easily worked out as $\frac{\hat{\beta}_\texttt{attr}}{- \hat{\beta}_{\texttt{\attr} \times \texttt{intel}}}$.] Because there is not just a single value of the slope, testing whether "the" slope of $\texttt{attr}$ is equal to 0 doesn't really make sense, because there is no single value to represent "the" slope. What, then, does $\hat{\beta}_\texttt{attr} =  `r coef[2]`$ represent? Well, it is the (estimated) slope of $\texttt{attr}$ when $\texttt{intel}_i = 0$. Similarly, $\hat{\beta}_\texttt{intel} =  `r coef[3]`$ is the estimated slope of $\texttt{intel}$ when $\texttt{attr}_i = 0$ 
+
+A significance test of the null hypothesis $H_0$: $\beta_\texttt{attr} = 0$ is thus a test whether, when $\texttt{intel} = 0$, the slope of $\texttt{attr}$ is 0. This test is easy enough to perform, but is it interesting to know whether liking is related to attractiveness for people who's intelligence was rated as 0? Perhaps not. For one thing, the ratings were on a scale from 1 to 10, so no one could actually receive a rating of 0. Because the slope depends on $\texttt{intel}$ and we know that for some value of $\texttt{intel}$, the slope of $\texttt{attr}$ will equal 0, the hypothesis test will not be significant for some values of $\texttt{intel}$, and will be significant for others. At which value of $\texttt{intel}$ we might want to perform such a test is up to us, but the result seems somewhat arbitrary. 
+
+That said, we might be interested in assessing whether there is an effect of $\texttt{attr}$ for particular values of $\texttt{intel}$. For instance, whether, for someone with an average intelligence rating, their physical attractiveness matters to how much someone likes them as a potential partner. We can obtain this test by __centering__ the predictors. Centering is basically just subtracting the sample mean of each value of a variable. So for example, we can center $\texttt{attr}$ as follows: $$\texttt{attr_centered} = \texttt{attr}_i - \overline{\texttt{attr}}$$
+Centering does not affect the relation between variables. It is really just a simple relabelling of the values. 
 
 ## Mediation
 
 ```{r}
-data(""legacy2015"")
+data("legacy2015")
 ```
 
 ```{r}

@@ -333,7 +333,7 @@ mod00 <- lm(percent_Trump_votes ~ hate_groups_per_million - 1, data=dat)
 A nice thing about the $F$ statistic is that it is general, and can be used to compare any nested linear models. For instance, we can also compare MODEL G to a different MODEL R in which we assume the intercept equals $\beta_0 = 0$, whilst allowing the slope to take any value. This model forces the regression line to go through the (0,0) point. Estimating this MODEL R gives^[Note that we cannot use Equation \@ref(eq:simple-regression-slope-estimate) to estimate the slope now. There is no nice formula for the slope estimate when you fix the intercept to 0, and so you will have to rely on statistical software to do this.]
 $$\begin{align}
 Y_i &= 0 + \hat{\beta}_{R,1} \times X_i \\
-&= `r coef(mod00)[1]`
+&= `r coef(mod00)[1]` \times X_i
 \end{align}$$
 You can see the resulting regression line and error terms in Figure \@ref(fig:scatterplot-trump-votes-hate-groups-with-regression-model-comparison-2). 
 ```{r scatterplot-trump-votes-hate-groups-with-regression-model-comparison-2, fig.cap="Estimated regression lines for MODEL G (left) and MODEL R (right) with $\\beta_1 = 0$ and the errors.", fig.width=8, fig.height=4, out.width="100%"}
