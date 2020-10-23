@@ -1,6 +1,119 @@
 # Moderation and mediation
 
-## Moderated regression
+In this chapter, we will focus on two ways in which one predictor variable may affect the relation between another predictor variable and the dependent variable. Moderation means the strength of the relation (in terms of the slope) of a predictor variable is determined by the value of another predictor variable. For instance, while physical attractiveness is generally positively related to mating success, for very rich people, physical attractiveness may not be so important. This is also called an interaction between the two predictor variables. Mediation is a different in which two predictors affect a dependent variable. It is best thought of as a __causal chain__, where one predictor variable determines the value of another predictor variable, which then in turn determines the value of the dependent variable. the difference between moderation and mediation is illustrated in Figure \@ref(fig:moderation-mediation-difference-graph).
+
+```{tikz moderation-mediation-difference-graph, dev="svg", fig.cap="Graphical depiction of the difference between moderation and mediation. Moderation means that the effect of a predictor ($X_1$) on the dependent variable ($Y$) depends on teh value of another predictor ($X_2$). Mediation means that a predictor ($X_1$) affects the dependent variable ($Y$) indirectly, through its relation to another predictor ($X_2$) which is directly related to the dependent variable.", out.width="80%"}
+\usetikzlibrary{calc}
+\usetikzlibrary{arrows}
+\begin{tikzpicture}
+	\begin{scope}{
+		\pgfsetxvec{\pgfpoint{2cm}{0cm}}
+		\pgfsetyvec{\pgfpoint{0cm}{1.5cm}}
+		\tikzstyle{every node}=[minimum size=.95cm,circle]
+		\draw node[draw] (x1) at (0,0) {$X_1$};
+		\draw node[draw] (x2) at (1,1) {$X_2$};
+		\draw node[draw] (y) at (2,0) {$Y$};
+		\coordinate (c) at ($ (x1)!.5!(y)$);
+		
+		\draw node[align=center] at (1,2) {\textbf{moderation}};
+
+		\draw[->, line width=.5mm] (x1) -- (y);
+		\draw[->, line width=.5mm] (x2) -- (c);
+	}
+	\end{scope}
+
+		\begin{scope}[shift={(7,0)}]{
+			\pgfsetxvec{\pgfpoint{2cm}{0cm}}
+			\pgfsetyvec{\pgfpoint{0cm}{1.5cm}}
+			\tikzstyle{every node}=[minimum size=.95cm,circle]
+			\draw node[draw] (x1) at (0,0) {$X_1$};
+			\draw node[draw] (x2) at (1,1) {$X_2$};
+			\draw node[draw] (y) at (2,0) {$Y$};
+			
+			\draw node[align=center] at (1,2) {\textbf{mediation}};
+
+			\draw[->, line width=.5mm] (x1) -- (x2);
+			\draw[->, line width=.5mm] (x2) -- (y);
+		}
+		\end{scope}
+\end{tikzpicture}
+
+```
+
+
+## Moderation
+
+```{r}
+library(sdamr)
+data("speeddate")
+```
+
+### Physical attractiveness and intelligence in speed dating
+
+@fisman2006gender conducted a large scale experiment^[Here, we analyse only a subset of their data.] on dating behaviour. They placed their participants in a speed dating context, where they were randomly matched with a number of potential partners (between `r min(table(speeddate$iid))` and `r max(table(speeddate$iid))`) and could converse for four minutes. As part of the study, after each meeting. participants rated how much they liked their speed dating partners, as well as more specifically on their attractiveness, sincerity, intelligence, fun, and ambition. We will focus on particular on ratings of physical attractiveness, fun, and intelligence, and how these are related to the general liking of a person. Ratings were given on a 10-point scale, from 1 ("awful") to 10 ("great"). A multiple regression analysis predicting general liking from attractiveness, fun, and intelligence (Table \@ref(tab:multiple-regression-speed-dating-just-main-effects)) shows that all three predictors have a significant and positive relation with general liking.
+
+```{r multiple-regression-speed-dating-just-main-effects}
+modg <- lm(other_like ~ other_attr + other_intel + other_fun, data=speeddate)
+tab <- summary(modg)$coefficients
+rownames(tab) <- c("Intercept","Attractiveness","Intelligence","Fun")
+colnames(tab) <- c("$\\hat{\\beta}$","$\\text{SE}(\\hat{\\beta})$", "$t$", "$P(\\geq \\lvert t \\rvert)$")
+knitr::kable(tab, caption="Multiple regression predicting liking from attractiveness, sincerity, intelligence, fun, and ambition.")
+```
+
+### Modeling slopes with linear models
+
+If we were to model the relation between overall liking and physical attractiveness and intelligence, we might use a multiple regression model such as:^[Note that I'm using more descriptive labels here. If you prefer the more abstract version, then you can replace $Y_i = \texttt{like}_i$, $\beta_1 = \beta_{\texttt{attr}}$,  $X_{1,i} = \texttt{attr}_i$. $\beta_2 = \beta_{\texttt{intel}}$,  $X_{2,i} = \texttt{intel}_i$.]
+$$\texttt{like}_i = \beta_0 + \beta_{\texttt{attr}} \times \texttt{attr}_i + \beta_\texttt{intel} \times \texttt{intel}_i + \epsilon_i \quad \quad \epsilon_i \sim \mathbf{Normal}(0,\sigma_\epsilon)$$
+which is estimated as 
+$$`r mod <- lm(other_like ~ other_attr + other_intel, data=speeddate); write_GLM_equation(mod, dv_name = "like", iv_names = c("attr","intel"), digits=3)`$$
+```{r}
+coef <- coefficients(mod)
+vals1 <- c(8,2)
+like1 <- sum(coef*c(1,vals1))
+vals2 <- c((like1 - coef[1] - coef[3]*8)/(coef[2]) , 8)
+```
+
+In the model above, a relative lack in physical attractiveness can be overcome by high intelligence, because in the end, the general liking of someone depends on the sum of both attractiveness and intelligence (each "scaled" by there corresponding slope). For example, someone with an attractiveness rating of $\texttt{attr}_i = `r vals1[1]`$ and an intelligence rating of $\texttt{intel}_i = `r vals1[2]`$ would be expected to be liked as much as a partner as someone with an attractiveness rating of $\texttt{attr}_i = `r vals2[1]`$ and an intelligence rating of $\texttt{intel}_i = `r vals2[2]`$:
+$$\begin{align}
+\texttt{like}_i &= `r coef[1]` + `r coef[2]` \times `r vals1[1]` + `r coef[3]` \times `r vals1[2]` \\
+&= `r coef[1]` + `r coef[2]` \times `r vals2[1]` + `r coef[3]` \times `r vals2[2]` \\
+&= `r like1`
+\end{align}$$
+
+But what if for those lucky people who are very physically attractive, their intelligence doesn't matter _that much_, or even _at all_? And what if, for those lucky people who are very intelligent, their physical attractiveness doesn't really matter much or at all? In other words, what if the more attractive people are, the less intelligence determines how much other people like them as a potential partner, and conversely, the more intelligent people are, the less attractiveness determines how much others like them as a potential partner? This implies that the effect of attractiveness on liking depends on intelligence, and that the effect of intelligence on liking depends on attractiveness. Such dependence is not captured by the multiple regression model above. While a relative lack of intelligence might be overcome by a relative abundance of attractiveness, for any level of intelligence, the additional effect of attractiveness is the same (i.e., an increase in attractiveness by one unit will always result in an increase of the predicted liking of `r coef[2]`).
+
+$$\beta_{\texttt{attr},i} = \beta_{\texttt{attr},0} + \beta_{\texttt{attr},1} \times \texttt{intel}_i$$
+
+
+```{r speeddate_multiple-regression-interaction-exaggerated, fig.cap="Liking as a function of attractiveness for different levels of intelligence, either without moderation or with moderation of the slope of attraciveness by intelligence.", fig.width=5, fig.height=5, out.width='50%', fig.show="hold"}
+set.seed(23487610)
+mod0 <- lm(other_like ~ other_attr + other_intel, data=speeddate)
+mod1 <- lm(other_like ~ other_attr*other_intel, data=speeddate)
+coefs <- coefficients(mod0)
+adj <- 5
+dat <- subset(speeddate, !(is.na(other_like) | is.na(other_attr) | is.na(other_intel))) 
+dat$other_like <- dat$other_like + rnorm(nrow(dat),0,.2)
+dat$other_attr <- dat$other_attr + rnorm(nrow(dat),0,.2)
+dat$other_intel <- dat$other_intel + rnorm(nrow(dat),0,.2)
+ggplot(dat,aes(x=other_attr, y=other_like, colour=other_intel)) + geom_point() + geom_abline(intercept = coefs[1] + (min(dat$other_intel)- adj)*coefs[3], slope = coefs[2], colour=viridis::viridis_pal()(3)[1]) + geom_abline(intercept = coefs[1] + (min(dat$other_intel) -adj + (max(dat$other_intel) - min(dat$other_intel) + 2*adj)/2)*coefs[3], slope = coefs[2], colour=viridis::viridis_pal()(3)[2]) + geom_abline(intercept = coefs[1] + (max(dat$other_intel) + adj)*coefs[3], slope = coefs[2], colour = viridis::viridis_pal()(3)[3]) + theme(legend.position = "bottom") + labs(colour = "intelligence") + xlab("attractiveness") + ylab("liking") + ggtitle("Without moderation") + expand_limits(colour = c(min(dat$other_intel)- adj, max(dat$other_intel) + adj))
+
+coefs <- coefficients(mod1)
+ggplot(dat,aes(x=other_attr, y=other_like, colour=other_intel)) + geom_point() + geom_abline(intercept = coefs[1] + (min(dat$other_intel) - adj)*coefs[3], slope = coefs[2] + (min(dat$other_intel) - adj)*coefs[4], colour=viridis::viridis_pal()(3)[1]) + geom_abline(intercept = coefs[1] + (min(dat$other_intel) - adj + ((max(dat$other_intel) - min(dat$other_intel)) + 2*adj)/2) *coefs[3], slope = coefs[2] + (min(dat$other_intel) - adj + (max(dat$other_intel) - min(dat$other_intel) + 2*adj)/2) * coefs[4], colour=viridis::viridis_pal()(3)[2]) + geom_abline(intercept = coefs[1] + (max(dat$other_intel) + adj)*coefs[3], slope = coefs[2] + (max(dat$other_intel) + adj)*coefs[4], colour = viridis::viridis_pal()(3)[3]) + theme(legend.position = "bottom") + labs(colour = "intelligence") + xlab("attractiveness") + ylab("liking") + ggtitle("With moderation")  + expand_limits(colour = c(min(dat$other_intel)- adj, max(dat$other_intel) + adj))
+
+```
+
+
+### Simple slopes and centering
+
+It is very important to realise that in a model with interactions, there is no single slope of any the predictors involved in an interaction that is particularly meaningful in principle. An interaction means that the slope of predictor varies as a function of another predictor. Depending on which value of that other predictor you focus on, the slope of the predictor can be positive, negative, or zero. le slopes__ 
+
 
 ## Mediation
 
+```{r}
+data(""legacy2015"")
+```
+
+```{r}
+
+```
