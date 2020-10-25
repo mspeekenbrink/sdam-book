@@ -262,6 +262,124 @@ options(opts)
 data("legacy2015")
 ```
 
-```{r}
+
+### Legacy motives and pro-environmental behaviours
+
+@zaval_how_2015 investigated whether there is a relation between individuals' motivation to leave a positive legacy in the world, and their pro-environmental behaviours and intentions. The authors reasoned that long time horizons and social distance are key psychological barriers to pro-environmental action, particularly regarding climate change. But if people with a legacy motivation put more emphasis on future others than those without such motivation, they may also be motivated to behave more pro-environmentally in order to benefit those future others. In a pilot study, they recruited a diverse sample of 245 U.S. participants through Amazon’s Mechanical Turk. Participants answered three sets of questions: one assessing individual differences in legacy motives, one assessing their beliefs about climate change, and one assessing their willingness to take pro-environmental action. Following these sets of questions, participants were told they would be entered into a lottery to win a $10 bonus. They were then given the option to donate part (between $0 and $10) of their bonus to an environmental cause (Trees for the Future). This last measure was meant to test whether people actually act on any intention to act pro-environmentally.
+
+For ease of analysis, the three sets of questions measuring legacy motive, belief about the reality of climate change, and intention to take pro-environmental action, were transformed into three overall scores by computing the average over the items in each set. After eliminating participants who did not answer all questions, we have data from $n = `r nrow(legacy2015)`$ participants. Figure \@ref(fig:ggpairs-plot-legacy2015) depicts the pairwise relations between the four variables. As can be seen, all variables are significantly correlated. The relation is most obvious for $\texttt{belief}$ and $\texttt{intention}$. Looking at the histogram of $\texttt{donation}$, you can see that although all whole amounts between $0 and $10 have been chosen at least once, it looks like three values were particularly popular, namely $0, $5, and to a lesser extent $10. This results in what looks like a tri-modal distribution. This is not necessarily an issue when modelling $\texttt{donation}$ with a regression model, as the assumptions in a regression model concern the _prediction errors_, and not the dependent variable itself.  
+
+```{r ggpairs-plot-legacy2015, fig.cap="Pairwise plots for legacy motives, climate change belief, intention for pro-environmental action, and donations."}
+library(GGally)
+ggpairs(legacy2015, columns = c("legacy", "belief", "intention", "donation"), diag=list(continuous=wrap(ggally_barDiag, bins=11, colour="black")),upper = list(continuous = wrap(ggally_cor, size = 5,family="sans")))
+```
+
+According to the [Theory of Planned Behavior](https://en.wikipedia.org/wiki/Theory_of_planned_behavior) [@ajzen1991theory], attitudes and norms shape a person's behavioural intentions, which in turn result in behaviour itself. In the context of the present example, that could mean that legacy motive and climate change beliefs do not directly determine whether someone behaves in a pro-environmental way. Rather, these factors shape a person's intentions towards pro-environmental behaviour, which in turn may actually lead in said pro-environmental behaviour. This is an example of an assumed __causal chain__, where legacy motive (partly) determines behavioural intention, and intention determines behaviour. __Mediation analysis__ is aimed at detecting an __indirect effect__ of a predictor (e.g. $\texttt{legacy}$) on the dependent variable (e.g. $\texttt{donation}$), via another variable called the __mediator__ (e.g. $\texttt{intention}$), which is the middle variable in the causal chain.
+
+
+### Causal steps
+
+A traditional method to assess mediation is the so-called __causal steps__ approach [@baron1986moderator]. the basic idea behind the causal steps approach is as follows: if there is a causal chain from predictor ($X$) to mediator ($M$) to dependent variable ($Y$), then, ignoring the mediator for the moment, we should be able to see a relation between the predictor and dependent variable. This relation reflects the indirect effect of the predictor on the dependent variable. We should also be able to detect an effect of the predictor on the mediator, as well as an effect of the mediator on the dependent variable. Crucially, if there is a true causal chain, then the predictor should not offer any additional predictive power over the mediator. Because the effect of the predictor is assumed to go only "through" the mediator, once we know the value of the mediator, this should be all we need to predict the dependent variable. In more fancy statistical terms, this means that conditional on the mediator, the dependent variable is independent of the predictor, i.e. $P(Y \mid M, X) = P(Y \mid M)$. In the context of a multiple regression model, we could say that in a model where we predict $Y$ from $M$, the predictor $X$ would not have a unique effect on $Y$ (i.e. its slope would equal $\beta_X = 0$).
+
+The causal steps (Figure \@ref(fig:causal-steps-models)) approach involves assessing a pattern of significant relations in three different regression models. The first model is a simple regression model where we predict $Y$ from $X$. In this model, we should find evidence for a relation between $X$ and $Y$, meaning that we can reject the null hypothesis that the slope of $X$ on $Y$ (referred to here as $\beta_X = c$) equals 0. The second model is a simple regression model where we predict $M$ from $X$. In this model, we should find evidence for a relation between $X$ and $M$, meaning that we can reject the null hypothesis that the slope of $X$ on $M$ (referred to here as $\beta_X = a$ here) equals 0. The third model is a multiple regression model where we predict $Y$ from both $M$ and $X$. In this model, we should find evidence for a unique relation between $M$ and $Y$, meaning that we can reject the null hypothesis that the slope of $M$ on $Y$ (referred to here as $\beta_M = b$ here) equals 0. Controlling for the effect of $M$ on $Y$, in a true causal chain, there should no longer be evidence for a relation between $X$ and $Y$ (as any relation between $X$ and $Y$ is captured through $M$). Hence, we should not be able to reject the null hypothesis that the slope of $X$ on $Y$ in this model (referred to here as $\beta_X = c$', to distinguish it from the relation between $X$ and $Y$ in the first model, which was labelled as $c$) equals 0. If this is so, then we speak of __full mediation__. When there is still evidence of a unique relation between $X$ and $Y$ in the model that includes $M$, but the relation is reduced (i.e. $|c'| < |c|$), we speak of __partial mediation__.
+
+```{tikz causal-steps-models, dev='svg', fig.cap='Assessing mediation with the causal steps approach involves testing parameters of three models. Model 1 is a simple regression model predicting $Y$ from $X$ and the slope of $X$ ($c$)  should be significant MODEL 2 is a simple regression model predicting $M$ from $X$ and the slope of $X$ ($a$) should be significant. MODEL 3 is a multiple regression model predicting $Y$ from both $X$ and $M$. The slope of $M$ ($b$) should be significant. The slope of $X$ ($c$\') should not be significant ("full" mediation) or be substantially smaller in absolute value ("partial" mediation).'}
+\usetikzlibrary{calc}
+\usetikzlibrary{arrows}
+\begin{tikzpicture}
+	\begin{scope}{
+		\pgfsetxvec{\pgfpoint{2cm}{0cm}}
+		\pgfsetyvec{\pgfpoint{0cm}{1.5cm}}
+		\tikzstyle{every node}=[minimum size=.95cm,circle]
+		\draw node[draw] (x1) at (0,0) {$X$};
+		\draw node[draw, opacity=0.4] (x2) at (1,1) {$M$};
+		\draw node[draw] (y) at (2,0) {$Y$};
+
+		\draw[->, line width=.5mm] (x1) -- node [sloped,below] {$c$} (y);
+		
+		\draw node[align=center] at (1,2) {\textbf{MODEL 1}};
+	}
+	\end{scope}
+	\begin{scope}[shift={(7,0)}]{
+		\pgfsetxvec{\pgfpoint{2cm}{0cm}}
+		\pgfsetyvec{\pgfpoint{0cm}{1.5cm}}
+		\tikzstyle{every node}=[minimum size=.95cm,circle]
+		\draw node[draw] (x1) at (0,0) {$X$};
+		\draw node[draw] (x2) at (1,1) {$M$};
+		\draw node[draw, opacity=0.4] (y) at (2,0) {$Y$};		
+		
+		\draw[->, line width=.5mm] (x1) -- node [sloped,above] {$a$} (x2);
+		
+		\draw node[align=center] at (1,2) {\textbf{MODEL 2}};
+	}
+	\end{scope}
+		
+	\begin{scope}[shift={(14,0)}]{
+		\pgfsetxvec{\pgfpoint{2cm}{0cm}}
+		\pgfsetyvec{\pgfpoint{0cm}{1.5cm}}
+		\tikzstyle{every node}=[minimum size=.95cm,circle]
+		\draw node[draw] (x1) at (0,0) {$X$};
+		\draw node[draw] (x2) at (1,1) {$M$};
+		\draw node[draw] (y) at (2,0) {$Y$};		
+		
+		\draw[->, line width=.5mm] (x2) -- node [sloped,above] {$b$} (y);
+		\draw[->, dashed, line width=.5mm] (x1) -- node [sloped,below] {$c$'} (y);
+		
+		\draw node[align=center] at (1,2) {\textbf{MODEL 3}};
+		
+	}
+	\end{scope}
+\end{tikzpicture}
 
 ```
+
+#### Testing mediation of legacy motive by intention with the causal steps approach
+
+Let's see how the causal steps approach works in practice by assessing whether the relation between `legacy` on `donation` is mediated by `intent`.
+
+In MODEL 1 (Table \@ref(tab:causal-steps-mod1-results)), we assess the relation between `legacy` and `donation`. In this model, we find a significant and positive relation between legacy motives and donations, such that people with stronger legacy motives donate more of their potential bonus to a pro-environmental cause. The question is now whether this is a direct effect of legacy motive, or an indirect effect "via" behavioural intent.
+
+```{r causal-steps-mod1-results}
+mod1 <- lm(donation ~ legacy, data=legacy2015)
+tab <- summary(mod1)$coefficients
+rownames(tab) <- c("Intercept","Legacy motive")
+colnames(tab) <- c("$\\hat{\\beta}$","$\\text{SE}(\\hat{\\beta})$", "$t$", "$P(\\geq \\lvert t \\rvert)$")
+knitr::kable(tab, caption="Model 1: Simple regression model predicting donations from legacy motive")
+```
+
+In MODEL 2 (Table \@ref(tab:causal-steps-mod2-results)), we assess the relation between `legacy` and `intention`. In this model, we find a significant and positive relation between legacy motives and intention to act pro-environmentally, such that people with stronger legacy motives have a stronger intention to act pro-environmentally.
+
+```{r causal-steps-mod2-results}
+mod2 <- lm(intention ~ legacy, data=legacy2015)
+tab <- summary(mod2)$coefficients
+rownames(tab) <- c("Intercept","Legacy motive")
+colnames(tab) <- c("$\\hat{\\beta}$","$\\text{SE}(\\hat{\\beta})$", "$t$", "$P(\\geq \\lvert t \\rvert)$")
+knitr::kable(tab, caption="Model 2: Simple regression model predicting pro-environmental intent from legacy motive")
+```
+
+In MODEL 3 (Table \@ref(tab:causal-steps-mod3-results)), we assess the relation between `legacy`, `intention`, and `donation`. In this model, we find a significant and positive relation between intention to act pro-environmentally and donation to a pro-environmental cause, such that people with stronger intentions donate more. We also find evidence of a unique and positive effect of legacy motive on donation, such that people with stronger legacy motives donate more. Because there is still evidence of an effect of legacy motive on donations, after controlling for the effect of behavioural intent, we would not conclude that the effect of legacy motive is _fully mediated_ by intent. When you compare the slope of `legacy` in MODEL 3 to that in MODEL 1, you can however see that the (absolute) value is smaller. Hence, when controlling for the effect of behavioural intent, a one-unit increase in `legacy` is estimated to increase the amount of donation less then in a model where `intention` is not taken into account.  
+
+
+```{r causal-steps-mod3-results}
+mod2 <- lm(donation ~ legacy + intention, data=legacy2015)
+tab <- summary(mod2)$coefficients
+rownames(tab) <- c("Intercept","Legacy motive", "Behavioral intent")
+colnames(tab) <- c("$\\hat{\\beta}$","$\\text{SE}(\\hat{\\beta})$", "$t$", "$P(\\geq \\lvert t \\rvert)$")
+knitr::kable(tab, caption="Model 3: Multiple regression model predicting donations from legacy motive and pro-environmental intent.")
+```
+
+### Estimating the indirect effect
+
+An alternative to the causal steps approach is to estimate the mediated (indirect) effect of the predictor on the dependent variable directly. Algebraically, this mediated effect can be worked out as [@mackinnon2007mediation]:
+
+\begin{equation}
+\text{mediated effect} = a \times b
+\end{equation}
+
+The rationale behind this is reasonably straightforward. The slope $a$ reflects the increase in the mediator $M$ for every one-unit increase in the predictor $X$. The slope $b$ reflects the increase in the dependent variable $Y$ for every one unit increase in the mediator. So a one-unit increase in $X$ implies an increase in $M$ by $a$ units, which in turn implies an increase in $Y$ of $a \times b$ units. Hence, the mediated effect can be expressed as $a \times b$.
+
+To test whether the mediated effect differs from 0, we can try to work out the sampling distribution of the estimated effect $\hat{a} \times \hat{b}$, under the null-hypothesis that in reality, $a \times b = 0$. Note that this null hypothesis can be true when $a = 0$, $b = 0$, or both $a = b = 0$. In the so-called Sobel-Aroian test, this sampling distribution is assumed to be Normal. However, it has been found that this assumption is often inaccurate. A better approach is to simulate a large number of datasets from a model in which the null hypothesis is true, and then determine an "empirical sampling distribution" which is appropriate for the data at hand. This simulation procedure is similar in spirit to that to work out the sampling distribution of the likelihood ratio in Figure \@ref(fig:simulate-LR-coin-flipping).   
+
+<!-- In a single mediator model such as the one looked at here, this mediated effect 
+To test whether this mediated effect equals 0 (in which case there is no mediation), we can attempt to work out the sampling -->
+
