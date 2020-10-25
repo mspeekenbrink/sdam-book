@@ -193,3 +193,16 @@ tab:multiple-regression-with-interaction-ANOVA-centered
 tab:full-model-like
 a-model-with-multiple-interactions
 dont-forget-about-fun-a-model-with-multiple-interactions
+legacy-motives-and-pro-environmental-behaviours
+causal-steps
+estimating-and-testing-the-indirect-effect
+fig:unnamed-chunk-7
+fig:ggpairs-plot-legacy2015
+fig:causal-steps-models
+testing-mediation-of-legacy-motive-by-intention
+tab:causal-steps-mod1-results
+tab:causal-steps-mod2-results
+tab:causal-steps-mod3-results
+testing-mediation-of-legacy-motive-by-intention-with-the-causal-steps-approach
+estimating-the-indirect-effect
+estimating-the-mediated-effect

@@ -24,7 +24,7 @@
 <meta name="author" content="Maarten Speekenbrink" />
 
 
-<meta name="date" content="2020-10-24" />
+<meta name="date" content="2020-10-25" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -51,6 +51,8 @@
 
 
 <script src="book_assets/accessible-code-block-0.0.1/empty-anchor.js"></script>
+<link href="book_assets/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
+<script src="book_assets/anchor-sections-1.0/anchor-sections.js"></script>
 
 
 
@@ -167,7 +169,11 @@
 <li class="chapter" data-level="6.1.4" data-path="moderation-and-mediation.html"><a href="moderation-and-mediation.html#simple-slopes-and-centering"><i class="fa fa-check"></i><b>6.1.4</b> Simple slopes and centering</a></li>
 <li class="chapter" data-level="6.1.5" data-path="moderation-and-mediation.html"><a href="moderation-and-mediation.html#dont-forget-about-fun-a-model-with-multiple-interactions"><i class="fa fa-check"></i><b>6.1.5</b> Don’t forget about fun! A model with multiple interactions</a></li>
 </ul></li>
-<li class="chapter" data-level="6.2" data-path="moderation-and-mediation.html"><a href="moderation-and-mediation.html#mediation"><i class="fa fa-check"></i><b>6.2</b> Mediation</a></li>
+<li class="chapter" data-level="6.2" data-path="moderation-and-mediation.html"><a href="moderation-and-mediation.html#mediation"><i class="fa fa-check"></i><b>6.2</b> Mediation</a><ul>
+<li class="chapter" data-level="6.2.1" data-path="moderation-and-mediation.html"><a href="moderation-and-mediation.html#legacy-motives-and-pro-environmental-behaviours"><i class="fa fa-check"></i><b>6.2.1</b> Legacy motives and pro-environmental behaviours</a></li>
+<li class="chapter" data-level="6.2.2" data-path="moderation-and-mediation.html"><a href="moderation-and-mediation.html#causal-steps"><i class="fa fa-check"></i><b>6.2.2</b> Causal steps</a></li>
+<li class="chapter" data-level="6.2.3" data-path="moderation-and-mediation.html"><a href="moderation-and-mediation.html#estimating-the-mediated-effect"><i class="fa fa-check"></i><b>6.2.3</b> Estimating the mediated effect</a></li>
+</ul></li>
 </ul></li>
 <li class="chapter" data-level="7" data-path="a-model-of-means-anova.html"><a href="a-model-of-means-anova.html"><i class="fa fa-check"></i><b>7</b> A model of means (ANOVA)</a><ul>
 <li class="chapter" data-level="7.1" data-path="a-model-of-means-anova.html"><a href="a-model-of-means-anova.html#two-sample-t-test"><i class="fa fa-check"></i><b>7.1</b> Two-sample t-test</a></li>
@@ -539,13 +545,164 @@ Figure 6.3: Liking as a function of centered attractiveness for different levels
 </div>
 <div id="mediation" class="section level2">
 <h2><span class="header-section-number">6.2</span> Mediation</h2>
+<div id="legacy-motives-and-pro-environmental-behaviours" class="section level3">
+<h3><span class="header-section-number">6.2.1</span> Legacy motives and pro-environmental behaviours</h3>
+<p><span class="citation">Zaval, Markowitz, &amp; Weber (<a href="#ref-zaval_how_2015" role="doc-biblioref">2015</a>)</span> investigated whether there is a relation between individuals’ motivation to leave a positive legacy in the world, and their pro-environmental behaviours and intentions. The authors reasoned that long time horizons and social distance are key psychological barriers to pro-environmental action, particularly regarding climate change. But if people with a legacy motivation put more emphasis on future others than those without such motivation, they may also be motivated to behave more pro-environmentally in order to benefit those future others. In a pilot study, they recruited a diverse sample of 245 U.S. participants through Amazon’s Mechanical Turk. Participants answered three sets of questions: one assessing individual differences in legacy motives, one assessing their beliefs about climate change, and one assessing their willingness to take pro-environmental action. Following these sets of questions, participants were told they would be entered into a lottery to win a $10 bonus. They were then given the option to donate part (between $0 and $10) of their bonus to an environmental cause (Trees for the Future). This last measure was meant to test whether people actually act on any intention to act pro-environmentally.</p>
+<p>For ease of analysis, the three sets of questions measuring legacy motive, belief about the reality of climate change, and intention to take pro-environmental action, were transformed into three overall scores by computing the average over the items in each set. After eliminating participants who did not answer all questions, we have data from <span class="math inline">\(n = 237\)</span> participants. Figure <a href="moderation-and-mediation.html#fig:ggpairs-plot-legacy2015">6.4</a> depicts the pairwise relations between the four variables. As can be seen, all variables are significantly correlated. The relation is most obvious for <span class="math inline">\(\texttt{belief}\)</span> and <span class="math inline">\(\texttt{intention}\)</span>. Looking at the histogram of <span class="math inline">\(\texttt{donation}\)</span>, you can see that although all whole amounts between $0 and $10 have been chosen at least once, it looks like three values were particularly popular, namely $0, $5, and to a lesser extent $10. This results in what looks like a tri-modal distribution. This is not necessarily an issue when modelling <span class="math inline">\(\texttt{donation}\)</span> with a regression model, as the assumptions in a regression model concern the <em>prediction errors</em>, and not the dependent variable itself.</p>
+<div class="figure" style="text-align: center"><span id="fig:ggpairs-plot-legacy2015"></span>
+<img src="_main_files/figure-html/ggpairs-plot-legacy2015-1.svg" alt="Pairwise plots for legacy motives, climate change belief, intention for pro-environmental action, and donations." width="672" />
+<p class="caption">
+Figure 6.4: Pairwise plots for legacy motives, climate change belief, intention for pro-environmental action, and donations.
+</p>
+</div>
+<p>According to the <a href="https://en.wikipedia.org/wiki/Theory_of_planned_behavior">Theory of Planned Behavior</a> <span class="citation">(Ajzen, <a href="#ref-ajzen1991theory" role="doc-biblioref">1991</a>)</span>, attitudes and norms shape a person’s behavioural intentions, which in turn result in behaviour itself. In the context of the present example, that could mean that legacy motive and climate change beliefs do not directly determine whether someone behaves in a pro-environmental way. Rather, these factors shape a person’s intentions towards pro-environmental behaviour, which in turn may actually lead in said pro-environmental behaviour. This is an example of an assumed <strong>causal chain</strong>, where legacy motive (partly) determines behavioural intention, and intention determines behaviour. <strong>Mediation analysis</strong> is aimed at detecting an <strong>indirect effect</strong> of a predictor (e.g. <span class="math inline">\(\texttt{legacy}\)</span>) on the dependent variable (e.g. <span class="math inline">\(\texttt{donation}\)</span>), via another variable called the <strong>mediator</strong> (e.g. <span class="math inline">\(\texttt{intention}\)</span>), which is the middle variable in the causal chain.</p>
+</div>
+<div id="causal-steps" class="section level3">
+<h3><span class="header-section-number">6.2.2</span> Causal steps</h3>
+<p>A traditional method to assess mediation is the so-called <strong>causal steps</strong> approach <span class="citation">(Baron &amp; Kenny, <a href="#ref-baron1986moderator" role="doc-biblioref">1986</a>)</span>. the basic idea behind the causal steps approach is as follows: if there is a causal chain from predictor (<span class="math inline">\(X\)</span>) to mediator (<span class="math inline">\(M\)</span>) to dependent variable (<span class="math inline">\(Y\)</span>), then, ignoring the mediator for the moment, we should be able to see a relation between the predictor and dependent variable. This relation reflects the indirect effect of the predictor on the dependent variable. We should also be able to detect an effect of the predictor on the mediator, as well as an effect of the mediator on the dependent variable. Crucially, if there is a true causal chain, then the predictor should not offer any additional predictive power over the mediator. Because the effect of the predictor is assumed to go only “through” the mediator, once we know the value of the mediator, this should be all we need to predict the dependent variable. In more fancy statistical terms, this means that conditional on the mediator, the dependent variable is independent of the predictor, i.e. <span class="math inline">\(P(Y \mid M, X) = P(Y \mid M)\)</span>. In the context of a multiple regression model, we could say that in a model where we predict <span class="math inline">\(Y\)</span> from <span class="math inline">\(M\)</span>, the predictor <span class="math inline">\(X\)</span> would not have a unique effect on <span class="math inline">\(Y\)</span> (i.e. its slope would equal <span class="math inline">\(\beta_X = 0\)</span>).</p>
+<p>The causal steps (Figure <a href="moderation-and-mediation.html#fig:causal-steps-models">6.5</a>) approach involves assessing a pattern of significant relations in three different regression models. The first model is a simple regression model where we predict <span class="math inline">\(Y\)</span> from <span class="math inline">\(X\)</span>. In this model, we should find evidence for a relation between <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>, meaning that we can reject the null hypothesis that the slope of <span class="math inline">\(X\)</span> on <span class="math inline">\(Y\)</span> (referred to here as <span class="math inline">\(\beta_X = c\)</span>) equals 0. The second model is a simple regression model where we predict <span class="math inline">\(M\)</span> from <span class="math inline">\(X\)</span>. In this model, we should find evidence for a relation between <span class="math inline">\(X\)</span> and <span class="math inline">\(M\)</span>, meaning that we can reject the null hypothesis that the slope of <span class="math inline">\(X\)</span> on <span class="math inline">\(M\)</span> (referred to here as <span class="math inline">\(\beta_X = a\)</span> here) equals 0. The third model is a multiple regression model where we predict <span class="math inline">\(Y\)</span> from both <span class="math inline">\(M\)</span> and <span class="math inline">\(X\)</span>. In this model, we should find evidence for a unique relation between <span class="math inline">\(M\)</span> and <span class="math inline">\(Y\)</span>, meaning that we can reject the null hypothesis that the slope of <span class="math inline">\(M\)</span> on <span class="math inline">\(Y\)</span> (referred to here as <span class="math inline">\(\beta_M = b\)</span> here) equals 0. Controlling for the effect of <span class="math inline">\(M\)</span> on <span class="math inline">\(Y\)</span>, in a true causal chain, there should no longer be evidence for a relation between <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> (as any relation between <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> is captured through <span class="math inline">\(M\)</span>). Hence, we should not be able to reject the null hypothesis that the slope of <span class="math inline">\(X\)</span> on <span class="math inline">\(Y\)</span> in this model (referred to here as <span class="math inline">\(\beta_X = c\)</span>’, to distinguish it from the relation between <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> in the first model, which was labelled as <span class="math inline">\(c\)</span>) equals 0. If this is so, then we speak of <strong>full mediation</strong>. When there is still evidence of a unique relation between <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> in the model that includes <span class="math inline">\(M\)</span>, but the relation is reduced (i.e. <span class="math inline">\(|c&#39;| &lt; |c|\)</span>), we speak of <strong>partial mediation</strong>.</p>
+<div class="figure" style="text-align: center"><span id="fig:causal-steps-models"></span>
+<img src="_main_files/figure-html/causal-steps-models-1.svg" alt="Assessing mediation with the causal steps approach involves testing parameters of three models. Model 1 is a simple regression model predicting $Y$ from $X$ and the slope of $X$ ($c$)  should be significant MODEL 2 is a simple regression model predicting $M$ from $X$ and the slope of $X$ ($a$) should be significant. MODEL 3 is a multiple regression model predicting $Y$ from both $X$ and $M$. The slope of $M$ ($b$) should be significant. The slope of $X$ ($c$') should not be significant (&quot;full&quot; mediation) or be substantially smaller in absolute value (&quot;partial&quot; mediation)." width="672" />
+<p class="caption">
+Figure 6.5: Assessing mediation with the causal steps approach involves testing parameters of three models. Model 1 is a simple regression model predicting <span class="math inline">\(Y\)</span> from <span class="math inline">\(X\)</span> and the slope of <span class="math inline">\(X\)</span> (<span class="math inline">\(c\)</span>) should be significant MODEL 2 is a simple regression model predicting <span class="math inline">\(M\)</span> from <span class="math inline">\(X\)</span> and the slope of <span class="math inline">\(X\)</span> (<span class="math inline">\(a\)</span>) should be significant. MODEL 3 is a multiple regression model predicting <span class="math inline">\(Y\)</span> from both <span class="math inline">\(X\)</span> and <span class="math inline">\(M\)</span>. The slope of <span class="math inline">\(M\)</span> (<span class="math inline">\(b\)</span>) should be significant. The slope of <span class="math inline">\(X\)</span> (<span class="math inline">\(c\)</span>’) should not be significant (“full” mediation) or be substantially smaller in absolute value (“partial” mediation).
+</p>
+</div>
+<div id="testing-mediation-of-legacy-motive-by-intention-with-the-causal-steps-approach" class="section level4">
+<h4><span class="header-section-number">6.2.2.1</span> Testing mediation of legacy motive by intention with the causal steps approach</h4>
+<p>Let’s see how the causal steps approach works in practice by assessing whether the relation between <span class="math inline">\(\texttt{legacy}\)</span> on <span class="math inline">\(\texttt{donation}\)</span> is mediated by <span class="math inline">\(\texttt{intention}\)</span>.</p>
+<p>In MODEL 1 (Table <a href="moderation-and-mediation.html#tab:causal-steps-mod1-results">6.5</a>), we assess the relation between <span class="math inline">\(\texttt{legacy}\)</span> and <span class="math inline">\(\texttt{donation}\)</span>. In this model, we find a significant and positive relation between legacy motives and donations, such that people with stronger legacy motives donate more of their potential bonus to a pro-environmental cause. The question is now whether this is a direct effect of legacy motive, or an indirect effect “via” behavioural intent.</p>
+<table>
+<caption><span id="tab:causal-steps-mod1-results">Table 6.5: </span>Model 1: Simple regression model predicting donations from legacy motive</caption>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="right"><span class="math inline">\(\hat{\beta}\)</span></th>
+<th align="right"><span class="math inline">\(\text{SE}(\hat{\beta})\)</span></th>
+<th align="right"><span class="math inline">\(t\)</span></th>
+<th align="right"><span class="math inline">\(P(\geq \lvert t \rvert)\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Intercept</td>
+<td align="right">-0.325</td>
+<td align="right">0.833</td>
+<td align="right">-0.39</td>
+<td align="right">0.697</td>
+</tr>
+<tr class="even">
+<td align="left">Legacy motive</td>
+<td align="right">0.733</td>
+<td align="right">0.198</td>
+<td align="right">3.70</td>
+<td align="right">0.000</td>
+</tr>
+</tbody>
+</table>
+<p>In MODEL 2 (Table <a href="moderation-and-mediation.html#tab:causal-steps-mod2-results">6.6</a>), we assess the relation between <span class="math inline">\(\texttt{legacy}\)</span> and <span class="math inline">\(\texttt{intention}\)</span>. In this model, we find a significant and positive relation between legacy motives and intention to act pro-environmentally, such that people with stronger legacy motives have a stronger intention to act pro-environmentally.</p>
+<table>
+<caption><span id="tab:causal-steps-mod2-results">Table 6.6: </span>Model 2: Simple regression model predicting pro-environmental intent from legacy motive</caption>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="right"><span class="math inline">\(\hat{\beta}\)</span></th>
+<th align="right"><span class="math inline">\(\text{SE}(\hat{\beta})\)</span></th>
+<th align="right"><span class="math inline">\(t\)</span></th>
+<th align="right"><span class="math inline">\(P(\geq \lvert t \rvert)\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Intercept</td>
+<td align="right">1.785</td>
+<td align="right">0.246</td>
+<td align="right">7.25</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">Legacy motive</td>
+<td align="right">0.267</td>
+<td align="right">0.059</td>
+<td align="right">4.56</td>
+<td align="right">0</td>
+</tr>
+</tbody>
+</table>
+<p>In MODEL 3 (Table <a href="moderation-and-mediation.html#tab:causal-steps-mod3-results">6.7</a>), we assess the relation between <span class="math inline">\(\texttt{legacy}\)</span>, <span class="math inline">\(\texttt{intention}\)</span>, and <span class="math inline">\(\texttt{donation}\)</span>. In this model, we find a significant and positive relation between intention to act pro-environmentally and donation to a pro-environmental cause, such that people with stronger intentions donate more. We also find evidence of a unique and positive effect of legacy motive on donation, such that people with stronger legacy motives donate more. Because there is still evidence of an effect of legacy motive on donations, after controlling for the effect of behavioural intent, we would not conclude that the effect of legacy motive is <em>fully mediated</em> by intent. When you compare the slope of <span class="math inline">\(\texttt{legacy}\)</span> in MODEL 3 to that in MODEL 1, you can however see that the (absolute) value is smaller. Hence, when controlling for the effect of behavioural intent, a one-unit increase in <span class="math inline">\(\texttt{legacy}\)</span> is estimated to increase the amount of donation less then in a model where <span class="math inline">\(\texttt{intention}\)</span> is not taken into account.</p>
+<table>
+<caption><span id="tab:causal-steps-mod3-results">Table 6.7: </span>Model 3: Multiple regression model predicting donations from legacy motive and pro-environmental intent.</caption>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="right"><span class="math inline">\(\hat{\beta}\)</span></th>
+<th align="right"><span class="math inline">\(\text{SE}(\hat{\beta})\)</span></th>
+<th align="right"><span class="math inline">\(t\)</span></th>
+<th align="right"><span class="math inline">\(P(\geq \lvert t \rvert)\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Intercept</td>
+<td align="right">-1.961</td>
+<td align="right">0.889</td>
+<td align="right">-2.21</td>
+<td align="right">0.028</td>
+</tr>
+<tr class="even">
+<td align="left">Legacy motive</td>
+<td align="right">0.488</td>
+<td align="right">0.200</td>
+<td align="right">2.45</td>
+<td align="right">0.015</td>
+</tr>
+<tr class="odd">
+<td align="left">Behavioral intent</td>
+<td align="right">0.917</td>
+<td align="right">0.213</td>
+<td align="right">4.30</td>
+<td align="right">0.000</td>
+</tr>
+</tbody>
+</table>
+<p>In conclusion, the causal steps approach indicates that the effect of legacy motive of pro-environmental action (donations) is <em>partially mediated</em> by pro-environmental behavioural intentions. There is a residual direct effect of legacy motive on donations that is not captured by behavioural intentions.</p>
+</div>
+</div>
+<div id="estimating-the-mediated-effect" class="section level3">
+<h3><span class="header-section-number">6.2.3</span> Estimating the mediated effect</h3>
+<p>One potential problem with the causal steps approach is that it is based on a pattern of significance in four hypothesis tests (one for each parameter <span class="math inline">\(a\)</span>, <span class="math inline">\(b\)</span>, <span class="math inline">\(c\)</span>, and <span class="math inline">\(c&#39;\)</span>). This can result in a rather low power of the procedure <span class="citation">(MacKinnon, Fairchild, &amp; Fritz, <a href="#ref-mackinnon2007mediation" role="doc-biblioref">2007</a>)</span>, which seems to be particularly related to the requirement of a significant <span class="math inline">\(c\)</span> (the direct effect of <span class="math inline">\(X\)</span> on <span class="math inline">\(Y\)</span> in the model without the mediator).</p>
+<p>An alternative to the causal steps approach is to estimate the mediated (indirect) effect of the predictor on the dependent variable directly. Algebraically, this mediated effect can be worked out as <span class="citation">(MacKinnon et al., <a href="#ref-mackinnon2007mediation" role="doc-biblioref">2007</a>)</span>:</p>
+<p><span class="math display">\[\begin{equation}
+\text{mediated effect} = a \times b
+\end{equation}\]</span></p>
+<p>The rationale behind this is reasonably straightforward. The slope <span class="math inline">\(a\)</span> reflects the increase in the mediator <span class="math inline">\(M\)</span> for every one-unit increase in the predictor <span class="math inline">\(X\)</span>. The slope <span class="math inline">\(b\)</span> reflects the increase in the dependent variable <span class="math inline">\(Y\)</span> for every one unit increase in the mediator. So a one-unit increase in <span class="math inline">\(X\)</span> implies an increase in <span class="math inline">\(M\)</span> by <span class="math inline">\(a\)</span> units, which in turn implies an increase in <span class="math inline">\(Y\)</span> of <span class="math inline">\(a \times b\)</span> units. Hence, the mediated effect can be expressed as <span class="math inline">\(a \times b\)</span>.</p>
+<p>In a single mediator model such as the one looked at here, the mediated effect <span class="math inline">\(a \times b\)</span> turns out to be equal to <span class="math inline">\(c - c&#39;\)</span>, i.e. the difference between the direct effect of <span class="math inline">\(X\)</span> on <span class="math inline">\(Y\)</span> in a model without the mediator, and the unique direct effect of <span class="math inline">\(X\)</span> on <span class="math inline">\(Y\)</span> in a model which includes the mediator.</p>
+<p>To test whether the mediated effect differs from 0, we can try to work out the sampling distribution of the estimated effect <span class="math inline">\(\hat{a} \times \hat{b}\)</span>, under the null-hypothesis that in reality, <span class="math inline">\(a \times b = 0\)</span>. Note that this null hypothesis can be true when <span class="math inline">\(a = 0\)</span>, <span class="math inline">\(b = 0\)</span>, or both <span class="math inline">\(a = b = 0\)</span>. In the so-called Sobel-Aroian test, this sampling distribution is assumed to be Normal. However, it has been found that this assumption is often inaccurate. As there is no method to derive an accurate sampling distribution analytically, modern procedures rely on simulation. There are different ways to do this, but we’ll focus on one, namely the <strong>nonparametric bootstrap</strong> approach <span class="citation">(Preacher &amp; Hayes, <a href="#ref-preacher2008asymptotic" role="doc-biblioref">2008</a>)</span>. This involves generating a large number (e.g. <span class="math inline">\(&gt;1000\)</span>) of simulated datasets by randomly sampling <span class="math inline">\(n\)</span> cases with replacement from the original dataset. This means that any given case (i.e. a row in the dataset) can occur 0, 1, 2, times in a simulated dataset. For each simulated dataset, we can estimate <span class="math inline">\(\hat{a} \times \hat{b}\)</span> by fitting the two corresponding regression models. The variance in these estimates over the different datasets forms an estimate of the variance of the sampling distribution. A 95% confidence interval can then also be computed through by determining the 2.5 and 97.5 percentiles. Because just the original data is used, there is no direct assumption made about the distribution of the variables, apart from that the original data is a representative sample from the Data Generating Process. Applying this procedure (with 1000 simulated datasets) provides a 95% confidence interval for <span class="math inline">\(a \times b\)</span> of <span class="math inline">\([0.104, 0.446]\)</span>. As this interval does not contain the value 0, we reject the null hypothesis that the moderated effect of <span class="math inline">\(\texttt{legacy}\)</span> on <span class="math inline">\(\texttt{donation}\)</span> “via” <span class="math inline">\(\texttt{intention}\)</span> equals 0.</p>
+<p>Note that in solely focusing on the mediated effect, we do not address the issue of total vs partial mediation. Using our simulated datasets, we can however also compute a bootstrap confidence interval for <span class="math inline">\(c&#39;\)</span>. For the present set of simulations, the 95% confidence interval for <span class="math inline">\(c&#39;\)</span> is <span class="math inline">\([0.189, 0.807]\)</span>. As this interval does not contain the value 0, we reject the null hypothesis that the unique direct effect of <span class="math inline">\(\texttt{legacy}\)</span> on <span class="math inline">\(\texttt{donation}\)</span> equals 0. This thus provides a similar conclusion to the causal steps approach.</p>
+<!-- In a single mediator model such as the one looked at here, this mediated effect 
+To test whether this mediated effect equals 0 (in which case there is no mediation), we can attempt to work out the sampling -->
 
+</div>
 </div>
 </div>
 <h3>References</h3>
 <div id="refs" class="references">
+<div id="ref-ajzen1991theory">
+<p>Ajzen, I. (1991). The theory of planned behavior. <em>Organizational Behavior and Human Decision Processes</em>, <em>50</em>, 179–211.</p>
+</div>
+<div id="ref-baron1986moderator">
+<p>Baron, R. M., &amp; Kenny, D. A. (1986). The moderator–mediator variable distinction in social psychological research: Conceptual, strategic, and statistical considerations. <em>Journal of Personality and Social Psychology</em>, <em>51</em>, 1173.</p>
+</div>
 <div id="ref-fisman2006gender">
 <p>Fisman, R., Iyengar, S. S., Kamenica, E., &amp; Simonson, I. (2006). Gender differences in mate selection: Evidence from a speed dating experiment. <em>The Quarterly Journal of Economics</em>, <em>121</em>, 673–697.</p>
+</div>
+<div id="ref-mackinnon2007mediation">
+<p>MacKinnon, D. P., Fairchild, A. J., &amp; Fritz, M. S. (2007). Mediation analysis. <em>Annual Review of Psychology</em>, <em>58</em>, 593–614.</p>
+</div>
+<div id="ref-preacher2008asymptotic">
+<p>Preacher, K. J., &amp; Hayes, A. F. (2008). Asymptotic and resampling strategies for assessing and comparing indirect effects in multiple mediator models. <em>Behavior Research Methods</em>, <em>40</em>, 879–891.</p>
+</div>
+<div id="ref-zaval_how_2015">
+<p>Zaval, L., Markowitz, E. M., &amp; Weber, E. U. (2015). How will I be remembered? Conserving the environment for the sake of one’s legacy. <em>Psychological Science</em>, <em>26</em>, 231–236.</p>
 </div>
 </div>
 <div class="footnotes">
