@@ -206,3 +206,13 @@ tab:causal-steps-mod3-results
 testing-mediation-of-legacy-motive-by-intention-with-the-causal-steps-approach
 estimating-the-indirect-effect
 estimating-the-mediated-effect
+effect-sizes-and-the-importance-of-predictors
+eq:standardized-slopes
+r2-change-and-the-coefficient-of-partial-determination
+effect-size-and-the-importance-of-predictors
+r2-changes-and-the-coefficient-of-semi-partial-determination
+eq:semi-partial-determination
+eq:confidence-interval-slope-multiple-regression
+eq:tolerance
+multicollinearity-redundancy-between-predictors
+detecting-and-dealing-with-multicollinearity
