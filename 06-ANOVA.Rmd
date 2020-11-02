@@ -1,10 +1,404 @@
 # A model of means (ANOVA)
 
-## Two-sample t-test
+```{r}
+library(sdamr)
+data("tetris2015")
+```
+
+## Can playing Tetris reduce intrusive memories?
+
+After a traumatic experience, some people experience flashbacks, which are intrusive and involuntary memories that involve vivid imagery related to the traumatic event. These intrusive memories can be highly distressing and are a hallmark of acute stress disorder and posttraumatic stress disorder (PTSD). It has been suggested that recalling traumatic memories under certain conditions can reduce their negative impact. Memory consolidation refers to a collection of neural processes which stabilize a memory trace after it is aqcuired. According to reconsolidation theory, when a consolidated memory trace is reactivated (remembered), it again becomes malleable and will require restabilization for it to persist. Disruption of this reconsolidation after recall may then be a way to reduce the strength of traumatic memories, or even allow them to be forgotten. 
+
+@james_computer_2015 conducted a study to investigate this idea. They reasoned that because intrusive memories of trauma are often visual in nature, performing a demanding visuospatial task (e.g. playing the computer game Tetris) after recall could interfere with the reconsolidation process and reduce subsequent intrusions of the traumatic memory. In their Experiment 2, they first created traumatic memories by showing their participants an 12-minute film with graphic scenes depicting death and serious injury (e.g. a van hitting a teenage boy while he was using his mobile phone crossing the road). Participants then went home and recorded the number of intrusive memories of the film during the subsequent 24-hour period (Day 0). The next day, they returned to the lab and were randomly assigned to one of four conditions:
+
+1. No-task control: participants in this condition ($n=18$) completed a 10-minute music filler task, rating excerpts of classical music for pleasantness.
+2. Tetris+Reactivation: participants in this condition ($n=18$) were shown a series of images from the scenes in the trauma film to reactivate the memories of the scenes. After this reactivation task, they completed the 10-minute music filler task, and then played the video game Tetris for 12 minutes.
+3. Tetris-Only: participants in this condition ($n=18$) performed the music filler task and then played Tetris for 12 minutes, but did not complete the reactivation task.
+4. Reactivation Only: participants in this condition ($n=18$) completed the reactivation and music filler task, but did not play Tetris.
+
+All participants then went home and were asked to record the number of intrusive memories they experienced over the next seven days (Day 1 to 7). After this week passed, participants returned to the lab and completed an Intrusion-Provocation Task, in which they
+were shown blurred images from the trauma film and asked to indicate whether each of these triggered an intrusive memory.
+
+The sample means and standard deviations of the number of intrusions in each condition are:
+```{r}
+library(dplyr)
+dat <- tetris2015
+dat$Condition <- factor(dat$Condition, labels=c("Control","Tetris+Reactivation","Tetris Only", "Reactivation Only"))
+dat$intrusions <- dat$Days_One_to_Seven_Number_of_Intrusions
+tab <- dat %>% group_by(Condition) %>% summarise(mean = mean(intrusions), sd = sample_sd(intrusions)) %>% select(mean,sd) 
+colnames(tab) <- c("$\\overline{Y}$", "$S_Y$")
+rownames(tab) <- c("Control","Tetris+Reactivation","Tetris-Only","Reactivation-Only")
+knitr::kable(tab, escape=FALSE)
+
+```
+
+Boxplots for each condition are provided in Figure \@ref(fig:tetris-intrusive-memories).
+
+```{r tetris-intrusive-memories, fig.cap="Number of intrusive memories during days 1 to 7 for each condition of Experiment 2 of @james_computer_2015."}
+library(ggplot2)
+ggplot(dat, aes(y = Days_One_to_Seven_Number_of_Intrusions, colour=Condition)) + geom_boxplot() + ylab("Number of intrusions") + theme(legend.position = "bottom")
+```
+
+## Comparing two groups
+
+```{r}
+dat <- subset(tetris2015, Condition %in% c("Tetris_Reactivation","Reactivation"))
+dat$intrusions <- dat$Days_One_to_Seven_Number_of_Intrusions
+dat$dummy <- 0
+dat$dummy[dat$Condition == "Reactivation"] <- 1
+```
+
+To start with a relatively straightforward example, let's first focus only on the data from the Tetris+Reactivation and the Reactivation-Only conditions. We are interested in whether playing Tetris during reactivation reduces the number of memory intrusions on later days, in comparison to when the traumatic memory was reactivated only. To investigate this, we will extend the simple model of Chapter \@ref(ch:simple-GLM). In particular, we will assume that the number of intrusions is Normal-distributed with a mean that depends on the experimental condition participants were assigned to (Tetris+Reactivation or Reactivation-Only). We can write this model in two equivalent ways as:
+$$Y_i \sim \mathbf{Normal}(\mu_{\text{con}},\sigma)$$
+and
+\begin{equation}
+Y_i = \mu_\text{con} + \epsilon_i \quad \quad \epsilon_i \sim \mathbf{Normal}(0,\sigma)
+(\#eq:two-group-model-mu)
+\end{equation}
+where $\mu_\text{con}$ is a placeholder for the mean of a particular condition. Specifying that mean explicitly, we can also write the model as 
+
+$$Y_{i} = \begin{cases}  \mu_\text{t+r} + \epsilon_{i} \hspace{2em} \text{if condition = Tetris+Reactivation} \\ \mu_\text{react} + \epsilon_{i} \hspace{2em} \text{if condition = Reactivation-Only}  \end{cases} \quad \quad \epsilon_i \sim \mathbf{Normal}(0,\sigma_\epsilon)$$
+Note that the model assumes that while the mean can differ between the conditions, deviations of the observations around the mean are assumed to have the same standard deviance $\sigma_\epsilon$. An example of what the model might look like is given in Figure \@ref(fig:two-group-Normal-densities).
+
+```{r two-group-Normal-densities, fig.cap="The Normal density function for $\\mu = 0$ and $\\sigma = 1$", fig.height=4,out.width="80%"}
+ggplot() + stat_function(fun=function(x) dnorm(x,mean=4,sd=1)) + stat_function(fun=function(x) dnorm(x,mean=6,sd=1)) + xlim(0,10) + ylab("p(y)") + xlab("y") + geom_line(data=data.frame(x=c(4,4),y=c(0,dnorm(4,4,1))),aes(x=x,y=y),lty=3) + geom_line(data=data.frame(x=c(6,6),y=c(0,dnorm(6,6,1))),aes(x=x,y=y),lty=3) + annotate("text",x=4,y=-.02,label=expression(mu[t+r])) + annotate("text",x=6,y=-.02,label=expression(mu[react]))
+```
+
+Can we estimate such a model, using the tools we have already learned about? Yes! It is actually quite straightforward to construct a linear model to represent the model with means depending on condition. Condition is a nominal variable, which we can't simply include "as is" in a linear model. Linear models need _metric_ predictors. But we can construct a new predictor $X$, which has the value 0 for participants in the Tetris+Reactivation condition, and the value 1 for participants in the Reactivation-Only condition. This predictor $X$, with values 0 and 1 referring to different groups, is commonly referred to as a __dummy coding__ variable. With this dummy predictor, the model
+
+$$Y_i = \beta_0 + \beta_1 \times X_i + \epsilon_i \quad \quad \epsilon_i \sim \mathbf{Normal}(0,\sigma)$$ 
+is formally equivalent to the model of Equation \@ref(eq:two-group-model-mu). To see why, it is important to realize that linear regression concerns the conditional means of the dependent variable given the values of the predictor variable(s). If we give the model enough flexibility (and I will discuss more in detail what that means later), then the model will be able to represent those conditional means accurately. Let's write out the structural part of the model (excluding the error term $\epsilon_i$) for a  participant from each condition. For _everyone_ in the Tetris+Reactivation condition, $X_i = 0$, so the model predictions are
+$$\begin{align}
+\hat{Y}_i &= \beta_0 + \beta_1 \times 0 \\
+&= \beta_0
+\end{align}$$ 
+For _everyone_ in the Reactivation-Only condition, $X_i = 1$, so the model are 
+$$\begin{align}
+\hat{Y}_i &= \beta_0 + \beta_1 \times 1 \\
+&= \beta_0 + \beta_1
+\end{align}$$ 
+
+For cases in the Tetris+Reactivation condition, the model predictions are a constant: $\beta_0$. If we "rename" $\beta_0 = \mu_\text{t+r}$, then we have the the model we wanted for this condition. For cases in the Reactivation-Only condition, the prediction consists of the sum of two constants, $\beta_0 + \beta_1$. A sum of two constants is itself a constant. Moreover, because we have already "renamed" $\beta_0 = \mu_\text{tetr}$, we can also write the sum as $\mu_\text{react} = \mu_\text{t+r} + \beta_1$, which if we move $\mu_\text{t+r}$ to the left-hand side, indicates that $\beta_1 = \mu_\text{react} - \mu_\text{t+r}$. In words, the slope of our predictor equals the difference between the mean of the the Reactivation-Only and the mean of Tetris+Reacivation condition.
+
+Remember that the linear model represents the conditional mean of the dependent variable for each set of values of the predictor variables. We have just constructed a predictor with a different value for cases in each condition, and we could write the resulting model predictions in terms of two parameters (the intercept and the slope) which we could relate to the means in each condition. In Chapter \@ref(ch:simple-GLM), we showed that the maximum likelihood estimate of the mean $\mu$ of a Normal-distributed variable is the sample mean $\overline{Y}$. In a model with multiple means, the maximum likelihood estimates are the respective sample means in each group (condition). In the model we just constructed, the parameter estimates are a function of the sample means in each group. More precisely, the estimate of the intercept equals the mean in the Tetris+Reacivation condition:
+$$\hat{\beta}_0 = \overline{Y}_\text{t+r}$$
+and the estimate of the slope equals the difference between the sample mean of the the Reactivation-Only and the sample mean of Tetris+Reacivation condition:
+$$\hat{\beta}_1 = \overline{Y}_\text{react} - \overline{Y}_\text{t+r}$$
+The average number of intrusive memories in the Tetris+Reacivation condition was $\overline{Y}_\text{t+r} = `r format(mean(subset(dat, Condition == "Tetris_Reactivation")$intrusions), digits=3)`$, and the corresponding mean in the Reacivation condition was $\overline{Y}_\text{react} = `r format(mean(subset(dat, Condition == "Reactivation")$intrusions), digits=3)`$. Estimating the regression model provides the following estimates
+$$`r mod <- lm(intrusions ~ dummy, data=dat); write_GLM_equation(mod, dv_name = "intrusions", iv_names = c("dummy"), digits=3)`$$
+As you can see, the intercept equals $\overline{Y}_\text{t+r}$, and the slope of $\texttt{dummy}$ equals $\overline{Y}_\text{react} - \overline{Y}_\text{t+r} = `r format(mean(subset(dat, Condition == "Reactivation")$intrusions), digits=3)` -  `r format(mean(subset(dat, Condition == "Tetris_Reactivation")$intrusions), digits=3)` = `r format(mean(subset(dat, Condition == "Reactivation")$intrusions) - mean(subset(dat, Condition == "Tetris_Reactivation")$intrusions), digits=3)`$. The results of the hypothesis tests that the intercept and slope equal 0 are given in Table \@ref(tab:tetris-intrusions-dummy-ANOVA). The test result for the intercept indicates that the average number of intrusions in the Tetris+Reactivation condition is different than zero. More interestingly, the test result for the slope of $\texttt{dummy}$ indicates that the difference between the Tetris+Reactivation and Reactivation-Only condition is not equal to 0. In other words, there is a _difference_ between the conditions in the average number of intrusions. Playing Tetris after memory reactivation seems to reduce the number of subsequent intrusions.
+
+```{r tetris-intrusions-dummy-ANOVA}
+opts <- options()
+options(knitr.kable.NA = "")
+tab <- cbind(estimate = c(coefficients(mod),Error=NA),car::Anova(mod, type=3))
+rownames(tab) <- c("Intercept","$\\texttt{dummy}$","Error")
+colnames(tab) <- c("$\\hat{\\beta}$","$\\text{SS}$", "$\\text{df}$", "$F$", "$P(\\geq \\lvert F \\rvert)$")
+knitr::kable(tab, caption = "Linear model predicting number of intrusions by a dummy predictor.", escape = FALSE, digits=3)
+options(opts)
+```
+
+A test comparing the means of two Normal-distributed variables is also known as an __independent samples t-test__. It involves an extension of the one-sample $t$ test discussed in Chapter \@ref(ch:simple-GLM) and is based on the sampling distribution of the difference between two sample means. As the mathematical details of that test do not provide any new insights, we omit them here. A main thing to realise is that this test will provide identical results to the test of the slope of $\texttt{dummy}$. If you'd take the square-root of the $F$ statistic for this test, you obtain the value of the $t$ statistic of the independent samples t-test. 
+
+<!-- 
+$$t = \frac{\overline{Y}_1 - \overline{Y}_2}{\hat{\sigma}_p \sqrt{\frac{1}{n_1} + \frac{1}{n_2}}}$$
+
+where $\hat{\sigma}_p$ is a so-called _pooled_ estimate of the standard deviation in each group
+$$\hat{\sigma}_p = \sqrt{\frac{(n_1 - 1) S^2_1 + (n_2 - 1) S^2_2}{n_1 + n_2 - 2}}$$
+
+-->
+
+## The ANOVA model
+
+The dummy coding procedure above can be generalized to the situation in which you want to compare more than two groups. In the Tetris study, there were four conditions. To allow a linear model to represent the means in all four conditions, you need to use more than one dummy-coding predictor. In fact, you would need 3 dummy-coding predictors. In such a model, the intercept represents the mean of one condition, which we can call the reference group. The slope of each predictor represents the difference between the mean of the remaining groups and the reference group. Whilst dummy coding is simple and provides interpretable parameters, there are alternative coding schemes that may provide more interesting tests.
+
+Before going into such alternative coding schemes, we will take a _slight_ detour and consider the traditional model for the case of Normal-distributed variables in multiple groups with (potentially) different means, but the same standard deviation. This model is also called the oneway ANOVA model, and can be stated as follows:
+\begin{equation}
+Y_{j,i} = \mu + \tau_j + \epsilon_{j,i} \quad \quad \epsilon_{j,i} \sim \textbf{Normal}(0, \sigma_\epsilon)
+(\#eq:glm-ANOVA-model)
+\end{equation}
+Here, $Y_{j,i}$ denotes the value of the dependent variable for case $i = 1,\ldots, n_j$ in group $j = 1, \ldots, g$. So $g$ denotes the total number of groups (i.e. $g=4$ in the Tetris study), and $n_j$ the number of cases in group $j$ (i.e. $n_j = 18$ in the Tetris study). $\epsilon_{j,i}$ is the corresponding error term for participant $i$ in group $j$. The mean $\mu$ is the so-called "grand mean", which is the overall mean of the dependent variable, the of any observation that could be produced by the Data Generating Process, regardless of group. The term $\tau_j$ represents the so-called "treatment effect" of group $j$, defined as the difference between the mean of group $j$ and the grand mean: $$\tau_j = \mu_j - \mu$$
+
+The traditional goal of an ANOVA is to determine whether there is any treatment effect. That is, to test the null-hypothesis $H_0: \tau_j = 0 \text{ for all } j = 1, \ldots, g$. Note that the hypothesis states that $\tau_j = 0$ for all groups. We could have also stated this hypothesis as $H_0: \tau_1 = \tau_2 = \ldots = \tau_g = 0$, if you find that clearer. As the hypothesis states that the difference between the group-specific mean $\mu_j$ and the grand mean $\mu$ is 0 for every group, the implication is that $\mu_j = \mu$ for all groups (i.e. all groups have an identical mean $\mu$). The test statistic for this null-hypothesis is the $F$ statistic, calculated as a ratio of the (estimated) sample variance of the treatment effects and the (estimated) variance of residual error terms. As we will see, we can perform this hypothesis test in with the General Linear Model through an overall model test (comparing a "full" MODEL G to an intercept-only MODEL R). In addition, we can also test more specific hypotheses regarding differences between the group means and the overall mean, or specific hypotheses regarding differences between particular (combinations of) groups. In contrast to traditional ANOVA, the GLM approach also deals naturally with situations in which the groups have unequal sizes (i.e. $n_j$ differs between the groups). This is not straightforward with the traditional ANOVA test.
 
 ## Contrast coding
 
-## Oneway ANOVA
+<!-- The dummy coding procedure above can be generalized to the situation in which you want to compare more than two groups. In the Tetris study, there were four conditions. To allow a linear model to represent the means in all four conditions, you need to use more than one dummy-coding predictor. In fact, you would need 3 dummy-coding predictors. In such a model, the intercept represents the mean of one condition, which we can call the reference group. The slope of each predictor represents the difference between the mean of the remaining groups and the reference group. Whilst dummy coding is simple and provides interpretable parameters, there are alternative coding schemes that may provide more interesting tests. <!-- we will in the remainder of this book focus mostly on other forms of coding. --><!-- a different way of coding, which also provides interpretable parameters, but has the benefit that it (in the case of equally-sized groups) provides __independent predictors__. If the predictors in a linear model are all independent, there is no redundancy between them (i.e. no multicollinearity). This increases the reliability of parameter estimates and with that the power of the tests of those parameters.-->
 
-## Factorial ANOVA
+As in the case of two groups, the approach to testing group differences in the GLM is to construct new predictor variables, which we might call __contrast-coding predictors__, which represent differences between groups. 
+
+To illustrate the general concepts of contrast coding in a hopefully intuitive manner, let's first consider a game in which you ask someone to pick a random number between 1 and 8 and your job is to determine the number they picked by asking questions which can be answered by "yes" or "no". There are different ways in which you can play this game, and some of these are more efficient than others. For instance, you can ask "Is the number 1?", "Is the number 2?", "Is the number 3?", etc. If they picked the number 1, then you would have needed just a single question, but if they picked the number 8, you would have needed a total of 7 questions. After having asked "Is the number 7?", you would not need to ask whether the number was 8, because that would be the only remaining possibility. 
+
+To uniquely determine any number between 1 and 8, your playing strategy will always consist of 7 questions. You would not need to ask all of these questions in any given play of the game, but over many plays with the same question strategy, you would ask a total of 7 unique questions. The strategy above is a bit like dummy coding. The final number 8 is the reference group, and each question such as "Is the number 1?" is implicitly the same as "Is the number 1 _and not 8_?". A different way to play the game is by a strategy which guarantees you to always correctly "guess" the number in three questions. This strategy is depicted in Figure \@ref(fig:number-guessing-game-contrast-coding). In this strategy, each question halves the number of remaining options. If the first question "Is the number larger than 4?" is answered as "yes", the number can only be 5, 6, 7, or 8. Subsequently asking "Is the number larger than 6?" would reduce the remaining options by half again. If the answer to this question was "yes", then the number would have to be either 7 or 8. Asking "Is the number 7?" would then allow you to finish the game (if the answer is "yes", the number is 7, if "no", it would have to be 8). Just like the earlier strategy, this strategy consists of a total of 7 questions (and in any given game, you would ask 3 of these). 
+
+
+```{tikz number-guessing-game-contrast-coding, dev="svg", out.width="60%", fig.cap="Questions to guess a random number between 1 and 8"}
+\scriptsize
+\tikzstyle{level 1}=[level distance=2cm, sibling distance=2.4cm]
+\tikzstyle{level 2}=[level distance=2cm, sibling distance=1.2cm]
+\tikzstyle{level 3}=[level distance=2cm, sibling distance=0.6cm]
+\tikzstyle{level 4}=[level distance=2cm, sibling distance=0cm]
+\tikzstyle{bag} = [circle, draw, fill=gray!20,text width=2.4em, text centered]
+\tikzstyle{end} = [circle, minimum width=3pt,fill, inner sep=0pt]
+\begin{tikzpicture}[grow=right, sloped]
+\node[bag] {$>4$ ?}
+    child {
+        node[bag] {$>6$?}        
+            child {
+            	node[bag] {7?}
+            		child {
+            			node[end, label=right: {8}] {}
+            			edge from parent
+            			node[above] {no}
+            		}
+            		child {
+            			node[end, label=right: {7}] {}
+	                    edge from parent
+						node[above] {yes}
+            		}
+            	edge from parent
+            	node[above] {yes}
+            }
+                child {
+            	node[bag] {5?}
+            		child {
+            			node[end, label=right: {6}] {}
+            			edge from parent
+            			node[above] {no}
+            		}
+            		child {
+            			node[end, label=right: {5}] {}
+	                    edge from parent
+						node[above] {yes}
+            		}
+            	edge from parent
+            	node[above] {no}
+            }
+            edge from parent
+            node[above] {yes}
+        }
+    child {
+        node[bag] {$>2$?}        
+            child {
+            	node[bag] {3?}
+            		child {
+            			node[end, label=right: {4}] {}
+            			edge from parent
+            			node[above] {no}
+            		}
+            		child {
+            			node[end, label=right: {3}] {}
+	                    edge from parent
+						node[above] {yes}
+            		}
+            	edge from parent
+            	node[above] {yes}
+            }
+                child {
+            	node[bag] {1?}
+            		child {
+            			node[end, label=right: {2}] {}
+            			edge from parent
+            			node[above] {no}
+            		}
+            		child {
+            			node[end, label=right: {1}] {}
+	                    edge from parent
+						node[above] {yes}
+            		}
+            	edge from parent
+            	node[above] {no}
+            }
+            edge from parent
+            node[above] {no}
+	};
+
+\end{tikzpicture}
+```
+
+Constructing contrast codes can be seen as more complicated version of the game above. Suppose that instead of guessing a single number, the other person can assign numbers to 8 letters $A, B, \ldots, H$, and your job is to determine what all these numbers are. You are given one hint, and then you can ask questions only about what the _differences_ are between the number(s) assigned to (combinations of) the letters. In the case of our analysis situation, the letters represent the groups, and the numbers the averages of those groups. This game is less fun to play than the earlier version, but its more interesting from a data analysis perspective.
+
+```{r}
+dat <- tetris2015
+dat$intrusions <- dat$Days_One_to_Seven_Number_of_Intrusions
+```
+
+Let's get back to the Tetris study. There were four conditions: the no-task Control condition, Tetris+Reactivation, Tetris-Only, and Reactivation-Only. Remember, your job is not to determine which condition someone was in. This can be answered with a total of two yes-no questions ("Did the condition involve playing Tetris?" and "Did the condition involve memory reactivation?"). Your job is now to determine the average number of intrusions in each condition by asking questions about differences between the averages. To start, I will give you a hint, which is that the average over all conditions (i.e. the grand mean) is $\hat{\mu} = `r format(mean(dat$intrusions), digits=3)`$. 
+
+```{r}
+tab <- data.frame(c1 = c(1,0,0,-1),
+                  c2 = c(0,1,0,-1),
+                  c3 = c(0,0,1,-1))
+colnames(tab) <- c("$c_1$","$c_2$","$c_3$")
+#rownames(tab) <- c(paste("Control (mean = ",format(mean(subset(dat,Condition == "Control")$intrusions),digits=3),")"),
+#paste("Tetris+Reactivation (mean =",format(mean(subset(dat,Condition == "Tetris_Reactivation")$intrusions),digits=3),")"),paste("Tetris-Only (mean =",format(mean(subset(dat,Condition == "Tetris")$intrusions),digits=3),")"),paste("Reactivation-Only (mean =",format(mean(subset(dat,Condition == "Reactivation")$intrusions),digits=3),")"))
+rownames(tab) <- c("Control","Tetris+Reactivation", "Tetris-Only", "Reactivation-Only")
+# knitr::kable(tab, escape=FALSE,align=rep('r', 3))
+library(dplyr)
+means <- dat %>% group_by(Condition) %>% summarise(mean = mean(intrusions)) %>% select(mean)
+codes <- cbind(c(1,0,0,-1),
+               c(0,1,0,-1),
+               c(0,0,1,-1))
+means <- means$mean
+contrasts(dat$Condition) <- codes
+modg <- lm(intrusions ~ Condition, data=dat)
+
+```
+
+One set of questions you could ask is the following:
+
+1. What is the difference between the mean of the Control condition and the grand mean? 
+2. What is the difference between the mean of the Tetris+Reactivation condition and the grand mean? 
+3. What is the difference between the mean of the Tetris-Only condition and the grand mean? 
+
+The answers to these questions are
+
+1. $\hat{\mu}_\text{contr} - \hat{\mu} = `r format(means[1],digits=3)` - `r format(mean(means), digits=3)` = `r format(means[1] - mean(means),digits=3)`$.
+2. $\hat{\mu}_\text{t+r} - \hat{\mu} = `r format(means[2],digits=3)` - `r format(mean(means), digits=3)` = `r format(means[2] - mean(means),digits=3)`$.
+3. $\hat{\mu}_\text{tetr} - \hat{\mu} = `r format(means[3],digits=3)` - `r format(mean(means), digits=3)` = `r format(means[3] - mean(means),digits=3)`$.
+
+Because I have told you the value of $\hat{\mu}$ already, you can simply add the value of this "hint" to the answer of each question to determine the mean of a condition. You do not need to ask a fourth question ("What is the difference between the mean of the reactivation-Only condition and the grand mean?"), because with the information provided, you would be able to determine this. Firstly, I should point out that $$\begin{align}
+\hat{\mu} &= \frac{\hat{\mu}_\text{contr} + \hat{\mu}_\text{t+r} + \hat{\mu}_\text{tetr} + \hat{\mu}_\text{react}}{4} \\
+&= \frac{\overline{Y}_\text{contr} + \overline{Y}_\text{t+r} + \overline{Y}_\text{tetr} + \overline{Y}_\text{react}}{4}
+\end{align}$$
+i.e., the estimate of the grand mean is a "mean of means". From this, it directly follows that
+$$\hat{\mu}_\text{react} = 4 \times \mu - \hat{\mu}_\text{contr} - \hat{\mu}_\text{t+r} - \hat{\mu}_\text{tetr}$$
+and the treatment effect can also be determined as
+$$\hat{\mu}_\text{react} - \hat{\mu} = -1 \times\left( (\hat{\mu}_\text{contr} - \hat{\mu}) + (\hat{\mu}_\text{t+r} - \hat{\mu}) + (\hat{\mu}_\text{tetr} - \hat{\mu}) \right)$$
+i.e. as minus one times the sum of the treatment effect of the other conditions. It is precisely for dependencies like these that when constructing contrast codes for a nominal variable representing group membership, you need $g-1$ (the number of groups minus 1) contrast codes.
+
+### Effect coding
+
+The questions about deviations between group means and the grand mean (the _treatment effects_) correspond to the following three contrast codes $c_j$:
+```{r}
+knitr::kable(tab, escape=FALSE,align=rep('r', 3))
+```
+Just like for the dummy coding example discussed above, the idea is to construct a new predictor for each of these contrast codes. The contrast codes have values for each condition. The corresponding contrast-coding predictor has a value for each case $i$ in the data, where we give all cases in a condition the corresponding value of $c_j$ for that condition. For example, the first predictor $X_1$, which corresponds to the first contrast code $c_1$, would have the value $X_{1,i} = 1$ if case $i$ is in the Control condition, the value $X_{1,i} = 0$ if case $i$ is in the Tetris+Reactivation or Tetris-only condition, and the value $X_{1,i} = -1$ if case $i$ is in the Reactivation-Only condition. Similarly, the second predictor $X_2$, which corresponds to the second contrast code $c_2$, would have the value $X_{2,i} = 0$ if case $i$ is in the Control condition, the value $X_{2,i} = 1$ if case $i$ is in the Tetris+Reactivation condition, the value $X_{2,i} = 0$ if case $i$ is in the  Tetris-only condition, and the value $X_{2,i} = -1$ if case $i$ is in the Reactivation-Only condition. Having defined three contrast-coding predictors, $X_1$, $X_2$, and $X_3$ in this manner, we can then estimate the linear (regression) model
+$$Y_i = \beta_0 + \beta_1 \times X_{1,i} + \beta_2 \times X_{2,i} + \beta_3 \times X_{3,i} + \epsilon_i \quad \quad \epsilon_i \sim \mathbf{Normal}(0,\sigma_\epsilon)$$
+This model is treated as any other regression model. So after re-coding a nominal variable "condition" with four levels (Control, Tetris+Reactivation, Tetris-Only, and Reactivation-Only) with three contrast codes $c_1$, $c_2$, and $c_3$, each with a corresponding predictor $X_1$, $X_2$, and $X_3$, we end up with a linear model that is effectively like any other multiple regression model. Estimating the model gives:
+$$`r write_GLM_equation(modg, dv_name = "intrusions", iv_names = c("}X_1\\texttt{","}X_2\\texttt{","}X_3\\texttt{"), digits=3, include_sde = TRUE)`$$
+Figure \@ref(fig:tetris-effect-coding-parameter-plot) shows how the parameters of the model are related to the average number of intrusions in each condition.
+```{r tetris-effect-coding-parameter-plot, fig.cap="Average number of instrusions in the four conditions in the Tetris study and how they are related to the parameters of the effect-coding model. The intercept $\\hat{\beta}_0 = \\hat{\\mu}$ is the grand mean (dotted line). The slopes reflect treatment effects, which are deviations from the average intrusions in a condition and the grand mean. The averages of the first three conditions are equal to $\\beta_0 + \\beta_j$, the sum of the intercept and the slope of the effect-coding predictor $X_j$ representing the treatment effect of that condition. The mean of the last condition is the intercept minus the sum of the slopes of the effect-coding predictors."}
+data.frame(Condition = factor(1:4,labels=c("Control","Tetris+Reactivation","Tetris-Only","Reactivation-Only")), mean=means) %>%
+  ggplot(aes(x=Condition, y=mean, xend = Condition, yend=mean(mean))) + geom_point() + geom_hline(yintercept = mean(means), lty=3) + geom_segment(arrow = arrow(length=unit(0.20,"cm"), type="closed", ends = "first"), alpha=.6) + annotate("text",x=1.1,y=.5*mean(means) + .5*means[1], label=expression(beta[1])) + annotate("text",x=2.1,y=.5*mean(means) + .5*means[2], label=expression(beta[2])) + annotate("text",x=3.1,y=.5*mean(means) + .5*means[3], label=expression(beta[3])) + annotate("text",x=3.5,y=.5*mean(means) + .5*means[1], label=expression(beta[0] - (beta[1] + beta[2] + beta[3]))) + annotate("text",x=0.5,y=mean(means) - .15, label=expression(beta[0])) + ylab("Intrusions")
+```
+
+
+Test results for the parameters of the model are given in Table \@ref(tab:tetris-effect-coding-ANOVA). As can be seen there, the test of the intercept is significant. In this model, the intercept represents the "grand mean" $\mu$ (the average of the means in each condition). The test indicates that the true value of the grand mean is unlikely to be 0. In addition, the slope of $X_2$ is significant. This slope is equal to the _treatment effect_ of the Tetris+Reactivation condition (i.e. $\hat{\beta}_2 = \hat{\mu}_{t+r} - \hat{\mu}$). The test is a test of the null-hypothesis $H_0: \beta_2 = 0$, and this test involves a comparison of the models
+$$\begin{align}
+\text{MODEL G}: && Y_i &= \beta_0 + \beta_1 \times X_{1,i} + \beta_2 \times X_{2,i} + \beta_3 \times X_{3,i} + \epsilon_i \\
+\text{MODEL R}: && Y_i &= \beta_0 + \beta_1 \times X_{1,i} + \beta_3 \times X_{3,i} + \epsilon_i
+\end{align}$$
+The comparison indicates that fixing the slope $\beta_2 = 0$ in MODEL R results is a substantial increase in the Sum of Squared Error of MODEL R compared to MODEL G. As such, there is evidence that the true value of this slope does not equal 0, and with that, that the true treatment effect of the Tetris+Reactivation condition does not equal 0, i.e. that $\mu_{t+r} - \mu \neq 0$. Furthermore, the estimate of the treatment effect is $\hat{\beta}_2 = \hat{\mu}_{t+r} - \hat{\mu} = \overline{Y}_{t+r} - \frac{\overline{Y}_\text{contr} + \overline{Y}_\text{t+r} + \overline{Y}_\text{tetr} + \overline{Y}_\text{react}}{4}  =  `r coefficients(modg)[3]`$, which indicates that the number of intrusions in this condition is _lower_ than the grand mean. As such, we would conclude that playing Tetris after memory reactivation _reduces_ the subsequent memory intrusions. The tests of the slopes of $X_1$ and $X_3$ are not significant. We therefore do not have sufficient evidence that the treatment effect of the Control condition, or of the Tetris-only condition, are different to 0. 
+
+```{r tetris-effect-coding-ANOVA}
+opts <- options()
+options(knitr.kable.NA = "")
+tab <- cbind(estimate = c(coefficients(modg)[1],NA,coefficients(modg)[2:4],Error=NA),rbind(car::Anova(modg, type=3)[1:2,],expand_Anova(modg, type=3)[-1,]))
+rownames(tab) <- c("Intercept","Condition","$\\quad X_1$","$\\quad X_2$", "$\\quad X_3$", "Error")
+colnames(tab) <- c("$\\hat{\\beta}$","$\\text{SS}$", "$\\text{df}$", "$F$", "$P(\\geq \\lvert F \\rvert)$")
+knitr::kable(tab, caption = "Linear model predicting number of intrusions by three effect-coded predictors.", escape = FALSE, digits=3)
+options(opts)
+```
+
+Table \@ref(tab:tetris-effect-coding-ANOVA) also includes a row labelled "Condition". This is a test of the hypothesis that _all_ of the slopes of the contrast-coding predictors for Condition are equal to 0:
+$$H_0\!: \beta_1 = \beta_2 = \beta_3 = 0$$
+This hypothesis test is based on comparing the following two models:
+$$\begin{align}
+\text{MODEL G}: && Y_i &= \beta_0 + \beta_1 \times X_{1,i} + \beta_2 \times X_{2,i} + \beta_3 \times X_{3,i} + \epsilon_i \\
+\text{MODEL R}: && Y_i &= \beta_0 + \epsilon_i
+\end{align}$$
+i.e., it is a "whole model test". The result of this so-called __omnibus test__ (a simultaneous test of multiple parameters) is significant, indicating that it is unlikely that the true values of the slopes are all equal to 0. In MODEL R above, there is only a single parameter $\beta_0$. As such, this model predicts that all conditions have the same mean $\mu$. This test is thus a test of the null-hypothesis that _all_ treatment effects for Condition are equal to 0: 
+$$H_0\!: (\mu_\text{contr} - \mu) = (\mu_\text{t+r} - \mu) = (\mu_\text{tetr} - \mu) = (\mu_\text{react} - \mu) = 0$$
+which is also equivalent to the test that the means of all conditions are equal to eachother:
+$$H_0\!: \mu_\text{contr} = \mu_\text{t+r} = \mu_\text{tetr} = \mu_\text{react} $$
+
+The result of the omnibus test indicates that there is at least one treatment effect which is different from 0. Omnibus tests for all slopes reflecting treatment effects are what is traditionally focused on in an ANOVA. But these omnibus tests are not always that informative. We'd generally like to know more than "there is at least one treatment that is likely to have an effect". It seems inherently more interesting to know _which_ conditions are associated with a treatment effect. This is where the tests of the individual slopes come in handy. Assessing the effect of the three effect-coding predictors, we can conclude that only the treatment effect of the Tetris+Reactivation condition is significant. As such, we only have sufficient evidence that a combination of memory reactivation and playing Tetris changes the number of subsequent memory intrusions. 
+
+At this point, I'd like to make some important remarks. Firstly, the absence of sufficient evidence that any of the other treatment effects differs from 0 should _not_ be taken as direct evidence that the true treatment effects equal 0. A non-significant result indicates a lack of evidence _against_ the null-hypothesis, but not an abundance of evidence _for_ the null hypothesis. You can think of this as follows: that a suspect in a murder trial is not able to provide evidence that she is innocent is in itself not sufficient evidence that she is guilty. You might also think of black swans. While the empirical statement "All swans are white" is impossible to prove conclusively without checking the colour of all swans that have and will ever grace this world, finding a single black swan disproves that statement immediately [@popper1959logic]. Although significance testing does not provide _conclusive evidence_ for or against the null-hypothesis^[Remember that the significance level sets an allowable error rate if the null hypothesis is true, whilst the error rate when the null hypothesis is not true is unknown, but unlikely to be 0.], the analogy can be described as follows: a significant test is like spotting a swan that is "off-white" enough for you to decide it is not exactly white. But not having spotted such a swan could either mean that such a swan does not exist (the null hypothesis is true), or that you have not searched hard enough (the null hypothesis is false, but your test lacked power).
+
+Secondly, the effect-coding predictors only reflect three out of a total of four treatment effects. The treatment effect of the reactivation-Only condition follows directly as minus the sum of these three treatment effects. As such, it is redundant. But we don't have a hypothesis test for this redundant treatment effect. If we had chosen a slightly different coding scheme, where we would have estimated the treatment effects of the Control, Tetris-Only, and Reactivation-Only condition, such that the treatment effect of the Tetris+Reactivation condition is redundant, then none of the significance tests of the slopes of this different model would have been significant. The omnibus test would be give exactly the same results, thus indicating that at least one treatment effect does not equal 0, but we couldn't have easily spotted which treatment effect(s) these were. Whilst the estimates and slopes of contrast-coding predictors are often more specific and informative than an omnibus test, because we can only use $g-1$ of such predictors (one less than the number of groups), we can't test for all treatment effects in a single model, nor test all hypotheses that we might be interested in. We will come back to this when we discuss "multiple testing" approaches. For now, a main thing to realise is that a significant omnibus test indicates that at least two groups differ in their means. If none of tests of the slopes of the contrast-coding predictors in a linear model are significant, but you have obtained a significant omnibus test, that indicates that none of these predictors encoded that specific difference. Whilst some authors bemoan the use of omnibus tests, they have a role to play in the inference process, for instance in spotting whether you have missed a potentially important effect. Other authors put too much emphasis on omnibus tests, for instance requiring a significant omnibus tests before you might consider tests of the individual slopes that comprise this omnibus test. It is perfectly possible for an omnibus test to be non-significant, whilst a slope for one (or more) contrast-coding predictors is significant. For instance, if you'd conduct an experiment with 10 conditions, and only on has an actual treatment effect, the omnibus test might be non-significant because it effectively assigns that one treatment effect to nine parameters (slopes for nine contrast-coding predictors). Let's take an extreme example, where only $X_1$ (the first contrast-coding predictor) reduces the SSE with $\text{SSR}(X_1) > 0$, whilst the other predictors provide no reduction in the SSE whatsoever (i.e. $\text{SSR}(X_j) = 0$ for $j=2, \ldots, 9$). Then the $F$ statistic of the omnibus test might be
+$$\begin{align}
+F &= \frac{\frac{\text{SSE}(R) - \text{SSE}(G)}{\text{npar}(G) - \text{npar}(R)}}{\frac{\text{SSE}(G)}{n-\text{npar}(G)}} \\
+&= \frac{\text{SSR}(X_1)/9}{\text{SSE}(G)/(n-10)}
+\end{align}$$
+whilst the $F$ statistic for the slope of $X_1$ would be
+$$\begin{align}
+F &= \frac{\frac{\text{SSE}(R) - \text{SSE}(G)}{\text{npar}(G) - \text{npar}(R)}}{\frac{\text{SSE}(G)}{n-\text{npar}(G)}} \\
+&= \frac{\text{SSR}(X_1)/1}{\text{SSE}(G)/(n-10)}
+\end{align}$$
+which, with a higher value and smaller $\text{df}_1$, would be more likely to be significant.
+
+Thirdly, when you look at the value of $\text{SSR}(\text{Condition}) = `r format(tab[2,2],digits=3)`$ in Table \@ref(tab:tetris-effect-coding-ANOVA), you can see that it is smaller than the sum of the SSR terms corresponding to the three predictors. This indicates that there is redundancy between the predictors $X_1$, $X_2$, and $X_3$ (i.e., some form of multicollinearity). Although Venn diagrams such as Figure \@ref(fig:sse-partition-multicollinearity) imply that the SSR of the full model would be larger than the sum of the unique SSR terms attributable to each predictor, the opposite can also be true! This situation is commonly referred to as __suppression__ and is rather difficult to explain here without a significant and detailed detour. For now, we will therefore leave it to the interested reader to consult other sources on this, and simply not that if the sum of the SSR terms of the predictors does not equal the "whole model" SSR, this indicates redundancy between the predictors. 
+
+### Orthogonal contrast codes
+
+Whilst redundancy is not necessarily a problem, it is in some sense preferable if all the predictors in a linear model are independent, as we can then neatly distribute the total SSR to each predictor. When the number of cases in each group ($n_j$) is equal for all groups, there are contrast coding schemes that ensure that the resulting contrast-coding predictors are non-redundant (i.e., independent). Such coding schemes are called __orthogonal contrast codes__. There are some benefits to employing orthogonal contrast codes, although these benefits are sometimes overstated. Firstly, using orthogonal contrast codes ensures that the model predictions will exactly equal to (sample) averages in the conditions --  as long as no additional predictors are included in the model; we will discuss such additional predictors in the context of Analysis of Covariance (ANCOVA). Whilst redundant coding schemes such as dummy coding or effect coding (amongst others) also ensure this, when you start defining your own contrast coding schemes, it might be difficult to check whether this is the case, and then resorting to orthogonal contrast codes may provide useful guidance. Secondly, as already mentioned, using independent predictors will ensure that the whole model SSR is completely distributed over the SSR terms for the individual predictors. This makes it somewhat less likely that you will miss a difference between the groups in the tests of individual parameters that would be identified in the whole model test. Thirdly, using orthogonal contrast codes provides a general formula to state the estimate of the slopes of contrast-coding predictors in terms of the averages of the groups. If you use a set of orthogonal contrast codes, then the estimated slope of each predictor $X_j$ corresponding to contrast code $c_j$ can be expressed as the following function of the values of $c_{j,k}$ contrast code $c_j$ for group $k$ and the sample means $\overline{Y}_k$ of the dependent variable in group $k$ as: 
+\begin{equation}
+\hat{\beta}_j = \frac{\sum_{k=1}^{g} c_{j,k} \overline{Y}_k}{\sum_{k=1} c_{j,k}^2}
+(\#eq:estimate-slope-orthogonal-contrast-codes)
+\end{equation}
+i.e. as the sum of the sample means $\overline{Y}_k$ multiplied by the group-wise values of contrast code $c_j$, divided by the sum of $c_{j,k}^2$, the squared group-wise values of contrast $c_j$. Note that this formula does _not_ hold for the effect-coding scheme discussed previously. For instance, if you'd fill in the values of $c_1$, you'd get
+$$\begin{align}
+\hat{\beta}_1 &= \frac{1 \times \overline{Y}_\text{contr} + 0 \times \overline{Y}_\text{t+r} + 0 \times \overline{Y}_\text{tetr} - 1 \times \overline{Y}_\text{react}}{(1)^2 + (0)^2 + (0)^2 + (-1)^2} \\
+&= \frac{\overline{Y}_\text{contr} - \overline{Y}_\text{react}}{2}
+\end{align}$$
+which is obviously _not_ the same as
+$$\hat{\beta}_1 = \overline{Y}_\text{contr} - \frac{\overline{Y}_\text{contr} + \overline{Y}_\text{t+r} + \overline{Y}_\text{tetr} + \overline{Y}_\text{react}}{4}$$
+Nevertheless, the slopes of the effect-coding scheme gave us interpretable parameters, hence using non-orthogonal contrast codes does not prohibit interpretable parameter estimates. With that said, if you can define comparisons you would like to make in terms of a set of orthogonal contrast codes, that would be preferable. If you can't, there are ways to deal with that too, and you shouldn't worry too much. 
+
+
+One set of questions you could ask is the following:
+
+1. What is the difference between the Control condition and the average of the three remaining conditions combined?
+2. What is the difference between the Tetris-only condition and the average of the two reactivation conditions combined?
+3. What is the difference between the Tetris+Reactivation condition and the Reactivation-only condition?
+
+With answers to these three questions, and knowing the overall mean, you would be able to calculate the average in each condition with complete accuracy. How that works in practice we'll leave for the moment. Instead, let's focus on these three questions. The idea behind contrast coding is to define values for the predictors such that the slopes of those predictors are the answers to these questions. These values of three three contrast codes $c_1$, $c_2$, and $c_3$ (for questions 1 to 3 respectively) for each of the four conditions, is given in the table below:
+
+```{r}
+tab <- data.frame(c1 = c("$\\tfrac{1}{2}$","$-\\tfrac{1}{6}$","$-\\tfrac{1}{6}$","$-\\tfrac{1}{6}$"),
+                  c2 = c("0","$-\\tfrac{1}{4}$","$\\tfrac{1}{2}$","$-\\tfrac{1}{4}$"),
+                  c3 = c("0","$-\\tfrac{1}{2}$","0","$\\tfrac{1}{2}$"))
+colnames(tab) <- c("$c_1$","$c_2$","$c_3$")
+rownames(tab) <- c(paste("Control (mean = ",format(mean(subset(dat,Condition == "Control")$intrusions),digits=3),")"),
+paste("Tetris+Reactivation (mean =",format(mean(subset(dat,Condition == "Tetris_Reactivation")$intrusions),digits=3),")"),paste("Tetris-Only (mean =",format(mean(subset(dat,Condition == "Tetris")$intrusions),digits=3),")"),paste("Reactivation-Only (mean =",format(mean(subset(dat,Condition == "Reactivation")$intrusions),digits=3),")"))
+knitr::kable(tab, escape=FALSE,align=rep('r', 3))
+library(dplyr)
+means <- dat %>% group_by(Condition) %>% summarise(mean = mean(intrusions)) %>% select(mean)
+codes <- cbind(c(1/2,-1/6,-1/6,-1/6),
+               c(0,-1/4,1/2,-1/4),
+               c(0,-1/2,0,1/2))
+means <- means$mean
+```
+
+\begin{equation}
+\hat{\beta}_j = \frac{\sum_{k=1}^{g} c_{j,k} \overline{Y}_k}{\sum_{k=1} c_{j,k}^2}
+(\#eq:estimate-slope-orthogonal-contrast-codes)
+\end{equation}
+
+For the $c_1$, the estimated slope is
+$$
+\begin{align}
+\hat{\beta}_1 &= \frac{ \tfrac{1}{2} \times `r format(means[1],digits=3)` - \tfrac{1}{6} \times `r  format(means[2],digits=3)` - \tfrac{1}{6} \times `r format(means[3],digits=3)` - \frac{1}{6} \times  `r format(means[4],digits=3)` }{ (\frac{1}{2})^2 + (-\frac{1}{6})^2 + (-\frac{1}{6})^2 + (-\frac{1}{6})^2 }  \\
+&= \frac{`r sum(codes[,1]*means)`}{`r sum(codes[,1]^2)`} = `r sum(codes[,1]*means)/sum(codes[,1]^2)`
+\end{align}
+$$
+For the $c_2$, the estimated slope is
+$$
+\begin{align}
+\hat{\beta}_2 &= \frac{ 0 \times `r format(means[1],digits=3)` - \tfrac{1}{4} \times `r  format(means[2],digits=3)` + \tfrac{1}{2} \times `r format(means[3],digits=3)` - \frac{1}{4} \times  `r format(means[4],digits=3)` }{ (0)^2 + (-\frac{1}{4})^2 + (\frac{1}{2})^2 + (-\frac{1}{4})^2 }  \\
+&= \frac{`r sum(codes[,2]*means)`}{`r sum(codes[,2]^2)`} = `r sum(codes[,2]*means)/sum(codes[,2]^2)`
+\end{align}
+$$
+Finally, for the $c_3$, the estimated slope is
+$$
+\begin{align}
+\hat{\beta}_3 &= \frac{ 0 \times `r format(means[1],digits=3)` - \tfrac{1}{2} \times `r  format(means[2],digits=3)` + 0 \times `r format(means[3],digits=3)` + \frac{1}{2} \times  `r format(means[4],digits=3)` }{ (0)^2 + (-\frac{1}{2})^2 + (0)^2 + (\frac{1}{2})^2 }  \\
+&= \frac{`r sum(codes[,3]*means)`}{`r sum(codes[,3]^2)`} = `r sum(codes[,3]*means)/sum(codes[,3]^2)`
+\end{align}
+$$
+
+## Multiple testing and post-hoc tests
+
 
