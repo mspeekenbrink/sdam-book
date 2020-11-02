@@ -528,7 +528,7 @@ The value of $R^2_{X_j}$ is a measure of the redundancy of the predictor $X_j$. 
 
 If the value of $X_j$ could be perfectly predicted from the values of all other predictors, then $X_j$ would not be able to provide any information about the dependent variable $Y$ _over and above_ the other predictors. Remember that the slope in a multiple regression model represents an increase or decrease in the conditional mean of $Y$ for a one-unit increase in the predictor. If any increase in $X_j$ can be perfectly predicted by an increase or decrease in the other predictors, then those in- and decreases of the other predictors can also perfectly account for the associated in- or decrease in the conditional mean of $Y$. Very high values of $R^2_{X_j}$ indicate that a predictor $X_j$ will not be able to uniquely account for much variation in $Y$. The value of $1 - R^2_{X_j}$ then conversely represents the _uniqueness_ of predictor $X_j$, and this value is commonly referred to as the "tolerance":
 \begin{equation}
-\text{tolerance}(X_j) = R^2_{X_j}
+\text{tolerance}(X_j) = 1 - R^2_{X_j}
 (\#eq:tolerance)
 \end{equation}
 
@@ -546,7 +546,7 @@ which would give _exactly_ the same predictions of $Y_i$. Moreover, while we can
 
 ### Detecting and dealing with multicollinearity
 
-Generally, tolerance values below $R^2_j = .20$ are considered potentially problematic. This is by no means a precise cut-off value, but it can guide you nonetheless. Some statistics programs also report the __variance inflation factor__ (VIF), which is defined as 
+Generally, tolerance values below $1- R^2_{X_j} = .20$ are considered potentially problematic. This is by no means a precise cut-off value, but it can guide you nonetheless. Some statistics programs also report the __variance inflation factor__ (VIF), which is defined as 
 $$\text{VIF} = \frac{1}{1 - R^2_{X_j}}$$
 As this is just a transformation of the tolerance, I don't really see the point. Although it might be more intuitive as a measure of collinearity in the sense that high values indicate stronger collinearity, the scale of this measure is between 1 and $\infty$, and when possible, I find a bounded scale more easily interpretable. But, as there is a one-to-one relation between the tolerance and VIF measures, both provide exactly the same information, so either is fine.
 

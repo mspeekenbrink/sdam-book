@@ -24,7 +24,7 @@
 <meta name="author" content="Maarten Speekenbrink" />
 
 
-<meta name="date" content="2020-10-25" />
+<meta name="date" content="2020-11-02" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -53,6 +53,23 @@
 <script src="book_assets/accessible-code-block-0.0.1/empty-anchor.js"></script>
 <link href="book_assets/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
 <script src="book_assets/anchor-sections-1.0/anchor-sections.js"></script>
+<script src="book_assets/htmlwidgets-1.5.2/htmlwidgets.js"></script>
+<script src="book_assets/viz-1.8.2/viz.js"></script>
+<link href="book_assets/DiagrammeR-styles-0.2/styles.css" rel="stylesheet" />
+<script src="book_assets/grViz-binding-1.0.6.1/grViz.js"></script>
+<script src="book_assets/plotly-binding-4.9.2.1/plotly.js"></script>
+<script src="book_assets/typedarray-0.1/typedarray.min.js"></script>
+<link href="book_assets/crosstalk-1.1.0.1/css/crosstalk.css" rel="stylesheet" />
+<script src="book_assets/crosstalk-1.1.0.1/js/crosstalk.min.js"></script>
+<link href="book_assets/plotly-htmlwidgets-css-1.52.2/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="book_assets/plotly-main-1.52.2/plotly-latest.min.js"></script>
+<link href="book_assets/combineWidgetStyle-0.1/combineWidgets.css" rel="stylesheet" />
+<script src="book_assets/combineWidgets-binding-0.10.1/combineWidgets.js"></script>
+<link href="book_assets/rglwidgetClass-2/rgl.css" rel="stylesheet" />
+<script src="book_assets/rglwidgetClass-2/rglClass.src.js"></script>
+<script src="book_assets/CanvasMatrix4-2016/CanvasMatrix.src.js"></script>
+<script src="book_assets/rglWebGL-binding-0.100.54/rglWebGL.js"></script>
+<script src="book_assets/rglPlayer-binding-0.100.54/rglPlayer.js"></script>
 
 
 
@@ -106,31 +123,28 @@
 <li class="chapter" data-level="2.6" data-path="statistical-modelling.html"><a href="statistical-modelling.html#hypothesis-testing-directly-with-the-binomial-distribution"><i class="fa fa-check"></i><b>2.6</b> Hypothesis testing directly with the Binomial distribution</a></li>
 <li class="chapter" data-level="2.7" data-path="statistical-modelling.html"><a href="statistical-modelling.html#summary-1"><i class="fa fa-check"></i><b>2.7</b> Summary</a></li>
 <li class="chapter" data-level="2.8" data-path="statistical-modelling.html"><a href="statistical-modelling.html#epilogue"><i class="fa fa-check"></i><b>2.8</b> Epilogue</a></li>
-<li class="chapter" data-level="2.9" data-path="statistical-modelling.html"><a href="statistical-modelling.html#exercises"><i class="fa fa-check"></i><b>2.9</b> Exercises</a></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="a-model-with-a-mean-one-sample-t-test.html"><a href="a-model-with-a-mean-one-sample-t-test.html"><i class="fa fa-check"></i><b>3</b> A model with a mean (one sample t-test)</a><ul>
-<li class="chapter" data-level="3.1" data-path="a-model-with-a-mean-one-sample-t-test.html"><a href="a-model-with-a-mean-one-sample-t-test.html#numeric-judgement-and-anchoring"><i class="fa fa-check"></i><b>3.1</b> Numeric judgement and anchoring</a><ul>
-<li class="chapter" data-level="3.1.1" data-path="a-model-with-a-mean-one-sample-t-test.html"><a href="a-model-with-a-mean-one-sample-t-test.html#exploring-the-data"><i class="fa fa-check"></i><b>3.1.1</b> Exploring the data</a></li>
+<li class="chapter" data-level="3" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html"><i class="fa fa-check"></i><b>3</b> A model with a mean (one sample t-test)</a><ul>
+<li class="chapter" data-level="3.1" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#numeric-judgement-and-anchoring"><i class="fa fa-check"></i><b>3.1</b> Numeric judgement and anchoring</a><ul>
+<li class="chapter" data-level="3.1.1" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#exploring-the-data"><i class="fa fa-check"></i><b>3.1.1</b> Exploring the data</a></li>
 </ul></li>
-<li class="chapter" data-level="3.2" data-path="a-model-with-a-mean-one-sample-t-test.html"><a href="a-model-with-a-mean-one-sample-t-test.html#a-statistical-model-of-judgements"><i class="fa fa-check"></i><b>3.2</b> A statistical model of judgements</a><ul>
-<li class="chapter" data-level="3.2.1" data-path="a-model-with-a-mean-one-sample-t-test.html"><a href="a-model-with-a-mean-one-sample-t-test.html#the-normal-distribution"><i class="fa fa-check"></i><b>3.2.1</b> The Normal distribution</a></li>
-<li class="chapter" data-level="3.2.2" data-path="a-model-with-a-mean-one-sample-t-test.html"><a href="a-model-with-a-mean-one-sample-t-test.html#two-useful-properties-of-the-normal-distribution"><i class="fa fa-check"></i><b>3.2.2</b> Two useful properties of the Normal distribution</a></li>
-<li class="chapter" data-level="3.2.3" data-path="a-model-with-a-mean-one-sample-t-test.html"><a href="a-model-with-a-mean-one-sample-t-test.html#back-to-anchoring"><i class="fa fa-check"></i><b>3.2.3</b> Back to anchoring</a></li>
+<li class="chapter" data-level="3.2" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#a-statistical-model-of-judgements"><i class="fa fa-check"></i><b>3.2</b> A statistical model of judgements</a><ul>
+<li class="chapter" data-level="3.2.1" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#the-normal-distribution"><i class="fa fa-check"></i><b>3.2.1</b> The Normal distribution</a></li>
+<li class="chapter" data-level="3.2.2" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#two-useful-properties-of-the-normal-distribution"><i class="fa fa-check"></i><b>3.2.2</b> Two useful properties of the Normal distribution</a></li>
+<li class="chapter" data-level="3.2.3" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#back-to-anchoring"><i class="fa fa-check"></i><b>3.2.3</b> Back to anchoring</a></li>
 </ul></li>
-<li class="chapter" data-level="3.3" data-path="a-model-with-a-mean-one-sample-t-test.html"><a href="a-model-with-a-mean-one-sample-t-test.html#parameter-estimation"><i class="fa fa-check"></i><b>3.3</b> Parameter estimation</a><ul>
-<li class="chapter" data-level="3.3.1" data-path="a-model-with-a-mean-one-sample-t-test.html"><a href="a-model-with-a-mean-one-sample-t-test.html#sampling-distribution-of-the-estimated-mean"><i class="fa fa-check"></i><b>3.3.1</b> Sampling distribution of the estimated mean</a></li>
+<li class="chapter" data-level="3.3" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#parameter-estimation"><i class="fa fa-check"></i><b>3.3</b> Parameter estimation</a><ul>
+<li class="chapter" data-level="3.3.1" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#sampling-distribution-of-the-estimated-mean"><i class="fa fa-check"></i><b>3.3.1</b> Sampling distribution of the estimated mean</a></li>
 </ul></li>
-<li class="chapter" data-level="3.4" data-path="a-model-with-a-mean-one-sample-t-test.html"><a href="a-model-with-a-mean-one-sample-t-test.html#testing-whether-mu-has-an-specific-value"><i class="fa fa-check"></i><b>3.4</b> Testing whether <span class="math inline">\(\mu\)</span> has an specific value</a><ul>
-<li class="chapter" data-level="3.4.1" data-path="a-model-with-a-mean-one-sample-t-test.html"><a href="a-model-with-a-mean-one-sample-t-test.html#the-classical-way"><i class="fa fa-check"></i><b>3.4.1</b> The classical way</a></li>
-<li class="chapter" data-level="3.4.2" data-path="a-model-with-a-mean-one-sample-t-test.html"><a href="a-model-with-a-mean-one-sample-t-test.html#the-model-comparison-way"><i class="fa fa-check"></i><b>3.4.2</b> The model comparison way</a></li>
+<li class="chapter" data-level="3.4" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#testing-whether-mu-has-an-specific-value"><i class="fa fa-check"></i><b>3.4</b> Testing whether <span class="math inline">\(\mu\)</span> has an specific value</a><ul>
+<li class="chapter" data-level="3.4.1" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#the-classical-way"><i class="fa fa-check"></i><b>3.4.1</b> The classical way</a></li>
+<li class="chapter" data-level="3.4.2" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#the-model-comparison-way"><i class="fa fa-check"></i><b>3.4.2</b> The model comparison way</a></li>
 </ul></li>
-<li class="chapter" data-level="3.5" data-path="a-model-with-a-mean-one-sample-t-test.html"><a href="a-model-with-a-mean-one-sample-t-test.html#confidence-intervals"><i class="fa fa-check"></i><b>3.5</b> Confidence intervals</a></li>
-<li class="chapter" data-level="3.6" data-path="a-model-with-a-mean-one-sample-t-test.html"><a href="a-model-with-a-mean-one-sample-t-test.html#sec:02-assumptions"><i class="fa fa-check"></i><b>3.6</b> Assumptions</a></li>
-<li class="chapter" data-level="3.7" data-path="a-model-with-a-mean-one-sample-t-test.html"><a href="a-model-with-a-mean-one-sample-t-test.html#the-central-limit-theorem"><i class="fa fa-check"></i><b>3.7</b> The Central Limit Theorem</a><ul>
-<li class="chapter" data-level="3.7.1" data-path="a-model-with-a-mean-one-sample-t-test.html"><a href="a-model-with-a-mean-one-sample-t-test.html#the-central-limit-theorem-in-action"><i class="fa fa-check"></i><b>3.7.1</b> The Central Limit Theorem in action</a></li>
+<li class="chapter" data-level="3.5" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#confidence-intervals"><i class="fa fa-check"></i><b>3.5</b> Confidence intervals</a></li>
+<li class="chapter" data-level="3.6" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#sec:02-assumptions"><i class="fa fa-check"></i><b>3.6</b> Assumptions</a></li>
+<li class="chapter" data-level="3.7" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#the-central-limit-theorem"><i class="fa fa-check"></i><b>3.7</b> The Central Limit Theorem</a><ul>
+<li class="chapter" data-level="3.7.1" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#the-central-limit-theorem-in-action"><i class="fa fa-check"></i><b>3.7.1</b> The Central Limit Theorem in action</a></li>
 </ul></li>
-<li class="chapter" data-level="3.8" data-path="a-model-with-a-mean-one-sample-t-test.html"><a href="a-model-with-a-mean-one-sample-t-test.html#summary-2"><i class="fa fa-check"></i><b>3.8</b> Summary</a></li>
-<li class="chapter" data-level="3.9" data-path="a-model-with-a-mean-one-sample-t-test.html"><a href="a-model-with-a-mean-one-sample-t-test.html#the-general-linear-model"><i class="fa fa-check"></i><b>3.9</b> The General Linear Model</a></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html"><i class="fa fa-check"></i><b>4</b> Simple linear regression</a><ul>
 <li class="chapter" data-level="4.1" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#trump-votes-and-hate-groups"><i class="fa fa-check"></i><b>4.1</b> Trump, votes, and hate groups</a></li>
@@ -141,10 +155,7 @@
 <li class="chapter" data-level="4.4" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#hypothesis-testing"><i class="fa fa-check"></i><b>4.4</b> Hypothesis testing</a><ul>
 <li class="chapter" data-level="4.4.1" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#sampling-distribution-of-estimates"><i class="fa fa-check"></i><b>4.4.1</b> Sampling distribution of estimates</a></li>
 <li class="chapter" data-level="4.4.2" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#model-comparison"><i class="fa fa-check"></i><b>4.4.2</b> Model comparison</a></li>
-<li class="chapter" data-level="4.4.3" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#confidence-interval"><i class="fa fa-check"></i><b>4.4.3</b> Confidence interval</a></li>
 </ul></li>
-<li class="chapter" data-level="4.5" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#assumptions-and-outliers"><i class="fa fa-check"></i><b>4.5</b> Assumptions and outliers</a></li>
-<li class="chapter" data-level="4.6" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#summary-3"><i class="fa fa-check"></i><b>4.6</b> Summary</a></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="multiple-regression.html"><a href="multiple-regression.html"><i class="fa fa-check"></i><b>5</b> Multiple regression</a><ul>
 <li class="chapter" data-level="5.1" data-path="multiple-regression.html"><a href="multiple-regression.html#trump-votes-and-hate-groups-again"><i class="fa fa-check"></i><b>5.1</b> Trump, votes, and hate groups (again)</a><ul>
@@ -154,12 +165,14 @@
 <li class="chapter" data-level="5.3" data-path="multiple-regression.html"><a href="multiple-regression.html#sec:04b-estimation"><i class="fa fa-check"></i><b>5.3</b> Estimation</a></li>
 <li class="chapter" data-level="5.4" data-path="multiple-regression.html"><a href="multiple-regression.html#sec:04b-inference"><i class="fa fa-check"></i><b>5.4</b> Inference</a></li>
 <li class="chapter" data-level="5.5" data-path="multiple-regression.html"><a href="multiple-regression.html#partitioning-and-explaining-variance"><i class="fa fa-check"></i><b>5.5</b> Partitioning and explaining variance</a></li>
-<li class="chapter" data-level="5.6" data-path="multiple-regression.html"><a href="multiple-regression.html#controlling-for-education-level-and-poverty"><i class="fa fa-check"></i><b>5.6</b> Controlling for education level and poverty</a></li>
+<li class="chapter" data-level="5.6" data-path="multiple-regression.html"><a href="multiple-regression.html#effect-size-and-the-importance-of-predictors"><i class="fa fa-check"></i><b>5.6</b> Effect size and the importance of predictors</a><ul>
+<li class="chapter" data-level="5.6.1" data-path="multiple-regression.html"><a href="multiple-regression.html#r2-changes-and-the-coefficient-of-semi-partial-determination"><i class="fa fa-check"></i><b>5.6.1</b> <span class="math inline">\(R^2\)</span> changes and the coefficient of (semi-)partial determination</a></li>
+</ul></li>
 <li class="chapter" data-level="5.7" data-path="multiple-regression.html"><a href="multiple-regression.html#sec:04b-assumptions"><i class="fa fa-check"></i><b>5.7</b> Assumptions</a></li>
-<li class="chapter" data-level="5.8" data-path="multiple-regression.html"><a href="multiple-regression.html#multicollinearity"><i class="fa fa-check"></i><b>5.8</b> Multicollinearity</a></li>
+<li class="chapter" data-level="5.8" data-path="multiple-regression.html"><a href="multiple-regression.html#multicollinearity-redundancy-between-predictors"><i class="fa fa-check"></i><b>5.8</b> Multicollinearity: Redundancy between predictors</a><ul>
+<li class="chapter" data-level="5.8.1" data-path="multiple-regression.html"><a href="multiple-regression.html#detecting-and-dealing-with-multicollinearity"><i class="fa fa-check"></i><b>5.8.1</b> Detecting and dealing with multicollinearity</a></li>
+</ul></li>
 <li class="chapter" data-level="5.9" data-path="multiple-regression.html"><a href="multiple-regression.html#outliers"><i class="fa fa-check"></i><b>5.9</b> Outliers</a></li>
-<li class="chapter" data-level="5.10" data-path="multiple-regression.html"><a href="multiple-regression.html#polynomial-regression"><i class="fa fa-check"></i><b>5.10</b> Polynomial regression</a></li>
-<li class="chapter" data-level="5.11" data-path="multiple-regression.html"><a href="multiple-regression.html#summary-4"><i class="fa fa-check"></i><b>5.11</b> Summary</a></li>
 </ul></li>
 <li class="chapter" data-level="6" data-path="moderation-and-mediation.html"><a href="moderation-and-mediation.html"><i class="fa fa-check"></i><b>6</b> Moderation and mediation</a><ul>
 <li class="chapter" data-level="6.1" data-path="moderation-and-mediation.html"><a href="moderation-and-mediation.html#moderation"><i class="fa fa-check"></i><b>6.1</b> Moderation</a><ul>
@@ -176,16 +189,20 @@
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="7" data-path="a-model-of-means-anova.html"><a href="a-model-of-means-anova.html"><i class="fa fa-check"></i><b>7</b> A model of means (ANOVA)</a><ul>
-<li class="chapter" data-level="7.1" data-path="a-model-of-means-anova.html"><a href="a-model-of-means-anova.html#two-sample-t-test"><i class="fa fa-check"></i><b>7.1</b> Two-sample t-test</a></li>
-<li class="chapter" data-level="7.2" data-path="a-model-of-means-anova.html"><a href="a-model-of-means-anova.html#contrast-coding"><i class="fa fa-check"></i><b>7.2</b> Contrast coding</a></li>
-<li class="chapter" data-level="7.3" data-path="a-model-of-means-anova.html"><a href="a-model-of-means-anova.html#oneway-anova"><i class="fa fa-check"></i><b>7.3</b> Oneway ANOVA</a></li>
-<li class="chapter" data-level="7.4" data-path="a-model-of-means-anova.html"><a href="a-model-of-means-anova.html#factorial-anova"><i class="fa fa-check"></i><b>7.4</b> Factorial ANOVA</a></li>
+<li class="chapter" data-level="7.1" data-path="a-model-of-means-anova.html"><a href="a-model-of-means-anova.html#can-playing-tetris-reduce-intrusive-memories"><i class="fa fa-check"></i><b>7.1</b> Can playing Tetris reduce intrusive memories?</a></li>
+<li class="chapter" data-level="7.2" data-path="a-model-of-means-anova.html"><a href="a-model-of-means-anova.html#comparing-two-groups"><i class="fa fa-check"></i><b>7.2</b> Comparing two groups</a></li>
+<li class="chapter" data-level="7.3" data-path="a-model-of-means-anova.html"><a href="a-model-of-means-anova.html#the-anova-model"><i class="fa fa-check"></i><b>7.3</b> The ANOVA model</a></li>
+<li class="chapter" data-level="7.4" data-path="a-model-of-means-anova.html"><a href="a-model-of-means-anova.html#contrast-coding"><i class="fa fa-check"></i><b>7.4</b> Contrast coding</a><ul>
+<li class="chapter" data-level="7.4.1" data-path="a-model-of-means-anova.html"><a href="a-model-of-means-anova.html#effect-coding"><i class="fa fa-check"></i><b>7.4.1</b> Effect coding</a></li>
+<li class="chapter" data-level="7.4.2" data-path="a-model-of-means-anova.html"><a href="a-model-of-means-anova.html#orthogonal-contrast-codes"><i class="fa fa-check"></i><b>7.4.2</b> Orthogonal contrast codes</a></li>
 </ul></li>
-<li class="chapter" data-level="8" data-path="mixing-categorical-and-metric-predictors-ancova.html"><a href="mixing-categorical-and-metric-predictors-ancova.html"><i class="fa fa-check"></i><b>8</b> Mixing categorical and metric predictors (ANCOVA)</a></li>
-<li class="chapter" data-level="9" data-path="repeated-measures-anova.html"><a href="repeated-measures-anova.html"><i class="fa fa-check"></i><b>9</b> Repeated-measures ANOVA</a></li>
-<li class="chapter" data-level="10" data-path="linear-mixed-effects-models.html"><a href="linear-mixed-effects-models.html"><i class="fa fa-check"></i><b>10</b> Linear mixed-effects models</a></li>
-<li class="chapter" data-level="11" data-path="introduction-to-bayesian-hypothesis-testing.html"><a href="introduction-to-bayesian-hypothesis-testing.html"><i class="fa fa-check"></i><b>11</b> Introduction to Bayesian hypothesis testing</a></li>
-<li class="chapter" data-level="12" data-path="being-a-responsible-data-analyst.html"><a href="being-a-responsible-data-analyst.html"><i class="fa fa-check"></i><b>12</b> Being a responsible data analyst</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="factorial-anova.html"><a href="factorial-anova.html"><i class="fa fa-check"></i><b>8</b> Factorial ANOVA</a></li>
+<li class="chapter" data-level="9" data-path="mixing-categorical-and-metric-predictors-ancova.html"><a href="mixing-categorical-and-metric-predictors-ancova.html"><i class="fa fa-check"></i><b>9</b> Mixing categorical and metric predictors (ANCOVA)</a></li>
+<li class="chapter" data-level="10" data-path="repeated-measures-anova.html"><a href="repeated-measures-anova.html"><i class="fa fa-check"></i><b>10</b> Repeated-measures ANOVA</a></li>
+<li class="chapter" data-level="11" data-path="linear-mixed-effects-models.html"><a href="linear-mixed-effects-models.html"><i class="fa fa-check"></i><b>11</b> Linear mixed-effects models</a></li>
+<li class="chapter" data-level="12" data-path="introduction-to-bayesian-hypothesis-testing.html"><a href="introduction-to-bayesian-hypothesis-testing.html"><i class="fa fa-check"></i><b>12</b> Introduction to Bayesian hypothesis testing</a></li>
+<li class="chapter" data-level="13" data-path="being-a-responsible-data-analyst.html"><a href="being-a-responsible-data-analyst.html"><i class="fa fa-check"></i><b>13</b> Being a responsible data analyst</a></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 </ul>
 
@@ -217,7 +234,7 @@ Figure 6.1: Graphical depiction of the difference between moderation and mediati
 <h2><span class="header-section-number">6.1</span> Moderation</h2>
 <div id="physical-attractiveness-and-intelligence-in-speed-dating" class="section level3">
 <h3><span class="header-section-number">6.1.1</span> Physical attractiveness and intelligence in speed dating</h3>
-<p><span class="citation">Fisman, Iyengar, Kamenica, &amp; Simonson (<a href="#ref-fisman2006gender" role="doc-biblioref">2006</a>)</span> conducted a large scale experiment<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> on dating behaviour. They placed their participants in a speed dating context, where they were randomly matched with a number of potential partners (between 5 and 20) and could converse for four minutes. As part of the study, after each meeting. participants rated how much they liked their speed dating partners, as well as more specifically on their attractiveness, sincerity, intelligence, fun, and ambition. We will focus on particular on ratings of physical attractiveness, fun, and intelligence, and how these are related to the general liking of a person. Ratings were given on a 10-point scale, from 1 (“awful”) to 10 (“great”). A multiple regression analysis predicting general liking from attractiveness, fun, and intelligence (Table <a href="moderation-and-mediation.html#tab:multiple-regression-speed-dating-just-main-effects">6.1</a>) shows that all three predictors have a significant and positive relation with general liking.</p>
+<p><span class="citation">Fisman, Iyengar, Kamenica, &amp; Simonson (<a href="#ref-fisman2006gender" role="doc-biblioref">2006</a>)</span> conducted a large scale experiment<a href="#fn12" class="footnote-ref" id="fnref12"><sup>12</sup></a> on dating behaviour. They placed their participants in a speed dating context, where they were randomly matched with a number of potential partners (between 5 and 20) and could converse for four minutes. As part of the study, after each meeting. participants rated how much they liked their speed dating partners, as well as more specifically on their attractiveness, sincerity, intelligence, fun, and ambition. We will focus on particular on ratings of physical attractiveness, fun, and intelligence, and how these are related to the general liking of a person. Ratings were given on a 10-point scale, from 1 (“awful”) to 10 (“great”). A multiple regression analysis predicting general liking from attractiveness, fun, and intelligence (Table <a href="moderation-and-mediation.html#tab:multiple-regression-speed-dating-just-main-effects">6.1</a>) shows that all three predictors have a significant and positive relation with general liking.</p>
 <table>
 <caption><span id="tab:multiple-regression-speed-dating-just-main-effects">Table 6.1: </span>Multiple regression predicting liking from attractiveness, intelligence, and fun.</caption>
 <thead>
@@ -263,7 +280,7 @@ Figure 6.1: Graphical depiction of the difference between moderation and mediati
 </div>
 <div id="conditional-slopes" class="section level3">
 <h3><span class="header-section-number">6.1.2</span> Conditional slopes</h3>
-<p>If we were to model the relation between overall liking and physical attractiveness and intelligence, we might use a multiple regression model such as:<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a>
+<p>If we were to model the relation between overall liking and physical attractiveness and intelligence, we might use a multiple regression model such as:<a href="#fn13" class="footnote-ref" id="fnref13"><sup>13</sup></a>
 <span class="math display">\[\texttt{like}_i = \beta_0 + \beta_{\texttt{attr}} \times \texttt{attr}_i + \beta_\texttt{intel} \times \texttt{intel}_i + \epsilon_i \quad \quad \epsilon_i \sim \mathbf{Normal}(0,\sigma_\epsilon)\]</span>
 which is estimated as
 <span class="math display">\[\texttt{like}_i = -0.0733 + 0.527 \times \texttt{attr}_i  + 0.392 \times \texttt{intel}_i  + \hat{\epsilon}_i \quad \quad \hat{\epsilon}_i \sim \mathbf{Normal}(0, 1.25)\]</span>
@@ -308,7 +325,7 @@ When we plug these definitions into Equation <a href="moderation-and-mediation.h
 <p>Estimating this model gives
 <span class="math display">\[\texttt{like}_i = -0.791 + 0.657 \times \texttt{attr}_i  + 0.488 \times \texttt{intel}_i  - 0.0171 \times \texttt{(attr}\times\texttt{intel)}_i  + \hat{\epsilon}_i \]</span>
 The estimate of the slope of the interaction, <span class="math inline">\(\hat{\beta}_{\texttt{attr} \times \texttt{intel}} = -0.017\)</span>, is negative. That means that the <em>higher</em> the value of <span class="math inline">\(\texttt{intel}\)</span>, the <em>less</em> steep the regression line relating <span class="math inline">\(\texttt{attr}\)</span> to <span class="math inline">\(\texttt{like}\)</span>. At the same time, the <em>higher</em> the value of <span class="math inline">\(\texttt{attr}\)</span>, the <em>less</em> steep the regression line relating <span class="math inline">\(\texttt{intel}\)</span> to <span class="math inline">\(\texttt{like}\)</span>. You can interpret this as meaning that for more intelligent people, physical attractiveness is less of a defining factor in their liking by a potential partner. And for more attractive people, intelligence is less important.</p>
-<p>A graphical view of this model, and the earlier one without moderation, is provided in Figure <a href="moderation-and-mediation.html#fig:speeddate-multiple-regression-interaction-exaggerated">6.2</a>. The plot on the left represents the model which does not allow for interaction. You can see that, for different values of intelligence, the model predicts parallel regression lines for the relation between attractiveness and liking. While intelligence affects the intercept of these regression lines, it does not affect the slope. In the plot on the left – although subtle – you can see that the regression lines are <em>not</em> parallel. This is a model with an interaction between intelligence and attractiveness. For different values of intelligence, the model predicts a linear relation between attractiveness and liking, but crucially, intelligence determines both the intercept <em>and</em> slope of these lines.</p>
+<p>A graphical view of this model, and the earlier one without moderation, is provided in Figure <a href="moderation-and-mediation.html#fig:speeddate-multiple-regression-interaction-exaggerated">6.2</a>. The plot on the left represents the model which does not allow for interaction. You can see that, for different values of intelligence, the model predicts parallel regression lines for the relation between attractiveness and liking. While intelligence affects the intercept of these regression lines, it does not affect the slope. In the plot on the right – although subtle – you can see that the regression lines are <em>not</em> parallel. This is a model with an interaction between intelligence and attractiveness. For different values of intelligence, the model predicts a linear relation between attractiveness and liking, but crucially, intelligence determines both the intercept <em>and</em> slope of these lines.</p>
 <div class="figure" style="text-align: center"><span id="fig:speeddate-multiple-regression-interaction-exaggerated"></span>
 <img src="_main_files/figure-html/speeddate-multiple-regression-interaction-exaggerated-1.svg" alt="Liking as a function of attractiveness (intelligence) for different levels of intelligence (attractiveness), either without moderation or with moderation of the slope of attraciveness by intelligence. Note that the actual values of liking, attractiveness, and intelligence, are whole numbers (ratings on a scale between 1 and 10). For visualization purposes, the values have been randomly jittered by adding a Normal-distributed displacement term." width="50%" /><img src="_main_files/figure-html/speeddate-multiple-regression-interaction-exaggerated-2.svg" alt="Liking as a function of attractiveness (intelligence) for different levels of intelligence (attractiveness), either without moderation or with moderation of the slope of attraciveness by intelligence. Note that the actual values of liking, attractiveness, and intelligence, are whole numbers (ratings on a scale between 1 and 10). For visualization purposes, the values have been randomly jittered by adding a Normal-distributed displacement term." width="50%" /><img src="_main_files/figure-html/speeddate-multiple-regression-interaction-exaggerated-3.svg" alt="Liking as a function of attractiveness (intelligence) for different levels of intelligence (attractiveness), either without moderation or with moderation of the slope of attraciveness by intelligence. Note that the actual values of liking, attractiveness, and intelligence, are whole numbers (ratings on a scale between 1 and 10). For visualization purposes, the values have been randomly jittered by adding a Normal-distributed displacement term." width="50%" /><img src="_main_files/figure-html/speeddate-multiple-regression-interaction-exaggerated-4.svg" alt="Liking as a function of attractiveness (intelligence) for different levels of intelligence (attractiveness), either without moderation or with moderation of the slope of attraciveness by intelligence. Note that the actual values of liking, attractiveness, and intelligence, are whole numbers (ratings on a scale between 1 and 10). For visualization purposes, the values have been randomly jittered by adding a Normal-distributed displacement term." width="50%" />
 <p class="caption">
@@ -388,7 +405,7 @@ If we fill in a particular value for intelligence, say <span class="math inline"
 &amp;= (-0.791 + 0.488 \times 10) + (0.657 -0.017\times 10) \times \texttt{attr}_i + \epsilon_i \\
 &amp;= 4.09 + 0.486 \times \texttt{attr}_i + \epsilon_i
 \end{align}\]</span>
-This shows that the higher the value of intelligence, the lower the slope of <span class="math inline">\(\texttt{attr}\)</span> becomes. If you’d pick <span class="math inline">\(\texttt{intel} = 38.337\)</span>, the slope would be exactly equal to 0.<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a> Because there is not just a single value of the slope, testing whether “the” slope of <span class="math inline">\(\texttt{attr}\)</span> is equal to 0 doesn’t really make sense, because there is no single value to represent “the” slope. What, then, does <span class="math inline">\(\hat{\beta}_\texttt{attr} = 0.657\)</span> represent? Well, it is the (estimated) slope of <span class="math inline">\(\texttt{attr}\)</span> when <span class="math inline">\(\texttt{intel}_i = 0\)</span>. Similarly, <span class="math inline">\(\hat{\beta}_\texttt{intel} = 0.488\)</span> is the estimated slope of <span class="math inline">\(\texttt{intel}\)</span> when <span class="math inline">\(\texttt{attr}_i = 0\)</span></p>
+This shows that the higher the value of intelligence, the lower the slope of <span class="math inline">\(\texttt{attr}\)</span> becomes. If you’d pick <span class="math inline">\(\texttt{intel} = 38.337\)</span>, the slope would be exactly equal to 0.<a href="#fn14" class="footnote-ref" id="fnref14"><sup>14</sup></a> Because there is not just a single value of the slope, testing whether “the” slope of <span class="math inline">\(\texttt{attr}\)</span> is equal to 0 doesn’t really make sense, because there is no single value to represent “the” slope. What, then, does <span class="math inline">\(\hat{\beta}_\texttt{attr} = 0.657\)</span> represent? Well, it is the (estimated) slope of <span class="math inline">\(\texttt{attr}\)</span> when <span class="math inline">\(\texttt{intel}_i = 0\)</span>. Similarly, <span class="math inline">\(\hat{\beta}_\texttt{intel} = 0.488\)</span> is the estimated slope of <span class="math inline">\(\texttt{intel}\)</span> when <span class="math inline">\(\texttt{attr}_i = 0\)</span></p>
 <p>A significance test of the null hypothesis <span class="math inline">\(H_0\)</span>: <span class="math inline">\(\beta_\texttt{attr} = 0\)</span> is thus a test whether, when <span class="math inline">\(\texttt{intel} = 0\)</span>, the slope of <span class="math inline">\(\texttt{attr}\)</span> is 0. This test is easy enough to perform, but is it interesting to know whether liking is related to attractiveness for people who’s intelligence was rated as 0? Perhaps not. For one thing, the ratings were on a scale from 1 to 10, so no one could actually receive a rating of 0. Because the slope depends on <span class="math inline">\(\texttt{intel}\)</span> and we know that for some value of <span class="math inline">\(\texttt{intel}\)</span>, the slope of <span class="math inline">\(\texttt{attr}\)</span> will equal 0, the hypothesis test will not be significant for some values of <span class="math inline">\(\texttt{intel}\)</span>, and will be significant for others. At which value of <span class="math inline">\(\texttt{intel}\)</span> we might want to perform such a test is up to us, but the result seems somewhat arbitrary.</p>
 <p>That said, we might be interested in assessing whether there is an effect of <span class="math inline">\(\texttt{attr}\)</span> for particular values of <span class="math inline">\(\texttt{intel}\)</span>. For instance, whether, for someone with an average intelligence rating, their physical attractiveness matters to how much someone likes them as a potential partner. We can obtain this test by <strong>centering</strong> the predictors. Centering is basically just subtracting the sample mean of each value of a variable. So for example, we can center <span class="math inline">\(\texttt{attr}\)</span> as follows: <span class="math display">\[\texttt{attr_cent}_i = \texttt{attr}_i - \overline{\texttt{attr}}\]</span>
 Centering does not affect the relation between variables. You can view it as a simple relabelling of the values, where the value which was the sample mean is now <span class="math inline">\(\texttt{attr_cent}_i = \overline{\texttt{attr}} - \overline{\texttt{attr}} = 0\)</span>, all values below the mean are now negative, and values above the mean are now positive. The important part of this is that the centered predictor is 0 where the original predictor was at the sample mean. In a model with centered predictors
@@ -707,10 +724,10 @@ To test whether this mediated effect equals 0 (in which case there is no mediati
 </div>
 <div class="footnotes">
 <hr />
-<ol start="1">
-<li id="fn1"><p>Here, we analyse only a subset of their data.<a href="moderation-and-mediation.html#fnref1" class="footnote-back">↩︎</a></p></li>
-<li id="fn2"><p>Note that I’m using more descriptive labels here. If you prefer the more abstract version, then you can replace <span class="math inline">\(Y_i = \texttt{like}_i\)</span>, <span class="math inline">\(\beta_1 = \beta_{\texttt{attr}}\)</span>, <span class="math inline">\(X_{1,i} = \texttt{attr}_i\)</span>. <span class="math inline">\(\beta_2 = \beta_{\texttt{intel}}\)</span>, <span class="math inline">\(X_{2,i} = \texttt{intel}_i\)</span>.<a href="moderation-and-mediation.html#fnref2" class="footnote-back">↩︎</a></p></li>
-<li id="fn3"><p>The value for which the slope is 0 is easily worked out as <span class="math inline">\(\frac{\hat{\beta}_\texttt{attr}}{- \hat{\beta}_{\texttt{\attr} \times \texttt{intel}}}\)</span>.<a href="moderation-and-mediation.html#fnref3" class="footnote-back">↩︎</a></p></li>
+<ol start="12">
+<li id="fn12"><p>Here, we analyse only a subset of their data.<a href="moderation-and-mediation.html#fnref12" class="footnote-back">↩︎</a></p></li>
+<li id="fn13"><p>Note that I’m using more descriptive labels here. If you prefer the more abstract version, then you can replace <span class="math inline">\(Y_i = \texttt{like}_i\)</span>, <span class="math inline">\(\beta_1 = \beta_{\texttt{attr}}\)</span>, <span class="math inline">\(X_{1,i} = \texttt{attr}_i\)</span>. <span class="math inline">\(\beta_2 = \beta_{\texttt{intel}}\)</span>, <span class="math inline">\(X_{2,i} = \texttt{intel}_i\)</span>.<a href="moderation-and-mediation.html#fnref13" class="footnote-back">↩︎</a></p></li>
+<li id="fn14"><p>The value for which the slope is 0 is easily worked out as <span class="math inline">\(\frac{\hat{\beta}_\texttt{attr}}{- \hat{\beta}_{\texttt{attr} \times \texttt{intel}}}\)</span>.<a href="moderation-and-mediation.html#fnref14" class="footnote-back">↩︎</a></p></li>
 </ol>
 </div>
             </section>
