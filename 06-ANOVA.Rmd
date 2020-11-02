@@ -329,7 +329,7 @@ F &= \frac{\frac{\text{SSE}(R) - \text{SSE}(G)}{\text{npar}(G) - \text{npar}(R)}
 \end{align}$$
 which, with a higher value and smaller $\text{df}_1$, would be more likely to be significant.
 
-Thirdly, when you look at the value of $\text{SSR}(\text{Condition}) = `r format(tab[2,2],digits=3)`$ in Table \@ref(tab:tetris-effect-coding-ANOVA), you can see that it is smaller than the sum of the SSR terms corresponding to the three predictors. This indicates that there is redundancy between the predictors $X_1$, $X_2$, and $X_3$ (i.e., some form of multicollinearity). Although Venn diagrams such as Figure \@ref(fig:sse-partition-multicollinearity) imply that the SSR of the full model would be larger than the sum of the unique SSR terms attributable to each predictor, the opposite can also be true! This situation is commonly referred to as __suppression__ and is rather difficult to explain here without a significant and detailed detour. For now, we will therefore leave it to the interested reader to consult other sources on this, and simply not that if the sum of the SSR terms of the predictors does not equal the "whole model" SSR, this indicates redundancy between the predictors. 
+Thirdly, when you look at the value of $\text{SSR}(\text{Condition}) = `r format(tab[2,2],digits=3)`$ in Table \@ref(tab:tetris-effect-coding-ANOVA), you can see that it is smaller than the sum of the SSR terms corresponding to the three predictors. This indicates that there is redundancy between the predictors $X_1$, $X_2$, and $X_3$ (i.e., some form of multicollinearity). Although Venn diagrams such as Figure \@ref(fig:sse-partition-multicollinearity) imply that the SSR of the full model would be larger than the sum of the unique SSR terms attributable to each predictor, the opposite can also be true! This situation is commonly referred to as __suppression__ and is rather difficult to explain here without a lengthy and detailed detour. For now, we will therefore leave it to the interested reader to consult other sources on this, and simply not that if the sum of the SSR terms of the predictors does not equal the "whole model" SSR, this indicates redundancy between the predictors. 
 
 ### Orthogonal contrast codes
 
@@ -343,62 +343,219 @@ $$\begin{align}
 \hat{\beta}_1 &= \frac{1 \times \overline{Y}_\text{contr} + 0 \times \overline{Y}_\text{t+r} + 0 \times \overline{Y}_\text{tetr} - 1 \times \overline{Y}_\text{react}}{(1)^2 + (0)^2 + (0)^2 + (-1)^2} \\
 &= \frac{\overline{Y}_\text{contr} - \overline{Y}_\text{react}}{2}
 \end{align}$$
-which is obviously _not_ the same as
+which is obviously _not_ the same as the treatment effect the estimated slope actually reflects:
 $$\hat{\beta}_1 = \overline{Y}_\text{contr} - \frac{\overline{Y}_\text{contr} + \overline{Y}_\text{t+r} + \overline{Y}_\text{tetr} + \overline{Y}_\text{react}}{4}$$
-Nevertheless, the slopes of the effect-coding scheme gave us interpretable parameters, hence using non-orthogonal contrast codes does not prohibit interpretable parameter estimates. With that said, if you can define comparisons you would like to make in terms of a set of orthogonal contrast codes, that would be preferable. If you can't, there are ways to deal with that too, and you shouldn't worry too much. 
+Nevertheless, the slopes of the effect-coding scheme gave us interpretable parameters, hence using non-orthogonal contrast codes does not prohibit interpretable parameter estimates. With that said, if you can define comparisons you would like to make in terms of a set of orthogonal contrast codes, that would be preferable. If you can't, there are ways to deal with that too, and you shouldn't worry too much.
 
+There are two rules you can follow to create orthogonal contrast codes:
 
-One set of questions you could ask is the following:
+1. For all contrast codes $c_j$, $j = 1, \ldots, g-1$, $\sum_{k=1}^g c_{j,k} = 0$. The sum of the values of each contrast code $j$ is zero.
+2. For all pairs of contrast codes $c_j$ and $c_l$, $j \neq l$, $\sum_{k=1}^g c_{j,k} \times c_{l,k} = 0$. The sum of the cross-products of each pair of contrast codes $j$ and $l$ is equal to zero.
 
-1. What is the difference between the Control condition and the average of the three remaining conditions combined?
-2. What is the difference between the Tetris-only condition and the average of the two reactivation conditions combined?
-3. What is the difference between the Tetris+Reactivation condition and the Reactivation-only condition?
+In the statements above, $c_{j,k}$ refers to the value of a contrast code $c_j$ for group $k$, and similarly $c_{l,k}$ refers to the value of a contrast code $c_l$ for group $k$, whilst $g$ refers to the total number of groups. Only the second rule is strictly necessary, but the first one is a useful one to follow as well, as --like in the effect coding scheme-- it ensures that the intercept represents the grand mean. If we check the two rules for the effect coding scheme, we can see that the first requirement is adhered to:
 
-With answers to these three questions, and knowing the overall mean, you would be able to calculate the average in each condition with complete accuracy. How that works in practice we'll leave for the moment. Instead, let's focus on these three questions. The idea behind contrast coding is to define values for the predictors such that the slopes of those predictors are the answers to these questions. These values of three three contrast codes $c_1$, $c_2$, and $c_3$ (for questions 1 to 3 respectively) for each of the four conditions, is given in the table below:
+$$\begin{align}
+\sum_{k=1}^g c_{1,k} &= 1 + 0 + 0 + (-1) = 0 \\
+\sum_{k=1}^g c_{2,k} &= 0 + 1 + 0 + (-1) = 0 \\
+\sum_{k=1}^g c_{3,k} &= 0 + 0 + 1 + (-1) = 0
+\end{align}$$
+However, the second is _not_:
+$$\begin{align}
+\sum_{k=1}^g c_{1,k} \times c_{2,k} &= 1 \times 0 + 0 \times 1 + 0 \times 0 + (-1) \times (-1) = 1 \\
+\sum_{k=1}^g c_{1,k} \times c_{3,k} &= 1 \times 0 + 0 \times 0 + 0 \times 1 + (-1) \times (-1) = 1 \\
+\sum_{k=1}^g c_{2,k} \times c_{3,k} &= 0 \times 0 + 0 \times 1 + 0 \times 1 + (-1) \times (-1) = 1 
+\end{align}$$
 
-```{r}
-tab <- data.frame(c1 = c("$\\tfrac{1}{2}$","$-\\tfrac{1}{6}$","$-\\tfrac{1}{6}$","$-\\tfrac{1}{6}$"),
-                  c2 = c("0","$-\\tfrac{1}{4}$","$\\tfrac{1}{2}$","$-\\tfrac{1}{4}$"),
+One set of questions you could ask, which will result in orthogonal contrast codes, is the following:
+
+1. What is the difference between doing nothing (the Control condition) and doing something (the three remaining conditions)?
+2. What is the difference between playing Tetris (the Tetris-Only condition) and a procedure involving memory reactivation (the Tetris+Reactivation and reactivation-Only condition)?
+3. What is the difference between memory reactivation without playing Tetris (the Reactivation-only condition) and the playing Tetris after reactivation (the Tetris+Reactivation condition)?
+
+<!-- With answers to these three questions, and knowing the overall mean, you would be able to calculate the average in each condition with complete accuracy. How that works in practice we'll leave for the moment. Instead, let's focus on these three questions. -->
+To define out contrast codes, we need to define values for the contrast codes such that the slopes of the predictors based on them provide the answers to these questions. The first question refers to the difference between the Control condition and the three other conditions. As the answer to the question should be a single deviation, it makes sense to compare the mean of the Control condition to the average of the three remaining conditions combined. In this combination, we would not distinguish between those three conditions, and hence we should give each of those three conditions the same value. In addition, remember that a slope reflects an in- or decrease in the dependent variable for a one-unit increase in the predictor. It then makes sense to let the difference between the value we assign to the Control condition and the values we assign to the three other conditions equal 1. Finally, we would like to use values such that their sum over the groups equals 0. Combining these three ideas, to answer the first question, we could define a contrast code $c_1$ with value $\tfrac{3}{4}$ for the control condition, and the value $-\tfrac{1}{4}$ for the Tetris+Reactivation, Tetris-Only, and Reactivation-Only condition. In particular, note that these values sum to 0, and that the distance between $\tfrac{3}{4}$ and $-\tfrac{1}{4}$ equals 1. As such, a one-unit increase for this contrast code is equal to going from one of the three experimental conditions to the Control condition.  
+
+For the second question, we would like to compare the Tetris-Only condition to the Tetris+Reactivation and Reactivation-Only condition combined. In this comparison, we ignore the Control condition. By giving this condition a value of 0 in the contrast code, it will not be entered in the comparison. Additionally using similar reasoning as before, the suggested second contrast code $c_2$ has values $0, -\tfrac{1}{3}, \tfrac{2}{3}, -\tfrac{1}{3}$ for the Control, Tetris+Reactivation, Tetris-Only, and Reactivation-Only conditions respectively. Again, the difference between $\tfrac{2}{3}$ and $-\tfrac{1}{3}$ equals 1, so that a one-unit increase in this contrast code is equal to going from one of the reactivation conditions to the Tetris-Only condition.
+
+For the third question, finally, we would like to compare the Reactivation-Only condition to the Tetris+Reactivation condition, ignoring the other two conditions. The suggested contrast code $c_3$ then has values $0, -\tfrac{1}{2}, 0, \tfrac{1}{2}$ for the four conditions respectively. Here, a one-unit increase is equal to going from the Tetris+Reactivation condition to the Reactivation-Only condition. 
+
+The values of the three contrast codes $c_1$, $c_2$, and $c_3$ (for questions 1 to 3 respectively) for each of the four conditions, are summarized given in the table below:
+
+```{r tetris-orthogonal-cotrast-codes}
+tab <- data.frame(c1 = c("$\\tfrac{3}{4}$","$-\\tfrac{1}{4}$","$-\\tfrac{1}{4}$","$-\\tfrac{1}{4}$"),
+                  c2 = c("0","$-\\tfrac{1}{3}$","$\\tfrac{2}{3}$","$-\\tfrac{1}{3}$"),
                   c3 = c("0","$-\\tfrac{1}{2}$","0","$\\tfrac{1}{2}$"))
 colnames(tab) <- c("$c_1$","$c_2$","$c_3$")
-rownames(tab) <- c(paste("Control (mean = ",format(mean(subset(dat,Condition == "Control")$intrusions),digits=3),")"),
-paste("Tetris+Reactivation (mean =",format(mean(subset(dat,Condition == "Tetris_Reactivation")$intrusions),digits=3),")"),paste("Tetris-Only (mean =",format(mean(subset(dat,Condition == "Tetris")$intrusions),digits=3),")"),paste("Reactivation-Only (mean =",format(mean(subset(dat,Condition == "Reactivation")$intrusions),digits=3),")"))
-knitr::kable(tab, escape=FALSE,align=rep('r', 3))
+rownames(tab) <- c("Control","Tetris+Reactivation", "Tetris-Only", "Reactivation-Only")
+knitr::kable(tab, escape=FALSE,align=rep('r', 3), caption="A set of orthogonal contrast codes.")
 library(dplyr)
 means <- dat %>% group_by(Condition) %>% summarise(mean = mean(intrusions)) %>% select(mean)
-codes <- cbind(c(1/2,-1/6,-1/6,-1/6),
-               c(0,-1/4,1/2,-1/4),
+codes <- cbind(c(3/4,-1/4,-1/4,-1/4),
+               c(0,-1/3,2/3,-1/3),
                c(0,-1/2,0,1/2))
 means <- means$mean
 ```
 
-\begin{equation}
-\hat{\beta}_j = \frac{\sum_{k=1}^{g} c_{j,k} \overline{Y}_k}{\sum_{k=1} c_{j,k}^2}
-(\#eq:estimate-slope-orthogonal-contrast-codes)
-\end{equation}
+Let's check whether these three contrast codes are orthogonal. The first requirements (values sum to 0) holds:
+$$\begin{align}
+\sum_{k=1}^g c_{1,k} &= \tfrac{3}{4} - \tfrac{1}{4} - \tfrac{1}{4} - \tfrac{1}{4} = 0 \\
+\sum_{k=1}^g c_{2,k} &= 0 - \tfrac{1}{3} + \tfrac{2}{3} - \tfrac{1}{3} = 0 \\
+\sum_{k=1}^g c_{3,k} &= 0 - \tfrac{1}{2} + 0 + \tfrac{1}{2} = 0
+\end{align}$$
+And indeed the second requirement (pairwise products sum to 0) also holds:
+$$\begin{align}
+\sum_{k=1}^g c_{1,k} \times c_{2,k} &= \tfrac{3}{4} \times 0 + (- \tfrac{1}{4}) \times (- \tfrac{1}{3}) + (-\tfrac{1}{4}) \times \tfrac{2}{3} + (- \tfrac{1}{4}) \times (- \tfrac{1}{3}) \\ &= \tfrac{1}{12} - \tfrac{2}{12} + \tfrac{1}{12} = 0 \\
+\sum_{k=1}^g c_{1,k} \times c_{3,k} &= \tfrac{3}{4} \times 0 + (- \tfrac{1}{4}) \times (- \tfrac{1}{2}) + (-\tfrac{1}{4}) \times 0 + (- \tfrac{1}{4}) \times \tfrac{1}{2} \\ &= \tfrac{1}{8} - \tfrac{1}{8} = 0 \\
+\sum_{k=1}^g c_{2,k} \times c_{3,k} &= 0 \times 0 + (-\tfrac{1}{3}) \times (- \tfrac{1}{2}) + \tfrac{2}{3} \times 0 + (-\tfrac{1}{3}) \times \tfrac{1}{2} \\ &=  \tfrac{1}{6} - \tfrac{1}{6} = 0
+\end{align}$$
 
-For the $c_1$, the estimated slope is
+Because the contrast codes $c_1$, $c_2$, and $c_3$ are orthogonal, we can use Equation \@ref(eq:estimate-slope-orthogonal-contrast-codes) to determine the estimates of the slopes. The estimated slope of the contrast-coding predictor $X_1$ which takes its values from $c_1$ will be:
 $$
 \begin{align}
-\hat{\beta}_1 &= \frac{ \tfrac{1}{2} \times `r format(means[1],digits=3)` - \tfrac{1}{6} \times `r  format(means[2],digits=3)` - \tfrac{1}{6} \times `r format(means[3],digits=3)` - \frac{1}{6} \times  `r format(means[4],digits=3)` }{ (\frac{1}{2})^2 + (-\frac{1}{6})^2 + (-\frac{1}{6})^2 + (-\frac{1}{6})^2 }  \\
+\hat{\beta}_1 &= \frac{ \tfrac{3}{4} \times \overline{Y}_\text{contr} - \tfrac{1}{4} \times \overline{Y}_\text{t+r} - \tfrac{1}{4} \times \overline{Y}_\text{tetr} - \frac{1}{4} \times  \overline{Y}_\text{react} }{ (\frac{3}{4})^2 + (-\frac{1}{4})^2 + (-\frac{1}{4})^2 + (-\frac{1}{4})^2 }  \\
+&= \frac{ \tfrac{3}{4} \times \overline{Y}_\text{contr} - \tfrac{1}{4} \times \overline{Y}_\text{t+r} - \tfrac{1}{4} \times \overline{Y}_\text{tetr} - \frac{1}{4} \times  \overline{Y}_\text{react} }{ \tfrac{3^2}{4^2} + \tfrac{1^2}{4^2} + \tfrac{1^2}{4^2} + \tfrac{1^2}{4^2} }
+\end{align}
+$$
+The denominator evaluates to $\tfrac{12}{16} = \tfrac{3}{4}$, and dividing both the numerator and denominator by $\tfrac{3}{4}$ gives^[you are allowed to multiply or divide the numerator and denominator by the same constant, as this does not change the fraction, i.e. $\tfrac{a}{b} = \frac{a/c}{b/c}$]
+$$\hat{\beta}_1 = \overline{Y}_\text{contr} - \frac{\overline{Y}_\text{t+r} + \overline{Y}_\text{tetr} + \overline{Y}_\text{react}}{3}$$
+i.e. the slope of the first predictor is equal to the difference between the average intrusions in the Control condition, and the average of the average number of intrusions in the three other conditions. When we fill in the actual sample averages, we get:
+$$
+\begin{align}
+\hat{\beta}_1 &= \frac{ \tfrac{3}{4} \times `r format(means[1],digits=3)` - \tfrac{1}{4} \times `r  format(means[2],digits=3)` - \tfrac{1}{4} \times `r format(means[3],digits=3)` - \frac{1}{4} \times  `r format(means[4],digits=3)` }{ \tfrac{3}{4}}  \\
 &= \frac{`r sum(codes[,1]*means)`}{`r sum(codes[,1]^2)`} = `r sum(codes[,1]*means)/sum(codes[,1]^2)`
 \end{align}
 $$
-For the $c_2$, the estimated slope is
+
+The estimated slope of the contrast-coding predictor $X_2$ which takes its values from $c_2$ will be:
 $$
 \begin{align}
-\hat{\beta}_2 &= \frac{ 0 \times `r format(means[1],digits=3)` - \tfrac{1}{4} \times `r  format(means[2],digits=3)` + \tfrac{1}{2} \times `r format(means[3],digits=3)` - \frac{1}{4} \times  `r format(means[4],digits=3)` }{ (0)^2 + (-\frac{1}{4})^2 + (\frac{1}{2})^2 + (-\frac{1}{4})^2 }  \\
+\hat{\beta}_2 &= \frac{ 0 \times \overline{Y}_\text{contr} - \tfrac{1}{3} \times \overline{Y}_\text{t+r} + \tfrac{2}{3} \times \overline{Y}_\text{tetr} - \frac{1}{3} \times  \overline{Y}_\text{react} }{ (0)^2 + (-\frac{1}{3})^2 + (\frac{2}{3})^2 + (-\frac{1}{3})^2 }  \\
+&= \frac{ \tfrac{2}{3} \times \overline{Y}_\text{tetr} - \tfrac{1}{3} \times \overline{Y}_\text{t+r}  - \frac{1}{3} \times  \overline{Y}_\text{react} }{ \tfrac{6}{9}} \\
+&= \overline{Y}_\text{tetr} - \frac{\overline{Y}_\text{t+r} + \overline{Y}_\text{react}}{2}
+\end{align}
+$$
+The slope of the second predictor is thus equal to the difference between the average number of intrusions in the Tetris-Only condition, and the average of the average number of intrusions in the Tetris+Reactivation condition and the Reactivation-Only condition. Filling in the actual averages then gives.
+$$
+\begin{align}
+\hat{\beta}_2 &= \frac{ 0 \times `r format(means[1],digits=3)` - \tfrac{1}{3} \times `r  format(means[2],digits=3)` + \tfrac{2}{3} \times `r format(means[3],digits=3)` - \frac{1}{3} \times  `r format(means[4],digits=3)` }{ \tfrac{2}{3} }  \\
 &= \frac{`r sum(codes[,2]*means)`}{`r sum(codes[,2]^2)`} = `r sum(codes[,2]*means)/sum(codes[,2]^2)`
 \end{align}
 $$
-Finally, for the $c_3$, the estimated slope is
+Finally, the estimated slope of the contrast-coding predictor $X_3$ which takes its values from $c_3$ will be:
 $$
 \begin{align}
-\hat{\beta}_3 &= \frac{ 0 \times `r format(means[1],digits=3)` - \tfrac{1}{2} \times `r  format(means[2],digits=3)` + 0 \times `r format(means[3],digits=3)` + \frac{1}{2} \times  `r format(means[4],digits=3)` }{ (0)^2 + (-\frac{1}{2})^2 + (0)^2 + (\frac{1}{2})^2 }  \\
+\hat{\beta}_3 &= \frac{ 0 \times \overline{Y}_\text{contr}  - \tfrac{1}{2} \times \overline{Y}_\text{t+r} + 0 \times \overline{Y}_\text{tetr} + \frac{1}{2} \times  \overline{Y}_\text{react} }{ (0)^2 + (-\frac{1}{2})^2 + (0)^2 + (\frac{1}{2})^2 }  \\
+&= \frac{\frac{1}{2} \times  \overline{Y}_\text{react} - \tfrac{1}{2} \times \overline{Y}_\text{t+r} }{ \tfrac{2}{4} } \\
+&= \overline{Y}_\text{react} - \overline{Y}_\text{t+r}
+\end{align}
+$$
+i.e. the difference between the average intrusions in the Reactivation-Only condition and the average intrusions in Tetris+Reactivation condition. Filling in the actual averages gives:
+$$
+\begin{align}
+\hat{\beta}_3 &= \frac{ 0 \times `r format(means[1],digits=3)` - \tfrac{1}{2} \times `r  format(means[2],digits=3)` + 0 \times `r format(means[3],digits=3)` + \frac{1}{2} \times  `r format(means[4],digits=3)` }{\tfrac{1}{2}}  \\
 &= \frac{`r sum(codes[,3]*means)`}{`r sum(codes[,3]^2)`} = `r sum(codes[,3]*means)/sum(codes[,3]^2)`
 \end{align}
 $$
 
+While it is important to understand what each slope reflects in terms of differences between the group means, you would not normally use these equations to actually estimate the slopes. It is much easier to use statistical software for that. This gives us the following estimated model:
+
+```{r}
+contrasts(dat$Condition) <- codes
+modg <- lm(intrusions ~ Condition, data=dat)
+```
+$$`r write_GLM_equation(modg, dv_name = "intrusions", iv_names = c("}X_1\\texttt{","}X_2\\texttt{","}X_3\\texttt{"), digits=3, include_sde = TRUE)`$$
+As you can see, the parameter estimates are identical to those worked out from the sample means. Figure \@ref(fig:tetris-contrast-coding-parameter-plot) shows how the parameters of the model are related to the average number of intrusions in each condition.
+```{r tetris-contrast-coding-parameter-plot, fig.cap="Average number of instrusions in the four conditions in the Tetris study and how they are related to the parameters of the orthogonal contrast-coding model. The intercept $\\hat{\beta}_0 = \\hat{\\mu}$ is the grand mean (dotted line). The slopes reflect deviations from the average intrusions in a condition and combinations of other conditions."}
+data.frame(Condition = factor(1:4,labels=c("Control","Tetris+Reactivation","Tetris-Only","Reactivation-Only")), mean=means) %>%
+  ggplot(aes(x=Condition, y=mean, xend = Condition)) + geom_point() + geom_hline(yintercept = mean(means), lty=3) + geom_line(data=data.frame(x=c(.8,1.2),y=rep(mean(means[2:4]),2)), aes(x=x,y=y,xend=x),lty=3) + annotate("text", x=1, y=mean(means[2:4] - .3), label=expression(over(bar(Y)[t+r] + bar(Y)[tetr] + bar(Y)[react],3))) +  geom_segment(data=data.frame(Condition="Control", mean = means[1], start = mean(means[2:4])), aes(x=Condition, y = mean, xend=Condition, yend=start), arrow = arrow(length=unit(0.20,"cm"), type="closed", ends = "first"), alpha=.6) + geom_line(data=data.frame(x=c(2.8,3.2),y=rep(mean(means[c(2,4)]),2)), aes(x=x,y=y,xend=x),lty=3) + annotate("text", x=3, y=mean(means[c(2,4)] - .3), label=expression(over(bar(Y)[t+r] + bar(Y)[react],2))) +  geom_segment(data=data.frame(Condition="Tetris-Only", mean = means[3], start = mean(means[c(2,4)])), aes(x=Condition, y = mean, xend=Condition, yend=start), arrow = arrow(length=unit(0.20,"cm"), type="closed", ends = "first"), alpha=.6) + geom_line(data=data.frame(x=c(3.8,4.2),y=rep(mean(means[c(2)]),2)), aes(x=x,y=y,xend=x),lty=3) + annotate("text", x=4, y=mean(means[c(2)] - .2), label=expression(bar(Y)[t+r])) + geom_segment(data=data.frame(Condition="Reactivation-Only", mean = means[4], start = mean(means[2])), aes(x=Condition, y = mean, xend=Condition, yend=start), arrow = arrow(length=unit(0.20,"cm"), type="closed", ends = "first"), alpha=.6) + annotate("text",x=0.5,y=mean(means) - .15, label=expression(hat(beta)[0])) + ylab("Intrusions") + annotate("text",x=1.1,y=.5*mean(means) + .5*means[1], label=expression(hat(beta)[1])) + annotate("text",x=3.1,y=.5*mean(means) + .5*mean(means[c(2,4)]), label=expression(hat(beta)[2])) + annotate("text",x=4.1,y=.5*mean(means) + .5*means[4], label=expression(hat(beta)[3]))
+#+ annotate("text",x=3.5,y=.5*mean(means) + .5*means[1], label=expression(beta[0] - (beta[1] + beta[2] + beta[3]))) 
+```
+
+
+Hypothesis tests for all the parameters, as well as the omnibus test for Condition, are provided in Table \@ref(tab:tetris-contrast-coding-ANOVA). Again, we find a significant overall effect for Condition, which indicates that at least one of the group means differs from another one. The tests for the first two contrasts are not significant. As such, we have no evidence that the Control condition differs from the other three conditions combined, or that the Tetris-Only condition differs from the Tetris+Reactivation or Reactivation-Only condition combined. The test of the third contrast is significant, however, indicating a difference between the Tetris+Reactivation and Reactivation-Only condition. The slope of this comparison is positive, indicating that, as expected, there are more memory intrusions in the Reactivation-Only condition compared to the Tetris+Reactivation condition.
+
+```{r tetris-contrast-coding-ANOVA}
+opts <- options()
+options(knitr.kable.NA = "")
+tab <- cbind(estimate = c(coefficients(modg)[1],NA,coefficients(modg)[2:4],Error=NA),rbind(car::Anova(modg, type=3)[1:2,],expand_Anova(modg, type=3)[-1,]))
+rownames(tab) <- c("Intercept","Condition","$\\quad X_1$","$\\quad X_2$", "$\\quad X_3$", "Error")
+colnames(tab) <- c("$\\hat{\\beta}$","$\\text{SS}$", "$\\text{df}$", "$F$", "$P(\\geq \\lvert F \\rvert)$")
+knitr::kable(tab, caption = "Linear model predicting number of intrusions by three contrast-coded predictors.", escape = FALSE, digits=3)
+options(opts)
+```
+
+Comparing the results in Table \@ref(tab:tetris-contrast-coding-ANOVA) to those in Table \@ref(tab:tetris-effect-coding-ANOVA), there are a few things to note. Firstly, the result of the omnibus test is _exactly the same_, whether you use effect coding or orthogonal contrast coding. Because both ways of coding in the end make the same prediction $\hat{Y}_i$ (namely that $\hat{Y}_i$ equals the group mean of the condition that case $i$ belongs to), the model as a whole has the same SSE for both coding schemes. And as the omnibus test involves the same MODEL R (an intercept-only model), the SSR term of the omnibus Condition effect is the same for effect-coding and orthogonal coding. Indeed, for any form of contrast coding which results in model predictions that equal the group means, the omnibus test gives exactly the same results! The model with orthogonal contrast coding, however, separates the whole model SSR term neatly into into different SSR terms for the contrast-coding predictors. If you add up the SSR terms for the three predictors (in the column labelled SS), you get exactly the SSR term given for Condition. This shows that when you use orthogonal contrast coding, the variance explained by the model as a whole is separated exactly into three independent parts reflecting the unique part of the variance explained due to each predictor. 
+
+### Defining your own (orthogonal) contrasts
+
+
+Initially, coming up with orthogonal contrast codes (or for that matter, any coding scheme which allows the model predictions to equal all the group means exactly) will not be easy, especially for nominal variables with more than 3 levels (i.e. more than 3 groups). With practice, you should become better at this, though. Ideally, the contrast codes reflect at least some of the theoretically important research questions you want to ask (e.g., relevant comparisons of the effects of experimental manipulations). In an experimental design with $g$ groups, you need to define $g-1$ contrast codes which correspond to such questions. When designing your own contrast codes, you should start with the most important question you want to ask, For instance, if you want to compare the conditions with memory reactivation to those without memory reactivation, because you expect more memory intrusions after memory reactivation than without this reactivation, your initial contrast could be $c_1 = (-\tfrac{1}{2}, \tfrac{1}{2}, -\tfrac{1}{2}, \tfrac{1}{2})$. Note that I'm giving the Control and Tetris-Only condition a negative value of $-\tfrac{1}{2}$ and the Tetris+Reactivation and Reactivation-Only condition a positive value of $\tfrac{1}{2}$ because the resulting slope would be positive if the expectation of more memory intrusions after reactivation holds true. For expectations which involve not only a difference, but also a direction of that difference, I find it handy to assign values which are in line with those expectations. Negative slopes in the model then indicate that my expectations did not hold true. 
+
+Having defined this initial contrast, we have two more to go. Perhaps I'm also interested in assessing the effect of Tetris within the conditions that involve memory reactivation, because I expect playing Tetris to reduce the number of memory intrusions. This is a comparison between the Reactivation-Only and Tetris+Reactivation conditions. Because we gave these conditions the same value in the first contrast $c_1$ (i.e. we did not differentiate between them in the first comparison), this new comparison will be independent of (orthogonal to) the first comparison. We can use the same contrast code for this as the one used earlier, so $c_2 = (0,-\tfrac{1}{2}, 0, \tfrac{1}{2})$. It is easy to check that this contrast is indeed orthogonal to the first one
+$$\sum_{k=1}^g c_{1,k} \times c_{2,k} = -\tfrac{1}{2} \times 0 + \tfrac{1}{2} \times (-\tfrac{1}{2}) + (-\tfrac{1}{2}) \times 0 + \tfrac{1}{2} \times \tfrac{1}{2} = 0$$
+We now have one contrast left to specify. Perhaps we don't really have any more important questions to ask, so this contrast might be arbitrary from a theoretical viewpoint. However, to have a model which is able to fit the group means exactly, we would need a contrast code that differentiates between the Control condition and the Tetris-Only condition, as these conditions received the same value on $c_1$ (both $-\tfrac{1}{2}$) _and_ $c_2$ (both 0). If our last contrast code would not differentiate between these two conditions, then there would be no way in which the model can make different predictions for those two conditions. The model then involves a quite strong assumption that means of the Control and Tetris-Only condition are exactly identical. I don't see a reason why such equivalence between the conditions would necessarily hold. So the final contrast code will be $c_3 = (\tfrac{1}{2}, 0, -\tfrac{1}{2}, 0)$. Note that if I had used different values for the Reactivation-Only and Tetris+Reactivation conditions, for instance a contrast code of $(\tfrac{1}{2}, -\tfrac{1}{2}, -\tfrac{1}{2}, \tfrac{1}{2})$, then the contrast code would correlate with $c_2$ (or with $c_1$ if I had used different values). So the final contrast code needs to give the same value (0) to the Reactivation-Only and Tetris+Reactivation conditions to give us a set of orthogonal contrast codes. So the final set of orthogonal contrast codes is
+
+```{r}
+tab <- data.frame(c1 = c("$-\\tfrac{1}{2}$","$\\tfrac{1}{2}$","$-\\tfrac{1}{2}$","$\\tfrac{1}{2}$"),
+                  c2 = c("0","$-\\tfrac{1}{2}$","0","$\\tfrac{1}{2}$"),
+                  c3 = c("$\\tfrac{1}{2}$","0","$-\\tfrac{1}{2}$","0"))
+colnames(tab) <- c("$c_1$","$c_2$","$c_3$")
+rownames(tab) <- c("Control","Tetris+Reactivation", "Tetris-Only", "Reactivation-Only")
+knitr::kable(tab, escape=FALSE,align=rep('r', 3))
+```
+
+I will leave checking the orthogonality, and estimating and testing the parameters of the resulting model, as an exercise to the reader.
+
+## Default orthogonal coding schemes
+
+While orthogonal contrasts provide benefits in terms of straightforward interpretation of the parameters, and, in the case of equally sized groups, independent predictors and and a neat division of the whole model $\text{SSR}$ to the $\text{SSR}$ terms for the predictors, orthogonality is not a strict requirement. For instance, effect coding and dummy coding also provide interpretable parameters, although the predictors are not independent. The most important thing is that the contrast codes can answer questions about the Data Generating Process which are of interest to the researcher. 
+
+In the absence of any comparisons of interest, you shouldn't really be conducting hypothesis tests in the first place. That said, there might be times where you would like to resort to a "default" way of orthogonal contrast coding. Such default coding schemes can also provide inspiration for defining your own contrast codes. Two default orthogonal contrast codes are Helmert coding, and polynomial contrast coding.
+
+__Helmert coding__ involves a set of contrast codes in which each code compares a group mean to the average of all group means that come before it. You can find these contrast, for situations with a group size of $g=1, 2, \ldots, 6$, in Table \@ref(tab:Helmert-contrasts). Using Helmert contrasts will always provide a set of orthogonal contrasts. And if you reorder the conditions in Table \@ref(tab:tetris-orthogonal-cotrast-codes) as Tetris+Reactivation, Reactivation-Only, tetris-Only, Control, you should recognize that this was actually an example of Helmert coding for $g=4$. 
+
+```{r Helmert-contrasts}
+options(knitr.kable.NA = "")
+tmp <- data.frame(group = NA, H2=NA, H3 = NA, H4 = NA, H5 = NA, H6 = NA)
+tab <- as.data.frame(codingMatrices::code_helmert(2))
+tab$group <- 1:2
+#mp <- data.frame(H2=NA, H3 = NA, H4 = NA, H5 = NA, H6 = NA)
+tab <- dplyr::bind_rows(tmp, tab)
+for(g in 3:6) {
+  tmp <- data.frame(group = NA, H2=NA, H3 = NA, H4 = NA, H5 = NA, H6 = NA)
+  tab <- dplyr::bind_rows(tab, tmp)
+  tmp <- as.data.frame(codingMatrices::code_helmert(g))
+  tmp$group <- 1:g
+  tab <- dplyr::bind_rows(tab, tmp)
+  #tmp <- data.frame(H2=NA, H3 = NA, H4 = NA, H5 = NA, H6 = NA)
+  #tab <- dplyr::bind_rows(tab, tmp)
+}
+colnames(tab)[2:6] <- paste0("$c_",1:(6-1),"$")
+knitr::kable(tab, escape = FALSE, caption = "Helmert contrast codes for situations with two to six groups.", row.names = FALSE)
+```
+
+__Polynomial contrast codes__ tend to be used when the groups can be ordered in a meaningful way. For instance, a study might involve different age groups, e.g. "18-30 year old", "31-40 year old", and "41-50 year old". Using polynomial contrast coding, you can then determine a linear trend over these age groups with a _linear_ contrast $c_1 = (-1,0,1)$, as well as whether the average of the middle age group is lower (or higher) than would be expected from the linear contrast through a _quadratic_ contrast $c_2 = (1,-2,1)$. Examples of polynomial contrast codes for situations with between 2 and 6 groups are provided in Table \@ref(tab:polynomial-contrasts). 
+
+```{r polynomial-contrasts}
+options(knitr.kable.NA = "")
+tmp <- data.frame(group = NA, ".I"=NA, ".II" = NA, ".III" = NA, ".IV" = NA, ".V" = NA)
+tab <- as.data.frame(codingMatrices::code_poly(2))
+tab$group <- 1:2
+#mp <- data.frame(H2=NA, H3 = NA, H4 = NA, H5 = NA, H6 = NA)
+tab <- dplyr::bind_rows(tmp, tab)
+for(g in 3:6) {
+  tmp <- data.frame(".I"=NA, ".II" = NA, ".III" = NA, ".IV" = NA, ".V" = NA)
+  tab <- dplyr::bind_rows(tab, tmp)
+  tmp <- as.data.frame(codingMatrices::code_poly(g))
+  tmp$group <- 1:g
+  tab <- dplyr::bind_rows(tab, tmp)
+  #tmp <- data.frame(H2=NA, H3 = NA, H4 = NA, H5 = NA, H6 = NA)
+  #tab <- dplyr::bind_rows(tab, tmp)
+}
+colnames(tab)[2:6] <- paste0("$c_",1:(6-1),"$")
+knitr::kable(tab, escape = FALSE, caption = "Polynomial contrast codes for situations with two to six groups.", row.names = FALSE)
+```
+
 ## Multiple testing and post-hoc tests
 
-
+Come back later for this.
