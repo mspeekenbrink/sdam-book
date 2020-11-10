@@ -1,1 +1,98 @@
 # Factorial ANOVA
+
+```{r}
+library(sdamr)
+data("expBelief")
+```
+
+## Experimenter beliefs and social priming
+
+Research suggests that stimuli that prime social concepts can fundamentally alter people's behaviour. For instance, in one experiment people were primed with either a high-power or low-power social status. Not only did people differ in how powerful they felt, they also differed in their cognitive functioning, processing information more quickly when it was consistent with the induced status (low or high power). However, it is also known that experimenter expectations may alter participants' behaviour. As many studies on social priming have not been conducted as double-blind experiments (where neither experimenters nor participants are aware of the actual experimental conditions), it may be the case that some of the results were due to experimenter expectations. To investigate this, @gilder2018role conducted an experiment in which they systematically primed social status, as well as experimenters' beliefs about which prime was used for which participant.
+
+A total of $n = 400$ students participated in their experiment. They first performed a priming task in which they were either assigned a high-power ("boss") or low-power ("employee") role. Independent of the actual condition, the experimenter (a research assistant) was made to believe that half of the participants in each condition were in the other condition (e.g., that people in the high-power condition were in the low-power condition). After the priming task, participants performed a lexical decision task, in which they as quickly as possible had to indicate whether a presented letter string was a word or non-word. Their response was made by pressing a key to move a stick figure closer (approach) or further away (avoid) from the word. Earlier research found that participants primed with high power were quicker to approach than avoid stimuli, while the reverse was true for those primed with low power. The dependent variable was therefore an "approach advantage", calculated $\texttt{ApproachAdvantage}_i = \overline{\texttt{RT}}_{\text{approach},i} - \overline{\texttt{RT}}_{\text{avoid},i}$).
+
+According to the "social priming hypothesis", people will be faster to approach than avoid when they feel they have more power (and be faster to avoid than approach when they feel they have low power). If this hypothesis is true, then the $\texttt{ApproachAvoidance}$ measure would be positive on average in the high-power condition, and negative on average in the low-power condition. Alternatively, according to the "experimenter belief hypothesis", it is the experimenter belief about the condition, and not the actual condition, that drives any effects. If this hypothesis is true, then the $\texttt{ApproachAvoidance}$ measure would be positive whenever the experimenter believes a participant is in the high-power condition, and negative when the experimenter believes a participant is in the low-power condition. Figure \@ref(fig:expBelief-raincloud) shows the data for the four conditions (the four possible combinations of prime and experimenter belief). The plot looks like the results are more consistent with the experimenter-hypothesis, as the averages in the two "experimenter low" conditions appear almost equal, and are both lower than in the two "experimenter high" conditions. 
+
+```{r expBelief-raincloud, fig.cap="Approach advantage scores in the four conditions of Experiment 5 of @gilder2018role; PL = Low-power prime, PH = high-power prime, EL = experimenter believes condition was PL, EH = experimenter believes condition was PH"}
+library(dplyr)
+library(stringr)
+dat <- expBelief %>% mutate(primeCond = str_replace_all(primeCond, c("LPP" = "PL", "HPP" = "PH"))) %>% mutate(experimenterBelief = str_replace_all(experimenterBelief, c("H" = "EH", "L" = "EL"))) %>% mutate(condition = interaction(primeCond, experimenterBelief, sep="-")) %>% mutate(condition = factor(condition, levels=c("PL-EL", "PL-EH", "PH-EL", "PH-EH")))
+plot_raincloud(dat, ApproachAdvantage, groups=condition)
+```
+
+### A oneway ANOVA
+
+Let's analyze the data with the tools we already have. There are four conditions in the experiment, so we can treat `condition` as a nominal independent variable with four levels. We then need to use three contrast codes. We are free to choose these in any way we like, as long as the model is able to predict the `ApproachAdvantage` in each condition as the average in that condition. What would be the most interesting comparisons to make for this study? Two contrasts of interest follow directly from the two main hypotheses. To test the "social priming hypothesis", it is of interest to compare the conditions in which participants received a low-power prime to those in which they received a high-power prime. More specifically, if the social-priming hypothesis is false and the power-primes have _no effect_ on the speediness of approach and avoid responses, then the average of the low-power prime conditions would be equal to the average of the high-power prime conditions:
+$$\frac{\mu_\text{PL-EL} + \mu_\text{PL-EH}}{2} = \frac{\mu_\text{PH-EL} + \mu_\text{PH-EH}}{2}$$
+If the social-priming hypothesis is true, on the other hand, we would expect the approach advantage scores to be higher in the high-power prime conditions than in the low-power prime conditions, i.e.:
+$$\frac{\mu_\text{PH-EL} + \mu_\text{PH-EH}}{2} - \frac{\mu_\text{PL-EL} + \mu_\text{PL-EH}}{2} > 0$$
+The suggested contrast code is then $c_1 = (-\tfrac{1}{2}, -\tfrac{1}{2}, \tfrac{1}{2}, \tfrac{1}{2})$ for the PL-EL, PL-EH, PH-EL, and PH-EH conditions, respectively. 
+
+To test the experimenter-belief hypotheses, a similar comparison would be made between the "experimenter believes low" and "experimenter believes high" conditions. More specifically, if the experimenter-belief hypothesis is false and the experimenter beliefs have _no effect_ on the speediness of approach and avoid responses, then the average of the experimenter-believes-low conditions would be equal to the average of the experimenter-believes-high conditions:
+$$\frac{\mu_\text{PL-EL} + \mu_\text{PH-EL}}{2} = \frac{\mu_\text{PL-EH} + \mu_\text{PH-EH}}{2}$$
+If the experimenter-belief hypothesis is true, on the other hand, we would expect the approach advantage scores to be higher in the experimenter-believes-high conditions than in the experimenter-believes-low conditions, i.e.:
+$$\frac{\mu_\text{PL-EH} + \mu_\text{PH-EH}}{2} - \frac{\mu_\text{PL-EL} + \mu_\text{PH-EL}}{2} > 0$$
+The suggested contrast code is then $c_2 = (-\tfrac{1}{2}, \tfrac{1}{2}, -\tfrac{1}{2}, \tfrac{1}{2})$.
+
+It is straightforward to check that these two contrasts are orthogonal.^[$\sum_{k=1}^g c_{1,k} = 0$, $\sum_{k=1}^g c_{2,k} = 0$, and $\sum_{k=1}^g c_{1,k} \times c_{2,k} = \tfrac{1}{4} - \tfrac{1}{4} - \tfrac{1}{4} + \tfrac{1}{4} = 0$.] If you don't have any burning other question to ask about differences between the conditions, it then makes sense to look for a third contrast which completes the set of orthogonal contrasts (i.e. a contrast that is orthogonal to $c_1$ and $c_2$). One such contrast is $c_3 = (\tfrac{1}{2}, -\tfrac{1}{2}, -\tfrac{1}{2}, \tfrac{1}{2})$. Analogous to the first two contrasts, this contrast can be used to test the following equivalence:
+$$\frac{\mu_\text{PL-EL} + \mu_\text{PH-EH}}{2} = \frac{\mu_\text{PL-EH} + \mu_\text{PH-EL}}{2}$$
+Our full set of three (orthogonal) contrasts is thus the following:
+
+```{r}
+tab <- data.frame(c1 = c("$-\\tfrac{1}{2}$","$-\\tfrac{1}{2}$","$\\tfrac{1}{2}$","$\\tfrac{1}{2}$"),
+                  c2 = c("$-\\tfrac{1}{2}$","$\\tfrac{1}{2}$","$-\\tfrac{1}{2}$","$\\tfrac{1}{2}$"),
+                  c3 = c("$\\tfrac{1}{2}$","$-\\tfrac{1}{2}$","$-\\tfrac{1}{2}$","$\\tfrac{1}{2}$"))
+colnames(tab) <- c("$c_1$","$c_2$","$c_3$")
+rownames(tab) <- c("PL-EL","PL-EH", "PH-EL", "PH-EH")
+knitr::kable(tab, escape=FALSE,align=rep('r', 3), caption="A set of three orthogonal contrast codes for the Experimenter Belief study.")
+means <- dat %>% group_by(condition) %>% summarise(mean = mean(ApproachAdvantage)) %>% select(mean)
+codes <- cbind(c(-1/2,-1/2,1/2,1/2),
+               c(-1/2,1/2,-1/2,1/2),
+               c(1/2,-1/2,-1/2,1/2))
+# means <- means$mean
+```
+
+Estimating a linear regression model with the corresponding contrast-coding predictors gives the results provided in Table \@ref(tab:expBelief-oneway-ANOVA-results).
+```{r expBelief-oneway-ANOVA-results}
+contrasts(dat$condition) <- codes
+modg <- lm(ApproachAdvantage ~ condition, data=dat)
+opts <- options()
+options(knitr.kable.NA = "")
+tab <- cbind(estimate = c(coefficients(modg)[1],NA,coefficients(modg)[2:4],Error=NA),rbind(car::Anova(modg, type=3)[1:2,],expand_Anova(modg, type=3)[-1,]))
+rownames(tab) <- c("Intercept","Condition","$\\quad X_1$","$\\quad X_2$", "$\\quad X_3$", "Error")
+colnames(tab) <- c("$\\hat{\\beta}$","$\\text{SS}$", "$\\text{df}$", "$F$", "$P(\\geq \\lvert F \\rvert)$")
+knitr::kable(tab, caption = "Linear model predicting $\\texttt{ApproachAvoidance}$ by three orthogonal contrast-coding predictors.", escape = FALSE, digits=3)
+options(opts)
+```
+The estimate of the intercept is positive and differs significantly from 0. Remember that in a model with sum-to-zero contrasts, the intercept reflects the grand mean (average of group means). Thus, we can conclude that, on average, participants were quicker in making approach than in making avoid responses. The scale of the dependent variable ($\texttt{ApproachAdvantage}$) is in milliseconds, so approach responses were `r format(coefficients(modg)[1],digits=3)` milliseconds faster than avoid responses. The omnibus test of Condition is significant, indicating that the mean of at least one condition differs from that of another. Each individual contrast represents the difference between one combination of two conditions and another combination of two conditions. Only the effect of $X_2$ (the predictor corresponding to contrast $c_2$) is significant. This indicates that when the experimenter believed a participant was in the high-power condition, the difference between approach and avoid responses was `r format(coefficients(modg)[3],digits=3)` milliseconds larger than when the experimenter believed a participant was in the low-power condition. Interestingly, the effect of $X_1$, the contrast-coding predictor corresponding to $c_1$ is _not_ significant. Hence, we can _not_ reject the null hypothesis that the difference in the approach advantage between the high-power and low-power primes is 0. We have thus not found evidence for the social-priming hypothesis, whilst the results are in line with the experimenter-belief hypothesis.
+
+## Factorial designs
+
+In the above, we have pretty much conducted the analysis that answered the interesting questions for the study. In doing so, we treated the study consisting of four conditions, without any additional structure. But if you consider the design, you might realise that the conditions consisted of two manipulations: the prime given to participants (a low- or high-power prime) and the belief given to the experimenters (whether the participants was supposedly given the low- or high-power prime). The actual conditions in the experiment consisted of the four ($2 \times 2$) possible combinations of these two manipulations (PL-EL, PL-EH, PH-EL, and PH-EH). When a study has such a factorial design, we can think of the _treatment effects_ in a slightly different manner than considering the conditions as, in some sense, isolated from the others. In our contrast coding scheme, we have already done this: we chose to group the "PL" conditions, and the "PH" conditions, together, in the first contrast ($c_1$). Similarly, we chose to group the "EL" conditions, and the "EH" conditions, together, in the second contrast ($c_2$). By doing so, we have considered __main effects__ of the two manipulations (priming, and experimenter belief): what, on average, is the effect of giving participants a low-power prime, compared to a high-power prime? And what, on average, is the effect of making the experimenter believe participants were given a low-power prime, compared to a high-power prime? 
+
+In the previous discussion, we defined the remaining contrast code as the code which would complete the set of orthogonal contrast codes. But when dealing with a factorial design, we can take a different viewpoint. The two contrast codes $c$, and their corresponding predictors $X$, reflect independent effects of the experimental manipulations. If we had a model with just these two predictors, we would assume the slope of these is the same, not matter what the value of the other predictor. That implies that the effect of the power prime is the same, no matter what the belief of the experimenter. Similarly, that implies that the effect of the experimenter belief is the same, no matter what the power-prime. That's quite a strong assumption. What if the effect of the power prime depends on the belief of the experimenter, and what if the effect of the experimenter belief depends on the power-prime? Well, we have already considered this possibility, when we discussed _moderation_. Because, once we have constructed contrast-coding predictors, we are "safely in the land of multiple regression", we can investigate this possibility by adding a product-predictor to our model, i.e. $(X_1 \times X_2)_i$. Such a product predictor is _exactly_ the same as defining a contrast code $c_3 = c_1 \times c_2$!. So, to investigate whether the effect of the power-prime is moderated by experimenter belief, we should use a contrast code $c_3' = c_1 \times c_2 = (\tfrac{1}{4},- \tfrac{1}{4}, -\tfrac{1}{4}, \tfrac{1}{4})$. Note that this is, apart from scaling, the same contrast code as we used before, i.e. $c_3 = 2 \times c_{3}'$. And, while scaling affects the value of the slope, it does not change the underlying relation between a predictor and the dependent variable, so the reduction in the Sum of Squared Error, and the resulting null-hypothesis, are exactly the same for $c_3$ and $c_3'$. Before showing you that this is actually the case, let's consider what we might expect from the slope of $X_3'$ (the predictor corresponding to $c_3'$). Because $c_3 = 2 \times c_{3}'$, every one-unit increase in $c_3$ corresponds to a _half-unit_ increase in $c_3'$. Conversely, that means that every one-unit increase in $c_3'$ corresponds to a _two-unit_ increase in $c_3$. So, what do you think the relation between the slope of $X_3$ and $X_{3}'$ would be?
+
+The slope of $X_3'$ reflects the increase in the dependent variable for every one-unit increase in $X_3'$. This is the same as a half-unit increase in $X_3$, which means that $\beta'_{3} = 2 \times \beta_3$. The results of estimating a model with this alternative version of $c_3'$ of the third contrast code (keeping the others the same) is given in Table \@ref(tab:expBelief-factorial-ANOVA-results). As you can see, the only difference with Table \@ref(tab:expBelief-oneway-ANOVA-results) is the estimate of the slope of $X_3$. This is now half of the value in Table \@ref(tab:expBelief-oneway-ANOVA-results). 
+```{r expBelief-factorial-ANOVA-results}
+codes <- cbind(c(-1/2,-1/2,1/2,1/2),
+               c(-1/2,1/2,-1/2,1/2),
+               c(1/4,-1/4,-1/4,1/4))
+contrasts(dat$condition) <- codes
+modg <- lm(ApproachAdvantage ~ condition, data=dat)
+opts <- options()
+options(knitr.kable.NA = "")
+tab <- cbind(estimate = c(coefficients(modg)[1],NA,coefficients(modg)[2:4],Error=NA),rbind(car::Anova(modg, type=3)[1:2,],expand_Anova(modg, type=3)[-1,]))
+rownames(tab) <- c("Intercept","Condition","$\\quad X_1$","$\\quad X_2$", "$\\quad X_3$", "Error")
+colnames(tab) <- c("$\\hat{\\beta}$","$\\text{SS}$", "$\\text{df}$", "$F$", "$P(\\geq \\lvert F \\rvert)$")
+knitr::kable(tab, caption = "Linear model predicting $\\texttt{ApproachAvoidance}$ by factorial contrast-coding predictors.", escape = FALSE, digits=3)
+options(opts)
+```
+
+At this point, you might wonder what is special about factorial 
+
+
+### Main effects and interactions
+
+
+## Orthogonal contrast codes and unequal sample sizes
+
