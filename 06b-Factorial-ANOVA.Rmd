@@ -9,7 +9,7 @@ data("expBelief")
 
 Research suggests that stimuli that prime social concepts can fundamentally alter people's behaviour. For instance, in one experiment people were primed with either a high-power or low-power social status. Not only did people differ in how powerful they felt, they also differed in their cognitive functioning, processing information more quickly when it was consistent with the induced status (low or high power). However, it is also known that experimenter expectations may alter participants' behaviour. As many studies on social priming have not been conducted as double-blind experiments (where neither experimenters nor participants are aware of the actual experimental conditions), it may be the case that some of the results were due to experimenter expectations. To investigate this, @gilder2018role conducted an experiment in which they systematically primed social status, as well as experimenters' beliefs about which prime was used for which participant.
 
-A total of $n = 400$ students participated in their experiment. They first performed a priming task in which they were either assigned a high-power ("boss") or low-power ("employee") role. Independent of the actual condition, the experimenter (a research assistant) was made to believe that half of the participants in each condition were in the other condition (e.g., that people in the high-power condition were in the low-power condition). After the priming task, participants performed a lexical decision task, in which they as quickly as possible had to indicate whether a presented letter string was a word or non-word. Their response was made by pressing a key to move a stick figure closer (approach) or further away (avoid) from the word. Earlier research found that participants primed with high power were quicker to approach than avoid stimuli, while the reverse was true for those primed with low power. The dependent variable was therefore an "approach advantage", calculated $\texttt{ApproachAdvantage}_i = \overline{\texttt{RT}}_{\text{approach},i} - \overline{\texttt{RT}}_{\text{avoid},i}$).
+A total of $n = 400$ students participated in their experiment. They first performed a priming task in which they were either assigned a high-power ("boss") or low-power ("employee") role. Independent of the actual condition, the experimenter (one of four research assistants) was made to believe that half of the participants in each condition were in the other condition (e.g., that people in the high-power condition were in the low-power condition). After the priming task, participants performed a lexical decision task, in which they as quickly as possible had to indicate whether a presented letter string was a word or non-word. Their response was made by pressing a key to move a stick figure closer (approach) or further away (avoid) from the word. Earlier research found that participants primed with high power were quicker to approach than avoid stimuli, while the reverse was true for those primed with low power. The dependent variable was therefore an "approach advantage", calculated $\texttt{ApproachAdvantage}_i = \overline{\texttt{RT}}_{\text{approach},i} - \overline{\texttt{RT}}_{\text{avoid},i}$).
 
 According to the "social priming hypothesis", people will be faster to approach than avoid when they feel they have more power (and be faster to avoid than approach when they feel they have low power). If this hypothesis is true, then the $\texttt{ApproachAvoidance}$ measure would be positive on average in the high-power condition, and negative on average in the low-power condition. Alternatively, according to the "experimenter belief hypothesis", it is the experimenter belief about the condition, and not the actual condition, that drives any effects. If this hypothesis is true, then the $\texttt{ApproachAvoidance}$ measure would be positive whenever the experimenter believes a participant is in the high-power condition, and negative when the experimenter believes a participant is in the low-power condition. Figure \@ref(fig:expBelief-raincloud) shows the data for the four conditions (the four possible combinations of prime and experimenter belief). The plot looks like the results are more consistent with the experimenter-hypothesis, as the averages in the two "experimenter low" conditions appear almost equal, and are both lower than in the two "experimenter high" conditions. 
 
@@ -23,19 +23,19 @@ plot_raincloud(dat, ApproachAdvantage, groups=condition)
 ### A oneway ANOVA
 
 Let's analyze the data with the tools we already have. There are four conditions in the experiment, so we can treat `condition` as a nominal independent variable with four levels. We then need to use three contrast codes. We are free to choose these in any way we like, as long as the model is able to predict the `ApproachAdvantage` in each condition as the average in that condition. What would be the most interesting comparisons to make for this study? Two contrasts of interest follow directly from the two main hypotheses. To test the "social priming hypothesis", it is of interest to compare the conditions in which participants received a low-power prime to those in which they received a high-power prime. More specifically, if the social-priming hypothesis is false and the power-primes have _no effect_ on the speediness of approach and avoid responses, then the average of the low-power prime conditions would be equal to the average of the high-power prime conditions:
-$$\frac{\mu_\text{PL-EL} + \mu_\text{PL-EH}}{2} = \frac{\mu_\text{PH-EL} + \mu_\text{PH-EH}}{2}$$
+$$\frac{\mu_\text{PL,EL} + \mu_\text{PL,EH}}{2} = \frac{\mu_\text{PH,EL} + \mu_\text{PH,EH}}{2}$$
 If the social-priming hypothesis is true, on the other hand, we would expect the approach advantage scores to be higher in the high-power prime conditions than in the low-power prime conditions, i.e.:
-$$\frac{\mu_\text{PH-EL} + \mu_\text{PH-EH}}{2} - \frac{\mu_\text{PL-EL} + \mu_\text{PL-EH}}{2} > 0$$
+$$\frac{\mu_\text{PH,EL} + \mu_\text{PH,EH}}{2} - \frac{\mu_\text{PL,EL} + \mu_\text{PL,EH}}{2} > 0$$
 The suggested contrast code is then $c_1 = (-\tfrac{1}{2}, -\tfrac{1}{2}, \tfrac{1}{2}, \tfrac{1}{2})$ for the PL-EL, PL-EH, PH-EL, and PH-EH conditions, respectively. 
 
 To test the experimenter-belief hypotheses, a similar comparison would be made between the "experimenter believes low" and "experimenter believes high" conditions. More specifically, if the experimenter-belief hypothesis is false and the experimenter beliefs have _no effect_ on the speediness of approach and avoid responses, then the average of the experimenter-believes-low conditions would be equal to the average of the experimenter-believes-high conditions:
-$$\frac{\mu_\text{PL-EL} + \mu_\text{PH-EL}}{2} = \frac{\mu_\text{PL-EH} + \mu_\text{PH-EH}}{2}$$
+$$\frac{\mu_\text{PL,EL} + \mu_\text{PH,EL}}{2} = \frac{\mu_\text{PL,EH} + \mu_\text{PH,EH}}{2}$$
 If the experimenter-belief hypothesis is true, on the other hand, we would expect the approach advantage scores to be higher in the experimenter-believes-high conditions than in the experimenter-believes-low conditions, i.e.:
-$$\frac{\mu_\text{PL-EH} + \mu_\text{PH-EH}}{2} - \frac{\mu_\text{PL-EL} + \mu_\text{PH-EL}}{2} > 0$$
+$$\frac{\mu_\text{PL,EH} + \mu_\text{PH,EH}}{2} - \frac{\mu_\text{PL,EL} + \mu_\text{PH,EL}}{2} > 0$$
 The suggested contrast code is then $c_2 = (-\tfrac{1}{2}, \tfrac{1}{2}, -\tfrac{1}{2}, \tfrac{1}{2})$.
 
 It is straightforward to check that these two contrasts are orthogonal.^[$\sum_{k=1}^g c_{1,k} = 0$, $\sum_{k=1}^g c_{2,k} = 0$, and $\sum_{k=1}^g c_{1,k} \times c_{2,k} = \tfrac{1}{4} - \tfrac{1}{4} - \tfrac{1}{4} + \tfrac{1}{4} = 0$.] If you don't have any burning other question to ask about differences between the conditions, it then makes sense to look for a third contrast which completes the set of orthogonal contrasts (i.e. a contrast that is orthogonal to $c_1$ and $c_2$). One such contrast is $c_3 = (\tfrac{1}{2}, -\tfrac{1}{2}, -\tfrac{1}{2}, \tfrac{1}{2})$. Analogous to the first two contrasts, this contrast can be used to test the following equivalence:
-$$\frac{\mu_\text{PL-EL} + \mu_\text{PH-EH}}{2} = \frac{\mu_\text{PL-EH} + \mu_\text{PH-EL}}{2}$$
+$$\frac{\mu_\text{PL,EL} + \mu_\text{PH,EH}}{2} = \frac{\mu_\text{PL,EH} + \mu_\text{PH,EL}}{2}$$
 Our full set of three (orthogonal) contrasts is thus the following:
 
 ```{r}
@@ -43,8 +43,8 @@ tab <- data.frame(c1 = c("$-\\tfrac{1}{2}$","$-\\tfrac{1}{2}$","$\\tfrac{1}{2}$"
                   c2 = c("$-\\tfrac{1}{2}$","$\\tfrac{1}{2}$","$-\\tfrac{1}{2}$","$\\tfrac{1}{2}$"),
                   c3 = c("$\\tfrac{1}{2}$","$-\\tfrac{1}{2}$","$-\\tfrac{1}{2}$","$\\tfrac{1}{2}$"))
 colnames(tab) <- c("$c_1$","$c_2$","$c_3$")
-rownames(tab) <- c("PL-EL","PL-EH", "PH-EL", "PH-EH")
-knitr::kable(tab, escape=FALSE,align=rep('r', 3), caption="A set of three orthogonal contrast codes for the Experimenter Belief study.")
+rownames(tab) <- c("PL,EL","PL,EH", "PH,EL", "PH,EH")
+knitr::kable(tab, escape=FALSE,align=rep('r', 3))#, caption="A set of three orthogonal contrast codes for the Experimenter Belief study.")
 means <- dat %>% group_by(condition) %>% summarise(mean = mean(ApproachAdvantage)) %>% select(mean)
 codes <- cbind(c(-1/2,-1/2,1/2,1/2),
                c(-1/2,1/2,-1/2,1/2),
@@ -68,11 +68,19 @@ The estimate of the intercept is positive and differs significantly from 0. Reme
 
 ## Factorial designs
 
-In the above, we have pretty much conducted the analysis that answered the interesting questions for the study. In doing so, we treated the study consisting of four conditions, without any additional structure. But if you consider the design, you might realise that the conditions consisted of two manipulations: the prime given to participants (a low- or high-power prime) and the belief given to the experimenters (whether the participants was supposedly given the low- or high-power prime). The actual conditions in the experiment consisted of the four ($2 \times 2$) possible combinations of these two manipulations (PL-EL, PL-EH, PH-EL, and PH-EH). When a study has such a factorial design, we can think of the _treatment effects_ in a slightly different manner than considering the conditions as, in some sense, isolated from the others. In our contrast coding scheme, we have already done this: we chose to group the "PL" conditions, and the "PH" conditions, together, in the first contrast ($c_1$). Similarly, we chose to group the "EL" conditions, and the "EH" conditions, together, in the second contrast ($c_2$). By doing so, we have considered __main effects__ of the two manipulations (priming, and experimenter belief): what, on average, is the effect of giving participants a low-power prime, compared to a high-power prime? And what, on average, is the effect of making the experimenter believe participants were given a low-power prime, compared to a high-power prime? 
+In the above, we have pretty much conducted the analysis that answered the interesting questions for the study. In doing so, we treated the study consisting of four conditions, without any additional structure. But if you consider the design, you might realise that the conditions consisted of two manipulations: the prime given to participants (a low- or high-power prime) and the belief given to the experimenters (whether the participants was supposedly given the low- or high-power prime). The actual conditions in the experiment consisted of the four ($2 \times 2$) possible combinations of these two manipulations (PL-EL, PL-EH, PH-EL, and PH-EH). 
 
-In the previous discussion, we defined the remaining contrast code as the code which would complete the set of orthogonal contrast codes. But when dealing with a factorial design, we can take a different viewpoint. The two contrast codes $c$, and their corresponding predictors $X$, reflect independent effects of the experimental manipulations. If we had a model with just these two predictors, we would assume the slope of these is the same, not matter what the value of the other predictor. That implies that the effect of the power prime is the same, no matter what the belief of the experimenter. Similarly, that implies that the effect of the experimenter belief is the same, no matter what the power-prime. That's quite a strong assumption. What if the effect of the power prime depends on the belief of the experimenter, and what if the effect of the experimenter belief depends on the power-prime? Well, we have already considered this possibility, when we discussed _moderation_. Because, once we have constructed contrast-coding predictors, we are "safely in the land of multiple regression", we can investigate this possibility by adding a product-predictor to our model, i.e. $(X_1 \times X_2)_i$. Such a product predictor is _exactly_ the same as defining a contrast code $c_3 = c_1 \times c_2$!. So, to investigate whether the effect of the power-prime is moderated by experimenter belief, we should use a contrast code $c_3' = c_1 \times c_2 = (\tfrac{1}{4},- \tfrac{1}{4}, -\tfrac{1}{4}, \tfrac{1}{4})$. Note that this is, apart from scaling, the same contrast code as we used before, i.e. $c_3 = 2 \times c_{3}'$. And, while scaling affects the value of the slope, it does not change the underlying relation between a predictor and the dependent variable, so the reduction in the Sum of Squared Error, and the resulting null-hypothesis, are exactly the same for $c_3$ and $c_3'$. Before showing you that this is actually the case, let's consider what we might expect from the slope of $X_3'$ (the predictor corresponding to $c_3'$). Because $c_3 = 2 \times c_{3}'$, every one-unit increase in $c_3$ corresponds to a _half-unit_ increase in $c_3'$. Conversely, that means that every one-unit increase in $c_3'$ corresponds to a _two-unit_ increase in $c_3$. So, what do you think the relation between the slope of $X_3$ and $X_{3}'$ would be?
+### Main effects and interactions
 
-The slope of $X_3'$ reflects the increase in the dependent variable for every one-unit increase in $X_3'$. This is the same as a half-unit increase in $X_3$, which means that $\beta'_{3} = 2 \times \beta_3$. The results of estimating a model with this alternative version of $c_3'$ of the third contrast code (keeping the others the same) is given in Table \@ref(tab:expBelief-factorial-ANOVA-results). As you can see, the only difference with Table \@ref(tab:expBelief-oneway-ANOVA-results) is the estimate of the slope of $X_3$. This is now half of the value in Table \@ref(tab:expBelief-oneway-ANOVA-results). 
+When a study has such a factorial design, we can think of the _treatment effects_ in a slightly different manner than considering the conditions as, in some sense, isolated from the others. In our contrast coding scheme, we have already done this: we chose to group the "PL" conditions, and the "PH" conditions, together, in the first contrast ($c_1$). Similarly, we chose to group the "EL" conditions, and the "EH" conditions, together, in the second contrast ($c_2$). By doing so, we have considered __main effects__ of the two manipulations (priming, and experimenter belief): what, on average, is the effect of giving participants a low-power prime, compared to a high-power prime? And what, on average, is the effect of making the experimenter believe participants were given a low-power prime, compared to a high-power prime?
+
+In the previous discussion, we defined the remaining contrast code as that code which would complete the set of orthogonal contrast codes. But when dealing with a factorial design, we can take a different viewpoint. The two contrast codes $c_j$, and their corresponding predictors $X_j$, reflect independent effects of the experimental manipulations. If we had a model with just these two predictors, we would assume the slope of these is the same, no matter what the value of the other predictor. That implies that the effect of the power prime is the same, no matter what the belief of the experimenter. Similarly, the effect of the experimenter belief is assumed the same, no matter which power-prime was presented. That is quite a strong assumption. What if the effect of the power-prime depends on the belief of the experimenter, and what if the effect of the experimenter belief depends on the power-prime? This implies that the effect of power prime is _moderated_ by experimenter belief (and vice versa). 
+
+It is important to realise that, once we have constructed contrast-coding predictors, we can treat the model as any other multiple regression model. Hence, we can investigate this possibility by adding a product-predictor to our model, i.e. $(X_1 \times X_2)_i$, just like we would do in a multiple regression model. Such a product predictor is exactly the same as defining a contrast code $c_3' = c_1 \times c_2$! So, to investigate whether the effect of the power-prime is moderated by experimenter belief, we should use a contrast code $c_3' = c_1 \times c_2 = (\tfrac{1}{4},- \tfrac{1}{4}, -\tfrac{1}{4}, \tfrac{1}{4})$. Note that this is, apart from scaling, the same contrast code as we used before, i.e. $c_3' = \tfrac{1}{2} \times c_{3}$. And, while scaling affects the value of the slope, it does not change the underlying relation between a predictor and the dependent variable, so the reduction in the Sum of Squared Error, and the resulting null-hypothesis test, are exactly the same for $c_3$ and $c_3'$. 
+
+Before showing you that this is actually the case, let's consider what we might expect from the slope of $X_3'$ (the predictor corresponding to $c_3'$). Because $c_3' = \tfrac{1}{2} \times c_{3}$, every one-unit increase in $c_3$ corresponds to a _half-unit_ increase in $c_3'$. Conversely, that means that every one-unit increase in $c_3'$ corresponds to a _two-unit_ increase in $c_3$. So, what do you think the relation between the slope of $X_3$ and $X_{3}'$ would be?^[Remember that the slope of a predictor reflects the increase in the dependent variable for every one-unit increase in that predictor. Every one-unit increase in $X_3$ corresponds to a half-unit increase in $X_3'$. That means that a one-unit increase in $X_3'$ is the same as a two-unit increase in $X_3$, so $\beta'_{3} = 2 \times \beta_3$.]
+
+The results of estimating a model with this alternative version of $c_3'$ of the third contrast code (keeping the others the same) is given in Table \@ref(tab:expBelief-factorial-ANOVA-results). IN the table, I have given the predictors more informative labels: $X_1$ becomes $\texttt{P}$ (for the main effect of Prime), $X_2$ becomes $\texttt{B}$ (for the main effect of experimenter Belief), and $X_3'$ becomes $\texttt{P} \times \texttt{B}$ (for the interaction between Prime and Belief. I have also omitted the omnibus test for Condition. In a factorial ANOVA, main effects and interaction effects can be omnibus tests themselves (we will see an example of this later). Besides these stylistic changes, the only real difference with Table \@ref(tab:expBelief-oneway-ANOVA-results) is the estimate of the slope of $\texttt{P} \times \texttt{B}$, which is half the value of the corresponding slope of $X_3$ in Table \@ref(tab:expBelief-oneway-ANOVA-results). 
 ```{r expBelief-factorial-ANOVA-results}
 codes <- cbind(c(-1/2,-1/2,1/2,1/2),
                c(-1/2,1/2,-1/2,1/2),
@@ -81,18 +89,200 @@ contrasts(dat$condition) <- codes
 modg <- lm(ApproachAdvantage ~ condition, data=dat)
 opts <- options()
 options(knitr.kable.NA = "")
-tab <- cbind(estimate = c(coefficients(modg)[1],NA,coefficients(modg)[2:4],Error=NA),rbind(car::Anova(modg, type=3)[1:2,],expand_Anova(modg, type=3)[-1,]))
-rownames(tab) <- c("Intercept","Condition","$\\quad X_1$","$\\quad X_2$", "$\\quad X_3$", "Error")
+# tab <- cbind(estimate = c(coefficients(modg)[1],NA,coefficients(modg)[2:4],Error=NA),rbind(car::Anova(modg, type=3)[1:2,],expand_Anova(modg, type=3)[-1,]))
+# rownames(tab) <- c("Intercept","Condition","$\\quad X_1$","$\\quad X_2$", "$\\quad X_3$", "Error")
+# colnames(tab) <- c("$\\hat{\\beta}$","$\\text{SS}$", "$\\text{df}$", "$F$", "$P(\\geq \\lvert F \\rvert)$")
+tab <- cbind(estimate = c(coefficients(modg)[1],coefficients(modg)[2:4],Error=NA),rbind(car::Anova(modg, type=3)[1,],expand_Anova(modg, type=3)[-1,]))
+rownames(tab) <- c("Intercept","$\\texttt{P}$","$\\texttt{B}$", "$\\texttt{P} \\times \\texttt{B}$", "Error")
 colnames(tab) <- c("$\\hat{\\beta}$","$\\text{SS}$", "$\\text{df}$", "$F$", "$P(\\geq \\lvert F \\rvert)$")
-knitr::kable(tab, caption = "Linear model predicting $\\texttt{ApproachAvoidance}$ by factorial contrast-coding predictors.", escape = FALSE, digits=3)
+knitr::kable(tab, caption = "Linear model predicting $\\texttt{ApproachAdvantage}$ by factorial contrast-coding predictors.", escape = FALSE, digits=3)
 options(opts)
 ```
 
-At this point, you might wonder what is special about factorial 
+At this point, you might wonder what is special about factorial designs and the way they are implemented in linear models. As the previous discussion indicates, in some sense, they are not special at all. If you have one experimental manipulation $A$ (e.g. power priming) with a total of $g_A$ levels $a_1, \ldots, a_{g_A}$, and another manipulation $B$ (e.g. experimenter belief) with a total of $g_B$ levels $b_1, \ldots, b_{L_B}$, and the experiment crosses all these levels as $(a_1 \text{ and } b_1), (a_1 \text{ and } b_2), \ldots, (a_2 \text{ and } b_1), \ldots, (a_{g_A} \text{ and } b_{g_B})$, then in the end, you will end up with an experiment that has $g = g_A \times g_B$ conditions. It is up to you how you treat these conditions. There is nothing inherently wrong with ignoring the factorial nature of a design, and analysing it as a oneway design. The key is really to come up with contrasts that test interesting hypotheses. Often, these contrasts will involve comparisons between levels of one manipulation, whilst averaging over the levels of another manipulation. This then naturally results in treating the design as factorial.
 
+## A threeway factorial ANOVA
 
-### Main effects and interactions
+One benefit of treating a factorial design as such, is that you can define contrast codes for the different manipulations separately. If you choose orthogonal contrasts for these, then the remaining contrasts for the full design a simple to work out as the pairwise products of these contrasts over the manipulations.
 
+To see how this works in a more complex situation, let's investigate whether the experimenter themselves might also play a role. In the study, there were four experimenters (the research assistants). Let's treat the identity of the experimenter as another factor in the design. A plot of the data, separated by experimenter, is provided in Figure \@ref(fig:expBelief-threeway-raincloud). As you may see there, while the first three experimenters show the same overall pattern as in Figure \@ref(fig:expBelief-raincloud), with higher scores for the "EH" conditions than the "EL" conditions, this is not so obvious for Experimenter 4. 
+
+```{r expBelief-threeway-raincloud, fig.cap="Approach advantage scores separated by condition and experimenter", out.width="100%"}
+library(ggplot2)
+dat %>% mutate(exptrNum = factor(exptrNum, labels=paste("Experimenter",1:4))) %>%
+plot_raincloud(ApproachAdvantage, groups=condition) + facet_wrap(~exptrNum)
+```
+
+Treating experimenter as another factor, we now have a 2 (Prime: low power vs high power) by 2 (experimenter Belief: low-power prime vs high-power prime) by 4 (Experimenter: 1, 2, 3, or 4) factorial design, with a total of $2 \times 2 \times 4 = 16$ conditions. We would thus need a total of $g-1 = 16 - 1 = 15$ contrast codes. That is a lot! We will start by defining suitable contrast codes for each of the three factors (manipulations). We have already done this for the first two factors. For prime-condition, we can assign a value of $-\frac{1}{2}$ to all conditions with a lower-power prime, and a value of $\tfrac{1}{2}$ to all conditions with a high-power prime. Thus, using a more informative label than $c_1$, the contrast code for Prime condition is $\texttt{P} = (-\tfrac{1}{2},\tfrac{1}{2})$. Similarly, to code for experimenter belief, we can assign a value of $-\tfrac{1}{2}$ to all conditions where the experimenter believed participants were in the low-power prime condition, and a value of $\tfrac{1}{2}$ for the conditions where the experimenter believed participants were assigned a high-power prime, i.e. $\texttt{B} = (-\tfrac{1}{2},\tfrac{1}{2})$. Experimenter is a factor with four levels, and hence we need three contrast codes. As I don't have a particular hypothesis about which experimenters might differ from others, we can use one of the default orthogonal contrast codes, for instance a Helmert coding scheme, with contrasts $\texttt{E}_1 = (-\tfrac{1}{2}, \tfrac{1}{2}, 0, 0)$, $\texttt{E}_2 = (-\tfrac{1}{3}, -\tfrac{1}{3}, \tfrac{2}{3}, 0)$, and $\texttt{E}_3 = (-\tfrac{1}{4}, -\tfrac{1}{4}, -\tfrac{1}{4}, \tfrac{3}{4})$. We have now defined $1 + 1 + 3 = 5$ contrast codes. The remaining 10 are easily defined. First, we will construct codes for the moderation of $\texttt{P}$ by $\texttt{B}$, by multiplying the values of $\texttt{P}$ and $\texttt{B}$ for all 16 conditions. We would do the same for the interaction between $\texttt{P}$ and $\texttt{E}_1$, $\texttt{P}$ and $\texttt{E}_2$, $\texttt{P}$ and $\texttt{E}_3$, as well as the interaction between $\texttt{B}$ and $\texttt{E}_1$, $\texttt{B}$ and $\texttt{E}_2$, and $\texttt{B}$ and $\texttt{E}_3$. We then have 7 more contrast codes to reflect each pairwise interaction. Great, we have now defined $5+7 = 12$ out of the required 15 contrast codes. The final three can be constructed as __threeway interactions__, i.e. as $\texttt{P} \times \texttt{B} \times \texttt{E}_1$, $\texttt{P} \times \texttt{B} \times \texttt{E}_2$, and $\texttt{P} \times \texttt{B} \times \texttt{E}_3$. You can view these threeway interactions as a form of "moderated moderations". We will come back to the interpretation of this shortly.
+
+The full set of 15 contrast codes, with values for all 16 conditions, is given in the (rather large) Table \@ref(tab:expBelief-threeway-ANOVA-codes).
+```{r expBelief-threeway-ANOVA-codes}
+tab <- data.frame(c1 = rep(c("$-\\tfrac{1}{2}$","$-\\tfrac{1}{2}$","$\\tfrac{1}{2}$","$\\tfrac{1}{2}$"),each=4),
+                  c2 = rep(c("$-\\tfrac{1}{2}$","$\\tfrac{1}{2}$","$-\\tfrac{1}{2}$","$\\tfrac{1}{2}$"),each=4),
+                  c3 = c("$-\\tfrac{1}{2}$","$\\tfrac{1}{2}$","$0$","$0$"),
+                  c4 = c("$-\\tfrac{1}{3}$","$-\\tfrac{1}{3}$","$\\tfrac{2}{3}$","$0$"),
+                  c5 = c("$-\\tfrac{1}{4}$","$-\\tfrac{1}{4}$","$-\\tfrac{1}{4}$","$\\tfrac{3}{4}$")
+                  )
+tab$c6 <- sapply(paste(tab$c1,tab$c2, sep="$\\times$"),gsub,pattern="$$\\times$$",replacement="\\times", fixed=TRUE)
+tab$c7 <- sapply(paste(tab$c1,tab$c3, sep="$\\times$"),gsub,pattern="$$\\times$$",replacement="\\times", fixed=TRUE)
+tab$c8 <- sapply(paste(tab$c1,tab$c4, sep="$\\times$"),gsub,pattern="$$\\times$$",replacement="\\times", fixed=TRUE)
+tab$c9 <- sapply(paste(tab$c1,tab$c5, sep="$\\times$"),gsub,pattern="$$\\times$$",replacement="\\times", fixed=TRUE)
+tab$c10 <- sapply(paste(tab$c2,tab$c3, sep="$\\times$"),gsub,pattern="$$\\times$$",replacement="\\times", fixed=TRUE)
+tab$c11 <- sapply(paste(tab$c2,tab$c4, sep="$\\times$"),gsub,pattern="$$\\times$$",replacement="\\times", fixed=TRUE)
+tab$c12 <- sapply(paste(tab$c2,tab$c5, sep="$\\times$"),gsub,pattern="$$\\times$$",replacement="\\times", fixed=TRUE)
+tab$c13 <- sapply(paste(tab$c1,tab$c10, sep="$\\times$"),gsub,pattern="$$\\times$$",replacement="\\times", fixed=TRUE)
+tab$c14 <- sapply(paste(tab$c1,tab$c11, sep="$\\times$"),gsub,pattern="$$\\times$$",replacement="\\times", fixed=TRUE)
+tab$c15 <- sapply(paste(tab$c1,tab$c12, sep="$\\times$"),gsub,pattern="$$\\times$$",replacement="\\times", fixed=TRUE)
+
+colnames(tab) <- c("$\\texttt{P}$","$\\texttt{B}$","$\\texttt{E}_1$", "$\\texttt{E}_2$", "$\\texttt{E}_3$", "$\\texttt{P} \\times \\texttt{B}$", "$\\texttt{P} \\times \\texttt{E}_1$", "$\\texttt{P} \\times \\texttt{E}_2$", "$\\texttt{P} \\times \\texttt{E}_3$", "$\\texttt{B} \\times \\texttt{E}_1$", "$\\texttt{B} \\times \\texttt{E}_2$", "$\\texttt{B} \\times \\texttt{E}_3$", "$\\texttt{P} \\times \\texttt{B} \\times \\texttt{E}_1$", "$\\texttt{P} \\times \\texttt{B} \\times \\texttt{E}_2$", "$\\texttt{P} \\times \\texttt{B} \\times \\texttt{E}_3$")
+rownames(tab) <- paste(rep(c("PL,EL","PL,EH", "PH,EL", "PH,EH"),each=4), c("E1","E2","E3","E4"), sep=",")
+library(kableExtra)
+knitr::kable(tab, escape=FALSE,align=rep('r', 3), caption="A set of 15 orthogonal contrast codes for the Experimenter Belief study.") %>% kable_styling() %>%
+  scroll_box(width = "100%", box_css = "border: 0px;")
+
+# means <- means$mean
+```
+
+Estimating the corresponding linear model with 15 predictors gives the results in Table \@ref(tab:expBelief-threeway-ANOVA-results). 
+
+```{r expBelief-threeway-ANOVA-results}
+dat$exptrNum <- factor(dat$exptrNum)
+contrasts(dat$exptrNum) <- cbind(c(-.5,.5,0,0),c(-1/3, -1/3, 2/3, 0), c(-1/4,-1/4,-1/4,3/4))
+dat$primeCond <- factor(dat$primeCond, levels=c("PL","PH"))
+contrasts(dat$primeCond) <- c(-.5,.5)
+dat$experimenterBelief <- factor(dat$experimenterBelief,levels=c("EL","EH"))
+contrasts(dat$primeCond) <- c(-.5,.5)
+modg <- lm(ApproachAdvantage ~ primeCond*experimenterBelief*exptrNum, data=dat)
+opts <- options()
+options(knitr.kable.NA = "")
+# tab <- cbind(estimate = c(coefficients(modg)[1],NA,coefficients(modg)[2:4],Error=NA),rbind(car::Anova(modg, type=3)[1:2,],expand_Anova(modg, type=3)[-1,]))
+# rownames(tab) <- c("Intercept","Condition","$\\quad X_1$","$\\quad X_2$", "$\\quad X_3$", "Error")
+# colnames(tab) <- c("$\\hat{\\beta}$","$\\text{SS}$", "$\\text{df}$", "$F$", "$P(\\geq \\lvert F \\rvert)$")
+caov <- car::Anova(modg, type=3)
+eaov <- expand_Anova(modg, type=3)
+tab <- cbind(estimate = c(coefficients(modg)[1:3],NA,coefficients(modg)[4:7],NA, coefficients(modg)[8:10],NA,coefficients(modg)[11:13],NA,coefficients(modg)[14:16],Error=NA),rbind(caov[1:4,],eaov[4:6,],caov[5:6,],eaov[8:10,],caov[7,],eaov[11:13,],caov[8,],eaov[14:17,]))
+rownames(tab) <- c("Intercept","Prime ($\\texttt{P}$)","Belief ($\\texttt{B}$)", "Experimenter", "$\\quad \\texttt{E}_1$", "$\\quad \\texttt{E}_2$", "$\\quad \\texttt{E}_3$", "Prime $\\times$ Belief", "Prime $\\times$ Experimenter", "$\\quad \\texttt{P} \\times \\texttt{E}_1$", "$\\quad \\texttt{P} \\times \\texttt{E}_2$", "$\\quad \\texttt{P} \\times \\texttt{E}_3$",  "Belief $\\times$ Experimenter", "$\\quad \\texttt{B} \\times \\texttt{E}_1$", "$\\quad \\texttt{B} \\times \\texttt{E}_2$", "$\\quad \\texttt{B} \\times \\texttt{E}_3$", "Prime $\\times$ Belief $\\times$ Experimenter", "$\\quad \\texttt{P} \\times \\texttt{B} \\times \\texttt{E}_1$", "$\\quad \\texttt{P} \\times \\texttt{B} \\times \\texttt{E}_2$", "$\\quad \\texttt{P} \\times \\texttt{B} \\times \\texttt{E}_3$", "Error")
+colnames(tab) <- c("$\\hat{\\beta}$","$\\text{SS}$", "$\\text{df}$", "$F$", "$P(\\geq \\lvert F \\rvert)$")
+knitr::kable(tab, caption = "Linear model predicting $\\texttt{ApproachAdvantage}$ by factorial contrast-coding predictors.", escape = FALSE, digits=c(3,8,3,1,3,3))
+options(opts)
+```
+
+I must admit these results are rather extensive and mind-boggling at first. Note that the main effect of "Experimenter" is entered in the table as an omnibus test, as well as the test for the individual contrasts $(\texttt{E}_1$, $\texttt{E}_2$, and $\texttt{E}_3)$. In a conventional ANOVA table, you would only see the omnibus test, but the individual contrasts are informative, so I like to include these as well. The omnibus test listed under "Experimenter" is a test that the slope of $\texttt{E}_1$, $\texttt{E}_2$, and $\texttt{E}_3$ are _all_ equal to 0. This is based on a model comparison between a MODEL G which includes all 16 parameters (intercept and the slopes of all 15 predictors) and a MODEL R which fixes the slopes of $\texttt{E}_1$, $\texttt{E}_2$, and $\texttt{E}_3$ to 0. Note that this MODEL R still includes the slopes of the various product-predictors such as $\texttt{P} \times \texttt{E}_1$. The omnibus test is significant, which indicates that, aggregating over the levels of Prime and Belief, at least one of the experimenters differs from one other one. The tests of the individual contrasts show a significant effect of $\texttt{E}_3$, which compares experimenter 4 to the average of experimenters 1, 2, and 3. The estimated slope is positive, which indicates that the approach advantage scores are generally higher for this experimenter than for the other ones. When you inspect Figure \@ref(fig:expBelief-threeway-raincloud), you can see this: whilst for all other experimenters, average scores in the "EL" conditions are negative and positive in the "EH" conditions, the averages for Experimenter 4 are always positive, regardless of the level of Belief or Prime. 
+
+### Interpreting interactions
+
+Aggregating over experimenters (i.e., looking at the main effect of Belief), we still obtain a significant effect of experimenter Belief, as we did before. However, the significant effect of the $\texttt{B} \times \texttt{E}_3$ contrast indicates that the effect of experimenter belief is different for Experimenter 4 compared to the other three experimenters. Let's consider this more carefully. The slope of $\texttt{B}$ is estimated as $\hat{\beta}_\texttt{B} = `r format(coefficients(modg)[3],digits=3)`$. This simple slope represents the difference between the "believe high-prime" and "believe low-prime" conditions, when all other predictors which moderate this effect equal 0. When using orthogonal "sum-to-zero" contrasts, the simple slope can be thought of as reflecting the average effect of belief over all levels of the other factors in the design (prime condition, and experimenter). So, aggregating over all other conditions, the approach advantage score is `r format(coefficients(modg)[3],digits=3)` milliseconds larger when the experimenter believed a participant was given a high-power prime compared to when the experimenter believed the participant received a low-power prime. 
+
+To interpret the interaction, we will just focus on the significant $\texttt{B} \times \texttt{E}_3$ contrast. Using the slope of this interaction, we can work out the predicted slope for Experimenter 4 as $$\hat{\beta}_{\texttt{B}|\text{Experimenter 4}} = `r format(coefficients(modg)[3],digits=3)` + \tfrac{3}{4} \times (`r format(coefficients(modg)[13],digits=3)`) = `r format(coefficients(modg)[3] + .75*coefficients(modg)[13],digits=3)`$$ As the scale of the dependent variable is in milliseconds, this seems a rather negligible effect. For the other three experimenters, on average, the predicted slope is $$\hat{\beta}_{\texttt{B}|\text{Experimenter 1, 2, or 3}} = `r format(coefficients(modg)[3],digits=3)` + (- \tfrac{1}{4})\times (`r format(coefficients(modg)[13],digits=3)`) = `r format(coefficients(modg)[3] + -.25*coefficients(modg)[13],digits=3)`$$ which is more substantial. Apparently, Experimenter 4 was "immune" to the experimenter belief manipulation, whilst the the other three experimenters were not.
+
+Note that the omnibus test of the interaction between Belief and Experimenter is not significant, while the test of the $\texttt{B} \times \texttt{E}_3$ is. It is not uncommon for an individual contrast to be significant while an omnibus test is not. When only a single contrast has a sizeable effect (i.e. it provides a substantial reduction in the Sum of Squared Error), the omnibus test effectively divides the RSS attributable to that contrast over all contrasts that are part of the omnibus test. The omnibus test then has less power than a test of the individual contrast. 
+
+None of the other effects are significant. If the threeway interaction was significant, we'd have the tricky task to interpret this. Interpreting threeway interactions is not impossible, but it does require effort. For example, imagine that the $\texttt{P} \times \texttt{B} \times \texttt{E}_3$ interaction was significant. One way to interpret this is as a moderation of a moderation. We have already interpreted the $\texttt{B} \times \texttt{E}_3$ interaction as indicating that the effect of Belief is reduced for Experimenter 4 compared to the other experimenters. The $\texttt{P} \times \texttt{B} \times \texttt{E}_3$ is estimated to be positive. That indicates that this reduction in the effect of Belief is smaller for those participants who received a high-power prime, as compared to a low-power prime. To see this, we can use the same method to determine conditional slopes we have used before, but now looking at the conditional slope of $\texttt{B} \times \texttt{E}_3$ for the different levels of Prime. For the high-power prime conditions, we can determine this slope as $$\hat{\beta}_{\texttt{B} \times \texttt{E}_3|\text{high-power prime}} = `r format(coefficients(modg)[13],digits=3)` + \tfrac{1}{2} \times (`r format(coefficients(modg)[16],digits=3)`) = `r format(coefficients(modg)[13] + .5*coefficients(modg)[16],digits=3)`$$ For the low-power prime conditions, the slope is $$\hat{\beta}_{\texttt{B} \times \texttt{E}_3|\text{low-power prime}} = `r format(coefficients(modg)[13],digits=3)` - \tfrac{1}{2} \times (`r format(coefficients(modg)[16],digits=3)`) = `r format(coefficients(modg)[13] - .5*coefficients(modg)[16],digits=3)`$$
+
+We can use these conditional interaction slopes in the same way as before to work out the effect of belief for Experimenter 4 and participants who received a high-power prime:
+$$\hat{\beta}_{\texttt{B}|\text{Experimenter 4 and high-power prime}} = `r format(coefficients(modg)[3],digits=3)` + \tfrac{3}{4} \times (`r format(coefficients(modg)[13] + .5*coefficients(modg)[16],digits=3)`) = `r format(coefficients(modg)[3] + .75*(coefficients(modg)[13] + .5*coefficients(modg)[16]),digits=3)`$$
+Similarly, the effect of belief for Experimenter 4 and participants who received a low-power prime is:
+$$\hat{\beta}_{\texttt{B}|\text{Experimenter 4 and low-power prime}} = `r format(coefficients(modg)[3],digits=3)` + \tfrac{3}{4} \times (`r format(coefficients(modg)[13] - .5*coefficients(modg)[16],digits=3)`) = `r format(coefficients(modg)[3] + .75*(coefficients(modg)[13] - .5*coefficients(modg)[16]),digits=3)`$$
 
 ## Orthogonal contrast codes and unequal sample sizes
+
+Using orthogonal contrast codes in factorial designs generally leads to interpretable parameters. While interaction effects can be difficult to interpret initially, with practice, you will become better at this. Another benefit is that, if the conditions have equal sample sizes, the contrast-coding predictors will be independent. But when the sample sizes are unequal, this independence between contrast-coding predictors does not hold, even if the contrast codes are orthogonal. 
+
+To keep the following discussion relatively straightforward, let's go back to the two-way factorial ANOVA where we look at the effect of prime condition ($\texttt{P}$) and experimenter belief ($\texttt{B}$). To analyse this, we used a linear model
+$$\text{MODEL G:} \quad \texttt{ApproachAdvantage}_i = \beta_0 + \beta_\texttt{P} \times \texttt{P}_i + \beta_\texttt{B} \times \texttt{B}_i + \beta_{\texttt{P} \times \texttt{B}} \times (\texttt{P} \times \texttt{B})_i + \epsilon_i$$
+When all four conditions have equal sample sizes, i.e. $n_{\text{PL},\text{EL}} = n_{\text{PL},\text{EH}} = n_{\text{PH},\text{EL}} = n_{\text{PH},\text{EH}}$, then the three predictors $\texttt{P}$, $\texttt{B}$, and $(\texttt{P} \times \texttt{B})$ are independent. 
+In a linear model with independent predictors, the estimated slope of one predictor, say $\texttt{P}$, does not depend on the whether the model includes a second predictor (e.g. $\texttt{B}$) or not. For example, the slope $\beta_\texttt{P}$ would be exactly the same in the model above and the model
+$$\text{MODEL R:} \quad \texttt{ApproachAdvantage}_i = \beta_0 + \beta_\texttt{P} \times \texttt{P}_i + \epsilon_i$$
+In both models, the estimated slope represents the difference
+$$\hat{\beta}_\texttt{P} = \frac{\mu_\text{PH,EL} + \mu_\text{PH,EH}}{2} - \frac{\mu_\text{PL,EL} + \mu_\text{PL,EH}}{2}$$
+When the sample sizes are _unequal_, however, this would only be the case for MODEL G above. Because of the resulting dependency between the predictors, the estimate of $\hat{\beta}_\texttt{P}$ in MODEL R will be different. It will still represent a difference between averages, but these would now be _weighted by sample size_.
+
+To make the example dramatic, I have removed participants randomly from each condition, such that the conditions have rather unequal sizes:
+```{r}
+dat <- expBelief %>% mutate(primeCond = str_replace_all(primeCond, c("LPP" = "PL", "HPP" = "PH"))) %>% mutate(experimenterBelief = str_replace_all(experimenterBelief, c("H" = "EH", "L" = "EL"))) %>% mutate(condition = interaction(primeCond, experimenterBelief, sep="-")) %>% mutate(condition = factor(condition, levels=c("PL-EL", "PL-EH", "PH-EL", "PH-EH")))
+set.seed(876234)
+ns <- c(20,40,60,80)
+tid <- c()
+for(i in 1:4) {
+  tid <- c(tid,sample(subset(dat,condition == levels(dat$condition)[i])$pid,size=ns[i]))
+}
+dat <- subset(dat,pid %in% tid)
+contrasts(dat$condition) <- cbind(c(-.5,-.5,.5,.5),c(-.5,.5,-.5,.5),c(.5,-.5,-.5,.5))
+tab <- aggregate(ApproachAdvantage ~ condition,data=dat,mean)
+tab$n <- table(dat$condition)
+colnames(tab)[2] <- "mean"
+tab$mean <- round(tab$mean,2)
+tab <- t(tab[,c(1,3,2)])
+rownames(tab) <- c("","$n$","mean")
+knitr::kable(tab)
+modg <- lm(ApproachAdvantage ~ condition, data = dat)
+modr <- lm(dat$ApproachAdvantage ~ model.matrix(modg)[,2])
+means <- aggregate(ApproachAdvantage ~ condition,data=dat,mean)
+```
+Estimating MODEL G gives the following estimates
+$$`r write_GLM_equation(modg, dv_name = "ApproachAdvantage", iv_names = c("P","B", "}(\\texttt{P}\\times \\texttt{B}){"), digits=4, include_sde = FALSE)`$$
+This shows that the estimated slope indeed $\texttt{P}$ equals
+$$\hat{\beta}_\texttt{P} = \frac{`r format(means[3,2],digits=4)` + `r format(means[4,2],digits=4)`}{2} - \frac{`r format(means[1,2],digits=4)` + `r format(means[2,2],digits=4)`}{2} = `r format(sum(means[3:4,2])/2 - sum(means[1:2,2])/2, digits=4)`$$
+For MODEL R, the estimate is
+$$`r write_GLM_equation(modr, dv_name = "ApproachAdvantage", iv_names = c("P"), digits=4, include_sde = FALSE)`$$
+Obviously, this is different from the estimate in MODEL G. While the slope still reflects a difference between the high-power and low-power prime conditions, the averages of these conditions are weighted by the sample size as follows:
+$$\begin{align}
+\hat{\beta}_\texttt{P} &= \frac{n_{\text{PH,EL}} \times \mu_\text{PH,EL} + n_\text{PH,EH} \times \mu_\text{PH,EH}}{n_\text{PH,EL} + n_\text{PH,EH}} - \frac{n_\text{PL,EL} \times \mu_\text{PL,EL} + n_\text{PL,EH} \times \mu_\text{PL-EH}}{n_\text{PL,EL} + n_\text{PL,EH}} \\
+&= \frac{60 \times `r format(means[3,2],digits=4)` + 80 \times `r format(means[4,2],digits=4)`}{140} - \frac{20 \times `r format(means[1,2],digits=4)` + 40 \times `r format(means[2,2],digits=4)`}{60} \\
+&= `r format(sum(c(60,80)*means[3:4,2])/140 - sum(c(20,40)*means[1:2,2])/60, digits=4)`
+\end{align}$$
+
+Why is this of importance? We're generally interested in the estimates from MODEL G, and use a restricted MODEL R mainly for the purpose of conducting hypothesis tests. Well, the estimates of MODEL R become important when we consider different ways of conducting model comparisons to perform hypothesis tests.
+
+### Comparison schemes and SS types
+
+When predictors are dependent, they are partially redundant. Going back to our discussion of _multicollinearity_, that means that the predictors in a model together can account for more of the variance of the dependent variable than the sum of their unique contributions. In Figure \@ref(fig:sse-partition-type-SS), as a whole, the model can account for a proportion $B + C + D$, but the sum of the unique contributions is $B + C$. This can result in a relative lack of power for the tests of main effects and interactions.
+
+```{tikz sse-partition-type-SS, device='svg', fig.cap="Partitioning the variance in a General Linear Model. Each circle represents the variance of a variable. Overlapping regions represent shared variability (e.g. covariance) between variables. ", out.width="50%"}
+\def\firstcircle{(1,1) circle (1.75cm)}
+\def\secondcircle{(2,1) circle (1.75cm)}
+\def\thirdcircle{(1.5,2) circle (1.75cm)}
+\begin{tikzpicture}
+	\pgfsetxvec{\pgfpoint{2cm}{0cm}}
+	\pgfsetyvec{\pgfpoint{0cm}{2cm}}
+	\tikzstyle{every node}=[minimum size=.7cm]
+
+	\fill[white!50] (-1,0) -- (-1,3.5) -- (3.5,3.5) -- (3.5,0) -- (-1,0);
+
+	\draw \firstcircle;
+	\draw \secondcircle;
+	\draw \thirdcircle;
+	
+	\draw (0.2,0.2) node {$X_1$};
+	\draw (2.8,0.2) node {$X_2$};
+	\draw (1.5,3) node {$Y$};
+	\draw (1.5,2.3) node {$A$};
+	\draw (1.1,1.6) node {$B$};
+	\draw (1.5,1.4) node {$D$};
+	\draw (1.9,1.6) node {$C$};
+
+\end{tikzpicture}	
+```
+
+Up to now, we have performed hypothesis tests by comparing a full MODEL G to a restricted MODEL R where some of the effects in MODEL G are fixed to particular values (generally 0). This procedure is -- in the context of the General Linear Model -- called a __Type 3 Sums of Squares__ procedure. The Sum of Squares attributed to each predictor or set of predictors reflect their _unique_ contributions (i.e., regressions $B$ and $C$ in Figure \@ref(fig:sse-partition-type-SS)). When there is redundancy, these unique contributions do not add up to the total SS that can be attributed to all predictors in the model (i.e. the reduction in the SSE comparing the full model to an intercept-only model). There are two alternative schemes which guarantee that the SS terms do add up to this total SS. These are, as you might have guessed, Type 1 and Type 2 SS procedures.
+
+In the __Type 1 SS__ procedure, also called _sequential SS_, you build up the model sequentially. You start by comparing a model which includes just the contrast-coded predictors for the main effect of one of the factors in the design (for instance $\texttt{P}$ in the simple factorial design) to an intercept only model. The reduction in the SSE (e.g. $B + D$ in Figure \@ref(fig:sse-partition-type-SS)) is the SS assigned to that main effect. You then add all contrast-coding predictors for the main effect of the second factor in the design (e.g. $\texttt{B}$), and compare this more general model to the one of the previous step (e.g. the model with only the predictors for $\texttt{P}$). The reduction in SSE (e.g. $C$ in Figure \@ref(fig:sse-partition-type-SS)) is the SSR assigned to that second main effect. If there are more factors in the design, you would then add the contrast-coding predictors for another factor, and compute an SSR for this factor as the reduction in the SSE compared to the model defined in the step before, etc. Ones you have done this for all the main effects, you would then continue this procedure for all interactions, until you arrive at the full model. Note that the model comparisons performed on the way are solely to compute SSR terms. You would not perform hypothesis tests at each step. Rather, each SSR term computed is entered in the usual formula to compute the $F$ statistic, where you'd use the SSE of the full MODEL G:
+$$F = \frac{\text{SSR}/(\text{npar}(G) - \text{npar}(R))}{\text{SSE}(G)/(n-\text{npar}(G))}$$
+In this computation, all elements are the same as for the usual Type 3 procedure, apart from SSR, which is the one computed with the sequential procedure.
+
+While this procedure has the benefit of ensuring that all the SSR terms add up to the total SSR, it is important to note that the hypotheses tested are not necessarily those that you expect to test. As was shown earlier, the slope of contrast-coding predictor $\texttt{P}$, when the only predictor in the model, reflects the _sample-size weighted_ difference between the means. The omnibus test for the main effect that is entered first is thus a test that all these _sample-size weighted_ means are equal to each-other, it is not a test that the _unweighted_ means are all equal to eachother. For the second main effect, the test is also one of sample-size weighted comparisons, although the precise weights are a more complex function of the sample sizes. 
+
+If the sample-sizes are reflective of the actual proportions in which you might find the various factor levels in the Data Generating Process, then it might make sense to test such sample-size weighted equality between means. However, unequal sample sizes often do not reflect such meaningful differences in the DGP. In that case, the hypotheses tested with a Type 1 procedure might not be meaningful. Also, the results of a Type 1 SS procedure depend on the _order_ in which you enter the main effects. If you start with the main effect of $\texttt{B}$ rather than $\texttt{P}$, then the SSR of $\texttt{B}$ would have been $C+D$ rather than just $C$ in Figure \@ref(fig:sse-partition-type-SS). There often isn't a clear reason to prefer one order over another. Hence, because of these issues, I generally don't recommend using a Type 1 SS procedure. The reason for mentioning it here is that some statistical software (e.g. base R) use Type 1 SS procedures by default, and it is important to be aware of this.
+
+The __Type 2 SS__ procedure is (even) more complicated, in terms of the hypotheses that are tested. The comparisons involved in computing the SSR terms for the different effects can be described reasonably clearly though. The idea is to determine the SSR associated to an effect whilst controlling for any effects that do not fully contain that effect. For example, let's consider the threeway Prime by Belief by Experimenter ANOVA we conducted earlier. To compute the SSR of main effect of Prime, you would construct a model with the contrast codes corresponding to the main effects of Prime, Belief, and Experimenter, as well as the Belief $\times$ Experimenter interaction, as the latter does not contain Prime. Because the Prime $\times$ Experimenter and Prime $\times$ Belief $\times$ Experimenter interactions do contain Prime, they would not be included. You would then compute the SSR for the main effect of Prime by computing the difference in the SSE of this model and a model that excludes the Prime main effect. Similarly, to compute the SSR for Belief, you would compare a model with the main effects of Prime, Belief, and Experimenter, and Prime $\times$ Experimenter interaction, to a model which excludes the Belief main effect. To compute the SSR for e.g. the Prime $\times$ Belief interaction, you would compare a model which includes the main effects of Prime, Belief, and Experimenter, and the Prime $\times$ Belief, Prime $\times$ Experimenter, and Belief $\times$ Experimenter interactions. All effects included, apart from the Prime $\times$ Belief interaction itself, do not fully contain this interaction (i.e. do not include both Prime and Belief). The Prime $\times$ Belief $\times$ Experimenter interaction is excluded, because it involves both Prime and Belief. As for the Type 1 procedure, these comparisons are solely used to compute the SSR terms for the main effects and interactions. Once these have been obtained, they are used in the usual formula for the $F$ statistic, where everything else is the same as in the Type 3 procedure. 
+
+As for the Type 1 procedure, the hypotheses tested by the Type 2 procedure reflect a (complex) weighting of means by sample size. But, unlike the Type 1 procedure, the results are not dependent on the order in which you include effects. Some authors argue that a Type 2 procedure is preferable to a Type 3 procedure when you don't expect interactions, as the tests of the main effects are more powerful. That may be so, but interactions are often difficult to rule out on theoretical grounds. Moreover, because the hypothesis tests are generally more straightforward to interpret in the Type 3 procedure, as they involve comparisons between unweighted population means, I would generally advice the use of Type 3 tests, unless you have a strong conviction that there are no interactions, and a good grasp of the hypotheses tested by the Type 2 procedure. 
+
+The issue of different testing schemes for _unbalanced_ designs (unequal sample sizes) is a complex one, and opinions differ on which scheme is preferred. I mainly want you to be aware of these different approaches, and you can determine your own preference once you have gained enough experience with the General Linear Model to do so. A more comprehensive treatment of the different schemes is given in Chapter 7 of @maxwell2017designing. 
+
+<!--
+some useful online resources:
+http://dwoll.de/rexrepos/posts/anovaSStypes.html 
+http://md.psych.bio.uni-goettingen.de/mv/unit/lm_cat/lm_cat_unbal_ss_explained.html
+!-->
 

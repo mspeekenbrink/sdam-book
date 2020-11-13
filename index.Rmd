@@ -77,7 +77,7 @@ Unlike some other books, we don't discuss using software such as R, JASP, or SPS
 
 This book is inspired by lots of other statistics books I have read over the years. Some books deserve special mention. "Data analysis: A model comparison approach" [@judd2011data] is a book I have used for many years as required reading for the MSc level statistics course. It is extremely clear in its coverage of the General Linear Model, and consistent in its use of the model comparison approach we adopt here as well. "Doing Bayesian data analysis" [@kruschke2014doing] gave me the idea to cover all the basics of statistical modelling with a simple binomial example.
 
-A large part of this book was -- and at the moment still is -- written whilst moving all teaching online during a world-wide epidemic. For a variety of reasons, that meant writing at high-speed and -- lacking any touch typing skills and mostly relying on three out of ten fingers -- many typos. I therefore would also like to thank everyone who spotted these typos and otherwise unclear parts, in particular Sabine Topf and Laura Bourne, as well as the students in "PSYC0146".
+A large part of this book was -- and at the moment still is -- written whilst moving all teaching online during a world-wide pandemic. For a variety of reasons, that meant writing at high-speed and -- lacking any touch typing skills and mostly relying on three out of ten fingers -- many typos. I therefore would also like to thank everyone who spotted these typos and otherwise unclear parts, in particular Sabine Topf and Laura Bourne, as well as the students in "PSYC0146".
 
 ## Notation {-}
 
