@@ -118,6 +118,7 @@ tab:expBelief-factorial-ANOVA-results
 fig:expBelief-threeway-raincloud
 tab:expBelief-threeway-ANOVA-codes
 tab:expBelief-threeway-ANOVA-results
+fig:sse-partition-type-SS
 intro
 paul-the-octopus
 experiments-and-observations
@@ -214,6 +215,7 @@ a-oneway-anova
 factorial-designs
 main-effects-and-interactions
 a-threeway-factorial-anova
+interpreting-interactions
 orthogonal-contrast-codes-and-unequal-sample-sizes
 comparison-schemes-and-ss-types
 mixing-categorical-and-metric-predictors-ancova
@@ -221,16 +223,3 @@ repeated-measures-anova
 linear-mixed-effects-models
 introduction-to-bayesian-hypothesis-testing
 being-a-responsible-data-analyst
-exercises
-summary-2
-the-general-linear-model
-confidence-interval
-assumptions-and-outliers
-summary-3
-controlling-for-education-level-and-poverty
-polynomial-regression
-summary-4
-interpreting-interactions
-fig:sse-partition-type-SS
-type-1-hierarchical-sums-of-squares
-type-2-sums-of-squares
