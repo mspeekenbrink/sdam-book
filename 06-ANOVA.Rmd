@@ -588,5 +588,8 @@ We now have to discuss a rather tricky issue. Suppose you are really just intere
 
 Finally, if you are just interested in _all_ pairwise comparisons between conditions (whether post-hoc or not), I want to point out the __Tukey Honestly Significant Difference__ (HSD) test. It was specifically designed for this purpose, and will often be more powerful than the previously discussed correction methods. 
 
-<!-- ## Assumptions {#sec:06-assumptions} -->
+<!-- 
+## Assumptions {#sec:06-assumptions}
 
+The assumptions of the oneway ANOVA model are the same as the assumptions of any General Linear Model (see Section \@ref(sec:04b-assumptions)). Thus, we assume the errors (residuals) of the model to be Normal-distributed with a mean of 0, a constant standard deviation $\sigma_\epsilon$, and each error term $\epsilon_i$ to be independent from any other one. However, because a oneway ANOVA makes the same prediction within each group, $\hat{Y} = \overline{Y}_j$, where $\overline{Y}_j$ is the sample mean of the dependent variable in the group the case belongs to.  
+-->
