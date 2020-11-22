@@ -60,7 +60,7 @@ The results show a significant effect of power prime. The slope is estimated as 
 $$
 \begin{align}
 \hat{\beta}_\text{P} &= \hat{\mu}_{\text{PH},\cdot} - \hat{\mu}_{\text{PL},\cdot} \\
-&= \frac{\overline{Y}_\text{PH,EL} + \overline{Y}_\text{PH,EL}}{2} - \frac{\overline{Y}_\text{PL,EL} + \overline{Y}_\text{PL,EL}}{2} \\
+&= \frac{\overline{Y}_\text{PH,EL} + \overline{Y}_\text{PH,EH}}{2} - \frac{\overline{Y}_\text{PL,EL} + \overline{Y}_\text{PL,EH}}{2} \\
 &= `r format(coefficients(modpost)[2],digits=3)`
 \end{align}
 $$

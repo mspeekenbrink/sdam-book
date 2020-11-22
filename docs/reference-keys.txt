@@ -246,3 +246,13 @@ repeated-measures-anova
 linear-mixed-effects-models
 introduction-to-bayesian-hypothesis-testing
 being-a-responsible-data-analyst
+exercises
+summary-2
+the-general-linear-model
+confidence-interval
+assumptions-and-outliers
+summary-3
+controlling-for-education-level-and-poverty
+polynomial-regression
+summary-4
+sec:06-assumptions
