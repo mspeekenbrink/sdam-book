@@ -1,3 +1,307 @@
 # Mixing categorical and metric predictors (ANCOVA)
 
+In this chapter, we will consider combining categorical and metric independent variables to predict an outcome variable. Such an analysis is generally called an Analysis of Covariance (ANCOVA). There are a number of reasons why you might want to include metric predictors (or "covariates") in an ANOVA-type analysis. Controlling. Reducing error. Theoretical interest/mediation
 
+## Subjective feelings of power and priming
+
+To illustrate the models, we will consider the data from @gilder2018role again. As part of the experiment, the researchers measured participants' subjective feeling of power, both before and after providing them with the power priming task. In the priming task participants were presented with randomly scrambled sentences, and they were asked to reorder the words into grammatically correct sentences. In the high-power prime condition, half of the sentences included words associated with high power (e.g., "dominates," “commands”), and in the low-power prime condition, half the sentences contained words associated with low power (e.g., "subordinate," "obeys"). If the priming task had the desired effect, then participants in the high-power condition should report feeling more power after the priming task than participants in the low-power condition. Figure \@ref(fig:expBelief-power-test-interaction-plots) shows the means of the subjective feeling of power before and after the power priming manipulation. As can be seen there, the task indeed appears to have the desired effect. Before the priming task, differences between the groups are relatively small and there appears to be no real difference between the priming condition. After the priming task, the averages in the low-power prime conditions are lower, and those in the high-power prime conditions higher, than before the priming task. 
+
+```{r expBelief-power-test-interaction-plots, fig.cap="Means and standard errors of subjective feeling of power before (pre-test) and after (post-test) power prime.", fig.width=6, fig.height=3.5, out.width="80%"}
+library(sdamr)
+data("expBelief")
+dat <- expBelief
+library(dplyr)
+library(stringr)
+library(ggplot2)
+dat <- expBelief %>% mutate(primeCond = str_replace_all(primeCond, c("LPP" = "PL", "HPP" = "PH"))) %>% mutate(experimenterBelief = str_replace_all(experimenterBelief, c("H" = "EH", "L" = "EL"))) %>% mutate(condition = interaction(primeCond, experimenterBelief, sep="-"))
+
+dat$primeCond <- factor(dat$primeCond, levels=c("PL","PH"))
+contrasts(dat$primeCond) <- c(-.5,.5)
+dat$experimenterBelief <- factor(dat$experimenterBelief, levels=c("EL","EH"))
+contrasts(dat$experimenterBelief) <- c(-.5,.5)
+
+library(ggplot2)
+
+modpre <- lm(powerPRE ~ primeCond*experimenterBelief, data=dat)
+modpost <- lm(powerPOST ~ primeCond*experimenterBelief, data=dat)
+rbind(cbind(test="pre-test",summary(emmeans::emmeans(modpre, ~ primeCond:experimenterBelief))),
+      cbind(test="post-test",summary(emmeans::emmeans(modpost, ~ primeCond:experimenterBelief)))) %>% mutate(ymax=emmean+SE, ymin=emmean-SE) %>% mutate(test = factor(test, levels=c("pre-test","post-test"))) %>%
+  ggplot(aes(x=primeCond,y=emmean,colour=experimenterBelief, ymin=ymin, ymax=ymax)) +geom_point(position=position_dodge(.2)) + geom_line() + geom_errorbar(width=.1,position=position_dodge(.2)) + ylab("power") + facet_wrap(~test) + theme(legend.position = "bottom") + labs(colour = "Experimenter belief")
+```
+
+To determine whether the differences between the conditions after the power prime manipulation are significant, we can use the by-now hopefully familiar procedure of constructing appropriate contrast codes for priming condition and experimenter belief. To code for prime condition, it makes sense to assign a value of $\tfrac{1}{2}$ to the high-power prime condition, and a value of $-\tfrac{1}{2}$ to the lower-power prime condition. As one would expect the high-power prime to increase the subjective feeling of power, one would then expect a positive slope for the associated contrast-coding predictor. Similarly, it makes sense to assign a value of $\tfrac{1}{2}$ to the "experimenter believes high-power" condition, and a value of $-\tfrac{1}{2}$ to the "experimenter believes low-power" condition. If experimenter belief has an effect on feelings of power, one would expect the the subjective feeling of power to be higher when the experimenter believes the participant was given a high-power prime. Hence, one would then expect a positive slope for the contrast-coding predictor associated to this contrast. The contrast code for the interaction is constructed as usual by multiplying the values of these two contrast codes. So our set of (orthogonal) contrast codes is:
+```{r}
+tab <- data.frame(c1 = c("$-\\tfrac{1}{2}$","$-\\tfrac{1}{2}$","$\\tfrac{1}{2}$","$\\tfrac{1}{2}$"),
+                  c2 = c("$-\\tfrac{1}{2}$","$\\tfrac{1}{2}$","$-\\tfrac{1}{2}$","$\\tfrac{1}{2}$"),
+                  c3 = c("$\\tfrac{1}{2}$","$-\\tfrac{1}{2}$","$-\\tfrac{1}{2}$","$\\tfrac{1}{2}$"))
+colnames(tab) <- c("$\\texttt{P}$","$\\texttt{B}$","$\\texttt{P}\\times\\texttt{B}$")
+rownames(tab) <- c("PL,EL","PL,EH", "PH,EL", "PH,EH")
+knitr::kable(tab, escape=FALSE,align=rep('r', 3))#, caption="A set of three orthogonal contrast codes for the Experimenter Belief study.")
+```
+
+We can then estimate a linear model predicting $\texttt{post-power}$, the subjective feeling of power after the priming manipulation, as:
+\begin{equation}
+\texttt{post-power}_i = \beta_0 + \beta_\text{P} \times \texttt{P}_i + \beta_\text{B} \times \texttt{B}_i + \beta_{\text{P}\times \text{B}} \times (\texttt{P} \times \texttt{B})_i + \epsilon_i
+(\#eq:post-power-ANOVA)
+\end{equation}
+The estimates and hypothesis tests of the parameters of this model are given in Table \@ref(tab:expBelief-power-post-ANOVA).
+
+```{r expBelief-power-post-ANOVA}
+opts <- options()
+options(knitr.kable.NA = "")
+tab <- cbind(estimate = c(coefficients(modpost)[1],coefficients(modpost)[2:4],Error=NA),rbind(car::Anova(modpost, type=3)[1,],expand_Anova(modpost, type=3)[-1,]))
+rownames(tab) <- c("Intercept","$\\texttt{P}$","$\\texttt{B}$", "$\\texttt{P} \\times \\texttt{B}$", "Error")
+colnames(tab) <- c("$\\hat{\\beta}$","$\\text{SS}$", "$\\text{df}$", "$F$", "$P(\\geq \\lvert F \\rvert)$")
+knitr::kable(tab, caption = "Linear model predicting $\\texttt{post-power}$ by factorial contrast-coding predictors.", escape = FALSE, digits=3)
+options(opts)
+```
+
+The results show a significant effect of power prime. The slope is estimated as $\hat{\beta}_\text{P} = `r format(coefficients(modpost)[2],digits=3)`$. Remember that this slope represents a difference between two marginal means (averaging over the levels of experimenter Belief):
+$$
+\begin{align}
+\hat{\beta}_\text{P} &= \hat{\mu}_{\text{PH},\cdot} - \hat{\mu}_{\text{PL},\cdot} \\
+&= \frac{\overline{Y}_\text{PH,EL} + \overline{Y}_\text{PH,EL}}{2} - \frac{\overline{Y}_\text{PL,EL} + \overline{Y}_\text{PL,EL}}{2} \\
+&= `r format(coefficients(modpost)[2],digits=3)`
+\end{align}
+$$
+Hence, the power prime manipulation appears to result in a difference of `r format(coefficients(modpost)[2],digits=3)` points in subjective feeling of power. Neither the main effect of experimenter belief, nor the interaction between priming condition and experimenter belief are significant. We might thus conclude that experimenter belief has no effect on subjective feeling of power, neither directly, nor by moderating the effect of power prime. 
+
+While the results are indicative of a successful manipulation of participants' subjective feeling of power, it could be that these differences between the conditions were already present before the priming manipulation. While random assignment of participants to the conditions makes such pre-existing differences unlikely, they cannot be ruled out a priori. In this case, as we also have a measure of participants' feeling of power before the priming task, we can test for these pre-existing differences. This can be done with exactly the same model as before, now using $\texttt{pre-power}$ as the dependent variable. The results are provided in Table \@(expBelief-power-pre-ANOVA). As only the intercept is significant (which tells us, rather uninterestingly, that the average feeling of power differs from 0), we have no evidence for pre-existing differences, which strengthens our belief that the power manipulation was indeed successful. 
+
+```{r expBelief-power-pre-ANOVA}
+opts <- options()
+options(knitr.kable.NA = "")
+tab <- cbind(estimate = c(coefficients(modpre)[1],coefficients(modpre)[2:4],Error=NA),rbind(car::Anova(modpre, type=3)[1,],expand_Anova(modpre, type=3)[-1,]))
+rownames(tab) <- c("Intercept","$\\texttt{P}$","$\\texttt{B}$", "$\\texttt{P} \\times \\texttt{B}$", "Error")
+colnames(tab) <- c("$\\hat{\\beta}$","$\\text{SS}$", "$\\text{df}$", "$F$", "$P(\\geq \\lvert F \\rvert)$")
+knitr::kable(tab, caption = "Linear model predicting $\\texttt{pre-power}$ by factorial contrast-coding predictors.", escape = FALSE, digits=3)
+options(opts)
+```
+
+## Acounting for pre-existing differences
+
+We have just used two separate analyses to (1) assess differences between the priming conditions in feelings of power after the priming task and (2) rule out that these were due to pre-existing differences. There is an issue with the latter, actually, in that a non-significant test result is not direct evidence for the absence of an effect. Non-significant results can always be due to a lack of power. 
+
+There is a better way to reach both objectives: by including $\texttt{pre-power}$ as a predictor in our model of $\texttt{post-power}$, we can determine the effect of prime and experimenter belief controlling for the effect of $\texttt{pre-power}$. This is the general idea of ANCOVA, to test for group differences whilst controlling for the effect of __covariates__ (metric predictors). 
+
+When we add $\texttt{pre-power}$ to the model, it becomes:
+\begin{equation}
+\texttt{post-power}_i = \beta_0 + \beta_\text{P} \times \texttt{P}_i + \beta_\text{B} \times \texttt{B}_i + \beta_{\text{P}\times \text{B}} \times (\texttt{P} \times \texttt{B})_i + \beta_\text{pre} \times \texttt{pre-power}_i + \epsilon_i
+(\#eq:post-power-ANCOVA)
+\end{equation}
+Parameter estimates and tests are provided in Table \@ref(tab:expBelief-power-post-ANCOVA). The results show a significant effect of prime, as well as the pre-test power score ($\texttt{pre-power}$). The latter effect is expected, and can be interpreted as usual: the positive slope indicates that participants who scored relatively high in the pre-test also score relatively high in the post-test. Comparing the effect of power prime to that obtained earlier (Table \@ref(tab:expBelief-power-post-ANOVA)), we can notice two things: the slope is somewhat higher, and the value of the $F$ statistic is substantially higher. We will consider the interpretation of the slope in the next section, and the reason for the higher $F$ statistic in Section \@ref(sec:ANCOVA-power). 
+
+```{r expBelief-power-post-ANCOVA}
+modpostpre <- update(modpost, .~. + powerPRE)
+opts <- options()
+options(knitr.kable.NA = "")
+tab <- cbind(estimate = c(coefficients(modpostpre)[1],coefficients(modpostpre)[2:5],Error=NA),rbind(car::Anova(modpostpre, type=3)[1,],expand_Anova(modpostpre, type=3)[-1,]))
+rownames(tab) <- c("Intercept","$\\texttt{P}$","$\\texttt{B}$", "$\\texttt{pre-power}$", "$\\texttt{P} \\times \\texttt{B}$", "Error")
+colnames(tab) <- c("$\\hat{\\beta}$","$\\text{SS}$", "$\\text{df}$", "$F$", "$P(\\geq \\lvert F \\rvert)$")
+knitr::kable(tab, caption = "Linear model predicting $\\texttt{post-power}$ by $\\texttt{pre-power}$ and factorial contrast-coding predictors.", escape = FALSE, digits=3)
+options(opts)
+```
+
+
+## Slopes of contrast-coding predictors in an ANCOVA models
+
+Although a metric predictor in an ANCOVA model is really just like any other predictor in the GLM, it is useful for clarity to (momentarily) denote such a __covariate__ with a different symbol, e.g. $Z$, instead of the usual $X$ we used for predictors. We can then write the model of Equation \@ref(eq:post-power-ANCOVA) more abstractly as:
+\begin{equation}
+Y_i = \beta_0 + \beta_1 \times X_{1,i} + \beta_2 \times X_{2,i} + \beta_3 \times X_{3,i} + \beta_\text{z} \times Z_i + \epsilon_i
+(\#eq:ANCOVA-one-covariate)
+\end{equation}
+Here, the $X$ variables are the contrast-coding predictors (e.g. $\texttt{P}$, $\texttt{B}$, and $\texttt{P}\times\texttt{B}$), and $Z$ is a single covariate (e.g. $\texttt{pre-power}$). 
+
+As in any General Linear Model, inclusion of additional predictors will likely change the slopes of already included predictors. The slopes of the latter predictors will remain the same only when the additional predictors are _completely independent_ from the already-included predictors. This is extremely unlikely. That means that in a model like that of Equation \@ref(eq:ANCOVA-one-covariate), we can no longer use Equation \@ref(eq:estimate-slope-orthogonal-contrast-codes) to compute the estimated slopes of contrast-coding predictors which are based set of orthogonal contrast codes. Fortunately, that does not mean those slopes no longer have a useful interpretation. In fact, the estimated slopes can be expressed as an adjusted version of Equation \@ref(eq:estimate-slope-orthogonal-contrast-codes):
+\begin{equation}
+\hat{\beta}_j = \frac{\sum_{k=1}^{g} c_{j,k} \overline{Y}_k}{\sum_{k=1} c_{j,k}^2} - \hat{\beta}_z \frac{\sum_{k=1}^{g} c_{j,k} \overline{Z}_k}{\sum_{k=1} c_{j,k}^2}
+(\#eq:estimate-slope-orthogonal-contrast-codes-ANCOVA-one-covariate)
+\end{equation}
+where $\hat{\beta}_z$ is the slope of the covariate in the full model (Equation \@ref(eq:ANCOVA-one-covariate)). You can think of this as follows. An orthogonal contrast code reflects differences between marginal means. In the presence of a covariate, these differences are adjusted for the same difference in the marginal means of the covariate, weighted by its effect on the dependent variable. If there are differences in the covariate between the groups, and the covariate has an effect on the dependent variable, then any differences between the groups can be explained by differences in the covariate. After the adjustment, the slope of the contrast code then reflects differences between the groups that are not explained by the covariate.
+
+Let's illustrate how this works. The means of $\texttt{pre-power}$ and $\texttt{post-power}$ are:
+```{r expBelief-power-means}
+tab <- dat %>%
+  group_by(primeCond, experimenterBelief) %>%
+    summarise(powerPRE = mean(powerPRE), powerPOST = mean(powerPOST))
+colnames(tab) <- c("Prime","Belief","pre-power","post-power")
+knitr::kable(tab, digits = 4, escape=FALSE, row.names = FALSE)
+```
+The estimated slope of $\texttt{pre-power}$ was $\hat{\beta}_\text{pre} = `r format(coefficients(modpostpre)[4], digits=4)`$.
+
+$$\begin{align}
+\hat{\beta}_\texttt{P} &=&& \frac{\tfrac{1}{2} \times `r format(format(as.numeric(tab[3,4]),digits=4))` + \tfrac{1}{2} \times `r format(format(as.numeric(tab[4,4]),digits=4))` - \tfrac{1}{2} \times `r format(format(as.numeric(tab[1,4]),digits=4))` - \tfrac{1}{2} \times `r format(format(as.numeric(tab[2,4]),digits=4))`}{ (\tfrac{1}{2})^2 + (\tfrac{1}{2})^2 + (-\tfrac{1}{2})^2 + (-\tfrac{1}{2})^2} - \\
+&&& `r format(coefficients(modpostpre)[4], digits=4)` \times \frac{\tfrac{1}{2} \times `r format(format(as.numeric(tab[3,3]),digits=4))` + \tfrac{1}{2} \times `r format(format(as.numeric(tab[4,3]),digits=4))` - \tfrac{1}{2} \times `r format(format(as.numeric(tab[1,3]),digits=4))` - \tfrac{1}{2} \times `r format(format(as.numeric(tab[2,3]),digits=4))`}{ (\tfrac{1}{2})^2 + (\tfrac{1}{2})^2 + (-\tfrac{1}{2})^2 + (-\tfrac{1}{2})^2} \\
+& = && \frac{`r sum(c(-.5,-.5,.5,.5)*tab[,4])`}{1} - `r format(coefficients(modpostpre)[4], digits=4)` \times \frac{`r sum(c(-.5,-.5,.5,.5)*tab[,3])`}{1} \\
+& = && `r sum(c(-.5,-.5,.5,.5)*tab[,4]) - coefficients(modpostpre)[4] * sum(c(-.5,-.5,.5,.5)*tab[,3])`
+\end{align}$$
+
+An alternative way to define the slope of Equation \@ref(eq:estimate-slope-orthogonal-contrast-codes-ANCOVA-one-covariate) is to first adjust the means of $Y$ and then enter the adjusted group means in the usual formula for the slope of a contrast-coding predictor. These adjusted means are computed using a centered version of the covariate (i.e. $Z'_i = Z_i - \overline{Z}$):
+$$\overline{Y}_k' = \overline{Y}_k - \hat{\beta}_z \times (\overline{Z}_k - \overline{Z})$$
+where $\overline{Z}$ is the average of the covariate over all observations (i.e. it is not an "average of averages"). The slope can them be expressed as a function of these adjusted means:
+$$\hat{\beta}_j = \frac{\sum_{k=1}^{g} c_{j,k} \overline{Y}_k'}{\sum_{k=1} c_{j,k}^2}$$
+The fact that these two formulations are equivalent again illustrates the main idea of an ANCOVA model, which is to assess group differences that can not be attributed to the covariate. 
+
+## Homogeneity of slopes
+
+The model of Equation \@ref(eq:post-power-ANOVA) does not include any interactions between the covariate and the contrast-coding differences. As such, the model assumes the effect of the covariate on the dependent variable is the same in each condition. The regression lines for the relation between $\texttt{power-pre}$ and $\texttt{power-post}$ in the different conditions are depicted in Figure \@ref(fig:expBelief-modpostpre-regression-lines). Because the slopes are assumed to be identical, you can see that the regression lines are parallel. Note that the relative "height" of each regression line (e.g. the intercept) reflects the combined effect of power priming and experimenter belief. As discussed above, you can think of an ANCOVA model as statistically correcting the conditions for any differences in the covariate. After this correction, the conditions effectively have the same value for the covariate. In the context of Figure \@ref(fig:expBelief-modpostpre-regression-lines), you can pick any value of the covariate you like, and then think of the contrasts between the conditions as comparisons between the model predictions at that value of the covariate. Because the regression lines for both high-power prime conditions, and for both low-power prime conditions, are almost overlapping, it is clear that experimenter belief has little effect on feelings of power. The separation between the regression lines is clearer between the high-power and low-power conditions, which is also reflected in the significant effect of power prime in the model.
+
+```{r expBelief-modpostpre-regression-lines, fig.cap="Regression lines reflecting the relation between $\texttt{power-pre}$ and $\texttt{power-post}$ in the four conditions of the experimenter belief and power priming experiment."}
+newdata <- data.frame(primeCond=rep(unique(dat$primeCond),each=2),experimenterBelief = unique(dat$experimenterBelief),powerPRE = c(rep(min(dat$powerPRE),4),rep(max(dat$powerPRE),4))) %>% mutate(condition = interaction(primeCond,experimenterBelief,sep="-"))
+dat %>% 
+  ggplot(aes(x=powerPRE,y=powerPOST,colour=condition)) + geom_point(alpha=.5) + geom_line(data=mutate(newdata, powerPOST = predict(modpostpre, newdata = newdata))) + xlab("pre-power") + ylab("post-power") + theme(legend.position = "bottom")
+```
+
+While the assumption of parallel regression lines (homogeneity of slopes) allows for a straightforward interpretation of the other effects as reflecting differences in adjusted means, like for any assumption, there is always the question whether the assumption holds. Not only does the lack of interactions between the covariate and contrast-coding predictors mean that the effect of the covariate on the dependent variable is the same in all conditions, it also means that the effect of the conditions is the same regardless of the value on the covariate. There may be good reasons to suspect that the effect of the experimental manipulations differ for people who score differently on the covariate. For instance, you might think that a high-power prime is effective in lifting the subjective feeling of power for those who have a relatively low feeling of power to start off with, while it doesn't do much for those who feel powerful anyway. In a similar vain, the low-power prime might lower the subjective feeling of power for those who have a relatively low feeling of power to start off with, while those with a relatively high feeling of power are immune to it. This implies that the experimental manipulations interact with the covariate, and that we should include interactions between the covariate and the contrast-coding predictors. Allowing for such interactions is straightforward: we just construct new product predictors and include them in the model.
+
+In the model of Equation \@ref(eq:post-power-ANOVA), we would add three product predictors: $(\texttt{P} \times \texttt{power-pre})_i$, $(\texttt{B} \times \texttt{power-pre})_i$, and $(\texttt{P} \times \texttt{B} \times \texttt{power-pre})_i$. The results of the expanded model are given in Table \@ref(tab:expBelief-power-post-ANCOVA-non-homgeneous).
+
+```{r expBelief-power-post-ANCOVA-non-homgeneous}
+modpostpre_int <- lm(powerPOST ~ primeCond*experimenterBelief*powerPRE, data=dat)
+opts <- options()
+options(knitr.kable.NA = "")
+tab <- cbind(estimate = c(coefficients(modpostpre_int)[1],coefficients(modpostpre_int)[2:8],Error=NA),rbind(car::Anova(modpostpre_int, type=3)[1,],expand_Anova(modpostpre_int, type=3)[-1,]))
+rownames(tab) <- c("Intercept","$\\texttt{P}$","$\\texttt{B}$", "$\\texttt{pre-power}$", "$\\texttt{P} \\times \\texttt{B}$", "$\\texttt{P} \\times \\texttt{pre-power}$", "$\\texttt{B} \\times \\texttt{pre-power}$", "$\\texttt{P} \\times \\texttt{B} \\times \\texttt{pre-power}$", "Error")
+colnames(tab) <- c("$\\hat{\\beta}$","$\\text{SS}$", "$\\text{df}$", "$F$", "$P(\\geq \\lvert F \\rvert)$")
+knitr::kable(tab, caption = "Linear model predicting $\\texttt{post-power}$ by  $\\texttt{pre-power}$ and factorial contrast-coding predictors, as well as interactions between those.", escape = FALSE, digits=3)
+options(opts)
+```
+
+We can see that none of the interactions between $\texttt{pre-power}$ and the contrast-coding predictors are significant. As such, there is no strong evidence of an interaction between the covariate and the experimental manipulations. Rather than inspecting each interaction separately, it makes sense to perform an omnibus test, comparing the expanded model to the one of Equation \@ref(eq:post-power-ANOVA). This comparison tests the hypothesis that all the slopes of the additional product-predictors equal 0. If there is no overly strong reason to suspect a moderation within particular conditions, the omnibus test is a reasonable reflection of the more-or-less unspecified hypothesis that the covariate interacts with the experimental manipulations.^[Although my reasoning why the power-prime manipulation might have a different effect for those participants with an initial high or low feeling of power might suggest otherwise, this was to illustrate why you _might_ suspect an interaction, it is not a hypothesis I would stand by personally. I'm by no means an expert in the scientific study of social power.] This omnibus test is a straightforward application of the model comparison approach. We need the Sum of Squared Errors of each model, which are $\text{SSE}(G) = `r format(sum(residuals(modpostpre_int)^2), digits=2)`$ and $\text{SSE}(R) = `r format(sum(residuals(modpostpre)^2), digits=2)`$ for the expanded model and the one of Equation \@ref(eq:post-power-ANOVA), respectively. The $F$ statistic is then computed as usual as 
+
+$$\begin{align}
+F &= \frac{\frac{\text{SSE}(R) -  \text{SSE}(G)}{\text{npar}(G) - \text{npar}(R)}}{\frac{\text{SSE}(G)}{n-\text{npar}(G)}} \\
+&= \frac{\frac{`r format(sum(residuals(modpostpre)^2), digits=2)` -  `r format(sum(residuals(modpostpre_int)^2), digits=2)`}{`r length(coefficients(modpostpre_int))` - `r length(coefficients(modpostpre))`}}{\frac{`r format(sum(residuals(modpostpre_int)^2), digits=2)`}{`r nrow(dat)`-`r length(coefficients(modpostpre_int))`}} \\
+&= `r format(((sum(residuals(modpostpre)^2) -  sum(residuals(modpostpre_int)^2))/(length(coefficients(modpostpre_int)) - length(coefficients(modpostpre))))/( sum(residuals(modpostpre_int)^2)/(nrow(dat)- length(coefficients(modpostpre_int)))),digits=3)`
+\end{align}$$
+With $\text{df}_1 = `r length(coefficients(modpostpre_int))- length(coefficients(modpostpre))`$ and $\text{df}_2 = `r nrow(dat) - length(coefficients(modpostpre_int))`$, the critical value is $F_{`r length(coefficients(modpostpre_int))- length(coefficients(modpostpre))`,`r nrow(dat) - length(coefficients(modpostpre_int))`, .05} = `r format(qf(.95, length(coefficients(modpostpre_int))- length(coefficients(modpostpre)), nrow(dat) - length(coefficients(modpostpre_int))),digits=3)`$. Hence, the result is non-significant, and we do not reject the null hypothesis that there are no interactions between the covariate and the contrast-coding predictors. In other words, we have no evidence that the assumption of homogeneous regression slopes is violated.
+
+If the assumption of homogeneous regression slopes is violated, then the model should really include the appropriate interaction terms. In that case, it is important to remember that the "simple slopes" of the contrast-coding predictors then reflect tests of group differences at particular values of the covariate. Group differences at one value of the covariate may be substantial, but absent or even reversed at another. It might make sense to center the covariate, so that you would test for group differences for an average value of the covariate. You could also consider not only centering at the mean, but at a few informative other values. For instance, you could consider testing the slopes at three values of the covariate: the minimum value, mean, and maximum value in the data. You could do this by creating three different "centered" covariates: $Z'_i = Z_i - \overline{Z}$, $Z''_i = Z_i - \text{min}(Z)$, and $Z'''_i = Z_i - \text{max}(Z)$, and entering each in a different version of the same model. If the estimates of the group differences have the same direction and the tests significant in each, then you would conclude that there is evidence of group differences in the whole range of the covariate observed in the data. Other strategies are possible, of course. The main thing to realise is that in a model with interactions between the covariate and contrast-codes, group differences depend on the value of the covariate, and statements about group differences should be qualified by for which value of the covariate they hold. 
+
+## Power considerations in ANCOVA {#sec:ANCOVA-power}
+
+A primary reason for including covariates in models with categorical independent variables is to assess group differences in the dependent variable whilst controlling for any possible differences in the covariates. But there is another reason why the inclusion of covariates can be a good idea: it may increase the power of the tests of group differences. We saw evidence of this when we included $\texttt{pre-power}$ in the model for $\texttt{post-power}$. Comparing the results in Table \@ref(tab:expBelief-power-post-ANCOVA) to those in Table \@ref(tab:expBelief-power-post-ANOVA), you can see that the test results for the main effect of priming are stronger after inclusion of the covariate. The reason for this is that the covariate can explain differences in $\texttt{post-power}$ within each condition. Accounting for this within-condition variance reduces the overall error variance of the model, which can subsequently increase the power of the tests. This is particularly the case when the covariate is strongly related to the dependent variable, but independent of the contrast-coding predictors. Such independence implies that the group do not differ in the average value of the covariate. 
+
+We can illustrate this with the Venn diagrams in Figure \@ref(fig:sse-partition-ANCOVA). Let's consider first the situation of no redundancy between the covariate $Z$ and the contrast-coding predictors $X$, which is depicted in the left-hand plot. The SSR associated to the contrast-coding predictors is region $B$, and the SSR associated to the covariate is region $C$. The test of group differences (i.e. the test of the contrast-coding predictors) would involve a comparison of the SSR of region $B$ against the unexplained error of region $A$. In a model without the covariate, the unexplained error would be the sum of region $A$ and $B$. As this error is larger, the $F$ statistic will be smaller, even though the SSR term for $X$ is the same. As such, inclusion of the covariate increases the power of the test of $X$, and the increase in power is larger the stronger the relation between the covariate $Z$ and the dependent variable $Y$ (i.e. the larger region $B$). The situation is more complicated when there is redundancy between the covariate and the contrast-coding predictors. This is the situation depicted in the right-hand plot. Whilst inclusion of the covariate again reduces the error -- which would be the sum $A+C+D$ for a model without the covariate, but only $A$ for a model with the covariate -- it also reduces the unique SSR that can be associated to the contrast-coding predictors. In a model without the covariate, $\text{SSR}(X) = B + D$, and in a model with the covariate, $\text{SSR}(X) = B$. The ANCOVA model is now no longer guaranteed to increase the power of the test of $X$, as this depends on how the reduction in error compares to the reduction of the SSR.
+
+In conclusion, for purposes of increasing power, the covariate is ideally strongly related to the dependent variable, but unrelated to the other predictors in the model.
+
+```{tikz sse-partition-ANCOVA, device='svg', fig.cap="Partitioning the variance in an ANCOVA model. the circle labelled as $Y$ represents the variance of teh dependent variable, circle $X$ represents a (set of) contrast-coding predictor(s), and circle $Z$ the covariate. Overlapping regions represent shared variability (e.g. covariance) between variables.", out.width="60%"}
+\def\firstcircleA{(1.1,1.3) circle (1.75cm)}
+\def\secondcircleA{(2.9,1.3) circle (1.75cm)}
+\def\thirdcircleA{(2,1.7) circle (1.75cm)}
+
+\def\firstcircleB{(6.2,1) circle (1.75cm)}
+\def\secondcircleB{(6.8,1) circle (1.75cm)}
+\def\thirdcircleB{(6.5,2) circle (1.75cm)}
+
+\begin{tikzpicture}
+	\pgfsetxvec{\pgfpoint{2cm}{0cm}}
+	\pgfsetyvec{\pgfpoint{0cm}{2cm}}
+	\tikzstyle{every node}=[minimum size=.7cm]
+
+	\draw \firstcircleA;
+	\draw \secondcircleA;
+	\draw \thirdcircleA;
+	
+	\draw (0.2,0.2) node {$X$};
+	\draw (3.8,0.2) node {$Z$};
+	\draw (2,3) node {$Y$};
+	\draw (2,2.3) node {$A$};
+	\draw (1.5,1.5) node {$B$};
+	\draw (2.5,1.5) node {$C$};
+ 
+  %\draw (1,1) node {$E$};
+  %\draw (3,1) node {$F$};
+
+  \draw node[align=center] at (2,3.5) {\textbf{no redundancy}};
+
+	\draw \firstcircleB;
+	\draw \secondcircleB;
+	\draw \thirdcircleB;
+	
+	\draw (5.2,0.2) node {$X$};
+	\draw (7.8,0.2) node {$Z$};
+	\draw (6.5,3) node {$Y$};
+	\draw (6.5,2.3) node {$A$};
+	\draw (5.95,1.6) node {$B$};
+	\draw (6.5,1.4) node {$D$};
+	\draw (7.05,1.6) node {$C$};
+  %\draw (5.6,.8) node {$E$};
+  %\draw (7.4,.8) node {$F$};
+  %\draw (6.5,.8) node {$G$};
+
+  \draw node[align=center] at (6.5,3.5) {\textbf{with redundancy}};
+
+\end{tikzpicture}	
+```
+
+## Models with multiple covariates
+
+The analyses reported above indicate that the power priming task had the desired result of changing participants' subjective feeling of power. The significant effect of prime on $\texttt{post-power}$ reflects differences between the means of the priming conditions. It is likely that within those conditions, there is variability in the subjective feeling of power. According to the social priming hypothesis, we might expect the approach advantage scores to be higher for those participants with a relatively strong subjective feeling of power, and lower for those with a relatively weak subjective feeling of power.
+
+Given the significant differences in $\texttt{post-power}$ between the priming conditions, but the lack of a significant effect of priming condition on approach advantage scores, a relation between $\texttt{post-power}$ and $\texttt{ApproachAdvantage}$ seems unlikely, but we can include $\texttt{post-power}$ as a predictor of $\texttt{ApproachAdvantage}$ and see. Rather than the final subjective feeling of power, it might also be the case that the approach advantage is related to how much the priming manipulation increased or decreased the feeling of power. To investigate this, we might include the _difference_ $\texttt{post-power} - \texttt{pre-power}$ as a predictor. But actually, we can obtain a similar effect by just including $\texttt{pre-power}$ as a predictor in the model; when the slope of $\texttt{pre-power}$ is negative and the slope of $\texttt{post-power}$ positive, the combined effect on $\texttt{ApproachAdvantage}$ would be similar.
+The model thus becomes:
+$$\begin{align}
+\texttt{ApproachAdvantage}_i =& \beta_0 + \beta_\text{P} \times \texttt{P}_i + \beta_\text{B} \times \texttt{B}_i + \beta_{\text{P}\times \text{B}} \times (\texttt{P} \times \texttt{B})_i + \\ & \beta_\text{pre} \times \texttt{pre-power}_i + \beta_\text{post} \times \texttt{post-power}_i + \epsilon_i
+\end{align}$$
+Parameter estimates and tests are provided in Table \@ref(tab:expBelief-ApproachAdvantage-ANCOVA). As in the earlier ANOVA (Table \@ref(tab:expBelief-oneway-ANOVA-results)), we obtain a significant effect of experimenter belief. None of the other effects are significant. Neither the subjective feeling of power before or after the priming manipulation appears to affect the approach advantage scores. Interestingly, whilst not significant, the slope of $\texttt{post-power}$ is positive, and the slope of $\texttt{pre-power}$ negative, which is what one would expect when the difference between the two is related to the dependent variable.
+
+```{r expBelief-ApproachAdvantage-ANCOVA}
+modg <- lm(ApproachAdvantage ~ primeCond*experimenterBelief + powerPRE + powerPOST, data=dat)
+opts <- options()
+options(knitr.kable.NA = "")
+tab <- cbind(estimate = c(coefficients(modg)[1],coefficients(modg)[2:6],Error=NA),rbind(car::Anova(modg, type=3)[1,],expand_Anova(modg, type=3)[-1,]))
+rownames(tab) <- c("Intercept","$\\texttt{P}$","$\\texttt{B}$", "$\\texttt{pre-power}$","$\\texttt{post-power}$", "$\\texttt{P} \\times \\texttt{B}$", "Error")
+colnames(tab) <- c("$\\hat{\\beta}$","$\\text{SS}$", "$\\text{df}$", "$F$", "$P(\\geq \\lvert F \\rvert)$")
+knitr::kable(tab, caption = "Linear model predicting $\\texttt{ApproachAdvantage}$ by $\\texttt{pre-power}$, $\\texttt{post-power}$,  and factorial contrast-coding predictors.", escape = FALSE, digits=3)
+options(opts)
+```
+
+Note that the slopes of the contrast-coding predictors are somewhat different from those in Table \@ref(tab:expBelief-oneway-ANOVA-results). As before, this is because the slopes in the ANCOVA model represent differences between adjusted means. Analogous to Equation \@ref(eq:estimate-slope-orthogonal-contrast-codes-ANCOVA-one-covariate), when there are a total of $L$ covariates included in the model, which we can denote as $Z_1, Z_2, \ldots, Z_L$, the estimate of the slope of the contrast-coding predictors can be written as:
+\begin{equation}
+\hat{\beta}_j = \frac{\sum_{k=1}^{g} c_{j,k} \overline{Y}_k}{\sum_{k=1} c_{j,k}^2} - \sum_{l=1}^L \hat{\beta}_{z_l} \frac{\sum_{k=1}^{g} c_{j,k} \overline{Z}_{l,k}}{\sum_{k=1} c_{j,k}^2}
+(\#eq:estimate-slope-orthogonal-contrast-codes-ANCOVA-multiple-covariates)
+\end{equation}
+i.e. the total adjustment of the slope consists of the sum of adjustments for each covariate. 
+
+## Mediation with categorical independent variables
+
+The finding that experimenter belief has an effect on participants' approach advantage indicates that experimenter expectations affect participants behaviour, even though the experimenters in the study of @gilder2018role asserted that their knowledge of the condition had not affected their behaviour towards the participants. The question is then how experimenter belief changed their interaction with the participants to change their approach advantage scores. To attempt to answer this question, we assess whether experimenter belief changed participants' perception of the experimenters, and whether such changes resulted in the difference in approach advantage. Thus, as another example of mixing categorical and metric independent variables, we can consider assessing whether the effect of experimenter belief on approach advantage is mediated by participants' perceptions of the experimenters. 
+
+At the end of the experiment, participants rated how attractive, competent, friendly, and trustworthy they found their experimenter. Preliminary analysis (not shown here for brevity) indicates that when experimenters believed participants were assigned to the high-power condition, they were rated as more attractive, friendly, and trustworthy. If the effect of experimenter belief is mediated by these changes in perception, then after including the ratings of attractiveness, friendliness, and trustworthiness, we would expect the effect of experimenter belief to be reduced. However, the results of the analysis (see Table \@ref(tab:expBelief-ApproachAdvantage-mediation-ANCOVA)) are only slighly suggestive of this. Controlling for attractiveness, friendliness, and trustworthiness, we still obtain a highly significant effect of experimenter belief, with a slope which is a little lower than in a model without these covariates. But none of the covariates appears to be related to the approach advantage. 
+
+```{r expBelief-ApproachAdvantage-mediation-ANCOVA}
+modg2 <- lm(ApproachAdvantage ~ primeCond*experimenterBelief + attractive + friendly + trustworthy, data=dat)
+opts <- options()
+options(knitr.kable.NA = "")
+tab <- cbind(estimate = c(coefficients(modg2)[1],coefficients(modg2)[2:7],Error=NA),rbind(car::Anova(modg2, type=3)[1,],expand_Anova(modg2, type=3)[-1,]))
+rownames(tab) <- c("Intercept","$\\texttt{P}$","$\\texttt{B}$", "$\\texttt{attractive}$","$\\texttt{friendly}$", "$\\texttt{trustworthy}$", "$\\texttt{P} \\times \\texttt{B}$", "Error")
+colnames(tab) <- c("$\\hat{\\beta}$","$\\text{SS}$", "$\\text{df}$", "$F$", "$P(\\geq \\lvert F \\rvert)$")
+knitr::kable(tab, caption = "Linear model predicting $\\texttt{ApproachAdvantage}$ by $\\texttt{pre-power}$, $\\texttt{post-power}$,  and factorial contrast-coding predictors.", escape = FALSE, digits=3)
+options(opts)
+```
+
+## ANCOVA vs difference scores
+
+To end the chapter, I want to discuss an alternative method to assess whether the power prime manipulation was effective. Note that the main effect of power prime reported in Table \@ref(tab:expBelief-power-post-ANOVA) just reflects a difference between high-power and low-power priming conditions. That there is a difference between the conditions does not really tell us exactly what the priming task did to participants' feeling of power. It could be that unscrambling high-power sentences increases feelings of power, and unscrambling low-power sentences decreases feelings of power. But it could also be that the task increased feelings of power in both conditions, but more so in the high-power conditions. Or it could be that the task decreased feelings of power in both conditions, but less so in the high-power conditions. In all these cases, the mean would be higher in the high-power conditions than in the low-power conditions, but the effect of the priming task is rather different. To more directly assess whether the high-power prime _increased_, and the low-power prime _decreased_ participants' subjective feeling of power, we can consider using the difference $\texttt{diff-power}_i =  \texttt{post-power} - \texttt{pre-power}$ as dependent variable in the model
+$$\texttt{diff-power}_i = \beta_0 + \beta_\text{P} \times \texttt{P}_i + \beta_\text{B} \times \texttt{B}_i + \epsilon_i$$
+The model results are given in Table \@ref(tab:expBelief-diff-power-ANOVA). We again find a significant and positive effect of power prime. We also find that the intercept is close to 0 and non-significant. That indicates that averaged over all conditions, the subjective feeling of power seems to neither increase or decrease. However, the significant positive slope of power prime shows that the high-power prime increased, and the low-power prime decreased, subjective feeling of power. 
+
+```{r expBelief-diff-power-ANOVA}
+dat$powerDIFF <- dat$powerPOST - dat$powerPRE
+modgdiff <- lm(powerDIFF ~ primeCond*experimenterBelief, data=dat)
+opts <- options()
+options(knitr.kable.NA = "")
+tab <- cbind(estimate = c(coefficients(modgdiff)[1],coefficients(modgdiff)[2:4],Error=NA),rbind(car::Anova(modgdiff, type=3)[1,],expand_Anova(modgdiff, type=3)[-1,]))
+rownames(tab) <- c("Intercept","$\\texttt{P}$","$\\texttt{B}$", "$\\texttt{P} \\times \\texttt{B}$", "Error")
+colnames(tab) <- c("$\\hat{\\beta}$","$\\text{SS}$", "$\\text{df}$", "$F$", "$P(\\geq \\lvert F \\rvert)$")
+knitr::kable(tab, caption = "Linear model predicting $\\texttt{diff-power}$ by factorial contrast-coding predictors.", escape = FALSE, digits=3)
+options(opts)
+```
+
+Although a model with a difference score as dependent variable is straightforward to interpret, when we are mainly interested in determining group differences (i.e. the effects of the contrast-coding predictors), there are reasons to prefer an ANCOVA model (e.g. Equation \@ref(eq:post-power-ANCOVA)) to this analysis. If we write out the difference score model as
+$$\texttt{post-power}_i - \texttt{pre-power}_i = \beta_0 + \beta_\text{P} \times \texttt{P}_i + \beta_\text{B} \times \texttt{B}_i + \epsilon_i$$
+we can add $\texttt{pre-power}$ to both sides of the equation to obtain 
+$$\texttt{post-power}_i = \beta_0 + \beta_\text{P} \times \texttt{P}_i + \beta_\text{B} \times \texttt{B}_i + \texttt{pre-power}_i + \epsilon_i$$
+Note that this model is the same model as in Equation \@ref(eq:post-power-ANCOVA) if we fix $\beta_\text{pre} = 1$. In other words, the difference model is a special case of the ANCOVA model, where we assume we know the slope of the covariate equals 1. If this assumption is (approximately) true, then the difference model can be preferred, because it has one parameter less to estimate. If, however, the true slope of the covariate is different from 1, then the difference model is less accurate than the ANCOVA model. If the slope of the covariate is sufficiently different from 1, then the ANCOVA model will provide more powerful tests of the contrasts than the difference model [@judd2011data]. In addition, if one is interested in modelling changes within participants, then approaches such as repeated-measures ANOVA and linear mixed-effects models are a better choice.

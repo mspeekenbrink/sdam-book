@@ -201,7 +201,7 @@ knitr::kable(tab, caption = "Null-hypothesis significance tests using the t stat
 ```
 
 Alternatively, we can compare models in which we either fix the parameter to the value assumed in the null hypothesis or not. As discussed in the previous chapter, this is a more general approach. When comparing two multiple regression models, we use the $F$-statistic defined in Equation \@ref(eq:glm-f-definition):
-$$F = \frac{\frac{\text{SSE}(R) -  \text{SSE}(G)}{\text{npar}(G) - \text{npar}(R)}}{\frac{\text{SSE}(G)}{n-\text{npar(G)}}}$$
+$$F = \frac{\frac{\text{SSE}(R) -  \text{SSE}(G)}{\text{npar}(G) - \text{npar}(R)}}{\frac{\text{SSE}(G)}{n-\text{npar}(G)}}$$
 For instance, to test the null hypothesis $\beta_1 = 0$ in the model defined in Equation \@ref(eq:multiple-regression-votes-by-hate-education), we compare this general model
 $$\text{MODEL G: } \quad \texttt{trump_votes}_i = \beta_0 + \beta_1 \times \texttt{hate_groups}_i + \beta_2 \times \texttt{education}_i + \epsilon_i$$  
 to a restricted model where we fix $\beta_1 = 0$:

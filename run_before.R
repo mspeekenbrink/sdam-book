@@ -14,8 +14,21 @@ knitr::opts_hooks$set(echo = function(options) {
 
 library(sdamr)
 library(ggplot2)
-scale_colour_discrete <- scale_colour_viridis_d
-scale_fill_discrete <- scale_fill_viridis_d
+
+m_scale_colour_viridis_d <- function(..., alpha = 1, begin = 0, end = 0.9, direction = 1, 
+                                     option = "D", aesthetics = "colour") {
+  scale_colour_viridis_d(..., alpha = alpha, begin = begin, end = end, direction = direction, 
+                         option = option, aesthetics = aesthetics)
+}
+
+m_scale_fill_viridis_d <- function(..., alpha = 1, begin = 0, end = 0.9, direction = 1, 
+                                     option = "D", aesthetics = "fill") {
+  scale_fill_viridis_d(..., alpha = alpha, begin = begin, end = end, direction = direction, 
+                         option = option, aesthetics = aesthetics)
+}
+
+scale_colour_discrete <- m_scale_colour_viridis_d
+scale_fill_discrete <- m_scale_fill_viridis_d
 scale_colour_continuous <- scale_colour_viridis_c
 scale_fill_continuous <- scale_fill_viridis_c
 scale_colour_binned <- scale_colour_viridis_b
