@@ -250,7 +250,7 @@
             <section class="normal" id="section-">
 <div id="mixing-categorical-and-metric-predictors-ancova" class="section level1">
 <h1><span class="header-section-number">Chapter 9</span> Mixing categorical and metric predictors (ANCOVA)</h1>
-<p>In this chapter, we will consider combining categorical and metric independent variables to predict an outcome variable. Such an analysis is generally called an Analysis of Covariance (ANCOVA). There are a number of reasons why you might want to include metric predictors (or “covariates”) in an ANOVA-type analysis. Controlling. Reducing error. Theoretical interest/mediation</p>
+<p>In this chapter, we will consider combining categorical and metric independent variables to predict an outcome variable. Such an analysis is generally called an Analysis of Covariance (ANCOVA). There are a number of reasons why you might want to include metric predictors (or “covariates”) in an ANOVA-type analysis: to statistically control for pre-existing differences between conditions of potential confounders, to reduce prediction error and increase the power of statistical tests, and because they are theoretically interesting as e.g. potential mediators of the effect of experimental manipulations. In the course of this chapter, we will see examples of each of these. We will also discuss the interpretation of contrasts in ANCOVA models as reflecting differences between group means which are adjusted for the effect of the covariate.</p>
 <div id="subjective-feelings-of-power-and-priming" class="section level2">
 <h2><span class="header-section-number">9.1</span> Subjective feelings of power and priming</h2>
 <p>To illustrate the models, we will consider the data from <span class="citation">Gilder &amp; Heerey (<a href="#ref-gilder2018role" role="doc-biblioref">2018</a>)</span> again. As part of the experiment, the researchers measured participants’ subjective feeling of power, both before and after providing them with the power priming task. In the priming task participants were presented with randomly scrambled sentences, and they were asked to reorder the words into grammatically correct sentences. In the high-power prime condition, half of the sentences included words associated with high power (e.g., “dominates,” “commands”), and in the low-power prime condition, half the sentences contained words associated with low power (e.g., “subordinate,” “obeys”). If the priming task had the desired effect, then participants in the high-power condition should report feeling more power after the priming task than participants in the low-power condition. Figure <a href="mixing-categorical-and-metric-predictors-ancova.html#fig:expBelief-power-test-interaction-plots">9.1</a> shows the means of the subjective feeling of power before and after the power priming manipulation. As can be seen there, the task indeed appears to have the desired effect. Before the priming task, differences between the groups are relatively small and there appears to be no real difference between the priming condition. After the priming task, the averages in the low-power prime conditions are lower, and those in the high-power prime conditions higher, than before the priming task.</p>
@@ -289,7 +289,7 @@ PL,EL
 <span class="math inline">\(-\tfrac{1}{2}\)</span>
 </td>
 <td style="text-align:right;">
-<span class="math inline">\(\tfrac{1}{2}\)</span>
+<span class="math inline">\(\tfrac{1}{4}\)</span>
 </td>
 </tr>
 <tr>
@@ -303,7 +303,7 @@ PL,EH
 <span class="math inline">\(\tfrac{1}{2}\)</span>
 </td>
 <td style="text-align:right;">
-<span class="math inline">\(-\tfrac{1}{2}\)</span>
+<span class="math inline">\(-\tfrac{1}{4}\)</span>
 </td>
 </tr>
 <tr>
@@ -317,7 +317,7 @@ PH,EL
 <span class="math inline">\(-\tfrac{1}{2}\)</span>
 </td>
 <td style="text-align:right;">
-<span class="math inline">\(-\tfrac{1}{2}\)</span>
+<span class="math inline">\(-\tfrac{1}{4}\)</span>
 </td>
 </tr>
 <tr>
@@ -331,7 +331,7 @@ PH,EH
 <span class="math inline">\(\tfrac{1}{2}\)</span>
 </td>
 <td style="text-align:right;">
-<span class="math inline">\(\tfrac{1}{2}\)</span>
+<span class="math inline">\(\tfrac{1}{4}\)</span>
 </td>
 </tr>
 </tbody>

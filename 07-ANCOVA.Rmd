@@ -1,6 +1,6 @@
 # Mixing categorical and metric predictors (ANCOVA)
 
-In this chapter, we will consider combining categorical and metric independent variables to predict an outcome variable. Such an analysis is generally called an Analysis of Covariance (ANCOVA). There are a number of reasons why you might want to include metric predictors (or "covariates") in an ANOVA-type analysis. Controlling. Reducing error. Theoretical interest/mediation
+In this chapter, we will consider combining categorical and metric independent variables to predict an outcome variable. Such an analysis is generally called an Analysis of Covariance (ANCOVA). There are a number of reasons why you might want to include metric predictors (or "covariates") in an ANOVA-type analysis: to statistically control for pre-existing differences between conditions of potential confounders, to reduce prediction error and increase the power of statistical tests, and because they are theoretically interesting as e.g. potential mediators of the effect of experimental manipulations. In the course of this chapter, we will see examples of each of these. We will also discuss the interpretation of contrasts in ANCOVA models as reflecting differences between group means which are adjusted for the effect of the covariate.
 
 ## Subjective feelings of power and priming
 
@@ -26,14 +26,14 @@ modpre <- lm(powerPRE ~ primeCond*experimenterBelief, data=dat)
 modpost <- lm(powerPOST ~ primeCond*experimenterBelief, data=dat)
 rbind(cbind(test="pre-test",summary(emmeans::emmeans(modpre, ~ primeCond:experimenterBelief))),
       cbind(test="post-test",summary(emmeans::emmeans(modpost, ~ primeCond:experimenterBelief)))) %>% mutate(ymax=emmean+SE, ymin=emmean-SE) %>% mutate(test = factor(test, levels=c("pre-test","post-test"))) %>%
-  ggplot(aes(x=primeCond,y=emmean,colour=experimenterBelief, ymin=ymin, ymax=ymax)) +geom_point(position=position_dodge(.2)) + geom_line() + geom_errorbar(width=.1,position=position_dodge(.2)) + ylab("power") + facet_wrap(~test) + theme(legend.position = "bottom") + labs(colour = "Experimenter belief")
+  ggplot(aes(x=primeCond,y=emmean,colour=experimenterBelief, ymin=ymin, ymax=ymax)) +geom_point(position=position_dodge(.2)) + geom_line() + geom_errorbar(width=.1,position=position_dodge(.2)) + ylab("power") + xlab("Priming condition") + facet_wrap(~test) + theme(legend.position = "bottom") + labs(colour = "Experimenter belief")
 ```
 
 To determine whether the differences between the conditions after the power prime manipulation are significant, we can use the by-now hopefully familiar procedure of constructing appropriate contrast codes for priming condition and experimenter belief. To code for prime condition, it makes sense to assign a value of $\tfrac{1}{2}$ to the high-power prime condition, and a value of $-\tfrac{1}{2}$ to the lower-power prime condition. As one would expect the high-power prime to increase the subjective feeling of power, one would then expect a positive slope for the associated contrast-coding predictor. Similarly, it makes sense to assign a value of $\tfrac{1}{2}$ to the "experimenter believes high-power" condition, and a value of $-\tfrac{1}{2}$ to the "experimenter believes low-power" condition. If experimenter belief has an effect on feelings of power, one would expect the the subjective feeling of power to be higher when the experimenter believes the participant was given a high-power prime. Hence, one would then expect a positive slope for the contrast-coding predictor associated to this contrast. The contrast code for the interaction is constructed as usual by multiplying the values of these two contrast codes. So our set of (orthogonal) contrast codes is:
 ```{r}
 tab <- data.frame(c1 = c("$-\\tfrac{1}{2}$","$-\\tfrac{1}{2}$","$\\tfrac{1}{2}$","$\\tfrac{1}{2}$"),
                   c2 = c("$-\\tfrac{1}{2}$","$\\tfrac{1}{2}$","$-\\tfrac{1}{2}$","$\\tfrac{1}{2}$"),
-                  c3 = c("$\\tfrac{1}{2}$","$-\\tfrac{1}{2}$","$-\\tfrac{1}{2}$","$\\tfrac{1}{2}$"))
+                  c3 = c("$\\tfrac{1}{4}$","$-\\tfrac{1}{4}$","$-\\tfrac{1}{4}$","$\\tfrac{1}{4}$"))
 colnames(tab) <- c("$\\texttt{P}$","$\\texttt{B}$","$\\texttt{P}\\times\\texttt{B}$")
 rownames(tab) <- c("PL,EL","PL,EH", "PH,EL", "PH,EH")
 knitr::kable(tab, escape=FALSE,align=rep('r', 3))#, caption="A set of three orthogonal contrast codes for the Experimenter Belief study.")
