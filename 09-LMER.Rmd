@@ -96,9 +96,9 @@ You may also be interested in testing evidence for the existence of random effec
 $$\text{likelihood-ratio} = \frac{p(Y_1,\ldots,Y_n|\text{MODEL R})}{p(Y_1,\ldots,Y_n|\text{MODEL G})}$$
 In particular, if the number of total observations $n$ is sufficiently large, we can rely on an important and general statistical theorem by @wilks1938large that shows that as $n \rightarrow \infty$ (i.e., as the number of samples approaches infinity), then under the null-hypothesis that MODEL R is true:
 \begin{equation}
--2 \log \left(\text{likelihood-ratio}\right) &\sim \mathbf{chi-squared}(\text{npar}(G) - \text{npar}(R))
+-2 \log \left(\text{likelihood-ratio}\right) \sim \mathbf{chi-squared}(\text{npar}(G) - \text{npar}(R))
 \end{equation}
-where teh log likelihood ratio is usually computed as
+where the log likelihood ratio is usually computed as
 $$\begin{align}
 -2 \log \left(\text{likelihood-ratio}\right) &= -2 \log p(Y_1,\ldots,Y_n|\text{MODEL R}) - (-2 \log p(Y_1,\ldots,Y_n|\text{MODEL G}))
 \end{align}$$

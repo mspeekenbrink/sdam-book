@@ -320,9 +320,9 @@ Figure 11.1: Graphical depiction of the random-intercepts model. At the top you 
 <p><span class="math display">\[\text{likelihood-ratio} = \frac{p(Y_1,\ldots,Y_n|\text{MODEL R})}{p(Y_1,\ldots,Y_n|\text{MODEL G})}\]</span>
 In particular, if the number of total observations <span class="math inline">\(n\)</span> is sufficiently large, we can rely on an important and general statistical theorem by <span class="citation">Wilks (<a href="#ref-wilks1938large" role="doc-biblioref">1938</a>)</span> that shows that as <span class="math inline">\(n \rightarrow \infty\)</span> (i.e., as the number of samples approaches infinity), then under the null-hypothesis that MODEL R is true:
 <span class="math display">\[\begin{equation}
--2 \log \left(\text{likelihood-ratio}\right) &amp;\sim \mathbf{chi-squared}(\text{npar}(G) - \text{npar}(R))
+-2 \log \left(\text{likelihood-ratio}\right) \sim \mathbf{chi-squared}(\text{npar}(G) - \text{npar}(R))
 \end{equation}\]</span>
-where teh log likelihood ratio is usually computed as
+where the log likelihood ratio is usually computed as
 <span class="math display">\[\begin{align}
 -2 \log \left(\text{likelihood-ratio}\right) &amp;= -2 \log p(Y_1,\ldots,Y_n|\text{MODEL R}) - (-2 \log p(Y_1,\ldots,Y_n|\text{MODEL G}))
 \end{align}\]</span>
