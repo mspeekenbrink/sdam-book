@@ -108,11 +108,13 @@ In words, under the null-hypothesis that the restricted model is true, the sampl
 
 Having spent a bit of time discussing the estimation and testing of effects in linear mixed-effects models in abstract terms, let's see how we can use a model like this in practice. For this first example, we will consider the data from the anchoring study again, focussing on those (non US or UK based) labs that were able to obtain estimates of the height of Mount Everest in meters, after having povided the participants with a low anchor. The judgements of participants aqcuired by these different labs, as well as the mean judgements and standard errors of the mean (remember, these standard errors are the standard deviation of the sampling distribution of the mean) are shown in Figure \@ref(fig:anchoring-low-boxplot-by-referrer). 
 
-```{r anchoring-low-boxplot-by-referrer, fig.cap="Judged height of Mount Everest after a low anchor for all international labs where participants provided their answer in meters.. Boxes represent the mean in each group plus or minus the standard error of the mena."}
+```{r anchoring-low-boxplot-by-referrer, fig.cap="Judged height of Mount Everest after a low anchor for all international labs where participants provided their answer in meters. Boxes represent the mean in each group plus or minus the standard error of the mean."}
 library(dplyr)
 library(sdamr)
 data("anchoring")
-dat <- subset(anchoring, anchor == "low" & us_or_international == "International" & referrer != "lse")
+dat <- subset(anchoring, anchor == "low" & us_or_international == "International" & referrer != "lse") %>%
+  mutate(referrer = factor(referrer))
+contrasts(dat$referrer) <- contr.sum(length(levels(dat$referrer)))
 dat %>%
   ggplot(aes(x=referrer,y=everest_meters,colour = referrer)) + stat_summary(fun.data="mean_se",geom="crossbar") + geom_jitter(alpha=.4) + theme(legend.position = "none") + xlab("Lab") + ylab("Height of Mount Everest in meters") 
 ```
@@ -169,7 +171,7 @@ The model we dealt with so far is the simplest example of a linear mixed-effects
 library(dplyr)
 library(sdamr)
 data("anchoring")
-dat <- subset(anchoring, us_or_international == "International" & referrer != "lse") %>% mutate(anchor=factor(anchor,levels=c("low","high")))
+dat <- subset(anchoring, us_or_international == "International" & referrer != "lse") %>% mutate(anchor=factor(anchor,levels=c("low","high")), referrer = factor(referrer))
 dat %>% 
   ggplot(aes(x=referrer,y=everest_meters,colour = referrer)) + stat_summary(fun.data="mean_se",geom="crossbar") + geom_jitter(alpha=.4) + theme(legend.position = "none") + xlab("Lab") + ylab("Height of Mount Everest in meters") + facet_wrap(~anchor)
 ```
@@ -194,6 +196,7 @@ library(sdamr)
 library(afex)
 contrasts(dat$anchor) <- c(-1/2,1/2)
 dat$referrer <- as.factor(dat$referrer)
+contrasts(dat$referrer) <- contr.sum(length(levels(dat$referrer)))
 modg <- mixed(everest_meters ~ anchor + (anchor||referrer), data=dat, check_contrasts=FALSE, expand_re=TRUE, test_intercept = TRUE)
 ```
 
@@ -205,9 +208,9 @@ Y_{i,j} &= \beta_0 + \gamma_{0,j} + (\beta_1 + \gamma_{1,j}) \times X_{1,i,j} + 
 \gamma_{1,j} &\sim \mathbf{Normal}(0,`r format(attr(VarCorr(modg$full_model)$referrer.1,"stddev"), digits=3, nsmall=2)`) \\
 \epsilon_{i,j} &\sim \mathbf{Normal}(0,`r format(attr(VarCorr(modg$full_model),"sc"), digits=3, nsmall=2)`)
 \end{align}$$
-In terms of inference, we are mainly interested in the fixed effect of anchor. A test of the hypothesis that the slope of anchor is $\beta_1 = 0$, again using the Kenward-Roger approximation for the degrees of freedom, gives us $F(`r modg$anova_table[2,1]`, `r modg$anova_table[2,1]`) = `r modg$anova_table[2,3]`$, $p `r pvalue(modg$anova_table[2,4], limit=TRUE)`$. Hence, we reject the null hypothesis that the true effect of the anchor equals 0. There clearly is a difference between the low and high anchor condition, such that the judgements in the former are lower on average than in the latter conditions.
+In terms of inference, we are mainly interested in the fixed effect of anchor. A test of the hypothesis that the slope of anchor is $\beta_1 = 0$, again using the Kenward-Roger approximation for the degrees of freedom, gives us $F(`r modg$anova_table[2,1]`, `r modg$anova_table[2,2]`) = `r modg$anova_table[2,3]`$, $p `r pvalue(modg$anova_table[2,4], limit=TRUE)`$. Hence, we reject the null hypothesis that the true effect of the anchor equals 0. There clearly is a difference between the low and high anchor condition, such that the judgements in the former are lower on average than in the latter conditions.
 
-```{r}
+```{r est-ml-models}
 dat$anchor_n <- -1/2
 dat$anchor_n[dat$anchor == "high"] <- 1/2
 modg_ml <- lme4::lmer(everest_meters ~ anchor_n + (1 + anchor_n||referrer), data=dat, REML=FALSE)
@@ -241,6 +244,7 @@ data("anchoring")
 anchoring$anchor <- factor(anchoring$anchor, levels=c("low","high"))
 contrasts(anchoring$anchor) <- c(-1/2,1/2)
 anchoring$referrer <- factor(anchoring$referrer)
+contrasts(dat$referrer) <- contr.sum(length(levels(dat$referrer)))
 modg <- mixed(everest_feet ~ anchor + (1 + anchor|referrer), data=anchoring, check_contrasts = FALSE)
 ```
 
@@ -253,6 +257,7 @@ Y_{i,j} &= \beta_0 + \gamma_{0,j} + (\beta_1 + \gamma_{1,j}) \times X_{1,i,j} + 
 & \sim \mathbf{Normal}\left( \left[ \begin{matrix} 0 \\ 0 \end{matrix} \right] , \left[ \begin{matrix}  (`r attr(VarCorr(modg$full_model)$referrer,"stddev")[1]`)^2 & `r attr(VarCorr(modg$full_model)$referrer,"correlation")[2,1]` \times `r attr(VarCorr(modg$full_model)$referrer,"stddev")[1]` \times `r attr(VarCorr(modg$full_model)$referrer,"stddev")[2]` \\ `r attr(VarCorr(modg$full_model)$referrer,"correlation")[2,1]` \times `r attr(VarCorr(modg$full_model)$referrer,"stddev")[1]` \times `r attr(VarCorr(modg$full_model)$referrer,"stddev")[2]` & (`r attr(VarCorr(modg$full_model)$referrer,"stddev")[2]`)^2 \end{matrix} \right] \right) \\
 \epsilon_{i,j} &\sim \mathbf{Normal}(0,`r format(attr(VarCorr(modg$full_model),"sc"), digits=3, nsmall=2)`)
 \end{align}$$
+This shows a negative correlation between the random intercepts and the random slopes. This can be interpreted as indicating that the higher the average judgements in a grouping (the intercept), the smaller the difference is between the low and high anchor conditions within that grouping (the slope). 
 
 ## Crossed random effects: dating partners in the speed dating experiment
 
