@@ -100,7 +100,7 @@ To give a single answer, a "long-run relative frequency" must be the relative fr
 
 There is an alternative to the Frequentist View, called the __Bayesian view__ or __Subjective view__, according to which probability means a _rational degree of belief_. This, in a sense, takes probability out of the real world, and into our minds. By doing so, it allows statements of probabilities for single events, such as what is the probability that it will rain tomorrow. In the Frequentist View, it either rains tomorrow or not. We can ask what the probability is that it rains on the 25th of July in general, by considering the long-run relative frequency of rain on every 25th of July in past, present, and future years. But there is no long-run relative frequency for the 25th of July in 2020.
 
-#### The rules of probability
+#### The rules of probability {#sec:02-rules-of-probability}
 
 <!-- https://bolt.mph.ufl.edu/6050-6052/unit-3/module-6/ -->
 <!-- https://bolt.mph.ufl.edu/6050-6052/unit-3/module-7/ -->
@@ -404,7 +404,7 @@ An __efficient__ estimator is an estimator which provides the least possible var
 
 In general, maximum likelihood estimators are consistent and (asymptotically) efficient. They are not always unbiased though, although the bias (the difference between the mean estimate and the true value) decreases when the number of observations increases. Given these desirable properties, maximum likelihood estimators are often the estimators of choice.
 
-## Comparing models: Null-hypothesis significance testing
+## Comparing models: Null-hypothesis significance testing {#sec:02-likelihood-ratio}
 
 So, at this point, we have three models of Paul's accuracy in predictions. The biased coin-flipping model with an unknown parameter $\theta$. The unbiased coin-flipping, or random guessing, model (which is a special case of the first one, with $\theta = 0.5$). And an _estimated_ version of the biased coin-flipping model, with $\hat{\theta} = 1$ (which is also a special case). Now what?
 

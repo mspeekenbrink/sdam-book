@@ -103,7 +103,7 @@ It turns out that we do not need to estimate separate models to remove the effec
 
 The multiple regression model is a straightforward extension of the simple linear regression model, including more than one predictor $X$:
 \begin{equation}
-Y_i = \beta_0 + \beta_1 \times X_{1,i} + \beta_2 \times X_{2,i} + \ldots + \beta_k \times X_{m,i} + \epsilon_i \quad \quad \quad \epsilon_i \sim \mathbf{Normal}(0,\sigma_\epsilon)
+Y_i = \beta_0 + \beta_1 \times X_{1,i} + \beta_2 \times X_{2,i} + \ldots + \beta_m \times X_{m,i} + \epsilon_i \quad \quad \quad \epsilon_i \sim \mathbf{Normal}(0,\sigma_\epsilon)
 (\#eq:multiple-regression-model-definition)
 \end{equation}
 Note that we are using $m$ to reflect the total number of predictors $X$ in the model. As for the simple regression model, this model consists of a structural part which reflects the conditional mean of the dependent variable $Y$, conditional upon all predictors:
