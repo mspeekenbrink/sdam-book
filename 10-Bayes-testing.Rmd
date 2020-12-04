@@ -92,21 +92,84 @@ In assigning probabilities to parameters, Thomas Bayes can be seen as the foundi
 
 ### We missed you Paul!
 
-In Bayesian statistics, we can apply the principles of Bayesian inference to anything we can assign degrees of belief to. For instance, our belief that Paul the Octopus had psychic abilities. In our general model of Paul's predictions (Section \@ref(sec:02-binomial-model), Equation \@ref(eq:definition-binomial-distribution)), we assumed there was a probability that he made a correct prediction, which we denoted by $\theta$. This parameter probability could in principle take any value $0 \leq \theta 1$. The idea of a prior distribution for such a parameter is to assign to each possible value of $\theta$ a "degree of belief" that this is the true value. These degrees of belief should obey the rules of probability. In the coin-flipping model, which assumed Paul was randomly guessing, there was only one possible value, namely $\theta=.5$. That means that, if we were to believe this model is true, we would consequently  believe that any other value is impossible: $P(\theta \neq .5) = 0$, which implies $P(\theta = .5) = 1$. If we don't believe that Paul is necessarily randomly guessing, then the parameter could have other values as well. Figure \@ref(fig:prior-distributions-Paul) shows two possible prior distributions. In the plot on the left, the prior assigns an equal probability to any possible value of $\theta$. This is also called a uniform distribution, and reflects the beliefs of someone who considers that "anything goes" when it comes to Paul's ability to predict the outcome of football matches. In the plot on the right, the prior distribution reflects the beliefs of someone who quite strongly considers Paul a good predictor of the outcome of football matches.  
+In Bayesian statistics, we can apply the principles of Bayesian inference to anything we can assign degrees of belief to. For instance, our belief that Paul the Octopus had psychic abilities. In our general model of Paul's predictions (Section \@ref(sec:02-binomial-model), Equation \@ref(eq:definition-binomial-distribution)), we assumed there was a probability that he made a correct prediction, which we denoted by $\theta$. This parameter probability could in principle take any value $0 \leq \theta \leq 1$. The idea of a prior distribution for such a parameter is to assign to each possible value of $\theta$ a "degree of belief" that this is the true value. These degrees of belief should obey the rules of probability. In the coin-flipping model, which assumed Paul was randomly guessing, there was only one possible value, namely $\theta=.5$. That means that, if we were to believe this model is true, we would consequently  believe that any other value is impossible: $P(\theta \neq .5) = 0$, which implies $P(\theta = .5) = 1$. If we don't believe that Paul is necessarily randomly guessing, then the parameter could have other values as well. Figure \@ref(fig:prior-distributions-Paul) shows two possible prior distributions. In the plot on the left, the prior assigns an equal probability to any possible value of $\theta$. This is also called a uniform distribution, and reflects the beliefs of someone who considers that "anything goes" when it comes to Paul's ability to predict the outcome of football matches. In the plot on the right, the prior distribution reflects the beliefs of someone who quite strongly considers Paul a good predictor of the outcome of football matches.  
 
-```{r prior-distributions-Paul, fig.cap="Two different prior distributions for the probability that Paul makes a correct prediction, and the resulting posterior distributions after observing that Paul made 12 out of 14 correct predictions.", fig.width=6,fig.height=4, out.width="90%"}
+```{r prior-distributions-Paul, fig.cap="Two different prior distributions for the probability that Paul makes a correct prediction, the normalised likelihood function ($P(Y|\\theta)/P(Y)$) and the resulting posterior distributions after observing that Paul made $Y=12$ out of $n=14$ correct predictions. Wherever the normalised likelihood is larger than 1, the posterior probabiilty is larger than the prior probability, while the posterior probability is lower than the prior probability wherever the normalised likelihood is lower than 1. Note that in MODEL 1, the normalised likelihood and posterior distribution are identical and therefore overlapping on the plot.", fig.width=6,fig.height=3.5, out.width="90%"}
 library(dplyr)
 library(ggplot2)
-data.frame(model=rep(c("model 1","model 2"),each=200),type=rep(c("prior","posterior"),each=100),x=seq(0,1,length=100)) %>%
-  mutate(type=factor(type,levels=c("prior","posterior")), y=if_else(model == "model 1",if_else(type=="prior",dbeta(x,1,1),dbeta(x,1+12,1+2)),if_else(type=="prior",dbeta(x,12,2),dbeta(x,12+12,2+2)))) %>%
-  ggplot(aes(x=x,y=y,lty=type)) + geom_line() + facet_wrap(~model) + xlab(expression(theta)) + ylab(expression(p(theta))) + theme(legend.position="bottom", legend.title = element_blank())
+
+data.frame(model=rep(c("MODEL 1","MODEL 2"),each=3*100),type=rep(c("prior","likelihood","posterior"),each=100),x=seq(0,1,length=100)) %>%
+  mutate(type=factor(type,levels=c("prior","likelihood","posterior")), y=if_else(model == "MODEL 1",case_when(type=="prior" ~ dbeta(x,1,1), type=="likelihood" ~ dbinom(12,14,x)/(choose(14,12)*(beta(1+12,1+2)/beta(1,1))), type == "posterior" ~ dbeta(x,1+12,1+2)),case_when(type=="prior" ~ dbeta(x,12,2), type=="likelihood" ~ dbinom(12,14,x)/(choose(14,12)*(beta(12+12,2+2)/beta(12,2))), type == "posterior" ~ dbeta(x,12+12,2+2)))) %>%
+  ggplot(aes(x=x,y=y,colour=type, group=type)) + geom_line(lwd=1.5,alpha=.5) + facet_wrap(~model) + xlab(expression(theta)) + ylab(expression(p(theta))) + theme(legend.position="bottom", legend.title = element_blank())
 ```
 
+We can write the posterior distribution for the parameter $\theta$, conditional upon observed data $Y$ (e.g., $Y=12$ out of $n=14$ correct predictions) as:
+\begin{align}
+p(\theta|Y) &= \frac{P(Y|\theta) \times p(\theta)}{P(Y)} \\
+&= \frac{P(Y|\theta)}{P(Y)} \times p(\theta)
+(\#eq:posterior-parameter-specification)
+\end{align}
+Here, $P(Y|\theta)$ is the likelihood function (the probability of the observed data $Y$ given a particular value of $\theta$), $p(\theta)$ is the prior distribution of the parameter $\theta$, and $P(Y)$ is the probability of the data over all possible values of $\theta$ (weighted by their prior probability). This is also called the __marginal likelihood__, and technically is defined as
+$$P(Y) = \int P(Y|\theta) p(\theta) d \theta$$
+i.e. as the integral of the product of the likelihood function and prior over all possible values of $\theta$, but you don't need to worry about this. The formulation on the second line of Equation \@ref(eq:posterior-parameter-specification) is just a rearrangement of the terms, but is meant to show that you can think of the posterior probability as the product of the prior probability and the __normalised likelihood__ (the likelihood of the data for a particular value of $\theta$ compared to the marginal likelihood of $Y$ over all possible values of $\theta$).  
+
+In words, we can describe Equation \@ref(eq:posterior-parameter-specification) as:
+$$\begin{align}
+\text{posterior} &= \frac{\text{likelihood} \times \text{prior}}{\text{marginal likelihood}} \\
+&= \text{normalised likelihood} \times \text{prior}
+\end{align}$$
+The values of the normalized likelihood and the resulting posterior distribution are also shown in Figure \@ref(fig:prior-distributions-Paul). Because the posterior probabilities are calculated by multiplying the prior probability by the normalised likelihood, the posterior probability will be _higher_ than than the prior probability when the normalised likelihood is _larger_ than 1. You can think of the normalised likelihood as an average likelihood over all possible values of $\theta$ (we will discuss this in a little more detail soon). So when a particular value of $\theta$ assigns a higher likelihood to the data than the average likelihood of the data, i.e. $\frac{P(Y|\theta)}{P(Y)} > 1$, the evidence that this value of $\theta$ is the true value increases. Conversely, the posterior probability will be _lower_ than than the prior probability when the normalised likelihood is _smaller_ than 1. So when a particular value of $\theta$ assigns a lower likelihood to the data than average, the evidence that this value of $\theta$ is the true value decreases. This, in a nutshell, is how Bayesian inference of parameters works.
+
+Inspecting the posterior distributions resulting from the two models in Figure \@ref(fig:prior-distributions-Paul), you can see that the posterior distribution is mostly located at the higher values of $\theta$, because small values of $\theta$ are not very likely given Paul's success rate of 12 out of 14 correct predictions. Comparing the posterior distributions between the two models, you may also see that the posterior distribution for MODEL 2 is less dispersed (i.e. "narrower") than for MODEL 1. This is a direct consequence of the difference in the prior distributions. The uniform distribution of MODEL 1 does not make very precise predictions regarding the likely values of $\theta$ ("anything goes"). The more dispersed the prior is, the more dispersed the posterior will be. The prior distribution of MODEL 2 is, in some sense, much more daring, indicating that low values of $\theta$ are very unlikely _a priori_. Because these values are not believed to be true in the first place, they are also relatively less likely after observing the data. 
+
+### The marginal likelihood and prior predictive distribution
+
+A Bayesian statistical model consists of both the prior distribution and the likelihood function. Both are integral parts of a Bayesian model. This is different from statistical models in the Frequentist tradition, which only focus on the likelihood. One way to view a Bayesian model is as a _hierarchical model_, similar how linear mixed-effects models can be viewed as hierarchical models. With this formulation, it is straightforward to simulate a Bayesian model, by first sampling a random parameter value from the prior distribution $p(\theta)$, and then using this to sample a value of the dependent variable from the conditional distribution $P(Y|\theta)$. The resulting marginal distribution of the dependent variable, $P(Y)$, is also called the __prior predictive__ distribution. The sampling scheme is
+\begin{align}
+Y_j &\sim P(Y|\theta_j) \\
+\theta_j &\sim p(\theta)
+\end{align}
+Not only can we use each sampled parameter value $\theta_j$ to sample a value of the dependent variable, we can also use each to compute the likelihood of the data actually observed, e.g. $P(Y=12|\theta_j)$. Figure \@ref(fig:prior-predictive-samples-binomial-bayesian-models) shows 1000 samples parameter values (prior samples), corresponding samples of the dependent variable (prior predictive samples), and the likelihood value for Paul's predictions (sampled likelihood), for both models in Figure \@ref(fig:prior-distributions-Paul). Note that all these are based on the same set of sampled parameter values $\theta$. 
+
+```{r prior-predictive-samples-binomial-bayesian-models, fig.width=6,fig.height=3.5, fig.cap="Number of correct predictions (out of 14) for 1000 simulations from both Bayesian models of Figure \\@ref(fig:prior-distributions-Paul).", fig.show='hold'}
+set.seed(91237898)
+tdat <- rbind(
+  data.frame(model = "MODEL 1", theta = rbeta(1000,1,1)),
+  data.frame(model = "MODEL 2", theta = rbeta(1000,12,2))
+) %>% mutate(likelihood=dbinom(12,14,prob=theta))
+tdat$Y = rbinom(2000,size=14,prob=tdat$theta)
+tdat %>%
+  ggplot(aes(x=theta)) + geom_histogram(colour="black", binwidth=.025) + facet_wrap(~model) + ggtitle("Prior samples") + xlab(expression(theta))
+
+tdat %>%
+  ggplot(aes(x=Y)) + geom_histogram(colour="black", binwidth=1) + facet_wrap(~model) + ggtitle("Prior predictive samples")
+
+tdat %>%
+  ggplot(aes(x=likelihood)) + geom_histogram(colour="black", binwidth=.01) + facet_wrap(~model) + ggtitle("Sampled likelihood") + xlab("Likelihood (k=12, n=14)")
+
+```
+
+You can see that the prior predictive distribution looks quite similar in shape to the prior distribution, which is because for this model, there is a close link between the probability of a correct prediction ($\theta$), and the total number of correct predictions ($Y$). You can also see that the likelihood value is relatively low for many sampled parameters from MODEL 1. That is because there are many relatively low sampled values of $\theta$ in MODEL 1, for which the likelihood of 12 out of 14 correct predictions is low. Model 2 does better in accounting for the observed data, with generally higher likelihood values for the sampled parameters. This better fit to the observed data can also be seen in the prior predictive distribution of MODEL 2, where 12 correct predictions is a common occurrence. In MODEL 1, all numbers of correct predictions are sampled roughly equally often.
+
+The sampled likelihoods can be used to compute an average likelihood for each model. This average is an estimate of the marginal likelihood, and computed simply as
+$$\hat{P}(Y=12) = \sum_{j=1}^n P(Y|\theta_j)$$
+Because most of the sampled likelihoods are low for MODEL 1, the average is relatively low as well: $\hat{P}(Y=12) = `r format(mean(tdat$likelihood[tdat$model == "MODEL 1"]),digits=3)`$. For MODEL 3, most of the sampled likelihoods are relatively high, and hence the average is higher than for MODEL 1:  $\hat{P}(Y=12) = `r format(mean(tdat$likelihood[tdat$model == "MODEL 2"]),digits=3)`$. Because MODEL 2 on average assigns a higher probability to the observed data, it offers a better account of the observed data than MODEL 1. As we will see, a Bayesian version of the likelihood ratio called the Bayes Factor, which reflects the ratio of marginal likelihoods for models, is central in the Bayesian version of hypothesis testing.
+
+Before we go on to look at the Bayes Factor in more detail, I would like to point out a close correspondence between the marginal likelihood and the prior predictive distribution. In fact, the marginal likelihood is just the prior predictive distribution evaluated at the observed data point. The prior predictive distribution is the marginal distribution of the data, whilst the marginal likelihood is the value of this distribution for a particular value of the dependent variable. So we can also estimate the marginal likelihood by computing the relative frequency of $Y=12$ in the prior predictive distribution. For MODEL 1, this gives $\hat{P}(Y=12) = `r sum(tdat$Y[tdat$model == "MODEL 1"] == 12)/1000`$, and for MODEL 2, it is $\hat{P}(Y=12) = `r sum(tdat$Y[tdat$model == "MODEL 2"] == 12)/1000`$. These two ways of estimating the marginal likelihood are not exactly the same, because they approach the same quantity via a different route.^[The first method is generally more reliable.] And both are subject to random sampling variation due to simulating a limited number of parameter values. Accurately computing marginal likelihoods is, for most models, a rather complicated thing, but we won't go into the details here. 
+
+### Hypothesis testing, relative evidence, and the Bayes Factor
+
+In the Frequentist null-hypothesis significance testing procedure, we defined a hypothesis test in terms of comparing two nested models, a general MODEL G and a restricted MODEL R which is a special case of MODEL G. Moreover, we defined the testing procedure in terms of determining the probability of a test result, or one more extreme, given that the simpler MODEL R is the true model. This was necessary because MODEL G is too vague to determine the sampling distribution of the test statistic.
+
+By supplying a prior distribution to parameters, Bayesian models can be "vague" whilst not suffering from the problem that they effectively make no prediction. As we saw in the prior predictive distributions in Figure \@(fig:prior-predictive-samples-binomial-bayesian-models), even MODEL 1, which assumes all possible values of the parameter $\theta$ are equally likely, still provides a valid predicted distribution of the data. Because any Bayesian model with a valid prior distribution provides a valid prior predictive distribution, which then also provides a valid value for the marginal likelihood, we do not have to worry about complications that arise when comparing models in the Frequentist tradition, such as that the likelihood of one model will always be higher than the other because we need to estimate an additional parameter by maximum likelihood. The relative marginal likelihood of the data assigned by each model, which can be stated as a marginal likelihood ratio analogous to the likelihood ratio of Chapter \@ref(ch:modeling), provides a direct measure of the relative evidence for both models. The marginal likelihood ratio is also called the Bayes Factor, and can be defined for two general Bayesian models as:
+\begin{equation}
+\text{BayesFactor}(\text{MODEL 1}, \text{MODEL 2}) = \frac{P(Y_1,\ldots,Y_n|\text{MODEL 1})}{P(Y_1,\ldots,Y_n|\text{MODEL 2})}
+(\#eq:Bayesfactor-definition)
+\end{equation}
+where $P(Y_1,\ldots,Y_n|\text{MODEL } j)$ denotes the marginal likelihood of observed data $Y_1,\ldots,Y_n$ according to MODEL $j$. 
 
 
-### Relative evidence and Bayes Factors
-
-When, upon observing one event (e.g. a positive test result) the posterior probability of another event (e.g. covid-19) increases, that means that the posterior belief of the complementary or opposite event (e.g. not covid-19) will decrease. 
+When, upon observing one event (e.g., a positive test result) the posterior probability of another event (e.g., covid-19) increases, that means that the posterior belief of the complementary or opposite event (e.g., not covid-19) will decrease. 
 $$\begin{align}
 \frac{P(A|B)}{P(\neg A|B)} &= \frac{\frac{P(B|A) \times P(A)}{P(B|A) \times P(A) + P(B|\neg A) \times P(\neg A)}{\frac{P(B|\neg A) \times P(A)}{P(B|A) \times P(A) + P(B|\neg A) \times P(\neg A)} \\
 
