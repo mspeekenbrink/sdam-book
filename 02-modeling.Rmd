@@ -1,4 +1,4 @@
-# Statistical modelling
+# Statistical modelling {#ch:modeling}
 
 Was Paul truly psychic, an oracle of some kind? Or was Paul -- or his keeper, as what does fame really mean to an octopus? -- just really lucky? How do we know? And what really are the chances of predicting the winner of 8 matches correct? These are questions we will focus on now.
 
@@ -50,7 +50,7 @@ The outcome space is the set of all possible events.
 
 Our coin flip is a __random variable__ that takes one of the values in the outcome space. It is traditional to denote random variables with capital Roman letters, and the values with small Roman letters. When we want to make generic statements that apply to different random variables (such as a coin flip, the roll of a die, the outcome of a prediction), we tend to use this notation, and $P(Y=y)$ then means 'The probability that random variable $Y$ has value $y$'. Other times, it may be easier to use more descriptive names. In this book, when we use a name for a variable, we will use a computer font, such as `coin_flip`, for the random variable. So $P(\texttt{coin_flip} = \text{heads})$ means 'The probability that random variable `coin_flip` has the value "heads"'.   
 
-### What is probability?
+### What is probability? {#sec:02-probability-definition}
 
 ```{r, echo=FALSE}
 library(ggplot2)
@@ -330,7 +330,7 @@ We can follow the same procedure to compute the probability of all other outcome
 ggplot(data.frame(x=0:8,y=dbinom(0:8,size=8,prob=.5)),aes(x=as.factor(x),y=y)) + geom_col(width=1,col="black") + xlab("Number correct") + ylab("Probability")
 ```
 
-## Flipping a biased coin: An alternative model
+## Flipping a biased coin: An alternative model {#sec:02-binomial-model}
 
 Suppose that Paul did not make his decisions by flipping a mental coin. Perhaps Paul had extensive knowledge of all things football, or perhaps he could see into the future. In that case, we might expect Paul to have a higher rate of correct answers than predicted by our coin flipping model. But perhaps Paul, although an oracle, wasn't so benevolent to his caretakers, or didn't want to spoil the match for them. In that case, we might expect the rate of correct answers to be lower than predicted by the coin flipping model. In both cases, we'd expect the probability of a correct answer to be different from .5: $P(\text{correct}) \neq .5$. But whilst not .5, we don't otherwise know the value. We call such an unknown value which determines a probability distribution a __parameter__. We will generally use symbols from the Greek alphabet to denote such parameters. Here, we will use $\theta$ (pronounced as "thee-ta"). Our alternative to the coin flipping model can now be stated as:
 

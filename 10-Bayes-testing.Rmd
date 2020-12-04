@@ -1,1 +1,195 @@
 # Introduction to Bayesian hypothesis testing
+
+In this chapter, we will introduce an alternative to the null-hypothesis significance testing procedure employed up to now. 
+
+## Fundamentals of Bayesian inference
+
+### Probability in times of Covid
+
+Let's start with a classic example in a topical guise. As we hopefully move to a new phase in the covid-19 pandemic,^[I'm writing this on 3 December 2020] the UK government plans to employ mass testing as part of a wider strategy also involving vaccination ([Guardian, 1 December 2020](https://www.theguardian.com/world/2020/dec/01/funds-for-mass-covid-testing-offered-to-local-authorities-in-tier-3)). The testing will involve lateral flow tests, which are relatively inexpensive and give a result in about 20 minutes. Estimates are that these tests give a positive test result in 76.8% of cases of covid-19, and a negative test result in 99.68% of cases ([Department of Health and Social Care, 11 November 2020](https://www.gov.uk/government/news/oxford-university-and-phe-confirm-high-sensitivity-of-lateral-flow-tests)). The true positive rate (76.8%) is also called the __sensitivity__ of a test, and the true negative rate (99.68%) the __specificity__. of On 26 November, the [Office of National Statistics ](https://www.ons.gov.uk/peoplepopulationandcommunity/healthandsocialcare/conditionsanddiseases/bulletins/coronaviruscovid19infectionsurveypilot/26november2020) estimates the rate of covid-19 cases in the general population of England to be 1.17%. That implies that about 1 in 85 people carry the virus, which is also called the __base rate__. Suppose someone is tested and the test result is positive. What is the probability that they are currently infected with covid-19? The probability is _not_ .768. This is the conditional probability $P(\text{positive test}|\text{covid-19})$. What we would like to know however is a different conditional probability, namely $P(\text{covid-19}|\text{positive test})$. And these are _not_ the same!
+
+We can work out the desired probability using the rules of probability discussed in Section \@ref(sec:02-rules-of-probability). 
+$$P(\text{covid-19}|\text{positive test}) = \frac{P(\text{covid-19 and positive test})}{P(\text{positive test})}$$
+From the multiplication rule, we know that
+$$P(\text{covid-19 and positive test}) = P(\text{positive test}|\text{covid-19}) \times P(\text{covid-19})$$ 
+To work out $P(\text{positive test})$, we need to consider all the ways in which someone can obtain a positive test result. In this situation, there are two: the person can carry covid-19 and have a positive test result, or the person can not carry covid-19 and obtain a positive test result. Thus 
+$$P(\text{positive test}) = P(\text{covid-19 and positive test}) + P(\text{no covid-19 and positive test})$$
+We have already specified how to calculate $P(\text{covid-19 and positive test})$. Similarly, we can compute $P(\text{no covid-19 and positive test})$ as
+$$P(\text{no covid-19 and positive test}) = P(\text{positive test}|\text{no covid-19}) \times P(\text{no covid-19})$$
+Now we are in a position to calculate $P(\text{covid-19}|\text{positive test})$ from the sensitivity and specificity of the test, and the base rate of covid-19 infection. We know that $P(\text{covid-19}) = .0117$, hence $P(\text{no covid-19}) = 1 - P(\text{covid-19}) = 1 - .0117 = .9883$. Putting all the numbers in a table:
+```{r covid-mass-test-sensitivy-specificty}
+tab <- data.frame(c("76.8%","23.2%"),c("0.32%","99.68%"))
+rownames(tab) <- c("positive test","negative test")
+knitr::kable(tab, col.names = c("covid-19 (1.17%)","no covid-19 (98.83%)"), align=c("r","r"))
+```
+
+$$\begin{align}
+P(\text{covid-19}|\text{positive test}) &= \frac{P(\text{covid-19 and positive test})}{P(\text{positive test})} \\
+&= \frac{P(\text{positive test}|\text{covid-19}) P(\text{covid-19})}{P(\text{pos. test}|\text{covid-19}) P(\text{covid-19}) + P(\text{pos. test}|\text{no covid-19}) P(\text{no covid-19})} \\
+&= \frac{.768 \times .0117}{.768 \times .0117 + .0032 \times .9883} \\
+&= 0.7396
+\end{align}$$
+So just under 3 out of all 4 people that positive in this scenario would actually carry covid-19. As a result, 1 out of 4 people might be asked to quarantine without really needing to do so. Although of course very unfortunate for those people, that does not seem like a too-high price to pay to me. But the base-rate is very important here. If the rate of covid-19 infections is lowered to $P(\text{covid-19}) = .01$ (i.e. 1%), then the result would be $P(\text{covid-19}|\text{positive test}) = 0.1937$, which means that only about one in five people who test positive are actually infected by covid-19! When the base-rate is lowered, massive testing seems like a much less useful procedure.
+
+Perhaps the equations seem a little abstract. Another way to explain the resulting conditional probability is through the tree diagram of Figure \@ref(fig:covid-19-test-tree). The tree represents a group of 100,000 people from the general population, of which 1,176 would have covid-19, and 903 of these would also get a positive test result. Of the 98,824 people without covid-19, 316 would receive a positive test result. While the change of a false positive is very low, because so many people do not have covid-19, the actual frequency of people without covid-19 who obtain a positive test result is not that much smaller than the number of people with covid-19 who obtain a positive test result. The conditional probability can then be computed simply as 
+$$P(\text{covid-19}|\text{positive test}) = \frac{903}{903 + 316} = .74$$
+which is equal to the value computed earlier (up to rounding error resulting from converting probabilities to whole people).
+
+```{r covid-19-test-tree, fig.cap="Outcome tree representing mass testing for covid-19."}
+library(DiagrammeR)
+
+treePlot <- "
+  digraph cvid_tree_plot {
+
+    graph [layout = dot,
+           rankdir = LR]
+
+    node [shape = box] 
+    S [label = '100,000 people']
+    
+    node [shape = oval, style = filled]
+    H [label = 'covid-19', fillcolor = '#cc0000']
+    T [label = 'no covid-19', fillcolor = '#00cc00']
+    HH [label = 'positive test', fillcolor = '#ff0000' ]
+    HT [label = 'negative test', fillcolor = '#990000']
+    TH [label = 'positive-test', fillcolor =  '#00ff00']
+    TT [label = 'negative-test', fillcolor = '#009900']
+    
+    edge [label = '1,176']
+    S -> {H}
+    
+    edge [label = '98,824', labelloc=b]
+    S -> {T}
+    
+    edge [label = '903']
+    H -> {HH}
+    
+    edge [label = '273', labelloc=b]
+    H -> {HT}
+    
+    edge [label = '316' ]
+    T -> {TH}
+    
+    edge [label = '98,508', labelloc=b]
+    T -> {TT}
+}
+"
+DiagrammeR::grViz(treePlot)
+```
+
+## Bayes' rule
+
+In calculating a conditional probability from other conditional probabilities and base-rates, we have just applied the general rules of probability. That's nothing special, really. In abstract notation, the formula known as Bayes' rule is
+
+\begin{equation}
+P(A|B) = \frac{P(B|A) P(A)}{P(B|A)P(A) + P(B|\neg A) P(\neg A)}
+(\#eq:bayes-rule)
+\end{equation}
+
+Again, there is nothing special about this formula itself, it follows from the rules of probability. These rules were however not clearly specified when Reverend Thomas Bayes defined the rule in an essay which was posthumously published [@bayes1763]. More importantly, he used the rule to infer an unknown parameter of a statistical model. According to the Frequentist View (see Section \@ref(sec:02-probability-definition)), a parameter has a true value, but you cannot assign a probability to it, because it is not a random event that has a long-run frequency. It just has one value: the true value.
+
+In assigning probabilities to parameters, Thomas Bayes can be seen as the founding father of the Subjectivist View of probability. There has been quite a lot of philosophical discussion about probability interpretations. The subjectivist view is that a probability represents a rational degree of belief. This belief can be about anything, whether actual events in the world, or more abstract concepts such as hypotheses or model parameters. Bayesian inference concerns adjusting prior beliefs in light of evidence. The resulting adjusted belief is called the posterior belief. In the previous example, the base-rate of covid-19 infections can be seen as a rational prior belief that a randomly chosen person from the general population in England has covid-19. Upon observing a positive test result, this __prior probability__ $P(\text{covid-19})$ can be adjusted to become the __posterior probability__  $P(\text{covid-19}|\text{positive test})$.
+
+### We missed you Paul!
+
+In Bayesian statistics, we can apply the principles of Bayesian inference to anything we can assign degrees of belief to. For instance, our belief that Paul the Octopus had psychic abilities. In our general model of Paul's predictions (Section \@ref(sec:02-binomial-model), Equation \@ref(eq:definition-binomial-distribution)), we assumed there was a probability that he made a correct prediction, which we denoted by $\theta$. This parameter probability could in principle take any value $0 \leq \theta 1$. The idea of a prior distribution for such a parameter is to assign to each possible value of $\theta$ a "degree of belief" that this is the true value. These degrees of belief should obey the rules of probability. In the coin-flipping model, which assumed Paul was randomly guessing, there was only one possible value, namely $\theta=.5$. That means that, if we were to believe this model is true, we would consequently  believe that any other value is impossible: $P(\theta \neq .5) = 0$, which implies $P(\theta = .5) = 1$. If we don't believe that Paul is necessarily randomly guessing, then the parameter could have other values as well. Figure \@ref(fig:prior-distributions-Paul) shows two possible prior distributions. In the plot on the left, the prior assigns an equal probability to any possible value of $\theta$. This is also called a uniform distribution, and reflects the beliefs of someone who considers that "anything goes" when it comes to Paul's ability to predict the outcome of football matches. In the plot on the right, the prior distribution reflects the beliefs of someone who quite strongly considers Paul a good predictor of the outcome of football matches.  
+
+```{r prior-distributions-Paul, fig.cap="Two different prior distributions for the probability that Paul makes a correct prediction, and the resulting posterior distributions after observing that Paul made 12 out of 14 correct predictions.", fig.width=6,fig.height=4, out.width="90%"}
+library(dplyr)
+library(ggplot2)
+data.frame(model=rep(c("model 1","model 2"),each=200),type=rep(c("prior","posterior"),each=100),x=seq(0,1,length=100)) %>%
+  mutate(type=factor(type,levels=c("prior","posterior")), y=if_else(model == "model 1",if_else(type=="prior",dbeta(x,1,1),dbeta(x,1+12,1+2)),if_else(type=="prior",dbeta(x,12,2),dbeta(x,12+12,2+2)))) %>%
+  ggplot(aes(x=x,y=y,lty=type)) + geom_line() + facet_wrap(~model) + xlab(expression(theta)) + ylab(expression(p(theta))) + theme(legend.position="bottom", legend.title = element_blank())
+```
+
+
+
+### Relative evidence and Bayes Factors
+
+When, upon observing one event (e.g. a positive test result) the posterior probability of another event (e.g. covid-19) increases, that means that the posterior belief of the complementary or opposite event (e.g. not covid-19) will decrease. 
+$$\begin{align}
+\frac{P(A|B)}{P(\neg A|B)} &= \frac{\frac{P(B|A) \times P(A)}{P(B|A) \times P(A) + P(B|\neg A) \times P(\neg A)}{\frac{P(B|\neg A) \times P(A)}{P(B|A) \times P(A) + P(B|\neg A) \times P(\neg A)} \\
+
+\end[align}$$
+
+
+\\
+&= \frac{P(E|H_0)}{P(E|H_1)} \times \frac{P(H_0)}{P(H_1)} \\
+\text{Posterior odds} &= \text{Bayes factor} \times \text{Prior odds}
+\end{align}
+
+
+The relative impact of the first event on the belief in the second event and its complement is sometimes also called the __evidence__. 
+
+\begin{align}
+\frac{P(A|B)}{P(\neg A|B)} &= \frac{\frac{P(E|H_0) \times P(H_0)}{P(E)}}{\frac{P(E|H_1) \times P(H_1)}{P(E)}} \\
+&= \frac{P(E|H_0)}{P(E|H_1)} \times \frac{P(H_0)}{P(H_1)} \\
+\text{Posterior odds} &= \text{Bayes factor} \times \text{Prior odds}
+\end{align}
+
+## A Bayesian t-test
+
+
+## Common objections to null-hypothesis significance testing
+
+### The $p$-value is not a proper measure of evidential support
+
+For a given alternative to $H_0$, the (expected) $p$-value becomes smaller and smaller as the sample size increases. But smaller and smaller effect sizes become significant when sample size increases. Under $H_0$, any $p$-value is equally likely (the distribution of $p$-values is uniform)
+
+```{r,fig.width=6,fig.height=4, fig.show='hold'}
+f <- seq(0,6,length=100)
+plot(f,df(f,df1=1,df2=95),type="l",xlab="F",ylab="density")
+tf <- seq(2.829,7,length=1000)
+polygon(x=c(tf[1],tf,tf[length(tf)]),y=c(0,df(tf,df1=1,df2=95),0),density=NA, col="#0080ff")
+#lines(x=c(tf[1],tf[1]),y=c(0,.5),lty=2)
+#text(tf[1],.6,labels=expression(paste("critical value (",alpha==.05,")")))
+lines(x=c(2.829,2.829),y=c(0,1),lty=2)
+text(2.829,1.1,labels="actual value")
+
+xx <- seq(0,1,length=10)
+plot(xx,rep(1,length(xx)),type="l",xlab="p-value",ylab="density")
+polygon(x=c(1-pf(tf[1],df1=1,df2=95),1-pf(tf[1],df1=1,df2=95),0,0),y=c(0,1,1,0),density=NA, col="#0080ff")
+```
+
+### The $p$-value depends on researcher intentions
+
+The sampling distribution of a test statistic is the distribution of the values of the statistic calculated for an infinite number of datasets produced by the same Data Generating Process (DGP). The DGP includes all the relevant factors that affect the data, including not only characteristics of the population under study, but also characteristics of the study, such as whether participants were randomly sampled, how many participants were included, which measurement tools were used, etc. Choices such as when to stop collecting data are part of the study design. That means that the same data can have a different $p$-value, depending on whether the sample size was fixed a priori, or whether sampling continued until some criterion was reached. The following story, paraphrased from [@berger, p. 30–33], may highlight the issue:
+
+A scientist has obtained 100 independent observations that are assumed be Normal-distributed with mean $\mu$ and standard deviation $\sigma$. In order to test the null hypothesis that $\mu=0$, the scientist consults a Frequentist statistician. The mean of the observations is $\overline{Y} = 0.2$, and the sample standard deviation is $S_Y=1$, hence the $p$-value is $p = `r pvalue(2*(1-pt((.2-0)/(1/sqrt(100)),df=99)))`$, which is a little lower than than the adopted significance level of $\alpha.05$. This leads to a rejection of the null hypothesis, and a happy scientist. However, the statistician decides to probe deeper and asks the scientist what he would have done in case that the experiment had not yielded a significant result after 100 observations. The scientist replies he would have collected another 100 observations. As such, the implicit sampling plan was not to collect $n=100$ observation and stop, but rather to first take 100 observations and check whether $p <.05$, and collect another 100 observations (resulting in $n=200$) if not. This is a so-called sequential testing procedure, and requires a different treatment than a fixed-sampling procedure. In controlling the Type 1 error of the procedure as a whole, one would need to consider the possible results after $n=100$ observations, but also after $n=200$ observations, which is possible, but not straightforward, as the results of after $n=100$ are dependent on the results after $n=100$ observations. But the clever statistician works it out and then convinces the scientist that the appropriate p-value for this sequential testing procedure is no longer significant. The puzzled and disappointed scientist leaves to collect another 100 observations. After lots of hard work, the scientist returns, and the statistician computes a $p$-value for the new data, which is now significant. Just to make sure the sampling plan is appropriately reflected in the calculation, the statistician asks what the scientist would have done if the result would not have been significant at this point. The scientist answers "This would depend on the status of my funding; If my grant is renewed, I would test another 100 observations. If my grant is not renewed, I would have had to stop the experiment. Not that this matters, of course, because the data were significant anyway”. The statistician then explains that the correct inference depends on the grant renewal; if the grant is not renewed, the sampling plan stands and no correction is necessary. But if the grant is renewed, the scientist could have collected more data, which calls for a further correction, similar to the first one. The annoyed scientist then leaves and resolves to never again share with the statistician her hypothetical research intentions.
+
+What this story shows is that in considering infinite possible repetitions of a study, everything about the study that might lead to variations in the results should be taken into account. This includes a scientists' decisions made during each hypothetical replication of the study. As such, the interpretation of the data at hand (i.e., whether the hypothesis test is significant or not significant) depends on hypothetical decisions in situations that did not actually occur. If exactly the same data had been collected by a scientist who would have not have collected more observations, regardless of the outcome of the first test, then the result would have been judged significant. So the same data can provide different evidence. This does not mean the Frequentist NHST is inconsistent. The procedure "does what it says on the tin", namely providing a bound on the rate of Type 2 errors _in decisions_, when the null hypothesis is true. 
+
+
+You cannot "peek at the data", try out various predictors, etc., and calculate a "standard" $p$-value!
+
+### Results of a NHST are often misinterpreted
+
+The $p$-value ($p$) is the probability of observing a particular value of a test statistic, or one more extreme, given that the null-hypothesis is true.
+  
+Common misconceptions:
+
+1. $p = P(H_0|\text{data})$, the probability that the null-hypothesis is true, given the data
+2. $1-p = P(H_1|\text{data})$, the probability that the alternative hypothesis is true, given the data
+3. $p$ = the probability that the results were due to random chance
+
+## To Bayes or not to Bayes? A pragmatic view
+
+
+
+
+
+
+
+
+Suppose someone wakes up with a fever. He immediately thinks of one thing: COVID-19. What is the probability that this person actually has the disease? The most common signs and symptoms of COVID-19, with their estimated prevalence, are given in Table \@ref(tab:covid-symptoms-table}). 
+
+```{r covid-symptoms-table}
+tab <- data.frame(
+  symptom = c("fever","dry cough","fatigue","sputum production", "shortness of breath", "sore throat", "headache", "myalgiaor arthralgia", "chills", "nausea or vomiting", "nasal congestion", "diarrhea", "hemoptysis", "conjunctival congestion"),
+  percentage = c("87.9%","67.7%","38.1%", "33.4%", "18.6%", "13.9%", "13.6%", "14.8%", "11.4%", "5.0%", "4.8%", "3.7%", "0.9%", "0.8%"))
+knitr::kable(tab, align = c("l","r"), caption = "Signs and symptom of COVID-19 in 55,924 laboratory confirmed cases. [Source](https://www.who.int/docs/default-source/coronaviruse/who-china-joint-mission-on-covid-19-final-report.pdf): Report of the WHO-China Joint Mission on Coronavirus Disease 2019 (COVID-19)")
+```
+
+You can see that fever is present in `r tab[1,2]` of confirmed cases. Does that mean that the probability that he has COVID-19 is .879? I hope you thought: No! The value in the table is the conditional probability $P(\text{fever}|\text{COVID-19})$. What we would like to know however is a different conditional probability, namely $P(\text{COVID-19}|\text{fever})$. And these are _not_ the same! 
+
+But of course, there are other possibilities. Fever is also a common sign of seasonal influenza, and one study estimates the prevalence of this at 68% in 2470 confirmed cases [@monto_2000_influenza]. 
