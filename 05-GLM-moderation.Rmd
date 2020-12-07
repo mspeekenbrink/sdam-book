@@ -231,7 +231,7 @@ knitr::kable(tab, caption = "Null-hypothesis significance tests after centering 
 options(opts)
 ```
 
-### Don't forget about fun! A model with multiple interactions
+### Don't forget about fun! A model with multiple interactions {#sec:05-dont-forget-about-the-fun}
 
 Up to now, we have looked at a model with two predictors, attractiveness and intelligence, and have allowed for an interaction between these. To simplify the discussion a little, we have not included $\texttt{fun}$ in the model. It is relatively straightforward to extend this idea to multiple predictors. For instance, it might also be the case that the effect of $\texttt{fun}$ is moderated by $\texttt{intel}$. To investigate this, we can estimate the following regression model:
 
