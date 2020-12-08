@@ -1,5 +1,5 @@
 # Being a responsible data analyst
 
-```{r, fig.cap="Source: https://phdcomics.com/comics/archive.php?comicid=905"}
-knitr::include_graphics("https://phdcomics.com/comics/archive/phd082707s.gif")
-```
+## Explore the data
+
+## 

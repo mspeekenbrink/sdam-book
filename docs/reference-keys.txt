@@ -156,7 +156,6 @@ tab:bayesian-lm-speedate
 tab:bayesian-anova-expBelief
 fig:simulation-p-value-distribution
 fig:unnamed-chunk-49
-fig:unnamed-chunk-51
 intro
 paul-the-octopus
 experiments-and-observations
@@ -292,3 +291,5 @@ results-of-a-nhst-are-often-misinterpreted
 to-bayes-or-not-to-bayes-a-pragmatic-view
 summary-2
 being-a-responsible-data-analyst
+explore-the-data
+section

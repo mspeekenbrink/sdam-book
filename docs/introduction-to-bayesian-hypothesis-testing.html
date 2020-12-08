@@ -24,7 +24,7 @@
 <meta name="author" content="Maarten Speekenbrink" />
 
 
-<meta name="date" content="2020-12-07" />
+<meta name="date" content="2020-12-08" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -257,7 +257,10 @@
 <li class="chapter" data-level="12.5" data-path="introduction-to-bayesian-hypothesis-testing.html"><a href="introduction-to-bayesian-hypothesis-testing.html#to-bayes-or-not-to-bayes-a-pragmatic-view"><i class="fa fa-check"></i><b>12.5</b> To Bayes or not to Bayes? A pragmatic view</a></li>
 <li class="chapter" data-level="12.6" data-path="introduction-to-bayesian-hypothesis-testing.html"><a href="introduction-to-bayesian-hypothesis-testing.html#summary-2"><i class="fa fa-check"></i><b>12.6</b> “Summary”</a></li>
 </ul></li>
-<li class="chapter" data-level="13" data-path="being-a-responsible-data-analyst.html"><a href="being-a-responsible-data-analyst.html"><i class="fa fa-check"></i><b>13</b> Being a responsible data analyst</a></li>
+<li class="chapter" data-level="13" data-path="being-a-responsible-data-analyst.html"><a href="being-a-responsible-data-analyst.html"><i class="fa fa-check"></i><b>13</b> Being a responsible data analyst</a><ul>
+<li class="chapter" data-level="13.1" data-path="being-a-responsible-data-analyst.html"><a href="being-a-responsible-data-analyst.html#explore-the-data"><i class="fa fa-check"></i><b>13.1</b> Explore the data</a></li>
+<li class="chapter" data-level="13.2" data-path="being-a-responsible-data-analyst.html"><a href="being-a-responsible-data-analyst.html#section"><i class="fa fa-check"></i><b>13.2</b> </a></li>
+</ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 </ul>
 
@@ -342,8 +345,8 @@ So just under 3 out of all 4 people that positive in this scenario would actuall
 <span class="math display">\[P(\text{covid-19}|\text{positive test}) = \frac{903}{903 + 316} = .74\]</span>
 which is equal to the value computed earlier (up to rounding error resulting from converting probabilities to whole people).</p>
 <div class="figure" style="text-align: center"><span id="fig:covid-19-test-tree"></span>
-<div id="htmlwidget-97e39284b719c07487b6" style="width:672px;height:480px;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-97e39284b719c07487b6">{"x":{"diagram":"\n  digraph cvid_tree_plot {\n\n    graph [layout = dot,\n           rankdir = LR]\n\n    node [shape = box] \n    S [label = \"100,000 people\"]\n    \n    node [shape = oval, style = filled]\n    H [label = \"covid-19\", fillcolor = \"#cc0000\"]\n    T [label = \"no covid-19\", fillcolor = \"#00cc00\"]\n    HH [label = \"positive test\", fillcolor = \"#ff0000\" ]\n    HT [label = \"negative test\", fillcolor = \"#990000\"]\n    TH [label = \"positive-test\", fillcolor =  \"#00ff00\"]\n    TT [label = \"negative-test\", fillcolor = \"#009900\"]\n    \n    edge [label = \"1,176\"]\n    S -> {H}\n    \n    edge [label = \"98,824\", labelloc=b]\n    S -> {T}\n    \n    edge [label = \"903\"]\n    H -> {HH}\n    \n    edge [label = \"273\", labelloc=b]\n    H -> {HT}\n    \n    edge [label = \"316\" ]\n    T -> {TH}\n    \n    edge [label = \"98,508\", labelloc=b]\n    T -> {TT}\n}\n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-e55646f976e9e0d92b47" style="width:672px;height:480px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-e55646f976e9e0d92b47">{"x":{"diagram":"\n  digraph cvid_tree_plot {\n\n    graph [layout = dot,\n           rankdir = LR]\n\n    node [shape = box] \n    S [label = \"100,000 people\"]\n    \n    node [shape = oval, style = filled]\n    H [label = \"covid-19\", fillcolor = \"#cc0000\"]\n    T [label = \"no covid-19\", fillcolor = \"#00cc00\"]\n    HH [label = \"positive test\", fillcolor = \"#ff0000\" ]\n    HT [label = \"negative test\", fillcolor = \"#990000\"]\n    TH [label = \"positive-test\", fillcolor =  \"#00ff00\"]\n    TT [label = \"negative-test\", fillcolor = \"#009900\"]\n    \n    edge [label = \"1,176\"]\n    S -> {H}\n    \n    edge [label = \"98,824\", labelloc=b]\n    S -> {T}\n    \n    edge [label = \"903\"]\n    H -> {HH}\n    \n    edge [label = \"273\", labelloc=b]\n    H -> {HT}\n    \n    edge [label = \"316\" ]\n    T -> {TH}\n    \n    edge [label = \"98,508\", labelloc=b]\n    T -> {TT}\n}\n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 <p class="caption">
 Figure 12.1: Outcome tree representing mass testing for covid-19.
 </p>
