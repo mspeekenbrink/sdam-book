@@ -1,4 +1,4 @@
-# Factorial ANOVA
+# Factorial ANOVA {#ch:factorial-ANOVA}
 
 In this chapter, we will extend our discussion of including nominal predictors in the General Linear Model to the case of multiple nominal predictors, where all the combinations of the levels of each are included in the design of a study. The analysis of such designs, with a factorial combination of all levels, is generally called factorial ANOVA. While the method is, as we will see, not fundamentally different than a oneway ANOVA, treated in the previous chapter, the factorial nature allows one to distinguish between _main effects_ of factors, and their _interactions_. After discussing how to interpret these effects, we turn to issues that arise when there are an unequal number of observations for the combinations of the levels. 
 

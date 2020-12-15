@@ -156,6 +156,9 @@ tab:bayesian-lm-speedate
 tab:bayesian-anova-expBelief
 fig:simulation-p-value-distribution
 fig:unnamed-chunk-49
+tab:common-data-transformations
+fig:example-multiple-regression-write-up-plot
+fig:example-factorial-ANOVA-write-up-plot
 intro
 paul-the-octopus
 experiments-and-observations
@@ -211,7 +214,7 @@ estimating-the-relation-between-trump-votes-and-hate-groups
 hypothesis-testing
 sampling-distribution-of-estimates
 model-comparison
-multiple-regression
+ch:multiple-regression
 trump-votes-and-hate-groups-again
 controlling-for-education-level
 the-multiple-regression-model
@@ -246,7 +249,7 @@ orthogonal-contrast-codes
 defining-your-own-orthogonal-contrasts
 default-orthogonal-coding-schemes
 multiple-testing-and-post-hoc-tests
-factorial-anova
+ch:factorial-ANOVA
 experimenter-beliefs-and-social-priming
 a-oneway-anova
 factorial-designs
@@ -291,5 +294,11 @@ results-of-a-nhst-are-often-misinterpreted
 to-bayes-or-not-to-bayes-a-pragmatic-view
 summary-2
 being-a-responsible-data-analyst
+consider-analysis-before-data-collection
 explore-the-data
-section
+evaluate-the-assumptions-underlying-your-analyses
+distinguish-between-confirmatory-and-exploratory-analyses
+aim-for-openness-and-reproducibility
+communicate-clearly-and-concisely
+example-of-reporting-a-multiple-regression-analysis
+example-of-reporting-a-factorial-anova
