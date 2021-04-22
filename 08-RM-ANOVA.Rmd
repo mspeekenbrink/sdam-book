@@ -1,3 +1,28 @@
 # Repeated-measures ANOVA
 
+<!-- 
+In this chapter, we will discuss how to deal with the non-independence of errors that can result from repeated-measures of the same individual, or otherwise multiple observations which come from different groupings in the data.
 
+## Non-independence
+
+## Coding for participants/groups
+
+## Error strata/right comparisons
+
+## Sphericity
+
+## Effect size
+
+## In practice
+
+### Defining and estimating the model
+
+### Assessing the assumptions
+
+### Reporting the results
+
+## Summary
+
+
+
+-->
