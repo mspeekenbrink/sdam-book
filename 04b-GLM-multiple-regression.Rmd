@@ -51,9 +51,9 @@ tab2 <- summary(mod2)$coefficients
 ```
 
 When we estimate a regression model predicting Trump votes from education level (defined as the percentage of citizens who obtained a Bachelors degree or higher), we obtain the following estimated model
-$$\texttt{Trump\_votes}_i = `r coefficients(mod1)[1]` `r ifelse(coefficients(mod1)[2] >= 0, "+", "-")` `r abs(coefficients(mod1)[2])` \times \texttt{education}_i + \hat{\epsilon}_{\texttt{votes},i}$$
+$$\texttt{trump_votes}_i = `r coefficients(mod1)[1]` `r ifelse(coefficients(mod1)[2] >= 0, "+", "-")` `r abs(coefficients(mod1)[2])` \times \texttt{education}_i + \hat{\epsilon}_{\texttt{votes},i}$$
 and for the hate groups we obtain
-$$\texttt{hate\_groups}_i = `r coefficients(mod2)[1]` `r ifelse(coefficients(mod1)[2] >= 0, "+", "-")` `r abs(coefficients(mod2)[2])` \times \texttt{education}_i + \hat{\epsilon}_{\texttt{hate},i}$$
+$$\texttt{hate_groups}_i = `r coefficients(mod2)[1]` `r ifelse(coefficients(mod1)[2] >= 0, "+", "-")` `r abs(coefficients(mod2)[2])` \times \texttt{education}_i + \hat{\epsilon}_{\texttt{hate},i}$$
 Note that I'm labelling the error terms for both models with a subscript (either $\texttt{votes}$ or $\texttt{hate}$) to denote these are the residual terms for a model predicting Trump votes and hate groups from education levels respectively. Also, I'm adding the hat above them to indicate that these are not the "true errors" (from a model with the true values of the slope and intercept) but rather estimates of these resulting from using estimated parameters. The residuals, as well as the estimated regression lines, are depicted in Figure \@ref(fig:regressions-controlling-for-education). The slope of $\texttt{education}_i$ is significant in both models. In the model for Trump votes, $\hat{\beta}_\texttt{education} = `r tab1[2,1]`$, `r apa_print(mod1)$statistic$percent_bachelors_degree_or_higher`. In the model for hate groups, $\hat{\beta}_\texttt{education} = `r tab2[2,1]`$, `r apa_print(mod2)$statistic$percent_bachelors_degree_or_higher`.
 This thus shows a reliable relation between education level and Trump votes, and between education level and hate groups, which is supportive of the idea of a common cause. However, significance is not a prerequisite to statistically control for a third variable.
 
@@ -114,7 +114,7 @@ mod <- lm(percent_Trump_votes ~ hate_groups_per_million + percent_bachelors_degr
 
 For a model with $m=2$ predictors, such as
 $$
-\texttt{trump\_votes}_i = \beta_0 + \beta_1 \times \texttt{hate\_groups}_i + \beta_2 \times \texttt{education}_i + \epsilon_i \quad \quad \epsilon_i \sim \mathbf{Normal}(0,\sigma_\epsilon)
+\texttt{trump_votes}_i = \beta_0 + \beta_1 \times \texttt{hate_groups}_i + \beta_2 \times \texttt{education}_i + \epsilon_i \quad \quad \epsilon_i \sim \mathbf{Normal}(0,\sigma_\epsilon)
 (\#eq:multiple-regression-votes-by-hate-education)
 $$
 the data can be represented in a three-dimensional space. In this space, the conditional means $\mu_{Y | X_{1,i}, X_{2,i}}$ can be represented as a __regression plane__. A visual representation is given below.
@@ -145,12 +145,12 @@ widget
 
 Keeping all predictors constant apart from one, the model becomes a simple linear regression model for the non-constant variable. If you pick a value of "% bachelors degree or higher", you can think of this as slicing the regression plane at that point. The slice of the plane is a single straight line, which is then a simple regression model. For example, if we focus on states with an education level of `r min(dat$percent_bachelors_degree_or_higher)`% with a bachelors degree or higher, then the multiple regression model can be written as
 $$\begin{aligned}
-\texttt{trump\_votes}_i &= \beta_0 + \beta_1 \times \texttt{hate\_groups}_i + \beta_2 \times `r min(dat$percent_bachelors_degree_or_higher)` + \epsilon_i  \\
-&= (\beta_0 + \beta_2 \times `r min(dat$percent_bachelors_degree_or_higher)`) + \beta_1 \times \texttt{hate\_groups}_i + \epsilon_i \\
-&= \beta_0' + \beta_1 \times \texttt{hate\_groups}_i + \epsilon_i
+\texttt{trump_votes}_i &= \beta_0 + \beta_1 \times \texttt{hate_groups}_i + \beta_2 \times `r min(dat$percent_bachelors_degree_or_higher)` + \epsilon_i  \\
+&= (\beta_0 + \beta_2 \times `r min(dat$percent_bachelors_degree_or_higher)`) + \beta_1 \times \texttt{hate_groups}_i + \epsilon_i \\
+&= \beta_0' + \beta_1 \times \texttt{hate_groups}_i + \epsilon_i
 \end{aligned}
 $$
-which is a simple regression model with a new intercept $\beta_0' = \beta_0 + \beta_2 \times `r min(dat$percent_bachelors_degree_or_higher)`$ composed as the sum of the original intercept and `r min(dat$percent_bachelors_degree_or_higher)` times the slope of $\texttt{education\_level}$, and the same slope $\beta_1$ for $\texttt{hate\_groups}$. You can see these simple regression lines, for three different values of education level, in Figure \@ref(fig:trump-multiple-regression-scatter-with-multiple-regression-lines). Notice that the regression lines for different education levels are parallel, because they have the same slope. However, the regression lines are at different heights, because they have a different intercept.
+which is a simple regression model with a new intercept $\beta_0' = \beta_0 + \beta_2 \times `r min(dat$percent_bachelors_degree_or_higher)`$ composed as the sum of the original intercept and `r min(dat$percent_bachelors_degree_or_higher)` times the slope of $\texttt{education\_level}$, and the same slope $\beta_1$ for $\texttt{hate_groups}$. You can see these simple regression lines, for three different values of education level, in Figure \@ref(fig:trump-multiple-regression-scatter-with-multiple-regression-lines). Notice that the regression lines for different education levels are parallel, because they have the same slope. However, the regression lines are at different heights, because they have a different intercept.
 
 ```{r trump-multiple-regression-scatter-with-multiple-regression-lines, fig.cap="Percentage of votes for Trump in the 2016 elections for 50 US states and the number of hate groups per 1 million citizens, with regression lines for three different values of education level. The colour of each data point and regression line reflects the value of education level.", fig.width=5, fig.height=5, out.width='60%'}
 ggplot(dat,aes(x=hate_groups_per_million, y=percent_Trump_votes, colour=percent_bachelors_degree_or_higher)) + geom_point() + geom_abline(intercept = coefs[1] + min(dat$percent_bachelors_degree_or_higher)*coefs[3], slope = coefs[2], colour=viridis::viridis_pal()(3)[1]) + geom_abline(intercept = coefs[1] + (min(dat$percent_bachelors_degree_or_higher) + (max(dat$percent_bachelors_degree_or_higher) - min(dat$percent_bachelors_degree_or_higher))/2) *coefs[3], slope = coefs[2], colour=viridis::viridis_pal()(3)[2]) + geom_abline(intercept = coefs[1] + max(dat$percent_bachelors_degree_or_higher)*coefs[3], slope = coefs[2], colour = viridis::viridis_pal()(3)[3]) + theme(legend.position = "bottom") + labs(colour = "% bachelors degree or higher") + xlab("Hate groups per million citizens") + ylab("% votes for Trump")
@@ -180,11 +180,11 @@ sd_e <- sqrt(sum(residuals(mod)^2)/(nrow(dat) - length(coefficients(mod))))
 ```
 Estimating the model in which we predict Trump votes from hate groups and education level gives the following estimates:
 $$`r write_GLM_equation(mod,dv_name = "trump_votes", iv_names = c("hate_groups","education"), digits=4)`$$
-A main thing to note here is that the estimated slope of $\texttt{hate\_groups}$ is exactly the same as in Equation \@ref(eq:slope-hate-groups-from-residuals) when first computing the residual Trump votes and hate groups! This is because the slopes in a multiple regression model are __unique effects__ of a predictor on the dependent variable, after removing the effect of all other predictors from both that predictor and the dependent variable. So, equivalently, the slope of $\texttt{education}$ in the model above is identical to the slope we would obtain by first computing the residual Trump votes from
-$$\texttt{trump\_votes}_i = \hat{\beta}_0 + \hat{\beta}_1 \times \texttt{hate\_groups}_i + \hat{\epsilon}_{\text{vote},i}$$
+A main thing to note here is that the estimated slope of $\texttt{hate_groups}$ is exactly the same as in Equation \@ref(eq:slope-hate-groups-from-residuals) when first computing the residual Trump votes and hate groups! This is because the slopes in a multiple regression model are __unique effects__ of a predictor on the dependent variable, after removing the effect of all other predictors from both that predictor and the dependent variable. So, equivalently, the slope of $\texttt{education}$ in the model above is identical to the slope we would obtain by first computing the residual Trump votes from
+$$\texttt{trump_votes}_i = \hat{\beta}_0 + \hat{\beta}_1 \times \texttt{hate_groups}_i + \hat{\epsilon}_{\text{vote},i}$$
 
 and the residual education from 
-$$\texttt{education}_i = \hat{\beta}_0 + \hat{\beta}_1 \times \texttt{hate\_groups}_i + \hat{\epsilon}_{\text{education},i}$$
+$$\texttt{education}_i = \hat{\beta}_0 + \hat{\beta}_1 \times \texttt{hate_groups}_i + \hat{\epsilon}_{\text{education},i}$$
 and then determining the slope of the residual $\texttt{education}$ in the model
 $$\hat{\epsilon}_{\text{vote},i} + \beta_0 + \beta_1 \times \hat{\epsilon}_{\text{education},i} + \epsilon_i$$
 
@@ -201,14 +201,14 @@ knitr::kable(tab, caption = "Null-hypothesis significance tests using the t stat
 Alternatively, we can compare models in which we either fix the parameter to the value assumed in the null hypothesis or not. As discussed in the previous chapter, this is a more general approach. When comparing two multiple regression models, we use the $F$-statistic defined in Equation \@ref(eq:glm-f-definition):
 $$F = \frac{\frac{\text{SSE}(R) -  \text{SSE}(G)}{\text{npar}(G) - \text{npar}(R)}}{\frac{\text{SSE}(G)}{n-\text{npar}(G)}}$$
 For instance, to test the null hypothesis $\beta_1 = 0$ in the model defined in Equation \@ref(eq:multiple-regression-votes-by-hate-education), we compare this general model
-$$\text{MODEL G: } \quad \texttt{trump\_votes}_i = \beta_0 + \beta_1 \times \texttt{hate\_groups}_i + \beta_2 \times \texttt{education}_i + \epsilon_i$$  
+$$\text{MODEL G: } \quad \texttt{trump_votes}_i = \beta_0 + \beta_1 \times \texttt{hate_groups}_i + \beta_2 \times \texttt{education}_i + \epsilon_i$$  
 to a restricted model where we fix $\beta_1 = 0$:
 $$\begin{aligned}
-\text{MODEL R: } \quad \texttt{trump\_votes}_i &= \beta_0 + 0 \times \texttt{hate\_groups}_i + \beta_2 \times \texttt{education}_i + \epsilon_i \\
+\text{MODEL R: } \quad \texttt{trump_votes}_i &= \beta_0 + 0 \times \texttt{hate_groups}_i + \beta_2 \times \texttt{education}_i + \epsilon_i \\
 &= \beta_0 + \beta_1 \times \texttt{education}_i + \epsilon_i
 \end{aligned}
 $$  
-In other words, we would compare the multiple regression model to a simple regression model where we don't include $\texttt{hate\_groups}$, as the null hypothesis assumes that this predictor has no _unique_ effect on the dependent variable. If the Sum of Squared Error of MODEL R is not substantially higher than that of MODEL G, then there would be no good evidence that $\beta_1 \neq 0$. Remember that the Sum of Squared Error of MODEL R can never be lower than that of MODEL G, i.e.  $\text{SSE}(R) \geq \text{SSE}(G)$. This is because __estimating the parameters of MODEL G by maximum likelihood is equivalent to minimizing the Sum of Squared Error__. If $\hat{\beta}_1 = 0$ in MODEL G, that would mean that the SSE of both models is exactly the same. If $\hat{\beta}_1 \neq 0$ in MODEL G, then $\text{SSE}(R) > \text{SSE}(G)$, because otherwise the estimated MODEL G would not have maximised the likelihood (or equivalently minimised the SSE).
+In other words, we would compare the multiple regression model to a simple regression model where we don't include $\texttt{hate_groups}$, as the null hypothesis assumes that this predictor has no _unique_ effect on the dependent variable. If the Sum of Squared Error of MODEL R is not substantially higher than that of MODEL G, then there would be no good evidence that $\beta_1 \neq 0$. Remember that the Sum of Squared Error of MODEL R can never be lower than that of MODEL G, i.e.  $\text{SSE}(R) \geq \text{SSE}(G)$. This is because __estimating the parameters of MODEL G by maximum likelihood is equivalent to minimizing the Sum of Squared Error__. If $\hat{\beta}_1 = 0$ in MODEL G, that would mean that the SSE of both models is exactly the same. If $\hat{\beta}_1 \neq 0$ in MODEL G, then $\text{SSE}(R) > \text{SSE}(G)$, because otherwise the estimated MODEL G would not have maximised the likelihood (or equivalently minimised the SSE).
 
 We have already shown results for MODEL G. The Sum of Squared Error for that model is $\text{SSE}(G) = `r sum(residuals(mod)^2)`$. Estimating MODEL R gives 
 $$`r modg <- mod; modr <- lm(percent_Trump_votes ~ percent_bachelors_degree_or_higher, data=dat); write_GLM_equation(modr,dv_name = "trump_votes", iv_names = c("education"), digits=4)`$$
@@ -223,8 +223,8 @@ To determine whether this value is significant, we need to compare it to an $F$-
 Similarly, to test the null-hypothesis $\beta_2 = 0$ in MODEL G as defined above, we compare this model to a _new_ restricted MODEL R where we fix $\beta_2 = 0$:
 $$
 \begin{aligned}
-\text{MODEL R: } \quad \texttt{trump\_votes}_i &= \beta_0 + \beta_1 \times \texttt{hate\_groups}_i + 0 \times \texttt{education}_i + \epsilon_i \\
-&= \beta_0 + \beta_1 \times \texttt{hate\_groups}_i + \epsilon_i
+\text{MODEL R: } \quad \texttt{trump_votes}_i &= \beta_0 + \beta_1 \times \texttt{hate_groups}_i + 0 \times \texttt{education}_i + \epsilon_i \\
+&= \beta_0 + \beta_1 \times \texttt{hate_groups}_i + \epsilon_i
 \end{aligned}
 $$  
 This is the model we estimated in the previous chapter, where we determined the estimates as 
@@ -240,8 +240,8 @@ The critical value is the same as before, and hence we also reject this null hyp
 To test whether the intercept $\beta_0 = 0$, we would compare MODEL G to yet another MODEL R:
 $$
 \begin{aligned}
-\text{MODEL R: } \quad \texttt{trump\_votes}_i &= 0 + \beta_1 \times \texttt{hate\_groups}_i + \beta_2 \times \texttt{education}_i + \epsilon_i \\
-&=\beta_1 \times \texttt{hate\_groups}_i + \beta_1 \times \texttt{education}_i + \epsilon_i
+\text{MODEL R: } \quad \texttt{trump_votes}_i &= 0 + \beta_1 \times \texttt{hate_groups}_i + \beta_2 \times \texttt{education}_i + \epsilon_i \\
+&=\beta_1 \times \texttt{hate_groups}_i + \beta_1 \times \texttt{education}_i + \epsilon_i
 \end{aligned}
 $$  
 which is estimated as 
@@ -269,7 +269,7 @@ When performing such model comparisons, it is very important to remember that wh
 There is one more comparison that we could perform, namely to compare MODEL G to a MODEL R without any predictors. This is a so-called __omnibus test__ of the null hypothesis about two parameters simultaneously, namely $H_0: \beta_1 = 0 \text { and } \beta_2 = 0$. This results in another version of the restricted MODEL R:
 $$
 \begin{aligned}
-\text{MODEL R: } \quad \texttt{trump\_votes}_i &= \beta_0 +  0 \times \texttt{hate\_groups}_i + 0 \times \texttt{education}_i + \epsilon_i \\
+\text{MODEL R: } \quad \texttt{trump_votes}_i &= \beta_0 +  0 \times \texttt{hate_groups}_i + 0 \times \texttt{education}_i + \epsilon_i \\
 &= \beta_0 + \epsilon_i
 \end{aligned}
 $$  
