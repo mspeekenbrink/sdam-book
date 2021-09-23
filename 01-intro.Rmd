@@ -29,14 +29,14 @@ Paul began his career during the UEFA Euro 2008 football tournament. In the lead
 
 ```{r uefa2008, echo=FALSE}
 data(uefa2008)
-knitr::kable(uefa2008,caption = "Paul's predictions for the UEFA Euro 2008",label = "uefa2008")
+knitr::kable(uefa2008,caption = "Paul's predictions for the UEFA Euro 2008",label = "uefa2008", booktabs = TRUE, linesep="")
 ```
 
 Two years later, during the 2010 FIFA World Cup football tournament, Paul obtained celebrity status and his divinations were broadcast live on German TV. This time, Paul made correct predictions for all matches in which Germany played, as well as the final between Spain and the Netherlands. 
 
 ```{r fifa2010, echo=FALSE}
 data(fifa2010)
-knitr::kable(fifa2010,caption = "Paul's predictions for the 2010 FIFA World Cup")
+knitr::kable(fifa2010,caption = "Paul's predictions for the 2010 FIFA World Cup",  booktabs = TRUE, linesep="")
 ```
 
 Paul's record of 8/8 correct predictions in the 2010 world cup is quite amazing. The common octopus (_Octopus vulgaris_) is indeed quite an intelligent species. But was Paul really psychic? Could he really foresee the future?
@@ -92,7 +92,7 @@ As the distribution of Paul's predictions is not so interesting to look into exp
 data("fifa2010teams")
 dat <- fifa2010teams[,c(2,3,4,6,9,11)]
 dat <- dat[order(dat$team),]
-knitr::kable(dat, col.names = stringr::str_replace_all(stringr::str_to_sentence(colnames(dat)),"_"," "), caption = "Team statistics in the 2010 FIFA World cup")
+knitr::kable(dat, col.names = stringr::str_replace_all(stringr::str_to_sentence(colnames(dat)),"_"," "), caption = "Team statistics in the 2010 FIFA World cup", booktabs = TRUE, row.names = FALSE)
 ```
 
 ### Summary statistics
@@ -151,14 +151,14 @@ is always 0. An alternative is of course to then calculate the average of the _a
 S^2_{Y} = \frac{\sum_{i=1}^n (Y_i - \overline{Y})^2}{n}
 (\#eq:definition-sample-variance)
 \end{equation}
-So you simply subtract from each value the average value (the sample mean), and then raise each deviation to the power of 2. Then you add those squared deviations up, and divide the sum by the total number of observations. For the total goals scored, the variance is calculated as: 
-\begin{align}
+So you simply subtract from each value the average value (the sample mean), and then raise each deviation to the power of 2. Then you add those squared deviations up, and divide the sum by the total number of observations. For the total goals scored, the variance is calculated as:
+$$\begin{aligned}
 S^2_Y &= \frac{(`r y[1]` - `r mean(y)`)^2 + (`r y[2]` - `r mean(y)`)^2 + (`r y[3]` - `r mean(y)`)^2 + \ldots + (`r y[31]` - `r mean(y)`)^2 + (`r y[32]` - `r mean(y)`)^2}{`r length(y)`} \\
 &= \frac{(`r y[1]-mean(y)`)^2 + (`r y[2]- mean(y)`)^2 + (`r y[3]- mean(y)`)^2 + \ldots + (`r y[31]- mean(y)`)^2 + (`r y[32]-mean(y)`)^2}{`r length(y)`} \\
 &= \frac{`r (y[1]-mean(y))^2` + `r (y[2]-mean(y))^2` + `r (y[3]-mean(y))^2` + \ldots + `r (y[31]-mean(y))^2` + `r (y[32]-mean(y))^2`}{`r length(y)`} \\
 &= \frac{`r sum((y - mean(y))^2)`}{`r length(y)`} \\
 &= `r sum((y - mean(y))^2)/length(y)`
-\end{align}
+\end{aligned}$$
 
 A downside of the variance is that its value is difficult to interpret. By squaring each deviation, the value of the variance is on a different scale of magnitude than the original values. The __standard deviation__ aims to provide a more interpretable measure of spread, by transforming the variance back to the scale of the original values. The standard deviation of a collection of observed values, usually denoted as $S_Y$, is simply the square-root of the variance, so
 $$S_Y = \sqrt{S^2_Y}$$
@@ -176,7 +176,7 @@ $$S_Y = \sqrt{`r sum((y - mean(y))^2)/length(y)`} = `r sqrt(sum((y - mean(y))^2)
 Exploring a data set is generally done visually, using various plots such as histograms, boxplots, 
 scatterplots, etc. A good plot can immediately provide a lot more information than summary measures. So before proceeding with statistical analysis: plot your data! Visualizing data in the most effective and pleasant way is an art form in itself. But here are some standard plots that are helpful and relatively easy to produce:
 
-```{r example-histogram-and-boxplot, fig.show='hold',fig.width=4,out.width='50%',fig.cap="A histogram and boxplot of the total goals scored by each team"}
+```{r example-histogram-and-boxplot, fig.show='hold',fig.width=4,out.width='49%',fig.cap="A histogram and boxplot of the total goals scored by each team"}
 library(ggplot2)
 ggplot(dat,aes(x=goals_for)) + geom_histogram(binwidth=1,colour="black") + xlab("Goals scored")
 

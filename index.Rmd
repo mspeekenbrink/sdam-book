@@ -1,37 +1,9 @@
 ---
-title: "Statistics: data analysis and modelling"
+title: "Statistics: Data analysis and modelling"
 author: "Maarten Speekenbrink"
 date: "`r Sys.Date()`"
 site: bookdown::bookdown_site
-output:
-  bookdown::gitbook:
-    dev: svg
-    config:
-      edit : null
-      source: null
-      download: null
-      search: yes
-      fontsettings:
-        theme: white
-        family: serif
-        size: 2
-    css: style.css
-    lib_dir: "book_assets"
-  bookdown::pdf_book:
-    keep_tex: yes
-    dev: "cairo_pdf"
-    latex_engine: xelatex
-    citation_package: natbib
-    template: null
-    pandoc_args: --top-level-division=chapter
-    toc_depth: 3
-    toc_unnumbered: no
-    toc_appendix: yes
-    quote_footer: ["\\VA{", "}{}"]
-  bookdown::epub_book:
-    dev: svglite
-    stylesheet: css/style.css
-documentclass: book
+documentclass: krantz
 bibliography: [book.bib, packages.bib]
 biblio-style: apalike
 csl: apa-no-doi-no-issue.csl
@@ -42,11 +14,13 @@ description: "A book about statistics for data analysis, with a main focus on st
 
 # Preface {-}
 
+<!-- 
 ```{r setup, echo=FALSE}
 knitr::opts_chunk$set(echo = FALSE,
                       warning = FALSE,
                       message = FALSE,
-                      fig.align = "center")
+                      fig.align = "center",
+                      out.width="95%")
 
 knitr::opts_hooks$set(echo = function(options) {
   if (options$fig.width < options$fig.height) {
@@ -67,32 +41,35 @@ pretNum <- function(x) {
 }
 ```
 
-This book concerns __statistics__, and more specifically __data analysis__ and __modeling__. It aims to be a self-contained source, requiring little background in mathematics or statistics. That said, it is not necessarily an "easy" book. It contains some mathematical notation and ideas. I do my best to properly explain how to read and interpret these in both an intuitive and more formal way. I don't do this to torture you. Neither you with little mathematical background, who might have to read some explanations twice or more, nor you with more mathematical background, who might find my intuitive explanations tedious, superfluous, and utterly pointless, nor you in the middle, who, like me, will agree with both (but hopefully not simultaneously). What I hope to do is to bring you some sense of the beauty of a formal system that stems from its simplicity and exactness, as well as some of the excitement of grasping it. I'm under no illusion that this is an easy task, for you or for me. But I hope you will try, like I did writing this book.
+-->
+This book concerns __statistics__, and more specifically __data analysis__ through __modeling__. It aims to be a self-contained source, requiring little prior background in mathematics or statistics. That said, it is not necessarily an "easy" book. It contains some mathematical notation and ideas. I do my best to properly explain how to read and interpret these in both an intuitive as well as a more formal way. I don't do this to torture you: Neither you with little mathematical background, who might have to read some explanations twice or more, nor you with more mathematical background, who might find my intuitive explanations tedious, superfluous, and utterly pointless, nor you in the middle, who, like me, will agree with both (but hopefully not simultaneously). What I hope to do is to bring you some sense of the beauty of a formal system that stems from its simplicity and exactness, as well as some of the excitement of grasping it. I'm under no illusion that this is an easy task, for you or for me. But I hope you will try, like I do writing this book.
 
-We will focus on building models of data in order to evaluate claims about how that data came to be what it is. Statistics is often taught with a "cookbook" approach. The "ingredients" are characteristics of the data (e.g. a variable is metric) and the goal of the analysis (e.g. compare the mean of two groups) and the cookbook provides the recipe (e.g., a two-sample t-test). While straightforward to teach, the limitations of this approach become quickly apparent when you need to analyse data from a less "standard" design. The cookbook can also become something of a straightjacket, when you are forced to change the design of a study in order to allow the subsequent analysis to be covered in the cookbook. Another limitation of the approach is that the different analyses and tests are often treated in isolation, which makes it more difficult to see the often strong connections between the models and statistical principles underlying them. By contrast, the modelling approach adopted here is much more flexible. The aim is to give you the confidence to, when given the ingredients, design your own recipe.
+We will focus on building models of data in order to evaluate claims about how the data came to be what it is. Statistics is often taught with a "cookbook" approach. The "ingredients" are characteristics of the data (e.g. a variable is metric) and the goal of the analysis (e.g. compare the mean of two groups). The "cookbook" will then provide the recipe (e.g., a two-sample t-test). Whilst straightforward to teach, the limitations of this approach become quickly apparent when you need to analyse data from a less standard design. The cookbook can also become somewhat of a straightjacket, forcing you to change the design of a study in order to allow the subsequent analysis to be covered in the cookbook. Another limitation of the approach is treating the different analyses and tests in isolation, making it difficult to see the strong connections between the models and statistical principles underlying them. By contrast, the modelling approach adopted here is much more flexible. My aim is to give you the confidence to, when given the ingredients, design your own recipe.
 
-Unlike some other books, we don't discuss using software such as R, JASP, or SPSS. Instead, there are companion books which discuss how to do analyses with specific software (R or JASP). Separating theory and practice in this way has as main benefit that each can be focused on fully. An additional benefit is that it is also easier to add companions for other software. A downside is that you might need to cross-reference between two books. However, by keeping the structure of the companions mostly in line with the structure of this book, this cross-referencing should be straightforward enough. 
+Unlike some other books, we don't discuss using software such as R, JASP, or SPSS. Instead, there are companion books which discuss how to do analyses with specific software (R or JASP). Separating theory and practice in this way has as main benefit that each can be focused on fully. An additional benefit is that it is also easier to add companions for other software. A downside is that you might need to cross-reference between two books. However, by keeping the structure of the companions mostly in line with the structure of this book, this cross-referencing should be straightforward enough. As a long time R user, my personal preference is towards R, and this is held as the "golden standard". Practically, that means that some of the analyses employed might be more difficult to do in other software. 
 
 ## Acknowledgements {-}
 
-This book is inspired by lots of other statistics books I have read over the years. Some books deserve special mention. "Data analysis: A model comparison approach" [@judd2011data] is a book I have used for many years as required reading for the MSc level statistics course. It is extremely clear in its coverage of the General Linear Model, and consistent in its use of the model comparison approach we adopt here as well. "Doing Bayesian data analysis" [@kruschke2014doing] gave me the idea to cover all the basics of statistical modelling with a simple binomial example.
+This book is inspired by lots of other statistics books I have read over the years. Some books deserve special mention. "Data analysis: A model comparison approach" [@judd2011data] is a book I have used for many years as required reading for the MSc level statistics course I convened. It is extremely clear in its coverage of the General Linear Model, and consistent in its use of the model comparison approach we adopt here as well. "Doing Bayesian data analysis" [@kruschke2014doing] gave me the idea to cover all the basics of statistical modelling with a simple binomial example. ["Learning statistics with R"](https://learningstatisticswithr.com/) by Danielle Navarro convinced me to release this book online under a creative commons licence (CC BY-SA 4.0).  
 
-A large part of this book was -- and at the moment still is -- written whilst moving all teaching online during a world-wide pandemic. For a variety of reasons, that meant writing at high-speed and -- lacking any touch typing skills and mostly relying on three out of ten fingers -- many typos. I therefore would also like to thank everyone who spotted these typos and otherwise unclear parts, in particular Sabine Topf and Laura Bourne, as well as the students in "PSYC0146".
+A large part of this book was written between September and December of 2020, whilst moving all teaching online during the world-wide Covid-19 pandemic.^[Revising this section in September 2021, we are by no means out of the pandemic, but in the UK things are slowly improving.] For a variety of reasons, that meant writing at high-speed and -- lacking any touch typing skills and mostly relying on three out of ten fingers -- many typos. I therefore would also like to thank everyone who spotted these typos and otherwise unclear parts, in particular Sabine Topf and Laura Bourne, as well as the students in "PSYC0146".
 
 ## Notation {-}
 
-In a book with mathematics, notation is important. Mathematics can be viewed as a very precise language. For some of you, this may be a very foreign language. But languages can be learned. Like words, mathematical symbols represent important concepts and relations. The aim is to be consistent, so that each symbol has a clearly defined meaning. That isn't always easy, or possible. Another aim is to stay close to prevailing conventions, so that it will be easier to understand papers and other books. This is also not always easy, or possible, because in different areas of statistics, the same symbol may have very different meanings. In any case, we will try to be very clear when introducing notation.
+In a book with mathematical details, notation is important. Mathematics is, if anything, a very precise language. For some of you, this may be a very foreign language. But languages can be learned. Like words, mathematical symbols represent important concepts and relations. My first aim, notation wise, is to be consistent, so that each symbol has a clearly defined meaning. My second aim is to stay as close as possible to prevailing conventions, so that it will be easier to understand published journal articles and books. Combining these aims is not always easy, or possible, because in different areas of statistics, the same symbol may have very different conventional meanings. Mathematics, in all its beauty, allows one to develop an entirely new dialect within a single paper, whilst still conveying to the agreed-upon structure of general mathematics, In writing this book, I have generally chosen for internal consistency, changing some commonly-used symbols for less-widely used ones, but will note the more commonly adopted symbols where necessary. In any case, I will try to be very clear when introducing notation.
 
-You will come across symbols from the Greek alphabet. Generally, these symbols are used to reflect parameters of statistical models, and sometimes to reflect other fundamental aspects of statistical analyses. So it will be useful to familiarize yourself with the Greek alphabet. In the following table, each Greek letter is shown, with the corresponding name in English (useful if you want to read the symbols aloud), as well as the common parameter or concept the symbol refers to:
+You will come across symbols from the Greek alphabet. Generally, these symbols are used to reflect parameters of statistical models, and sometimes to reflect other fundamental aspects of statistical analyses. So it will be useful to familiarize yourself with the Greek alphabet. In the following table, each Greek letter is shown, with the corresponding name in English (useful if you want to read the symbols aloud), as well as the common parameter or concept the symbol refers to in this book:
 
 ```{r greek-symbol-table}
-greek_symbols <- c("alpha","beta","gamma","delta","epsilon","zeta","eta","theta","iota","kappa","lambda","mu","nu","xi","omicron","pi","rho","sigma","tau","upsilon","phi","chi","psi","omega")
+greek_symbols <- c("alpha","beta","gamma","delta","epsilon","zeta","eta","theta","iota","kappa","lambda","mu","nu","xi","pi","rho","sigma","tau","upsilon","phi","chi","psi","omega")
 knitr::kable(
   data.frame(
     symbol = paste0("$\\",greek_symbols,"$"),
     name = greek_symbols,
-    usage = c("significance level","parameter (slope or intercept) in the General Linear Model","random effect in a linear mixed-effects model","","error","","","a parameter in general","","","","mean","","","","","correlation","standard deviation","","","","Chi-squared distribution","","")
-  )
+    usage = c("significance level","parameter (slope or intercept) in the General Linear Model","random effect in a linear mixed-effects model","","error","","","a parameter in general","","","","mean","","","","correlation","standard deviation","","","","Chi-squared distribution","","")
+  ),
+  escape = FALSE,
+  booktabs = TRUE
 )
 ```
 

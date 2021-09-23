@@ -36,7 +36,7 @@ tab <- data.frame(c1 = c("$-\\tfrac{1}{2}$","$-\\tfrac{1}{2}$","$\\tfrac{1}{2}$"
                   c3 = c("$\\tfrac{1}{4}$","$-\\tfrac{1}{4}$","$-\\tfrac{1}{4}$","$\\tfrac{1}{4}$"))
 colnames(tab) <- c("$\\texttt{P}$","$\\texttt{B}$","$\\texttt{P}\\times\\texttt{B}$")
 rownames(tab) <- c("PL,EL","PL,EH", "PH,EL", "PH,EH")
-knitr::kable(tab, escape=FALSE,align=rep('r', 3))#, caption="A set of three orthogonal contrast codes for the Experimenter Belief study.")
+knitr::kable(tab, escape=FALSE,align=rep('r', 3), booktabs=TRUE, linesep="")#, caption="A set of three orthogonal contrast codes for the Experimenter Belief study.")
 ```
 
 We can then estimate a linear model predicting $\texttt{post-power}$, the subjective feeling of power after the priming manipulation, as:
@@ -52,17 +52,17 @@ options(knitr.kable.NA = "")
 tab <- cbind(estimate = round(c(coefficients(modpost)[1],coefficients(modpost)[2:4],Error=NA),2),rbind(car::Anova(modpost, type=3)[1,],expand_Anova(modpost, type=3)[-1,]))
 rownames(tab) <- c("Intercept","$\\texttt{P}$","$\\texttt{B}$", "$\\texttt{P} \\times \\texttt{B}$", "Error")
 colnames(tab) <- c("$\\hat{\\beta}$","$\\text{SS}$", "$\\text{df}$", "$F$", "$P(\\geq \\lvert F \\rvert)$")
-knitr::kable(tab, caption = "Linear model predicting $\\texttt{post-power}$ by factorial contrast-coding predictors.", escape = FALSE, digits=3)
+knitr::kable(tab, caption = "Linear model predicting $\\texttt{post-power}$ by factorial contrast-coding predictors.", escape = FALSE, digits=3, booktabs=TRUE, linesep="")
 options(opts)
 ```
 
 The results show a significant effect of power prime. The slope is estimated as $\hat{\beta}_\text{P} = `r round(coefficients(modpost)[2],digits=2)`$. Remember that this slope represents a difference between two marginal means (averaging over the levels of experimenter Belief):
 $$
-\begin{align}
+\begin{aligned}
 \hat{\beta}_\text{P} &= \hat{\mu}_{\text{PH},\cdot} - \hat{\mu}_{\text{PL},\cdot} \\
 &= \frac{\overline{Y}_\text{PH,EL} + \overline{Y}_\text{PH,EH}}{2} - \frac{\overline{Y}_\text{PL,EL} + \overline{Y}_\text{PL,EH}}{2} \\
 &= `r format(coefficients(modpost)[2],digits=3)`
-\end{align}
+\end{aligned}
 $$
 Hence, the power prime manipulation appears to result in a difference of `r format(coefficients(modpost)[2],digits=3)` points in subjective feeling of power. Neither the main effect of experimenter belief, nor the interaction between priming condition and experimenter belief are significant. We might thus conclude that experimenter belief has no effect on subjective feeling of power, neither directly, nor by moderating the effect of power prime. 
 
@@ -74,7 +74,7 @@ options(knitr.kable.NA = "")
 tab <- cbind(estimate = c(coefficients(modpre)[1],coefficients(modpre)[2:4],Error=NA),rbind(car::Anova(modpre, type=3)[1,],expand_Anova(modpre, type=3)[-1,]))
 rownames(tab) <- c("Intercept","$\\texttt{P}$","$\\texttt{B}$", "$\\texttt{P} \\times \\texttt{B}$", "Error")
 colnames(tab) <- c("$\\hat{\\beta}$","$\\text{SS}$", "$\\text{df}$", "$F$", "$P(\\geq \\lvert F \\rvert)$")
-knitr::kable(tab, caption = "Linear model predicting $\\texttt{pre-power}$ by factorial contrast-coding predictors.", escape = FALSE, digits=3)
+knitr::kable(tab, caption = "Linear model predicting $\\texttt{pre-power}$ by factorial contrast-coding predictors.", escape = FALSE, digits=3, booktabs=TRUE, linesep="")
 options(opts)
 ```
 
@@ -98,7 +98,7 @@ options(knitr.kable.NA = "")
 tab <- cbind(estimate = c(coefficients(modpostpre)[1],coefficients(modpostpre)[2:5],Error=NA),rbind(car::Anova(modpostpre, type=3)[1,],expand_Anova(modpostpre, type=3)[-1,]))
 rownames(tab) <- c("Intercept","$\\texttt{P}$","$\\texttt{B}$", "$\\texttt{pre-power}$", "$\\texttt{P} \\times \\texttt{B}$", "Error")
 colnames(tab) <- c("$\\hat{\\beta}$","$\\text{SS}$", "$\\text{df}$", "$F$", "$P(\\geq \\lvert F \\rvert)$")
-knitr::kable(tab, caption = "Linear model predicting $\\texttt{post-power}$ by $\\texttt{pre-power}$ and factorial contrast-coding predictors.", escape = FALSE, digits=3)
+knitr::kable(tab, caption = "Linear model predicting $\\texttt{post-power}$ by $\\texttt{pre-power}$ and factorial contrast-coding predictors.", escape = FALSE, digits=3, booktabs=TRUE, linesep="")
 options(opts)
 ```
 
@@ -125,16 +125,16 @@ tab <- dat %>%
   group_by(primeCond, experimenterBelief) %>%
     summarise(powerPRE = mean(powerPRE), powerPOST = mean(powerPOST))
 colnames(tab) <- c("Prime","Belief","pre-power","post-power")
-knitr::kable(tab, digits = 4, escape=FALSE, row.names = FALSE)
+knitr::kable(tab, digits = 4, escape=FALSE, row.names = FALSE, booktabs=TRUE, linesep="")
 ```
 The estimated slope of $\texttt{pre-power}$ was $\hat{\beta}_\text{pre} = `r format(coefficients(modpostpre)[4], digits=4)`$.
 
-$$\begin{align}
+$$\begin{aligned}
 \hat{\beta}_\texttt{P} &=&& \frac{\tfrac{1}{2} \times `r format(format(as.numeric(tab[3,4]),digits=4))` + \tfrac{1}{2} \times `r format(format(as.numeric(tab[4,4]),digits=4))` - \tfrac{1}{2} \times `r format(format(as.numeric(tab[1,4]),digits=4))` - \tfrac{1}{2} \times `r format(format(as.numeric(tab[2,4]),digits=4))`}{ (\tfrac{1}{2})^2 + (\tfrac{1}{2})^2 + (-\tfrac{1}{2})^2 + (-\tfrac{1}{2})^2} - \\
 &&& `r format(coefficients(modpostpre)[4], digits=4)` \times \frac{\tfrac{1}{2} \times `r format(format(as.numeric(tab[3,3]),digits=4))` + \tfrac{1}{2} \times `r format(format(as.numeric(tab[4,3]),digits=4))` - \tfrac{1}{2} \times `r format(format(as.numeric(tab[1,3]),digits=4))` - \tfrac{1}{2} \times `r format(format(as.numeric(tab[2,3]),digits=4))`}{ (\tfrac{1}{2})^2 + (\tfrac{1}{2})^2 + (-\tfrac{1}{2})^2 + (-\tfrac{1}{2})^2} \\
 & = && \frac{`r sum(c(-.5,-.5,.5,.5)*tab[,4])`}{1} - `r format(coefficients(modpostpre)[4], digits=4)` \times \frac{`r sum(c(-.5,-.5,.5,.5)*tab[,3])`}{1} \\
 & = && `r sum(c(-.5,-.5,.5,.5)*tab[,4]) - coefficients(modpostpre)[4] * sum(c(-.5,-.5,.5,.5)*tab[,3])`
-\end{align}$$
+\end{aligned}$$
 
 An alternative way to define the slope of Equation \@ref(eq:estimate-slope-orthogonal-contrast-codes-ANCOVA-one-covariate) is to first adjust the means of $Y$ and then enter the adjusted group means in the usual formula for the slope of a contrast-coding predictor. These adjusted means are computed using a centered version of the covariate (i.e. $Z'_i = Z_i - \overline{Z}$):
 $$\overline{Y}_k' = \overline{Y}_k - \hat{\beta}_z \times (\overline{Z}_k - \overline{Z})$$
@@ -163,17 +163,17 @@ options(knitr.kable.NA = "")
 tab <- cbind(estimate = c(coefficients(modpostpre_int)[1],coefficients(modpostpre_int)[2:8],Error=NA),rbind(car::Anova(modpostpre_int, type=3)[1,],expand_Anova(modpostpre_int, type=3)[-1,]))
 rownames(tab) <- c("Intercept","$\\texttt{P}$","$\\texttt{B}$", "$\\texttt{pre-power}$", "$\\texttt{P} \\times \\texttt{B}$", "$\\texttt{P} \\times \\texttt{pre-power}$", "$\\texttt{B} \\times \\texttt{pre-power}$", "$\\texttt{P} \\times \\texttt{B} \\times \\texttt{pre-power}$", "Error")
 colnames(tab) <- c("$\\hat{\\beta}$","$\\text{SS}$", "$\\text{df}$", "$F$", "$P(\\geq \\lvert F \\rvert)$")
-knitr::kable(tab, caption = "Linear model predicting $\\texttt{post-power}$ by  $\\texttt{pre-power}$ and factorial contrast-coding predictors, as well as interactions between those.", escape = FALSE, digits=3)
+knitr::kable(tab, caption = "Linear model predicting $\\texttt{post-power}$ by  $\\texttt{pre-power}$ and factorial contrast-coding predictors, as well as interactions between those.", escape = FALSE, digits=3, booktabs=TRUE, linesep="")
 options(opts)
 ```
 
 We can see that none of the interactions between $\texttt{pre-power}$ and the contrast-coding predictors are significant. As such, there is no strong evidence of an interaction between the covariate and the experimental manipulations. Rather than inspecting each interaction separately, it makes sense to perform an omnibus test, comparing the expanded model to the one of Equation \@ref(eq:post-power-ANOVA). This comparison tests the hypothesis that all the slopes of the additional product-predictors equal 0. If there is no overly strong reason to suspect a moderation within particular conditions, the omnibus test is a reasonable reflection of the more-or-less unspecified hypothesis that the covariate interacts with the experimental manipulations.^[Although my reasoning why the power-prime manipulation might have a different effect for those participants with an initial high or low feeling of power might suggest otherwise, this was to illustrate why you _might_ suspect an interaction, it is not a hypothesis I would stand by personally. I'm by no means an expert in the scientific study of social power.] This omnibus test is a straightforward application of the model comparison approach. We need the Sum of Squared Errors of each model, which are $\text{SSE}(G) = `r format(sum(residuals(modpostpre_int)^2), digits=2)`$ and $\text{SSE}(R) = `r format(sum(residuals(modpostpre)^2), digits=2)`$ for the expanded model and the one of Equation \@ref(eq:post-power-ANOVA), respectively. The $F$ statistic is then computed as usual as 
 
-$$\begin{align}
+$$\begin{aligned}
 F &= \frac{\frac{\text{SSE}(R) -  \text{SSE}(G)}{\text{npar}(G) - \text{npar}(R)}}{\frac{\text{SSE}(G)}{n-\text{npar}(G)}} \\
 &= \frac{\frac{`r format(sum(residuals(modpostpre)^2), digits=2)` -  `r format(sum(residuals(modpostpre_int)^2), digits=2)`}{`r length(coefficients(modpostpre_int))` - `r length(coefficients(modpostpre))`}}{\frac{`r format(sum(residuals(modpostpre_int)^2), digits=2)`}{`r nrow(dat)`-`r length(coefficients(modpostpre_int))`}} \\
 &= `r format(((sum(residuals(modpostpre)^2) -  sum(residuals(modpostpre_int)^2))/(length(coefficients(modpostpre_int)) - length(coefficients(modpostpre))))/( sum(residuals(modpostpre_int)^2)/(nrow(dat)- length(coefficients(modpostpre_int)))),digits=3)`
-\end{align}$$
+\end{aligned}$$
 With $\text{df}_1 = `r length(coefficients(modpostpre_int))- length(coefficients(modpostpre))`$ and $\text{df}_2 = `r nrow(dat) - length(coefficients(modpostpre_int))`$, the critical value is $F_{`r length(coefficients(modpostpre_int))- length(coefficients(modpostpre))`,`r nrow(dat) - length(coefficients(modpostpre_int))`, .05} = `r format(qf(.95, length(coefficients(modpostpre_int))- length(coefficients(modpostpre)), nrow(dat) - length(coefficients(modpostpre_int))),digits=3)`$. Hence, the result is non-significant, and we do not reject the null hypothesis that there are no interactions between the covariate and the contrast-coding predictors. In other words, we have no evidence that the assumption of homogeneous regression slopes is violated.
 
 If the assumption of homogeneous regression slopes is violated, then the model should really include the appropriate interaction terms. In that case, it is important to remember that the "simple slopes" of the contrast-coding predictors then reflect tests of group differences at particular values of the covariate. Group differences at one value of the covariate may be substantial, but absent or even reversed at another. It might make sense to center the covariate, so that you would test for group differences for an average value of the covariate. You could also consider not only centering at the mean, but at a few informative other values. For instance, you could consider testing the slopes at three values of the covariate: the minimum value, mean, and maximum value in the data. You could do this by creating three different "centered" covariates: $Z'_i = Z_i - \overline{Z}$, $Z''_i = Z_i - \text{min}(Z)$, and $Z'''_i = Z_i - \text{max}(Z)$, and entering each in a different version of the same model. If the estimates of the group differences have the same direction and the tests significant in each, then you would conclude that there is evidence of group differences in the whole range of the covariate observed in the data. Other strategies are possible, of course. The main thing to realise is that in a model with interactions between the covariate and contrast-codes, group differences depend on the value of the covariate, and statements about group differences should be qualified by for which value of the covariate they hold. 
@@ -186,7 +186,7 @@ We can illustrate this with the Venn diagrams in Figure \@ref(fig:sse-partition-
 
 In conclusion, for purposes of increasing power, the covariate is ideally strongly related to the dependent variable, but unrelated to the other predictors in the model.
 
-```{tikz sse-partition-ANCOVA, device='svg', fig.cap="Partitioning the variance in an ANCOVA model. the circle labelled as $Y$ represents the variance of the dependent variable, circle $X$ represents a (set of) contrast-coding predictor(s), and circle $Z$ the covariate. Overlapping regions represent shared variability (e.g. covariance) between variables.", out.width="60%"}
+```{tikz sse-partition-ANCOVA, fig.cap="Partitioning the variance in an ANCOVA model. the circle labelled as $Y$ represents the variance of the dependent variable, circle $X$ represents a (set of) contrast-coding predictor(s), and circle $Z$ the covariate. Overlapping regions represent shared variability (e.g. covariance) between variables.", out.width="60%"}
 \def\firstcircleA{(1.1,1.3) circle (1.75cm)}
 \def\secondcircleA{(2.9,1.3) circle (1.75cm)}
 \def\thirdcircleA{(2,1.7) circle (1.75cm)}
@@ -242,9 +242,9 @@ The analyses reported above indicate that the power priming task had the desired
 
 Given the significant differences in $\texttt{post-power}$ between the priming conditions, but the lack of a significant effect of priming condition on approach advantage scores, a relation between $\texttt{post-power}$ and $\texttt{ApproachAdvantage}$ seems unlikely, but we can include $\texttt{post-power}$ as a predictor of $\texttt{ApproachAdvantage}$ and see. Rather than the final subjective feeling of power, it might also be the case that the approach advantage is related to how much the priming manipulation increased or decreased the feeling of power. To investigate this, we might include the _difference_ $\texttt{post-power} - \texttt{pre-power}$ as a predictor. But actually, we can obtain a similar effect by just including $\texttt{pre-power}$ as a predictor in the model; when the slope of $\texttt{pre-power}$ is negative and the slope of $\texttt{post-power}$ positive, the combined effect on $\texttt{ApproachAdvantage}$ would be similar.
 The model thus becomes:
-$$\begin{align}
+$$\begin{aligned}
 \texttt{ApproachAdvantage}_i =& \beta_0 + \beta_\text{P} \times \texttt{P}_i + \beta_\text{B} \times \texttt{B}_i + \beta_{\text{P}\times \text{B}} \times (\texttt{P} \times \texttt{B})_i + \\ & \beta_\text{pre} \times \texttt{pre-power}_i + \beta_\text{post} \times \texttt{post-power}_i + \epsilon_i
-\end{align}$$
+\end{aligned}$$
 Parameter estimates and tests are provided in Table \@ref(tab:expBelief-ApproachAdvantage-ANCOVA). As in the earlier ANOVA (Table \@ref(tab:expBelief-oneway-ANOVA-results)), we obtain a significant effect of experimenter belief. None of the other effects are significant. Neither the subjective feeling of power before or after the priming manipulation appears to affect the approach advantage scores. Interestingly, whilst not significant, the slope of $\texttt{post-power}$ is positive, and the slope of $\texttt{pre-power}$ negative, which is what one would expect when the difference between the two is related to the dependent variable.
 
 ```{r expBelief-ApproachAdvantage-ANCOVA}
@@ -254,7 +254,7 @@ options(knitr.kable.NA = "")
 tab <- cbind(estimate = c(coefficients(modg)[1],coefficients(modg)[2:6],Error=NA),rbind(car::Anova(modg, type=3)[1,],expand_Anova(modg, type=3)[-1,]))
 rownames(tab) <- c("Intercept","$\\texttt{P}$","$\\texttt{B}$", "$\\texttt{pre-power}$","$\\texttt{post-power}$", "$\\texttt{P} \\times \\texttt{B}$", "Error")
 colnames(tab) <- c("$\\hat{\\beta}$","$\\text{SS}$", "$\\text{df}$", "$F$", "$P(\\geq \\lvert F \\rvert)$")
-knitr::kable(tab, caption = "Linear model predicting $\\texttt{ApproachAdvantage}$ by $\\texttt{pre-power}$, $\\texttt{post-power}$,  and factorial contrast-coding predictors.", escape = FALSE, digits=3)
+knitr::kable(tab, caption = "Linear model predicting $\\texttt{ApproachAdvantage}$ by $\\texttt{pre-power}$, $\\texttt{post-power}$,  and factorial contrast-coding predictors.", escape = FALSE, digits=3, booktabs=TRUE, linesep="")
 options(opts)
 ```
 
@@ -278,7 +278,7 @@ options(knitr.kable.NA = "")
 tab <- cbind(estimate = c(coefficients(modg2)[1],coefficients(modg2)[2:7],Error=NA),rbind(car::Anova(modg2, type=3)[1,],expand_Anova(modg2, type=3)[-1,]))
 rownames(tab) <- c("Intercept","$\\texttt{P}$","$\\texttt{B}$", "$\\texttt{attractive}$","$\\texttt{friendly}$", "$\\texttt{trustworthy}$", "$\\texttt{P} \\times \\texttt{B}$", "Error")
 colnames(tab) <- c("$\\hat{\\beta}$","$\\text{SS}$", "$\\text{df}$", "$F$", "$P(\\geq \\lvert F \\rvert)$")
-knitr::kable(tab, caption = "Linear model predicting $\\texttt{ApproachAdvantage}$ by $\\texttt{pre-power}$, $\\texttt{post-power}$,  and factorial contrast-coding predictors.", escape = FALSE, digits=3)
+knitr::kable(tab, caption = "Linear model predicting $\\texttt{ApproachAdvantage}$ by $\\texttt{pre-power}$, $\\texttt{post-power}$,  and factorial contrast-coding predictors.", escape = FALSE, digits=3, booktabs=TRUE, linesep="")
 options(opts)
 ```
 
@@ -296,7 +296,7 @@ options(knitr.kable.NA = "")
 tab <- cbind(estimate = c(coefficients(modgdiff)[1],coefficients(modgdiff)[2:4],Error=NA),rbind(car::Anova(modgdiff, type=3)[1,],expand_Anova(modgdiff, type=3)[-1,]))
 rownames(tab) <- c("Intercept","$\\texttt{P}$","$\\texttt{B}$", "$\\texttt{P} \\times \\texttt{B}$", "Error")
 colnames(tab) <- c("$\\hat{\\beta}$","$\\text{SS}$", "$\\text{df}$", "$F$", "$P(\\geq \\lvert F \\rvert)$")
-knitr::kable(tab, caption = "Linear model predicting $\\texttt{diff-power}$ by factorial contrast-coding predictors.", escape = FALSE, digits=3)
+knitr::kable(tab, caption = "Linear model predicting $\\texttt{diff-power}$ by factorial contrast-coding predictors.", escape = FALSE, digits=3, booktabs=TRUE, linesep="")
 options(opts)
 ```
 

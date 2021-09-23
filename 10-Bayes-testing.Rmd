@@ -20,15 +20,15 @@ Now we are in a position to calculate $P(\text{covid-19}|\text{positive test})$ 
 ```{r covid-mass-test-sensitivy-specificty}
 tab <- data.frame(c("76.8%","23.2%"),c("0.32%","99.68%"))
 rownames(tab) <- c("positive test","negative test")
-knitr::kable(tab, col.names = c("covid-19 (1.17%)","no covid-19 (98.83%)"), align=c("r","r"))
+knitr::kable(tab, col.names = c("covid-19 (1.17%)","no covid-19 (98.83%)"), align=c("r","r"), booktabs=TRUE, linesep="")
 ```
 
-$$\begin{align}
+$$\begin{aligned}
 P(\text{covid-19}|\text{positive test}) &= \frac{P(\text{covid-19 and positive test})}{P(\text{positive test})} \\
 &= \frac{P(\text{positive test}|\text{covid-19}) P(\text{covid-19})}{P(\text{pos. test}|\text{covid-19}) P(\text{covid-19}) + P(\text{pos. test}|\text{no covid-19}) P(\text{no covid-19})} \\
 &= \frac{.768 \times .0117}{.768 \times .0117 + .0032 \times .9883} \\
 &= 0.7396
-\end{align}$$
+\end{aligned}$$
 So just under 3 out of all 4 people that test positive in this scenario would actually carry covid-19. As a result, 1 out of 4 people might be asked to quarantine without really needing to do so. Although of course very unfortunate for those people, that does not seem like a too-high price to pay to me. But the base-rate is very important here. If the rate of covid-19 infections is lowered to $P(\text{covid-19}) = .001$ (i.e. 0.1%), then the result would be $P(\text{covid-19}|\text{positive test}) = 0.1937$, which means that only about one in five people who test positive are actually infected by covid-19! When the base-rate is lowered, massive testing seems like a much less useful procedure.
 
 Perhaps the equations seem a little abstract. Another way to explain the resulting conditional probability is through the tree diagram of Figure \@ref(fig:covid-19-test-tree). The tree represents a group of 100,000 people from the general population, of which 1,176 would have covid-19, and 903 of these would also get a positive test result. Of the 98,824 people without covid-19, 316 would receive a positive test result. While the change of a false positive is very low, because so many people do not have covid-19, the actual frequency of people without covid-19 who obtain a positive test result is not that much smaller than the number of people with covid-19 who obtain a positive test result. The conditional probability can then be computed simply as 
@@ -114,10 +114,10 @@ $$P(Y) = \int P(Y|\theta) p(\theta) d \theta$$
 i.e. as the integral of the product of the likelihood function and prior over all possible values of $\theta$, but you don't need to worry about this. The formulation on the second line of Equation \@ref(eq:posterior-parameter-specification) is just a rearrangement of the terms, but is meant to show that you can think of the posterior probability as the product of the prior probability and the __normalised likelihood__ (the likelihood of the data for a particular value of $\theta$ compared to the marginal likelihood of $Y$ over all possible values of $\theta$).  
 
 In words, we can describe Equation \@ref(eq:posterior-parameter-specification) as:
-$$\begin{align}
+$$\begin{aligned}
 \text{posterior} &= \frac{\text{likelihood} \times \text{prior}}{\text{marginal likelihood}} \\
 &= \text{normalised likelihood} \times \text{prior}
-\end{align}$$
+\end{aligned}$$
 The values of the normalized likelihood and the resulting posterior distribution are also shown in Figure \@ref(fig:prior-distributions-Paul). Because the posterior probabilities are calculated by multiplying the prior probability by the normalised likelihood, the posterior probability will be _higher_ than the prior probability when the normalised likelihood is _larger_ than 1. You can think of the normalised likelihood as an average likelihood over all possible values of $\theta$ (we will discuss this in a little more detail soon). So when a particular value of $\theta$ assigns a higher likelihood to the data than the average likelihood of the data, i.e. $\frac{P(Y|\theta)}{P(Y)} > 1$, the evidence that this value of $\theta$ is the true value increases. Conversely, the posterior probability will be _lower_ than than the prior probability when the normalised likelihood is _smaller_ than 1. So when a particular value of $\theta$ assigns a lower likelihood to the data than average, the evidence that this value of $\theta$ is the true value decreases. This, in a nutshell, is how Bayesian inference of parameters works.
 
 Inspecting the posterior distributions resulting from the two models in Figure \@ref(fig:prior-distributions-Paul), you can see that the posterior distribution is mostly located at the higher values of $\theta$, because small values of $\theta$ are not very likely given Paul's success rate of 12 out of 14 correct predictions. Comparing the posterior distributions between the two models, you may also see that the posterior distribution for MODEL 2 is less dispersed (i.e. "narrower") than for MODEL 1. This is a direct consequence of the difference in the prior distributions. The uniform distribution of MODEL 1 does not make very precise predictions regarding the likely values of $\theta$ ("anything goes"). The more dispersed the prior is, the more dispersed the posterior will be. The prior distribution of MODEL 2 is, in some sense, much more daring, indicating that low values of $\theta$ are very unlikely _a priori_. Because these values are not believed to be true in the first place, they are also relatively less likely after observing the data. 
@@ -169,10 +169,10 @@ By supplying a prior distribution to parameters, Bayesian models can be "vague" 
 where $P(Y_1,\ldots,Y_n|\text{MODEL } j)$ denotes the marginal likelihood of observed data $Y_1,\ldots,Y_n$ according to MODEL $j$.
 
 The Bayes factor is a central statistic of interest in Bayesian hypothesis testing. It is a direct measure of the relative evidence for two models. Its importance can also be seen when we consider the ratio of the posterior probabilities for two models, which is also called the __posterior odds__. In a Bayesian framework, we can assign probabilities not just to data and parameters, but also to whole models. These probabilities reflect our belief that a model is "true" in the sense that it provides a better account of the data than other models. Before observing data, we can assign a prior probability $P(\text{model } j)$ to a model, and we can update this to a posterior probability $P(\text{model } j|Y_1,\ldots,Y_n)$ after observing data $Y_1,\ldots,Y_n$. If the marginal likelihood $P(\text{MODEL 2}|Y_1,\ldots,Y_n)$ is larger than 1, the posterior probability is higher than the prior probability, and hence our belief in the model would increase. If the marginal likelihood is smaller than 1, the posterior probability is lower than the prior probability, and hence our belief in the model would decrease. We can compare the relative change in our belief for two models by considering the posterior odds ratio, which is just the ratio of the posterior probability of two models, and computed by multiplying the ratio of the prior probabilities of the models (the prior odds ratio) by the marginal likelihood ratio:
-$$\begin{align}
+$$\begin{aligned}
 \frac{P(\text{MODEL 1}|Y_1,\ldots,Y_n)}{P(\text{MODEL 2}|Y_1,\ldots,Y_n)} &= \frac{P(Y_1,\ldots,Y_n|\text{MODEL 1})}{P(Y_1,\ldots,Y_n|\text{MODEL 2})} \times \frac{P(\text{MODEL 1})}{P(\text{MODEL 2})} \\
 \text{posterior odds} &= \text{Bayes factor} \times \text{prior odds}
-\end{align}$$
+\end{aligned}$$
 
 In terms of the relative evidence that the data provides for the two models, the Bayes factor is all that matters, as the prior probabilities do not depend on the data. Moreover, if we assign an equal prior probability to each model, then the prior odds ratio would equal 1, and hence the posterior odds ratio is identical to the Bayes factor.
 
@@ -216,10 +216,10 @@ As discussed above, Bayesian hypothesis testing concerns comparing models with d
 $$Y_i = \beta_0 + \beta_1 \times X_{1,i} + \epsilon_i \quad \quad \epsilon_i \sim \textbf{Normal}(0, \sigma_\epsilon)$$
 where $X_{1,i}$ is a contrast-coding predictor with the values $X_{1i} = \pm \tfrac{1}{2}$ for the different groups. Remember that with this contrast code, the slope $\beta_1$ reflects the difference between the group means, e.g. $\beta_1 = \mu_1 - \mu_2$, and the intercept represents the grand mean $\beta_0 = \frac{\mu_1 + \mu_2}{2}$. Testing for group differences involves a test of the following hypotheses: 
 
-$$\begin{align}
+$$\begin{aligned}
 H_0\!: & \quad \beta_1 = 0 \\
 H_1\!: & \quad \beta_1 \neq 0 \\
-\end{align}$$
+\end{aligned}$$
 
 To do this in a Bayesian framework, we need prior distributions for all the model parameters ($\beta_0$, $\beta_1$, and $\sigma$). @rouder2009bayesian propose to use so-called uninformative priors for $\beta_0$ and $\sigma$ (effectively meaning that for these parameters, "anything goes"). The main consideration is then the prior distribution for $\beta_1$. Rather than defining a prior distribution for $\beta_1$ directly, they propose to define a prior distribution for $\frac{\beta_1}{\sigma}$, which is the difference between the group means divided by the variance of the dependent variable within each group. This is a measure of effect-size and is also known as Cohen's $d$:
 
@@ -284,8 +284,12 @@ dat$funintel <- dat$other_fun*dat$other_intel
 BFreg <- regressionBF(other_like ~ other_attr + other_intel + other_fun + attrintel + funintel, data=dat, whichModels = "top")
 tmp <- data.frame(effect = c("$\\texttt{attr}$","$\\texttt{intel}$","$\\texttt{fun}$","$\\texttt{attr} \\times \\texttt{intel}$","$\\texttt{fun} \\times \\texttt{intel}$"), BF =  exp(-BFreg@bayesFactor$bf)[c(5:1)])
 tmp$BF <- round(tmp$BF,2)
-tmp$BF[tmp$BF > 1000] <- "&gt; 1000"
-knitr::kable(tmp, escape=FALSE, caption = "Results of a Bayesian regression analysis for the Speed Dating data (cf Table \\@ref(tab:full-model-like)) with a default JZS prior with scale $r = \\sqrt{2}/4$. The test of each effect compares the full model to one with that effect excluded.", format.args = list(scientific = FALSE))
+if(knitr::is_latex_output()) {
+  tmp$BF[tmp$BF > 1000] <- "$> 1000$"
+} else {
+  tmp$BF[tmp$BF > 1000] <- "&gt; 1000"
+}
+knitr::kable(tmp, escape=FALSE, booktabs=TRUE, linesep="", caption = "Results of a Bayesian regression analysis for the Speed Dating data (cf Table \\@ref(tab:full-model-like)) with a default JZS prior with scale $r = \\sqrt{2}/4$. The test of each effect compares the full model to one with that effect excluded.", format.args = list(scientific = FALSE))
 
 ```
 
@@ -298,7 +302,7 @@ data("expBelief")
 BFanova <- expBelief %>%
   mutate(experimenterBelief = factor(experimenterBelief), primeCond = factor(primeCond)) %>%
     anovaBF(ApproachAdvantage ~ experimenterBelief * primeCond, whichModels = "top", data=., iterations = 500000)
-knitr::kable(data.frame(effect = c("$\\texttt{P}$","$\\texttt{B}$","$\\texttt{P} \\times \\texttt{B}$"), BF =  exp(-BFanova@bayesFactor$bf)[c(2,3,1)]), escape=FALSE, caption = "Results of a Bayesian factorial ANOVA analysis for the social priming data (cf Table \\@ref(tab:expBelief-factorial-ANOVA-results)) with a default JZS prior with scale $r = .5$. The test of each effect compares the full model to one with that effect excluded.")
+knitr::kable(data.frame(effect = c("$\\texttt{P}$","$\\texttt{B}$","$\\texttt{P} \\times \\texttt{B}$"), BF =  exp(-BFanova@bayesFactor$bf)[c(2,3,1)]), escape=FALSE, booktabs=TRUE, linesep="", caption = "Results of a Bayesian factorial ANOVA analysis for the social priming data (cf Table \\@ref(tab:expBelief-factorial-ANOVA-results)) with a default JZS prior with scale $r = .5$. The test of each effect compares the full model to one with that effect excluded.")
 ```
 
 ## Some objections to null-hypothesis significance testing
@@ -357,6 +361,12 @@ My pragmatic answer to the question whether you should use a Bayesian test or a 
 
 ## "Summary"
 
-```{r, fig.cap="Source: https://phdcomics.com/comics/archive.php?comicid=905"}
-knitr::include_graphics("https://phdcomics.com/comics/archive/phd082707s.gif")
+```{r, fig.cap="'Piled Higher and Deeper' by Jorge Cham www.phdcomics.com. Source: https://phdcomics.com/comics/archive.php?comicid=905"}
+if(knitr::is_html_output()) {
+  knitr::include_graphics("https://phdcomics.com/comics/archive/phd082707s.gif")
+} else {
+  #download.file("https://phdcomics.com/comics/archive/phd082707s.gif", "phd082707s.gif", mode = 'wb')
+  # knitr::include_graphics("phd082707s.gif")
+  knitr::include_graphics("phd082707s.png")
+}
 ```

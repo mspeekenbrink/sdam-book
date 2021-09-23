@@ -48,7 +48,7 @@ The outcome space is the set of all possible events.
 ```
 -->
 
-Our coin flip is a __random variable__ that takes one of the values in the outcome space. It is traditional to denote random variables with capital Roman letters, and the values with small Roman letters. When we want to make generic statements that apply to different random variables (such as a coin flip, the roll of a die, the outcome of a prediction), we tend to use this notation, and $P(Y=y)$ then means 'The probability that random variable $Y$ has value $y$'. Other times, it may be easier to use more descriptive names. In this book, when we use a name for a variable, we will use a computer font, such as `coin_flip`, for the random variable. So $P(\texttt{coin_flip} = \text{heads})$ means 'The probability that random variable `coin_flip` has the value "heads"'.   
+Our coin flip is a __random variable__ that takes one of the values in the outcome space. It is traditional to denote random variables with capital Roman letters, and the values with small Roman letters. When we want to make generic statements that apply to different random variables (such as a coin flip, the roll of a die, the outcome of a prediction), we tend to use this notation, and $P(Y=y)$ then means 'The probability that random variable $Y$ has value $y$'. Other times, it may be easier to use more descriptive names. In this book, when we use a name for a variable, we will use a computer font, such as `coin_flip`, for the random variable. So $P(\texttt{coin\_flip} = \text{heads})$ means 'The probability that random variable `coin_flip` has the value "heads"'.   
 
 ### What is probability? {#sec:02-probability-definition}
 
@@ -68,14 +68,18 @@ tab$outcome <- c("tails","heads")[flip[1:15] + 1]
 tab$frequency <- cumsum(flip)[1:15]
 tab <- tab[,c(1,3,4,2)]
 colnames(tab) <- c(colnames(tab)[1:2],"cumulative frequency heads", "relative frequency heads")
-knitr::kable(tab, caption = "Relative frequency of heads for 1 to 15 flips. The cumulative frequency is the number of heads thus far, and the relative frequency the cumulative frequency divided by the number of flips.")
+knitr::kable(tab, caption = "Relative frequency of heads for 1 to 15 flips. The cumulative frequency is the number of heads thus far, and the relative frequency the cumulative frequency divided by the number of flips.", booktabs = TRUE)
 ```
 
 Figure \@ref(fig:coin-flip-relative-frequency) shows the relative frequency (i.e. the proportion) of heads after each coin flip, when flipping a coin for `r n_flip` times.  As you can see, the relative frequency fluctuates quite a bit, but becomes more stable with more flips. But even after `r n_flip` flips, it is not equal to 0.5. 
 
 ```{r coin-flip-relative-frequency, dev='png', echo=FALSE,fig.cap=paste("Relative frequency of heads when flipping a coin for",n_flip,"times"), cache=TRUE}
-library(gganimate)
-ggplot(dat,aes(x=flip,y=y)) + geom_line() + ylim(c(0,1)) + ylab("relative frequency of heads") + transition_reveal(flip)
+if(knitr::is_html_output()) {
+  library(gganimate)
+  ggplot(dat,aes(x=flip,y=y)) + geom_line() + ylim(c(0,1)) + ylab("relative frequency of heads") + transition_reveal(flip)
+} else {
+  ggplot(dat,aes(x=flip,y=y)) + geom_line() + ylim(c(0,1)) + ylab("relative frequency of heads")
+}
 ```
 
 ```{r, echo=FALSE}
@@ -93,7 +97,11 @@ for(i in 1:n_sim) {
 Flipping a coin can be viewed as an experiment, that we can repeat. Figure \@ref(fig:coin-flip-relative-frequency-multiple) shows the results of flipping a coin for `r n_flip` times when repeating the experiment `r n_sim` times. As you can see, the results of our experiments (the relative frequencies) are different each time. The differences are quite marked for a small number of flips, but become more alike after flipping the coin more times. This illustrates something known as __The Law of Large Numbers__, to which we will come back soon. For now, let's focus on a different matter. If probability is a relative frequency, then which one is it? Each repetition of the experiment, as well as each number of throws, would give us a different answer! 
 
 ```{r coin-flip-relative-frequency-multiple, dev='png', echo=FALSE,fig.cap=paste("Relative frequency of heads when flipping a coin",n_sim,"times for",n_flip,"times"), cache=TRUE}
-ggplot(dat,aes(x=flip,y=y,colour=factor(simulation))) + geom_line() + ylim(c(0,1)) + ylab("relative frequency of heads") + theme(legend.position="none") + transition_reveal(flip)
+if(knitr::is_html_output()) {
+  ggplot(dat,aes(x=flip,y=y,colour=factor(simulation))) + geom_line() + ylim(c(0,1)) + ylab("relative frequency of heads") + theme(legend.position="none") + transition_reveal(flip)
+} else {
+  ggplot(dat,aes(x=flip,y=y,colour=factor(simulation))) + geom_line() + ylim(c(0,1)) + ylab("relative frequency of heads") + theme(legend.position="none")
+}
 ```
 
 To give a single answer, a "long-run relative frequency" must be the relative frequency when flipping the coin for an infinite number of times. That may seem disappointing. A nice aspect of the Frequentist View is that probabilities are something of the real world, but surely, we can't flip a coin for an infinite number of times in the real world. That is true, but to understand what probability is, we don't necessarily have to perform such infinite experiments. When we have to estimate the probability from a given (non-infinite) number of coin flips, we do have to worry about these issues. This, indeed, is what statistics is about: dealing with sample variability to estimate and infer unknown things. But for defining what a probability is, we can use mathematics to show that the long run relative frequency converges to a single number as the number of coin flips gets closer and closer to infinity. Which, in other words, means there is a single long-run relative frequency, and hence the probability is mathematically well-defined.     
@@ -170,12 +178,12 @@ $$P(\text{correct}) = P(\text{paul left}) \times P(\text{winner left}) + P(\text
 which, filling in the appropriate values, becomes
 $$P(\text{correct}) = .5 \times 0 + .5 \times 1 = .5$$
 Actually, you can fill in any valid probability for $P(\text{winner left})$ and $P(\text{winner right})$, and $P(\text{correct})$ will always be .5! Let's say, in abstract terms, that $P(\text{winning left}) = w$. From the complement rule, we know that $P(\text{winning right}) = 1 - w$. Then
-\begin{align}
+$$\begin{aligned}
 P(\text{correct}) &= P(\text{paul left}) \times w + P(\text{paul right}) \times (1-w) \\
 &= .5 \times w +  .5 \times (1-w) \\
 &= .5 \times w - .5 \times w + .5\\
 &= .5
-\end{align}
+\end{aligned}$$
 So according to our model, no matter what bias Paul's keeper might have in placing winning teams in the left or right box, Paul's accuracy for each prediction would be $P(\text{correct}) = .5$.
 
 <!--
@@ -314,16 +322,16 @@ $$0! = 1$$
 So we can write 
 $$P(k \text { correct and }  n-k \text{ incorrect}) = \frac{n!}{k! \times (n-k)!} (0.5)^n$$
 For example, we can work out the probability of $k=8$ correct and $n-k=0$ incorrect as
-$$\begin{align}
+$$\begin{aligned}
 P(8 \text { correct and }  0 \text{ incorrect}) &= \frac{8 \times 7 \times ... \times 2 \times 1}{(8 \times 7 \times ... \times 2 \times 1) \times 1} (0.5)^8 \\
 &= \frac{1}{1} (0.5)^8 = `r (.5)^8`
-\end{align}
+\end{aligned}
 $$
 As another example, the probability of $k=3$ correct and $n-k=5$ incorrect is
-$$\begin{align}
+$$\begin{aligned}
 P(8 \text { correct and }  0 \text{ incorrect}) &= \frac{8 \times 7 \times ... \times 2 \times 1}{(3 \times 2 \times 1) \times (5 \times 4 \times 3 \times 2 \times 1)} (0.5)^8 \\
 &= \frac{`r prettyNum(factorial(8))`}{`r factorial(3)` \times `r factorial(5)`} \times (0.5)^8 = `r factorial(8)/(factorial(5)*factorial(3))` (0.5)^8 = `r factorial(8)/(factorial(5)*factorial(3))*(.5)^8`
-\end{align}
+\end{aligned}
 $$
 We can follow the same procedure to compute the probability of all other outcomes. The resulting distribution is depicted in Figure \@ref(fig:distribution-8-coin-flips-correct).
 ```{r distribution-8-coin-flips-correct, fig.cap="probability distribution over the number of correct predictions out of 8, assuming random guessing."}
@@ -368,10 +376,10 @@ There are different ways in which we can use the information in the data to esti
 The general idea of maximum likelihood estimation can be summarized as follows: Find that value of a parameter $\theta$ such that the probability assigned to the data at hand by the model based on $\theta$ is highest. 
 
 Let's think this through. If we pick any particular value for $\theta$, we can use the Binomial distribution (Equation \@ref(eq:definition-binomial-distribution)) to work out the probability that Paul made 8 out of 8 predictions. For instance, if we pick $\theta = .4$, then 
-\begin{align}
+$$\begin{aligned}
 P(\text{8 correct and 0 incorrect}) &= \frac{8!}{8! \times 0!} (0.4)^8 \times (0.6)^0 \\
 &= 1 \times (0.4)^8 \times 1 = `r format(dbinom(8,8,.4), scientific=FALSE)`
-\end{align}
+\end{aligned}$$
 If we pick $\theta = .95$, on the other hand, we'd get
 $$P(\text{8 correct and 0 incorrect}) = 1 \times (0.95)^8 \times 1 = `r format(dbinom(8,8,.95), scientific=FALSE)`$$
 which is obviously higher. If we plot $P(\text{8 correct} | \theta)$, the probability of 8 correct _given_ or _conditional upon_ a particular value of $\theta$, for all possible values of $\theta$, we get the curve shown in Figure \@ref(fig:plot-likelihood-fifa2010). 
@@ -445,21 +453,21 @@ tab <- data.frame(
 )
 tab$LR <- tab$lik1/tab$lik2
 colnames(tab) <- c("$k$","$P(k \\mid \\theta = .5)$", "$\\hat{\\theta}$", "$P(k \\mid \\theta = \\hat{\\theta})$", "likelihood ratio")
-knitr::kable(tab, escape=FALSE, digits = 6, caption = "Possible outcomes and their probabilities according to MODEL R, and estimates of $\\theta$, probabilities of outcomes according to estimated MODEL G, and likelihood ratio values.")
+knitr::kable(tab, escape=FALSE, digits = 6, caption = "Possible outcomes and their probabilities according to MODEL R, and estimates of $\\theta$, probabilities of outcomes according to estimated MODEL G, and likelihood ratio values.", booktabs = TRUE, linesep="")
 ```
 
 The column $P(k|\theta = .5)$ contains the probability of each possible value of $k$ according to MODEL R. As this is for the moment the true model, it is both the actual probability of $k$, and the "model assigned" value which goes into the likelihood ratio. In the table, we see that $k=0$ and $k=8$ both give the same value of the likelihood ratio. We know the probability of each value of $k$ is $P(k|\theta = .5)$ (because MODEL R generated the data), and therefore we can work out that the probability of obtaining this value of the likelihood is simply the sum of the probabilities of $k=0$ and $k=8$:
-\begin{align}
+$$\begin{aligned}
 P(\text{likelihood ratio} &= P(k=0) + P(k=8) \\
 &= `r format(tab[1,5], digits=3)`) = `r format(tab[1,2], digits=3)` + `r format(tab[9,2], digits=3)` = `r format(tab[1,2] + tab[9,2], digits=3)`
-\end{align}
+\end{aligned}$$
 Similarly, for the other possible values of the likelihood, we can work out the probabilities as:
-\begin{align}
+$$\begin{aligned}
 P(\text{likelihood ratio} = `r format(tab[2,5], digits=4)`) &= `r format(tab[2,2], digits=4)` + `r format(tab[8,2], digits=4)` = `r format(tab[2,2] + tab[8,2], digits=4)` \\
 P(\text{likelihood ratio} = `r format(tab[3,5], digits=5)`) &= `r format(tab[3,2], digits=5)` + `r format(tab[7,2], digits=5)` = `r format(tab[3,2] + tab[7,2], digits=5)` \\
 P(\text{likelihood ratio} = `r format(tab[4,5], digits=5)`) &= `r format(tab[4,2], digits=5)` + `r format(tab[6,2], digits=5)` = `r format(tab[4,2] + tab[6,2], digits=5)` \\
 P(\text{likelihood ratio} = `r format(tab[5,5], digits=5)`) &= `r format(tab[5,2], digits=5)` 
-\end{align}
+\end{aligned}$$
 This is similar to the example of throwing dice before. There, we had elementary events (each number that can be thrown), but we also had other events, such as "greater than 3", which we could compute the probability of by using the probability of the elementary events. Here, the number of correct guesses $k$ are the elementary events, and values of the likelihood ratio can be considered compound events. You can view a plot of the resulting distribution of likelihood ratio values in Figure \@ref(fig:true-likelihood-ratio-distribution-coin-flip).
 ```{r true-likelihood-ratio-distribution-coin-flip, fig.width=4.5,fig.height=3.5,out.width="60%",fig.cap="The true distibution of likelihood ratio's comparing MODEL R with estimated MODEL G, when the true model is MODEL R."}
 ggplot(data.frame(
@@ -502,7 +510,7 @@ tab <- data.frame(x = c("correct","error (Type 2)"),
                   y= c("error (Type 1)", "correct"))
 colnames(tab) <- c("accept $H_0$","reject $H_0$")
 rownames(tab) <- c("$H_0$ is true","$H_0$ is false")
-knitr::kable(tab, escape = FALSE)
+knitr::kable(tab, escape = FALSE, booktabs = TRUE, linesep="")
 ```
 
 If $H_0$ is actually true, and we accept $H_0$, we can rejoice, as we made a correct decision. Similarly, if $H_0$ is actually not true, and we reject $H_0$, we can also rejoice, as this is another correct decision. If, on the other hand, $H_0$ is true, but we reject $H_0$, we made a wrong decision. This is called a Type 1 error. A type 2 error refers to making the other wrong decision, namely if we accept $H_0$, but $H_0$ is in fact false.
@@ -538,7 +546,7 @@ tab2 <- data.frame(
   ps = cumsum(tab[1:5,2] + c(tab[9:6,2],0))
 )
 knitr::kable(
-  tab2,col.names = c("value","$P(\\text{likelihood ratio} = \\text{value})$","$P(\\text{likelihood ratio} \\leq \\text{value})$"), caption="Possible values of the likelihood ratio, their probability and cumulative probability, assuming MODEL R is true.", digits=6)
+  tab2,col.names = c("value","$P(\\text{likelihood ratio} = \\text{value})$","$P(\\text{likelihood ratio} \\leq \\text{value})$"), caption="Possible values of the likelihood ratio, their probability and cumulative probability, assuming MODEL R is true.", escape=FALSE, digits=6, booktabs=TRUE, linesep="")
 ```
 
 Let's look at the cumulative probabilities (simply computed by adding, on each row of the table, the value of $P(\text{likelihood ratio} = \text{value})$ on that row, and all rows above it). How should we place our critical value to ensure that $\alpha \leq .05$? If we picked the value `r format(tab2[2,1],digits=4)`, and rejected the null hypothesis if we obtained a value equal to or lower than that, then the probability of a Type I error would be `r format(tab2[2,3],digits=4)`. Thus, if we don't want that probability to be higher than .05, then we can't pick that value. If, on the other hand, we pick the value `r format(tab2[1,1],digits=3)`, then the probability of a Type I error would be `r format(tab2[1,3],digits=4)`, which is lower than $\alpha = .05$. As we should not go higher than our desired value of $\alpha$, that would be the appropriate critical value.^[Of course, another way to ensure that we never go above $\alpha$ is to set the critical value to 0. But that would mean we _never_ reject $H_0$, which makes the test pointless.] Indeed, we could place the critical value somewhere between `r format(tab2[1,1],digits=4)` and `r format(tab2[2,1],digits=4)`, as I have done in Figure \@ref(fig:critical-value-likelihood-ratio-coin-flip) to make the plot easier to read. As, with $n=8$, there are no possible values of the likelihood ratio between `r format(tab2[1,1],digits=4)` and `r format(tab2[2,1],digits=4)` anyway, the precise placement of the critical value does not really matter. 

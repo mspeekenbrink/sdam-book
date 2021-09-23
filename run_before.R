@@ -12,6 +12,13 @@ knitr::opts_hooks$set(echo = function(options) {
   options
 })
 
+knitr::knit_hooks$set(webgl = rgl::hook_webgl)
+
+options(digits=3)
+pretNum <- function(x) {
+  prettyNum(x, big.mark=",")
+}
+
 library(sdamr)
 library(ggplot2)
 
@@ -52,11 +59,20 @@ pvalue <- function(x, limit = FALSE, limit_below = 1e-3) {
 
 write_GLM_equation <- function(mod, digits=NULL, include_sde = TRUE, dv_name, iv_names) {
   if(missing(dv_name)) dv_name <- attr(mod$terms,"variables")[[2]]
+  if(!missing(dv_name) & knitr::is_latex_output()) {
+    dv_name <- stringr::str_replace_all(dv_name,"(?<!\\\\)_","\\\\_")
+  }
   coefs <- coefficients(mod)
   intercept_included <- names(coefs)[1] == "(Intercept)"
   if(missing(iv_names) & length(coefs) > as.numeric(intercept_included)) {
     iv_names <- names(coefs)
     if(intercept_included) iv_names <- iv_names[-1]
+    if(knitr::is_latex_output()) {
+      iv_names <- stringr::str_replace_all(iv_names,"(?<!\\\\)_","\\\\_")
+    }
+  }
+  if(knitr::is_latex_output() && !missing(iv_names)) {
+    iv_names <- stringr::str_replace_all(iv_names,"(?<!\\\\)_","\\\\_")
   }
   sd_e <- sqrt(sum(residuals(mod)^2)/(nrow(mod$model) - length(coefs)))
   if(is.null(digits)) digits <- options("digits")$digits

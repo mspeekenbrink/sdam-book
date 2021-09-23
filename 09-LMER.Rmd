@@ -99,9 +99,9 @@ In particular, if the number of total observations $n$ is sufficiently large, we
 -2 \log \left(\text{likelihood-ratio}\right) \sim \mathbf{chi-squared}(\text{npar}(G) - \text{npar}(R))
 \end{equation}
 where the log likelihood ratio is usually computed as
-$$\begin{align}
+$$\begin{aligned}
 -2 \log \left(\text{likelihood-ratio}\right) &= -2 \log p(Y_1,\ldots,Y_n|\text{MODEL R}) - (-2 \log p(Y_1,\ldots,Y_n|\text{MODEL G}))
-\end{align}$$
+\end{aligned}$$
 In words, under the null-hypothesis that the restricted model is true, the sampling distribution of minus twice the natural logarithm of the likelihood ratio is distributed as a Chi-squared ($\chi^2$) distribution. A Chi-squared distribution has one parameter, the degrees of freedom, which here equals the difference in the number of parameters of the two models. In this test, if there are any unknown parameters in the models, they need to be estimated by maximum likelihood (not by restricted maximum likelihood). This is because the ratio needs to be the ratio between the maximum value of each likelihood. The parameters to count are the fixed effects $\beta$ and the variances of the random effects $\sigma^2_\gamma$, as well as any covariances between them (we will discuss this later), and the residual error variance $\sigma^2_\epsilon$. In this test, you don't have to worry about adjusting the degrees of freedom for the influence of the random effects $\gamma$. An important caveat is however that Wilks' theorem assumes that the restriction of the parameters in MODEL R are in the "interior" of the parameter space. That means that if parameters have upper or lower bounds, they can not be set at exactly these bounds in MODEL R. A variance can not be negative, so a variance parameter has a lower bound of $\sigma^2 \geq 0$. Unfortunately, in the model comparison to test for random effects, we need to set the variance at exactly this lower bound in MODEL R. As a result, the chi-squared distribution is not an accurate approximation to the true sampling distribution. Usually, the tests are too conservative, providing too large $p$-values (suggestions are that when testing a single variance of a random effect, they are approximately twice as large as they should be, see e.g. @pinheiro2006mixed).^[When parameters are set on the bounds of the parameter space, the sampling distribution of the statistic is a _mixture_ of different Chi-squared distributions, which effectively is a weighted sum of chi-squared distributions. Although such mixture distributions are well-defined in principle, it is not straightforward to determine the component weights accurately in practice.] The general conservatism of the likelihood ratio tests means that if you obtain a significant result, you can be reassured that you have sufficient evidence for an effect. A conservative test procedure however means that the true rate of Type 1 errors will be lower than set by the significance level $\alpha$. When it is crucial to maintain the rate of Type 1 errors sought for by the significance level, a better approach is to use a __parametric bootstrap__ procedure where you simulate a large number of data sets according to the estimated MODEL R, and for each compute the value of the $-2 \log\left(\text{likelihood-ratio}\right)$ value, which provides an "empirical distribution" of the sampling distribution of this statistic. You can then determine how "unusual" the actual value computed for the true data is in the context of this simulated distribution.   
 
 ## Application of the random-intercepts model
@@ -136,25 +136,25 @@ lm(dev_everest_meters ~ 1, data=.) %>% car::Anova(type=3)
 ```
 
 The estimated model (by REML) can be written as
-$$\begin{align}
+$$\begin{aligned}
 Y_{i,j} &= \beta_0 + \gamma_{0,j} + \epsilon_{i,j} \\
 &= `r format(fixef(modg$full_model),digits=3, nsmall=2)` + \gamma_{0,j} + \epsilon_{i,j} \\
 \gamma_{0,j} &\sim \mathbf{Normal}(0,`r format(attr(VarCorr(modg$full_model)$referrer,"stddev"), digits=3, nsmall=2)`) \\
 \epsilon_{i,j} &\sim \mathbf{Normal}(0,`r format(attr(VarCorr(modg$full_model),"sc"), digits=3, nsmall=2)`)
-\end{align}$$
+\end{aligned}$$
 
 We can compare this to an estimated model without random intercepts:
-$$\begin{align}
+$$\begin{aligned}
 Y_{i,j} &= \beta_0 + \epsilon_{i,j} \\
 &= `r format(coefficients(modr)[1],digits=3,nsmall=2)` + \epsilon_{i,j} \\
 \epsilon_{i,j} &\sim \mathbf{Normal}(0,`r format(sqrt(sum(residuals(modr)^2)/modr$df.residual), digits=3,nsmall=2)`)
-\end{align}$$
+\end{aligned}$$
 
 In the latter model, which is similar to the simple model we focused on in Chapter \@ref(ch:simple-GLM), the estimate of the intercept is the sample mean over all the cases. You can see that this differs from the estimated fixed intercept of the random intercepts model. This fixed effect represents the average of the random intercepts $\beta_{0,j}$. Contrary to what you might have thought, the predicted^[In the context of mixed-effects models, it is common to state that random effects are _predicted_, rather than _estimated_.] random intercepts are not equal to the group-wise sample averages. Table \@ref(tab:anchoring-means-random-intercepts-table) shows the sample averages, and the predicted random intercepts.
 
 ```{r anchoring-means-random-intercepts-table}
 tab <- data.frame(mean = aggregate(everest_meters ~ referrer, data=dat, mean)$everest_meters, n = as.numeric(table(dat$referrer)), fixed_intercept = fixef(modg$full_model), intercept = (fixef(modg$full_model) + ranef(modg$full_model)$referrer)[,1], gamma = ranef(modg$full_model)$referrer, sample_minus_fixed_intercept = aggregate(everest_meters ~ referrer, data=dat, mean)$everest_meters - fixef(modg$full_model))
-knitr::kable(tab, col.names = c("$\\overline{Y}_j$","$n_j$","$\\hat{\\beta}_{0}$", "$\\hat{\\beta}_{0,j}$", "$\\hat{\\gamma}_{0,j}$", "$(\\overline{Y}_j - \\hat{\\beta}_{0})$"), caption = "Group-wise averages and sample sizes, estimated fixed intercept ($\\hat{\\beta}_0$) and predicted random intercepts ($\\hat{\\beta}_{0,j}$), random effects ($\\hat{\\gamma}_{0,j}$). The latter are the deviations between the random intercepts and teh fixed intercept. For comparison, we also show the deviations between the sample means and the fixed intercept $(\\overline{Y}_j - \\hat{\\beta}_0)$.", digits=2, escape=FALSE)
+knitr::kable(tab, col.names = c("$\\overline{Y}_j$","$n_j$","$\\hat{\\beta}_{0}$", "$\\hat{\\beta}_{0,j}$", "$\\hat{\\gamma}_{0,j}$", "$(\\overline{Y}_j - \\hat{\\beta}_{0})$"), caption = "Group-wise averages and sample sizes, estimated fixed intercept ($\\hat{\\beta}_0$) and predicted random intercepts ($\\hat{\\beta}_{0,j}$), random effects ($\\hat{\\gamma}_{0,j}$). The latter are the deviations between the random intercepts and teh fixed intercept. For comparison, we also show the deviations between the sample means and the fixed intercept $(\\overline{Y}_j - \\hat{\\beta}_0)$.", digits=2, escape=FALSE, booktabs=TRUE, linesep="")
 ```
 
 As you can see, the random intercepts $\hat{\beta}_{0,j}$ are closer to the fixed intercept $\hat{\beta}_0 = `r format(fixef(modg$full_model),digits=3, nsmall=2)`$ than the sample means $\overline{Y}_j$. In statistical terms, this is sometimes called __shrinkage__. Due to the assumption that the random effects are Normal-distributed, the random intercepts are pulled towards the average of that distribution, which is the fixed intercept $\beta_0$. This is because in a Normal distribution, large deviations from the mean are unlikely. Hence, if the average in a grouping is far from the overall average (the average over all the groupings), that is perhaps due to a random fluke in this particular dataset. Adjusting the estimated mean of the grouping to be closer to those of the other groupings then makes sense: although each grouping can differ, there will be some similarities between the groupings. Note that the relative adjustment depends not only on the difference between the sample mean from the overall mean, but also on the sample size ($n_j$) of each grouping level. The smaller the sample size, the more the estimate will be adjusted towards the overall mean, because there is less information in smaller samples and hence the true mean can be expected to be further away from the sample mean.
@@ -201,13 +201,13 @@ modg <- mixed(everest_meters ~ anchor + (anchor||referrer), data=dat, check_cont
 ```
 
 The estimated model (obtained with REML) can be stated as
-$$\begin{align}
+$$\begin{aligned}
 Y_{i,j} &= \beta_0 + \gamma_{0,j} + (\beta_1 + \gamma_{1,j}) \times X_{1,i,j} + \epsilon_{i,j} \\
 &= `r format(fixef(modg$full_model)[1],digits=3, nsmall=2)` + \gamma_{0,j} + (`r format(fixef(modg$full_model)[2],digits=3, nsmall=2)` + \gamma_{1,j}) \times X_{1,i,j} + \epsilon_{i,j} \\
 \gamma_{0,j} &\sim \mathbf{Normal}(0,`r format(attr(VarCorr(modg$full_model)$referrer,"stddev"), digits=3, nsmall=2)`) \\
 \gamma_{1,j} &\sim \mathbf{Normal}(0,`r format(attr(VarCorr(modg$full_model)$referrer.1,"stddev"), digits=3, nsmall=2)`) \\
 \epsilon_{i,j} &\sim \mathbf{Normal}(0,`r format(attr(VarCorr(modg$full_model),"sc"), digits=3, nsmall=2)`)
-\end{align}$$
+\end{aligned}$$
 In terms of inference, we are mainly interested in the fixed effect of anchor. A test of the hypothesis that the slope of anchor is $\beta_1 = 0$, again using the Kenward-Roger approximation for the degrees of freedom, gives us $F(`r modg$anova_table[2,1]`, `r modg$anova_table[2,2]`) = `r modg$anova_table[2,3]`$, $p `r pvalue(modg$anova_table[2,4], limit=TRUE)`$. Hence, we reject the null hypothesis that the true effect of the anchor equals 0. There clearly is a difference between the low and high anchor condition, such that the judgements in the former are lower on average than in the latter conditions.
 
 ```{r est-ml-models}
@@ -228,7 +228,7 @@ As MODEL G contains just one more estimated parameter, the degrees of freedom fo
 
 In the model above, we assumed the random effects $\gamma_{0,j}$ and $\gamma_{1,j}$ are independent and drawn from separate Normal distributions (each with a different standard deviation, $\sigma_{\gamma_0}$ and $\sigma_{\gamma_1}$. There are situations where we would however like to allow the random effects to be correlated. In the example above, it might be the case that the effect of the anchor differs between groups who on average give relatively high judgements, compared to groups who tend to give lower judgements. Such a dependence points to a moderation of the effect of anchor by the average (grand mean) judgement. In models without random effects, such a moderation would not make sense, because there is a single intercept, and a single slope for anchor. However, we now have different intercepts and slopes for the groups, such that we could, in principle, estimate a relation (a dependence) between the intercepts and slopes.
 
-In general, linear random-effects models assume that the random effects are samples from a __multivariate Normal distribution__. A multivariate Normal distribution is a distribution over vectors with values, and is parameterized by a mean vector $\boldsymbol{\mu}$ and a covariance matrix $\boldsymbol{\Sigma}$. For the two random effects in our model, we can specify the joint distribution as follows:
+In general, linear random-effects models assume that the random effects are samples from a __multivariate Normal distribution__. A multivariate Normal distribution is a distribution over vectors with values, and is parametrized by a mean vector $\boldsymbol{{\mu}}$ and a covariance matrix $\boldsymbol{{\Sigma}}$. For the two random effects in our model, we can specify the joint distribution as follows:
 \begin{equation}
 \left( \begin{matrix} \gamma_{0,j} \\ \gamma_{1,j} \end{matrix} \right)
 \sim \mathbf{Normal}\left( \left[ \begin{matrix} 0 \\ 0 \end{matrix} \right] , \left[ \begin{matrix} \sigma^2_{\gamma_0}&\rho_{\gamma_0,\gamma_1}\sigma_{\gamma_0}\sigma_{\gamma_1} \\ \rho_{\gamma_0,\gamma_1}\sigma_{\gamma_0}\sigma_{\gamma_1}&\sigma^2_{\gamma_1} \end{matrix} \right] \right)
@@ -249,14 +249,14 @@ modg <- mixed(everest_feet ~ anchor + (1 + anchor|referrer), data=anchoring, che
 ```
 
 The estimated model can be written as
-$$\begin{align}
+$$\begin{aligned}
 Y_{i,j} &= \beta_0 + \gamma_{0,j} + (\beta_1 + \gamma_{1,j}) \times X_{1,i,j} + \epsilon_{i,j} \\
 &= `r format(fixef(modg$full_model)[1],digits=3, nsmall=2)` + \gamma_{0,j} + (`r format(fixef(modg$full_model)[2],digits=3, nsmall=2)` + \gamma_{1,j}) \times X_{1,i,j} + \epsilon_{i,j} \\
 \left( \begin{matrix} \gamma_{0,j} \\ \gamma_{1,j} \end{matrix} \right)
 &\sim \mathbf{Normal}\left( \left[ \begin{matrix} 0 \\ 0 \end{matrix} \right] , \left[ \begin{matrix} \sigma^2_{\gamma_0}&\rho_{\gamma_0,\gamma_1}\sigma_{\gamma_0}\sigma_{\gamma_1} \\ \rho_{\gamma_0,\gamma_1}\sigma_{\gamma_0}\sigma_{\gamma_1}&\sigma^2_{\gamma_1} \end{matrix} \right] \right) \\
 & \sim \mathbf{Normal}\left( \left[ \begin{matrix} 0 \\ 0 \end{matrix} \right] , \left[ \begin{matrix}  (`r attr(VarCorr(modg$full_model)$referrer,"stddev")[1]`)^2 & `r attr(VarCorr(modg$full_model)$referrer,"correlation")[2,1]` \times `r attr(VarCorr(modg$full_model)$referrer,"stddev")[1]` \times `r attr(VarCorr(modg$full_model)$referrer,"stddev")[2]` \\ `r attr(VarCorr(modg$full_model)$referrer,"correlation")[2,1]` \times `r attr(VarCorr(modg$full_model)$referrer,"stddev")[1]` \times `r attr(VarCorr(modg$full_model)$referrer,"stddev")[2]` & (`r attr(VarCorr(modg$full_model)$referrer,"stddev")[2]`)^2 \end{matrix} \right] \right) \\
 \epsilon_{i,j} &\sim \mathbf{Normal}(0,`r format(attr(VarCorr(modg$full_model),"sc"), digits=3, nsmall=2)`)
-\end{align}$$
+\end{aligned}$$
 This shows a negative correlation between the random intercepts and the random slopes. This can be interpreted as indicating that the higher the average judgements in a grouping (the intercept), the smaller the difference is between the low and high anchor conditions within that grouping (the slope). 
 
 ## Crossed random effects: dating partners in the speed dating experiment

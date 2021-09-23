@@ -13,7 +13,7 @@ dat <- subset(trump2016,state != "District of Columbia")
 
 In the previous chapter, we found evidence for a relation between the number of hate groups and votes for Trump. This relation was found with an observational study, not an experimental one. Because the number of hate groups was not randomly assigned to states, there are possible confounding factors that could account for the result. The well-known phrase "correlation does not imply causation" should be taken seriously. For instance, it could be that hate groups are especially prevalent in places with relatively low levels of education. And it might be that those with a relatively low level of education are also more likely to vote for Trump. In other words, education level might be a __common cause__ of both hate groups and Trump votes, whilst there is no direct relation between hate groups and Trump votes. The difference between a direct relation, and a spurious one through a common cause, is depicted in Figure \@ref(fig:direct-relation-vs-common-cause). You can see more, often rather amusing examples of spurious relations on the [spurious correlation](https://www.tylervigen.com/spurious-correlations) website.
 
-```{tikz direct-relation-vs-common-cause, device='svg', fig.cap="A direct relation between hate groups and Trump votes vs a spurious relation through a common cause (education)."}
+```{tikz direct-relation-vs-common-cause, fig.cap="A direct relation between hate groups and Trump votes vs a spurious relation through a common cause (education)."}
   \usetikzlibrary{arrows}
 	\begin{tikzpicture}
 	\pgfsetxvec{\pgfpoint{3cm}{0cm}}
@@ -51,13 +51,13 @@ tab2 <- summary(mod2)$coefficients
 ```
 
 When we estimate a regression model predicting Trump votes from education level (defined as the percentage of citizens who obtained a Bachelors degree or higher), we obtain the following estimated model
-$$\texttt{Trump_votes}_i = `r coefficients(mod1)[1]` `r ifelse(coefficients(mod1)[2] >= 0, "+", "-")` `r abs(coefficients(mod1)[2])` \times \texttt{education}_i + \hat{\epsilon}_{\texttt{votes},i}$$
+$$\texttt{Trump\_votes}_i = `r coefficients(mod1)[1]` `r ifelse(coefficients(mod1)[2] >= 0, "+", "-")` `r abs(coefficients(mod1)[2])` \times \texttt{education}_i + \hat{\epsilon}_{\texttt{votes},i}$$
 and for the hate groups we obtain
-$$\texttt{hate_groups}_i = `r coefficients(mod2)[1]` `r ifelse(coefficients(mod1)[2] >= 0, "+", "-")` `r abs(coefficients(mod2)[2])` \times \texttt{education}_i + \hat{\epsilon}_{\texttt{hate},i}$$
+$$\texttt{hate\_groups}_i = `r coefficients(mod2)[1]` `r ifelse(coefficients(mod1)[2] >= 0, "+", "-")` `r abs(coefficients(mod2)[2])` \times \texttt{education}_i + \hat{\epsilon}_{\texttt{hate},i}$$
 Note that I'm labelling the error terms for both models with a subscript (either $\texttt{votes}$ or $\texttt{hate}$) to denote these are the residual terms for a model predicting Trump votes and hate groups from education levels respectively. Also, I'm adding the hat above them to indicate that these are not the "true errors" (from a model with the true values of the slope and intercept) but rather estimates of these resulting from using estimated parameters. The residuals, as well as the estimated regression lines, are depicted in Figure \@ref(fig:regressions-controlling-for-education). The slope of $\texttt{education}_i$ is significant in both models. In the model for Trump votes, $\hat{\beta}_\texttt{education} = `r tab1[2,1]`$, `r apa_print(mod1)$statistic$percent_bachelors_degree_or_higher`. In the model for hate groups, $\hat{\beta}_\texttt{education} = `r tab2[2,1]`$, `r apa_print(mod2)$statistic$percent_bachelors_degree_or_higher`.
 This thus shows a reliable relation between education level and Trump votes, and between education level and hate groups, which is supportive of the idea of a common cause. However, significance is not a prerequisite to statistically control for a third variable.
 
-```{r regressions-controlling-for-education, fig.show="hold", out.width="50%", fig.width=5, fig.height=4, fig.cap="Predicting Trump votes and hate groups by linear regression models with education level as predictor. The residuals of each model are depicted as vertical lines from the observations to the regression line."}
+```{r regressions-controlling-for-education, fig.show="hold", out.width="49%", fig.width=5, fig.height=4, fig.cap="Predicting Trump votes and hate groups by linear regression models with education level as predictor. The residuals of each model are depicted as vertical lines from the observations to the regression line."}
 library(ggplot2)
 library(dplyr)
 dat %>% mutate(ymin = if_else(percent_Trump_votes > predict(mod1), predict(mod1), percent_Trump_votes),
@@ -76,17 +76,15 @@ mod3 <- lm(res_trump_vote ~ res_hate_groups, data=tdat)
 
 The regression line in both models represents the variation in the dependent variable (Trump votes and hate groups) that is dependent on education level. In both models, the error term $\epsilon$ is assumed to be completely independent from the predictor. Hence, these are the aspects of Trump votes and hate groups that cannot be explained by education level. To assess whether there is a relation between these residual terms, which would indicate a relation between Trump votes and hate groups that is independent from education level, we can estimate another linear regression model
 $$
-\begin{equation}
 \hat{\epsilon}_{\texttt{votes},i}  = 0 + `r coefficients(mod3)[2]` \times \hat{\epsilon}_{\texttt{hate},i} + \hat{\epsilon}_i
 (\#eq:slope-hate-groups-from-residuals)
-\end{equation}
 $$
 Note that the intercept is equal to 0. This is necessarily the case, because __the residuals of estimated regression models always have a mean of 0__. If you go back to the estimate of the intercept in Equation \@ref(eq:simple-regression-intercept-estimate), you will see that if the means are both 0, the result has to be 0 as well:
-$$\begin{align}
+$$\begin{aligned}
 \hat{\beta}_0 &= \overline{Y} - \hat{\beta}_1 \overline{X} \\
 &= 0 - \hat{\beta}_1 \times 0 \\
 &= 0
-\end{align}$$
+\end{aligned}$$
 
 A scatterplot of the dependent variable (the _residual_ Trump votes $\hat{\epsilon}_{\texttt{votes},i}$) and the predictor (the _residual_ hate groups $\hat{\epsilon}_{\texttt{hate},i}$), together with the estimated regression line, is provided in Figure \@ref(fig:scatterplot-residual-votes-and-hate).
 
@@ -115,10 +113,10 @@ mod <- lm(percent_Trump_votes ~ hate_groups_per_million + percent_bachelors_degr
 ```
 
 For a model with $m=2$ predictors, such as
-$$\begin{equation}
-\texttt{trump_votes}_i = \beta_0 + \beta_1 \times \texttt{hate_groups}_i + \beta_2 \times \texttt{education}_i + \epsilon_i \quad \quad \epsilon_i \sim \mathbf{Normal}(0,\sigma_\epsilon)
+$$
+\texttt{trump\_votes}_i = \beta_0 + \beta_1 \times \texttt{hate\_groups}_i + \beta_2 \times \texttt{education}_i + \epsilon_i \quad \quad \epsilon_i \sim \mathbf{Normal}(0,\sigma_\epsilon)
 (\#eq:multiple-regression-votes-by-hate-education)
-\end{equation}$$
+$$
 the data can be represented in a three-dimensional space. In this space, the conditional means $\mu_{Y | X_{1,i}, X_{2,i}}$ can be represented as a __regression plane__. A visual representation is given below.
 
 ```{r 3d-regression-plane, fig.cap="Three-dimensional representation of a regression model predicting Trump votes from hate groups and education level. By clicking on the image and moving your mouse, you should be able to rotate the image to explore it further. You can also click on the 'Play' button for an animation of such a rotation.", fig.align='center', cache=TRUE}
@@ -146,13 +144,13 @@ widget
 ```
 
 Keeping all predictors constant apart from one, the model becomes a simple linear regression model for the non-constant variable. If you pick a value of "% bachelors degree or higher", you can think of this as slicing the regression plane at that point. The slice of the plane is a single straight line, which is then a simple regression model. For example, if we focus on states with an education level of `r min(dat$percent_bachelors_degree_or_higher)`% with a bachelors degree or higher, then the multiple regression model can be written as
-$$\begin{align}
-\texttt{trump_votes}_i &= \beta_0 + \beta_1 \times \texttt{hate_groups}_i + \beta_2 \times `r min(dat$percent_bachelors_degree_or_higher)` + \epsilon_i  \\
-&= (\beta_0 + \beta_2 \times `r min(dat$percent_bachelors_degree_or_higher)`) + \beta_1 \times \texttt{hate_groups}_i + \epsilon_i \\
-&= \beta_0' + \beta_1 \times \texttt{hate_groups}_i + \epsilon_i
-\end{align}
+$$\begin{aligned}
+\texttt{trump\_votes}_i &= \beta_0 + \beta_1 \times \texttt{hate\_groups}_i + \beta_2 \times `r min(dat$percent_bachelors_degree_or_higher)` + \epsilon_i  \\
+&= (\beta_0 + \beta_2 \times `r min(dat$percent_bachelors_degree_or_higher)`) + \beta_1 \times \texttt{hate\_groups}_i + \epsilon_i \\
+&= \beta_0' + \beta_1 \times \texttt{hate\_groups}_i + \epsilon_i
+\end{aligned}
 $$
-which is a simple regression model with a new intercept $\beta_0' = \beta_0 + \beta_2 \times `r min(dat$percent_bachelors_degree_or_higher)`$ composed as the sum of the original intercept and `r min(dat$percent_bachelors_degree_or_higher)` times the slope of $\texttt{education_level}$, and the same slope $\beta_1$ for $\texttt{hate_groups}$. You can see these simple regression lines, for three different values of education level, in Figure \@ref(fig:trump-multiple-regression-scatter-with-multiple-regression-lines). Notice that the regression lines for different education levels are parallel, because they have the same slope. However, the regression lines are at different heights, because they have a different intercept.
+which is a simple regression model with a new intercept $\beta_0' = \beta_0 + \beta_2 \times `r min(dat$percent_bachelors_degree_or_higher)`$ composed as the sum of the original intercept and `r min(dat$percent_bachelors_degree_or_higher)` times the slope of $\texttt{education\_level}$, and the same slope $\beta_1$ for $\texttt{hate\_groups}$. You can see these simple regression lines, for three different values of education level, in Figure \@ref(fig:trump-multiple-regression-scatter-with-multiple-regression-lines). Notice that the regression lines for different education levels are parallel, because they have the same slope. However, the regression lines are at different heights, because they have a different intercept.
 
 ```{r trump-multiple-regression-scatter-with-multiple-regression-lines, fig.cap="Percentage of votes for Trump in the 2016 elections for 50 US states and the number of hate groups per 1 million citizens, with regression lines for three different values of education level. The colour of each data point and regression line reflects the value of education level.", fig.width=5, fig.height=5, out.width='60%'}
 ggplot(dat,aes(x=hate_groups_per_million, y=percent_Trump_votes, colour=percent_bachelors_degree_or_higher)) + geom_point() + geom_abline(intercept = coefs[1] + min(dat$percent_bachelors_degree_or_higher)*coefs[3], slope = coefs[2], colour=viridis::viridis_pal()(3)[1]) + geom_abline(intercept = coefs[1] + (min(dat$percent_bachelors_degree_or_higher) + (max(dat$percent_bachelors_degree_or_higher) - min(dat$percent_bachelors_degree_or_higher))/2) *coefs[3], slope = coefs[2], colour=viridis::viridis_pal()(3)[2]) + geom_abline(intercept = coefs[1] + max(dat$percent_bachelors_degree_or_higher)*coefs[3], slope = coefs[2], colour = viridis::viridis_pal()(3)[3]) + theme(legend.position = "bottom") + labs(colour = "% bachelors degree or higher") + xlab("Hate groups per million citizens") + ylab("% votes for Trump")
@@ -167,7 +165,7 @@ The estimate of the intercept is a direct generalization of that for a simple re
 \end{equation}
 Again, it is an adjustment of the mean of the dependent variable, subtracting means multiplied by slopes of each predictor variable. 
 
-The estimates of the slopes are straightforward to compute using matrix algebra.^[A vector with the intercept and slopes can be computed by first constructing a so-called design matrix $\mathbf{X}$, where the first column contains only 1's, and the remaining columns contain values for each predictor. The vector with estimates is then computed as $\hat{\boldsymbol{\beta}} = (\mathbf{X}^\top \mathbf{X})^{-1} \mathbf{X}^\top \mathbf{Y}$, where $\mathbf{Y}$ is the vector with the values of the dependent variable, and $^\top$ stands for the matrix transpose, and $\mathbf{X}^{-1}$ for the inverse of matrix $\mathbf{X}$.] However, we won't cover matrix algebra here, so we will leave the estimation of the slopes to statistical software. 
+The estimates of the slopes are straightforward to compute using matrix algebra.^[A vector with the intercept and slopes can be computed by first constructing a so-called design matrix $\mathbf{X}$, where the first column contains only 1's, and the remaining columns contain values for each predictor. The vector with estimates is then computed as $\hat{\boldsymbol{{\beta}}} = (\mathbf{X}^\top \mathbf{X})^{-1} \mathbf{X}^\top \mathbf{Y}$, where $\mathbf{Y}$ is the vector with the values of the dependent variable, and $^\top$ stands for the matrix transpose, and $\mathbf{X}^{-1}$ for the inverse of matrix $\mathbf{X}$.] However, we won't cover matrix algebra here, so we will leave the estimation of the slopes to statistical software. 
 
 The (unbiased) estimate of the error variance is also a direct generalization of the estimate for a simple regression model:
 \begin{equation}
@@ -182,11 +180,11 @@ sd_e <- sqrt(sum(residuals(mod)^2)/(nrow(dat) - length(coefficients(mod))))
 ```
 Estimating the model in which we predict Trump votes from hate groups and education level gives the following estimates:
 $$`r write_GLM_equation(mod,dv_name = "trump_votes", iv_names = c("hate_groups","education"), digits=4)`$$
-A main thing to note here is that the estimated slope of $\texttt{hate_groups}$ is exactly the same as in Equation \@ref(eq:slope-hate-groups-from-residuals) when first computing the residual Trump votes and hate groups! This is because the slopes in a multiple regression model are __unique effects__ of a predictor on the dependent variable, after removing the effect of all other predictors from both that predictor and the dependent variable. So, equivalently, the slope of $\texttt{education}$ in the model above is identical to the slope we would obtain by first computing the residual Trump votes from
-$$\texttt{trump_votes}_i = \hat{\beta}_0 + \hat{\beta}_1 \times \texttt{hate_groups}_i + \hat{\epsilon}_{\text{vote},i}$$
+A main thing to note here is that the estimated slope of $\texttt{hate\_groups}$ is exactly the same as in Equation \@ref(eq:slope-hate-groups-from-residuals) when first computing the residual Trump votes and hate groups! This is because the slopes in a multiple regression model are __unique effects__ of a predictor on the dependent variable, after removing the effect of all other predictors from both that predictor and the dependent variable. So, equivalently, the slope of $\texttt{education}$ in the model above is identical to the slope we would obtain by first computing the residual Trump votes from
+$$\texttt{trump\_votes}_i = \hat{\beta}_0 + \hat{\beta}_1 \times \texttt{hate\_groups}_i + \hat{\epsilon}_{\text{vote},i}$$
 
 and the residual education from 
-$$\texttt{education}_i = \hat{\beta}_0 + \hat{\beta}_1 \times \texttt{hate_groups}_i + \hat{\epsilon}_{\text{education},i}$$
+$$\texttt{education}_i = \hat{\beta}_0 + \hat{\beta}_1 \times \texttt{hate\_groups}_i + \hat{\epsilon}_{\text{education},i}$$
 and then determining the slope of the residual $\texttt{education}$ in the model
 $$\hat{\epsilon}_{\text{vote},i} + \beta_0 + \beta_1 \times \hat{\epsilon}_{\text{education},i} + \epsilon_i$$
 
@@ -197,20 +195,20 @@ Testing hypotheses regarding the parameters of multiple regression models is ana
 tab <- summary(mod)$coefficients
 rownames(tab) <- c("Intercept","Hate groups per million", "% bachelors degree or higher")
 colnames(tab) <- c("$\\hat{\\beta}$","$\\text{SE}(\\hat{\\beta})$", "$t$", "$P(\\geq \\lvert t \\rvert)$")
-knitr::kable(tab, caption = "Null-hypothesis significance tests using the t statistic.", escape = FALSE)
+knitr::kable(tab, caption = "Null-hypothesis significance tests using the t statistic.", escape = FALSE, booktabs=TRUE, linesep="")
 ```
 
 Alternatively, we can compare models in which we either fix the parameter to the value assumed in the null hypothesis or not. As discussed in the previous chapter, this is a more general approach. When comparing two multiple regression models, we use the $F$-statistic defined in Equation \@ref(eq:glm-f-definition):
 $$F = \frac{\frac{\text{SSE}(R) -  \text{SSE}(G)}{\text{npar}(G) - \text{npar}(R)}}{\frac{\text{SSE}(G)}{n-\text{npar}(G)}}$$
 For instance, to test the null hypothesis $\beta_1 = 0$ in the model defined in Equation \@ref(eq:multiple-regression-votes-by-hate-education), we compare this general model
-$$\text{MODEL G: } \quad \texttt{trump_votes}_i = \beta_0 + \beta_1 \times \texttt{hate_groups}_i + \beta_2 \times \texttt{education}_i + \epsilon_i$$  
+$$\text{MODEL G: } \quad \texttt{trump\_votes}_i = \beta_0 + \beta_1 \times \texttt{hate\_groups}_i + \beta_2 \times \texttt{education}_i + \epsilon_i$$  
 to a restricted model where we fix $\beta_1 = 0$:
-$$\begin{align}
-\text{MODEL R: } \quad \texttt{trump_votes}_i &= \beta_0 + 0 \times \texttt{hate_groups}_i + \beta_2 \times \texttt{education}_i + \epsilon_i \\
+$$\begin{aligned}
+\text{MODEL R: } \quad \texttt{trump\_votes}_i &= \beta_0 + 0 \times \texttt{hate\_groups}_i + \beta_2 \times \texttt{education}_i + \epsilon_i \\
 &= \beta_0 + \beta_1 \times \texttt{education}_i + \epsilon_i
-\end{align}
+\end{aligned}
 $$  
-In other words, we would compare the multiple regression model to a simple regression model where we don't include $\texttt{hate_groups}$, as the null hypothesis assumes that this predictor has no _unique_ effect on the dependent variable. If the Sum of Squared Error of MODEL R is not substantially higher than that of MODEL G, then there would be no good evidence that $\beta_1 \neq 0$. Remember that the Sum of Squared Error of MODEL R can never be lower than that of MODEL G, i.e.  $\text{SSE}(R) \geq \text{SSE}(G)$. This is because __estimating the parameters of MODEL G by maximum likelihood is equivalent to minimizing the Sum of Squared Error__. If $\hat{\beta}_1 = 0$ in MODEL G, that would mean that the SSE of both models is exactly the same. If $\hat{\beta}_1 \neq 0$ in MODEL G, then $\text{SSE}(R) > \text{SSE}(G)$, because otherwise the estimated MODEL G would not have maximised the likelihood (or equivalently minimised the SSE).
+In other words, we would compare the multiple regression model to a simple regression model where we don't include $\texttt{hate\_groups}$, as the null hypothesis assumes that this predictor has no _unique_ effect on the dependent variable. If the Sum of Squared Error of MODEL R is not substantially higher than that of MODEL G, then there would be no good evidence that $\beta_1 \neq 0$. Remember that the Sum of Squared Error of MODEL R can never be lower than that of MODEL G, i.e.  $\text{SSE}(R) \geq \text{SSE}(G)$. This is because __estimating the parameters of MODEL G by maximum likelihood is equivalent to minimizing the Sum of Squared Error__. If $\hat{\beta}_1 = 0$ in MODEL G, that would mean that the SSE of both models is exactly the same. If $\hat{\beta}_1 \neq 0$ in MODEL G, then $\text{SSE}(R) > \text{SSE}(G)$, because otherwise the estimated MODEL G would not have maximised the likelihood (or equivalently minimised the SSE).
 
 We have already shown results for MODEL G. The Sum of Squared Error for that model is $\text{SSE}(G) = `r sum(residuals(mod)^2)`$. Estimating MODEL R gives 
 $$`r modg <- mod; modr <- lm(percent_Trump_votes ~ percent_bachelors_degree_or_higher, data=dat); write_GLM_equation(modr,dv_name = "trump_votes", iv_names = c("education"), digits=4)`$$
@@ -224,10 +222,10 @@ To determine whether this value is significant, we need to compare it to an $F$-
 
 Similarly, to test the null-hypothesis $\beta_2 = 0$ in MODEL G as defined above, we compare this model to a _new_ restricted MODEL R where we fix $\beta_2 = 0$:
 $$
-\begin{align}
-\text{MODEL R: } \quad \texttt{trump_votes}_i &= \beta_0 + \beta_1 \times \texttt{hate_groups}_i + 0 \times \texttt{education}_i + \epsilon_i \\
-&= \beta_0 + \beta_1 \times \texttt{hate_groups}_i + \epsilon_i
-\end{align}
+\begin{aligned}
+\text{MODEL R: } \quad \texttt{trump\_votes}_i &= \beta_0 + \beta_1 \times \texttt{hate\_groups}_i + 0 \times \texttt{education}_i + \epsilon_i \\
+&= \beta_0 + \beta_1 \times \texttt{hate\_groups}_i + \epsilon_i
+\end{aligned}
 $$  
 This is the model we estimated in the previous chapter, where we determined the estimates as 
 $$`r modr <- lm(percent_Trump_votes ~ hate_groups_per_million, data=dat); write_GLM_equation(modr,dv_name = "trump_votes", iv_names = c("hate_groups"), digits=4)`$$ 
@@ -241,10 +239,10 @@ The critical value is the same as before, and hence we also reject this null hyp
 
 To test whether the intercept $\beta_0 = 0$, we would compare MODEL G to yet another MODEL R:
 $$
-\begin{align}
-\text{MODEL R: } \quad \texttt{trump_votes}_i &= 0 + \beta_1 \times \texttt{hate_groups}_i + \beta_2 \times \texttt{education}_i + \epsilon_i \\
-&=\beta_1 \times \texttt{hate_groups}_i + \beta_1 \times \texttt{education}_i + \epsilon_i
-\end{align}
+\begin{aligned}
+\text{MODEL R: } \quad \texttt{trump\_votes}_i &= 0 + \beta_1 \times \texttt{hate\_groups}_i + \beta_2 \times \texttt{education}_i + \epsilon_i \\
+&=\beta_1 \times \texttt{hate\_groups}_i + \beta_1 \times \texttt{education}_i + \epsilon_i
+\end{aligned}
 $$  
 which is estimated as 
 $$`r modr <- lm(percent_Trump_votes ~ hate_groups_per_million + percent_bachelors_degree_or_higher - 1, data=dat); write_GLM_equation(modr,dv_name = "trump_votes", iv_names = c("hate_groups","education"), digits=4)`$$ 
@@ -262,7 +260,7 @@ options(knitr.kable.NA = "")
 tab <- cbind(estimate = c(coefficients(mod),Error=NA),car::Anova(mod, type=3))
 rownames(tab) <- c("Intercept","Hate groups per million", "% bachelors degree or higher","Error")
 colnames(tab) <- c("$\\hat{\\beta}$","$\\text{SS}$", "$\\text{df}$", "$F$",  "$P(\\geq F)$")
-knitr::kable(tab, caption = "Null-hypothesis significance tests by model comparisons and the F statistic.", escape = FALSE)
+knitr::kable(tab, caption = "Null-hypothesis significance tests by model comparisons and the F statistic.", escape = FALSE, booktabs = TRUE, linesep="")
 options(opts)
 ```
 
@@ -270,10 +268,10 @@ When performing such model comparisons, it is very important to remember that wh
 
 There is one more comparison that we could perform, namely to compare MODEL G to a MODEL R without any predictors. This is a so-called __omnibus test__ of the null hypothesis about two parameters simultaneously, namely $H_0: \beta_1 = 0 \text { and } \beta_2 = 0$. This results in another version of the restricted MODEL R:
 $$
-\begin{align}
-\text{MODEL R: } \quad \texttt{trump_votes}_i &= \beta_0 +  0 \times \texttt{hate_groups}_i + 0 \times \texttt{education}_i + \epsilon_i \\
+\begin{aligned}
+\text{MODEL R: } \quad \texttt{trump\_votes}_i &= \beta_0 +  0 \times \texttt{hate\_groups}_i + 0 \times \texttt{education}_i + \epsilon_i \\
 &= \beta_0 + \epsilon_i
-\end{align}
+\end{aligned}
 $$  
 This is like the alternative model of the one-sample t-test we considered earlier. Here, the model is estimated as 
 $$`r modr <- lm(percent_Trump_votes ~ 1, data=dat); write_GLM_equation(modr,dv_name = "trump_votes", digits=4)`$$ 
@@ -300,7 +298,7 @@ Dividing the SSE by $n - \text{npar}(M)$ would provide us with an unbiased estim
 A useful perspective on unique effects in multiple regression models and GLMs in general is to consider them as __partitioning the variance of the dependent variable__ in parts that are uniquely attributable to the predictors. If you consider the SSE of a very simple MODEL R
 $$Y_i = \beta_0 + \epsilon_i$$
 with estimate $\hat{\beta}_0 = \overline{Y}$, then for this model
-$$\text{SSE}(R) = \sum_{i=1}^n (Y_i - \hat{\beta}_0)^2 = (Y_i - \overline{Y})^2 = n S_Y^2$$
+$$\text{SSE}(R) = \sum_{i=1}^n (Y_i - \hat{\beta}_0)^2 = \sum_{i=1}^n (Y_i - \overline{Y})^2 = n S_Y^2$$
 So the SSE of a regression model without predictors is equal to $n$ times the sample variance of the dependent variable. When we add predictors to the model, we know the SSE can only decrease (or remain the same, but that is rather unlikely). The proportion of the SSE that is reduced by adding a predictor to the model can be seen as the proportion of the variance that is "explained" by the predictor. This __proportional reduction in error__ is a useful measure of the strength of the relation between a predictor and the dependent variable. As usual, this strength will have a true value for the Data Generating Process, and a value we can compute for a given limited dataset. We'll denote the true value as $\eta^2$. The sample estimate is: 
 \begin{equation}
 \hat{\eta}^2 = \frac{\text{SSE}(R) - \text{SSE}(G)}{\text{SSE}(R)}
@@ -308,7 +306,7 @@ So the SSE of a regression model without predictors is equal to $n$ times the sa
 \end{equation}
 Because $0 \leq \text{SSE}(G) \leq \text{SSE}(R)$, the value of $\hat{\eta}^2$ is between 0 and 1 (as a proportion should be). Figure \@ref(fig:sse-partition) depicts such "proportions of variance explained" for a situation with two predictors ($X_1$ and $X_2$) of a dependent variable $Y$.
 
-```{tikz sse-partition, device='svg', fig.cap="Partitioning the variance in a multiple regression model. Each circle represents the variance of a variable. Overlapping regions represent shared variability (e.g. covariance) between variables. ", out.width="50%"}
+```{tikz sse-partition, fig.cap="Partitioning the variance in a multiple regression model. Each circle represents the variance of a variable. Overlapping regions represent shared variability (e.g. covariance) between variables. ", out.width="50%"}
 \def\firstcircle{(1,1) circle (1.75cm)}
 \def\secondcircle{(2,1) circle (1.75cm)}
 \def\thirdcircle{(1.5,2) circle (1.75cm)}
@@ -360,35 +358,35 @@ Determination of the relative importance of predictors is tricky. There is no me
 
 The standardised slopes can be viewed as measures of effect size. But it is more common to consider effect size in terms of "proportion of variance explained". Personally, I like these measures because they have a clear and bounded scale between 0 (no effect) and 1 (a predictor is perfect in accounting for the dependent variable). We have already come across this measure in the form of "eta-squared" (Equation \@ref(eq:definition-eta-squared-glm)). Let's consider how we can use this measure to reflect the effect size for the different predictors in a multiple regression model. To frame our discussion, we will consider a situation where the dependent variable $Y$ can be modelled by two predictors, $X_1$ and $X_2$. In this situation, we can define four different models: 
 
-$$\begin{align}
+$$\begin{aligned}
 \text{MODEL R0}: && Y_i &= \beta_0 + \epsilon_i \\
 \text{MODEL R1}: && Y_i &= \beta_0 + \beta_1 X_{1i} + \epsilon_i \\
 \text{MODEL R2}: && Y_i &= \beta_0 + \beta_1 X_{2i} + \epsilon_i \\
 \text{MODEL G}: && Y_i &= \beta_0 + \beta_1 X_{1i} + \beta_2 X_{2i} + \epsilon_i
-\end{align}$$
+\end{aligned}$$
 
 Referring back to Figure \@ref(fig:sse-partition), the Sums of Squared Error of each model can be defined as
 
-$$\begin{align}
+$$\begin{aligned}
 \text{SSE}(R0) &= A + B + C + D = S^2_Y \\
 \text{SSE}(R1) &= A + C \\
 \text{SSE}(R2) &= A + B \\
 \text{SSE}(G) &= A 
-\end{align}$$
+\end{aligned}$$
 
 Recall that the $R^2$ measure reflects the proportion of variance "explained" by all the predictors in a model, and is the $\hat{\eta}^2$ of a model compared to an intercept-only model (i.e. MODEL R0). For each of the models apart from R0, we can compute the $R^2$ measure as
 
-$$\begin{align}
+$$\begin{aligned}
 R^2_{R1} &= \frac{\text{SSE}(R0) - \text{SSE}(R1)}{\text{SSE(R0)}} =  \frac{B + D}{A + B + C + D} \\
 R^2_{R2} &= \frac{\text{SSE}(R0) - \text{SSE}(R2)}{\text{SSE(R0)}} =  \frac{C + D}{A + B + C + D} \\
 R^2_{G} &= \frac{\text{SSE}(R0) - \text{SSE}(G)}{\text{SSE(R0)}} =  \frac{B + C + D}{A + B + C + D}
-\end{align}$$
+\end{aligned}$$
 
 We can define a measure of effect size by considering the following question: what additional proportion of the variance of $Y$ can be explained by including a predictor $X_j$ in a model. For example, what additional proportion of the variance can be explained by adding the predictor $X_2$ to MODEL R1? This is easily computed as the difference in $R^2$ values: $$R^2_{G} - R^2_{R1} = \frac{C}{A+B+C+D}$$ Similarly, we can define a measure of the effect of $X_1$ by considering what additional proportion of the variance is explained by adding the predictor $X_1$ to MODEL R2, providing $$R^2_{G} - R^2_{R2} = \frac{B}{A+B+C+D}$$ These $R^2$-change values are also called the __coefficient of semi-partial determination__. They reflect the unique proportion of variance of $Y$ that can be attributed to a predictor. Defining the Sum of Squared Reduced (SSR) -- the value of this for each predictor is usually given in the "SS" column of a multiple regression ANOVA table -- as follows:
-$$\begin{align}
+$$\begin{aligned}
 \text{SSR}(X_1) &= \text{SSE}(R2) - \text{SSE}(G) = A + B - A = B \\
 \text{SSR}(X_2) &= \text{SSE}(R1) - \text{SSE}(G) = A + C - A = C
-\end{align}$$
+\end{aligned}$$
 the coefficient of semi-partial determination can be computed as 
 \begin{equation}
 \text{Semi-partial determination of }X = \frac{\text{SSR}(X)}{\text{SSE}(R0)}
@@ -399,7 +397,7 @@ The main thing to remember is that the coefficient of semi-partial determination
 A different measure of effect size is called the __coefficient of partial determination__. This reflects not the proportion of the total variance of $Y$ that can be uniquely attributed to a predictor $X$, but rather the proportion of the variance of $Y$ that can not be explained by the other predictors in a model, but which can (uniquely) be explained by predictor $X$. For instance, with reference to Figure \@ref(fig:sse-partition), MODEL R1 leaves $A + C$ "unexplained". Of this unexplained variance, predictor $X_2$ can explain part $C$ when added to model R1. So the proportion of previously unexplained variance now explained is $\frac{C}{A+C}$. This proportion can also be computed from $R^2$ values. As the proportion of unexplained variance for MODEL R1 is simply $1 - R^2_{R1}$, the proportion of this variance accounted for by $X_2$ is $\frac{R^2_{G} - R^2_{R1}}{1 - R^2_{R1}}$. Because the numerator is equal to the coefficient of semi-partial determination, and the denominator is between 0 and 1, the coefficient of partial determination is equal to or larger than the coefficient of semi-partial determination. It can also be computed directly from SSE and SSR terms as 
 \begin{equation}
 \text{Partial determination of }X = \frac{\text{SSR}(X)}{\text{SSE}(G) + \text{SSR}(X)}
-(\#eq:semi-partial-determination)
+(\#eq:partial-determination)
 \end{equation}
 The coefficient of partial determination is (in the context of ANOVA models, which we will discuss later) also called the _partial eta-squared_, or $\eta_p^2$. 
 
@@ -437,7 +435,7 @@ It is important to realise that the assumption of Normal-distributed errors does
 
 In Section \@ref(sec:02-assumptions) we discussed some methods to assess the assumption of Normality (i.e. histograms, QQ-plots and statistical tests such as the Shapiro-Wilk test). The assumption of unbiasedness and homoscedasticity is generally assessed visually with a so-called predicted-by-residual plot. This plot (see Figure \@ref(fig:trump-predicted-residual)) depicts the residuals as a function of the model predictions (i.e. the estimated conditional means). The unbiasedness assumption implies that for each predicted value $\hat{Y}$ (i.e. each conditional mean), the residual or error terms are scattered around 0. For instance, it should _not_ be the case that for relatively low and high values of the predictions, the errors are generally above 0, while for medium values of the predictions, the errors are generally below 0. Such a pattern would be indicative of biased predictions and a likely non-linear relation between predictors and the dependent variable. The homoscedasticity assumption implies that the spread of the residuals is equal for each predicted value $\hat{Y}$. Looking at the predicted vs residual plot in Figure \@ref(fig:trump-predicted-residual), there is no clear indication that either assumption is violated. In addition, the QQ-plot indicates that the expected and sample quantiles do not differ radically, at least for the middle quantiles. Note that at the extremes (low and high quantiles), you will generally find more variable results, as quantiles in the tails of a distribution are less reliable.
 
-```{r trump-predicted-residual, fig.cap="Predicted vs residual plot, and a QQ plot, for MODEL G predicting Trump votes from hate groups and education level.", fig.show="hold", out.width="50%", fig.width=4,fig.height=4}
+```{r trump-predicted-residual, fig.cap="Predicted vs residual plot, and a QQ plot, for MODEL G predicting Trump votes from hate groups and education level.", fig.show="hold", out.width="49%", fig.width=4,fig.height=4}
 data.frame(predicted=predict(modg), residual=residuals(modg)) %>%
   ggplot(aes(x=predicted,y=residual)) + geom_point() + geom_hline(yintercept = 0, lty=3)
 data.frame(predicted=predict(modg), residual=residuals(modg)) %>%
@@ -445,7 +443,7 @@ data.frame(predicted=predict(modg), residual=residuals(modg)) %>%
 ```
 
 For comparison, Figure \@ref(fig:predicted-residual-for-violations-of-assumptions) shows two examples of predicted vs residual plots where the assumption of unbiasedness and homoscedasticity do not hold. 
-```{r predicted-residual-for-violations-of-assumptions, fig.cap="Predicted vs residual plots for two cases where the assumptions of the GLM do not hold. In the plot of the left, the assumption of unbiasedness is violated. There is clearly a nonlinearity in the data, which result in the underprediction (positive residuals) for low and high predicted values, and an overprediction (negative residuals) for medium predicted values. In the plot on the right, the homoscedasticity assumption is violated. The variability of the residuals clearly increases as a function of the predicted values.", fig.show="hold", out.width="50%", fig.width=4,fig.height=4}
+```{r predicted-residual-for-violations-of-assumptions, fig.cap="Predicted vs residual plots for two cases where the assumptions of the GLM do not hold. In the plot of the left, the assumption of unbiasedness is violated. There is clearly a nonlinearity in the data, which result in the underprediction (positive residuals) for low and high predicted values, and an overprediction (negative residuals) for medium predicted values. In the plot on the right, the homoscedasticity assumption is violated. The variability of the residuals clearly increases as a function of the predicted values.", fig.show="hold", out.width="49%", fig.width=4,fig.height=4}
 set.seed(234786)
 tdat <- data.frame(x=runif(100,min=1,max=10))
 tdat$y <- (tdat$x - 5)^2 - 10 + rnorm(100,sd=2)
@@ -467,7 +465,7 @@ Multicollinearity is a rather fancy word for interdependence between predictors 
 
 Figure \@ref(fig:sse-partition-multicollinearity) illustrates the difference between a model without redundancy between between predictors and with (substantial) redundancy between predictors. In the case of no redundancy, each predictor uniquely accounts for a substantial proportion (regions labelled as $B$ and $C$) of the variance of the dependent variable. In the case of redundancy between the predictors, while the overlapping region between each predictor and the dependent variable is the same size as before (region $B + D$ for $X_1$, and region $C + D$ for $X_2$), because a large part of this (region $D$) is shared between $X_1$ and $X_2$, the unique parts ($B$ and $C$ respectively) are substantially smaller. In the most extreme case, the circles representing $X_1$ and $X_2$ would be completely overlapping, meaning that neither accounts for a unique proportion of the variation in $Y$. __Multicollinearity__ is an extension of this concept, referring to dependency between more than two predictors.
 
-```{tikz sse-partition-multicollinearity, device='svg', fig.cap="Partitioning the variance in a multiple regression model. Each circle represents the variance of a variable. Overlapping regions represent shared variability (e.g. covariance) between variables. ", out.width="60%"}
+```{tikz sse-partition-multicollinearity, fig.cap="Partitioning the variance in a multiple regression model. Each circle represents the variance of a variable. Overlapping regions represent shared variability (e.g. covariance) between variables. ", out.width="60%"}
 \def\firstcircleA{(1.1,1.3) circle (1.75cm)}
 \def\secondcircleA{(2.9,1.3) circle (1.75cm)}
 \def\thirdcircleA{(2,1.7) circle (1.75cm)}
@@ -538,10 +536,10 @@ An infinite confidence interval means that we would _not_ be able to reject _any
 A tolerance of 0 and complete redundancy is not common if you are working with real variables. It can certainly happen if you include the same predictor twice in a model, or if you for instance include a number of predictors and also their case-wise mean. For example, in the model
 $$Y_i = \beta_0 + \beta_1 X_{1,i} + \beta_2 X_{2,i} + \beta_3 \left( \frac{X_{1,i} + X_{2,i}}{2} \right) + \epsilon_i$$
 the third predictor (the case-wise average of $X_1$ and $X_2$) is completely redundant. We can rewrite this model in an equivalent form as
-$$\begin{align}
+$$\begin{aligned}
 Y_i &= \beta_0 + (\beta_1 + \tfrac{1}{2} \beta_3) X_{1,i} + (\beta_2 + \tfrac{1}{2} \beta_3) X_{2,i} + \epsilon_i \\
 Y_i &= \beta_0 + \beta_1' X_{1,i} + \beta_2' X_{2,i} + \epsilon_i 
-\end{align}$$
+\end{aligned}$$
 which would give _exactly_ the same predictions of $Y_i$. Moreover, while we can estimate the slopes $\beta_1'$ and $\beta_2'$ as usual, we would _not_ be able to determine uniquely which part of $\hat{\beta}_1'$ should be assigned to $\beta_1$, and which part should be assigned to $\tfrac{1}{2}\beta_3$. Any such assignment would be arbitrary. For instance, if $\hat{\beta}_1' = 2$, then we could say that $\beta_1 = 1$ and $\beta_3 = 2$, but also that $\beta_1 = 2$ and $\beta_3 = 0$, without changing anything substantial about the relation between $Y$ and $X_1$ and $X_2$.
 
 ### Detecting and dealing with multicollinearity
@@ -552,7 +550,7 @@ As this is just a transformation of the tolerance, I don't really see the point.
 
 Multicollinearity is not a major issue if you are mainly concerned with predicting the dependent variable. The model as a whole will provide the best possible predictions, with or without collinearity. Problems arise mainly when your goal is to infer and test the true values of the parameters as reflecting relations in the Data Generating Process. When there is redundancy between predictors (high multicollinearity), the estimates of the slopes of each predictor become unreliable, and hypothesis tests will have low power. A "quick-and-dirty" solution is to simply remove some of the collinear predictors, keeping a set of predictors which are more independent of each other. The choice of which predictors to remove can be rather arbitrary however, and eliminating a predictor from consideration in an analysis does not mean that this predictor has no theoretical importance. Another option, if possible, is to increase the sample size $n$, which may reduce the width of the confidence intervals to more agreeable magnitudes. Alternatively, you could consider transforming all predictors into a set of orthogonal (uncorrelated) variables using a technique such as [Principal Components Analysis](https://en.wikipedia.org/wiki/Principal_component_analysis), where each new variable is a linear combination of the original predictors. Those new predictors can be difficult to interpret, however. Another option is to use a technique called _ridge regression_ [@hoerl1970ridge], which allows inclusion of all predictors in the model with a reduced variance of the parameter estimates, but thereby introduces some bias in these estimates.
 
-## Outliers
+## Outliers {#sec:04b-outliers}
 
 When we analysed the data regarding Trump votes and hate groups up to now, we excluded the data from the District of Columbia (Washington D.C.), because, while it is not part of any US state, it is itself not a state either. If we had included the data from this district, the results would have been quite different. Figure \@ref(fig:scatterplot-trump-votes-hate-groups-all-data) shows the Trump votes and hate groups with the Distric of Columbia included. You can see that the data point for the District of Columnbia is far removed from all other data points. The District of Columbia has both a very high number of hate groups (`r trump2016[trump2016$state == "District of Columbia","hate_groups_per_million"]` per million citizens), and a low percentage of votes for Trump (`r trump2016[trump2016$state == "District of Columbia","percent_Trump_votes"]`%). This makes the data District of Columbia rather unusual when compared to the 50 states. The plot also shows the estimated regression line of a simple regression model (with hate groups as a single predictor) for all the data, and the data excluding the District of Columbia. After inclusion of the District of Columbia, the estimated relation goes from positive to negative!
 
@@ -577,7 +575,7 @@ options(knitr.kable.NA = "")
 tab <- cbind(estimate = c(coefficients(mod),Error=NA),car::Anova(mod, type=3))
 rownames(tab) <- c("Intercept","Hate groups per million", "% bachelors degree or higher","Error")
 colnames(tab) <- c("$\\hat{\\beta}$","$\\text{SS}$", "$\\text{df}$", "$F$", "$P(\\geq \\lvert F \\rvert)$")
-knitr::kable(tab, caption = "Null-hypothesis significance tests by model comparisons and the F statistic.", escape = FALSE)
+knitr::kable(tab, caption = "Null-hypothesis significance tests by model comparisons and the F statistic.", escape = FALSE, booktabs=TRUE, linesep="")
 options(opts)
 ```
 

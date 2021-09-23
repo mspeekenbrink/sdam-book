@@ -190,12 +190,14 @@ Our main interest here is to assess whether it is reasonable to assume that, in 
 
 Now we know what happens to the estimate $\hat{\mu}$ of MODEL G when MODEL R is in fact true, we can use a similar logic as before to decide when $\hat{\mu}$ is different enough from $\underline{\mu}$ to reject MODEL R. To work this out, it is convenient to standardize the sample mean by subtracting the (supposed) true average, and dividing by the standard error of the sample mean:
 \begin{equation}
-t = \frac{\hat{\mu} - \underline{\mu}}{\hat{\sigma}/\sqrt{n}} = \frac{\overline{Y} - \underline{\mu}}{S/\sqrt{n}}
+t = \frac{\hat{\mu} - \underline{\mu}}{\hat{\sigma}/\sqrt{n}} = \frac{\overline{Y} - \underline{\mu}}{\hat{\sigma}/\sqrt{n}}
 (\#eq:definition-one-sample-t)
 \end{equation}
-We call the resulting standardized value the $t$ statistic. It is much like the $Z$-transformation, but now we're using an _estimated_ $\hat{\sigma}$ rather than a known value. The standardized $t$ statistic follows a $t$ distribution with $n-1$ __degrees of freedom__, which reflects the amount of data we used to estimate $\sigma$. What we showed in Figure \@ref(fig:comparing-normal-and-t-simple) was an "unstandardized" t-distribution, which also has a location and scale parameter. By standardizing $t$, we don't need to worry about these. Generally, when someone mentions the t-distribution, they refer to the standardized version, which has a single parameter, the degrees of freedom (commonly denoted with the Greek symbol $\nu$, pronounced as "nu"; I will just use "degrees of freedom", or $df$ though). Back in the times of Gosset, this was particularly important, as there was no access to modern computers to quickly work out the probabilities for different versions of unstandardized t-distributions. Statisticians had to rely on tables for a standard version of a distribution, which were painstakingly computed by hand. In fact, the term "computer" originally referred to a person performing mathematical calculations. Complex, long, and often rather tedious calculations were performed by teams of such computers.
+where 
+$$\hat{\sigma} = \sqrt{\frac{\sum_{i=1}^n (Y_i - \overline{Y})^2}{n-1}}$$
+is the unbiased estimator of $\sigma$. We call the resulting standardized value the $t$ statistic. It is much like the $Z$-transformation, but now we're using an _estimated_ $\hat{\sigma}$ rather than a known value. The standardized $t$ statistic follows a $t$ distribution with $n-1$ __degrees of freedom__, which reflects the amount of data we used to estimate $\sigma$. What we showed in Figure \@ref(fig:comparing-normal-and-t-simple) was an "unstandardized" t-distribution, which also has a location and scale parameter. By standardizing $t$, we don't need to worry about these. Generally, when someone mentions the t-distribution, they refer to the standardized version, which has a single parameter, the degrees of freedom (commonly denoted with the Greek symbol $\nu$, pronounced as "nu"; I will just use "degrees of freedom", or $df$ though). Back in the times of Gosset, this was particularly important, as there was no access to modern computers to quickly work out the probabilities for different versions of unstandardized t-distributions. Statisticians had to rely on tables for a standard version of a distribution, which were painstakingly computed by hand. In fact, the term "computer" originally referred to a person performing mathematical calculations. Complex, long, and often rather tedious calculations were performed by teams of such computers.
 
-I won't bore you with the mathematical details of the t-distribution. As I already mentioned, it looks quite like a Normal distribution. When the degrees of freedom get larger, the distributions looks more and more like the standard Normal distribution. Because we know that if MODEL R is true, the $t$ statistic follows a t-distribution with $n-1$ degrees of freedom, we know all there is to know about the sampling distribution of $t$. If $t$ is far away from 0, that means that the estimate $\hat{\mu}$ of MODEL G is far away from the assumed value $\underline{\mu}$ of MODEL R, and hence we have reason to reject MODEL R. Following the logic of the null-hypothesis significance test, we will limit the number of wrong rejections of MODEL R by choosing critical values such that
+I won't bore you with the mathematical details of the t-distribution. As I already mentioned, it looks quite like a Normal distribution. When the degrees of freedom get larger, the distributions looks more and more like the standard Normal distribution. Because we know that if MODEL R is true, the $t$ statistic follows a t-distribution with $n-1$ degrees of freedom, we know all there is to know about the sampling distribution of $t$. If $t$ is far away from 0, that means that the estimate $\hat{\mu}$ of MODEL G is far away from the assumed value $\underline{\mu}$ in MODEL R, and hence we have reason to reject MODEL R. Following the logic of the null-hypothesis significance test, we will limit the number of wrong rejections of MODEL R by choosing critical values such that
 $$P(t \leq \text{lower critical value} | \text{MODEL R}) + P(t \geq \text{upper critical value} | \text{MODEL R}) = \alpha$$
 The resulting critical regions are depicted in Figure \@ref(fig:critical-values-t-distribution).
 
@@ -211,7 +213,7 @@ data.frame(interval=1,x=c(-5,seq(-5,qt(.025,nrow(dat)-1),length=100),qt(.025,nro
 ```
 
 So how about the judgements in the anchoring experiment? Is it reasonable to assume that $\mu = 8848$? Let's perform the test and see. For MODEL G, our estimated mean is $\hat{\mu} = `r mean(dat$everest_meters)`$, and the unbiased estimate of the standard deviation is $\hat{\sigma} = `r sd(dat$everest_meters)`$. The $t$ statistic is then
-$$t = \frac{`r mean(dat$everest_meters)` - 8848}{`r sd(dat$everest_meters)`/\sqrt`r nrow(dat)`} = `r  (mean(dat$everest_meters) - 8848)/(sd(dat$everest_meters)/sqrt(nrow(dat)))`$$
+$$t = \frac{`r mean(dat$everest_meters)` - 8848}{`r sd(dat$everest_meters)`/\sqrt{`r nrow(dat)`}} = `r  (mean(dat$everest_meters) - 8848)/(sd(dat$everest_meters)/sqrt(nrow(dat)))`$$
 For a significance level of $\alpha = .05$, we can use the t-distribution with `r nrow(dat) - 1` degrees of freedom to work out the lower and upper critical value as `r qt(.025,nrow(dat)-1)` and `r qt(.975,nrow(dat)-1)`. Clearly, the value of the $t$-statistic that we computed is far below the lower critical value, which means we reject the null hypothesis. The associated $p$-value with this two-sided test (we would reject $H_0$ if we had very large negative, as well as very large positive values of the $t$ statistic), is $P(t \leq `r (mean(dat$everest_meters) - 8848)/(sd(dat$everest_meters)/sqrt(nrow(dat)))`| \text{df}  = `r nrow(dat) - 1`) + P(t \geq `r -1*(mean(dat$everest_meters) - 8848)/(sd(dat$everest_meters)/sqrt(nrow(dat)))`| \text{df}  = `r nrow(dat) - 1`) = P(|t| \geq `r -1*(mean(dat$everest_meters) - 8848)/(sd(dat$everest_meters)/sqrt(nrow(dat)))`| \text{df} = `r nrow(dat) - 1`) < .001$. So, in conclusion, the $t$-statistic is in the critical region for our chosen significance level of $\alpha = .05$, which leads us to reject the null hypothesis. Equivalently, the $p$-value, the probability of obtaining a $t$ statistic equal to or more extreme than the one we found, is smaller than our chosen significance level $\alpha=.05$, so we reject the null hypothesis. In our anchoring data, the "wisdom of crowds" doesn't seem to hold, because the average judgement does not equal the true height of Mount Everest.
 
 ### The model comparison way
@@ -220,30 +222,31 @@ There is an equivalent way to perform the hypothesis test that $\mu = \underline
 
 The procedure is essentially the same as before. We find a way to calculate the likelihood ratio, and work out the distribution of the likelihood ratio values we would get for repetitions of an experiment _assuming MODEL R is true_. Using this distribution, we can then work out a critical value, such that the probability of obtaining a likelihood ratio value equal to or smaller than it is equal to a significance level $\alpha$, i.e. , $P(\text{likelihood ratio } \leq \text{critical value} | \text{MODEL R}) = \alpha$. The derivation of the likelihood ratio is a little more complicated than before though. Feel free to glance over the following, as the derivation is not that important. The paragraphs marked with a vertical line in the left margin are more advanced and can be skipped without too much consequence.
 
-:::{.advanced-text}
+```{block2, type = "advancedtext", echo=TRUE}
 When all observations $Y_i$, $i=1, \ldots, n$ are independent draws from a Normal distribution, then we can use the product rule to work out the joint "probability" (density value really) of all observations. That is, we use Equation \@ref(eq:normal-density-function) to compute $p(Y_i)$, the density value of each observation, and then multiply these together:
 $$
-\begin{align}
+\begin{aligned}
 p(Y_1, Y_2, \ldots, Y_n) &= p(Y_1) \times p(Y_2) \times \ldots \times p(Y_n) \\
 &= \prod_{i=1}^n \frac{1}{\sqrt{2 \pi} \sigma} e^{-\frac{(Y_i-\mu)^2}{2\sigma^2}} \\
 &= \left( \frac{1}{\sqrt{2 \pi} \sigma} \right)^n e^{ \frac{n}{2\sigma^2} \sum_{i=1}^n (Y_i - \mu)^2}
-\end{align}
+\end{aligned}
 $$
 The $\prod$ sign on the second line is similar to the summation sign, but tells you to _multiply_ all the values that follow it, so e.g.
 $$\prod_{i=1}^3 Y_i = Y_1 \times Y_2 \times Y_3$$
 On the third line, we make use of the fact that $e^a \times e^b = e^{a + b}$. We can write the likelihood ratio of MODEL R over MODEL G as
 $$
-\begin{align}
+\begin{aligned}
 L\!R(R,G) &= \frac{\left( \frac{1}{\sqrt{2 \pi} \hat{\sigma}_{ml,R}} \right)^n e^{ \frac{n}{2\hat{\sigma}^2_{ml,R}} \sum_{i=1}^n (Y_i - \mu)^2}}{\left( \frac{1}{\sqrt{2 \pi} \hat{\sigma}_{ml,G}} \right)^n e^{ \frac{n}{2\hat{\sigma}^2_{ml,G}} \sum_{i=1}^n (Y_i - \mu)^2}} \\
 &=  \frac{ \left(\sqrt{\frac{2\pi}{n} \sum_{i=1}^n(Y_i - \underline{\mu})^2}\right)^{-n} e^{\frac{\sum_{i=1}^n(Y_i - \underline{\mu})^2}{2 \sum_{i=1}^n(Y_i - \underline{\mu})^2/n}}}{\left(\sqrt{\frac{2\pi}{n} \sum_{i=1}^n(Y_i - \overline{Y})^2}\right)^{-n} e^{ \frac{\sum_{i=1}^n (Y_i - \overline{Y})^2}{2 \sum_{i=1}^n (Y_i - \overline{Y})^2/n}} } \\
 &= \left(\frac{\sum_{i=1}^n(Y_i - \underline{\mu})^2}{\sum_{i=1}^n(Y_i - \overline{Y})^2}\right)^{-n/2}
-\end{align}
+\end{aligned}
 $$
-:::
+
+```
 
 What is interesting to point out  is that, on the last line of the equation above, we see that the two main ingredients of the likelihood ratio are _sums of squared deviations_. Moreover, as the deviations are between observations and the mean (either assumed mean or sample mean), these sums of squared deviations are very closely related to variances. As we will see later, "sums of squares" are important quantities when comparing General Linear Models.
 
-:::{.advanced-text}
+```{block2, type = 'advancedtext', echo=TRUE}
 While the likelihood ratio is reasonably straightforward to compute, it is not easy to derive the sampling distribution of the likelihood ratio. Previously, we could work out the distribution of the likelihood ratio when MODEL R is true relatively easily from the Binomial distribution of the outcomes. We can do something similar here, which effectively means transforming the likelihood ratio into a statistic we do know the distribution of, or conversely, transforming a statistic we know the distribution of into the likelihood ratio. To do this, first we can rewrite 
 $$\sum_{i=1}^n(Y_i - \underline{\mu})^2 = \sum_{i=1}^n(Y_i - \overline{Y} + \overline{Y} - \underline{\mu})^2 = n(\overline{Y} - \underline{\mu})^2 + \sum_{i=1}^n(Y_i - \overline{Y})^2$$
 and filling this in the numerator of the likelihood ratio gives
@@ -252,7 +255,7 @@ For a given experiment or study, we can treat the number of observations $n$ as 
 $$\frac{|\overline{Y} - \underline{\mu}|}{\sqrt{\sum_{i=1}^n(Y_i - \overline{Y})^2}} = \sqrt{n (n-1)} \times | t |$$
 with $t$ defined as in Equation \@ref(eq:definition-one-sample-t). When the absolute value of the $t$ statistic becomes larger, the likelihood ratio value becomes smaller (less supportive of MODEL R). We can thus view the likelihood ratio as a (rather complicated) transformation of the absolute value of the $t$ statistic. The _distribution_ of the likelihood ratio is then also a (rather complicated) transformation of the _distribution_ of the $t$-statistic. Just like the coin tossing model, where the likelihood ratio was effectively a transformation of the statistic $k$ (the number of correct guesses), and the distribution of the likelihood ratio a transformation of the distribution of $k$, i.e. the Binomial distribution.
 
-:::
+```
 
 What all this means is that the one-sample t-test, as worked out before, is equivalent to a likelihood ratio test comparing MODEL R to MODEL G. Whether you perform the test in the "classic" way by computing the $t$ statistic and assessing the magnitude of this in the $t$ distribution, or whether you compute a likelihood ratio and assess the magnitude of this in the distribution of the likelihood ratio under MODEL R, you will get exactly the same outcome.
 
@@ -266,7 +269,7 @@ While difficult to interpret properly, the confidence interval for the mean of N
 (\#eq:confidence-interval-one-sample-t-test)
 \end{equation}
 where $t_{n-1; 1- \frac{\alpha}{2}}$ stands for the upper critical value of a test with significance level $\alpha$. In other words, we take our estimate of the mean (i.e. $\hat{\mu} = \overline{Y}$), and add or subtract from that a multiple of the __estimated standard error of the mean__ (which is $\frac{\hat{\sigma}}{\sqrt{n}}$; remember that the standard error of a statistic is the standard deviation of the sampling distribution of that statistic). The multiple is derived from the t-distribution. As explained earlier, for the Normal distribution, we know that 95% of the observations lie in the range between $\mu - 1.96 \times \sigma$ and $\mu + 1.96 \times \sigma$. Similarly, for the Normal distribution, 95% of the sample means lie in the range between $\mu - 1.96 \times \frac{\sigma}{\sqrt{n}}$ and $\mu + 1.96 \times \frac{\sigma}{\sqrt{n}}$. The value  $t_{n-1; \frac{\alpha}{2}}$ is effectively a replacement for 1.96, which takes into account that we have estimated $\sigma$. 
-```{r simulated-confidence-intervals-one-sample-t-test, fig.cap="95% confidence intervals for 100 simulated datasets with $\\mu=8848$ and $\\sigma=2000$. Most of the intervals contain the true value $\\mu$, but some do not. If we would simulate an infinite number of datasets, then exactly 95% of the intervals would contain $\\mu$, and exactly 5% would not."}
+```{r simulated-confidence-intervals-one-sample-t-test, fig.cap="$\\text{95%}$ confidence intervals for 100 simulated datasets with $\\mu=8848$ and $\\sigma=2000$. Most of the intervals contain the true value $\\mu$, but some do not. If we would simulate an infinite number of datasets, then exactly $\\text{95%}$ of the intervals would contain $\\mu$, and exactly $\\text{5%}$ would not."}
 set.seed(238476234)
 n <- nrow(dat)
 nsim <- 100
@@ -283,20 +286,42 @@ conf_dat$contains <- (conf_dat$lower <= mu & conf_dat$upper >= mu)
 conf_dat$contains <- !conf_dat$contains
 ggplot(conf_dat,aes(x=sim,y=est,ymax=upper,ymin=lower,colour=contains)) + geom_point() + geom_linerange() + geom_hline(yintercept = mu,lty=2) + xlab("simulated data set") + ylab("confidence interval") + theme(legend.position = "none")
 ```
+
 Earlier on, we simulated datasets of size $n=`r nrow(dat)`$ from a Normal distribution with mean $\mu = 8848$ and $\sigma = 2000$. In Figure \@ref(fig:simulated-confidence-intervals-one-sample-t-test) we show the resulting 95% confidence intervals (now estimating $\sigma$ from the data) for `r nsim` of such simulated datasets. As you can see, the location, and the width of each confidence interval is different. Moreover, you can see that while most of the confidence intervals contain the true value $\mu = 8848$, some don't. Indeed, `r sum(conf_dat$contains)` out of `r nsim` confidence intervals do not include the true value of $\mu$, which is pretty close to 5%. <!-- You can see a particularly nice animation of how  confidence intervals work on the [Seeing Theory](https://seeing-theory.brown.edu/frequentist-inference/index.html#section2) website. -->
 
 For the judgements in the anchoring experiment, the estimated mean was $\hat{\mu} = `r mean(dat$everest_meters)`$, the unbiased estimate of the standard deviation was $\hat{\sigma} = `r sd(dat$everest_meters)`$, and the upper critical value was $t_{`r nrow(dat)-1`, .975} = `r qt(.975, nrow(dat)-1)`$. Thus, the confidence interval is
 $$
-\begin{align}
+\begin{aligned}
 \text{95% confidence interval} &= \hat{\mu} - t_{n-1; 1 - \frac{\alpha}{2}} \times \frac{\hat{\sigma}}{\sqrt{n}} \leq \mu \leq \hat{\mu} + t_{n-1; 1- \frac{\alpha}{2}} \times \frac{\hat{\sigma}}{\sqrt{n}} \\
 &= `r mean(dat$everest_meters)` - `r qt(.975, nrow(dat)-1)` \times \frac{`r sd(dat$everest_meters)`}{\sqrt{`r nrow(dat)`}} \leq \mu \leq `r mean(dat$everest_meters)` + `r qt(.975, nrow(dat)-1)` \times \frac{`r sd(dat$everest_meters)`}{\sqrt{`r nrow(dat)`}} \\
 &= `r mean(dat$everest_meters) - qt(.975, nrow(dat)-1)*(sd(dat$everest_meters)/sqrt(nrow(dat)))` \leq \mu \leq `r mean(dat$everest_meters) + qt(.975, nrow(dat)-1)*(sd(dat$everest_meters)/sqrt(nrow(dat)))` 
-\end{align}
+\end{aligned}
 $$
 
 Confidence intervals can be used to perform null hypothesis significance tests. In fact, a confidence interval contains all values of $\underline{\mu}$ for which MODEL R would not be rejected with the current data. In other words, if the confidence interval includes the value of $\underline{\mu}$ of interest (i.e. $\underline{\mu} = 8848$ in our example), that means that the null hypothesis would _not_ be rejected. In addition, we can also determine a whole range of other values of $\underline{\mu}$ which, if purported as a null hypothesis, would also not be rejected. In that sense, a confidence interval provides more information than a simple "reject" or "not reject" decision of a null hypothesis significance test. If a confidence interval is very wide, that implies the significance test has low power. Of course, what "very wide" is, depends on the scale of the data, and a subjective evaluation by the researcher.
 
-There have been calls to abandon hypothesis tests in favour of estimation and reporting confidence intervals [e.g. @cumming2014new]. Given the tricky interpretation of confidence intervals [@morey2016fallacy], and their rather close ties to significance tests, such ideas seem to promise more than they can deliver. There is no need to abandon either significance tests or confidence intervals, provided you know how to interpret them. 
+There have been calls to abandon hypothesis tests in favour of estimation and reporting confidence intervals [e.g. @cumming2014new]. Given the tricky interpretation of confidence intervals [@morey2016fallacy], and their rather close ties to significance tests, such ideas seem to promise more than they can deliver. There is no need to abandon either significance tests or confidence intervals, provided you know how to interpret them.
+
+## Effect size
+
+Whether an observed deviation between the sample mean $\overline{Y}$ and assumed mean $\underline{\mu}$ is significant, depends on the power of the test. The power of a test, as you may recall, is the probability of a test statistic exceeding the critical value(s) when the null hypothesis is false (i.e., when the true mean $\mu$ does not equal the assumed mean $\underline{\mu}$). This, in turn, depends to a large part on the number of observations ($n$). If you look closely at the definition of the $t$-statistic (Equation \@ref(eq:definition-one-sample-t)), you might see that, for any given values of  $\overline{Y}$, $\underline{\mu}$, and $S$, the value of $t$ increases with $n$. This is because the more observations we have, the more precisely we can estimate the true mean $\mu$ from the sample mean $\overline{Y}$. So that's all good. But as a consequence, if we have enough data, even the tiniest deviation between $\overline{Y}$ and $\underline{\mu}$ would give a significant test result. Whilst that is "all good" statistically speaking, in practical terms, we might not be all that interested in such small deviations from theoretical predictions. In addition to considering significance, it is useful to consider the *size of the effect* we have observed. By "effect", we simply mean the deviation between the sample mean and assumed mean. As this deviation is dependent on the scale of measurement, it is useful to standardize the deviation in some way. A common way to standardize effect sizes is to make them relative to the variability in the data, in the same way as is done in $Z$ scores. This provides us with what is commonly known as Cohen's $d$:
+\begin{equation}
+\text{Cohen's } d = \frac{\overline{Y} - \underline{\mu}}{\hat{\sigma}}
+(\#eq:cohen-d-one-sample-t-test)
+\end{equation}
+For our anchoring example, Cohen's $d$ is
+$$d = \frac{`r mean(dat$everest_meters)` - 8848}{`r sd(dat$everest_meters)`} = `r  (mean(dat$everest_meters) - 8848)/(sd(dat$everest_meters))`$$
+
+Cohen's $d$ quantifies an effect in units of the standard deviation in the sample data. As a rule of thumb, an absolute value of $|d| = 0.2$ is considered a small effect, an absolute value of $|d| = 0.5$ a medium effect, and an absolute value of $|d| = 0.8$ a large effect [@cohen1988statistical]. Thus, the effect-size we found can be classified as large. These rule-of-thumb values, relative to the Normal distribution, are depicted in Figure \@ref(fig:one-sample-cohen-d-plot). As you can see, even "large" effect sizes are still quite close to the center of the distribution. For example, `r round(100*(1 - pnorm(.8)),2)`% of observations from the Data Generating Process would exceed the deviation specified as a large positive effect size. But you should keep in mind that the objective of an effect size here is to quantify the deviation between a sample mean and an assumed mean, not between observations and that assumed mean.
+
+```{r one-sample-cohen-d-plot, fig.cap="Small, medium, and large values of Cohen's $d$ in context of the data distribution.", fig.height=4,out.width="80%"}
+data.frame(d = c(.2,-.2,.5,-.5,.8,-.8), effect = rep(c("small","medium","large"),each=2)) %>% ggplot() + stat_function(fun=function(x) dnorm(x,mean=0,sd=1)) + xlim(-4,4) + ylab("p(y)") + xlab("y") + geom_vline(aes(xintercept=d, colour=effect))
+```
+
+For our anchoring example, Cohen's $d$ is
+$$d = \frac{`r mean(dat$everest_meters)` - 8848}{`r sd(dat$everest_meters)`} = `r  (mean(dat$everest_meters) - 8848)/(sd(dat$everest_meters))`$$
+
+Comparing Equation \@ref(eq:cohen-d-one-sample-t-test) to \@ref(eq:definition-one-sample-t), we can see that these look almost the same. The only difference is that the $t$ statistic divides the estimated standard deviation by $\sqrt{n}$, as this provides the standard error of the mean. For a one-sample t-test, Cohen's $d$ can then also be computed as $t/\sqrt{n}$. This shows that, to an extent, Cohen's $d$ removes the effect of $n$ from the $t$ statistic, and is not "inflated" as sample size increases. In addition to providing test results, it is generally a good idea to also provide the effect size as additional information. 
 
 ## Assumptions {#sec:02-assumptions}
 
@@ -306,7 +331,7 @@ When we started modelling the data, we assumed each judgement was effectively an
 
 For each value, you can determine the proportion of values in the data which are equal or smaller than it. For instance, the proportion of observations equal to or smaller than 1 is $1/5 = 0.2$,  the proportion of observations equal to or smaller than 4 is $2/5 = 0.4$, the proportion of observations equal to or smaller than 4.5 is $3/5 = 0.6$, etc. For each of these proportions, we can also work out the corresponding value of the variable for the probability of a value equal to smaller than it equals this proportion. For instance, for a Normal distribution with mean $\mu=7$ and standard deviation $\sigma = 7$, the quantile such that $P(\text{value } \leq \text{ quantile}) = .2$ is `r qnorm(.2,mean=7,sd=7)`, and the quantile such that $P(\text{value } \leq \text{ quantile}) = .4$ is `r qnorm(.4,mean=7,sd=7)`. In a Q-Q plot, the values of the observed data are plotted against these theoretical quantiles in a scatter-plot. If the data follows the assumed distribution, the empirical quantiles should generally match the theoretical quantiles, and hence the points in the plot should roughly lie on a straight line. Figure \@ref(fig:anchoring-qq-plot) shows such a Q-Q plot for the judgements. As you can see, rather than on a straight-line, the points seem to lie on an s-shaped curve, which indicates that the assumption of a Normal distribution might not be a good match to the data.
 
-```{r anchoring-qq-plot, out.width="80%", fig.width=5, fig.height=5, fig.cap="A Quantile-quantile plot for the judgments of the height of Mount Everest"}
+```{r anchoring-qq-plot, out.width="80%", fig.width=5, fig.height=5, fig.cap="A Quantile-Quantile plot for the judgments of the height of Mount Everest"}
 ggplot(dat, aes(sample = everest_meters)) + stat_qq() + stat_qq_line()
 ```
 
@@ -372,10 +397,17 @@ n <- 5
 n_sim <- 200
 clt_dat <- data.frame(sim=1:n_sim,size=n,outcome=sapply(1:n_sim,function(x) sum(sample(values,size=n,prob=prob,replace=TRUE))/n))
 
+if(knitr::is_html_output()) {
 clt_dat %>%
   pull(sim) %>% 
     map_df(~ clt_dat %>% filter(sim %in% 1:.x) %>% mutate(sim = .x)) %>% 
   ggplot(aes(x=outcome)) + geom_histogram(binwidth=.2) + xlim(c(1,5)) + ylim(c(0,30)) + transition_manual(sim) + ease_aes("linear") + enter_fade() + exit_fade()
+} else {
+  clt_dat %>%
+  #pull(sim) %>% 
+  #  map_df(~ clt_dat %>% filter(sim %in% 1:.x) %>% mutate(sim = .x)) %>% 
+  ggplot(aes(x=outcome)) + geom_histogram(binwidth=.2) + xlim(c(1,5)) + ylim(c(0,30))
+}
 
 ```
 
@@ -397,6 +429,54 @@ clt_dat %>%
 From the Central Limit Theorem, we can conclude that if we focus on the mean of a sufficiently large number of independent observations, we can reasonably assume that the sampling distribution of the mean will be a Normal distribution, even when the distribution from which the actual values were drawn is far from Normal. We can also use this to argue that the $t$-statistic is a valid means to test our hypothesis even when the data is not Normal-distributed. Indeed, simulations show that hypothesis tests with the $t$-statistic are valid for sufficiently large data sets even when the distribution of the observations is far from Normal [e.g. @lumley2002importance].
 
 Finally, the Central Limit Theorem may also be applied to justify the assumption of a Normal distribution, at least for certain variables. For instance, in (cognitive) psychology, we might imagine that processes such as perception and judgement rely on processing and transforming information, and that various processing and transformation steps are subject to many independent sources of noise (e.g., things we might call visual, neural, and memory noise). If these sources of noise combine additively, we could argue that the resulting percept or judgement will follow a Normal distribution.
+
+### Bootstrapping a statistic
+
+The crucial thing to realise is that the assumption that the data is Normal-distributed is used to derive the sampling distribution of the test statistic. The sampling distribution of the test statistic allows us to calculate a $p$-value, and if the true sampling distribution of the statistic is different from what is assumed, then the $p$-value will be wrong. If the data is Normal-distributed, then we are guaranteed that the sampling distribution of the $t$ statistic follows a t-distribution. If the data is not Normal-distributed, the sampling distribution of the $t$ statistic may still be indistinguishable from a t distribution. In that case, the $p$-value would still be highly accurate, and we would not need to worry that the data is not Normal-distributed. In short, what we really want to know is whether the assumed distribution of a test statistic is approximately correct.
+
+This is not something we can know for sure. All we have is a sample from the Data Generating Process; we do not know the true distribution of the data. But we can use this sample to do something similar as I did above to show the Central Limit Theorem in action: we can repeatedly draw samples and check the resulting distribution. In this case, we will treat the sample as what can be termed an _empirical distribution_. We can draw, with replacement, a large number of samples of size $n$ from the data, and then check the distribution of the sample mean, or even better, the distribution of the $t$ statistic. We need to draw samples with replacement (which means that the same observation can occur multiple times in our generated samples) to ensure that we obtain different generated samples. This procedure is also called a **nonparametric bootstrap** [@davison1997bootstrap]. It can be useful for a variety of purposes, including the computation of robust confidence intervals and hypothesis testing. Here, we use it to assess whether the assumed distribution by a parametric test such as the $t$-test seems reasonable.
+
+Figure \@ref(fig:bootstrap-sample-mean-and-t) shows the distribution of the sample mean and the $t$-statistic for a total of 100,0000 bootstrap samples, drawn with replacement from the empirical distribution of the data (Figure \@ref(fig:anchoring-eda-plots)). As these plots indicate, whilst the empirical distribution looks far from Normal, the sampling distribution of the mean does not appear to deviate too far from a Normal distribution. Whilst not perfect, both the histogram and Q-Q plot show that the distribution is approximately Normal. The sampling distribution of the $t$ statistic matches the assumed t distribution somewhat less well, with signs of left-skew. As such, the results of the $t$-test may be somewhat biased. This would be of particular concern when the observed effect was small and the test result close to the border of significance. Given the large magnitude of the $t$-statistic we computed for the actual data, and the very low $p$-value, it doesn't seem likely that these are due to wrongly assuming a t distribution. 
+
+```{r bootstrap-sample-mean-and-t, cache=TRUE, fig.cap="Boostrapped sample means and $t$ statistics, using 100,000 bootstrap samples from the empirical distribution. For both the sample mean and $t$ statistic, we show a histogram with the assumed theoretical distribution overlaid, and a Q-Q plot."}
+nsim <- 100000
+set.seed(23456)
+boot_mean <- rep(0.0,nsim)
+boot_t <- rep(0.0,nsim)
+s_mean <- mean(dat$everest_meters)
+y <- matrix(dat[sample(1:nrow(dat),size=nsim*nrow(dat),replace=TRUE),]$everest_meters,ncol=nsim)
+boot_mean <- colMeans(y)
+boot_t <- apply(y,2,function(x) t.test(x - s_mean,mu=0)$statistic)
+
+plots <- list()
+
+plots[[1]] <- data.frame(mean=boot_mean) %>%
+  ggplot(aes(x=mean)) + geom_histogram(binwidth=30) + stat_function(fun = function(x) 
+    dnorm(x, mean = mean(boot_mean), sd = sd(boot_mean)) * 30 * nsim, linetype=2) + ylab("count")
+
+plots[[2]] <- data.frame(mean=boot_mean) %>%
+  ggplot(aes(sample = mean)) + stat_qq() + stat_qq_line() + ylab("sample") + xlab("theoretical")
+
+plots[[3]] <- data.frame(t=boot_t) %>%
+  ggplot(aes(x=t)) + geom_histogram(binwidth=.1) + stat_function(fun = function(x) 
+    dt(x, df = nrow(dat) - 1) * .1 * nsim, linetype=2) + ylab("count")
+
+plots[[4]] <- data.frame(t=boot_t) %>%
+  ggplot(aes(sample = t)) + stat_qq(distribution = stats::qt, dparams = list(df = nrow(dat) - 1)) + stat_qq_line(distribution = stats::qt, dparams = list(df = nrow(dat) - 1)) + ylab("sample") + xlab("theoretical")
+
+gridExtra::grid.arrange(plots[[1]], plots[[2]], plots[[3]], plots[[4]], ncol=2)
+
+```
+
+## In practice
+
+The one-sample t-test is perhaps one of the simplest statistical hypothesis tests. Simplicity is not a bad thing. If you can formulate a hypothesis in terms of an exact value of the true mean should take, that is a sign of an advanced science. Unfortunately, such precise predictions are rare in psychology. But in those occasions where you can use a one-sample t-test, here is some practical advice on how to proceed:
+
+1. __Explore the data__. In particular, check for **outliers**, which in this case are observations very far removed from the sample mean. Remember that in a Normal distribution, values which are more than 3 standard deviations removed from the mean are very rare. Whilst not impossible, such rare observations can severely bias the estimated mean. For example, if one participant in the anchoring experiment would have estimated the height of Mount Everest as one million meters, the sample mean would change rather dramatically. Consequently, the result of a statistical test could be entirely due to a single observation, effectively rendering all other observations in the data meaningless. In such cases, there is good reason to remove these unduly influential observations from the data. But this should always be done with caution. We will discuss outliers in more detail in Section \@ref(sec:04b-outliers).
+2. After removing outliers if necessary, assess whether the assumptions underlying the test are reasonable. This is, in my opinion, best done graphically. Plot the distribution of the variable of interest with e.g. a histogram, raincloud and Q-Q plot. Inspect these carefully. What you are looking for is relatively large deviations from a Normal distribution. 
+3. Conduct the analysis and report the results. When reporting the results, make sure that you include all relevant statistics. For example, one way to write the results of anchoring analysis is as follows:
+
+> To assess bias in participant's judgements of the height of Mount Everest, we conducted a one-sample $t$-test, against the null hypothesis that the average judgement equals the true height of Mount Everest (i.e. 8848 meters). In our sample of $n=`r nrow(dat)`$ participants, the average judgement was `r papaja::apa_print(t.test(dat$everest_meters,mu=8848))$estimate`. This is a significant difference from the null hypothesis of $\mu = 8848$, `r papaja::apa_print(t.test(dat$everest_meters,mu=8848))$statistic`, with an effect size of Cohen's $d = `r round(effectsize::effectsize(t.test(dat$everest_meters,mu=8848))$Cohens_d,3)`$, which can be considered large.
 
 <!--
 ## Summary

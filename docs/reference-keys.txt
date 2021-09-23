@@ -42,11 +42,14 @@ eq:definition-one-sample-t
 fig:critical-values-t-distribution
 eq:confidence-interval-one-sample-t-test
 fig:simulated-confidence-intervals-one-sample-t-test
+eq:cohen-d-one-sample-t-test
+fig:one-sample-cohen-d-plot
 fig:anchoring-qq-plot
 fig:anchoring-mixture-plot
 def:clt
 fig:weird-prob-dist
 fig:clt-animation-1
+fig:bootstrap-sample-mean-and-t
 fig:scatterplot-trump-votes-hate-groups
 eq:simple-model-as-glm
 eq:bivariate-regression-model-definition
@@ -59,6 +62,8 @@ fig:scatterplot-trump-votes-hate-groups-with-regression
 eq:SSE-GLM-general
 fig:scatterplot-trump-votes-hate-groups-with-regression-model-comparison
 eq:glm-f-definition
+eq:glm-df1-general
+eq:glm-df2-general
 fig:f-distribution-plot
 fig:scatterplot-trump-votes-hate-groups-with-regression-model-comparison-2
 fig:direct-relation-vs-common-cause
@@ -77,6 +82,7 @@ eq:definition-eta-squared-glm
 fig:sse-partition
 eq:standardized-slopes
 eq:semi-partial-determination
+eq:partial-determination
 fig:trump-predicted-residual
 fig:predicted-residual-for-violations-of-assumptions
 fig:sse-partition-multicollinearity
@@ -115,6 +121,7 @@ tab:polynomial-contrasts
 fig:expBelief-raincloud
 tab:expBelief-oneway-ANOVA-results
 tab:expBelief-factorial-ANOVA-results
+eq:glm-factorial-ANOVA-model
 fig:expBelief-threeway-raincloud
 tab:expBelief-threeway-ANOVA-codes
 tab:expBelief-threeway-ANOVA-results
@@ -155,7 +162,7 @@ fig:bayesian-t-tests-different-rscale
 tab:bayesian-lm-speedate
 tab:bayesian-anova-expBelief
 fig:simulation-p-value-distribution
-fig:unnamed-chunk-49
+fig:unnamed-chunk-51
 tab:common-data-transformations
 fig:example-multiple-regression-write-up-plot
 fig:example-factorial-ANOVA-write-up-plot
@@ -203,9 +210,12 @@ testing-whether-mu-has-an-specific-value
 the-classical-way
 the-model-comparison-way
 confidence-intervals
+effect-size
 sec:02-assumptions
 the-central-limit-theorem
 the-central-limit-theorem-in-action
+bootstrapping-a-statistic
+in-practice
 simple-linear-regression
 trump-votes-and-hate-groups
 the-model
@@ -226,7 +236,7 @@ r2-changes-and-the-coefficient-of-semi-partial-determination
 sec:04b-assumptions
 multicollinearity-redundancy-between-predictors
 detecting-and-dealing-with-multicollinearity
-outliers
+sec:04b-outliers
 moderation-and-mediation
 moderation
 physical-attractiveness-and-intelligence-in-speed-dating
@@ -254,6 +264,7 @@ experimenter-beliefs-and-social-priming
 a-oneway-anova
 factorial-designs
 sec:06-main-effects-and-interactions
+the-factorial-anova-model
 a-threeway-factorial-anova
 interpreting-interactions
 orthogonal-contrast-codes-and-unequal-sample-sizes
