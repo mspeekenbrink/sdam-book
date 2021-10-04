@@ -1,4 +1,4 @@
-# Statistical modelling {#ch:modeling}
+# Statistical modelling {#ch-modeling}
 
 Was Paul truly psychic, an oracle of some kind? Or was Paul -- or his keeper, as what does fame really mean to an octopus? -- just really lucky? How do we know? And what really are the chances of predicting the winner of 8 matches correct? These are questions we will focus on now.
 

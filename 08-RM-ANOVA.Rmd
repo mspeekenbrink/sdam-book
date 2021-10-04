@@ -1,6 +1,6 @@
 # Repeated-measures ANOVA
 
-In this chapter, we will discuss how to deal with the non-independence of errors that can result from repeated measures of the same individual or other forms of groupings in the data.
+In this chapter, we will discuss how to deal with the non-independence of errors that can result from repeated measures of the same individual or other forms of groupings in the data, within the context of ANOVA analyses. The resulting class of models is known as repeated-measures ANOVA. 
 
 ## Non-independence in linear models
 
@@ -9,49 +9,89 @@ The General Linear Model we have considered thus far can be stated as follows:
 $$Y_i = \beta_0 + \beta_1 \times X_{1,i} + \beta_2 \times X_{2,i} + \ldots + \beta_m \times X_{m,i} + \epsilon_i \quad \quad \quad \epsilon_i \sim \mathbf{Normal}(0,\sigma_\epsilon)$$
 The assumptions of this model concern the residuals or errors $\epsilon_i$. They are assumed to be _independent and identically distributed_ (iid), following a Normal distribution with a mean of 0 and a standard deviation $\sigma_\epsilon$.
 
-The assumption that the errors are independent means that knowing the value of the error for one case $i$ in the data does not give you any information to determine the value of the error for another case $j$. More formally, statistical independence is defined in terms of conditional probabilities. Remember when we discussed the rules of probability (Section \@ref(sec:02-rules-of-probability))? In particular, we used independence to state rule 7, which is a specific case of the multiplication rule (rule 6). We can define the distribution of the error for case $i$ as a conditional probability $p(\epsilon_i | \epsilon_i, X_{1,i}, \ldots, X_{m,i})$, where we conditionalise on all the predictor values, as well as another error term $\epsilon_j$. The errors are independent when 
-$$p(\epsilon_i | \epsilon_j, X_{1,i}, \ldots, X_{m,i}) = p(\epsilon_i |  X_{1,i}, \ldots, X_{m,i})$$
-i.e. the distribution of $\epsilon_i$, conditional upon knowing the value of the predictors and the error $\epsilon_j$ of another case $j$, is the same as the distribution conditional upon just knowing the value of the predictors. This means that error $\epsilon_j$ provides no information about the error $\epsilon_i$.
+You can expect violations of the _iid_ assumption if data are collected from "units of observation" that are clustered in groups. A common example of this in psychology is when you repeatedly observe behaviour from the same person.^[Other examples of such clustering in data are when data is collected in group settings, such as students within classrooms, or patients within hospitals. In such situations one could expect again that observations within each cluster (i.e., a specific group, classroom, or hospital) are more similar to each other than observations across clusters.] For example, suppose participants in an experiment perform two tests to measure their working memory capacity. A person with a high working memory capacity would score high on both tests, whilst a person with a low working memory capacity would score low on both. That means that the scores in the two tests are correlated. That means the scores on both tests are _not_ independent. If the model does not adequately account for this, then the residuals (errors) would also note be independent. 
 
-When might such independence _not_ hold? Let's for the moment go back to the simplest version of the GLM, the model with just an intercept that was the focus of Chapter \@ref(ch:simple-GLM):
+As another example of dependency between model residuals, let's go back to the simplest version of the GLM, the model with just an intercept that was the focus of Chapter \@ref(ch-simple-GLM):
 \begin{equation}
 Y_i = \beta_0 + \epsilon_i
 (\#eq:simple-glm-ch08)
 \end{equation}
-Suppose $Y$ are again judgements of the height of Mount Everest, but that one of the labs in the ManyLabs study that collected the data, was based in Nepal. We might expect participants in Nepal to have a more accurate idea of the height of Mount Everest than participants in Poland (the country the participants were from in the subset of the data we considered in Chapter \@ref(ch:simple-GLM)). As a result, participants in Nepal would likely be less influenced by the low anchor than those with less knowledge of Mount Everest. If $\beta_0$ represents the mean judgement over all participants, then participants in Nepal would generally provide judgements which are higher than $\beta_0$ (i.e positive errors), whilst participants in Poland would generally provide judgements that are lower than $\beta_0$ (i.e. negative errors). If our model does not account for such grouping in the data, then the errors for cases from Nepal would be correlated, because all would tend to be positive. Similarly, the errors for cases from Poland would also be correlated, as all would tend to be negative. What this example points to is that the simple model does not account for the fact that participants from different countries might have a different average judgement. As such, the model is misspecified. We could of course alleviate this problem by including an effect for country, using a contrast-coding predictor $X_1$ to reflect the difference between participants from Nepal ($X_1 = \tfrac{1}{2}$) and Poland ($X_1 = -\tfrac{1}{2}$) in an expanded model
-$$Y_i = \beta_0 + \beta_1 \times X_{1,i} + \epsilon_i$$
-This model would allow for a different mean judgement for cases from Nepal ($\beta_0 + \tfrac{1}{2} \times \beta_1$) and cases from Poland ($\beta_0 - \tfrac{1}{2} \times \beta_1$). Effectively, this is the strategy employed in repeated-measures ANOVA: include an effect for grouping.
+Suppose the dependent variable $Y$ again reflects judgements of the height of Mount Everest, but that one of the labs in the ManyLabs study that collected the data, was based in Nepal. We might expect participants in Nepal to have a more accurate idea of the height of Mount Everest than participants in Poland (the country the participants were from in the subset of the data we considered in Chapter \@ref(ch-simple-GLM)). As a result, participants in Nepal would likely be less influenced by the low anchor than those with less knowledge of Mount Everest. If $\beta_0$ represents the mean judgement over all participants, then participants in Nepal would generally provide judgements which are higher than $\beta_0$ (i.e positive errors), whilst participants in Poland would generally provide judgements that are lower than $\beta_0$ (i.e. negative errors). If our model does not account for such grouping in the data, then the errors for cases from Nepal would be correlated, because all would tend to be positive. Similarly, the errors for cases from Poland would also be correlated, as all would tend to be negative. 
 
-You can expect violations of the _iid_ assumption if data are collected from units of observations that are clustered in groups. A common example of this in psychology is when you repeatedly observe behaviour from the same person. Other examples of this are data from experiments collected in group settings, students within classrooms, or patients within hospitals. In such situations one would expect that observations within each cluster (i.e., a specific group, classroom, or hospital) are more similar to each other than observations across clusters. Unfortunately, compared to violations of other assumptions, such as the normality assumption or the assumption of variance homogeneity, standard statistical procedures are usually not robust to violations of the independence assumption [@kenny_consequences_1986;@judd_treating_2012]. They often lead to considerably increased Type I errors (i.e., false positives) and more generally can produce overconfident results (e.g., too narrow standard errors).
+What this example points to is that the simple model does not account for the fact that participants from different countries might have a different average judgement. As such, the model is misspecified. Here, that leads to dependent errors. Unfortunately, compared to violations of other assumptions, such as the normality assumption or the assumption of variance homogeneity, standard statistical procedures are usually _not_ robust to violations of the independence assumption [@kenny_consequences_1986;@judd_treating_2012]. They often lead to considerably increased Type I errors (i.e., false positives) and more generally can produce overconfident results (e.g., too narrow standard errors).
+
+In the example above, we could alleviate the problem of dependent errors by including an effect for country, using a contrast-coding predictor $X_1$ to reflect the difference between participants from Nepal ($X_1 = \tfrac{1}{2}$) and Poland ($X_1 = -\tfrac{1}{2}$) in an expanded model
+$$Y_i = \beta_0 + \beta_1 \times X_{1,i} + \epsilon_i$$
+This model would allow for a different mean judgement for cases from Nepal ($\beta_0 + \tfrac{1}{2} \times \beta_1$) and cases from Poland ($\beta_0 - \tfrac{1}{2} \times \beta_1$). Effectively, this is the strategy employed in repeated-measures ANOVA: include an additional grouping factor in the model.
+
+<!-- The assumption that the errors are independent means that knowing the value of the error for one case $i$ in the data does not give you any information to determine the value of the error for another case $j$. More formally, statistical independence is defined in terms of conditional probabilities. Remember when we discussed the rules of probability (Section \@ref(sec:02-rules-of-probability))? In particular, we used independence to state rule 7, which is a specific case of the multiplication rule (rule 6). We can define the distribution of the error for case $i$ as a conditional probability $p(\epsilon_i | \epsilon_i, X_{1,i}, \ldots, X_{m,i})$, where we conditionalise on all the predictor values, as well as another error term $\epsilon_j$. The errors are independent when 
+$$p(\epsilon_i | \epsilon_j, X_{1,i}, \ldots, X_{m,i}) = p(\epsilon_i |  X_{1,i}, \ldots, X_{m,i})$$
+i.e. the distribution of $\epsilon_i$, conditional upon knowing the value of the predictors and the error $\epsilon_j$ of another case $j$, is the same as the distribution conditional upon just knowing the value of the predictors. This means that error $\epsilon_j$ provides no information about the error $\epsilon_i$.
+-->
 
 ## The cheerleader effect
 
-Facial attractiveness is traditionally considered to be related to physical features such as symmetry, closeness to the "average" face, and sexual dimorphism. However, there is also evidence that perceived attractiveness can vary due to factors outside of the face. In what has become known as the "cheerleader effect", the same face is perceived to be more attractive when seen in a group, as compared to when it is seen alone. @walker2014hierarchical proposed that the cheerleader effect arises due, being presented with a group of faces, people encode the display in a hierarchical manner, calculating an average face of the group, and then deviations of individual faces from the group average. As average faces tend to be perceived as more attractive than individual faces, this hierarchical encoding results in each face being rated as more attractive (as the average part of the encoded face is attractive). @carragher2019limited set out to test this explanation. In one part of the study (Experiment 1), they let participants rate the attractiveness of a face when presented by itself, as part of a group of different faces, or as part of a group of similar faces. The latter differed slightly between conditions: in the Identical-distractors condition, the group consisted of three versions of exactly the same photo. In the Self-distractors condition, the group consisted of three different photos of the same face. The authors argued that if the hierarchical-encoding explanation for the cheerleader effect is true, then the cheerleader effect should not be observed in the Identical-distractors condition, as the lack of differences between the three photos means that an encoded average face should not be deemed more attractive than the individual face. In the Self-distractor condition, variability between the different photos of the same face might still lead to an average which is more attractive than the individual faces.
+The attractiveness of a person's face is traditionally considered to be related to physical features, such as how symmetrical the features are, how close a face is to the "average" face over many people, and sexual dimorphism (whether a face looks exclusively male or female). However, there is also evidence that perceived facial attractiveness can vary due to factors outside of the face. In what has become known as the "cheerleader effect", the same face is perceived to be more attractive when seen in a group, as compared to when it is seen alone. @walker2014hierarchical proposed that the cheerleader effect arises due to people encoding faces in a hierarchical manner. When presented with a group of faces, people encode the display by first calculating an average face for the group, and then encoding individual faces through deviations from the group average. As average faces tend to be perceived as more attractive than individual faces, this then results in each face in the group being perceived as more attractive, because the average part of the encoding is perceived as attractive. 
 
-```{r cheerleader-raincloud-plot}
+@carragher2019limited set out to test this explanation. In one part of the study (Experiment 1), they let participants rate the attractiveness of a face when presented by itself (the Alone condition), as part of a group of different faces (the Control condition), or as part of a group of similar faces (the Distractor conditions). There were two variants of the latter condition, and participants encountered only one of them in the experiment. In the Identical-distractors condition, the group consisted of three versions of exactly the same photo. In the Self-distractors condition, the group consisted of three different photos of the same face. The authors argued that if the hierarchical-encoding explanation for the cheerleader effect is true, then the cheerleader effect should not be observed in the Identical-distractors condition, as the lack of differences between three identical photos means that an encoded average face should not be deemed more attractive than the individual face. In the Self-distractor condition, variability between the different photos of the same face might still lead to an average face which is more attractive than each individual face. This is an example of a 2 (version: Indentical-distractors, Self-distractors) by 3 (condition: Alone, Control, or Distractor) design. The first factor (Version) varied between people, and the second (Condition) within people (each participant rated a face in each of the three conditions). The rated attractiveness of the faces in the different conditions are provided in Figure \@ref(fig:cheerleader-raincloud-plot).
+
+```{r cheerleader-raincloud-plot, fig.cap="Attractiveness ratings for photo's of faces when presented alone, as part of a group of dissimilar faces (Control), or as part of a group of similar faces (Distractor), which are either identical (Identical-distractors) or different photos (Self-distractors) ofd the same face."}
 library(dplyr)
 library(ggplot2)
 library(sdamr)
-data(cheerleader)
+data("cheerleader")
 dat <- subset(cheerleader, Excluded == 0)
 dat %>%
   # group_by(Task,Item) %>%
   sdamr::plot_raincloud(y=Response, groups = Item) + facet_wrap(~Task)
 ```
 
-## Variability between participants or other groupings
+## A oneway repeated-measures ANOVA
 
-```{r}
+To keep matters relatively simple, we will for now just consider participants in the Self-distractors condition. That means that we can treat the study as a oneway design, with three levels (condition: Alone, Control, or Distractor) that all vary within-participants.
+
+Table \@ref(tab:cheerleader-self-attractiveness-table) shows the attractiveness ratings for 10 participants in the Self-distractors condition. You can see there that when a participant rates a face as relatively attractive when presented alone, (s)he also tends to rate the face as relatively attractive when shown in a group of faces. Some participants (e.g. participant 37) rate the face as relatively unattractive in all conditions. This indicates individual differences in how attractive people find a face. People's tastes differ. Whilst that may be interesting in its own right, for the purposes of the experiment, we do not care about such individual differences. What we want to know is whether the attractiveness of a face increases when presented as part of a group. 
+
+```{r cheerleader-self-attractiveness-table}
+dat <- dat %>%
+  filter(Task == "Self-Distractors") %>%
+  mutate(Item = factor(Item))
 dat %>%
   group_by(Participant) %>%
-  summarize(Response = mean(Response)) %>%
-  ggplot(aes(x=Response)) + geom_histogram()
+  tidyr::pivot_wider(id_cols = Participant, names_from = Item, values_from = Response) %>%
+  ungroup() %>%
+  filter(row_number() <= 10) %>%
+  mutate("Average" = (Alone + Control_Group + Distractor_Manipulation)/3) %>%
+  knitr::kable(row.names = FALSE, col.names = c("Participant","Alone", "Control", "Distractor", "Average"), digits=2, caption=c("Attractiveness ratings in the Alone, Control, and Distractor condition for 10 participants in the Self-distractors condition. Also shown is the average over the three ratings."))  
+
+#  summarize(Response = mean(Response)) %>%
+#  ggplot(aes(x=Response)) + geom_histogram(bins=10)
 
 ```
 
-## Including effects for participants or other groupings
+To answer this question, we should however take individual differences into account. If we were to (wrongly!) treat all ratings as independent, and analyse the data with a regular oneway ANOVA, we would obtain the results in Table \@ref(tab:cheerleader-oneway-ANOVA-results). As you can see, this analysis indicates there is no effect of presenting a face alone or in a group.
 
-Let $Y_{i,j}$ denote a response by person $i$ in condition $j$. We can state an ANOVA model as
+```{r cheerleader-oneway-ANOVA-results}
+codes <- cbind(c(-1,1,0),
+               c(-1,0,1))
+contrasts(dat$Item) <- codes
+modg <- lm(Response ~ Item, data=dat)
+opts <- options()
+opts <- options()
+options(knitr.kable.NA = "")
+tab <- cbind(estimate = c(coefficients(modg)[1],NA,coefficients(modg)[2:3],Error=NA),rbind(car::Anova(modg, type=3)[1:2,],expand_Anova(modg, type=3)[-1,]))
+rownames(tab) <- c("Intercept","Condition","$\\quad X_1$ (Control)","$\\quad X_2$ (Distractor)", "Error")
+colnames(tab) <- c("$\\hat{\\beta}$","$\\text{SS}$", "$\\text{df}$", "$F$", "$P(\\geq \\lvert F \\rvert)$")
+knitr::kable(tab, caption = "Linear model predicting attractiveness ratings in the three conditions, wrongly assuming independence. Effect-coding was used for Condition.", escape = FALSE, digits=3, booktabs=TRUE, linesep="")
+options(opts)
+```
+
+The problem in this analysis is that it ignores the (sometimes rather large) differences between participants in how attractive they find a face on average (i.e. over the three conditions). This individual variability makes the ratings within each condition also highly variable. By ignoring that we have repeated measures for each participant, the model errors are the differences between each rating in a condition, and the average in that condition. If we let $Y_{i,j}$ denote a response by person $i$ in condition $j$, the errors in this model are $\hat{\epsilon}_{i,j} = Y_{i,j} - \overline{Y}_{\cdot,j}$. But, if you go back to Table \@ref(tab:cheerleader-self-attractiveness-table), you might realise that we can much more specific in considering what the effect of displaying a face in a group is. For each participant, we could consider whether the rating in e.g. the Control condition is higher than the rating in the Alone condition. For participant 36, the rating in the Control condition is a little lower than their rating in the Alone condition, and for participant 37, it is a little higher. We can then ask the question whether these differences are, on average, positive (indicating increased attractiveness) or negative (indicating decreased attractiveness). We could perform such an analysis by first computing difference scores, and then using a one-sample t-test to assess whether the difference scores are on average different from 0. We could do this for any pair of conditions, but that might result in a large number of tests. A repeated-measures ANOVA allows us to to essentially this within a single analysis.
+
+### Including effects for participants
+
+We can state an ANOVA model as
+<!--
 \begin{equation}
 Y_{i,j} = \mu + \tau^{(P)}_i + \tau^{(A)}_j + \epsilon_{i,j}
 (\#eq:glm-oneway-RM-ANOVA-model)
@@ -60,25 +100,40 @@ But this assumes that the effect of a treatment $j$ is the same for all
 individuals $i$. If we would allow the effect of a treatment to be different
 for participants, that would amount to including an interaction term (the 
 effect of treatment $j$ is moderated by individual $i$). This could be stated as
+-->
 \begin{equation}
 Y_{i,j} = \mu + \tau^{(P)}_i + \tau^{(A)}_j + \tau^{(P\times A)}_{i,j} + \epsilon_{i,j}
+(\#eq:one-RM-ANOVA-model-ch08)
 \end{equation}
-There is one complication, however. As we only have one observation for each combination of person and condition, both $\tau_{i,j}$ and $\epsilon_{i,j}$ target the same difference between observation $Y_{i,j}$ and $\mu + \tau^{(P)}_i + \tau^{(A)}_j$. Whilst it is straightforward to compute this difference
+There is one complication, however. We only have a single observation for each combination of person and condition. That means that the average for each combination of person and condition, which is what the model predicts, equals the observation $Y_{i,j}$. As such, the errors in this model would all be equal to $\epsilon_{i,j} = 0$. Our model would fit the data perfectly!
+
+Although you might think that a perfectly fitting model is ideal (why wouldn't you be happy when a model predicts the data perfectly?), that is far from the case here. Let's consider the number of parameters in the model. If we have $P$ people, and $A$ levels for condition, our model estimates $1 + (P-1) + (A-1) + (P-1)\times(A-1) = P \times A$ parameters, which is equal to the total number of observations $n = P \times A$. A model with as many parameters as observations is bound to _overfit_ the data.
+
+While the model specified in Equation \@ref(eq:one-RM-ANOVA-model-ch08) makes sense, in practice, we can not distinguish between the interaction term $\tau^{(P\times A)}_{i,j}$ and the error term $\epsilon_{i,j}$. To signify this, we could rewrite the model as
+\begin{equation}
+Y_{i,j} = \mu + \tau^{(P)}_i + \tau^{(A)}_j + (\tau^{(P\times A)} + \epsilon)_{i,j}
+\end{equation}
+
+<!--
+both $\tau_{i,j}$ and $\epsilon_{i,j}$ target the same difference between observation $Y_{i,j}$ and $\mu + \tau^{(P)}_i + \tau^{(A)}_j$. Whilst it is straightforward to compute this difference
 $$Y_{i,j} - (\mu + \tau^{(P)}_i + \tau^{(A)}_j)$$
 we cannot determine which part of this belongs to $\tau^{(P\times A)}_{i,j}$, and which part to $\epsilon_{i,j}$.
+-->
 
 <!-- It's like a pizza,  where some part is yours, and some part belongs to a random stranger. Halves may seem fair, but what if you haven't eaten for days, and perhaps the stranger is starving. Without knowing anything else, it could be just as fair to give on person everything and the other nothing, as splitting in equal halves. The right way to split is, in that case, indeterminate. When two terms in an equation "fight" for the same slice of the pie, that is similar. There is no way to  determine what belongs to what. -->
 
 To test for the main effect of experimental factor $A$, we can compare the full model to a reduced model where we set $\tau^{(A)}_j = 0$ for all $j$. This provides MODEL R:
 \begin{equation}
-Y_{i,j} = \mu + \tau^{(P)}_i + \epsilon_{i,j}
+Y_{i,j} = \mu + \tau^{(P)}_i + (\tau^{(P\times A)} + \epsilon)_{i,j}
 \end{equation}
 
 ```{r}
-anova(lm(Response ~ Participant, data=dat), lm(Response ~ Participant + Item, data=dat))
+#anova(lm(Response ~ Participant, data=dat), lm(Response ~ Participant + Item, data=dat))
 ```
 
-You might wonder if you should also test for the main effect of P. The short answer is: no. The longer answer involves me telling you why, and requires us first to consider the difference between fixed and random effects. 
+You might wonder if you can or should also test for the main effect of persons (P). The short answer is: no. The longer answer is that the inability to distinguish between the interaction term $\tau^{(P\times A)}_{i,j}$ and the error term $\epsilon_{i,j}$ affects the estimates of the person effects $\hat{\tau}^{(P)}_i$ and treatment effects $\hat{\tau}^{(A)}_j$ differently. Whilst the variance of the sampling distribution of the estimates of the treatment effects $\hat{\tau}^{(A)}_j$ depends on both the variance in the interaction term $\tau^{(P\times A)}_{i,j}$ and the error term $\epsilon_{i,j}$, the variance of the sampling distribution of the person effects depends only on the variance of the error term $\epsilon_{i,j}$. Intuitively, you might think of this as follows: whilst the treatment effects may differ between persons (as reflected in the interaction term $\tau^{(P\times A)}_{i,j}$), these deviations from the average treatment effects (as reflected in the treatment term $\tau^{(A)}_{j}$) are random, and will cancel each other out.  
+
+involves me telling you why, and requires us first to consider the difference between fixed and random effects. 
 
 ### Fixed vs random effects
 
@@ -86,7 +141,7 @@ A set of participants in a study is generally a sample from a (much) larger popu
 $$\tau_i^{(P)} \sim \mathbf{Normal}(0,\sigma_\text{P})$$
 Our objective here is to estimate the variability between persons, i.e. $\sigma_\text{P}$, and _not_ to estimate each $\tau^{P}_i$ as precisely as possible. 
 
-The generalization problem for fixed effects (experimental manipulations) is subtly different: our objective is to infer from a sample what effect precisely these experimental manipulations will have in the whole population. The objective here is to get the most precise estimation of each $\tau_j^{(A)}$. 
+The generalization problem for fixed effects (experimental manipulations) is different: our objective is to infer from a sample what effect precisely these experimental manipulations will have in the whole population. The objective here is to get the most precise estimation of each $\tau_j^{(A)}$. 
 
 
 

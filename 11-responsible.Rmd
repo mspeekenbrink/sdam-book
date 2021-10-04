@@ -56,7 +56,7 @@ When writing up the results of statistical analyses, you should aim for clarity 
 
 Here are some of my recommendations for describing analyses in the results section of a paper. They are mostly consistent with the APA guidelines, although I must admit the last version of the APA publication manual I read was the 5th edition from 2001.
 
-I will start by listing some general guidelines, and then provide two example write-ups, one for the multiple regression analysis that we focused on in Chapter \@ref(ch:multiple-regression), and another for the factorial ANOVA that we focused on in Chapter \@ref(ch:factorial-ANOVA).
+I will start by listing some general guidelines, and then provide two example write-ups, one for the multiple regression analysis that we focused on in Chapter \@ref(ch-multiple-regression), and another for the factorial ANOVA that we focused on in Chapter \@ref(ch-factorial-ANOVA).
 
 1. Start by describing the main objectives of an analysis.
 2. Identify the model underlying the analysis (e.g. a multiple regression model, an ANOVA model, or a linear mixed-effects model).

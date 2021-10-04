@@ -10,7 +10,7 @@ dat <- subset(trump2016,state != "District of Columbia")
 
 ## Trump, votes, and hate groups
 
-Donald Trump is perhaps the most divisive president in American history. The 2016 US elections were mired in controversy. [Some reports](https://www.theguardian.com/world/2020/mar/18/white-nationalist-hate-groups-southern-poverty-law-center) indicate the number of white nationalist hate groups have gone up by 55% in the Trump era. One study found a strong relation between Trump support and anti-immigrant sentiment, racism, and sexism [@schaffner_understanding_2018]. 
+Donald Trump was perhaps the most divisive president in American history. The 2016 US elections were mired in controversy. [Some reports](https://www.theguardian.com/world/2020/mar/18/white-nationalist-hate-groups-southern-poverty-law-center) indicate the number of white nationalist hate groups have gone up by 55% in the Trump era. One study found a strong relation between Trump support and anti-immigrant sentiment, racism, and sexism [@schaffner_understanding_2018]. 
 
 [Paul Ricci](https://www.csiwithoutdeadbodies.com/2017/02/hate-groups-and-trumps-vote-predictive.html) collated data about the number of hate groups in the different US states and votes for Trump. A scatterplot of these two variables is provided in Figure \@ref(fig:scatterplot-trump-votes-hate-groups). You can see that states with relatively little hate groups appear to also have relatively little votes for Trump, while states with a relatively large number of hate groups have relatively many votes for Trump.
 
@@ -24,8 +24,7 @@ if(knitr::is_html_output()) {
 }
 ```
 
-To assess the relation between Trump votes and the number of hate groups, we will use a linear regression model. As the name suggests, this model involves a line, a straight one in fact. This straight line represents the mean value of the dependent variable $Y$ (i.e. the percentage of Trump votes) for cases which have a particular value for the predictor (or independent) variable $X$ (i.e. the number of hate groups). The model concerns e.g. the mean percentage of Trump votes in all states with 5.55 hate groups per 1 million citizens, or all states with 0 hate groups per 1 million citizens. The model allows for variation around the mean of the actual percentages of Trump votes in all states with that particular number of hate groups per 1 million citizens. In particular, it assumes that these actual percentages are Normal-distributed. 
-
+To assess the relation between Trump votes and the number of hate groups, we will use a linear regression model. As the name suggests, this model involves a line, a straight one in fact. This straight line represents the mean value of the dependent variable $Y$ (i.e. the percentage of Trump votes) for cases which have a particular value for the predictor (or independent) variable $X$ (i.e. the number of hate groups). For example, we may consider the average percentage of Trump votes in those states with 5.55 hate groups per 1 million citizens, or the average percentage of Trump votes in states with 0 hate groups. The model allows the actual percentages of Trump votes to vary around the average. In particular, it assumes that the deviations between actual and mean percentages are Normal-distributed. 
 
 ## The model
 

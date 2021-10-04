@@ -1,4 +1,4 @@
-# A model with a mean (one sample t-test) {#ch:simple-GLM}
+# A model with a mean (one sample t-test) {#ch-simple-GLM}
 
 In this chapter, we will start our journey into the General Linear Model with the most basic example within the GLM: a model concerning a single Normal distribution, where we are interested in statements about the mean of that distribution. The resulting test is also known as the one-sample t-test. We will look at the Normal distribution in detail, and cover estimation of its parameters, before focusing on testing hypotheses about the mean. We will also introduce confidence intervals as an alternative, but mostly equivalent means to make inferences about parameters. We end the chapter by looking at the assumptions of the model, and what happens to the testing procedure if those assumptions are false. <!-- with a look ahead towards the other chapters, by providing a brief overview of the General Linear Model. -->
 

@@ -1,4 +1,4 @@
-# Multiple regression {#ch:multiple-regression}
+# Multiple regression {#ch-multiple-regression}
 
 In this chapter, we extend the simple regression model to include multiple predictor variables. The slopes of the predictors in the resulting multiple regression model reflect the unique effect of each predictor on the dependent variable, after removing the effect of all other predictors from both the dependent and predictor variable. We will look at what that means in some detail. We then go on to discuss parameter estimation and testing. 
 

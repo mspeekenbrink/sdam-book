@@ -1,0 +1,4 @@
+# Repeated-measures ANOVA
+
+In this chapter, we will discuss how to deal with the non-independence of errors that can result from repeated measures of the same individual or other forms of groupings in the data.
+

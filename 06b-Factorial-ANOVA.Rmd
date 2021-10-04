@@ -1,4 +1,4 @@
-# Factorial ANOVA {#ch:factorial-ANOVA}
+# Factorial ANOVA {#ch-factorial-ANOVA}
 
 In this chapter, we will extend our discussion of including nominal predictors in the General Linear Model to the case of multiple nominal predictors, where all the combinations of the levels of each are included in the design of a study. The analysis of such designs, with a factorial combination of all levels, is generally called factorial ANOVA. While the method is, as we will see, not fundamentally different than a oneway ANOVA, treated in the previous chapter, the factorial nature allows one to distinguish between _main effects_ of factors, and their _interactions_. After discussing how to interpret these effects, we turn to issues that arise when there are an unequal number of observations for the combinations of the levels. 
 
@@ -107,7 +107,7 @@ At this point, you might wonder what is special about factorial designs and the 
 
 An alternative, more traditional way of specifying a factorial ANOVA is in terms of a grand mean and treatment effects. This is analogous to the oneway ANOVA model of Equation \@ref(eq:glm-ANOVA-model). Let's consider a case with two experimental factors, $A$ and $B$, and let $Y_{i,j,k}$ denote an observation for person $i$ at level $j$ of the first factor ($A$) and level $k$ of the second factor ($B$). We can state the factorial ANOVA model as
 \begin{equation}
-Y_{i,j,k} = \mu + \tau^{(A)}_j + \tau^{(B)}_k + \tau{(A \times B)}_{j,k} + \epsilon_{i,j,k} \quad \quad \epsilon_{j,i} \sim \textbf{Normal}(0, \sigma_\epsilon)
+Y_{i,j,k} = \mu + \tau^{(A)}_j + \tau^{(B)}_k + \tau^{(A \times B)}_{j,k} + \epsilon_{i,j,k} \quad \quad \epsilon_{j,i} \sim \textbf{Normal}(0, \sigma_\epsilon)
 (\#eq:glm-factorial-ANOVA-model)
 \end{equation}
 Here, $\mu$ denotes the grand mean, $\tau^{(A)}_j$ the *treatment effect* of level $j$ of factor $A$:
@@ -115,9 +115,9 @@ $$\tau^{(A)}_j = \mu_{j,\cdot} - \mu$$
 $\tau^{(B)}_k$ the treatment effect of level $k$ of factor $B$
 $$\tau^{(B)}_k = \mu_{\cdot,k} - \mu$$
 
-, and $\tau{(A \times B)}_{j,k}$ the interaction effect
+and $\tau{(A \times B)}_{j,k}$ the interaction effect
 $$\tau^{(A \times B)}_{j,k} = \mu_{j,k} - (\mu + \tau^{(A)}_j + \tau^{(B)}_k)$$
-i.e. as the difference between the true mean $\mu_{j,k}$ at level $j$ of $A$ and level $k$ of factor $B$, and the predicted mean from treatment effects $\tau^{(A)}_j$ and $\tau^{(B)}_k$.
+i.e. the difference between the true mean $\mu_{j,k}$ at level $j$ of factor $A$ and level $k$ of factor $B$, and the predicted mean from treatment effects $\tau^{(A)}_j$ and $\tau^{(B)}_k$, which is $\mu + \tau^{(A)}_j + \tau^{(B)}_k$.
 
 ## A threeway factorial ANOVA
 
