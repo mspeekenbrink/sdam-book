@@ -259,7 +259,7 @@ with $t$ defined as in Equation \@ref(eq:definition-one-sample-t). When the abso
 
 What all this means is that the one-sample t-test, as worked out before, is equivalent to a likelihood ratio test comparing MODEL R to MODEL G. Whether you perform the test in the "classic" way by computing the $t$ statistic and assessing the magnitude of this in the $t$ distribution, or whether you compute a likelihood ratio and assess the magnitude of this in the distribution of the likelihood ratio under MODEL R, you will get exactly the same outcome.
 
-## Confidence intervals
+## Confidence intervals {#ch3-confidence-interval}
 
 Confidence intervals are __interval estimates__. That is, rather than providing a single point estimate of a parameter, they specify a range of values for a parameter. That range is chosen in a precise, but somewhat counter-intuitive and difficult to understand manner. Ideally, what you might want to obtain is a range such that you can be certain that, with a specified probability, the true parameter is within this range. Unfortunately, this is _not_ what confidence intervals do. Like much of Frequentist statistics, confidence intervals concern "the long run", they are based on the idea of an infinite number of possible (simulated) datasets from a true model. Confidence intervals are the result of an algorithm which is constructed in such a way that the ranges it produces will, for a specified proportion of all those possible datasets, contain the true value of the parameter. 
 

@@ -148,8 +148,7 @@ $$\begin{aligned}
 \texttt{trump_votes}_i &= \beta_0 + \beta_1 \times \texttt{hate_groups}_i + \beta_2 \times `r min(dat$percent_bachelors_degree_or_higher)` + \epsilon_i  \\
 &= (\beta_0 + \beta_2 \times `r min(dat$percent_bachelors_degree_or_higher)`) + \beta_1 \times \texttt{hate_groups}_i + \epsilon_i \\
 &= \beta_0' + \beta_1 \times \texttt{hate_groups}_i + \epsilon_i
-\end{aligned}
-$$
+\end{aligned}$$
 which is a simple regression model with a new intercept $\beta_0' = \beta_0 + \beta_2 \times `r min(dat$percent_bachelors_degree_or_higher)`$ composed as the sum of the original intercept and `r min(dat$percent_bachelors_degree_or_higher)` times the slope of $\texttt{education\_level}$, and the same slope $\beta_1$ for $\texttt{hate_groups}$. You can see these simple regression lines, for three different values of education level, in Figure \@ref(fig:trump-multiple-regression-scatter-with-multiple-regression-lines). Notice that the regression lines for different education levels are parallel, because they have the same slope. However, the regression lines are at different heights, because they have a different intercept.
 
 ```{r trump-multiple-regression-scatter-with-multiple-regression-lines, fig.cap="Percentage of votes for Trump in the 2016 elections for 50 US states and the number of hate groups per 1 million citizens, with regression lines for three different values of education level. The colour of each data point and regression line reflects the value of education level.", fig.width=5, fig.height=5, out.width='60%'}
@@ -190,7 +189,9 @@ $$\hat{\epsilon}_{\text{vote},i} + \beta_0 + \beta_1 \times \hat{\epsilon}_{\tex
 
 ## Inference {#sec:04b-inference}
 
-Testing hypotheses regarding the parameters of multiple regression models is analogous to testing the parameters of simple regression models. So one approach is to look at the sampling distribution of the estimates under the null hypothesis and compute the appropriate $t$ statistic. Testing, for each parameter, the null hypothesis $H_0: \beta_j = 0$, where $j = 0,\ldots,2$, we obtain the results given in \@ref(tab:t-test-results-multiple-regression-table).
+Testing hypotheses regarding the parameters of multiple regression models is analogous to testing the parameters of simple regression models. So one approach is to look at the sampling distribution of the estimates under the null hypothesis and compute the appropriate $t$ statistic. In a multiple regression model, the $t$-statistic follows a $t$-distribution with $n-(m+1)$ degrees of freedom, where as before $m$ stands for the number of predictors in the model. As we estimate a slope for each predictor, as well as an additional intercept parameter, the total number of estimated parameters is $\text{npar} = m + 1$. Hence, the degrees of freedom equals $n-\text{npar}$. 
+
+Testing, for each parameter, the null hypothesis $H_0: \beta_j = 0$, where $j = 0,\ldots,2$, we obtain the results given in \@ref(tab:t-test-results-multiple-regression-table).
 ```{r t-test-results-multiple-regression-table}
 tab <- summary(mod)$coefficients
 rownames(tab) <- c("Intercept","Hate groups per million", "% bachelors degree or higher")
@@ -206,8 +207,7 @@ to a restricted model where we fix $\beta_1 = 0$:
 $$\begin{aligned}
 \text{MODEL R: } \quad \texttt{trump_votes}_i &= \beta_0 + 0 \times \texttt{hate_groups}_i + \beta_2 \times \texttt{education}_i + \epsilon_i \\
 &= \beta_0 + \beta_1 \times \texttt{education}_i + \epsilon_i
-\end{aligned}
-$$  
+\end{aligned}$$  
 In other words, we would compare the multiple regression model to a simple regression model where we don't include $\texttt{hate_groups}$, as the null hypothesis assumes that this predictor has no _unique_ effect on the dependent variable. If the Sum of Squared Error of MODEL R is not substantially higher than that of MODEL G, then there would be no good evidence that $\beta_1 \neq 0$. Remember that the Sum of Squared Error of MODEL R can never be lower than that of MODEL G, i.e.  $\text{SSE}(R) \geq \text{SSE}(G)$. This is because __estimating the parameters of MODEL G by maximum likelihood is equivalent to minimizing the Sum of Squared Error__. If $\hat{\beta}_1 = 0$ in MODEL G, that would mean that the SSE of both models is exactly the same. If $\hat{\beta}_1 \neq 0$ in MODEL G, then $\text{SSE}(R) > \text{SSE}(G)$, because otherwise the estimated MODEL G would not have maximised the likelihood (or equivalently minimised the SSE).
 
 We have already shown results for MODEL G. The Sum of Squared Error for that model is $\text{SSE}(G) = `r sum(residuals(mod)^2)`$. Estimating MODEL R gives 
@@ -230,11 +230,11 @@ $$
 This is the model we estimated in the previous chapter, where we determined the estimates as 
 $$`r modr <- lm(percent_Trump_votes ~ hate_groups_per_million, data=dat); write_GLM_equation(modr,dv_name = "trump_votes", iv_names = c("hate_groups"), digits=4)`$$ 
 with an associated $\text{SSE}(R) = `r sum(residuals(modr)^2)`$. The $F$ statistic is then computed as 
-\begin{align}
+$$\begin{aligned}
 F &= \frac{\frac{`r sum(residuals(modr)^2)` -  `r sum(residuals(modg)^2)`}{`r length(coef(modg))` - `r length(coef(modr))`}}{\frac{`r sum(residuals(modg)^2)`}{`r nrow(dat)` - `r length(coef(modg))`}} \\
 &= \frac{`r  (sum(residuals(modr)^2) -  sum(residuals(modg)^2))/(length(coef(modg)) - length(coef(modr)))`}{`r sum(residuals(modg)^2)/(nrow(dat) - length(coef(modg)))`} \\
 &= `r  ((sum(residuals(modr)^2) -  sum(residuals(modg)^2))/(length(coef(modg)) - length(coef(modr))))/(sum(residuals(modg)^2)/(nrow(dat) - length(coef(modg))))`
-\end{align}
+\end{aligned}$$
 The critical value is the same as before, and hence we also reject this null hypothesis.
 
 To test whether the intercept $\beta_0 = 0$, we would compare MODEL G to yet another MODEL R:
@@ -267,12 +267,10 @@ options(opts)
 When performing such model comparisons, it is very important to remember that what we call MODEL G and MODEL R will depend on the null hypothesis tested. Generally, MODEL G will remain the same within the context of an analysis, but MODEL R will vary from test to test.
 
 There is one more comparison that we could perform, namely to compare MODEL G to a MODEL R without any predictors. This is a so-called __omnibus test__ of the null hypothesis about two parameters simultaneously, namely $H_0: \beta_1 = 0 \text { and } \beta_2 = 0$. This results in another version of the restricted MODEL R:
-$$
-\begin{aligned}
+$$\begin{aligned}
 \text{MODEL R: } \quad \texttt{trump_votes}_i &= \beta_0 +  0 \times \texttt{hate_groups}_i + 0 \times \texttt{education}_i + \epsilon_i \\
 &= \beta_0 + \epsilon_i
-\end{aligned}
-$$  
+\end{aligned}$$  
 This is like the alternative model of the one-sample t-test we considered earlier. Here, the model is estimated as 
 $$`r modr <- lm(percent_Trump_votes ~ 1, data=dat); write_GLM_equation(modr,dv_name = "trump_votes", digits=4)`$$ 
 with an associated $\text{SSE}(R) = `r sum(residuals(modr)^2)`$. The $F$ statistic is then computed as 
@@ -289,11 +287,16 @@ The critical value is different this time, because the degrees of freedom are no
 Let's have another look at the formula for the $F$ statistic:
 
 $$F = \frac{\frac{\text{SSE}(R) -  \text{SSE}(G)}{\text{npar}(G) - \text{npar}(R)}}{\frac{\text{SSE}(G)}{n-\text{npar(G)}}}$$
-The numerator (top part) consists of a difference between two SSE terms, divided by the difference in the number of estimated parameters. Because the comparison is between nested models, and MODEL G contains more estimated parameters than MODEL R, we can view this part as the average reduction of the SSE (per parameter) due to the additional parameters of MODEL G. The denominator (bottom part) consists of the SSE of MODEL G divided by $n-\text{npar}(G)$. This is an unbiased estimate of the error variance of MODEL G, and also referred to as the Mean Squared Error (MSE). 
+The numerator (top part) consists of a difference between two SSE terms, divided by the difference in the number of estimated parameters. Because the comparison is between nested models, and MODEL G contains more estimated parameters than MODEL R, we can view this part as the average reduction of the SSE (per parameter) due to the additional parameters of MODEL G. The numerator of the $F$-statistic is also referred to as the Mean Square Reduced (MSR):
+$$\text{MSR} = \frac{\text{SSE}(R) -  \text{SSE}(G)}{\text{npar}(G) - \text{npar}(R)}$$
+The denominator (bottom part) in the formula of the $F$-statistic consists of the SSE of MODEL G divided by $n-\text{npar}(G)$. This is an unbiased estimate of the error variance of MODEL G, and also referred to as the Mean Squared Error (MSE):
+$$\text{MSE} = \frac{\text{SSE}(G)}{n-\text{npar(G)}}$$
+So an alternative definition of the $F$-statistic is
+$$F = \frac{\text{MSR}}{\text{MSE}}$$
 
-The SSE of any model $M$ is itself related to an error variance, as the SSE is the sum of squared deviations between the observations and the model predictions ($\hat{Y} = \mu_{Y|X_1,\ldots,X_m}$):
+The SSE of _any_ linear model $M$ is related to an error variance, as the SSE is the sum of squared deviations between the observations and the model predictions ($\hat{Y} = \mu_{Y|X_1,\ldots,X_m}$):
 $$\text{SSE}(M) = \sum_{i=1}^n (Y_i - \hat{Y}_{M,i})^2$$
-Dividing the SSE by $n - \text{npar}(M)$ would provide us with an unbiased estimate of the error variance of the model. Although this is only done in the denominator of the $F$ statistic, it should be clear there is a close relation between SSE terms and variances.
+Dividing the SSE by $n - \text{npar}(M)$ would provide us with an unbiased estimate of the error variance of that model. Although this is only done in the denominator of the $F$ statistic, which considers MODEL G, it should be clear there is a close relation between any SSE term and an error variance.
 
 A useful perspective on unique effects in multiple regression models and GLMs in general is to consider them as __partitioning the variance of the dependent variable__ in parts that are uniquely attributable to the predictors. If you consider the SSE of a very simple MODEL R
 $$Y_i = \beta_0 + \epsilon_i$$
@@ -433,7 +436,7 @@ In other words, this implies the following assumptions for a multiple regression
 
 It is important to realise that the assumption of Normal-distributed errors does not necessarily translate in assuming that the dependent variable $Y$ is itself Normal-distributed. This will often not be the case. Nor does the model require the predictors to be Normal-distributed. No assumption is made at all about the distribution of the predictors. 
 
-In Section \@ref(sec:02-assumptions) we discussed some methods to assess the assumption of Normality (i.e. histograms, QQ-plots and statistical tests such as the Shapiro-Wilk test). The assumption of unbiasedness and homoscedasticity is generally assessed visually with a so-called predicted-by-residual plot. This plot (see Figure \@ref(fig:trump-predicted-residual)) depicts the residuals as a function of the model predictions (i.e. the estimated conditional means). The unbiasedness assumption implies that for each predicted value $\hat{Y}$ (i.e. each conditional mean), the residual or error terms are scattered around 0. For instance, it should _not_ be the case that for relatively low and high values of the predictions, the errors are generally above 0, while for medium values of the predictions, the errors are generally below 0. Such a pattern would be indicative of biased predictions and a likely non-linear relation between predictors and the dependent variable. The homoscedasticity assumption implies that the spread of the residuals is equal for each predicted value $\hat{Y}$. Looking at the predicted vs residual plot in Figure \@ref(fig:trump-predicted-residual), there is no clear indication that either assumption is violated. In addition, the QQ-plot indicates that the expected and sample quantiles do not differ radically, at least for the middle quantiles. Note that at the extremes (low and high quantiles), you will generally find more variable results, as quantiles in the tails of a distribution are less reliable.
+In Section \@ref(sec:02-assumptions) we discussed some methods to assess the assumption of Normality (i.e. histograms, QQ-plots and statistical tests such as the Shapiro-Wilk test). The assumption of unbiasedness and homoscedasticity is generally assessed visually with a so-called predicted-by-residual plot. This plot (see Figure \@ref(fig:trump-predicted-residual)) depicts the residuals as a function of the model predictions (i.e. the estimated conditional means). The unbiasedness assumption implies that for each predicted value $\hat{Y}$ (i.e. each conditional mean), the residual or error terms are scattered around 0. For instance, it should _not_ be the case that for relatively low and high values of the predictions, the errors are generally above 0, while for medium values of the predictions, the errors are generally below 0. Such a pattern would be indicative of biased predictions and a likely _non-linear_ relation between predictors and the dependent variable. The homoscedasticity assumption implies that the spread of the residuals is equal for each predicted value $\hat{Y}$. Looking at the predicted vs residual plot in Figure \@ref(fig:trump-predicted-residual), there is no clear indication that either assumption is violated. In addition, the QQ-plot indicates that the expected and sample quantiles do not differ radically, at least for the middle quantiles. Note that at the extremes (low and high quantiles), you will generally find more variable results, as quantiles in the tails of a distribution are less reliable.
 
 ```{r trump-predicted-residual, fig.cap="Predicted vs residual plot, and a QQ plot, for MODEL G predicting Trump votes from hate groups and education level.", fig.show="hold", out.width="49%", fig.width=4,fig.height=4}
 data.frame(predicted=predict(modg), residual=residuals(modg)) %>%
@@ -452,12 +455,49 @@ data.frame(predicted=predict(tmod), residual=residuals(tmod)) %>%
   ggplot(aes(x=predicted,y=residual)) + geom_point() + geom_hline(yintercept = 0, lty=3)
 
 tdat <- data.frame(x=runif(100,min=1,max=10))
-tdat$y <- tdat$x + rnorm(100,sd=tdat$x^1.2)
-tmod <- lm(y~x,data=tdat)
+tdat$y <- tdat$x + rnorm(100,sd=tdat$x^1)
+# tdat$yt <- tdat$y + abs(min(tdat$y)) + .1
+tmod <- lm(y ~ x,data=tdat)
 data.frame(predicted=predict(tmod), residual=residuals(tmod)) %>%
   ggplot(aes(x=predicted,y=residual)) + geom_point() + geom_hline(yintercept = 0, lty=3)
 
+tmod <- lm(I(y/x) ~ x, data=tdat)
+
 ```
+
+
+### Transforming variables
+
+In certain cases where the assumptions of unbiasedness and/or homoscedasticity do not hold, it may be possible to transform the dependent variables and/or predictors and obtain a model with these transformed parameters where the assumptions do hold. 
+
+```{block2, type = 'advancedtext', echo=TRUE}
+For example, the true underlying relation in the left plot of Figure \@ref(fig:predicted-residual-for-violations-of-assumptions) was
+$$Y_i = \beta_0 + \beta_1 \times X_{1,i}^2 + \epsilon_i \quad \quad \epsilon_i \sim \mathbf{Normal}(0,\sigma_\epsilon)$$
+In this case, a linear model would be obtained by transforming the predictor $X_1$ with a __power-transformation__, raising it to the power of 2 (i.e., using $X_1^2$ rather than $X_1$ as a predictor). The true underlying relation in the right plot of Figure \@ref(fig:predicted-residual-for-violations-of-assumptions) was
+$$\begin{aligned} Y_i &= \beta_0 + \beta_1 \times X_{1,i} + \epsilon_{i} \quad \quad \epsilon_i \sim \mathbf{Normal}(0,X_{1,i} \times \sigma_\epsilon) \end{aligned}$$
+In this case, the standard deviation of the errors increases with the value of $X_1$. We could get a constant standard deviation by modelling $\frac{Y_i}{X_i}$ as the dependent variable, instead of $Y_i$.
+
+You might -- rightly! -- think: but what if I don't know the true underlying relation between the predictors and the dependent variable? Well, in that case you might have to try a number of different transformations. As there are an infinite number of possible transformations, you would hopefully be lucky enough to arrive at one that works. Common transformations of the dependent variable, which aim to resolve issues with violations of the homoscedasticity assumption, are provided in Table \@ref{tab:common-data-transformations-ch4}
+
+Table: (\#tab:common-data-transformations-ch4) Some common transformations for the dependent variable in linear models.
+
+Transformation | Name | Usage
+:--------------|:-----|:--------------
+$Y^2$          | square | useful for negatively-skewed data, as it will increase the spread among higher scores compared to lower ones
+$\sqrt{Y}$     | square-root | useful for positively skewed data, as it will decrease the spread among higher scores compared to lower one
+$\log_e{(Y)}$  | natural logarithm | useful for positively skewed data, as it will decrease the spread among higher scores compared to lower one. If there are values equal to or smaller than 1, you can use an alternative form $\log_e{(Y + c)}$, with e.g. $c = \min(1,|\min(Y)|)$
+$\log_{10}{(Y)}$ | base 10 logarithm | useful for highly positively skewed data, as it will decrease the spread among higher scores compared to lower one. If there are values equal to or smaller than 1, you can use a similar adjustment as above.
+
+Of course, you don't have to try different transformations blindly. Inspecting the relations between the predictors and the dependent variable, and between the residuals and predicted values, can sometimes give reasonable clues to potentially useful transformations. The tricky thing is that non-linear transformations of the dependent or predictor variables can change many aspects of the model. For example, if the model
+$$Y_i = \beta_0 + \beta_1 \times X_{1,i} + \epsilon_i$$
+provides unbiased predictions, but violates the assumption of homoscedasticity, a transformed model
+$$\log(Y_i) = \beta_0 + \beta_1 \times X_{1,i} + \epsilon_i$$
+might resolve some of the issues with the homoscedasticity assumption, but lead to biased predictions. In this case, we might want to transform both the dependent variable _and_ the predictor
+$$\log(Y_i) = \beta_0 + \beta_1 \times \log(X_{1.i}) + \epsilon_i$$
+to (hopefully) resolve the issue with homoscedasticity and maintain unbiased estimates. And when we have more than one predictor, the situation becomes even more tricky to resolve. Transforming variables to make a model conform to the assumptions of the linear model is, in some sense, perhaps more of an art than a science. It is certainly not easy, and something that should be done with caution.
+```
+
+A general technique which aims to help you determine the appropriate transformation function is the so-called Box-Cox transformation [see e.g. @sakia1992box]. Describing this procedure in detail is beyond the scope of this book, but knowing of its existence might help you out in the future. And once you become comfortable with linear models, you will become more comfortable with the various ways in which to transform your data as well.
 
 ## Multicollinearity: Redundancy between predictors
 
@@ -598,6 +638,9 @@ So, sometimes "unusual" data points can have a large influence on model estimate
 
 There are several measures which aim to determine the unusualness and undue influence of observations on the model estimates. Commonly used ones include the leverage or lever (which assess whether the predictor values are far from the average), Studentized residuals (which aims to estimate whether an observation is far from the true regression line), and Studentized deleted residuals and Cook's distance (which aim to assess both). Some of these (e.g. Studentized deleted residuals) are effectively hypothesis tests applied to each individual observation. That has the benefit of providing them with a formal criterion to identify observations as outliers or not. On the other hand, by performing $n$ hypothesis tests with a significance level of $\alpha$, on average $n \times \alpha$ of these tests will involve a Type 1 error (a false rejection of the null hypothesis that an observation is not an outlier). As such, they will assign observations as outliers which are not truly outliers. Other measures (e.g. Cook's distance) use more heuristic cut-off values to determine when it needs to be carefully considered whether an observation is an outlier. At this point, I don't want to go into the mathematical details of these outlier detection measures. For now, I just want you to be aware of the potential problems that arise from outliers. Often, a thorough visual exploration of the data will indicate potential outliers. If you suspect an outlier, it is useful to repeat an analysis with and without including the potential outlier. When the results differ substantially, you will then need to carefully consider whether there are good reasons to exclude the outlying observation from the analysis. In the case of the District of Columbia, there are several reasons to exclude the District of Columbia. Not only does this electoral district has an unusual high number of hate groups, and an unusual low number of Trump votes, the district is not a state but a single city (Washington D.C.), with consequently a much higher population density than the 50 states. As the political capitol of the United States, it is likely to be different in many aspects related to politics. As such, treating this as a separate entity from the 50 US states seems reasonable.
 
+## In practise
+
+## Summary
 
 <!-- 
 ## Polynomial regression
