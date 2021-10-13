@@ -674,11 +674,20 @@ There are several measures which aim to determine the unusualness and undue infl
 
 At this point, I don't want to go into the mathematical details of these outlier detection measures. For now, I just want you to be aware of the potential problems that arise from outliers. Often, a thorough visual exploration of the data will indicate potential outliers. If you suspect an outlier, it is useful to repeat an analysis with and without including the potential outlier. When the results differ substantially, you will then need to carefully consider whether there are good reasons to exclude the outlying observation from the analysis. In the case of the District of Columbia, there are several reasons to exclude the District of Columbia. Not only does this electoral district has an unusual high number of hate groups, and an unusual low number of Trump votes, the district is not a state but a single city (Washington D.C.), with consequently a much higher population density than the 50 states. As the political capitol of the United States, it is likely to be different in many aspects related to politics. As such, treating this as a separate entity from the 50 US states seems reasonable.
 
-<!--
+
 ## In practise
 
 Linear regression is the "bread and butter" of data analysis. Whilst the name is generally reserved for models with only metric predictors, we we will see later on, the model we have discussed here is the foundation of the General Linear Model. 
 
+1. __Explore the data__. Check the distribution of the dependent variable and each (potential) predictor. Are there outlying or otherwise "strange" observations? Also explore pairwise relations between the (potential) predictors and the dependent variable, as well as between the predictors themselves. This may point to potential issues with the assumption of linearity (although pairwise linearity or nonlinearity is not necessarily reflective of linearity in a multiple regression model). 
+
+2. Estimate the multiple regression model. Then check for potential issues in the assumptions with e.g. predicted vs residual plots. This may point to potential outliers, but you can also check for overly influential cases with a measure such as Cook's distance. A value of Cook's distance larger than 1 is generally considered as a cut-off. If there are clear outliers in the data, remove these, and then re-estimate the model. Also check for issues with multicollinearity.
+
+3. Report the results. When reporting the results, make sure that you include all relevant statistics. For example, one way to write the results of the analysis reported in this chapter is as follows:
+
+> We assessed the relation between votes for Donald Trump and the presence of hate groups in 50 states of the USA with a multiple linear regression model (we excluded data from the District of Columbia, as this was a clear outlier). For each state, we computed the number of hate groups per one million citizen, to correct for differences in population size in the states. As the level of education might be a possible confound, we controlled for education level (measured as the percentage of the population with a Bachelor's degree or higher) by including this as a second predictor. The model accounted for a large proportion of the variance in Trump votes, `r papaja::apa_print(mod)$full_result$modelfit$r2`. The analysis showed a significant positive effect of hate groups on votes for Donald Trump, `r papaja::apa_print(mod)$full_result$hate_groups_per_million`. In addition, we found a significant negative relation between education level and votes for Donald Trump, `r papaja::apa_print(mod)$full_result$percent_bachelors_degree_or_higher`.
+
+<!--
 ## Summary
 -->
 
