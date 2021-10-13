@@ -85,6 +85,8 @@ eq:semi-partial-determination
 eq:partial-determination
 fig:trump-predicted-residual
 fig:predicted-residual-for-violations-of-assumptions
+tab:common-data-transformations-ch4
+fig:trump-polynomial-regression-plot
 fig:sse-partition-multicollinearity
 eq:confidence-interval-slope-multiple-regression
 eq:tolerance
@@ -162,7 +164,7 @@ fig:bayesian-t-tests-different-rscale
 tab:bayesian-lm-speedate
 tab:bayesian-anova-expBelief
 fig:simulation-p-value-distribution
-fig:unnamed-chunk-51
+fig:unnamed-chunk-52
 tab:common-data-transformations
 fig:example-multiple-regression-write-up-plot
 fig:example-factorial-ANOVA-write-up-plot
@@ -179,7 +181,7 @@ measures-of-spread
 visual-exploration
 analysis-and-modelling
 summary
-ch:modeling
+ch-modeling
 coin-flipping-defining-a-statistical-model
 probability
 sec:02-probability-definition
@@ -197,7 +199,7 @@ testing-whether-paul-was-guessing
 hypothesis-testing-directly-with-the-binomial-distribution
 summary-1
 epilogue
-ch:simple-GLM
+ch-simple-GLM
 numeric-judgement-and-anchoring
 exploring-the-data
 a-statistical-model-of-judgements
@@ -209,7 +211,7 @@ sampling-distribution-of-the-estimated-mean
 testing-whether-mu-has-an-specific-value
 the-classical-way
 the-model-comparison-way
-confidence-intervals
+ch3-confidence-interval
 effect-size
 sec:02-assumptions
 the-central-limit-theorem
@@ -224,7 +226,9 @@ estimating-the-relation-between-trump-votes-and-hate-groups
 hypothesis-testing
 sampling-distribution-of-estimates
 model-comparison
-ch:multiple-regression
+confidence-intervals
+summary-2
+ch-multiple-regression
 trump-votes-and-hate-groups-again
 controlling-for-education-level
 the-multiple-regression-model
@@ -234,6 +238,8 @@ partitioning-and-explaining-variance
 effect-size-and-the-importance-of-predictors
 r2-changes-and-the-coefficient-of-semi-partial-determination
 sec:04b-assumptions
+transforming-variables
+polynomial-regression
 multicollinearity-redundancy-between-predictors
 detecting-and-dealing-with-multicollinearity
 sec:04b-outliers
@@ -249,7 +255,7 @@ legacy-motives-and-pro-environmental-behaviours
 causal-steps
 testing-mediation-of-legacy-motive-by-intention-with-the-causal-steps-approach
 estimating-the-mediated-effect
-ch:ANOVA
+ch-ANOVA
 can-playing-tetris-reduce-intrusive-memories
 sec:06-two-groups
 the-anova-model
@@ -259,7 +265,7 @@ orthogonal-contrast-codes
 defining-your-own-orthogonal-contrasts
 default-orthogonal-coding-schemes
 multiple-testing-and-post-hoc-tests
-ch:factorial-ANOVA
+ch-factorial-ANOVA
 experimenter-beliefs-and-social-priming
 a-oneway-anova
 factorial-designs
@@ -303,7 +309,7 @@ the-p-value-is-not-a-proper-measure-of-evidential-support
 the-p-value-depends-on-researcher-intentions
 results-of-a-nhst-are-often-misinterpreted
 to-bayes-or-not-to-bayes-a-pragmatic-view
-summary-2
+summary-3
 being-a-responsible-data-analyst
 consider-analysis-before-data-collection
 explore-the-data

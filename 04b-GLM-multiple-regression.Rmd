@@ -477,7 +477,7 @@ In this case, a linear model would be obtained by transforming the predictor $X_
 $$\begin{aligned} Y_i &= \beta_0 + \beta_1 \times X_{1,i} + \epsilon_{i} \quad \quad \epsilon_i \sim \mathbf{Normal}(0,X_{1,i} \times \sigma_\epsilon) \end{aligned}$$
 In this case, the standard deviation of the errors increases with the value of $X_1$. We could get a constant standard deviation by modelling $\frac{Y_i}{X_i}$ as the dependent variable, instead of $Y_i$.
 
-You might -- rightly! -- think: but what if I don't know the true underlying relation between the predictors and the dependent variable? Well, in that case you might have to try a number of different transformations. As there are an infinite number of possible transformations, you would hopefully be lucky enough to arrive at one that works. Common transformations of the dependent variable, which aim to resolve issues with violations of the homoscedasticity assumption, are provided in Table \@ref{tab:common-data-transformations-ch4}
+You might -- rightly! -- think: but what if I don't know the true underlying relation between the predictors and the dependent variable? Well, in that case you might have to try a number of different transformations. As there are an infinite number of possible transformations, you would hopefully be lucky enough to arrive at one that works. Common transformations of the dependent variable, which aim to resolve issues with violations of the homoscedasticity assumption, are provided in Table \@ref(tab:common-data-transformations-ch4).
 
 Table: (\#tab:common-data-transformations-ch4) Some common transformations for the dependent variable in linear models.
 
@@ -498,6 +498,40 @@ to (hopefully) resolve the issue with homoscedasticity and maintain unbiased est
 ```
 
 A general technique which aims to help you determine the appropriate transformation function is the so-called Box-Cox transformation [see e.g. @sakia1992box]. Describing this procedure in detail is beyond the scope of this book, but knowing of its existence might help you out in the future. And once you become comfortable with linear models, you will become more comfortable with the various ways in which to transform your data as well.
+
+### Polynomial regression
+
+If the assumption of unbiasedness is violated because the relation between a predictor and the dependent variable is not linear, you may also try a technique called __polynomial regression__. For example, if we go back to analysing the relation between hate groups and votes for Trump considered earlier, you might not expect the relation to be exactly linear. It might be more reasonable to assume that the effect of hate groups on votes for Trump diminishes for very large numbers of hate groups. In other words, you might expect the effect of a one-unit increase in hate groups to be _larger_ for moving from one to two hate groups per million citizens, compared to moving from eight to nine hate groups per million citizens. This means that the relation between hate groups and votes for Trump is nonlinear.
+
+There are various techniques to deal with nonlinear relations. Polynomial regression can allow you to estimate nonlinear relations within the context of a linear model. That seems contradictory at first: how can a linear model provide a nonlinear relation? The key to doing so is to effectively transform the predictor in a variety of ways, and then average the functions relating each transformed predictor to the dependent variable. This "averaging" is done automatically, by estimating regression coefficients for each in a multiple regression model.
+
+The transformations considered in a polynomial regression are all power-transformations of a predictor (i.e. $(X_i)^k$, with $k=1, 2, \ldots$), up to a certain maximum power, called the degree of the model. For example, a 2nd-degree polynomial model would be  
+
+$$Y_i = \beta_0 + \beta_1 \times X_{i} + \beta_2 \times X_i^2 + \epsilon_i$$
+which is sometimes also called a quadratic model. A 3rd-degree polynomial, also called a cubic model, would be
+$$Y_i = \beta_0 + \beta_1 \times X_{i} + \beta_2 \times X_i^2 + \beta_3 \times X_i^3 + \epsilon_i$$
+The power-transformed predictors (e.g., $X^2$ and $X^3$) are treated as any other predictor. But, because when we know the value of the original predictor $X$, we also exactly know the value of each transformed predictor, the conditional mean $\mu_{Y|X,X^2,X^3}$ is really just a function of $X$. Hence, we can unambiguously consider the predictions of the model for each possible value of $X$.^[In usual multiple regression models, the values of the other predictors $X_k$ can take a variety of values for any focal predictor $X_j$, $j \neq k$. Here there is a perfect--but crucially_nonlinear relation between the predictors.] These are shown, for a quadratic (second-order) and cubic (third-order) polynomial regression model in Figure \@ref(fig:trump-polynomial-regression-plot). As you can see, both the quadratic and cubic model predict a nonlinear relation between hate groups and Trump votes. The quadratic model indicates that the effect of hate groups diminishes with more hate groups. In the cubic model, the effect even appears to reverse, such that after an initial increase, Trump votes decrease with more hate groups. As such, the quadratic model seems more plausible.
+
+```{r trump-polynomial-regression-plot, fig.cap="Polynomial regression models for the relation between hate groups and Trump votes."}
+ggplot(dat,aes(x=hate_groups_per_million,y=percent_Trump_votes)) + geom_point() + xlab("Hate groups per million citizens") + ylab("% votes for Trump") + geom_smooth(method="lm", formula=y~x, se=FALSE, aes(colour='Linear')) + geom_smooth(method="lm", formula=y~poly(x,2,raw=TRUE), se=FALSE, aes(colour='Quadratic')) + geom_smooth(method="lm", formula=y~poly(x,3,raw=TRUE), se=FALSE, aes(colour='Cubic')) + scale_color_manual(name='Model',
+                     breaks=c('Linear', 'Quadratic', 'Cubic'),
+                     values=c('Cubic'=viridis::viridis_pal(alpha=.6)(3)[3], 'Quadratic'=viridis::viridis_pal(alpha=.6)(3)[2], 'Linear'=viridis::viridis_pal(alpha=.6)(3)[1])) + theme(legend.position = "bottom")
+```
+
+At this point in time, I would like you to just be aware of the possibility of polynomial regression. We will hopefully return to it at some later stage.
+
+<!-- 
+
+TODO: polynomial regression
+
+One way to arbitrate between these models is to consider the more general  (third-order or cubic model) and determine whether the highest-order effect is significant. 
+
+```{r trump-polynomial-regression-lm-summary-table, eval=FALSE}
+mod <- lm(percent_Trump_votes ~ poly(hate_groups_per_million,3, raw=TRUE), data=dat)
+knitr::kable(summary(mod)$coefficients, digits=c(3,3,3,3), booktabs=TRUE, linesep="")
+```
+
+-->
 
 ## Multicollinearity: Redundancy between predictors
 
@@ -636,16 +670,15 @@ Figure \@ref(fig:scatterplot-trump-votes-education-all-data) shows the relation 
 
 So, sometimes "unusual" data points can have a large influence on model estimates, and sometimes not. Outliers which do not affect the models estimates much are of relatively little concern. However, outliers which have an undue influence on the model estimates are better removed from the dataset. You don't generally want the results of an analysis to depend largely on a single observation (it just wouldn't  be fair to the other data points). For an observation to have a large effect on the model estimates, it generally has to have values on the predictor variables which are far from the average, and a value on the dependent variable which is far removed from the true regression plane (i.e. the true residual $\epsilon_i$ is large). If an observation has values on the predictor variables which are close to other observations, then those other observations generally reduce the impact of the outlier, because they will have values on the dependent variable which are not unusual (thus "pulling" the model estimates towards them and with that towards the true values). If an observation has a value on the dependent variable which is not far removed from the true regression plane, then it will not bias the solution either.
 
-There are several measures which aim to determine the unusualness and undue influence of observations on the model estimates. Commonly used ones include the leverage or lever (which assess whether the predictor values are far from the average), Studentized residuals (which aims to estimate whether an observation is far from the true regression line), and Studentized deleted residuals and Cook's distance (which aim to assess both). Some of these (e.g. Studentized deleted residuals) are effectively hypothesis tests applied to each individual observation. That has the benefit of providing them with a formal criterion to identify observations as outliers or not. On the other hand, by performing $n$ hypothesis tests with a significance level of $\alpha$, on average $n \times \alpha$ of these tests will involve a Type 1 error (a false rejection of the null hypothesis that an observation is not an outlier). As such, they will assign observations as outliers which are not truly outliers. Other measures (e.g. Cook's distance) use more heuristic cut-off values to determine when it needs to be carefully considered whether an observation is an outlier. At this point, I don't want to go into the mathematical details of these outlier detection measures. For now, I just want you to be aware of the potential problems that arise from outliers. Often, a thorough visual exploration of the data will indicate potential outliers. If you suspect an outlier, it is useful to repeat an analysis with and without including the potential outlier. When the results differ substantially, you will then need to carefully consider whether there are good reasons to exclude the outlying observation from the analysis. In the case of the District of Columbia, there are several reasons to exclude the District of Columbia. Not only does this electoral district has an unusual high number of hate groups, and an unusual low number of Trump votes, the district is not a state but a single city (Washington D.C.), with consequently a much higher population density than the 50 states. As the political capitol of the United States, it is likely to be different in many aspects related to politics. As such, treating this as a separate entity from the 50 US states seems reasonable.
+There are several measures which aim to determine the unusualness and undue influence of observations on the model estimates. Commonly used ones include the __leverage__ or __lever__ (which assess whether the predictor values are far from the average), __Studentized residuals__ (which aim to estimate whether an observation is far from the true regression line), and __Studentized deleted residuals__ and __Cook's distances__ (which aim to assess both). Some of these (e.g. Studentized deleted residuals) are effectively hypothesis tests applied to each individual observation. That has the benefit of providing them with a formal criterion to identify observations as outliers or not. On the other hand, by performing a total of $n$ hypothesis tests with a significance level of $\alpha$, on average $n \times \alpha$ of these tests will involve a Type 1 error (a false rejection of the null hypothesis that an observation is not an outlier). These measures are therefore likely to classify observations as outliers which are not truly outliers. Other measures such as Cook's distance use more heuristic cut-off values to determine when there is a needs to carefully consider whether an observation is an outlier or not. 
 
+At this point, I don't want to go into the mathematical details of these outlier detection measures. For now, I just want you to be aware of the potential problems that arise from outliers. Often, a thorough visual exploration of the data will indicate potential outliers. If you suspect an outlier, it is useful to repeat an analysis with and without including the potential outlier. When the results differ substantially, you will then need to carefully consider whether there are good reasons to exclude the outlying observation from the analysis. In the case of the District of Columbia, there are several reasons to exclude the District of Columbia. Not only does this electoral district has an unusual high number of hate groups, and an unusual low number of Trump votes, the district is not a state but a single city (Washington D.C.), with consequently a much higher population density than the 50 states. As the political capitol of the United States, it is likely to be different in many aspects related to politics. As such, treating this as a separate entity from the 50 US states seems reasonable.
+
+<!--
 ## In practise
 
-## Summary
-
-<!-- 
-## Polynomial regression
-
+Linear regression is the "bread and butter" of data analysis. Whilst the name is generally reserved for models with only metric predictors, we we will see later on, the model we have discussed here is the foundation of the General Linear Model. 
 
 ## Summary
-
 -->
+
