@@ -135,7 +135,7 @@ $$\epsilon_i \sim \mathbf{Normal}(0,\sigma)$$
 
 ## Estimation {#sec:04-estimation}
 
-It can be shown that for the model specified in Equation \@(eq:bivariate-regression-model-definition), the maximum likelihood estimates of the model parameters are
+It can be shown that for the model specified in Equation \@ref(eq:bivariate-regression-model-definition), the maximum likelihood estimates of the model parameters are
 \begin{equation} 
 \hat{\beta}_0 = \overline{Y} - \hat{\beta}_1 \times \overline{X}
 (\#eq:simple-regression-intercept-estimate)
@@ -400,7 +400,7 @@ knitr::kable(anova(mod))
 
 ### Confidence intervals
 
-The way to compute and interpret confidence intervals for the parameters of a simple linear regression model is analoguous to that for the one sample $t$-test (see Section \@ref(#ch3-confidence-interval)). The formula to compute confidence intervals for the two parameters can be written as:
+The way to compute and interpret confidence intervals for the parameters of a simple linear regression model is analoguous to that for the one sample $t$-test (see Section \@ref(ch3-confidence-interval)). The formula to compute confidence intervals for the two parameters can be written as:
 $$\hat{\beta}_j \pm t_{n-2; 1-\tfrac{\alpha}{2}} \times \text{SE}(\hat{\beta}_j)$$
 where $t_{n-2; 1-\tfrac{\alpha}{2}}$ is the upper critical value in a $t$-distribution with $n-2$ degrees of freedom and a significance level of $\alpha$. Using $\alpha=.05$ gives us the conventional 95%-confidence interval. 
 

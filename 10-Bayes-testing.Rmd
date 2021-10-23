@@ -214,7 +214,7 @@ As discussed above, Bayesian hypothesis testing concerns comparing models with d
 @rouder2009bayesian developed a default prior distribution to test whether two groups have a different mean. The test is based on the two-group version of the General Linear Model (e.g. Section \@ref(sec:06-two-groups)):
 
 $$Y_i = \beta_0 + \beta_1 \times X_{1,i} + \epsilon_i \quad \quad \epsilon_i \sim \textbf{Normal}(0, \sigma_\epsilon)$$
-where $X_{1,i}$ is a contrast-coding predictor with the values $X_{1i} = \pm \tfrac{1}{2}$ for the different groups. Remember that with this contrast code, the slope $\beta_1$ reflects the difference between the group means, e.g. $\beta_1 = \mu_1 - \mu_2$, and the intercept represents the grand mean $\beta_0 = \frac{\mu_1 + \mu_2}{2}$. Testing for group differences involves a test of the following hypotheses: 
+where $X_{1,i}$ is a contrast-coded predictor with the values $X_{1i} = \pm \tfrac{1}{2}$ for the different groups. Remember that with this contrast code, the slope $\beta_1$ reflects the difference between the group means, e.g. $\beta_1 = \mu_1 - \mu_2$, and the intercept represents the grand mean $\beta_0 = \frac{\mu_1 + \mu_2}{2}$. Testing for group differences involves a test of the following hypotheses: 
 
 $$\begin{aligned}
 H_0\!: & \quad \beta_1 = 0 \\

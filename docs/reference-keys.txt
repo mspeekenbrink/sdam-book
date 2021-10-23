@@ -78,7 +78,7 @@ eq:multiple-regression-intercept-estimate
 eq:multiple-regression-sd-error-variance-estimate
 tab:t-test-results-multiple-regression-table
 tab:trump-multiple-regression-ANOVA-table
-eq:definition-eta-squared-glm
+eq:definition-partial-eta-squared-glm
 fig:sse-partition
 eq:standardized-slopes
 eq:semi-partial-determination
@@ -115,11 +115,12 @@ fig:number-guessing-game-contrast-coding
 fig:tetris-effect-coding-parameter-plot
 tab:tetris-effect-coding-ANOVA
 eq:estimate-slope-orthogonal-contrast-codes
-tab:tetris-orthogonal-cotrast-codes
+tab:tetris-orthogonal-contrast-codes
 fig:tetris-contrast-coding-parameter-plot
 tab:tetris-contrast-coding-ANOVA
 tab:Helmert-contrasts
 tab:polynomial-contrasts
+fig:four-group-Normal-densities
 fig:expBelief-raincloud
 tab:expBelief-oneway-ANOVA-results
 tab:expBelief-factorial-ANOVA-results
@@ -164,7 +165,7 @@ fig:bayesian-t-tests-different-rscale
 tab:bayesian-lm-speedate
 tab:bayesian-anova-expBelief
 fig:simulation-p-value-distribution
-fig:unnamed-chunk-52
+fig:unnamed-chunk-53
 tab:common-data-transformations
 fig:example-multiple-regression-write-up-plot
 fig:example-factorial-ANOVA-write-up-plot
@@ -235,7 +236,7 @@ the-multiple-regression-model
 sec:04b-estimation
 sec:04b-inference
 partitioning-and-explaining-variance
-effect-size-and-the-importance-of-predictors
+sec:04b-effect-size
 r2-changes-and-the-coefficient-of-semi-partial-determination
 sec:04b-assumptions
 transforming-variables
@@ -243,7 +244,7 @@ polynomial-regression
 multicollinearity-redundancy-between-predictors
 detecting-and-dealing-with-multicollinearity
 sec:04b-outliers
-in-practise
+in-practice-1
 moderation-and-mediation
 moderation
 physical-attractiveness-and-intelligence-in-speed-dating
@@ -265,7 +266,10 @@ effect-coding
 orthogonal-contrast-codes
 defining-your-own-orthogonal-contrasts
 default-orthogonal-coding-schemes
+effect-size-in-anova
+assumptions
 multiple-testing-and-post-hoc-tests
+in-practice-2
 ch-factorial-ANOVA
 experimenter-beliefs-and-social-priming
 a-oneway-anova
@@ -279,7 +283,7 @@ comparison-schemes-and-ss-types
 mixing-categorical-and-metric-predictors-ancova
 subjective-feelings-of-power-and-priming
 acounting-for-pre-existing-differences
-slopes-of-contrast-coding-predictors-in-ancova-models
+slopes-of-contrast-coded-predictors-in-ancova-models
 homogeneity-of-slopes
 sec:ANCOVA-power
 models-with-multiple-covariates

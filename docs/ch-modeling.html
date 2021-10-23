@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 2 Statistical modelling | Statistics: Data analysis and modelling</title>
   <meta name="description" content="A book about statistics for data analysis, with a main focus on statistical modelling." />
-  <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 2 Statistical modelling | Statistics: Data analysis and modelling" />
   <meta property="og:type" content="book" />
@@ -24,7 +24,7 @@
 <meta name="author" content="Maarten Speekenbrink" />
 
 
-<meta name="date" content="2021-10-13" />
+<meta name="date" content="2021-10-23" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -33,8 +33,8 @@
   
 <link rel="prev" href="intro.html"/>
 <link rel="next" href="ch-simple-GLM.html"/>
-<script src="book_assets/jquery-3.6.0/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<script src="book_assets/header-attrs-2.7/header-attrs.js"></script>
+<script src="book_assets/jquery-3.5.1/jquery.min.js"></script>
 <link href="book_assets/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="book_assets/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
 <link href="book_assets/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -50,42 +50,38 @@
 
 
 
-<link href="book_assets/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
-<script src="book_assets/anchor-sections-1.0.1/anchor-sections.js"></script>
-<script src="book_assets/htmlwidgets-1.5.4/htmlwidgets.js"></script>
+
+<script src="book_assets/htmlwidgets-1.5.3/htmlwidgets.js"></script>
 <script src="book_assets/viz-1.8.2/viz.js"></script>
 <link href="book_assets/DiagrammeR-styles-0.2/styles.css" rel="stylesheet" />
 <script src="book_assets/grViz-binding-1.0.6.1/grViz.js"></script>
-<script src="book_assets/plotly-binding-4.9.4.1/plotly.js"></script>
+<script src="book_assets/plotly-binding-4.9.3/plotly.js"></script>
 <script src="book_assets/typedarray-0.1/typedarray.min.js"></script>
 <link href="book_assets/crosstalk-1.1.1/css/crosstalk.css" rel="stylesheet" />
 <script src="book_assets/crosstalk-1.1.1/js/crosstalk.min.js"></script>
 <link href="book_assets/plotly-htmlwidgets-css-1.57.1/plotly-htmlwidgets.css" rel="stylesheet" />
 <script src="book_assets/plotly-main-1.57.1/plotly-latest.min.js"></script>
 <link href="book_assets/combineWidgetStyle-0.1/combineWidgets.css" rel="stylesheet" />
-<script src="book_assets/combineWidgets-binding-0.11.0/combineWidgets.js"></script>
-<script src="book_assets/rglWebGL-binding-0.107.14/rglWebGL.js"></script>
-<link href="book_assets/rglwidgetClass-0.107.14/rgl.css" rel="stylesheet" />
-<script src="book_assets/rglwidgetClass-0.107.14/rglClass.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.107.14/utils.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.107.14/subscenes.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.107.14/shaders.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.107.14/textures.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.107.14/projection.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.107.14/mouse.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.107.14/init.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.107.14/pieces.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.107.14/draw.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.107.14/controls.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.107.14/selection.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.107.14/rglTimer.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.107.14/pretty.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.107.14/axes.src.js"></script>
-<script src="book_assets/CanvasMatrix4-0.107.14/CanvasMatrix.src.js"></script>
-<script src="book_assets/rglPlayer-binding-0.107.14/rglPlayer.js"></script>
+<script src="book_assets/combineWidgets-binding-0.10.1/combineWidgets.js"></script>
+<script src="book_assets/rglWebGL-binding-0.106.6/rglWebGL.js"></script>
+<link href="book_assets/rglwidgetClass-0.106.6/rgl.css" rel="stylesheet" />
+<script src="book_assets/rglwidgetClass-0.106.6/rglClass.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.106.6/utils.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.106.6/subscenes.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.106.6/shaders.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.106.6/textures.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.106.6/projection.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.106.6/mouse.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.106.6/init.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.106.6/pieces.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.106.6/draw.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.106.6/controls.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.106.6/selection.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.106.6/rglTimer.src.js"></script>
+<script src="book_assets/CanvasMatrix4-0.106.6/CanvasMatrix.src.js"></script>
+<script src="book_assets/rglPlayer-binding-0.106.6/rglPlayer.js"></script>
 <script src="book_assets/kePrint-0.0.1/kePrint.js"></script>
 <link href="book_assets/lightable-0.0.1/lightable.css" rel="stylesheet" />
-
 
 
 
@@ -102,36 +98,44 @@
       <nav role="navigation">
 
 <ul class="summary">
-<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a><ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a>
+<ul>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#acknowledgements"><i class="fa fa-check"></i>Acknowledgements</a></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#notation"><i class="fa fa-check"></i>Notation</a></li>
 </ul></li>
-<li class="chapter" data-level="1" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
+<li class="chapter" data-level="1" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i><b>1</b> Introduction</a>
+<ul>
 <li class="chapter" data-level="1.1" data-path="intro.html"><a href="intro.html#paul-the-octopus"><i class="fa fa-check"></i><b>1.1</b> Paul the octopus</a></li>
 <li class="chapter" data-level="1.2" data-path="intro.html"><a href="intro.html#experiments-and-observations"><i class="fa fa-check"></i><b>1.2</b> Experiments and observations</a></li>
-<li class="chapter" data-level="1.3" data-path="intro.html"><a href="intro.html#data"><i class="fa fa-check"></i><b>1.3</b> Data</a><ul>
+<li class="chapter" data-level="1.3" data-path="intro.html"><a href="intro.html#data"><i class="fa fa-check"></i><b>1.3</b> Data</a>
+<ul>
 <li class="chapter" data-level="1.3.1" data-path="intro.html"><a href="intro.html#measurement-scales"><i class="fa fa-check"></i><b>1.3.1</b> Measurement scales</a></li>
 <li class="chapter" data-level="1.3.2" data-path="intro.html"><a href="intro.html#the-data-generating-process"><i class="fa fa-check"></i><b>1.3.2</b> The Data Generating Process</a></li>
 </ul></li>
-<li class="chapter" data-level="1.4" data-path="intro.html"><a href="intro.html#exploring-and-describing-data"><i class="fa fa-check"></i><b>1.4</b> Exploring and describing data</a><ul>
+<li class="chapter" data-level="1.4" data-path="intro.html"><a href="intro.html#exploring-and-describing-data"><i class="fa fa-check"></i><b>1.4</b> Exploring and describing data</a>
+<ul>
 <li class="chapter" data-level="1.4.1" data-path="intro.html"><a href="intro.html#summary-statistics"><i class="fa fa-check"></i><b>1.4.1</b> Summary statistics</a></li>
 <li class="chapter" data-level="1.4.2" data-path="intro.html"><a href="intro.html#visual-exploration"><i class="fa fa-check"></i><b>1.4.2</b> Visual exploration</a></li>
 </ul></li>
 <li class="chapter" data-level="1.5" data-path="intro.html"><a href="intro.html#analysis-and-modelling"><i class="fa fa-check"></i><b>1.5</b> Analysis and modelling</a></li>
 <li class="chapter" data-level="1.6" data-path="intro.html"><a href="intro.html#summary"><i class="fa fa-check"></i><b>1.6</b> Summary</a></li>
 </ul></li>
-<li class="chapter" data-level="2" data-path="ch-modeling.html"><a href="ch-modeling.html"><i class="fa fa-check"></i><b>2</b> Statistical modelling</a><ul>
+<li class="chapter" data-level="2" data-path="ch-modeling.html"><a href="ch-modeling.html"><i class="fa fa-check"></i><b>2</b> Statistical modelling</a>
+<ul>
 <li class="chapter" data-level="2.1" data-path="ch-modeling.html"><a href="ch-modeling.html#coin-flipping-defining-a-statistical-model"><i class="fa fa-check"></i><b>2.1</b> Coin flipping: Defining a statistical model</a></li>
-<li class="chapter" data-level="2.2" data-path="ch-modeling.html"><a href="ch-modeling.html#probability"><i class="fa fa-check"></i><b>2.2</b> Probability</a><ul>
+<li class="chapter" data-level="2.2" data-path="ch-modeling.html"><a href="ch-modeling.html#probability"><i class="fa fa-check"></i><b>2.2</b> Probability</a>
+<ul>
 <li class="chapter" data-level="2.2.1" data-path="ch-modeling.html"><a href="ch-modeling.html#sec:02-probability-definition"><i class="fa fa-check"></i><b>2.2.1</b> What is probability?</a></li>
 <li class="chapter" data-level="2.2.2" data-path="ch-modeling.html"><a href="ch-modeling.html#distributions"><i class="fa fa-check"></i><b>2.2.2</b> Distributions</a></li>
 </ul></li>
 <li class="chapter" data-level="2.3" data-path="ch-modeling.html"><a href="ch-modeling.html#sec:02-binomial-model"><i class="fa fa-check"></i><b>2.3</b> Flipping a biased coin: An alternative model</a></li>
-<li class="chapter" data-level="2.4" data-path="ch-modeling.html"><a href="ch-modeling.html#estimation"><i class="fa fa-check"></i><b>2.4</b> Estimation</a><ul>
+<li class="chapter" data-level="2.4" data-path="ch-modeling.html"><a href="ch-modeling.html#estimation"><i class="fa fa-check"></i><b>2.4</b> Estimation</a>
+<ul>
 <li class="chapter" data-level="2.4.1" data-path="ch-modeling.html"><a href="ch-modeling.html#maximum-likelihood-estimation"><i class="fa fa-check"></i><b>2.4.1</b> Maximum likelihood estimation</a></li>
 <li class="chapter" data-level="2.4.2" data-path="ch-modeling.html"><a href="ch-modeling.html#properties-of-good-estimators"><i class="fa fa-check"></i><b>2.4.2</b> Properties of good estimators</a></li>
 </ul></li>
-<li class="chapter" data-level="2.5" data-path="ch-modeling.html"><a href="ch-modeling.html#sec:02-likelihood-ratio"><i class="fa fa-check"></i><b>2.5</b> Comparing models: Null-hypothesis significance testing</a><ul>
+<li class="chapter" data-level="2.5" data-path="ch-modeling.html"><a href="ch-modeling.html#sec:02-likelihood-ratio"><i class="fa fa-check"></i><b>2.5</b> Comparing models: Null-hypothesis significance testing</a>
+<ul>
 <li class="chapter" data-level="2.5.1" data-path="ch-modeling.html"><a href="ch-modeling.html#decisions-and-types-of-error"><i class="fa fa-check"></i><b>2.5.1</b> Decisions and types of error</a></li>
 <li class="chapter" data-level="2.5.2" data-path="ch-modeling.html"><a href="ch-modeling.html#significance-and-power"><i class="fa fa-check"></i><b>2.5.2</b> Significance and power</a></li>
 <li class="chapter" data-level="2.5.3" data-path="ch-modeling.html"><a href="ch-modeling.html#testing-whether-paul-was-guessing"><i class="fa fa-check"></i><b>2.5.3</b> Testing whether Paul was guessing</a></li>
@@ -140,110 +144,138 @@
 <li class="chapter" data-level="2.7" data-path="ch-modeling.html"><a href="ch-modeling.html#summary-1"><i class="fa fa-check"></i><b>2.7</b> Summary</a></li>
 <li class="chapter" data-level="2.8" data-path="ch-modeling.html"><a href="ch-modeling.html#epilogue"><i class="fa fa-check"></i><b>2.8</b> Epilogue</a></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html"><i class="fa fa-check"></i><b>3</b> A model with a mean (one sample t-test)</a><ul>
-<li class="chapter" data-level="3.1" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#numeric-judgement-and-anchoring"><i class="fa fa-check"></i><b>3.1</b> Numeric judgement and anchoring</a><ul>
+<li class="chapter" data-level="3" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html"><i class="fa fa-check"></i><b>3</b> A model with a mean (one sample t-test)</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#numeric-judgement-and-anchoring"><i class="fa fa-check"></i><b>3.1</b> Numeric judgement and anchoring</a>
+<ul>
 <li class="chapter" data-level="3.1.1" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#exploring-the-data"><i class="fa fa-check"></i><b>3.1.1</b> Exploring the data</a></li>
 </ul></li>
-<li class="chapter" data-level="3.2" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#a-statistical-model-of-judgements"><i class="fa fa-check"></i><b>3.2</b> A statistical model of judgements</a><ul>
+<li class="chapter" data-level="3.2" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#a-statistical-model-of-judgements"><i class="fa fa-check"></i><b>3.2</b> A statistical model of judgements</a>
+<ul>
 <li class="chapter" data-level="3.2.1" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#the-normal-distribution"><i class="fa fa-check"></i><b>3.2.1</b> The Normal distribution</a></li>
 <li class="chapter" data-level="3.2.2" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#two-useful-properties-of-the-normal-distribution"><i class="fa fa-check"></i><b>3.2.2</b> Two useful properties of the Normal distribution</a></li>
 <li class="chapter" data-level="3.2.3" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#back-to-anchoring"><i class="fa fa-check"></i><b>3.2.3</b> Back to anchoring</a></li>
 </ul></li>
-<li class="chapter" data-level="3.3" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#parameter-estimation"><i class="fa fa-check"></i><b>3.3</b> Parameter estimation</a><ul>
+<li class="chapter" data-level="3.3" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#parameter-estimation"><i class="fa fa-check"></i><b>3.3</b> Parameter estimation</a>
+<ul>
 <li class="chapter" data-level="3.3.1" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#sampling-distribution-of-the-estimated-mean"><i class="fa fa-check"></i><b>3.3.1</b> Sampling distribution of the estimated mean</a></li>
 </ul></li>
-<li class="chapter" data-level="3.4" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#testing-whether-mu-has-an-specific-value"><i class="fa fa-check"></i><b>3.4</b> Testing whether <span class="math inline">\(\mu\)</span> has an specific value</a><ul>
+<li class="chapter" data-level="3.4" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#testing-whether-mu-has-an-specific-value"><i class="fa fa-check"></i><b>3.4</b> Testing whether <span class="math inline">\(\mu\)</span> has an specific value</a>
+<ul>
 <li class="chapter" data-level="3.4.1" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#the-classical-way"><i class="fa fa-check"></i><b>3.4.1</b> The classical way</a></li>
 <li class="chapter" data-level="3.4.2" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#the-model-comparison-way"><i class="fa fa-check"></i><b>3.4.2</b> The model comparison way</a></li>
 </ul></li>
 <li class="chapter" data-level="3.5" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#ch3-confidence-interval"><i class="fa fa-check"></i><b>3.5</b> Confidence intervals</a></li>
 <li class="chapter" data-level="3.6" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#effect-size"><i class="fa fa-check"></i><b>3.6</b> Effect size</a></li>
 <li class="chapter" data-level="3.7" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#sec:02-assumptions"><i class="fa fa-check"></i><b>3.7</b> Assumptions</a></li>
-<li class="chapter" data-level="3.8" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#the-central-limit-theorem"><i class="fa fa-check"></i><b>3.8</b> The Central Limit Theorem</a><ul>
+<li class="chapter" data-level="3.8" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#the-central-limit-theorem"><i class="fa fa-check"></i><b>3.8</b> The Central Limit Theorem</a>
+<ul>
 <li class="chapter" data-level="3.8.1" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#the-central-limit-theorem-in-action"><i class="fa fa-check"></i><b>3.8.1</b> The Central Limit Theorem in action</a></li>
 <li class="chapter" data-level="3.8.2" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#bootstrapping-a-statistic"><i class="fa fa-check"></i><b>3.8.2</b> Bootstrapping a statistic</a></li>
 </ul></li>
 <li class="chapter" data-level="3.9" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#in-practice"><i class="fa fa-check"></i><b>3.9</b> In practice</a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html"><i class="fa fa-check"></i><b>4</b> Simple linear regression</a><ul>
+<li class="chapter" data-level="4" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html"><i class="fa fa-check"></i><b>4</b> Simple linear regression</a>
+<ul>
 <li class="chapter" data-level="4.1" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#trump-votes-and-hate-groups"><i class="fa fa-check"></i><b>4.1</b> Trump, votes, and hate groups</a></li>
 <li class="chapter" data-level="4.2" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#the-model"><i class="fa fa-check"></i><b>4.2</b> The model</a></li>
-<li class="chapter" data-level="4.3" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#sec:04-estimation"><i class="fa fa-check"></i><b>4.3</b> Estimation</a><ul>
+<li class="chapter" data-level="4.3" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#sec:04-estimation"><i class="fa fa-check"></i><b>4.3</b> Estimation</a>
+<ul>
 <li class="chapter" data-level="4.3.1" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#estimating-the-relation-between-trump-votes-and-hate-groups"><i class="fa fa-check"></i><b>4.3.1</b> Estimating the relation between Trump votes and hate groups</a></li>
 </ul></li>
-<li class="chapter" data-level="4.4" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#hypothesis-testing"><i class="fa fa-check"></i><b>4.4</b> Hypothesis testing</a><ul>
+<li class="chapter" data-level="4.4" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#hypothesis-testing"><i class="fa fa-check"></i><b>4.4</b> Hypothesis testing</a>
+<ul>
 <li class="chapter" data-level="4.4.1" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#sampling-distribution-of-estimates"><i class="fa fa-check"></i><b>4.4.1</b> Sampling distribution of estimates</a></li>
 <li class="chapter" data-level="4.4.2" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#model-comparison"><i class="fa fa-check"></i><b>4.4.2</b> Model comparison</a></li>
 <li class="chapter" data-level="4.4.3" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#confidence-intervals"><i class="fa fa-check"></i><b>4.4.3</b> Confidence intervals</a></li>
 </ul></li>
 <li class="chapter" data-level="4.5" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#summary-2"><i class="fa fa-check"></i><b>4.5</b> Summary</a></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html"><i class="fa fa-check"></i><b>5</b> Multiple regression</a><ul>
-<li class="chapter" data-level="5.1" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#trump-votes-and-hate-groups-again"><i class="fa fa-check"></i><b>5.1</b> Trump, votes, and hate groups (again)</a><ul>
+<li class="chapter" data-level="5" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html"><i class="fa fa-check"></i><b>5</b> Multiple regression</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#trump-votes-and-hate-groups-again"><i class="fa fa-check"></i><b>5.1</b> Trump, votes, and hate groups (again)</a>
+<ul>
 <li class="chapter" data-level="5.1.1" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#controlling-for-education-level"><i class="fa fa-check"></i><b>5.1.1</b> Controlling for education level</a></li>
 </ul></li>
 <li class="chapter" data-level="5.2" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#the-multiple-regression-model"><i class="fa fa-check"></i><b>5.2</b> The multiple regression model</a></li>
 <li class="chapter" data-level="5.3" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#sec:04b-estimation"><i class="fa fa-check"></i><b>5.3</b> Estimation</a></li>
 <li class="chapter" data-level="5.4" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#sec:04b-inference"><i class="fa fa-check"></i><b>5.4</b> Inference</a></li>
 <li class="chapter" data-level="5.5" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#partitioning-and-explaining-variance"><i class="fa fa-check"></i><b>5.5</b> Partitioning and explaining variance</a></li>
-<li class="chapter" data-level="5.6" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#effect-size-and-the-importance-of-predictors"><i class="fa fa-check"></i><b>5.6</b> Effect size and the importance of predictors</a><ul>
+<li class="chapter" data-level="5.6" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#sec:04b-effect-size"><i class="fa fa-check"></i><b>5.6</b> Effect size and the importance of predictors</a>
+<ul>
 <li class="chapter" data-level="5.6.1" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#r2-changes-and-the-coefficient-of-semi-partial-determination"><i class="fa fa-check"></i><b>5.6.1</b> <span class="math inline">\(R^2\)</span> changes and the coefficient of (semi-)partial determination</a></li>
 </ul></li>
-<li class="chapter" data-level="5.7" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#sec:04b-assumptions"><i class="fa fa-check"></i><b>5.7</b> Assumptions</a><ul>
+<li class="chapter" data-level="5.7" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#sec:04b-assumptions"><i class="fa fa-check"></i><b>5.7</b> Assumptions</a>
+<ul>
 <li class="chapter" data-level="5.7.1" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#transforming-variables"><i class="fa fa-check"></i><b>5.7.1</b> Transforming variables</a></li>
 <li class="chapter" data-level="5.7.2" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#polynomial-regression"><i class="fa fa-check"></i><b>5.7.2</b> Polynomial regression</a></li>
 </ul></li>
-<li class="chapter" data-level="5.8" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#multicollinearity-redundancy-between-predictors"><i class="fa fa-check"></i><b>5.8</b> Multicollinearity: Redundancy between predictors</a><ul>
+<li class="chapter" data-level="5.8" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#multicollinearity-redundancy-between-predictors"><i class="fa fa-check"></i><b>5.8</b> Multicollinearity: Redundancy between predictors</a>
+<ul>
 <li class="chapter" data-level="5.8.1" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#detecting-and-dealing-with-multicollinearity"><i class="fa fa-check"></i><b>5.8.1</b> Detecting and dealing with multicollinearity</a></li>
 </ul></li>
 <li class="chapter" data-level="5.9" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#sec:04b-outliers"><i class="fa fa-check"></i><b>5.9</b> Outliers</a></li>
-<li class="chapter" data-level="5.10" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#in-practise"><i class="fa fa-check"></i><b>5.10</b> In practise</a></li>
+<li class="chapter" data-level="5.10" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#in-practice-1"><i class="fa fa-check"></i><b>5.10</b> In practice</a></li>
 </ul></li>
-<li class="chapter" data-level="6" data-path="moderation-and-mediation.html"><a href="moderation-and-mediation.html"><i class="fa fa-check"></i><b>6</b> Moderation and mediation</a><ul>
-<li class="chapter" data-level="6.1" data-path="moderation-and-mediation.html"><a href="moderation-and-mediation.html#moderation"><i class="fa fa-check"></i><b>6.1</b> Moderation</a><ul>
+<li class="chapter" data-level="6" data-path="moderation-and-mediation.html"><a href="moderation-and-mediation.html"><i class="fa fa-check"></i><b>6</b> Moderation and mediation</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="moderation-and-mediation.html"><a href="moderation-and-mediation.html#moderation"><i class="fa fa-check"></i><b>6.1</b> Moderation</a>
+<ul>
 <li class="chapter" data-level="6.1.1" data-path="moderation-and-mediation.html"><a href="moderation-and-mediation.html#physical-attractiveness-and-intelligence-in-speed-dating"><i class="fa fa-check"></i><b>6.1.1</b> Physical attractiveness and intelligence in speed dating</a></li>
 <li class="chapter" data-level="6.1.2" data-path="moderation-and-mediation.html"><a href="moderation-and-mediation.html#conditional-slopes"><i class="fa fa-check"></i><b>6.1.2</b> Conditional slopes</a></li>
 <li class="chapter" data-level="6.1.3" data-path="moderation-and-mediation.html"><a href="moderation-and-mediation.html#modeling-slopes-with-linear-models"><i class="fa fa-check"></i><b>6.1.3</b> Modeling slopes with linear models</a></li>
 <li class="chapter" data-level="6.1.4" data-path="moderation-and-mediation.html"><a href="moderation-and-mediation.html#simple-slopes-and-centering"><i class="fa fa-check"></i><b>6.1.4</b> Simple slopes and centering</a></li>
 <li class="chapter" data-level="6.1.5" data-path="moderation-and-mediation.html"><a href="moderation-and-mediation.html#sec:05-dont-forget-about-the-fun"><i class="fa fa-check"></i><b>6.1.5</b> Don’t forget about fun! A model with multiple interactions</a></li>
 </ul></li>
-<li class="chapter" data-level="6.2" data-path="moderation-and-mediation.html"><a href="moderation-and-mediation.html#mediation"><i class="fa fa-check"></i><b>6.2</b> Mediation</a><ul>
+<li class="chapter" data-level="6.2" data-path="moderation-and-mediation.html"><a href="moderation-and-mediation.html#mediation"><i class="fa fa-check"></i><b>6.2</b> Mediation</a>
+<ul>
 <li class="chapter" data-level="6.2.1" data-path="moderation-and-mediation.html"><a href="moderation-and-mediation.html#legacy-motives-and-pro-environmental-behaviours"><i class="fa fa-check"></i><b>6.2.1</b> Legacy motives and pro-environmental behaviours</a></li>
 <li class="chapter" data-level="6.2.2" data-path="moderation-and-mediation.html"><a href="moderation-and-mediation.html#causal-steps"><i class="fa fa-check"></i><b>6.2.2</b> Causal steps</a></li>
 <li class="chapter" data-level="6.2.3" data-path="moderation-and-mediation.html"><a href="moderation-and-mediation.html#estimating-the-mediated-effect"><i class="fa fa-check"></i><b>6.2.3</b> Estimating the mediated effect</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="ch-ANOVA.html"><a href="ch-ANOVA.html"><i class="fa fa-check"></i><b>7</b> A model of means (ANOVA)</a><ul>
+<li class="chapter" data-level="7" data-path="ch-ANOVA.html"><a href="ch-ANOVA.html"><i class="fa fa-check"></i><b>7</b> A model of means (ANOVA)</a>
+<ul>
 <li class="chapter" data-level="7.1" data-path="ch-ANOVA.html"><a href="ch-ANOVA.html#can-playing-tetris-reduce-intrusive-memories"><i class="fa fa-check"></i><b>7.1</b> Can playing Tetris reduce intrusive memories?</a></li>
 <li class="chapter" data-level="7.2" data-path="ch-ANOVA.html"><a href="ch-ANOVA.html#sec:06-two-groups"><i class="fa fa-check"></i><b>7.2</b> Comparing two groups</a></li>
 <li class="chapter" data-level="7.3" data-path="ch-ANOVA.html"><a href="ch-ANOVA.html#the-anova-model"><i class="fa fa-check"></i><b>7.3</b> The ANOVA model</a></li>
-<li class="chapter" data-level="7.4" data-path="ch-ANOVA.html"><a href="ch-ANOVA.html#contrast-coding"><i class="fa fa-check"></i><b>7.4</b> Contrast coding</a><ul>
+<li class="chapter" data-level="7.4" data-path="ch-ANOVA.html"><a href="ch-ANOVA.html#contrast-coding"><i class="fa fa-check"></i><b>7.4</b> Contrast coding</a>
+<ul>
 <li class="chapter" data-level="7.4.1" data-path="ch-ANOVA.html"><a href="ch-ANOVA.html#effect-coding"><i class="fa fa-check"></i><b>7.4.1</b> Effect coding</a></li>
 <li class="chapter" data-level="7.4.2" data-path="ch-ANOVA.html"><a href="ch-ANOVA.html#orthogonal-contrast-codes"><i class="fa fa-check"></i><b>7.4.2</b> Orthogonal contrast codes</a></li>
 <li class="chapter" data-level="7.4.3" data-path="ch-ANOVA.html"><a href="ch-ANOVA.html#defining-your-own-orthogonal-contrasts"><i class="fa fa-check"></i><b>7.4.3</b> Defining your own (orthogonal) contrasts</a></li>
 </ul></li>
 <li class="chapter" data-level="7.5" data-path="ch-ANOVA.html"><a href="ch-ANOVA.html#default-orthogonal-coding-schemes"><i class="fa fa-check"></i><b>7.5</b> Default orthogonal coding schemes</a></li>
-<li class="chapter" data-level="7.6" data-path="ch-ANOVA.html"><a href="ch-ANOVA.html#multiple-testing-and-post-hoc-tests"><i class="fa fa-check"></i><b>7.6</b> Multiple testing and post-hoc tests</a></li>
+<li class="chapter" data-level="7.6" data-path="ch-ANOVA.html"><a href="ch-ANOVA.html#effect-size-in-anova"><i class="fa fa-check"></i><b>7.6</b> Effect-size in ANOVA</a></li>
+<li class="chapter" data-level="7.7" data-path="ch-ANOVA.html"><a href="ch-ANOVA.html#assumptions"><i class="fa fa-check"></i><b>7.7</b> Assumptions</a></li>
+<li class="chapter" data-level="7.8" data-path="ch-ANOVA.html"><a href="ch-ANOVA.html#multiple-testing-and-post-hoc-tests"><i class="fa fa-check"></i><b>7.8</b> Multiple testing and post-hoc tests</a></li>
+<li class="chapter" data-level="7.9" data-path="ch-ANOVA.html"><a href="ch-ANOVA.html#in-practice-2"><i class="fa fa-check"></i><b>7.9</b> In practice</a></li>
 </ul></li>
-<li class="chapter" data-level="8" data-path="ch-factorial-ANOVA.html"><a href="ch-factorial-ANOVA.html"><i class="fa fa-check"></i><b>8</b> Factorial ANOVA</a><ul>
-<li class="chapter" data-level="8.1" data-path="ch-factorial-ANOVA.html"><a href="ch-factorial-ANOVA.html#experimenter-beliefs-and-social-priming"><i class="fa fa-check"></i><b>8.1</b> Experimenter beliefs and social priming</a><ul>
+<li class="chapter" data-level="8" data-path="ch-factorial-ANOVA.html"><a href="ch-factorial-ANOVA.html"><i class="fa fa-check"></i><b>8</b> Factorial ANOVA</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="ch-factorial-ANOVA.html"><a href="ch-factorial-ANOVA.html#experimenter-beliefs-and-social-priming"><i class="fa fa-check"></i><b>8.1</b> Experimenter beliefs and social priming</a>
+<ul>
 <li class="chapter" data-level="8.1.1" data-path="ch-factorial-ANOVA.html"><a href="ch-factorial-ANOVA.html#a-oneway-anova"><i class="fa fa-check"></i><b>8.1.1</b> A oneway ANOVA</a></li>
 </ul></li>
-<li class="chapter" data-level="8.2" data-path="ch-factorial-ANOVA.html"><a href="ch-factorial-ANOVA.html#factorial-designs"><i class="fa fa-check"></i><b>8.2</b> Factorial designs</a><ul>
+<li class="chapter" data-level="8.2" data-path="ch-factorial-ANOVA.html"><a href="ch-factorial-ANOVA.html#factorial-designs"><i class="fa fa-check"></i><b>8.2</b> Factorial designs</a>
+<ul>
 <li class="chapter" data-level="8.2.1" data-path="ch-factorial-ANOVA.html"><a href="ch-factorial-ANOVA.html#sec:06-main-effects-and-interactions"><i class="fa fa-check"></i><b>8.2.1</b> Main effects and interactions</a></li>
 </ul></li>
 <li class="chapter" data-level="8.3" data-path="ch-factorial-ANOVA.html"><a href="ch-factorial-ANOVA.html#the-factorial-anova-model"><i class="fa fa-check"></i><b>8.3</b> The factorial ANOVA model</a></li>
-<li class="chapter" data-level="8.4" data-path="ch-factorial-ANOVA.html"><a href="ch-factorial-ANOVA.html#a-threeway-factorial-anova"><i class="fa fa-check"></i><b>8.4</b> A threeway factorial ANOVA</a><ul>
+<li class="chapter" data-level="8.4" data-path="ch-factorial-ANOVA.html"><a href="ch-factorial-ANOVA.html#a-threeway-factorial-anova"><i class="fa fa-check"></i><b>8.4</b> A threeway factorial ANOVA</a>
+<ul>
 <li class="chapter" data-level="8.4.1" data-path="ch-factorial-ANOVA.html"><a href="ch-factorial-ANOVA.html#interpreting-interactions"><i class="fa fa-check"></i><b>8.4.1</b> Interpreting interactions</a></li>
 </ul></li>
-<li class="chapter" data-level="8.5" data-path="ch-factorial-ANOVA.html"><a href="ch-factorial-ANOVA.html#orthogonal-contrast-codes-and-unequal-sample-sizes"><i class="fa fa-check"></i><b>8.5</b> Orthogonal contrast codes and unequal sample sizes</a><ul>
+<li class="chapter" data-level="8.5" data-path="ch-factorial-ANOVA.html"><a href="ch-factorial-ANOVA.html#orthogonal-contrast-codes-and-unequal-sample-sizes"><i class="fa fa-check"></i><b>8.5</b> Orthogonal contrast codes and unequal sample sizes</a>
+<ul>
 <li class="chapter" data-level="8.5.1" data-path="ch-factorial-ANOVA.html"><a href="ch-factorial-ANOVA.html#comparison-schemes-and-ss-types"><i class="fa fa-check"></i><b>8.5.1</b> Comparison schemes and SS types</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="9" data-path="mixing-categorical-and-metric-predictors-ancova.html"><a href="mixing-categorical-and-metric-predictors-ancova.html"><i class="fa fa-check"></i><b>9</b> Mixing categorical and metric predictors (ANCOVA)</a><ul>
+<li class="chapter" data-level="9" data-path="mixing-categorical-and-metric-predictors-ancova.html"><a href="mixing-categorical-and-metric-predictors-ancova.html"><i class="fa fa-check"></i><b>9</b> Mixing categorical and metric predictors (ANCOVA)</a>
+<ul>
 <li class="chapter" data-level="9.1" data-path="mixing-categorical-and-metric-predictors-ancova.html"><a href="mixing-categorical-and-metric-predictors-ancova.html#subjective-feelings-of-power-and-priming"><i class="fa fa-check"></i><b>9.1</b> Subjective feelings of power and priming</a></li>
 <li class="chapter" data-level="9.2" data-path="mixing-categorical-and-metric-predictors-ancova.html"><a href="mixing-categorical-and-metric-predictors-ancova.html#acounting-for-pre-existing-differences"><i class="fa fa-check"></i><b>9.2</b> Acounting for pre-existing differences</a></li>
-<li class="chapter" data-level="9.3" data-path="mixing-categorical-and-metric-predictors-ancova.html"><a href="mixing-categorical-and-metric-predictors-ancova.html#slopes-of-contrast-coding-predictors-in-ancova-models"><i class="fa fa-check"></i><b>9.3</b> Slopes of contrast-coding predictors in ANCOVA models</a></li>
+<li class="chapter" data-level="9.3" data-path="mixing-categorical-and-metric-predictors-ancova.html"><a href="mixing-categorical-and-metric-predictors-ancova.html#slopes-of-contrast-coded-predictors-in-ancova-models"><i class="fa fa-check"></i><b>9.3</b> Slopes of contrast-coded predictors in ANCOVA models</a></li>
 <li class="chapter" data-level="9.4" data-path="mixing-categorical-and-metric-predictors-ancova.html"><a href="mixing-categorical-and-metric-predictors-ancova.html#homogeneity-of-slopes"><i class="fa fa-check"></i><b>9.4</b> Homogeneity of slopes</a></li>
 <li class="chapter" data-level="9.5" data-path="mixing-categorical-and-metric-predictors-ancova.html"><a href="mixing-categorical-and-metric-predictors-ancova.html#sec:ANCOVA-power"><i class="fa fa-check"></i><b>9.5</b> Power considerations in ANCOVA</a></li>
 <li class="chapter" data-level="9.6" data-path="mixing-categorical-and-metric-predictors-ancova.html"><a href="mixing-categorical-and-metric-predictors-ancova.html#models-with-multiple-covariates"><i class="fa fa-check"></i><b>9.6</b> Models with multiple covariates</a></li>
@@ -251,20 +283,24 @@
 <li class="chapter" data-level="9.8" data-path="mixing-categorical-and-metric-predictors-ancova.html"><a href="mixing-categorical-and-metric-predictors-ancova.html#ancova-vs-difference-scores"><i class="fa fa-check"></i><b>9.8</b> ANCOVA vs difference scores</a></li>
 </ul></li>
 <li class="chapter" data-level="10" data-path="repeated-measures-anova.html"><a href="repeated-measures-anova.html"><i class="fa fa-check"></i><b>10</b> Repeated-measures ANOVA</a></li>
-<li class="chapter" data-level="11" data-path="linear-mixed-effects-models.html"><a href="linear-mixed-effects-models.html"><i class="fa fa-check"></i><b>11</b> Linear mixed-effects models</a><ul>
+<li class="chapter" data-level="11" data-path="linear-mixed-effects-models.html"><a href="linear-mixed-effects-models.html"><i class="fa fa-check"></i><b>11</b> Linear mixed-effects models</a>
+<ul>
 <li class="chapter" data-level="11.1" data-path="linear-mixed-effects-models.html"><a href="linear-mixed-effects-models.html#non-independence-in-linear-models"><i class="fa fa-check"></i><b>11.1</b> Non-independence in linear models</a></li>
 <li class="chapter" data-level="11.2" data-path="linear-mixed-effects-models.html"><a href="linear-mixed-effects-models.html#random-intercept-models"><i class="fa fa-check"></i><b>11.2</b> Random intercept models</a></li>
 <li class="chapter" data-level="11.3" data-path="linear-mixed-effects-models.html"><a href="linear-mixed-effects-models.html#parameter-estimation-1"><i class="fa fa-check"></i><b>11.3</b> Parameter estimation</a></li>
 <li class="chapter" data-level="11.4" data-path="linear-mixed-effects-models.html"><a href="linear-mixed-effects-models.html#parameter-inference"><i class="fa fa-check"></i><b>11.4</b> Parameter inference</a></li>
 <li class="chapter" data-level="11.5" data-path="linear-mixed-effects-models.html"><a href="linear-mixed-effects-models.html#application-of-the-random-intercepts-model"><i class="fa fa-check"></i><b>11.5</b> Application of the random-intercepts model</a></li>
-<li class="chapter" data-level="11.6" data-path="linear-mixed-effects-models.html"><a href="linear-mixed-effects-models.html#models-with-random-intercepts-and-slopes"><i class="fa fa-check"></i><b>11.6</b> Models with random intercepts and slopes</a><ul>
+<li class="chapter" data-level="11.6" data-path="linear-mixed-effects-models.html"><a href="linear-mixed-effects-models.html#models-with-random-intercepts-and-slopes"><i class="fa fa-check"></i><b>11.6</b> Models with random intercepts and slopes</a>
+<ul>
 <li class="chapter" data-level="11.6.1" data-path="linear-mixed-effects-models.html"><a href="linear-mixed-effects-models.html#correlation-between-random-effects"><i class="fa fa-check"></i><b>11.6.1</b> Correlation between random effects</a></li>
 </ul></li>
 <li class="chapter" data-level="11.7" data-path="linear-mixed-effects-models.html"><a href="linear-mixed-effects-models.html#crossed-random-effects-dating-partners-in-the-speed-dating-experiment"><i class="fa fa-check"></i><b>11.7</b> Crossed random effects: dating partners in the speed dating experiment</a></li>
 <li class="chapter" data-level="11.8" data-path="linear-mixed-effects-models.html"><a href="linear-mixed-effects-models.html#choosing-the-random-effects-structure"><i class="fa fa-check"></i><b>11.8</b> Choosing the random effects structure</a></li>
 </ul></li>
-<li class="chapter" data-level="12" data-path="introduction-to-bayesian-hypothesis-testing.html"><a href="introduction-to-bayesian-hypothesis-testing.html"><i class="fa fa-check"></i><b>12</b> Introduction to Bayesian hypothesis testing</a><ul>
-<li class="chapter" data-level="12.1" data-path="introduction-to-bayesian-hypothesis-testing.html"><a href="introduction-to-bayesian-hypothesis-testing.html#fundamentals-of-bayesian-inference"><i class="fa fa-check"></i><b>12.1</b> Fundamentals of Bayesian inference</a><ul>
+<li class="chapter" data-level="12" data-path="introduction-to-bayesian-hypothesis-testing.html"><a href="introduction-to-bayesian-hypothesis-testing.html"><i class="fa fa-check"></i><b>12</b> Introduction to Bayesian hypothesis testing</a>
+<ul>
+<li class="chapter" data-level="12.1" data-path="introduction-to-bayesian-hypothesis-testing.html"><a href="introduction-to-bayesian-hypothesis-testing.html#fundamentals-of-bayesian-inference"><i class="fa fa-check"></i><b>12.1</b> Fundamentals of Bayesian inference</a>
+<ul>
 <li class="chapter" data-level="12.1.1" data-path="introduction-to-bayesian-hypothesis-testing.html"><a href="introduction-to-bayesian-hypothesis-testing.html#probability-in-times-of-covid"><i class="fa fa-check"></i><b>12.1.1</b> Probability in times of Covid</a></li>
 <li class="chapter" data-level="12.1.2" data-path="introduction-to-bayesian-hypothesis-testing.html"><a href="introduction-to-bayesian-hypothesis-testing.html#bayes-rule"><i class="fa fa-check"></i><b>12.1.2</b> Bayes’ rule</a></li>
 <li class="chapter" data-level="12.1.3" data-path="introduction-to-bayesian-hypothesis-testing.html"><a href="introduction-to-bayesian-hypothesis-testing.html#we-missed-you-paul"><i class="fa fa-check"></i><b>12.1.3</b> We missed you Paul!</a></li>
@@ -273,7 +309,8 @@
 </ul></li>
 <li class="chapter" data-level="12.2" data-path="introduction-to-bayesian-hypothesis-testing.html"><a href="introduction-to-bayesian-hypothesis-testing.html#a-bayesian-t-test"><i class="fa fa-check"></i><b>12.2</b> A Bayesian t-test</a></li>
 <li class="chapter" data-level="12.3" data-path="introduction-to-bayesian-hypothesis-testing.html"><a href="introduction-to-bayesian-hypothesis-testing.html#bayes-factors-for-general-linear-models"><i class="fa fa-check"></i><b>12.3</b> Bayes factors for General Linear Models</a></li>
-<li class="chapter" data-level="12.4" data-path="introduction-to-bayesian-hypothesis-testing.html"><a href="introduction-to-bayesian-hypothesis-testing.html#some-objections-to-null-hypothesis-significance-testing"><i class="fa fa-check"></i><b>12.4</b> Some objections to null-hypothesis significance testing</a><ul>
+<li class="chapter" data-level="12.4" data-path="introduction-to-bayesian-hypothesis-testing.html"><a href="introduction-to-bayesian-hypothesis-testing.html#some-objections-to-null-hypothesis-significance-testing"><i class="fa fa-check"></i><b>12.4</b> Some objections to null-hypothesis significance testing</a>
+<ul>
 <li class="chapter" data-level="12.4.1" data-path="introduction-to-bayesian-hypothesis-testing.html"><a href="introduction-to-bayesian-hypothesis-testing.html#the-p-value-is-not-a-proper-measure-of-evidential-support"><i class="fa fa-check"></i><b>12.4.1</b> The <span class="math inline">\(p\)</span>-value is not a proper measure of evidential support</a></li>
 <li class="chapter" data-level="12.4.2" data-path="introduction-to-bayesian-hypothesis-testing.html"><a href="introduction-to-bayesian-hypothesis-testing.html#the-p-value-depends-on-researcher-intentions"><i class="fa fa-check"></i><b>12.4.2</b> The <span class="math inline">\(p\)</span>-value depends on researcher intentions</a></li>
 <li class="chapter" data-level="12.4.3" data-path="introduction-to-bayesian-hypothesis-testing.html"><a href="introduction-to-bayesian-hypothesis-testing.html#results-of-a-nhst-are-often-misinterpreted"><i class="fa fa-check"></i><b>12.4.3</b> Results of a NHST are often misinterpreted</a></li>
@@ -281,13 +318,15 @@
 <li class="chapter" data-level="12.5" data-path="introduction-to-bayesian-hypothesis-testing.html"><a href="introduction-to-bayesian-hypothesis-testing.html#to-bayes-or-not-to-bayes-a-pragmatic-view"><i class="fa fa-check"></i><b>12.5</b> To Bayes or not to Bayes? A pragmatic view</a></li>
 <li class="chapter" data-level="12.6" data-path="introduction-to-bayesian-hypothesis-testing.html"><a href="introduction-to-bayesian-hypothesis-testing.html#summary-3"><i class="fa fa-check"></i><b>12.6</b> “Summary”</a></li>
 </ul></li>
-<li class="chapter" data-level="13" data-path="being-a-responsible-data-analyst.html"><a href="being-a-responsible-data-analyst.html"><i class="fa fa-check"></i><b>13</b> Being a responsible data analyst</a><ul>
+<li class="chapter" data-level="13" data-path="being-a-responsible-data-analyst.html"><a href="being-a-responsible-data-analyst.html"><i class="fa fa-check"></i><b>13</b> Being a responsible data analyst</a>
+<ul>
 <li class="chapter" data-level="13.1" data-path="being-a-responsible-data-analyst.html"><a href="being-a-responsible-data-analyst.html#consider-analysis-before-data-collection"><i class="fa fa-check"></i><b>13.1</b> Consider analysis before data collection</a></li>
 <li class="chapter" data-level="13.2" data-path="being-a-responsible-data-analyst.html"><a href="being-a-responsible-data-analyst.html#explore-the-data"><i class="fa fa-check"></i><b>13.2</b> Explore the data</a></li>
 <li class="chapter" data-level="13.3" data-path="being-a-responsible-data-analyst.html"><a href="being-a-responsible-data-analyst.html#evaluate-the-assumptions-underlying-your-analyses"><i class="fa fa-check"></i><b>13.3</b> Evaluate the assumptions underlying your analyses</a></li>
 <li class="chapter" data-level="13.4" data-path="being-a-responsible-data-analyst.html"><a href="being-a-responsible-data-analyst.html#distinguish-between-confirmatory-and-exploratory-analyses"><i class="fa fa-check"></i><b>13.4</b> Distinguish between confirmatory and exploratory analyses</a></li>
 <li class="chapter" data-level="13.5" data-path="being-a-responsible-data-analyst.html"><a href="being-a-responsible-data-analyst.html#aim-for-openness-and-reproducibility"><i class="fa fa-check"></i><b>13.5</b> Aim for openness and reproducibility</a></li>
-<li class="chapter" data-level="13.6" data-path="being-a-responsible-data-analyst.html"><a href="being-a-responsible-data-analyst.html#communicate-clearly-and-concisely"><i class="fa fa-check"></i><b>13.6</b> Communicate clearly and concisely</a><ul>
+<li class="chapter" data-level="13.6" data-path="being-a-responsible-data-analyst.html"><a href="being-a-responsible-data-analyst.html#communicate-clearly-and-concisely"><i class="fa fa-check"></i><b>13.6</b> Communicate clearly and concisely</a>
+<ul>
 <li class="chapter" data-level="13.6.1" data-path="being-a-responsible-data-analyst.html"><a href="being-a-responsible-data-analyst.html#example-of-reporting-a-multiple-regression-analysis"><i class="fa fa-check"></i><b>13.6.1</b> Example of reporting a multiple regression analysis</a></li>
 <li class="chapter" data-level="13.6.2" data-path="being-a-responsible-data-analyst.html"><a href="being-a-responsible-data-analyst.html#example-of-reporting-a-factorial-anova"><i class="fa fa-check"></i><b>13.6.2</b> Example of reporting a factorial ANOVA</a></li>
 </ul></li>
@@ -310,15 +349,15 @@
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="ch-modeling" class="section level1">
+<div id="ch-modeling" class="section level1" number="2">
 <h1><span class="header-section-number">Chapter 2</span> Statistical modelling</h1>
 <p>Was Paul truly psychic, an oracle of some kind? Or was Paul – or his keeper, as what does fame really mean to an octopus? – just really lucky? How do we know? And what really are the chances of predicting the winner of 8 matches correct? These are questions we will focus on now.</p>
 <p>In this chapter, we will start defining statistical models and using them to make inferences about the Data Generating Process. We will cover some basic probability theory, and use this to define two alternative models of Paul’s predictions. One in which he is randomly guessing, and one in which his predictions can be more (or less) accurate than if he were randomly guessing, while we are unsure about how accurate Paul really is in that case. We will discuss how to estimate the unknown accuracy of Paul’s predictions in this model. After this, we will try to answer the question: was Paul (somewhat) psychic? Our answer will be based on whether we can refute the hypothesis that he was randomly guessing. This is generally done with a procedure called a null-hypothesis significance test. <!-- We will also consider another way in which to look at this, in the form of so-called confidence intervals. --></p>
-<div id="coin-flipping-defining-a-statistical-model" class="section level2">
+<div id="coin-flipping-defining-a-statistical-model" class="section level2" number="2.1">
 <h2><span class="header-section-number">2.1</span> Coin flipping: Defining a statistical model</h2>
-<p>What does it mean for Paul to be psychic, to be an oracle? Sometimes it is easier to answer this question by considering the opposite: When would Paul <em>not</em> be an oracle? If Paul had no way to tell the future, he would be “merely guessing”. Purely random guessing between two options can be implemented by flipping a coin. Suppose Paul made his choices by “flipping a mental coin”, and choosing the box on the left when the outcome was “heads”, and the box on the right when the outcome was “tails”. Great, we now have a model of the Data Generating Process! Coin flipping can be seen as a physical model. It is something that we can do in the real world, as many times as we want. Because we understand the physical properties of coin flips reasonably well – it is really difficult to predict the outcome of a coin flip – it works well as a model of random guessing. But flipping coins over and over is rather tedious. If we have a mathematical description, a statistical model, of flipping coins, we can spare ourselves this trouble. To do so, we first need to know a bit more about probability.</p>
+<p>What does it mean for Paul to be psychic, to be an oracle? Sometimes it is easier to answer this question by considering the opposite: When would Paul <em>not</em> be an oracle? If Paul had no way to tell the future, he would be “merely guessing.” Purely random guessing between two options can be implemented by flipping a coin. Suppose Paul made his choices by “flipping a mental coin,” and choosing the box on the left when the outcome was “heads,” and the box on the right when the outcome was “tails.” Great, we now have a model of the Data Generating Process! Coin flipping can be seen as a physical model. It is something that we can do in the real world, as many times as we want. Because we understand the physical properties of coin flips reasonably well – it is really difficult to predict the outcome of a coin flip – it works well as a model of random guessing. But flipping coins over and over is rather tedious. If we have a mathematical description, a statistical model, of flipping coins, we can spare ourselves this trouble. To do so, we first need to know a bit more about probability.</p>
 </div>
-<div id="probability" class="section level2">
+<div id="probability" class="section level2" number="2.2">
 <h2><span class="header-section-number">2.2</span> Probability</h2>
 <p>Let’s simulate Paul’s decisions for the 2010 FIFA World cup. Grab a coin and flip it 8 times. What are the outcomes? When I did this, the outcomes were:</p>
 <p>tails, tails, tails, heads, tails, heads, heads, tails</p>
@@ -327,7 +366,7 @@
 <p>To know whether these guesses are correct or incorrect, we need to know which team was placed in which box. This information is provided in Table <a href="intro.html#tab:fifa2010">1.2</a>: the first country under <code>Match</code> is the box on the left, and the second the box on the right. Using this, our simulation then provides the following:</p>
 <p>incorrect, correct, correct, correct, correct, correct, incorrect, correct</p>
 <p>So in our simulation, Paul made 6 correct predictions out of 8. Not quite as good as the real Paul, but still a reasonable performance.</p>
-<p>Notice how we went through quite a few steps. We defined a model of non-psychic-and-guessing Paul as making decisions by flipping a coin, we then simulated Paul’s decisions by flipping a coin, then transformed these coin flips into a variable containing the decisions to open the left or right box, and finally transformed this variable into another variable containing the accuracy of the predictions. The first transformation is easy. We could have simply put stickers on the coin relabelling “heads” as “left” and “tails” as “right”. The second transformation is not as obvious as it depends on a second variable (whether the winning team was represented by the left or right box). In this case, we could have saved ourselves a bit of work by immediately relabelling our coin flips as “correct” or “incorrect”. To see why, we need to know a bit more about how to calculate probabilities.</p>
+<p>Notice how we went through quite a few steps. We defined a model of non-psychic-and-guessing Paul as making decisions by flipping a coin, we then simulated Paul’s decisions by flipping a coin, then transformed these coin flips into a variable containing the decisions to open the left or right box, and finally transformed this variable into another variable containing the accuracy of the predictions. The first transformation is easy. We could have simply put stickers on the coin relabelling “heads” as “left” and “tails” as “right.” The second transformation is not as obvious as it depends on a second variable (whether the winning team was represented by the left or right box). In this case, we could have saved ourselves a bit of work by immediately relabelling our coin flips as “correct” or “incorrect.” To see why, we need to know a bit more about how to calculate probabilities.</p>
 <p>Let’s start at the beginning. For one coin flip, there are two possible outcomes: the coin lands on heads or on tails. The outcome can’t be neither (we are assuming the coin is thin enough to not land on its side), nor two heads, or something else. The coin must land on either heads or tails, so there are two outcomes. We call the set of all possible outcomes the <strong>outcome space</strong>, and we’ll use a nice curly <span class="math inline">\(\mathcal{S}\)</span> to denote it:</p>
 <p><span class="math display">\[\mathcal{S} = \{\text{heads},\text{tails}\}\]</span></p>
 <!--
@@ -335,8 +374,8 @@
 The outcome space is the set of all possible events.
 </div>\EndKnitrBlock{definition}
 -->
-<p>Our coin flip is a <strong>random variable</strong> that takes one of the values in the outcome space. It is traditional to denote random variables with capital Roman letters, and the values with small Roman letters. When we want to make generic statements that apply to different random variables (such as a coin flip, the roll of a die, the outcome of a prediction), we tend to use this notation, and <span class="math inline">\(P(Y=y)\)</span> then means ‘The probability that random variable <span class="math inline">\(Y\)</span> has value <span class="math inline">\(y\)</span>’. Other times, it may be easier to use more descriptive names. In this book, when we use a name for a variable, we will use a computer font, such as <code>coin_flip</code>, for the random variable. So <span class="math inline">\(P(\texttt{coin\_flip} = \text{heads})\)</span> means ‘The probability that random variable <code>coin_flip</code> has the value “heads”’.</p>
-<div id="sec:02-probability-definition" class="section level3">
+<p>Our coin flip is a <strong>random variable</strong> that takes one of the values in the outcome space. It is traditional to denote random variables with capital Roman letters, and the values with small Roman letters. When we want to make generic statements that apply to different random variables (such as a coin flip, the roll of a die, the outcome of a prediction), we tend to use this notation, and <span class="math inline">\(P(Y=y)\)</span> then means ‘The probability that random variable <span class="math inline">\(Y\)</span> has value <span class="math inline">\(y\)</span>.’ Other times, it may be easier to use more descriptive names. In this book, when we use a name for a variable, we will use a computer font, such as <code>coin_flip</code>, for the random variable. So <span class="math inline">\(P(\texttt{coin\_flip} = \text{heads})\)</span> means ‘The probability that random variable <code>coin_flip</code> has the value “heads”.’</p>
+<div id="sec:02-probability-definition" class="section level3" number="2.2.1">
 <h3><span class="header-section-number">2.2.1</span> What is probability?</h3>
 <p>I have just introduced the word “probability” without telling you what it means. You probably have some intuition yourself, for instance that probability is the chance of something happening. You might be surprised to know that even though statisticians can all perform probability calculations comfortably, there is quite some disagreement on what probability means. According to the traditional, <strong>Frequentist view</strong>, probability means <em>long-run relative frequency</em>. For instance, the probability of a coin flip landing on heads is defined as the proportion of times a coin lands heads when I flip a coin for a very, very large number of times. Table <a href="ch-modeling.html#tab:long-run-frequency-table">2.1</a> shows the outcome and relative frequency calculations for 15 coin flips.</p>
 <table>
@@ -443,14 +482,14 @@ The outcome space is the set of all possible events.
 </tbody>
 </table>
 <p>Figure <a href="ch-modeling.html#fig:coin-flip-relative-frequency">2.1</a> shows the relative frequency (i.e. the proportion) of heads after each coin flip, when flipping a coin for 2000 times. As you can see, the relative frequency fluctuates quite a bit, but becomes more stable with more flips. But even after 2000 flips, it is not equal to 0.5.</p>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:coin-flip-relative-frequency"></span>
+<div class="figure" style="text-align: center"><span id="fig:coin-flip-relative-frequency"></span>
 <img src="_main_files/figure-html/coin-flip-relative-frequency-1.gif" alt="Relative frequency of heads when flipping a coin for 2000 times" width="95%" />
 <p class="caption">
 Figure 2.1: Relative frequency of heads when flipping a coin for 2000 times
 </p>
 </div>
 <p>Flipping a coin can be viewed as an experiment, that we can repeat. Figure <a href="ch-modeling.html#fig:coin-flip-relative-frequency-multiple">2.2</a> shows the results of flipping a coin for 5000 times when repeating the experiment 5 times. As you can see, the results of our experiments (the relative frequencies) are different each time. The differences are quite marked for a small number of flips, but become more alike after flipping the coin more times. This illustrates something known as <strong>The Law of Large Numbers</strong>, to which we will come back soon. For now, let’s focus on a different matter. If probability is a relative frequency, then which one is it? Each repetition of the experiment, as well as each number of throws, would give us a different answer!</p>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:coin-flip-relative-frequency-multiple"></span>
+<div class="figure" style="text-align: center"><span id="fig:coin-flip-relative-frequency-multiple"></span>
 <img src="_main_files/figure-html/coin-flip-relative-frequency-multiple-1.gif" alt="Relative frequency of heads when flipping a coin 5 times for 5000 times" width="95%" />
 <p class="caption">
 Figure 2.2: Relative frequency of heads when flipping a coin 5 times for 5000 times
@@ -458,7 +497,7 @@ Figure 2.2: Relative frequency of heads when flipping a coin 5 times for 5000 ti
 </div>
 <p>To give a single answer, a “long-run relative frequency” must be the relative frequency when flipping the coin for an infinite number of times. That may seem disappointing. A nice aspect of the Frequentist View is that probabilities are something of the real world, but surely, we can’t flip a coin for an infinite number of times in the real world. That is true, but to understand what probability is, we don’t necessarily have to perform such infinite experiments. When we have to estimate the probability from a given (non-infinite) number of coin flips, we do have to worry about these issues. This, indeed, is what statistics is about: dealing with sample variability to estimate and infer unknown things. But for defining what a probability is, we can use mathematics to show that the long run relative frequency converges to a single number as the number of coin flips gets closer and closer to infinity. Which, in other words, means there is a single long-run relative frequency, and hence the probability is mathematically well-defined.</p>
 <p>There is an alternative to the Frequentist View, called the <strong>Bayesian view</strong> or <strong>Subjective view</strong>, according to which probability means a <em>rational degree of belief</em>. This, in a sense, takes probability out of the real world, and into our minds. By doing so, it allows statements of probabilities for single events, such as what is the probability that it will rain tomorrow. In the Frequentist View, it either rains tomorrow or not. We can ask what the probability is that it rains on the 25th of July in general, by considering the long-run relative frequency of rain on every 25th of July in past, present, and future years. But there is no long-run relative frequency for the 25th of July in 2020.</p>
-<div id="sec:02-rules-of-probability" class="section level4">
+<div id="sec:02-rules-of-probability" class="section level4" number="2.2.1.1">
 <h4><span class="header-section-number">2.2.1.1</span> The rules of probability</h4>
 <!-- https://bolt.mph.ufl.edu/6050-6052/unit-3/module-6/ -->
 <!-- https://bolt.mph.ufl.edu/6050-6052/unit-3/module-7/ -->
@@ -467,13 +506,13 @@ Figure 2.2: Relative frequency of heads when flipping a coin 5 times for 5000 ti
 <li><span class="math inline">\(0 \leq P(E_i) \leq 1\)</span>. The probability of any event <span class="math inline">\(E_i\)</span> is greater or equal to 0 and smaller than or equal to 1. This rule requires little further explanation. Probabilities are chosen to lie on a scale between 0 and 1.</li>
 <li><span class="math inline">\(P(E_1 \text{ or } E_2 \text{ or } E_3 \text{ or } \ldots) = P(\mathcal{S}) = 1\)</span>. In words, this means that the probability of at least one event in the outcome space occurring is 1.</li>
 <li>If <span class="math inline">\(E_i\)</span> and <span class="math inline">\(E_j\)</span> are <em>mutually exclusive</em> events (if one of them occurs, the other cannot occur), then <span class="math inline">\(P(E_i \text{ or } E_j) = P(E_i) + P(E_j)\)</span>. This is also called the <strong>sum rule</strong>.</li>
-<li><span class="math inline">\(P(\neg E_i) = 1 - P(E_i)\)</span>. Here, <span class="math inline">\(\neg\)</span> means “not”, so the probability of “not <span class="math inline">\(E_i\)</span>” is 1 minus the probability of <span class="math inline">\(E_i\)</span> occurring. This is also called the <strong>complement rule</strong>.</li>
+<li><span class="math inline">\(P(\neg E_i) = 1 - P(E_i)\)</span>. Here, <span class="math inline">\(\neg\)</span> means “not,” so the probability of “not <span class="math inline">\(E_i\)</span>” is 1 minus the probability of <span class="math inline">\(E_i\)</span> occurring. This is also called the <strong>complement rule</strong>.</li>
 <li>For any events <span class="math inline">\(E_i\)</span> and <span class="math inline">\(E_j\)</span>, <span class="math inline">\(P(E_i \text{ or } E_j) = P(E_i) + P(E_j) - P(E_i \text{ and } E_j)\)</span>. This rule holds whether the events are mutually exclusive or not, and can be called the <strong>general sum rule</strong>.</li>
 </ol>
 <p>Now, all these rules seem overkill when we are dealing with a simple coin flip. So let’s consider a slightly more complex situation: betting on the outcome of a roll of a six-sided die. In this betting game, like in roulette, you are allowed to bet on many things, such as the exact number, but also whether the number is odd or even, whether the number is greater than 3, whether the number is greater than 1, etc. All these things are events in the outcome space:</p>
 <p><span class="math display">\[\mathcal{S} = \{1, 2, 3, 4, 5, 6, \text{even}, \text{odd}, &gt;3, &lt; 1, \geq 4, 1 \text{ or } 3, \ldots \}\]</span></p>
 <p>The first six events in this outcome space (the numbers 1 to 6) are called <strong>elementary events</strong>: they are mutually exclusive (a single roll cannot result in both a 1 and a 3), and one of them <em>must</em> occur. So we know that <span class="math inline">\(P(1) + P(2) + P(3) + P(4) + P(5) + P(6) = 1\)</span>. But wait, there are more events in the outcome space, and <span class="math inline">\(P(\mathcal{S}) = 1\)</span>, and these six events are only a small part of the outcome space, so does that imply that they all have probability 0? No! That is because not all events in the outcome space are mutually exclusive. For instance, if the outcome is 5, then the outcome is also odd, and it is also <span class="math inline">\(&gt;3\)</span>, <span class="math inline">\(\geq 4\)</span>, etc. As you might have noticed, the other events are actually themselves sets of the elementary events. For instance, <span class="math inline">\(\text{odd} = \{1, 3, 5\}\)</span>, <span class="math inline">\(\text{even} = \{2, 4, 6\}\)</span>, and <span class="math inline">\(&gt; 3 = \{4, 5, 6 \}\)</span>. Figure <a href="ch-modeling.html#fig:euler-diagram-betting-die">2.3</a> depicts the relations between these events, as well as the elementary events.</p>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:euler-diagram-betting-die"></span>
+<div class="figure" style="text-align: center"><span id="fig:euler-diagram-betting-die"></span>
 <img src="_main_files/figure-html/euler-diagram-betting-die-1.svg" alt="A diagram depicting the relations between 9 events in the outcome space of the die betting game" width="95%" />
 <p class="caption">
 Figure 2.3: A diagram depicting the relations between 9 events in the outcome space of the die betting game
@@ -487,7 +526,7 @@ Figure 2.3: A diagram depicting the relations between 9 events in the outcome sp
 </ol>
 <p>Kolmogorov, a rather brilliant mathematician, showed that you only need rules 1, 2 and 3; all the other rules follow from the first three. In mathematical terms, rules 1, 2, and 3 are <em>axioms</em>, statements which we assume are true without being able to prove them, while the remaining rules are <em>theorems</em>, statements which follow from the axioms and can be proven to be true.</p>
 </div>
-<div id="a-model-of-flipping-an-unbiased-coin" class="section level4">
+<div id="a-model-of-flipping-an-unbiased-coin" class="section level4" number="2.2.1.2">
 <h4><span class="header-section-number">2.2.1.2</span> A model of flipping an unbiased coin</h4>
 <p>Now that we know more about probability, let’s get back to our model for Paul. With a balanced coin (and a not too cunning flipper), the probability of the coin landing heads should equal the probability of the coin landing tails. In mathematical notation, we can state this as</p>
 <p><span class="math display">\[P(\text{heads}) = P(\text{tails})\]</span></p>
@@ -526,12 +565,12 @@ which you can translate into words as
 -->
 </div>
 </div>
-<div id="distributions" class="section level3">
+<div id="distributions" class="section level3" number="2.2.2">
 <h3><span class="header-section-number">2.2.2</span> Distributions</h3>
 <p>A probability distribution, as the name suggests, defines how probability is distributed over all possible values of a variable. You can think of “all probability” as a pie, and the probability distribution as slicing up the pie in (possibly unequal) pieces. Each possible value of a variable is given its own slice, and the size of the slice relative to the overall pie is the probability. Looking at the correctness of a single prediction, the pie is divided into two equal slices: half for <span class="math inline">\(P(\text{correct})\)</span>, and the other half for <span class="math inline">\(P(\text{incorrect})\)</span>. But Paul made more than one prediction (8 in the case of the 2010 FIFA World cup), and what we’re really interested in is Paul’s accuracy in all his predictions: What is the probability that Paul made 8 out of 8 correct predictions if he was merely guessing? Using the rules of probability, we can work out this probability as well.</p>
 <p>According to our coin-flipping model, it does not matter which of Paul’s prediction we look at (e.g. whether the first, the second, the last, or any other one). In fact, we could generate the data in the reverse order, or start with the Germany-Australia match and then the Spain-Germany match. Let’s write Paul’s predictions as a variable <span class="math inline">\(\texttt{pred}_i\)</span>, where the index <span class="math inline">\(i\)</span> can be a value between 1 and 8, corresponding to the first, second, etc., prediction he made. The probability that any prediction is correct is <span class="math inline">\(P(\texttt{pred}_i = \text{correct}) = .5\)</span>, and whether that prediction is correct is independent from whether any earlier (or later) prediction is correct. In fancy terms, this means that the observations <span class="math inline">\(Y_i\)</span> are <em>independent and identically distributed</em> (IID).</p>
 <p>When considering the probability of a sequence of events (e.g. a consecutive run of 8 correct predictions), it can be useful to draw all possible outcomes in the form of a tree. In Figure <a href="ch-modeling.html#fig:heads-tails-tree">2.4</a>, we show such a tree for the first three of Paul’s predictions according to our model in which he was randomly guessing. Starting at the “root node” on the left, the first guess can be either correct or incorrect, and these two outcomes are represented as separate branches. If the first guess was correct, we take the “correct” branch. The next guess can be either correct or incorrect, which splits this branch into two further branches, and so forth.</p>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:heads-tails-tree"></span>
+<div class="figure" style="text-align: center"><span id="fig:heads-tails-tree"></span>
 <div id="htmlwidget-dc7d1bbdcf5a8973ac1a" style="width:95%;height:480px;" class="grViz html-widget"></div>
 <script type="application/json" data-for="htmlwidget-dc7d1bbdcf5a8973ac1a">{"x":{"diagram":"\n  digraph tree_plot {\n\n    graph [layout = dot,\n           rankdir = LR]\n\n    node [shape = box] \n    S [label = \"start\"]\n    \n    node [shape = oval, style = filled]\n    H [label = \"correct\", fillcolor = purple ]\n    T [label = \"incorrect\", fillcolor = yellow]\n    HH [label = \"correct\", fillcolor = purple ]\n    HT [label = \"incorrect\", fillcolor = yellow]\n    TH [label = \"correct\", fillcolor = purple ]\n    TT [label = \"incorrect\", fillcolor = yellow]\n    HHH [label = \"correct\", fillcolor = purple ]\n    HHT [label = \"incorrect\", fillcolor = yellow]\n    HTH [label = \"correct\", fillcolor = purple ]\n    HTT [label = \"incorrect\", fillcolor = yellow]\n    THH [label = \"correct\", fillcolor = purple ]\n    THT [label = \"incorrect\", fillcolor = yellow]\n    TTH [label = \"correct\", fillcolor = purple ]\n    TTT [label = \"incorrect\", fillcolor = yellow]\n    \n    node [shape = plaintext, style = unfilled]\n    HHHe [label = \"3 correct\"]\n    HHTe [label = \"2 correct, 1 incorrect\"]\n    HTHe [label = \"2 correct, 1 incorrect\"]\n    HTTe [label = \"1 correct, 2 incorrect\"]\n    THHe [label = \"2 correct, 1 incorrect\"]\n    THTe [label = \"1 correct, 2 incorrect\"]\n    TTHe [label = \"1 correct, 2 incorrect\"]\n    TTTe [label = \"3 incorrect\"]\n    \n    edge [label = \".5\"]\n    S -> {H T}\n    H -> {HH HT}\n    T -> {TH TT}\n    HH -> {HHH HHT}\n    HT -> {HTH HTT}\n    TH -> {THH THT}\n    TT -> {TTH TTT}\n    \n    edge [label = \"\"]\n    \n    HHH -> HHHe\n    HHT -> HHTe\n    HTH -> HTHe\n    HTT -> HTTe\n    THH -> THHe\n    THT -> THTe\n    TTH -> TTHe\n    TTT -> TTTe\n    \n}\n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 <p class="caption">
@@ -563,7 +602,7 @@ P(8 \text { correct and }  0 \text{ incorrect}) &amp;= \frac{8 \times 7 \times .
 \end{aligned}
 \]</span>
 We can follow the same procedure to compute the probability of all other outcomes. The resulting distribution is depicted in Figure <a href="ch-modeling.html#fig:distribution-8-coin-flips-correct">2.5</a>.
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:distribution-8-coin-flips-correct"></span>
+<div class="figure" style="text-align: center"><span id="fig:distribution-8-coin-flips-correct"></span>
 <img src="_main_files/figure-html/distribution-8-coin-flips-correct-1.svg" alt="probability distribution over the number of correct predictions out of 8, assuming random guessing." width="95%" />
 <p class="caption">
 Figure 2.5: probability distribution over the number of correct predictions out of 8, assuming random guessing.
@@ -571,7 +610,7 @@ Figure 2.5: probability distribution over the number of correct predictions out 
 </div>
 </div>
 </div>
-<div id="sec:02-binomial-model" class="section level2">
+<div id="sec:02-binomial-model" class="section level2" number="2.3">
 <h2><span class="header-section-number">2.3</span> Flipping a biased coin: An alternative model</h2>
 <p>Suppose that Paul did not make his decisions by flipping a mental coin. Perhaps Paul had extensive knowledge of all things football, or perhaps he could see into the future. In that case, we might expect Paul to have a higher rate of correct answers than predicted by our coin flipping model. But perhaps Paul, although an oracle, wasn’t so benevolent to his caretakers, or didn’t want to spoil the match for them. In that case, we might expect the rate of correct answers to be lower than predicted by the coin flipping model. In both cases, we’d expect the probability of a correct answer to be different from .5: <span class="math inline">\(P(\text{correct}) \neq .5\)</span>. But whilst not .5, we don’t otherwise know the value. We call such an unknown value which determines a probability distribution a <strong>parameter</strong>. We will generally use symbols from the Greek alphabet to denote such parameters. Here, we will use <span class="math inline">\(\theta\)</span> (pronounced as “thee-ta”). Our alternative to the coin flipping model can now be stated as:</p>
 <p><span class="math display">\[P(\texttt{pred}_i = \text{correct}) = \theta\]</span></p>
@@ -587,16 +626,16 @@ P(k \text { correct and }  n-k \text{ incorrect}) = \frac{n!}{k! \times (n-k)!} 
 This distribution is quite common in statistics, and is called the <strong>Binomial distribution</strong>. Note that if we fill in <span class="math inline">\(\theta = 0.5\)</span>, then <span class="math inline">\((1-\theta) = 0.5\)</span> and the resulting distribution is exactly the one we worked out for the unbiased coin-flipping model earlier. So our new, more general model can indeed exactly produce the distribution of the simpler model, and this is what we mean when we say that the simpler model is nested under the more general model.</p>
 <p>To work out the probability that Paul made 8 out of 8 correct predictions according this new model, we need to know the value of the parameter <span class="math inline">\(\theta\)</span>. But what should this be? There are infinite possible values that might be reasonable (e.g., <span class="math inline">\(\theta = .9\)</span>, or <span class="math inline">\(\theta = .947873\)</span>). Luckily, we don’t need to pluck one of these values out of thin air: we can use the data we have to estimate the value of this parameter.</p>
 </div>
-<div id="estimation" class="section level2">
+<div id="estimation" class="section level2" number="2.4">
 <h2><span class="header-section-number">2.4</span> Estimation</h2>
 <!-- 
 From data produced by the Data Generating Process (DGP), we can estimate the value of a parameter. Remember, when we collect data in real life, it is obtained from DGP. Our model, on the other hand, provides a mathematical abstraction of the DGP. The DGP is The Truth. It is how the real world generated the data. Our model, on the other hand, is almost surely an approximation to The Truth. Think about it. Can you summarize Paul's choices by a mathematical formula with a distribution that takes a single parameter ($\theta$)? Probably not when you see Paul swimming in his tank, catching a glimmer of light shining from one of the boxes, than being distracted by the sound of a distant door opening, then going back and sensing a vibration in the water. How would all these serendipitous things not affect Paul's decision at the time? Our model ignores all these factors, and for a reason. Imagine we had to take all sensory input of Paul into account. We would not only have to take into account the actual stimuli present at the time, but also how they affected Paul's neuronal reactions to those. Even if we only take into account the neurons responding directly to external input, the number of possible neuronal excitation patterns quickly become enormous. When you think about it, you'd also want to take into account the activation state of all the neurons at the time just before (and possibly before that), which makes the number of possibilities even more enormous. And what about the chemical consistency of the water at the time? Learning a model of particular decision by a particular person at a particular time seems simply impossible without assuming that some of these things don't really matter to the decision at hand.
 
 So we can view our biased coin-flipping model as a simplification, but potentially useful model of Paul's accuracy if he was (somewhat) psychic. 
 -->
-<p>Estimation, in some sense, means an “educated guess”. It is a guess, because we cannot be completely sure that we have picked the true value. It is educated because we don’t just pluck the value from thin air: we use information in the data to guide our guess.</p>
+<p>Estimation, in some sense, means an “educated guess.” It is a guess, because we cannot be completely sure that we have picked the true value. It is educated because we don’t just pluck the value from thin air: we use information in the data to guide our guess.</p>
 <p>There are different ways in which we can use the information in the data to estimate parameters, such as the method of moments, minimum mean square estimation, and maximum likelihood estimation. Here, we will focus on the latter.</p>
-<div id="maximum-likelihood-estimation" class="section level3">
+<div id="maximum-likelihood-estimation" class="section level3" number="2.4.1">
 <h3><span class="header-section-number">2.4.1</span> Maximum likelihood estimation</h3>
 <p>The general idea of maximum likelihood estimation can be summarized as follows: Find that value of a parameter <span class="math inline">\(\theta\)</span> such that the probability assigned to the data at hand by the model based on <span class="math inline">\(\theta\)</span> is highest.</p>
 <p>Let’s think this through. If we pick any particular value for <span class="math inline">\(\theta\)</span>, we can use the Binomial distribution (Equation <a href="ch-modeling.html#eq:definition-binomial-distribution">(2.1)</a>) to work out the probability that Paul made 8 out of 8 predictions. For instance, if we pick <span class="math inline">\(\theta = .4\)</span>, then
@@ -607,7 +646,7 @@ P(\text{8 correct and 0 incorrect}) &amp;= \frac{8!}{8! \times 0!} (0.4)^8 \time
 If we pick <span class="math inline">\(\theta = .95\)</span>, on the other hand, we’d get
 <span class="math display">\[P(\text{8 correct and 0 incorrect}) = 1 \times (0.95)^8 \times 1 = 0.663\]</span>
 which is obviously higher. If we plot <span class="math inline">\(P(\text{8 correct} | \theta)\)</span>, the probability of 8 correct <em>given</em> or <em>conditional upon</em> a particular value of <span class="math inline">\(\theta\)</span>, for all possible values of <span class="math inline">\(\theta\)</span>, we get the curve shown in Figure <a href="ch-modeling.html#fig:plot-likelihood-fifa2010">2.6</a>.</p>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:plot-likelihood-fifa2010"></span>
+<div class="figure" style="text-align: center"><span id="fig:plot-likelihood-fifa2010"></span>
 <img src="_main_files/figure-html/plot-likelihood-fifa2010-1.svg" alt="Probability of Paul's performance in the 2010 FIFA World Cup for all possible values of $\theta$ in the biased coin-flipping model" width="50%" />
 <p class="caption">
 Figure 2.6: Probability of Paul’s performance in the 2010 FIFA World Cup for all possible values of <span class="math inline">\(\theta\)</span> in the biased coin-flipping model
@@ -620,7 +659,7 @@ Figure 2.6: Probability of Paul’s performance in the 2010 FIFA World Cup for a
 \end{equation}\]</span>
 i.e. equal to the proportion of correct. Estimating a probability as a proportion seems intuitively reasonable. But how good is it really?</p>
 </div>
-<div id="properties-of-good-estimators" class="section level3">
+<div id="properties-of-good-estimators" class="section level3" number="2.4.2">
 <h3><span class="header-section-number">2.4.2</span> Properties of good estimators</h3>
 <p>An <strong>estimator</strong> like specified in Equation <a href="ch-modeling.html#eq:maximum-likelihood-estimator-binomial">(2.2)</a> is an algorithm which takes data as input and produces a parameter estimate as output. Evaluating the quality of the resulting estimates is generally done under the assumption that our model represents the Data Generating Process accurately, i.e. our model is a true representation of the DGP. If our model has unknown parameters, that means that there are values for those parameters such that our model produces data with exactly the same distribution as the DGP. We can call those parameter values the true parameter values. Now, even if we have access to such a true model, estimates of its parameters from a given data set are unlikely to be identical to the true parameters. The main reason is that any actual data set will not cover all of the values that are possible from the Data Generating Process, and/or not in their expected proportions. But the fact is that in practice we have to rely on such limited data sets; we never have access to all the data that could be produced by the Data Generating Process. So we will have to work with estimates that are different from the true parameters. One thing we can do is quantify how much our estimates are likely to deviate from the true parameters. This, in a nutshell, is what statistical estimation theory is all about.</p>
 <p>Let’s focus on the estimator of <span class="math inline">\(\theta\)</span> in Equation <a href="ch-modeling.html#eq:maximum-likelihood-estimator-binomial">(2.2)</a> a bit more. For any fixed sample size <span class="math inline">\(n\)</span> and a particular true value of <span class="math inline">\(\theta\)</span>, the variability in the estimates will be completely determined by the variability in <span class="math inline">\(k\)</span>, the number correct. The variability in <span class="math inline">\(k\)</span> directly follows from the Binomial distribution itself. If you look at the distribution depicted in Figure <a href="ch-modeling.html#fig:distribution-8-coin-flips-correct">2.5</a>, which is the distribution of <span class="math inline">\(k\)</span> for <span class="math inline">\(\theta = .5\)</span>, you can see there are 9 possible values for <span class="math inline">\(k\)</span>, and hence also 9 possible values of <span class="math inline">\(\frac{k}{n}\)</span>, the estimator of <span class="math inline">\(\theta\)</span>. Assuming the true parameter equals <span class="math inline">\(\theta = .5\)</span>, each time we generate a new data set of 8 predictions, it is possible that the estimate of <span class="math inline">\(\theta\)</span> will equal any value <span class="math inline">\(\left\{\frac{0}{8}, \frac{1}{8}, \frac{2}{8}, \ldots, \frac{7}{8}, \frac{8}{8}\right\}\)</span>, because for each new data set, the value of <span class="math inline">\(k\)</span> can be any value between 0 and 8. Exactly like the values of <span class="math inline">\(k\)</span>, not each of these estimates will be equally likely. For most of the new data sets, the estimate will equal <span class="math inline">\(\hat{\theta} = \frac{4}{8}\)</span>, the true value of <span class="math inline">\(\theta\)</span>. If the true <span class="math inline">\(\theta = 1\)</span>, then there would be no variability in <span class="math inline">\(k\)</span>. It is simply impossible to make a wrong prediction, and hence the estimate would always equal the true value. In this case, how variable the estimates are depends on the true value of <span class="math inline">\(\theta\)</span>. There is no variability whenever <span class="math inline">\(\theta = 0\)</span> or <span class="math inline">\(\theta = 1\)</span>, and the variability increases the closer <span class="math inline">\(\theta\)</span> gets to .5.</p>
@@ -631,7 +670,7 @@ i.e. equal to the proportion of correct. Estimating a probability as a proporti
 <p>In general, maximum likelihood estimators are consistent and (asymptotically) efficient. They are not always unbiased though, although the bias (the difference between the mean estimate and the true value) decreases when the number of observations increases. Given these desirable properties, maximum likelihood estimators are often the estimators of choice.</p>
 </div>
 </div>
-<div id="sec:02-likelihood-ratio" class="section level2">
+<div id="sec:02-likelihood-ratio" class="section level2" number="2.5">
 <h2><span class="header-section-number">2.5</span> Comparing models: Null-hypothesis significance testing</h2>
 <p>So, at this point, we have three models of Paul’s accuracy in predictions. The biased coin-flipping model with an unknown parameter <span class="math inline">\(\theta\)</span>. The unbiased coin-flipping, or random guessing, model (which is a special case of the first one, with <span class="math inline">\(\theta = 0.5\)</span>). And an <em>estimated</em> version of the biased coin-flipping model, with <span class="math inline">\(\hat{\theta} = 1\)</span> (which is also a special case). Now what?</p>
 <p>What we would like to know is whether Paul was randomly guessing, or whether he had some psychic abilities. In other words, whether the unbiased coin-flipping model or the biased coin-flipping model provides a better description of the Data Generating Process. While it is reasonable to define a model as providing a better description of the DGP when the distribution it proposes is a better match to the true DGP distribution, this definition is not usable in practice, as we simply don’t know the true DGP distribution. We have to work with the data at hand, and there are many possible ways in which we can use the data to evaluate whether one statistical model provides a better description of the DGP. One principled way is to compare the probability assigned to the observed data by each model. This is usually done by computing what is called the likelihood ratio. Suppose we have two versions of the general biased-coin flipping model, one where we assume that the parameter <span class="math inline">\(\theta\)</span> has a particular value <span class="math inline">\(\underline{\theta}\)</span>, and one where we assume <span class="math inline">\(\theta\)</span> takes a different specified value <span class="math inline">\(\underline{\theta}&#39;\)</span>. Note that by placing a line underneath a parameter, we denote that it is a particular value of interest. In this case, we are interested in a single variable, namely the number of correct predictions Paul made, which we will denote by <span class="math inline">\(Y\)</span>, our general symbol for the dependent variable. We can then write the likelihood ratio as:
@@ -639,12 +678,12 @@ i.e. equal to the proportion of correct. Estimating a probability as a proporti
 At the top (the <em>numerator</em>), is the probability of <span class="math inline">\(k\)</span> out of <span class="math inline">\(n\)</span> correct when the probability of a single prediction correct equals <span class="math inline">\(\underline{\theta}\)</span>. The bottom part (the <em>denominator</em>), is the same probability if the probability of a single correct prediction equals another value <span class="math inline">\(\underline{\theta}&#39;\)</span>. Suppose <span class="math inline">\(\underline{\theta} = .5\)</span> (as in the random guessing model), and <span class="math inline">\(\underline{\theta}&#39; = 1\)</span>, as in the <em>estimated</em> biased coin-tossing model. The likelihood ratio is then
 <span class="math display">\[\frac{P(Y = 8 | n = 8, \theta = 0.5)}{P(Y = 8 | n = 8, \theta = 1)} = \frac{0.00391}{1} = 0.00391\]</span>
 What does this mean? Well, if both models assigned the same probability to the observed data, the likelihood ratio would equal one. If the probability according to the model of the numerator is higher, the value of the likelihood ratio would be <em>greater</em> than 1. And if the probability according to the model of the denominator is higher, the value of the likelihood ratio would be <em>smaller</em> than 1. So, as is clear, the model with the estimated value of <span class="math inline">\(\theta\)</span> assigns a higher probability to the observed data. But that is no wonder! We estimated <span class="math inline">\(\theta\)</span> by maximum likelihood, meaning that no other value of <span class="math inline">\(\theta\)</span> could assign a higher probability to the data! If it did, our estimate would simply <em>not</em> be the maximum likelihood estimate. So, if the model in the denominator is the one estimated by maximum likelihood, we know the likelihood ratio could <em>never</em> be larger than 1.</p>
-<p>So that’s a little annoying. What seemed like a reasonable way to compare two models describe a particular data set, now seems pretty useless. We cannot use the general biased coin-flipping model to compute the likelihood ratio, because without choosing a particular value for <span class="math inline">\(\theta\)</span>, the model can not be used to compute the probability of the data. And we can not just use the estimated value of <span class="math inline">\(\theta\)</span>, because then that model would always win the “likelihood competition”. But computing likelihood ratio’s is not, in fact, completely useless. We just need to take into account the fact that the estimated model will always win. What then matters is: by how much?</p>
-<p>The null-hypothesis significance test provides an answer to “by how much should the estimated model be better to refute an alternative model?”. The logic is roughly as follows: Suppose the restricted model (MODEL R, e.g. the one where <span class="math inline">\(\theta = .5\)</span>) is the true model. Then we can use this model to simulate lots of data sets. For each data set, we can estimate <span class="math inline">\(\theta\)</span> to give us an estimated version of the general model (i.e. MODEL G, the one with <span class="math inline">\(\theta\)</span> unknown). Then we can use both models to compute a value of the likelihood ratio. For each data set, the likelihood ratio may take a different value. What we end up with is thus a distribution of values of the likelihood ratio, produced by MODEL R. We will know that this likelihood ratio is always below 1, but by inspecting this distribution, we will roughly know what the usual values are, in the case where MODEL R is true. We can then try to find a range of values which are relatively <em>unusual</em>, given that MODEL R is true. If the value of the likelihood ratio we found for the real data is within this range, we might reason that this value is “unusual enough” to reject MODEL R, and accept that MODEL G provides a better description.</p>
+<p>So that’s a little annoying. What seemed like a reasonable way to compare two models describe a particular data set, now seems pretty useless. We cannot use the general biased coin-flipping model to compute the likelihood ratio, because without choosing a particular value for <span class="math inline">\(\theta\)</span>, the model can not be used to compute the probability of the data. And we can not just use the estimated value of <span class="math inline">\(\theta\)</span>, because then that model would always win the “likelihood competition.” But computing likelihood ratio’s is not, in fact, completely useless. We just need to take into account the fact that the estimated model will always win. What then matters is: by how much?</p>
+<p>The null-hypothesis significance test provides an answer to “by how much should the estimated model be better to refute an alternative model?” The logic is roughly as follows: Suppose the restricted model (MODEL R, e.g. the one where <span class="math inline">\(\theta = .5\)</span>) is the true model. Then we can use this model to simulate lots of data sets. For each data set, we can estimate <span class="math inline">\(\theta\)</span> to give us an estimated version of the general model (i.e. MODEL G, the one with <span class="math inline">\(\theta\)</span> unknown). Then we can use both models to compute a value of the likelihood ratio. For each data set, the likelihood ratio may take a different value. What we end up with is thus a distribution of values of the likelihood ratio, produced by MODEL R. We will know that this likelihood ratio is always below 1, but by inspecting this distribution, we will roughly know what the usual values are, in the case where MODEL R is true. We can then try to find a range of values which are relatively <em>unusual</em>, given that MODEL R is true. If the value of the likelihood ratio we found for the real data is within this range, we might reason that this value is “unusual enough” to reject MODEL R, and accept that MODEL G provides a better description.</p>
 <p>So let’s do this. I used MODEL R (the one with <span class="math inline">\(\theta = .5\)</span>) to simulate 100,000 data sets in which Paul made 8 predictions. For each of these, I estimated MODEL G, and then computed the likelihood ratio for that dataset, comparing MODEL R to the estimated MODEL G:
 <span class="math display">\[\frac{P(Y = k | n = 8, \theta = 0.5)}{P(Y = k | n = 8, \theta = \frac{k}{8})}\]</span>
 Note that <span class="math inline">\(k\)</span> is the main thing that varies from simulated dataset to simulated dataset, and that for <span class="math inline">\(\theta\)</span> in the model of the denominator, I have filled in the maximum likelihood estimate <span class="math inline">\(\frac{k}{8}\)</span>, which also varies over the simulations. I then determined the proportion (out of all 100,000) simulations of each value of the likelihood ratio. You can see the result in Figure <a href="ch-modeling.html#fig:simulate-LR-coin-flipping">2.7</a>.</p>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:simulate-LR-coin-flipping"></span>
+<div class="figure" style="text-align: center"><span id="fig:simulate-LR-coin-flipping"></span>
 <img src="_main_files/figure-html/simulate-LR-coin-flipping-1.svg" alt="Likelihood ratio values for 100,000 simulated data sets from MODEL R with $\theta = .5$" width="60%" />
 <p class="caption">
 Figure 2.7: Likelihood ratio values for 100,000 simulated data sets from MODEL R with <span class="math inline">\(\theta = .5\)</span>
@@ -750,8 +789,8 @@ P(\text{likelihood ratio} = 0.35117) &amp;= 0.10938 + 0.10938 = 0.21875 \\
 P(\text{likelihood ratio} = 0.77672) &amp;= 0.21875 + 0.21875 = 0.4375 \\
 P(\text{likelihood ratio} = 1) &amp;= 0.27344 
 \end{aligned}\]</span>
-This is similar to the example of throwing dice before. There, we had elementary events (each number that can be thrown), but we also had other events, such as “greater than 3”, which we could compute the probability of by using the probability of the elementary events. Here, the number of correct guesses <span class="math inline">\(k\)</span> are the elementary events, and values of the likelihood ratio can be considered compound events. You can view a plot of the resulting distribution of likelihood ratio values in Figure <a href="ch-modeling.html#fig:true-likelihood-ratio-distribution-coin-flip">2.8</a>.
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:true-likelihood-ratio-distribution-coin-flip"></span>
+This is similar to the example of throwing dice before. There, we had elementary events (each number that can be thrown), but we also had other events, such as “greater than 3,” which we could compute the probability of by using the probability of the elementary events. Here, the number of correct guesses <span class="math inline">\(k\)</span> are the elementary events, and values of the likelihood ratio can be considered compound events. You can view a plot of the resulting distribution of likelihood ratio values in Figure <a href="ch-modeling.html#fig:true-likelihood-ratio-distribution-coin-flip">2.8</a>.
+<div class="figure" style="text-align: center"><span id="fig:true-likelihood-ratio-distribution-coin-flip"></span>
 <img src="_main_files/figure-html/true-likelihood-ratio-distribution-coin-flip-1.svg" alt="The true distibution of likelihood ratio's comparing MODEL R with estimated MODEL G, when the true model is MODEL R." width="60%" />
 <p class="caption">
 Figure 2.8: The true distibution of likelihood ratio’s comparing MODEL R with estimated MODEL G, when the true model is MODEL R.
@@ -764,13 +803,13 @@ In other words, because MODEL R is the true model, it is the one that generates 
 
 Right, so if we go back to the table above,-->
 <p>That’s all well and good, you might object, but you have done all this by assuming that MODEL R is true. But we don’t know whether MODEL R is true, we don’t know that Paul was randomly guessing. In fact, the question whether he was actually psychic (and not randomly guessing) is what brought us to this point in the first place! That is indeed very true. The issue is that there are many ways in which MODEL R can be false and MODEL G true. In fact, there are an infinite number of values for <span class="math inline">\(\theta\)</span> which aren’t equal to 0.5. Each of these implies a different distribution of the likelihood ratio where we compare MODEL R (with <span class="math inline">\(\theta = .5\)</span>) to the <em>estimated</em> MODEL G (with <span class="math inline">\(\hat{\theta} = \frac{k}{n}\)</span>). Some examples are given in Figure <a href="ch-modeling.html#fig:true-likelihood-ratio-distribution-biased-coin-flip">2.9</a>. If we assume that MODEL R is false, then any of these distributions would be the true distribution of the likelihood ratio. But without knowing the exact value of <span class="math inline">\(\theta\)</span>, we simply don’t know which one. <!--Such indeterminism makes it practically impossible to derive --></p>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:true-likelihood-ratio-distribution-biased-coin-flip"></span>
+<div class="figure" style="text-align: center"><span id="fig:true-likelihood-ratio-distribution-biased-coin-flip"></span>
 <img src="_main_files/figure-html/true-likelihood-ratio-distribution-biased-coin-flip-1.svg" alt="The true distibution of likelihood ratio's comparing MODEL R with estimated MODEL G, when the true model is MODEL G with different values of $\theta$." width="95%" />
 <p class="caption">
 Figure 2.9: The true distibution of likelihood ratio’s comparing MODEL R with estimated MODEL G, when the true model is MODEL G with different values of <span class="math inline">\(\theta\)</span>.
 </p>
 </div>
-<div id="decisions-and-types-of-error" class="section level3">
+<div id="decisions-and-types-of-error" class="section level3" number="2.5.1">
 <h3><span class="header-section-number">2.5.1</span> Decisions and types of error</h3>
 <p>Let’s relocate ourselves. We started by defining a model in which Paul was randomly guessing (MODEL R). We then defined another model in which Paul could be (somewhat) psychic, but as we don’t know <em>how</em> psychic and whether Paul would want to make correct predictions or incorrect predictions. In this model, Paul’s probability of making a correct prediction could be anything. Because it is so general, MODEL G can effectively predict anything. We can use the data to estimate MODEL G. But doing that, it makes MODEL G a bit like an annoying friend, who always says “I knew that was going to happen” <em>after</em> it happened, but never before. Because MODEL G is so fickle, our procedure focuses almost exclusively on MODEL R, the version of MODEL G (remember, MODEL R is a special case of MODEL G) which is much more strident, and does tell us how likely things are to happen <em>before</em> they happen.</p>
 <p>In the null hypothesis significance test, the hypothesis that MODEL R is true is called the <strong>null hypothesis</strong>, or <span class="math inline">\(H_0\)</span>, in the conventional notation:
@@ -800,7 +839,7 @@ This hypothesis itself may be either true or false. If <span class="math inline"
 <p>If <span class="math inline">\(H_0\)</span> is actually true, and we accept <span class="math inline">\(H_0\)</span>, we can rejoice, as we made a correct decision. Similarly, if <span class="math inline">\(H_0\)</span> is actually not true, and we reject <span class="math inline">\(H_0\)</span>, we can also rejoice, as this is another correct decision. If, on the other hand, <span class="math inline">\(H_0\)</span> is true, but we reject <span class="math inline">\(H_0\)</span>, we made a wrong decision. This is called a Type 1 error. A type 2 error refers to making the other wrong decision, namely if we accept <span class="math inline">\(H_0\)</span>, but <span class="math inline">\(H_0\)</span> is in fact false.</p>
 <p><strong>Null hypothesis significance testing</strong> is a procedure to make a decision based on data such that we can limit the chances of making one of these errors, namely the Type 1 error.</p>
 </div>
-<div id="significance-and-power" class="section level3">
+<div id="significance-and-power" class="section level3" number="2.5.2">
 <h3><span class="header-section-number">2.5.2</span> Significance and power</h3>
 <p>In null hypothesis significance testing, we focus on the probability of making a Type 1 error, which is usually denoted as <span class="math inline">\(\alpha\)</span>:
 <span class="math display" id="eq:significance-definition">\[\begin{equation}
@@ -853,7 +892,7 @@ It is also referred to as the <strong>significance level</strong>. If <span clas
 </tbody>
 </table>
 <p>Let’s look at the cumulative probabilities (simply computed by adding, on each row of the table, the value of <span class="math inline">\(P(\text{likelihood ratio} = \text{value})\)</span> on that row, and all rows above it). How should we place our critical value to ensure that <span class="math inline">\(\alpha \leq .05\)</span>? If we picked the value 0.07958, and rejected the null hypothesis if we obtained a value equal to or lower than that, then the probability of a Type I error would be 0.07031. Thus, if we don’t want that probability to be higher than .05, then we can’t pick that value. If, on the other hand, we pick the value 0.00391, then the probability of a Type I error would be 0.007813, which is lower than <span class="math inline">\(\alpha = .05\)</span>. As we should not go higher than our desired value of <span class="math inline">\(\alpha\)</span>, that would be the appropriate critical value.<a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a> Indeed, we could place the critical value somewhere between 0.003906 and 0.07958, as I have done in Figure <a href="ch-modeling.html#fig:critical-value-likelihood-ratio-coin-flip">2.10</a> to make the plot easier to read. As, with <span class="math inline">\(n=8\)</span>, there are no possible values of the likelihood ratio between 0.003906 and 0.07958 anyway, the precise placement of the critical value does not really matter.</p>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:critical-value-likelihood-ratio-coin-flip"></span>
+<div class="figure" style="text-align: center"><span id="fig:critical-value-likelihood-ratio-coin-flip"></span>
 <img src="_main_files/figure-html/critical-value-likelihood-ratio-coin-flip-1.svg" alt="Critical values (dotted lines) and the true distibution of likelihood ratios comparing MODEL R with estimated MODEL G, when the true model is MODEL R (left) and the true model is one particular version of MODEL G (right)." width="95%" />
 <p class="caption">
 Figure 2.10: Critical values (dotted lines) and the true distibution of likelihood ratios comparing MODEL R with estimated MODEL G, when the true model is MODEL R (left) and the true model is one particular version of MODEL G (right).
@@ -869,7 +908,7 @@ This probability of obtaining a value equal to or lower than the critical value,
 Note that I’m using “test value” rather than likelihood ratio, because there will be times when we use a different test statistic than the likelihood ratio, and I want the definition of power here to cover those situations too. Furthermore, the complementary probability, <span class="math inline">\(P(\text{value} &gt; \text{critical value} | H_0 \text{ is false})\)</span>, is the probability of a Type 2 error. Now, while power is a very important concept in hypothesis testing, it is also elusive. If you look at Figure <a href="ch-modeling.html#fig:true-likelihood-ratio-distribution-biased-coin-flip">2.9</a>, you can see that the power is different for different values of <span class="math inline">\(\theta\)</span>.</p>
 <p>Power is an important concept because usually, it is less interesting if the null hypothesis is true than if it is false. For instance, it is less interesting if Paul was merely guessing than if he was psychic. So usually, we are more interested in rejecting the null hypothesis than in accepting it. Disappointingly, in this case, the power is pretty low even when <span class="math inline">\(\theta = .9\)</span>, and it is even lower for values of <span class="math inline">\(\theta\)</span> closer to 0.5. We can increase the power by increasing <span class="math inline">\(\alpha\)</span>. You can visualize this in Figure <a href="ch-modeling.html#fig:critical-value-likelihood-ratio-coin-flip">2.10</a> as moving the critical value to the right, for instance to the right of the second possible value of the likelihood ratio. If <span class="math inline">\(\theta = .9\)</span>, that would increase the power to 0.813. But conversely, the probability of a Type 1 error would now be 0.07. Generally speaking, we don’t want the probability of a Type 1 error so high. A better way of increasing the power of a test is to collect more data; e.g., by letting Paul make more predictions than 8.</p>
 <p>The tricky thing about the power of a test is that it depends on the unknown parameter <span class="math inline">\(\theta\)</span>, and can never really be known. We can calculate the power of a test for various values of <span class="math inline">\(\theta\)</span>, but in a sense, the choice of such values is arbitrary if we don’t know the true value of <span class="math inline">\(\theta\)</span>. Of course, using our data, we could estimate <span class="math inline">\(\theta\)</span>, and then calculate what some have called the “observed power” of a test. In this example, <span class="math inline">\(\hat{\theta} = \frac{8}{8} = 1\)</span>, and the “observed power” is 1. But, as we know, the estimate of <span class="math inline">\(\theta\)</span> is not identical to the true value of <span class="math inline">\(\theta\)</span>, and hence the estimated power is unlikely to be equal to the true power, unless we have a lot of data, but then the power would be reasonably large in the first place. As such, “observed power” is rather useless. Perhaps the most useful way (at least in my opinion) to consider power is to determine the value of <span class="math inline">\(\theta\)</span> that would provide a reasonable level of power. Conventionally, a power of <span class="math inline">\(P(\text{test value} \leq \text{critical value} | H_0 \text{ is false} ) = 0.8\)</span> is considered reasonable. By plotting the power for different values of <span class="math inline">\(\theta\)</span>, as done in Figure <a href="ch-modeling.html#fig:power-curve-biased-coin-flip">2.11</a>, we can then determine the values of <span class="math inline">\(\theta\)</span> which would obtain this level of power. Such a plot is also called a power-curve. As you can see, values of <span class="math inline">\(\theta\)</span> close to 0 and 1 provide a high power. To reach a power of at least 0.8, it would need to be the case that <span class="math inline">\(\theta \leq 0.028\)</span> or <span class="math inline">\(\theta \geq 0.972\)</span>. Thus, Paul would have to be rather good at giving correct predictions (or very good at giving incorrect predictions), to make it reasonably likely that we would reject the null hypothesis. If you consider <span class="math inline">\(\theta \leq 0.028\)</span> or <span class="math inline">\(\theta \geq 0.972\)</span> too extreme to be likely, then it would be a good idea to get more data in order to make the required value of <span class="math inline">\(\theta\)</span> more reasonable.</p>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:power-curve-biased-coin-flip"></span>
+<div class="figure" style="text-align: center"><span id="fig:power-curve-biased-coin-flip"></span>
 <img src="_main_files/figure-html/power-curve-biased-coin-flip-1.svg" alt="A power-curve, plotting the power of the test for different values of $\theta$. The broken line indicates a power of 0.8, and the dotted lines indicate the values of $\theta$ which obtain this power." width="60%" />
 <p class="caption">
 Figure 2.11: A power-curve, plotting the power of the test for different values of <span class="math inline">\(\theta\)</span>. The broken line indicates a power of 0.8, and the dotted lines indicate the values of <span class="math inline">\(\theta\)</span> which obtain this power.
@@ -877,7 +916,7 @@ Figure 2.11: A power-curve, plotting the power of the test for different values 
 </div>
 <!-- ## Confidence intervals -->
 </div>
-<div id="testing-whether-paul-was-guessing" class="section level3">
+<div id="testing-whether-paul-was-guessing" class="section level3" number="2.5.3">
 <h3><span class="header-section-number">2.5.3</span> Testing whether Paul was guessing</h3>
 <p>Finally then, let’s actually test the null hypothesis that Paul was guessing. When just considering his performance in the 2010 FIFA World cup, Paul made <span class="math inline">\(n=8\)</span> predictions and <span class="math inline">\(k=8\)</span> of these were correct. This gives a likelihood ratio of MODEL R (<span class="math inline">\(\theta = .5\)</span>) over estimated MODEL G (<span class="math inline">\(\hat{\theta} = 1\)</span>) of 0.00391. Using a significance level of <span class="math inline">\(\alpha = .05\)</span>, the critical value is set to 0.00391, and as the likelihood ratio is equal to or smaller than this value, we reject <span class="math inline">\(H_0: \theta = .5\)</span>, and conclude that it is rather unlikely that Paul was merely guessing. In fact, <span class="math inline">\(P(\text{likelihood ratio} \leq 0.00391 | \theta = .5) = 0.00781\)</span>. This latter probability, the probability of a test value equal to more extreme than the test value calculated for the data, is generally also called the <strong>p-value</strong>. If the p-value is smaller than the required significance level, the test result is called significant, and we reject <span class="math inline">\(H_0\)</span>. What “more extreme” means can vary, depending on how the test is performed.</p>
 <p>Now, in the preceding discussion, we have completely ignored Paul’s performance in the UEFA Euro 2008 cup. If we can assume that Paul’s psychic abilities did not change between the UEFA Euro 2008 and the 2010 FIFA World cup, it makes sense to pool both data sets to get a more reliable and more powerful test. As the logic is entirely the same as before, we will go through this quickly. Pooling both datasets, we now have <span class="math inline">\(n=14\)</span> predictions, of which <span class="math inline">\(k= 12\)</span> were correct. This provides a likelihood ratio of
@@ -886,12 +925,12 @@ Figure 2.11: A power-curve, plotting the power of the test for different values 
 <span class="math inline">\(H_0: \theta = .5\)</span>. In fact, the probability of obtaining a likelihood ratio of 0.019 or smaller if <span class="math inline">\(H_0\)</span> is true, the p-value, is .0129.</p>
 </div>
 </div>
-<div id="hypothesis-testing-directly-with-the-binomial-distribution" class="section level2">
+<div id="hypothesis-testing-directly-with-the-binomial-distribution" class="section level2" number="2.6">
 <h2><span class="header-section-number">2.6</span> Hypothesis testing directly with the Binomial distribution</h2>
 <p>In the preceding, we have focused on the likelihood ratio as the test statistic for our hypothesis tests. The likelihood ratio is a very general measure to compare how well two models describe the data. And it clearly shows how hypothesis testing can be seen as a form of model comparison. That said, the likelihood ratio can also be a bit cumbersome to work with, and deriving the distribution of the likelihood ratio under the null hypothesis is not always straightforward. As we will see later, we can often use a different measure in place of the likelihood ratio, which will provide testing procedures that are equivalent to it.</p>
-<p>As we saw when we worked out the theoretical distribution of the likelihood ratio (Table <a href="ch-modeling.html#tab:table-binomial-likelihood-ratio">2.2</a>), there is a direct relation between the number of correct guesses and the value of the likelihood ratio. In a way, you can think of the likelihood ratio as a transformation of the number of correct guesses into a new measure (the likelihood ratio). For example, <span class="math inline">\(k=8\)</span> out of <span class="math inline">\(n=8\)</span> correct guesses becomes a likelihood ratio of 0.00391, and <span class="math inline">\(7\)</span> out of <span class="math inline">\(8\)</span> correct guesses becomes a likelihood ratio of 0.07958. Similarly, <span class="math inline">\(k=0\)</span> out of <span class="math inline">\(n=8\)</span> correct guesses becomes a likelihood ratio of 0.00391, and <span class="math inline">\(1\)</span> out of <span class="math inline">\(8\)</span> correct guesses becomes a likelihood ratio of 0.07958. So different values of <span class="math inline">\(k\)</span> may provide the same likelihood ratio value (in mathematical terms, this is also called a many-to-one mapping). This is similar to outcomes 1, 3, and 5 of a die roll all mapping onto “odd number”.</p>
+<p>As we saw when we worked out the theoretical distribution of the likelihood ratio (Table <a href="ch-modeling.html#tab:table-binomial-likelihood-ratio">2.2</a>), there is a direct relation between the number of correct guesses and the value of the likelihood ratio. In a way, you can think of the likelihood ratio as a transformation of the number of correct guesses into a new measure (the likelihood ratio). For example, <span class="math inline">\(k=8\)</span> out of <span class="math inline">\(n=8\)</span> correct guesses becomes a likelihood ratio of 0.00391, and <span class="math inline">\(7\)</span> out of <span class="math inline">\(8\)</span> correct guesses becomes a likelihood ratio of 0.07958. Similarly, <span class="math inline">\(k=0\)</span> out of <span class="math inline">\(n=8\)</span> correct guesses becomes a likelihood ratio of 0.00391, and <span class="math inline">\(1\)</span> out of <span class="math inline">\(8\)</span> correct guesses becomes a likelihood ratio of 0.07958. So different values of <span class="math inline">\(k\)</span> may provide the same likelihood ratio value (in mathematical terms, this is also called a many-to-one mapping). This is similar to outcomes 1, 3, and 5 of a die roll all mapping onto “odd number.”</p>
 <p>Because both the value and the probability of likelihood ratio values depend solely on the number of correct guesses, the number of correct guesses contains all the information about the likelihood ratio. Because of this, we can define our hypothesis tests directly in terms of correct guesses, without losing any information. For instance, when we considered the pooled data from the UEFA Euro 2008 cup and the 2010 FIFA World cup, we determined that any likelihood ratio equal to or smaller than 0.00756 would lead to a rejection of the null hypothesis. There are three possible values of the likelihood ratio in this critical region (values between 0 and 0.00756), and these are associated with <span class="math inline">\(k=0,1,2,12,13,\text{ or } 14\)</span>. Thus, we can equivalently define the critical region in terms of the number of correct guesses: <span class="math inline">\(k \leq 2\)</span> and <span class="math inline">\(k \geq 12\)</span>. Figure <a href="ch-modeling.html#fig:binomial-distribution-critical-values-pooled">2.12</a> depicts the distribution of <span class="math inline">\(k\)</span> under <span class="math inline">\(H_0\)</span> and the critical region for <span class="math inline">\(\alpha=.05\)</span>.</p>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:binomial-distribution-critical-values-pooled"></span>
+<div class="figure" style="text-align: center"><span id="fig:binomial-distribution-critical-values-pooled"></span>
 <img src="_main_files/figure-html/binomial-distribution-critical-values-pooled-1.svg" alt="Distribution of the number of correct predictions ($k$) out of $n=14$ under MODEL R ($\theta = .5$), and the critical regions for $\alpha = .05$." width="95%" />
 <p class="caption">
 Figure 2.12: Distribution of the number of correct predictions (<span class="math inline">\(k\)</span>) out of <span class="math inline">\(n=14\)</span> under MODEL R (<span class="math inline">\(\theta = .5\)</span>), and the critical regions for <span class="math inline">\(\alpha = .05\)</span>.
@@ -899,7 +938,7 @@ Figure 2.12: Distribution of the number of correct predictions (<span class="mat
 </div>
 <p>Note that both this new way of testing <span class="math inline">\(H_0\)</span>, as well as the likelihood ratio test we performed earlier, base their decisions on Paul’s number of correct guesses (i.e. <span class="math inline">\(Y = 12\)</span>). This new way checks directly whether the value of <span class="math inline">\(Y\)</span> is in the critical region, while the likelihood ratio test first transforms <span class="math inline">\(Y\)</span> into a likelihood ratio, and then checks whether this value is in the critical region. Both ways of testing provide exactly the same decisions. But testing <span class="math inline">\(Y\)</span> directly is somewhat easier, as we don’t have to compute anything else. In addition, using <span class="math inline">\(Y\)</span> directly also makes it more straightforward to perform a one-sided hypothesis test.</p>
 <p>Up to now, we have compared a model with <span class="math inline">\(\theta = .5\)</span> to a model that merely assumed <span class="math inline">\(0 \leq \theta \leq 1\)</span>. The latter model can not only account for Paul making very accurate predictions, but also for Paul making very inaccurate predictions. But perhaps it is more reasonable to expect that if Paul was indeed psychic, that he would make correct predictions, rather than deceiving his keeper by making inaccurate predictions. In other words, if Paul was psychic, we would expect the probability of him making a correct prediction to be larger than if he were just guessing, so <span class="math inline">\(\theta &gt; .5\)</span>. We can still test this model against the null hypothesis of random guessing, but now small numbers of correct guesses should not move us to reject the null hypothesis, as such small numbers would be even less likely if a model with <span class="math inline">\(\theta &gt; .5\)</span> were true. If we’d use the right critical region of Figure <a href="ch-modeling.html#fig:binomial-distribution-critical-values-pooled">2.12</a>, the actual significance level would be only <span class="math inline">\(\alpha = 0.006\)</span> (the probability <span class="math inline">\(P(k \geq 12 | \theta = .5)\)</span>). If we’d like a significance level of <span class="math inline">\(\alpha = .05\)</span>, we can actually move the critical value to 11, as <span class="math inline">\(P(k \geq 11 | \theta = .5) = 0.029\)</span>, which is still below the desired <span class="math inline">\(\alpha = .05\)</span>, but it is as close as we can get here. The resulting right-sided test of the hypothesis <span class="math inline">\(H_0: \theta = .5\)</span> versus the alternative that <span class="math inline">\(\theta &gt; .5\)</span> is depicted in Figure <a href="ch-modeling.html#fig:binomial-distribution-critical-values-pooled-one-sided">2.13</a>. The result of this test, with <span class="math inline">\(Y = 12\)</span>, is again to reject <span class="math inline">\(H_0\)</span>.</p>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:binomial-distribution-critical-values-pooled-one-sided"></span>
+<div class="figure" style="text-align: center"><span id="fig:binomial-distribution-critical-values-pooled-one-sided"></span>
 <img src="_main_files/figure-html/binomial-distribution-critical-values-pooled-one-sided-1.svg" alt="Distribution of the number of correct predictions ($k$) out of $n=14$ under MODEL R ($\theta = .5$), and the critical region for a one-sided test and $\alpha = .05$." width="95%" />
 <p class="caption">
 Figure 2.13: Distribution of the number of correct predictions (<span class="math inline">\(k\)</span>) out of <span class="math inline">\(n=14\)</span> under MODEL R (<span class="math inline">\(\theta = .5\)</span>), and the critical region for a one-sided test and <span class="math inline">\(\alpha = .05\)</span>.
@@ -907,13 +946,13 @@ Figure 2.13: Distribution of the number of correct predictions (<span class="mat
 </div>
 <p>It is possible to formulate this one-sided test in terms of a likelihood ratio test as well, but that wouldn’t necessarily make things clearer, and I think this chapter is long enough already.</p>
 </div>
-<div id="summary-1" class="section level2">
+<div id="summary-1" class="section level2" number="2.7">
 <h2><span class="header-section-number">2.7</span> Summary</h2>
 <p>Statistical models define a probability distribution for the Data Generating Process. To test a particular hypothesis about an aspect of the DGP, such as that the probability of a correct prediction by Paul equals .5, we can define two alternative models, one which assumes the DGP has that characteristic, and one which doesn’t. When it is difficult to decide upon a reasonable alternative value for the hypothesised characteristic of the DGP, the model can leave this value unspecified as a parameter. Generally, apart from the value of the parameter(s), the models are identical in other respects. In that case, the model where we assume we know the value of the parameter(s) is a special case of the more general model where we leave the parameter(s) unspecified. The specified model (e.g., one in which the probability of a correct prediction is <span class="math inline">\(\theta = .5\)</span>) is then said to be nested within the more general model (e.g., the one in which <span class="math inline">\(\theta\)</span> can take any value between 0 and 1). We refer to the more general model as MODEL G (the “general” model), and the specified model as MODEL R (the “restricted” model, in which we restrict the value of a parameter to have a specified value).</p>
 <p>Unknown parameters of statistical models can be estimated from the data. Maximum likelihood estimation is a widely used and useful method to estimate parameters of statistical models. It estimates parameters by finding the value which maximises the probability of the observed data according to the model. Maximum likelihood estimators are consistent and efficient, although they can be biased.</p>
 <p>When comparing statistical models, we want to know how good each is in describing the data. A useful and general measure for this is the likelihood ratio. However, when comparing an estimated model to a model where we restrict the value of the parameter(s) to take a particular value, we know the likelihood ratio will never show the estimated model is worse than the restricted model, as we estimated the model to maximise the likelihood. The idea of null hypothesis significance testing is to consider how the parameter estimates and the likelihood ratio values are distributed if the null hypothesis (the restricted model) is true. The procedure relies on a critical value such that the null hypothesis is rejected if the likelihood ratio is equal to or more extreme than the critical value. the critical value is chosen such that the probability of rejecting the null hypothesis when it is true (a Type 1 error) does not exceed a particular value, called the significance level (<span class="math inline">\(\alpha\)</span>). The power of a test, the probability of rejecting the null hypothesis when it is false, is also an important concept, but in practice, it is difficult to determine, as it requires knowing the true value of the parameter(s) of the general model.</p>
 </div>
-<div id="epilogue" class="section level2">
+<div id="epilogue" class="section level2" number="2.8">
 <h2><span class="header-section-number">2.8</span> Epilogue</h2>
 <p>Was Paul really psychic? Quite likely not. Paul’s accuracy is quite unlikely if he were randomly guessing, and we have rejected this null hypothesis. That doesn’t mean that the null hypothesis is definitely not true; the null hypothesis significance test merely limits the probability of a wrong rejection to a maximum of e.g. <span class="math inline">\(\alpha = .05\)</span>. In statistics, we can never really be sure of anything. But we shouldn’t use this argument to allow us to conclude whatever we want, because then it becomes rather pointless to test a hypothesis in the first place. So we should really conclude that Paul’s performance was higher than expected if he were guessing. But there are various ways to explain his performance which don’t involve him being psychic. For instance, Germany was a team in a rather disproportionate number of the matches for which Paul provided predictions, and in many of these, he opened the box with the German flag on it first. Perhaps Paul preferred the German flag over most other flags? Germany was also a strong team in both the UEFA Euro 2008 and the 2010 FIFA World cup. These factors could easily combine to allow Paul a large number of correct predictions. You can probably think of other confounds to explain his performance as well.</p>
 <p>Paul was not the only animal making predictions about sports matches. Mani the parakeet, Nelly the elephant, Flopsy the kangaroo, Madame Shiva the guinea pig, Big Head the sea turtle, Shaheen the camel, and Achilles the cat, are some other ones with more or less success. And there are probably many more who no one has heard about. If you think of all these animals making predictions as repetitions of a larger experiment (e.g. testing whether animals in general are psychic), it does not seem surprising that in some of these, an animal will make a large number of correct predictions.</p>
@@ -932,8 +971,8 @@ Figure 2.13: Distribution of the number of correct predictions (<span class="mat
 <div class="footnotes">
 <hr />
 <ol start="3">
-<li id="fn3"><p>Perhaps it is a little confusing to first talk about models being true, and then about hypotheses stating that these models are true. As it is conventional to talk about the null hypothesis (<span class="math inline">\(H_0\)</span>) in the context of significance testing, it is important to know what this concept implies though, hence that’s why I’m using it here also.<a href="ch-modeling.html#fnref3" class="footnote-back">↩</a></p></li>
-<li id="fn4"><p>Of course, another way to ensure that we never go above <span class="math inline">\(\alpha\)</span> is to set the critical value to 0. But that would mean we <em>never</em> reject <span class="math inline">\(H_0\)</span>, which makes the test pointless.<a href="ch-modeling.html#fnref4" class="footnote-back">↩</a></p></li>
+<li id="fn3"><p>Perhaps it is a little confusing to first talk about models being true, and then about hypotheses stating that these models are true. As it is conventional to talk about the null hypothesis (<span class="math inline">\(H_0\)</span>) in the context of significance testing, it is important to know what this concept implies though, hence that’s why I’m using it here also.<a href="ch-modeling.html#fnref3" class="footnote-back">↩︎</a></p></li>
+<li id="fn4"><p>Of course, another way to ensure that we never go above <span class="math inline">\(\alpha\)</span> is to set the critical value to 0. But that would mean we <em>never</em> reject <span class="math inline">\(H_0\)</span>, which makes the test pointless.<a href="ch-modeling.html#fnref4" class="footnote-back">↩︎</a></p></li>
 </ol>
 </div>
             </section>
@@ -946,6 +985,7 @@ Figure 2.13: Distribution of the number of correct predictions (<span class="mat
     </div>
   </div>
 <script src="book_assets/gitbook-2.6.7/js/app.min.js"></script>
+<script src="book_assets/gitbook-2.6.7/js/lunr.js"></script>
 <script src="book_assets/gitbook-2.6.7/js/clipboard.min.js"></script>
 <script src="book_assets/gitbook-2.6.7/js/plugin-search.js"></script>
 <script src="book_assets/gitbook-2.6.7/js/plugin-sharing.js"></script>
@@ -964,7 +1004,6 @@ gitbook.start({
 "weibo": false,
 "instapaper": false,
 "vk": false,
-"whatsapp": false,
 "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
 },
 "fontsettings": {
@@ -982,14 +1021,11 @@ gitbook.start({
 "text": null
 },
 "download": null,
-"search": {
-"engine": "fuse",
-"options": null
-},
 "toc": {
 "collapse": "subsection"
 },
-"source": null
+"source": null,
+"search": true
 });
 });
 </script>

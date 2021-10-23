@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 13 Being a responsible data analyst | Statistics: Data analysis and modelling</title>
   <meta name="description" content="A book about statistics for data analysis, with a main focus on statistical modelling." />
-  <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 13 Being a responsible data analyst | Statistics: Data analysis and modelling" />
   <meta property="og:type" content="book" />
@@ -24,7 +24,7 @@
 <meta name="author" content="Maarten Speekenbrink" />
 
 
-<meta name="date" content="2021-10-13" />
+<meta name="date" content="2021-10-23" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -33,8 +33,8 @@
   
 <link rel="prev" href="introduction-to-bayesian-hypothesis-testing.html"/>
 <link rel="next" href="references.html"/>
-<script src="book_assets/jquery-3.6.0/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<script src="book_assets/header-attrs-2.7/header-attrs.js"></script>
+<script src="book_assets/jquery-3.5.1/jquery.min.js"></script>
 <link href="book_assets/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="book_assets/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
 <link href="book_assets/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -50,42 +50,38 @@
 
 
 
-<link href="book_assets/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
-<script src="book_assets/anchor-sections-1.0.1/anchor-sections.js"></script>
-<script src="book_assets/htmlwidgets-1.5.4/htmlwidgets.js"></script>
+
+<script src="book_assets/htmlwidgets-1.5.3/htmlwidgets.js"></script>
 <script src="book_assets/viz-1.8.2/viz.js"></script>
 <link href="book_assets/DiagrammeR-styles-0.2/styles.css" rel="stylesheet" />
 <script src="book_assets/grViz-binding-1.0.6.1/grViz.js"></script>
-<script src="book_assets/plotly-binding-4.9.4.1/plotly.js"></script>
+<script src="book_assets/plotly-binding-4.9.3/plotly.js"></script>
 <script src="book_assets/typedarray-0.1/typedarray.min.js"></script>
 <link href="book_assets/crosstalk-1.1.1/css/crosstalk.css" rel="stylesheet" />
 <script src="book_assets/crosstalk-1.1.1/js/crosstalk.min.js"></script>
 <link href="book_assets/plotly-htmlwidgets-css-1.57.1/plotly-htmlwidgets.css" rel="stylesheet" />
 <script src="book_assets/plotly-main-1.57.1/plotly-latest.min.js"></script>
 <link href="book_assets/combineWidgetStyle-0.1/combineWidgets.css" rel="stylesheet" />
-<script src="book_assets/combineWidgets-binding-0.11.0/combineWidgets.js"></script>
-<script src="book_assets/rglWebGL-binding-0.107.14/rglWebGL.js"></script>
-<link href="book_assets/rglwidgetClass-0.107.14/rgl.css" rel="stylesheet" />
-<script src="book_assets/rglwidgetClass-0.107.14/rglClass.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.107.14/utils.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.107.14/subscenes.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.107.14/shaders.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.107.14/textures.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.107.14/projection.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.107.14/mouse.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.107.14/init.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.107.14/pieces.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.107.14/draw.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.107.14/controls.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.107.14/selection.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.107.14/rglTimer.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.107.14/pretty.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.107.14/axes.src.js"></script>
-<script src="book_assets/CanvasMatrix4-0.107.14/CanvasMatrix.src.js"></script>
-<script src="book_assets/rglPlayer-binding-0.107.14/rglPlayer.js"></script>
+<script src="book_assets/combineWidgets-binding-0.10.1/combineWidgets.js"></script>
+<script src="book_assets/rglWebGL-binding-0.106.6/rglWebGL.js"></script>
+<link href="book_assets/rglwidgetClass-0.106.6/rgl.css" rel="stylesheet" />
+<script src="book_assets/rglwidgetClass-0.106.6/rglClass.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.106.6/utils.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.106.6/subscenes.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.106.6/shaders.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.106.6/textures.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.106.6/projection.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.106.6/mouse.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.106.6/init.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.106.6/pieces.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.106.6/draw.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.106.6/controls.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.106.6/selection.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.106.6/rglTimer.src.js"></script>
+<script src="book_assets/CanvasMatrix4-0.106.6/CanvasMatrix.src.js"></script>
+<script src="book_assets/rglPlayer-binding-0.106.6/rglPlayer.js"></script>
 <script src="book_assets/kePrint-0.0.1/kePrint.js"></script>
 <link href="book_assets/lightable-0.0.1/lightable.css" rel="stylesheet" />
-
 
 
 
@@ -102,36 +98,44 @@
       <nav role="navigation">
 
 <ul class="summary">
-<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a><ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a>
+<ul>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#acknowledgements"><i class="fa fa-check"></i>Acknowledgements</a></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#notation"><i class="fa fa-check"></i>Notation</a></li>
 </ul></li>
-<li class="chapter" data-level="1" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
+<li class="chapter" data-level="1" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i><b>1</b> Introduction</a>
+<ul>
 <li class="chapter" data-level="1.1" data-path="intro.html"><a href="intro.html#paul-the-octopus"><i class="fa fa-check"></i><b>1.1</b> Paul the octopus</a></li>
 <li class="chapter" data-level="1.2" data-path="intro.html"><a href="intro.html#experiments-and-observations"><i class="fa fa-check"></i><b>1.2</b> Experiments and observations</a></li>
-<li class="chapter" data-level="1.3" data-path="intro.html"><a href="intro.html#data"><i class="fa fa-check"></i><b>1.3</b> Data</a><ul>
+<li class="chapter" data-level="1.3" data-path="intro.html"><a href="intro.html#data"><i class="fa fa-check"></i><b>1.3</b> Data</a>
+<ul>
 <li class="chapter" data-level="1.3.1" data-path="intro.html"><a href="intro.html#measurement-scales"><i class="fa fa-check"></i><b>1.3.1</b> Measurement scales</a></li>
 <li class="chapter" data-level="1.3.2" data-path="intro.html"><a href="intro.html#the-data-generating-process"><i class="fa fa-check"></i><b>1.3.2</b> The Data Generating Process</a></li>
 </ul></li>
-<li class="chapter" data-level="1.4" data-path="intro.html"><a href="intro.html#exploring-and-describing-data"><i class="fa fa-check"></i><b>1.4</b> Exploring and describing data</a><ul>
+<li class="chapter" data-level="1.4" data-path="intro.html"><a href="intro.html#exploring-and-describing-data"><i class="fa fa-check"></i><b>1.4</b> Exploring and describing data</a>
+<ul>
 <li class="chapter" data-level="1.4.1" data-path="intro.html"><a href="intro.html#summary-statistics"><i class="fa fa-check"></i><b>1.4.1</b> Summary statistics</a></li>
 <li class="chapter" data-level="1.4.2" data-path="intro.html"><a href="intro.html#visual-exploration"><i class="fa fa-check"></i><b>1.4.2</b> Visual exploration</a></li>
 </ul></li>
 <li class="chapter" data-level="1.5" data-path="intro.html"><a href="intro.html#analysis-and-modelling"><i class="fa fa-check"></i><b>1.5</b> Analysis and modelling</a></li>
 <li class="chapter" data-level="1.6" data-path="intro.html"><a href="intro.html#summary"><i class="fa fa-check"></i><b>1.6</b> Summary</a></li>
 </ul></li>
-<li class="chapter" data-level="2" data-path="ch-modeling.html"><a href="ch-modeling.html"><i class="fa fa-check"></i><b>2</b> Statistical modelling</a><ul>
+<li class="chapter" data-level="2" data-path="ch-modeling.html"><a href="ch-modeling.html"><i class="fa fa-check"></i><b>2</b> Statistical modelling</a>
+<ul>
 <li class="chapter" data-level="2.1" data-path="ch-modeling.html"><a href="ch-modeling.html#coin-flipping-defining-a-statistical-model"><i class="fa fa-check"></i><b>2.1</b> Coin flipping: Defining a statistical model</a></li>
-<li class="chapter" data-level="2.2" data-path="ch-modeling.html"><a href="ch-modeling.html#probability"><i class="fa fa-check"></i><b>2.2</b> Probability</a><ul>
+<li class="chapter" data-level="2.2" data-path="ch-modeling.html"><a href="ch-modeling.html#probability"><i class="fa fa-check"></i><b>2.2</b> Probability</a>
+<ul>
 <li class="chapter" data-level="2.2.1" data-path="ch-modeling.html"><a href="ch-modeling.html#sec:02-probability-definition"><i class="fa fa-check"></i><b>2.2.1</b> What is probability?</a></li>
 <li class="chapter" data-level="2.2.2" data-path="ch-modeling.html"><a href="ch-modeling.html#distributions"><i class="fa fa-check"></i><b>2.2.2</b> Distributions</a></li>
 </ul></li>
 <li class="chapter" data-level="2.3" data-path="ch-modeling.html"><a href="ch-modeling.html#sec:02-binomial-model"><i class="fa fa-check"></i><b>2.3</b> Flipping a biased coin: An alternative model</a></li>
-<li class="chapter" data-level="2.4" data-path="ch-modeling.html"><a href="ch-modeling.html#estimation"><i class="fa fa-check"></i><b>2.4</b> Estimation</a><ul>
+<li class="chapter" data-level="2.4" data-path="ch-modeling.html"><a href="ch-modeling.html#estimation"><i class="fa fa-check"></i><b>2.4</b> Estimation</a>
+<ul>
 <li class="chapter" data-level="2.4.1" data-path="ch-modeling.html"><a href="ch-modeling.html#maximum-likelihood-estimation"><i class="fa fa-check"></i><b>2.4.1</b> Maximum likelihood estimation</a></li>
 <li class="chapter" data-level="2.4.2" data-path="ch-modeling.html"><a href="ch-modeling.html#properties-of-good-estimators"><i class="fa fa-check"></i><b>2.4.2</b> Properties of good estimators</a></li>
 </ul></li>
-<li class="chapter" data-level="2.5" data-path="ch-modeling.html"><a href="ch-modeling.html#sec:02-likelihood-ratio"><i class="fa fa-check"></i><b>2.5</b> Comparing models: Null-hypothesis significance testing</a><ul>
+<li class="chapter" data-level="2.5" data-path="ch-modeling.html"><a href="ch-modeling.html#sec:02-likelihood-ratio"><i class="fa fa-check"></i><b>2.5</b> Comparing models: Null-hypothesis significance testing</a>
+<ul>
 <li class="chapter" data-level="2.5.1" data-path="ch-modeling.html"><a href="ch-modeling.html#decisions-and-types-of-error"><i class="fa fa-check"></i><b>2.5.1</b> Decisions and types of error</a></li>
 <li class="chapter" data-level="2.5.2" data-path="ch-modeling.html"><a href="ch-modeling.html#significance-and-power"><i class="fa fa-check"></i><b>2.5.2</b> Significance and power</a></li>
 <li class="chapter" data-level="2.5.3" data-path="ch-modeling.html"><a href="ch-modeling.html#testing-whether-paul-was-guessing"><i class="fa fa-check"></i><b>2.5.3</b> Testing whether Paul was guessing</a></li>
@@ -140,110 +144,138 @@
 <li class="chapter" data-level="2.7" data-path="ch-modeling.html"><a href="ch-modeling.html#summary-1"><i class="fa fa-check"></i><b>2.7</b> Summary</a></li>
 <li class="chapter" data-level="2.8" data-path="ch-modeling.html"><a href="ch-modeling.html#epilogue"><i class="fa fa-check"></i><b>2.8</b> Epilogue</a></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html"><i class="fa fa-check"></i><b>3</b> A model with a mean (one sample t-test)</a><ul>
-<li class="chapter" data-level="3.1" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#numeric-judgement-and-anchoring"><i class="fa fa-check"></i><b>3.1</b> Numeric judgement and anchoring</a><ul>
+<li class="chapter" data-level="3" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html"><i class="fa fa-check"></i><b>3</b> A model with a mean (one sample t-test)</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#numeric-judgement-and-anchoring"><i class="fa fa-check"></i><b>3.1</b> Numeric judgement and anchoring</a>
+<ul>
 <li class="chapter" data-level="3.1.1" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#exploring-the-data"><i class="fa fa-check"></i><b>3.1.1</b> Exploring the data</a></li>
 </ul></li>
-<li class="chapter" data-level="3.2" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#a-statistical-model-of-judgements"><i class="fa fa-check"></i><b>3.2</b> A statistical model of judgements</a><ul>
+<li class="chapter" data-level="3.2" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#a-statistical-model-of-judgements"><i class="fa fa-check"></i><b>3.2</b> A statistical model of judgements</a>
+<ul>
 <li class="chapter" data-level="3.2.1" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#the-normal-distribution"><i class="fa fa-check"></i><b>3.2.1</b> The Normal distribution</a></li>
 <li class="chapter" data-level="3.2.2" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#two-useful-properties-of-the-normal-distribution"><i class="fa fa-check"></i><b>3.2.2</b> Two useful properties of the Normal distribution</a></li>
 <li class="chapter" data-level="3.2.3" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#back-to-anchoring"><i class="fa fa-check"></i><b>3.2.3</b> Back to anchoring</a></li>
 </ul></li>
-<li class="chapter" data-level="3.3" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#parameter-estimation"><i class="fa fa-check"></i><b>3.3</b> Parameter estimation</a><ul>
+<li class="chapter" data-level="3.3" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#parameter-estimation"><i class="fa fa-check"></i><b>3.3</b> Parameter estimation</a>
+<ul>
 <li class="chapter" data-level="3.3.1" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#sampling-distribution-of-the-estimated-mean"><i class="fa fa-check"></i><b>3.3.1</b> Sampling distribution of the estimated mean</a></li>
 </ul></li>
-<li class="chapter" data-level="3.4" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#testing-whether-mu-has-an-specific-value"><i class="fa fa-check"></i><b>3.4</b> Testing whether <span class="math inline">\(\mu\)</span> has an specific value</a><ul>
+<li class="chapter" data-level="3.4" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#testing-whether-mu-has-an-specific-value"><i class="fa fa-check"></i><b>3.4</b> Testing whether <span class="math inline">\(\mu\)</span> has an specific value</a>
+<ul>
 <li class="chapter" data-level="3.4.1" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#the-classical-way"><i class="fa fa-check"></i><b>3.4.1</b> The classical way</a></li>
 <li class="chapter" data-level="3.4.2" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#the-model-comparison-way"><i class="fa fa-check"></i><b>3.4.2</b> The model comparison way</a></li>
 </ul></li>
 <li class="chapter" data-level="3.5" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#ch3-confidence-interval"><i class="fa fa-check"></i><b>3.5</b> Confidence intervals</a></li>
 <li class="chapter" data-level="3.6" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#effect-size"><i class="fa fa-check"></i><b>3.6</b> Effect size</a></li>
 <li class="chapter" data-level="3.7" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#sec:02-assumptions"><i class="fa fa-check"></i><b>3.7</b> Assumptions</a></li>
-<li class="chapter" data-level="3.8" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#the-central-limit-theorem"><i class="fa fa-check"></i><b>3.8</b> The Central Limit Theorem</a><ul>
+<li class="chapter" data-level="3.8" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#the-central-limit-theorem"><i class="fa fa-check"></i><b>3.8</b> The Central Limit Theorem</a>
+<ul>
 <li class="chapter" data-level="3.8.1" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#the-central-limit-theorem-in-action"><i class="fa fa-check"></i><b>3.8.1</b> The Central Limit Theorem in action</a></li>
 <li class="chapter" data-level="3.8.2" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#bootstrapping-a-statistic"><i class="fa fa-check"></i><b>3.8.2</b> Bootstrapping a statistic</a></li>
 </ul></li>
 <li class="chapter" data-level="3.9" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#in-practice"><i class="fa fa-check"></i><b>3.9</b> In practice</a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html"><i class="fa fa-check"></i><b>4</b> Simple linear regression</a><ul>
+<li class="chapter" data-level="4" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html"><i class="fa fa-check"></i><b>4</b> Simple linear regression</a>
+<ul>
 <li class="chapter" data-level="4.1" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#trump-votes-and-hate-groups"><i class="fa fa-check"></i><b>4.1</b> Trump, votes, and hate groups</a></li>
 <li class="chapter" data-level="4.2" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#the-model"><i class="fa fa-check"></i><b>4.2</b> The model</a></li>
-<li class="chapter" data-level="4.3" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#sec:04-estimation"><i class="fa fa-check"></i><b>4.3</b> Estimation</a><ul>
+<li class="chapter" data-level="4.3" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#sec:04-estimation"><i class="fa fa-check"></i><b>4.3</b> Estimation</a>
+<ul>
 <li class="chapter" data-level="4.3.1" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#estimating-the-relation-between-trump-votes-and-hate-groups"><i class="fa fa-check"></i><b>4.3.1</b> Estimating the relation between Trump votes and hate groups</a></li>
 </ul></li>
-<li class="chapter" data-level="4.4" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#hypothesis-testing"><i class="fa fa-check"></i><b>4.4</b> Hypothesis testing</a><ul>
+<li class="chapter" data-level="4.4" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#hypothesis-testing"><i class="fa fa-check"></i><b>4.4</b> Hypothesis testing</a>
+<ul>
 <li class="chapter" data-level="4.4.1" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#sampling-distribution-of-estimates"><i class="fa fa-check"></i><b>4.4.1</b> Sampling distribution of estimates</a></li>
 <li class="chapter" data-level="4.4.2" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#model-comparison"><i class="fa fa-check"></i><b>4.4.2</b> Model comparison</a></li>
 <li class="chapter" data-level="4.4.3" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#confidence-intervals"><i class="fa fa-check"></i><b>4.4.3</b> Confidence intervals</a></li>
 </ul></li>
 <li class="chapter" data-level="4.5" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#summary-2"><i class="fa fa-check"></i><b>4.5</b> Summary</a></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html"><i class="fa fa-check"></i><b>5</b> Multiple regression</a><ul>
-<li class="chapter" data-level="5.1" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#trump-votes-and-hate-groups-again"><i class="fa fa-check"></i><b>5.1</b> Trump, votes, and hate groups (again)</a><ul>
+<li class="chapter" data-level="5" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html"><i class="fa fa-check"></i><b>5</b> Multiple regression</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#trump-votes-and-hate-groups-again"><i class="fa fa-check"></i><b>5.1</b> Trump, votes, and hate groups (again)</a>
+<ul>
 <li class="chapter" data-level="5.1.1" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#controlling-for-education-level"><i class="fa fa-check"></i><b>5.1.1</b> Controlling for education level</a></li>
 </ul></li>
 <li class="chapter" data-level="5.2" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#the-multiple-regression-model"><i class="fa fa-check"></i><b>5.2</b> The multiple regression model</a></li>
 <li class="chapter" data-level="5.3" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#sec:04b-estimation"><i class="fa fa-check"></i><b>5.3</b> Estimation</a></li>
 <li class="chapter" data-level="5.4" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#sec:04b-inference"><i class="fa fa-check"></i><b>5.4</b> Inference</a></li>
 <li class="chapter" data-level="5.5" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#partitioning-and-explaining-variance"><i class="fa fa-check"></i><b>5.5</b> Partitioning and explaining variance</a></li>
-<li class="chapter" data-level="5.6" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#effect-size-and-the-importance-of-predictors"><i class="fa fa-check"></i><b>5.6</b> Effect size and the importance of predictors</a><ul>
+<li class="chapter" data-level="5.6" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#sec:04b-effect-size"><i class="fa fa-check"></i><b>5.6</b> Effect size and the importance of predictors</a>
+<ul>
 <li class="chapter" data-level="5.6.1" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#r2-changes-and-the-coefficient-of-semi-partial-determination"><i class="fa fa-check"></i><b>5.6.1</b> <span class="math inline">\(R^2\)</span> changes and the coefficient of (semi-)partial determination</a></li>
 </ul></li>
-<li class="chapter" data-level="5.7" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#sec:04b-assumptions"><i class="fa fa-check"></i><b>5.7</b> Assumptions</a><ul>
+<li class="chapter" data-level="5.7" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#sec:04b-assumptions"><i class="fa fa-check"></i><b>5.7</b> Assumptions</a>
+<ul>
 <li class="chapter" data-level="5.7.1" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#transforming-variables"><i class="fa fa-check"></i><b>5.7.1</b> Transforming variables</a></li>
 <li class="chapter" data-level="5.7.2" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#polynomial-regression"><i class="fa fa-check"></i><b>5.7.2</b> Polynomial regression</a></li>
 </ul></li>
-<li class="chapter" data-level="5.8" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#multicollinearity-redundancy-between-predictors"><i class="fa fa-check"></i><b>5.8</b> Multicollinearity: Redundancy between predictors</a><ul>
+<li class="chapter" data-level="5.8" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#multicollinearity-redundancy-between-predictors"><i class="fa fa-check"></i><b>5.8</b> Multicollinearity: Redundancy between predictors</a>
+<ul>
 <li class="chapter" data-level="5.8.1" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#detecting-and-dealing-with-multicollinearity"><i class="fa fa-check"></i><b>5.8.1</b> Detecting and dealing with multicollinearity</a></li>
 </ul></li>
 <li class="chapter" data-level="5.9" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#sec:04b-outliers"><i class="fa fa-check"></i><b>5.9</b> Outliers</a></li>
-<li class="chapter" data-level="5.10" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#in-practise"><i class="fa fa-check"></i><b>5.10</b> In practise</a></li>
+<li class="chapter" data-level="5.10" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#in-practice-1"><i class="fa fa-check"></i><b>5.10</b> In practice</a></li>
 </ul></li>
-<li class="chapter" data-level="6" data-path="moderation-and-mediation.html"><a href="moderation-and-mediation.html"><i class="fa fa-check"></i><b>6</b> Moderation and mediation</a><ul>
-<li class="chapter" data-level="6.1" data-path="moderation-and-mediation.html"><a href="moderation-and-mediation.html#moderation"><i class="fa fa-check"></i><b>6.1</b> Moderation</a><ul>
+<li class="chapter" data-level="6" data-path="moderation-and-mediation.html"><a href="moderation-and-mediation.html"><i class="fa fa-check"></i><b>6</b> Moderation and mediation</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="moderation-and-mediation.html"><a href="moderation-and-mediation.html#moderation"><i class="fa fa-check"></i><b>6.1</b> Moderation</a>
+<ul>
 <li class="chapter" data-level="6.1.1" data-path="moderation-and-mediation.html"><a href="moderation-and-mediation.html#physical-attractiveness-and-intelligence-in-speed-dating"><i class="fa fa-check"></i><b>6.1.1</b> Physical attractiveness and intelligence in speed dating</a></li>
 <li class="chapter" data-level="6.1.2" data-path="moderation-and-mediation.html"><a href="moderation-and-mediation.html#conditional-slopes"><i class="fa fa-check"></i><b>6.1.2</b> Conditional slopes</a></li>
 <li class="chapter" data-level="6.1.3" data-path="moderation-and-mediation.html"><a href="moderation-and-mediation.html#modeling-slopes-with-linear-models"><i class="fa fa-check"></i><b>6.1.3</b> Modeling slopes with linear models</a></li>
 <li class="chapter" data-level="6.1.4" data-path="moderation-and-mediation.html"><a href="moderation-and-mediation.html#simple-slopes-and-centering"><i class="fa fa-check"></i><b>6.1.4</b> Simple slopes and centering</a></li>
 <li class="chapter" data-level="6.1.5" data-path="moderation-and-mediation.html"><a href="moderation-and-mediation.html#sec:05-dont-forget-about-the-fun"><i class="fa fa-check"></i><b>6.1.5</b> Don’t forget about fun! A model with multiple interactions</a></li>
 </ul></li>
-<li class="chapter" data-level="6.2" data-path="moderation-and-mediation.html"><a href="moderation-and-mediation.html#mediation"><i class="fa fa-check"></i><b>6.2</b> Mediation</a><ul>
+<li class="chapter" data-level="6.2" data-path="moderation-and-mediation.html"><a href="moderation-and-mediation.html#mediation"><i class="fa fa-check"></i><b>6.2</b> Mediation</a>
+<ul>
 <li class="chapter" data-level="6.2.1" data-path="moderation-and-mediation.html"><a href="moderation-and-mediation.html#legacy-motives-and-pro-environmental-behaviours"><i class="fa fa-check"></i><b>6.2.1</b> Legacy motives and pro-environmental behaviours</a></li>
 <li class="chapter" data-level="6.2.2" data-path="moderation-and-mediation.html"><a href="moderation-and-mediation.html#causal-steps"><i class="fa fa-check"></i><b>6.2.2</b> Causal steps</a></li>
 <li class="chapter" data-level="6.2.3" data-path="moderation-and-mediation.html"><a href="moderation-and-mediation.html#estimating-the-mediated-effect"><i class="fa fa-check"></i><b>6.2.3</b> Estimating the mediated effect</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="ch-ANOVA.html"><a href="ch-ANOVA.html"><i class="fa fa-check"></i><b>7</b> A model of means (ANOVA)</a><ul>
+<li class="chapter" data-level="7" data-path="ch-ANOVA.html"><a href="ch-ANOVA.html"><i class="fa fa-check"></i><b>7</b> A model of means (ANOVA)</a>
+<ul>
 <li class="chapter" data-level="7.1" data-path="ch-ANOVA.html"><a href="ch-ANOVA.html#can-playing-tetris-reduce-intrusive-memories"><i class="fa fa-check"></i><b>7.1</b> Can playing Tetris reduce intrusive memories?</a></li>
 <li class="chapter" data-level="7.2" data-path="ch-ANOVA.html"><a href="ch-ANOVA.html#sec:06-two-groups"><i class="fa fa-check"></i><b>7.2</b> Comparing two groups</a></li>
 <li class="chapter" data-level="7.3" data-path="ch-ANOVA.html"><a href="ch-ANOVA.html#the-anova-model"><i class="fa fa-check"></i><b>7.3</b> The ANOVA model</a></li>
-<li class="chapter" data-level="7.4" data-path="ch-ANOVA.html"><a href="ch-ANOVA.html#contrast-coding"><i class="fa fa-check"></i><b>7.4</b> Contrast coding</a><ul>
+<li class="chapter" data-level="7.4" data-path="ch-ANOVA.html"><a href="ch-ANOVA.html#contrast-coding"><i class="fa fa-check"></i><b>7.4</b> Contrast coding</a>
+<ul>
 <li class="chapter" data-level="7.4.1" data-path="ch-ANOVA.html"><a href="ch-ANOVA.html#effect-coding"><i class="fa fa-check"></i><b>7.4.1</b> Effect coding</a></li>
 <li class="chapter" data-level="7.4.2" data-path="ch-ANOVA.html"><a href="ch-ANOVA.html#orthogonal-contrast-codes"><i class="fa fa-check"></i><b>7.4.2</b> Orthogonal contrast codes</a></li>
 <li class="chapter" data-level="7.4.3" data-path="ch-ANOVA.html"><a href="ch-ANOVA.html#defining-your-own-orthogonal-contrasts"><i class="fa fa-check"></i><b>7.4.3</b> Defining your own (orthogonal) contrasts</a></li>
 </ul></li>
 <li class="chapter" data-level="7.5" data-path="ch-ANOVA.html"><a href="ch-ANOVA.html#default-orthogonal-coding-schemes"><i class="fa fa-check"></i><b>7.5</b> Default orthogonal coding schemes</a></li>
-<li class="chapter" data-level="7.6" data-path="ch-ANOVA.html"><a href="ch-ANOVA.html#multiple-testing-and-post-hoc-tests"><i class="fa fa-check"></i><b>7.6</b> Multiple testing and post-hoc tests</a></li>
+<li class="chapter" data-level="7.6" data-path="ch-ANOVA.html"><a href="ch-ANOVA.html#effect-size-in-anova"><i class="fa fa-check"></i><b>7.6</b> Effect-size in ANOVA</a></li>
+<li class="chapter" data-level="7.7" data-path="ch-ANOVA.html"><a href="ch-ANOVA.html#assumptions"><i class="fa fa-check"></i><b>7.7</b> Assumptions</a></li>
+<li class="chapter" data-level="7.8" data-path="ch-ANOVA.html"><a href="ch-ANOVA.html#multiple-testing-and-post-hoc-tests"><i class="fa fa-check"></i><b>7.8</b> Multiple testing and post-hoc tests</a></li>
+<li class="chapter" data-level="7.9" data-path="ch-ANOVA.html"><a href="ch-ANOVA.html#in-practice-2"><i class="fa fa-check"></i><b>7.9</b> In practice</a></li>
 </ul></li>
-<li class="chapter" data-level="8" data-path="ch-factorial-ANOVA.html"><a href="ch-factorial-ANOVA.html"><i class="fa fa-check"></i><b>8</b> Factorial ANOVA</a><ul>
-<li class="chapter" data-level="8.1" data-path="ch-factorial-ANOVA.html"><a href="ch-factorial-ANOVA.html#experimenter-beliefs-and-social-priming"><i class="fa fa-check"></i><b>8.1</b> Experimenter beliefs and social priming</a><ul>
+<li class="chapter" data-level="8" data-path="ch-factorial-ANOVA.html"><a href="ch-factorial-ANOVA.html"><i class="fa fa-check"></i><b>8</b> Factorial ANOVA</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="ch-factorial-ANOVA.html"><a href="ch-factorial-ANOVA.html#experimenter-beliefs-and-social-priming"><i class="fa fa-check"></i><b>8.1</b> Experimenter beliefs and social priming</a>
+<ul>
 <li class="chapter" data-level="8.1.1" data-path="ch-factorial-ANOVA.html"><a href="ch-factorial-ANOVA.html#a-oneway-anova"><i class="fa fa-check"></i><b>8.1.1</b> A oneway ANOVA</a></li>
 </ul></li>
-<li class="chapter" data-level="8.2" data-path="ch-factorial-ANOVA.html"><a href="ch-factorial-ANOVA.html#factorial-designs"><i class="fa fa-check"></i><b>8.2</b> Factorial designs</a><ul>
+<li class="chapter" data-level="8.2" data-path="ch-factorial-ANOVA.html"><a href="ch-factorial-ANOVA.html#factorial-designs"><i class="fa fa-check"></i><b>8.2</b> Factorial designs</a>
+<ul>
 <li class="chapter" data-level="8.2.1" data-path="ch-factorial-ANOVA.html"><a href="ch-factorial-ANOVA.html#sec:06-main-effects-and-interactions"><i class="fa fa-check"></i><b>8.2.1</b> Main effects and interactions</a></li>
 </ul></li>
 <li class="chapter" data-level="8.3" data-path="ch-factorial-ANOVA.html"><a href="ch-factorial-ANOVA.html#the-factorial-anova-model"><i class="fa fa-check"></i><b>8.3</b> The factorial ANOVA model</a></li>
-<li class="chapter" data-level="8.4" data-path="ch-factorial-ANOVA.html"><a href="ch-factorial-ANOVA.html#a-threeway-factorial-anova"><i class="fa fa-check"></i><b>8.4</b> A threeway factorial ANOVA</a><ul>
+<li class="chapter" data-level="8.4" data-path="ch-factorial-ANOVA.html"><a href="ch-factorial-ANOVA.html#a-threeway-factorial-anova"><i class="fa fa-check"></i><b>8.4</b> A threeway factorial ANOVA</a>
+<ul>
 <li class="chapter" data-level="8.4.1" data-path="ch-factorial-ANOVA.html"><a href="ch-factorial-ANOVA.html#interpreting-interactions"><i class="fa fa-check"></i><b>8.4.1</b> Interpreting interactions</a></li>
 </ul></li>
-<li class="chapter" data-level="8.5" data-path="ch-factorial-ANOVA.html"><a href="ch-factorial-ANOVA.html#orthogonal-contrast-codes-and-unequal-sample-sizes"><i class="fa fa-check"></i><b>8.5</b> Orthogonal contrast codes and unequal sample sizes</a><ul>
+<li class="chapter" data-level="8.5" data-path="ch-factorial-ANOVA.html"><a href="ch-factorial-ANOVA.html#orthogonal-contrast-codes-and-unequal-sample-sizes"><i class="fa fa-check"></i><b>8.5</b> Orthogonal contrast codes and unequal sample sizes</a>
+<ul>
 <li class="chapter" data-level="8.5.1" data-path="ch-factorial-ANOVA.html"><a href="ch-factorial-ANOVA.html#comparison-schemes-and-ss-types"><i class="fa fa-check"></i><b>8.5.1</b> Comparison schemes and SS types</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="9" data-path="mixing-categorical-and-metric-predictors-ancova.html"><a href="mixing-categorical-and-metric-predictors-ancova.html"><i class="fa fa-check"></i><b>9</b> Mixing categorical and metric predictors (ANCOVA)</a><ul>
+<li class="chapter" data-level="9" data-path="mixing-categorical-and-metric-predictors-ancova.html"><a href="mixing-categorical-and-metric-predictors-ancova.html"><i class="fa fa-check"></i><b>9</b> Mixing categorical and metric predictors (ANCOVA)</a>
+<ul>
 <li class="chapter" data-level="9.1" data-path="mixing-categorical-and-metric-predictors-ancova.html"><a href="mixing-categorical-and-metric-predictors-ancova.html#subjective-feelings-of-power-and-priming"><i class="fa fa-check"></i><b>9.1</b> Subjective feelings of power and priming</a></li>
 <li class="chapter" data-level="9.2" data-path="mixing-categorical-and-metric-predictors-ancova.html"><a href="mixing-categorical-and-metric-predictors-ancova.html#acounting-for-pre-existing-differences"><i class="fa fa-check"></i><b>9.2</b> Acounting for pre-existing differences</a></li>
-<li class="chapter" data-level="9.3" data-path="mixing-categorical-and-metric-predictors-ancova.html"><a href="mixing-categorical-and-metric-predictors-ancova.html#slopes-of-contrast-coding-predictors-in-ancova-models"><i class="fa fa-check"></i><b>9.3</b> Slopes of contrast-coding predictors in ANCOVA models</a></li>
+<li class="chapter" data-level="9.3" data-path="mixing-categorical-and-metric-predictors-ancova.html"><a href="mixing-categorical-and-metric-predictors-ancova.html#slopes-of-contrast-coded-predictors-in-ancova-models"><i class="fa fa-check"></i><b>9.3</b> Slopes of contrast-coded predictors in ANCOVA models</a></li>
 <li class="chapter" data-level="9.4" data-path="mixing-categorical-and-metric-predictors-ancova.html"><a href="mixing-categorical-and-metric-predictors-ancova.html#homogeneity-of-slopes"><i class="fa fa-check"></i><b>9.4</b> Homogeneity of slopes</a></li>
 <li class="chapter" data-level="9.5" data-path="mixing-categorical-and-metric-predictors-ancova.html"><a href="mixing-categorical-and-metric-predictors-ancova.html#sec:ANCOVA-power"><i class="fa fa-check"></i><b>9.5</b> Power considerations in ANCOVA</a></li>
 <li class="chapter" data-level="9.6" data-path="mixing-categorical-and-metric-predictors-ancova.html"><a href="mixing-categorical-and-metric-predictors-ancova.html#models-with-multiple-covariates"><i class="fa fa-check"></i><b>9.6</b> Models with multiple covariates</a></li>
@@ -251,20 +283,24 @@
 <li class="chapter" data-level="9.8" data-path="mixing-categorical-and-metric-predictors-ancova.html"><a href="mixing-categorical-and-metric-predictors-ancova.html#ancova-vs-difference-scores"><i class="fa fa-check"></i><b>9.8</b> ANCOVA vs difference scores</a></li>
 </ul></li>
 <li class="chapter" data-level="10" data-path="repeated-measures-anova.html"><a href="repeated-measures-anova.html"><i class="fa fa-check"></i><b>10</b> Repeated-measures ANOVA</a></li>
-<li class="chapter" data-level="11" data-path="linear-mixed-effects-models.html"><a href="linear-mixed-effects-models.html"><i class="fa fa-check"></i><b>11</b> Linear mixed-effects models</a><ul>
+<li class="chapter" data-level="11" data-path="linear-mixed-effects-models.html"><a href="linear-mixed-effects-models.html"><i class="fa fa-check"></i><b>11</b> Linear mixed-effects models</a>
+<ul>
 <li class="chapter" data-level="11.1" data-path="linear-mixed-effects-models.html"><a href="linear-mixed-effects-models.html#non-independence-in-linear-models"><i class="fa fa-check"></i><b>11.1</b> Non-independence in linear models</a></li>
 <li class="chapter" data-level="11.2" data-path="linear-mixed-effects-models.html"><a href="linear-mixed-effects-models.html#random-intercept-models"><i class="fa fa-check"></i><b>11.2</b> Random intercept models</a></li>
 <li class="chapter" data-level="11.3" data-path="linear-mixed-effects-models.html"><a href="linear-mixed-effects-models.html#parameter-estimation-1"><i class="fa fa-check"></i><b>11.3</b> Parameter estimation</a></li>
 <li class="chapter" data-level="11.4" data-path="linear-mixed-effects-models.html"><a href="linear-mixed-effects-models.html#parameter-inference"><i class="fa fa-check"></i><b>11.4</b> Parameter inference</a></li>
 <li class="chapter" data-level="11.5" data-path="linear-mixed-effects-models.html"><a href="linear-mixed-effects-models.html#application-of-the-random-intercepts-model"><i class="fa fa-check"></i><b>11.5</b> Application of the random-intercepts model</a></li>
-<li class="chapter" data-level="11.6" data-path="linear-mixed-effects-models.html"><a href="linear-mixed-effects-models.html#models-with-random-intercepts-and-slopes"><i class="fa fa-check"></i><b>11.6</b> Models with random intercepts and slopes</a><ul>
+<li class="chapter" data-level="11.6" data-path="linear-mixed-effects-models.html"><a href="linear-mixed-effects-models.html#models-with-random-intercepts-and-slopes"><i class="fa fa-check"></i><b>11.6</b> Models with random intercepts and slopes</a>
+<ul>
 <li class="chapter" data-level="11.6.1" data-path="linear-mixed-effects-models.html"><a href="linear-mixed-effects-models.html#correlation-between-random-effects"><i class="fa fa-check"></i><b>11.6.1</b> Correlation between random effects</a></li>
 </ul></li>
 <li class="chapter" data-level="11.7" data-path="linear-mixed-effects-models.html"><a href="linear-mixed-effects-models.html#crossed-random-effects-dating-partners-in-the-speed-dating-experiment"><i class="fa fa-check"></i><b>11.7</b> Crossed random effects: dating partners in the speed dating experiment</a></li>
 <li class="chapter" data-level="11.8" data-path="linear-mixed-effects-models.html"><a href="linear-mixed-effects-models.html#choosing-the-random-effects-structure"><i class="fa fa-check"></i><b>11.8</b> Choosing the random effects structure</a></li>
 </ul></li>
-<li class="chapter" data-level="12" data-path="introduction-to-bayesian-hypothesis-testing.html"><a href="introduction-to-bayesian-hypothesis-testing.html"><i class="fa fa-check"></i><b>12</b> Introduction to Bayesian hypothesis testing</a><ul>
-<li class="chapter" data-level="12.1" data-path="introduction-to-bayesian-hypothesis-testing.html"><a href="introduction-to-bayesian-hypothesis-testing.html#fundamentals-of-bayesian-inference"><i class="fa fa-check"></i><b>12.1</b> Fundamentals of Bayesian inference</a><ul>
+<li class="chapter" data-level="12" data-path="introduction-to-bayesian-hypothesis-testing.html"><a href="introduction-to-bayesian-hypothesis-testing.html"><i class="fa fa-check"></i><b>12</b> Introduction to Bayesian hypothesis testing</a>
+<ul>
+<li class="chapter" data-level="12.1" data-path="introduction-to-bayesian-hypothesis-testing.html"><a href="introduction-to-bayesian-hypothesis-testing.html#fundamentals-of-bayesian-inference"><i class="fa fa-check"></i><b>12.1</b> Fundamentals of Bayesian inference</a>
+<ul>
 <li class="chapter" data-level="12.1.1" data-path="introduction-to-bayesian-hypothesis-testing.html"><a href="introduction-to-bayesian-hypothesis-testing.html#probability-in-times-of-covid"><i class="fa fa-check"></i><b>12.1.1</b> Probability in times of Covid</a></li>
 <li class="chapter" data-level="12.1.2" data-path="introduction-to-bayesian-hypothesis-testing.html"><a href="introduction-to-bayesian-hypothesis-testing.html#bayes-rule"><i class="fa fa-check"></i><b>12.1.2</b> Bayes’ rule</a></li>
 <li class="chapter" data-level="12.1.3" data-path="introduction-to-bayesian-hypothesis-testing.html"><a href="introduction-to-bayesian-hypothesis-testing.html#we-missed-you-paul"><i class="fa fa-check"></i><b>12.1.3</b> We missed you Paul!</a></li>
@@ -273,7 +309,8 @@
 </ul></li>
 <li class="chapter" data-level="12.2" data-path="introduction-to-bayesian-hypothesis-testing.html"><a href="introduction-to-bayesian-hypothesis-testing.html#a-bayesian-t-test"><i class="fa fa-check"></i><b>12.2</b> A Bayesian t-test</a></li>
 <li class="chapter" data-level="12.3" data-path="introduction-to-bayesian-hypothesis-testing.html"><a href="introduction-to-bayesian-hypothesis-testing.html#bayes-factors-for-general-linear-models"><i class="fa fa-check"></i><b>12.3</b> Bayes factors for General Linear Models</a></li>
-<li class="chapter" data-level="12.4" data-path="introduction-to-bayesian-hypothesis-testing.html"><a href="introduction-to-bayesian-hypothesis-testing.html#some-objections-to-null-hypothesis-significance-testing"><i class="fa fa-check"></i><b>12.4</b> Some objections to null-hypothesis significance testing</a><ul>
+<li class="chapter" data-level="12.4" data-path="introduction-to-bayesian-hypothesis-testing.html"><a href="introduction-to-bayesian-hypothesis-testing.html#some-objections-to-null-hypothesis-significance-testing"><i class="fa fa-check"></i><b>12.4</b> Some objections to null-hypothesis significance testing</a>
+<ul>
 <li class="chapter" data-level="12.4.1" data-path="introduction-to-bayesian-hypothesis-testing.html"><a href="introduction-to-bayesian-hypothesis-testing.html#the-p-value-is-not-a-proper-measure-of-evidential-support"><i class="fa fa-check"></i><b>12.4.1</b> The <span class="math inline">\(p\)</span>-value is not a proper measure of evidential support</a></li>
 <li class="chapter" data-level="12.4.2" data-path="introduction-to-bayesian-hypothesis-testing.html"><a href="introduction-to-bayesian-hypothesis-testing.html#the-p-value-depends-on-researcher-intentions"><i class="fa fa-check"></i><b>12.4.2</b> The <span class="math inline">\(p\)</span>-value depends on researcher intentions</a></li>
 <li class="chapter" data-level="12.4.3" data-path="introduction-to-bayesian-hypothesis-testing.html"><a href="introduction-to-bayesian-hypothesis-testing.html#results-of-a-nhst-are-often-misinterpreted"><i class="fa fa-check"></i><b>12.4.3</b> Results of a NHST are often misinterpreted</a></li>
@@ -281,13 +318,15 @@
 <li class="chapter" data-level="12.5" data-path="introduction-to-bayesian-hypothesis-testing.html"><a href="introduction-to-bayesian-hypothesis-testing.html#to-bayes-or-not-to-bayes-a-pragmatic-view"><i class="fa fa-check"></i><b>12.5</b> To Bayes or not to Bayes? A pragmatic view</a></li>
 <li class="chapter" data-level="12.6" data-path="introduction-to-bayesian-hypothesis-testing.html"><a href="introduction-to-bayesian-hypothesis-testing.html#summary-3"><i class="fa fa-check"></i><b>12.6</b> “Summary”</a></li>
 </ul></li>
-<li class="chapter" data-level="13" data-path="being-a-responsible-data-analyst.html"><a href="being-a-responsible-data-analyst.html"><i class="fa fa-check"></i><b>13</b> Being a responsible data analyst</a><ul>
+<li class="chapter" data-level="13" data-path="being-a-responsible-data-analyst.html"><a href="being-a-responsible-data-analyst.html"><i class="fa fa-check"></i><b>13</b> Being a responsible data analyst</a>
+<ul>
 <li class="chapter" data-level="13.1" data-path="being-a-responsible-data-analyst.html"><a href="being-a-responsible-data-analyst.html#consider-analysis-before-data-collection"><i class="fa fa-check"></i><b>13.1</b> Consider analysis before data collection</a></li>
 <li class="chapter" data-level="13.2" data-path="being-a-responsible-data-analyst.html"><a href="being-a-responsible-data-analyst.html#explore-the-data"><i class="fa fa-check"></i><b>13.2</b> Explore the data</a></li>
 <li class="chapter" data-level="13.3" data-path="being-a-responsible-data-analyst.html"><a href="being-a-responsible-data-analyst.html#evaluate-the-assumptions-underlying-your-analyses"><i class="fa fa-check"></i><b>13.3</b> Evaluate the assumptions underlying your analyses</a></li>
 <li class="chapter" data-level="13.4" data-path="being-a-responsible-data-analyst.html"><a href="being-a-responsible-data-analyst.html#distinguish-between-confirmatory-and-exploratory-analyses"><i class="fa fa-check"></i><b>13.4</b> Distinguish between confirmatory and exploratory analyses</a></li>
 <li class="chapter" data-level="13.5" data-path="being-a-responsible-data-analyst.html"><a href="being-a-responsible-data-analyst.html#aim-for-openness-and-reproducibility"><i class="fa fa-check"></i><b>13.5</b> Aim for openness and reproducibility</a></li>
-<li class="chapter" data-level="13.6" data-path="being-a-responsible-data-analyst.html"><a href="being-a-responsible-data-analyst.html#communicate-clearly-and-concisely"><i class="fa fa-check"></i><b>13.6</b> Communicate clearly and concisely</a><ul>
+<li class="chapter" data-level="13.6" data-path="being-a-responsible-data-analyst.html"><a href="being-a-responsible-data-analyst.html#communicate-clearly-and-concisely"><i class="fa fa-check"></i><b>13.6</b> Communicate clearly and concisely</a>
+<ul>
 <li class="chapter" data-level="13.6.1" data-path="being-a-responsible-data-analyst.html"><a href="being-a-responsible-data-analyst.html#example-of-reporting-a-multiple-regression-analysis"><i class="fa fa-check"></i><b>13.6.1</b> Example of reporting a multiple regression analysis</a></li>
 <li class="chapter" data-level="13.6.2" data-path="being-a-responsible-data-analyst.html"><a href="being-a-responsible-data-analyst.html#example-of-reporting-a-factorial-anova"><i class="fa fa-check"></i><b>13.6.2</b> Example of reporting a factorial ANOVA</a></li>
 </ul></li>
@@ -310,25 +349,25 @@
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="being-a-responsible-data-analyst" class="section level1">
+<div id="being-a-responsible-data-analyst" class="section level1" number="13">
 <h1><span class="header-section-number">Chapter 13</span> Being a responsible data analyst</h1>
-<p>In this chapter, we will consider some general principles which will hopefully allow you to be a good and responsible “data science citizen”. In the preceding chapters, we have covered just a small set of the possible statistical models which you can apply to data, and which allow you to test hypotheses about important characteristics of the Data Generating Process. My aim has been – and is – to provide you with the knowledge and tools to be flexible in your approach to data analysis problems, and to choose the model of the Data Generating Process that is suitable for your goals and the characteristics of the process that provided the data. I have not given you a set of rules to follow blindly, because this would be restrictive and pointless. In the end, it is up to you to decide how to approach a problem. That freedom is perhaps both a gift and a curse. Just like coming up with a useful and explanatory theory, or designing an informative study, coming up with a useful way to analyse the resulting data is often not an easy task. It will require a good knowledge of the possibilities and limitations of various statistical analyses. Such knowledge generally comes with practice. Keep an open mind and keep learning. You will undoubtedly make mistakes along the way. We all do!</p>
-<p>In the following, I aim to provide some general suggestions and tips which may help to avoid some of these mistakes. And if not avoided, they may help you document and learn from your mistakes. This chapter is really about the ethics of data analysis, and my suggestions can be roughly summarized as: “be honest to yourself and your audience”.</p>
-<div id="consider-analysis-before-data-collection" class="section level2">
+<p>In this chapter, we will consider some general principles which will hopefully allow you to be a good and responsible “data science citizen.” In the preceding chapters, we have covered just a small set of the possible statistical models which you can apply to data, and which allow you to test hypotheses about important characteristics of the Data Generating Process. My aim has been – and is – to provide you with the knowledge and tools to be flexible in your approach to data analysis problems, and to choose the model of the Data Generating Process that is suitable for your goals and the characteristics of the process that provided the data. I have not given you a set of rules to follow blindly, because this would be restrictive and pointless. In the end, it is up to you to decide how to approach a problem. That freedom is perhaps both a gift and a curse. Just like coming up with a useful and explanatory theory, or designing an informative study, coming up with a useful way to analyse the resulting data is often not an easy task. It will require a good knowledge of the possibilities and limitations of various statistical analyses. Such knowledge generally comes with practice. Keep an open mind and keep learning. You will undoubtedly make mistakes along the way. We all do!</p>
+<p>In the following, I aim to provide some general suggestions and tips which may help to avoid some of these mistakes. And if not avoided, they may help you document and learn from your mistakes. This chapter is really about the ethics of data analysis, and my suggestions can be roughly summarized as: “be honest to yourself and your audience.”</p>
+<div id="consider-analysis-before-data-collection" class="section level2" number="13.1">
 <h2><span class="header-section-number">13.1</span> Consider analysis before data collection</h2>
 <p>Before you embark on a study, you should give consideration to how you will analyse the data. How will you test the main hypotheses of interest? Will the data you collect be sufficiently informative for your goals? When designing a study, there are many choices to make: How many participants will you test? Will experimental manipulations be “within” participants, or “between” participants? What will you manipulate? Will you use a double-blind procedure? What are the outcome measures? These choices will ultimately decide what you can conclude from a study. But that also depends, at least partly, on the analysis you will use.</p>
 <p>Ideally, experimental design and statistical analysis go hand in hand. If you can make reasonably precise predictions regarding participants’ behaviour from your theory, you can use simulation to generate possible datasets, and assess to what extent your proposed analyses will reflect your theoretical predictions. When possible, you can and should use this to conduct an <strong>a priori power analysis</strong> for your hypothesis tests. Unfortunately, when you’re not conducting a replication of an earlier study, this is often difficult, to say the least. Without prior research or precise process models linking sensory input to observable output (i.e. behavioural responses), making precise numerical predictions about effects of manipulations on behavioural/cognitive/perceptual tasks or self-report measures is pretty much impossible. Personally, I don’t think making predictions on standardized effect-size measures, as is generally done in a priori power analysis, is any easier. Dividing a predicted effect by the expected noise is not any easier than considering both separately. That said, it is useful to determine which effect size will provide you with e.g. a power of <span class="math inline">\(P(\text{reject } H_0| H_0 \text{ false}) = .8\)</span> with a planned number of participants. If that effect size seems unreasonably large, you may want to reconsider running the study as planned, and recruit more participants or simplify the design. If at all possible, I would advise on running a small pilot study, so you can get a sense of the data that you might get. You can use this pilot data as a basis to simulate larger datasets to assess the possible results of a full study.</p>
 <p>In the absence of pilot data, there are some general considerations which can increase the power of hypothesis tests for a study. Initially, try to keep analyses <strong>as simple as possible</strong>. When resources are limited, it may be better to choose reliability over generalizability. Focus on a single main effect, rather than including all possible moderators in a complicated design. Those moderators can be looked at later, after you have assessed that a main effect is actually relevant. Generally, a two-group comparison is more powerful than a <span class="math inline">\(k\)</span>-group comparison. And when considering possible measurements of that effect, choose the most precise possible. Generally, (almost) continuous dependent variables are more powerful than discrete ones.</p>
 </div>
-<div id="explore-the-data" class="section level2">
+<div id="explore-the-data" class="section level2" number="13.2">
 <h2><span class="header-section-number">13.2</span> Explore the data</h2>
-<p>Before viewing your data through the lens of a statistical model, get a sense of what the “raw data” looks like. Visual exploration, whether through raincloud plots, histograms, or boxplots, is very useful in this respect. Outliers and otherwise unusual data points are of particular concern, as they may have a dramatic impact on the results of further analyses. Removal of outliers should be done carefully and with reason. There is always a danger of “fitting the data to your hypothesis”. I tend to always run analyses with all data and with the “cleaned” data after removal of outliers. If the results are robust against the outliers, I tend to report the results with the full dataset. If the results are substantially affected by outliers, I mainly focus on the results of the analyses after removal of outliers, but report the results for the full data in e.g. an appendix or supporting materials. This will allow your audience to make up their own mind. Another important consideration is homogeneity of variance, although this is often best assessed within the context of a particular statistical model. Missing data is important too. If some conditions in an experiment lead to substantially more missing data than others, this can indicate that there is a problem in the design, where data is not “missing at random”. For instance, if you were to assess the effects of a new medicine, and all participants for whom the medicine had an adverse effect on their health were to drop out of a study, the results of the study would be obviously biased.</p>
+<p>Before viewing your data through the lens of a statistical model, get a sense of what the “raw data” looks like. Visual exploration, whether through raincloud plots, histograms, or boxplots, is very useful in this respect. Outliers and otherwise unusual data points are of particular concern, as they may have a dramatic impact on the results of further analyses. Removal of outliers should be done carefully and with reason. There is always a danger of “fitting the data to your hypothesis.” I tend to always run analyses with all data and with the “cleaned” data after removal of outliers. If the results are robust against the outliers, I tend to report the results with the full dataset. If the results are substantially affected by outliers, I mainly focus on the results of the analyses after removal of outliers, but report the results for the full data in e.g. an appendix or supporting materials. This will allow your audience to make up their own mind. Another important consideration is homogeneity of variance, although this is often best assessed within the context of a particular statistical model. Missing data is important too. If some conditions in an experiment lead to substantially more missing data than others, this can indicate that there is a problem in the design, where data is not “missing at random.” For instance, if you were to assess the effects of a new medicine, and all participants for whom the medicine had an adverse effect on their health were to drop out of a study, the results of the study would be obviously biased.</p>
 </div>
-<div id="evaluate-the-assumptions-underlying-your-analyses" class="section level2">
+<div id="evaluate-the-assumptions-underlying-your-analyses" class="section level2" number="13.3">
 <h2><span class="header-section-number">13.3</span> Evaluate the assumptions underlying your analyses</h2>
-<p>In most of the analyses covered here, which were (extensions of) the General Linear Model, we assumed the residuals were independent and Normal-distributed with a mean of 0 and a constant standard deviation <span class="math inline">\(\sigma_\epsilon\)</span>. A Normal distribution concerns continuous variables, and in reality, we do not have infinite precision in measurement. Hence, the assumption of continuity is strictly false. That doesn’t necessarily mean that the General Linear Model is invalid. As long as the assumptions are approximately true, we can quite safely use the GLM without worrying that the assumed Type 1 error (if staying within a Frequentist viewpoint) is far from the actual Type 1 error rate. “Approximately true” is obviously a vague statement. The general consensus is that ANOVAs are reasonably robust against deviations from Normal-distributed errors, and when sample sizes are equal, also to violations of homoscedasticity <span class="citation">(see Lix, Keselman, &amp; Keselman, <a href="#ref-lix1996consequences">1996</a>; Maxwell et al., <a href="#ref-maxwell2017designing">2017</a>)</span>. Regarding potential heteroscedasticity, <span class="citation">Maxwell et al. (<a href="#ref-maxwell2017designing">2017</a>)</span> offer the following advice: in a one-way ANOVA model with equal sample sizes, you may stick to the standard <span class="math inline">\(F\)</span> test if the ratio of the largest sample variance <span class="math inline">\(S^2_\text{max}\)</span> to the smallest sample variance <span class="math inline">\(S^2_\text{min}\)</span> is smaller than 4, i.e. <span class="math inline">\(\frac{S^2_\text{max}}{S^2_\text{min}} &lt; 4\)</span>. When sample sizes are unequal, things become a little more complicated. The suggestion is to also take the ratio of the sample size in the largest group, <span class="math inline">\(n_\text{max}\)</span> to the sample size of the smallest group, <span class="math inline">\(n_\text{min}\)</span> into account, and stick to the standard <span class="math inline">\(F\)</span> test whenever
+<p>In most of the analyses covered here, which were (extensions of) the General Linear Model, we assumed the residuals were independent and Normal-distributed with a mean of 0 and a constant standard deviation <span class="math inline">\(\sigma_\epsilon\)</span>. A Normal distribution concerns continuous variables, and in reality, we do not have infinite precision in measurement. Hence, the assumption of continuity is strictly false. That doesn’t necessarily mean that the General Linear Model is invalid. As long as the assumptions are approximately true, we can quite safely use the GLM without worrying that the assumed Type 1 error (if staying within a Frequentist viewpoint) is far from the actual Type 1 error rate. “Approximately true” is obviously a vague statement. The general consensus is that ANOVAs are reasonably robust against deviations from Normal-distributed errors, and when sample sizes are equal, also to violations of homoscedasticity <span class="citation">(see <a href="references.html#ref-lix1996consequences" role="doc-biblioref">Lix et al., 1996</a>; <a href="references.html#ref-maxwell2017designing" role="doc-biblioref">Maxwell et al., 2017</a>)</span>. Regarding potential heteroscedasticity, <span class="citation"><a href="references.html#ref-maxwell2017designing" role="doc-biblioref">Maxwell et al.</a> (<a href="references.html#ref-maxwell2017designing" role="doc-biblioref">2017</a>)</span> offer the following advice: in a one-way ANOVA model with equal sample sizes, you may stick to the standard <span class="math inline">\(F\)</span> test if the ratio of the largest sample variance <span class="math inline">\(S^2_\text{max}\)</span> to the smallest sample variance <span class="math inline">\(S^2_\text{min}\)</span> is smaller than 4, i.e. <span class="math inline">\(\frac{S^2_\text{max}}{S^2_\text{min}} &lt; 4\)</span>. When sample sizes are unequal, things become a little more complicated. The suggestion is to also take the ratio of the sample size in the largest group, <span class="math inline">\(n_\text{max}\)</span> to the sample size of the smallest group, <span class="math inline">\(n_\text{min}\)</span> into account, and stick to the standard <span class="math inline">\(F\)</span> test whenever
 <span class="math display">\[\frac{n_\text{max}}{n_\text{min}} \times \frac{S^2_\text{max}}{S^2_\text{min}} &lt; 4\]</span>
-When the ratio is larger than 4, you could decide to use an alternative test, such as the Brown-Forsythe or the Welch test <span class="citation">(see e.g. Tomarken &amp; Serlin, <a href="#ref-tomarken1986comparison">1986</a>)</span>. When the variance of a dependent variable increases with the mean, it may also be possible to transform the dependent variable using e.g. a logarithmic or square-root transformation. Such a relation between the mean value and the variance is often found for response times. Tasks which require relatively little time tend to show less variation between people or between occasions than tasks that require more time to complete. It is quite standard to analyse <span class="math inline">\(\log(\text{RT})\)</span> rather than “raw” RTs. But a transformation is not always necessary. One issue with transforming the dependent variable is that it will change the relation between predictors and the DV. If a relation is linear between a predictor and the dependent variable, the relation between the predictor and the transformed dependent variable will be nonlinear. This is not a concern in pure ANOVA type models, but may prove a thorny issue in linear regression models. Transformation of variables is therefore something that should be considered carefully. Determining the correct base of the logarithm to achieve the desired result of homogenising the variance can also be tricky. Some common transformations are provided in Table <a href="being-a-responsible-data-analyst.html#tab:common-data-transformations">13.1</a>. A general technique which aims to help you determine the appropriate transformation function is the so-called Box-Cox transformation <span class="citation">(see e.g. Sakia, <a href="#ref-sakia1992box">1992</a>)</span>.</p>
+When the ratio is larger than 4, you could decide to use an alternative test, such as the Brown-Forsythe or the Welch test <span class="citation">(see e.g. <a href="references.html#ref-tomarken1986comparison" role="doc-biblioref">Tomarken &amp; Serlin, 1986</a>)</span>. When the variance of a dependent variable increases with the mean, it may also be possible to transform the dependent variable using e.g. a logarithmic or square-root transformation. Such a relation between the mean value and the variance is often found for response times. Tasks which require relatively little time tend to show less variation between people or between occasions than tasks that require more time to complete. It is quite standard to analyse <span class="math inline">\(\log(\text{RT})\)</span> rather than “raw” RTs. But a transformation is not always necessary. One issue with transforming the dependent variable is that it will change the relation between predictors and the DV. If a relation is linear between a predictor and the dependent variable, the relation between the predictor and the transformed dependent variable will be nonlinear. This is not a concern in pure ANOVA type models, but may prove a thorny issue in linear regression models. Transformation of variables is therefore something that should be considered carefully. Determining the correct base of the logarithm to achieve the desired result of homogenising the variance can also be tricky. Some common transformations are provided in Table <a href="being-a-responsible-data-analyst.html#tab:common-data-transformations">13.1</a>. A general technique which aims to help you determine the appropriate transformation function is the so-called Box-Cox transformation <span class="citation">(see e.g. <a href="references.html#ref-sakia1992box" role="doc-biblioref">Sakia, 1992</a>)</span>.</p>
 <table>
 <caption><span id="tab:common-data-transformations">Table 13.1: </span> Some common transformations for the dependent variable in linear models.</caption>
 <colgroup>
@@ -369,23 +408,23 @@ When the ratio is larger than 4, you could decide to use an alternative test, su
 <p>Violation of the assumption of independent errors is much more problematic than a violation of Normality or homoscedasticity. This requires the use of an appropriate model (e.g. a linear mixed-effects model) that properly accounts for the dependence in the data.</p>
 <p>While there are many formal statistical tests to assess whether the assumption of Normality (e.g. the Shapiro-Wilk test, or the Kolmogorov-Smirnov test) or homoscedasticity (e.g. the Levene test) holds, I don’t advice the judicious use of these tests. A main issue here is that if you have a sufficient sample size, such tests can become very powerful, and will often result in a rejection of the null hypothesis of a Normal distribution or homoscedasticity, even if the departure from these assumptions is only slight and hence not anything to really worry about. Relying on graphical procedures to detect substantial departures is generally more sensible.</p>
 </div>
-<div id="distinguish-between-confirmatory-and-exploratory-analyses" class="section level2">
+<div id="distinguish-between-confirmatory-and-exploratory-analyses" class="section level2" number="13.4">
 <h2><span class="header-section-number">13.4</span> Distinguish between confirmatory and exploratory analyses</h2>
-<p>When embarking on a data analysis journey, you will often take a planned route, but also take some unplanned paths. It is important to distinguish between these, as unplanned routes may have been led by random noise or other idiosyncrasies in the dataset collected. Andrew Gelman quite nicely describes the various choices made during an analysis as a “garden of forking paths” <span class="citation">(Gelman &amp; Loken, <a href="#ref-gelman2013garden">2013</a>)</span>. Other authors talk of “researcher degrees of freedom” <span class="citation">(Simmons et al., <a href="#ref-simmons2011false">2011</a>)</span>. Consider the following hypothetical example:</p>
+<p>When embarking on a data analysis journey, you will often take a planned route, but also take some unplanned paths. It is important to distinguish between these, as unplanned routes may have been led by random noise or other idiosyncrasies in the dataset collected. Andrew Gelman quite nicely describes the various choices made during an analysis as a “garden of forking paths” <span class="citation">(<a href="references.html#ref-gelman2013garden" role="doc-biblioref">Gelman &amp; Loken, 2013</a>)</span>. Other authors talk of “researcher degrees of freedom” <span class="citation">(<a href="references.html#ref-simmons2011false" role="doc-biblioref">Simmons et al., 2011</a>)</span>. Consider the following hypothetical example:</p>
 <blockquote>
 <p>A researcher is interested in differences between Democrats and Republicans in how they perform in a short mathematics test when it is expressed in two different contexts, either involving health care or the military. The research hypothesis is that context matters, and one would expect Democrats to do better in the health-care context and Republicans in the military context. Party identification measured on a standard 7-point scale and various demographic information also available. At this point there is a huge number of possible comparisons that can be performed–all consistent with the data. For example, the pattern could be found (with statistical significance) among men and not among women–explicable under the theory that men are more ideological than women. Or the pattern could be found among women but not among men–explicable under the theory that women are more sensitive to context, compared to men. Or the pattern could be statistically significant for neither group, but the difference could be significant (still fitting the theory, as described above). Or the effect might only appear among men who are being asked the questions by female interviewers. We might see a difference between sexes in the health-care context but not the military context; this would make sense given that health care is currently a highly politically salient issue and the military is not. There are degrees of freedom in the classification of respondents into Democrats and Republicans from a 7-point scale. And how are independents and nonpartisans handled? They could be excluded entirely. Or perhaps the key pattern is between partisans and nonpartisans? And so on.<br />
-<span class="citation">(Gelman &amp; Loken, <a href="#ref-gelman2013garden">2013</a>, p. 3)</span></p>
+<span class="citation">(<a href="references.html#ref-gelman2013garden" role="doc-biblioref">Gelman &amp; Loken, 2013, p. 3</a>)</span></p>
 </blockquote>
-<p>As this example illustrates, there are many potential ways to show evidence for a seemingly straightforward hypothesis regarding an interaction between political affiliation and context, each which can be justified by theory. An unscrupulous analyst hunting for a significant result might try all these, and choose to report just the comparison with the strongest test result. This is also called “p-hacking” <span class="citation">(Simmons et al., <a href="#ref-simmons2011false">2011</a>)</span>, and will result in a proliferation of Type 1 errors in the scientific literature. But even highly conscientious analysts can be led astray when allowing hypothesis tests to be inspired by patterns in the data. The results of unplanned analyses that were inspired by other analyses should be treated with caution. Data is inherently noisy, and patterns which may seem obvious and easy to provide a post-hoc explanation for are noisy too. Whilst Bayesian hypothesis testing is sometimes portrayed as being immune to researcher intentions, this holds really just for confirmatory analyses where the priors are determined before data collection. Bayesian analyses, like Frequentist ones, can be “hacked” too <span class="citation">(Simonsohn, <a href="#ref-simonsohn2014posterior">2014</a>)</span>.</p>
-<p>To diminish the likelihood of being led astray, it is important to clearly distinguish between confirmatory and exploratory analyses. Confirmatory analyses are those that are planned before seeing the data. To be truly confirmatory, you should not only decide exactly which particular model to use, and which parameters to test, but also what exclusion criteria (if any) to apply to data points (e.g., what are considered to be outliers). If all is decided before seeing the data, these confirmatory analyses can be preregistered. Such preregistration is useful because by committing to a particular analysis, you avoid the temptation to deviate from your initial plans in seemingly innocuous ways, which nevertheless will increase the chance of Type 1 errors. Preregistration of analyses does not preclude further exploratory analyses. But these can then be clearly identified as such, and their results treated with the additional caution they deserve. When you don’t have pilot data, preregistration is difficult however, as there are often unforeseen issues in the data (e.g., heteroscedasticity which may require a transformation of the data, or unforeseen outliers). In responding to such unforeseen issues, it may be necessary to change the planned analyses which in principle would render them “exploratory”. I don’t think it is always necessary to be this strict. But it will be up to the analyst to provide a strong justification for the deviation from the analysis plan. Simply providing such a justification is already a substantial advance over not clearly identifying data-driven choices which may have affected the results.</p>
+<p>As this example illustrates, there are many potential ways to show evidence for a seemingly straightforward hypothesis regarding an interaction between political affiliation and context, each which can be justified by theory. An unscrupulous analyst hunting for a significant result might try all these, and choose to report just the comparison with the strongest test result. This is also called “p-hacking” <span class="citation">(<a href="references.html#ref-simmons2011false" role="doc-biblioref">Simmons et al., 2011</a>)</span>, and will result in a proliferation of Type 1 errors in the scientific literature. But even highly conscientious analysts can be led astray when allowing hypothesis tests to be inspired by patterns in the data. The results of unplanned analyses that were inspired by other analyses should be treated with caution. Data is inherently noisy, and patterns which may seem obvious and easy to provide a post-hoc explanation for are noisy too. Whilst Bayesian hypothesis testing is sometimes portrayed as being immune to researcher intentions, this holds really just for confirmatory analyses where the priors are determined before data collection. Bayesian analyses, like Frequentist ones, can be “hacked” too <span class="citation">(<a href="references.html#ref-simonsohn2014posterior" role="doc-biblioref">Simonsohn, 2014</a>)</span>.</p>
+<p>To diminish the likelihood of being led astray, it is important to clearly distinguish between confirmatory and exploratory analyses. Confirmatory analyses are those that are planned before seeing the data. To be truly confirmatory, you should not only decide exactly which particular model to use, and which parameters to test, but also what exclusion criteria (if any) to apply to data points (e.g., what are considered to be outliers). If all is decided before seeing the data, these confirmatory analyses can be preregistered. Such preregistration is useful because by committing to a particular analysis, you avoid the temptation to deviate from your initial plans in seemingly innocuous ways, which nevertheless will increase the chance of Type 1 errors. Preregistration of analyses does not preclude further exploratory analyses. But these can then be clearly identified as such, and their results treated with the additional caution they deserve. When you don’t have pilot data, preregistration is difficult however, as there are often unforeseen issues in the data (e.g., heteroscedasticity which may require a transformation of the data, or unforeseen outliers). In responding to such unforeseen issues, it may be necessary to change the planned analyses which in principle would render them “exploratory.” I don’t think it is always necessary to be this strict. But it will be up to the analyst to provide a strong justification for the deviation from the analysis plan. Simply providing such a justification is already a substantial advance over not clearly identifying data-driven choices which may have affected the results.</p>
 </div>
-<div id="aim-for-openness-and-reproducibility" class="section level2">
+<div id="aim-for-openness-and-reproducibility" class="section level2" number="13.5">
 <h2><span class="header-section-number">13.5</span> Aim for openness and reproducibility</h2>
 <p>In clearly distinguishing between confirmatory and exploratory analyses, you will be honest to yourself and to your audience. You should be open about the choices you have made when analysing the data, and why you made them. This will allow your audience to determine whether they agree with your choices, or not, and hence whether they would likely reach the same conclusions as you. Transparency and openness are extremely important principles in the scientific process. Where possible, you should make the data of studies publicly accessible, so that other scientists have the opportunity to perform their own analyses or to combine data to perform meta-analyses. When sharing the data, it is also very useful to share your analysis scripts (or e.g. JASP output file), so that other researchers can exactly replicate your results. By sharing your full analysis scripts, you provide a clear document of the process that transformed the raw data as collected to the results presented in a scientific manuscript. This is not only of benefit to other scientists, but also to yourself. In some months or years after performing your analyses, you will often forget some of the details. And scripts tend to get lost if not stored safely and permanently on an external server. There are useful and freely accessible platforms such as the Open Science Framework (<a href="https://osf.iof" class="uri">https://osf.iof</a>), figshare (<a href="https://figshare.com/" class="uri">https://figshare.com/</a>), and Zenodo (<a href="https://zenodo.org/" class="uri">https://zenodo.org/</a>), which are specifically designed to openly share research outputs such as data and analysis scripts. Another popular choice is github (<a href="https://github.com/" class="uri">https://github.com/</a>).</p>
 </div>
-<div id="communicate-clearly-and-concisely" class="section level2">
+<div id="communicate-clearly-and-concisely" class="section level2" number="13.6">
 <h2><span class="header-section-number">13.6</span> Communicate clearly and concisely</h2>
-<p>When writing up the results of statistical analyses, you should aim for clarity and conciseness. Provide all the relevant details of statistical analyses. The American Psychological Association (APA) provides extensive guidelines for reporting results of psychological studies in the APA publication manual <span class="citation">(American Psychological Association, <a href="#ref-apa2020publication">2020</a>)</span>. Some of the APA rules can be a little tedious, but they are meant to provide standards to make scientific communication effective. A useful summary of the main APA style guide can be found <a href="https://owl.purdue.edu/owl/research_and_citation/apa_style/apa_formatting_and_style_guide/apa_sample_paper.html">here</a> and brief guidelines on reporting numbers and statistics can be found <a href="https://apastyle.apa.org/instructional-aids/numbers-statistics-guide.pdf">here</a>. Andy Fields has also written a useful <a href="https://www.discoveringstatistics.com/docs/writinglabreports.pdf">guide to writing research reports</a>.</p>
+<p>When writing up the results of statistical analyses, you should aim for clarity and conciseness. Provide all the relevant details of statistical analyses. The American Psychological Association (APA) provides extensive guidelines for reporting results of psychological studies in the APA publication manual <span class="citation">(<a href="references.html#ref-apa2020publication" role="doc-biblioref">American Psychological Association, 2020</a>)</span>. Some of the APA rules can be a little tedious, but they are meant to provide standards to make scientific communication effective. A useful summary of the main APA style guide can be found <a href="https://owl.purdue.edu/owl/research_and_citation/apa_style/apa_formatting_and_style_guide/apa_sample_paper.html">here</a> and brief guidelines on reporting numbers and statistics can be found <a href="https://apastyle.apa.org/instructional-aids/numbers-statistics-guide.pdf">here</a>. Andy Fields has also written a useful <a href="https://www.discoveringstatistics.com/docs/writinglabreports.pdf">guide to writing research reports</a>.</p>
 <p>Here are some of my recommendations for describing analyses in the results section of a paper. They are mostly consistent with the APA guidelines, although I must admit the last version of the APA publication manual I read was the 5th edition from 2001.</p>
 <p>I will start by listing some general guidelines, and then provide two example write-ups, one for the multiple regression analysis that we focused on in Chapter <a href="ch-multiple-regression.html#ch-multiple-regression">5</a>, and another for the factorial ANOVA that we focused on in Chapter <a href="ch-factorial-ANOVA.html#ch-factorial-ANOVA">8</a>.</p>
 <ol style="list-style-type: decimal">
@@ -397,64 +436,37 @@ When the ratio is larger than 4, you could decide to use an alternative test, su
 <li>Describe what the effects mean in terms of the dependent variable. For instance, in a multiple regression model, you should indicate what a significant slope indicates in terms of increasing or decreasing the (predicted value of the) dependent variable. For main effects in an ANOVA model, you should describe what a significant effect indicates about the (marginal) means of the dependent variable.</li>
 <li>When the interpretation of a test result is not immediately clear (e.g. for an omnibus test in an ANOVA), describe the appropriate follow-up tests which provide clarity about the interpretation of that test result.</li>
 </ol>
-<div id="example-of-reporting-a-multiple-regression-analysis" class="section level3">
+<div id="example-of-reporting-a-multiple-regression-analysis" class="section level3" number="13.6.1">
 <h3><span class="header-section-number">13.6.1</span> Example of reporting a multiple regression analysis</h3>
 <p>An example of how I might communicate the results of the multiple regression analysis conducted to determine the effect of hate groups on votes for Donald Trumpm is as follows:</p>
 <blockquote>
 <p>To determine the effect of hate groups on votes for Donald Trump in the 2016 US elections, we conducted a multiple regression analysis. The dependent variable was the percentage of votes for Donald Trump in each of the <span class="math inline">\(n=50\)</span> US states, and to account for variations in the size of the population of each state, the number of hate groups was measured per million citizens. As education level is expected to be related to voting behaviour, the regression model also included a measure of education level (as the percentage of citizens with a Bachelors degree or higher) as an additional predictor. This allowed us to determine the unique effect of hate groups on voting behaviour whilst controlling for the possibly confounding effect of education. Pairwise plots depicting the pairwise relations between percentage Trump votes, number of hate groups, and education level, are shown in Figure <a href="being-a-responsible-data-analyst.html#fig:example-multiple-regression-write-up-plot">13.1</a>. The model accounted for a significant proportion of the variance of voting behaviour (<span class="math inline">\(R^2 = .58\)</span>, <span class="math inline">\(F(2, 47) = 33.06\)</span>, <span class="math inline">\(p &lt; .001\)</span>). The analysis showed a significant unique effect of hate groups on votes for Donald Trump (<span class="math inline">\(b = 1.31\)</span>, 95% CI <span class="math inline">\([0.29\)</span>, <span class="math inline">\(2.34]\)</span>, <span class="math inline">\(t(47) = 2.58\)</span>, <span class="math inline">\(p = .013\)</span>). For every additional hate group per million citizens, votes for Donald Trump are predicted to increase by 1.31%. In addition, the analysis showed a significant effect of education level (<span class="math inline">\(b = -1.22\)</span>, 95% CI <span class="math inline">\([-1.59\)</span>, <span class="math inline">\(-0.85]\)</span>, <span class="math inline">\(t(47) = -6.63\)</span>, <span class="math inline">\(p &lt; .001\)</span>). For every additional one percent of citizens with at least a Bachelor’s degree, votes for Donald Trump are predicted to decrease by 1.22%.</p>
 </blockquote>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:example-multiple-regression-write-up-plot"></span>
+<div class="figure" style="text-align: center"><span id="fig:example-multiple-regression-write-up-plot"></span>
 <img src="_main_files/figure-html/example-multiple-regression-write-up-plot-1.svg" alt="Pairwise scatterplots, nonparametric density plots, and pairwise correlations for the percentage of votes for Donald Trump, hate groups (per million citizens) and education level ($\text{\%}$ of citizens with a Bachelors degree or higher)." width="95%" />
 <p class="caption">
 Figure 13.1: Pairwise scatterplots, nonparametric density plots, and pairwise correlations for the percentage of votes for Donald Trump, hate groups (per million citizens) and education level (<span class="math inline">\(\text{\%}\)</span> of citizens with a Bachelors degree or higher).
 </p>
 </div>
 </div>
-<div id="example-of-reporting-a-factorial-anova" class="section level3">
+<div id="example-of-reporting-a-factorial-anova" class="section level3" number="13.6.2">
 <h3><span class="header-section-number">13.6.2</span> Example of reporting a factorial ANOVA</h3>
 <p>An example of how I might communicate the results of the factorial ANOVA assessing the effects of power prime and experimenter belief on approach advantage scores, is as follows:</p>
 <blockquote>
 <p>To assess the effect of power prime and experimenter belief on participants’ speed in approaching and avoiding virtual targets, a 2 (power prime: low power vs high power) by 2 (experimenter belief: low power vs high power) factorial ANOVA was conducted. The dependent variable was the “approach advantage” score, computed as the difference in the average time (in milliseconds) between to making an approach vs an avoid response. The approach advantage scores in the four conditions are depicted in Figure <a href="being-a-responsible-data-analyst.html#fig:example-factorial-ANOVA-write-up-plot">13.2</a>. The analysis showed a significant main effect of experimenter belief (<span class="math inline">\(F(1, 396) = 17.82\)</span>, <span class="math inline">\(\mathit{MSE} = 45,974.87\)</span>, <span class="math inline">\(p &lt; .001\)</span>, <span class="math inline">\(\hat{\eta}^2_p = .043\)</span>). The approach advantage score was higher when the experimenter was made to believe participants were provided with a high power prime (<span class="math inline">\(M = 66.72\)</span>) compared to when they were made to believe participants were provided with a low power prime (<span class="math inline">\(M = -23.79\)</span>). The main effect of power prime was not significant (<span class="math inline">\(F(1, 396) = 0.31\)</span>, <span class="math inline">\(\mathit{MSE} = 45,974.87\)</span>, <span class="math inline">\(p = .577\)</span>, <span class="math inline">\(\hat{\eta}^2_p = .001\)</span>). The interaction between experimenter belief and power prime was also not significant (<span class="math inline">\(F(1, 396) = 0.77\)</span>, <span class="math inline">\(\mathit{MSE} = 45,974.87\)</span>, <span class="math inline">\(p = .381\)</span>, <span class="math inline">\(\hat{\eta}^2_p = .002\)</span>).</p>
 </blockquote>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:example-factorial-ANOVA-write-up-plot"></span>
+<div class="figure" style="text-align: center"><span id="fig:example-factorial-ANOVA-write-up-plot"></span>
 <img src="_main_files/figure-html/example-factorial-ANOVA-write-up-plot-1.svg" alt="Approach advantage scores by Experimenter belief and Power prime. Means and $\text{95\%}$ confidence intervals are shown as black dots and bands respectively. Raw data points are shown in grey." width="95%" />
 <p class="caption">
 Figure 13.2: Approach advantage scores by Experimenter belief and Power prime. Means and <span class="math inline">\(\text{95\%}\)</span> confidence intervals are shown as black dots and bands respectively. Raw data points are shown in grey.
 </p>
 </div>
-<p>The APA guidelines indicate that the results section should detail the results of statistical analyses in an “objective” manner, without directly noting what they imply in terms of support for your theory. While you should avoid statements such as “This clearly shows our theory is true”, it is good practice to provide some guidance on how to interpret the results. In the above, I tried to clearly indicate what a significant effect indicates in terms of the marginal means of the the dependent variable. This is good practice, and does not mention anything about a theory. In addition, it is fine to add qualifiers like “As predicted, …” in the results section. More general evaluation of the evidence for your theory is generally left to the Discussion section of manuscripts, however. So in the discussion, we might interpret the results of this analysis:</p>
+<p>The APA guidelines indicate that the results section should detail the results of statistical analyses in an “objective” manner, without directly noting what they imply in terms of support for your theory. While you should avoid statements such as “This clearly shows our theory is true,” it is good practice to provide some guidance on how to interpret the results. In the above, I tried to clearly indicate what a significant effect indicates in terms of the marginal means of the the dependent variable. This is good practice, and does not mention anything about a theory. In addition, it is fine to add qualifiers like “As predicted, …” in the results section. More general evaluation of the evidence for your theory is generally left to the Discussion section of manuscripts, however. So in the discussion, we might interpret the results of this analysis:</p>
 <blockquote>
 <p>The results of our analysis clearly show that experimenter beliefs have an effect on participants’ behaviour. When experimenters believed participants were primed to take a high- or low-power role, those participants behaved according to the expectations from social priming theory. However, the actual prime provided to participants appeared to have little effect on their behaviour. This suggests that previous results might be due to experimenter expectations, rather than a direct effect of the power priming manipulations on participants’ behaviour. The precise mechanism by which experimenter expectations influence participants’ behaviour may be subtle and were not directly addressed in this study. If anything, our results indicate that future investigations of power priming should adopt a double-blind procedure, where neither participants nor experimenters are aware of the condition assigned to participants.</p>
 </blockquote>
 
 </div>
-</div>
-</div>
-<h3>References</h3>
-<div id="refs" class="references">
-<div id="ref-apa2020publication">
-<p>American Psychological Association. (2020). <em>Publication manual of the American Psychological Association</em> (7th ed). Washington, DC: American Psychological Association.</p>
-</div>
-<div id="ref-gelman2013garden">
-<p>Gelman, A., &amp; Loken, E. (2013). <em>The garden of forking paths: Why multiple comparisons can be a problem, even when there is no "fishing expedition" or "p-hacking" and the research hypothesis was posited ahead of time</em>. Department of Statistics, Columbia University.</p>
-</div>
-<div id="ref-lix1996consequences">
-<p>Lix, L. M., Keselman, J. C., &amp; Keselman, H. J. (1996). Consequences of assumption violations revisited: A quantitative review of alternatives to the one-way analysis of variance F test. <em>Review of Educational Research</em>, <em>66</em>, 579–619.</p>
-</div>
-<div id="ref-maxwell2017designing">
-<p>Maxwell, S. E., Delaney, H. D., &amp; Kelley, K. (2017). <em>Designing experiments and analyzing data: A model comparison perspective</em>. Routledge.</p>
-</div>
-<div id="ref-sakia1992box">
-<p>Sakia, R. M. (1992). The box-cox transformation technique: A review. <em>Journal of the Royal Statistical Society: Series D (the Statistician)</em>, <em>41</em>, 169–178.</p>
-</div>
-<div id="ref-simmons2011false">
-<p>Simmons, J. P., Nelson, L. D., &amp; Simonsohn, U. (2011). False-positive psychology: Undisclosed flexibility in data collection and analysis allows presenting anything as significant. <em>Psychological Science</em>, <em>22</em>, 1359–1366.</p>
-</div>
-<div id="ref-simonsohn2014posterior">
-<p>Simonsohn, U. (2014). <em>Posterior-hacking: Selective reporting invalidates Bayesian results also</em>. Retrieved from <a href="https://dx.doi.org/10.2139/ssrn.2374040">https://dx.doi.org/10.2139/ssrn.2374040</a></p>
-</div>
-<div id="ref-tomarken1986comparison">
-<p>Tomarken, A. J., &amp; Serlin, R. C. (1986). Comparison of anova alternatives under variance heterogeneity and specific noncentrality structures. <em>Psychological Bulletin</em>, <em>99</em>, 90.</p>
 </div>
 </div>
             </section>
@@ -467,6 +479,7 @@ Figure 13.2: Approach advantage scores by Experimenter belief and Power prime. M
     </div>
   </div>
 <script src="book_assets/gitbook-2.6.7/js/app.min.js"></script>
+<script src="book_assets/gitbook-2.6.7/js/lunr.js"></script>
 <script src="book_assets/gitbook-2.6.7/js/clipboard.min.js"></script>
 <script src="book_assets/gitbook-2.6.7/js/plugin-search.js"></script>
 <script src="book_assets/gitbook-2.6.7/js/plugin-sharing.js"></script>
@@ -485,7 +498,6 @@ gitbook.start({
 "weibo": false,
 "instapaper": false,
 "vk": false,
-"whatsapp": false,
 "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
 },
 "fontsettings": {
@@ -503,14 +515,11 @@ gitbook.start({
 "text": null
 },
 "download": null,
-"search": {
-"engine": "fuse",
-"options": null
-},
 "toc": {
 "collapse": "subsection"
 },
-"source": null
+"source": null,
+"search": true
 });
 });
 </script>
