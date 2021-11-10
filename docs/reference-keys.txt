@@ -165,7 +165,7 @@ fig:bayesian-t-tests-different-rscale
 tab:bayesian-lm-speedate
 tab:bayesian-anova-expBelief
 fig:simulation-p-value-distribution
-fig:unnamed-chunk-53
+fig:unnamed-chunk-54
 tab:common-data-transformations
 fig:example-multiple-regression-write-up-plot
 fig:example-factorial-ANOVA-write-up-plot
@@ -280,6 +280,7 @@ a-threeway-factorial-anova
 interpreting-interactions
 orthogonal-contrast-codes-and-unequal-sample-sizes
 comparison-schemes-and-ss-types
+in-practice-3
 mixing-categorical-and-metric-predictors-ancova
 subjective-feelings-of-power-and-priming
 acounting-for-pre-existing-differences

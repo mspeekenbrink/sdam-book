@@ -24,7 +24,7 @@
 <meta name="author" content="Maarten Speekenbrink" />
 
 
-<meta name="date" content="2021-10-23" />
+<meta name="date" content="2021-11-09" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -270,6 +270,7 @@
 <ul>
 <li class="chapter" data-level="8.5.1" data-path="ch-factorial-ANOVA.html"><a href="ch-factorial-ANOVA.html#comparison-schemes-and-ss-types"><i class="fa fa-check"></i><b>8.5.1</b> Comparison schemes and SS types</a></li>
 </ul></li>
+<li class="chapter" data-level="8.6" data-path="ch-factorial-ANOVA.html"><a href="ch-factorial-ANOVA.html#in-practice-3"><i class="fa fa-check"></i><b>8.6</b> In practice</a></li>
 </ul></li>
 <li class="chapter" data-level="9" data-path="mixing-categorical-and-metric-predictors-ancova.html"><a href="mixing-categorical-and-metric-predictors-ancova.html"><i class="fa fa-check"></i><b>9</b> Mixing categorical and metric predictors (ANCOVA)</a>
 <ul>
@@ -504,7 +505,7 @@ $$\hat{\sigma}_p = \sqrt{\frac{(n_1 - 1) S^2_1 + (n_2 - 1) S^2_2}{n_1 + n_2 - 2}
 </div>
 <div id="the-anova-model" class="section level2" number="7.3">
 <h2><span class="header-section-number">7.3</span> The ANOVA model</h2>
-<p>Before going into such alternative coding schemes, we will take a <em>slight</em> detour and consider the traditional model for the case of Normal-distributed variables in multiple groups with (potentially) different means, but the same standard deviation. This model is also called the oneway ANOVA model, and can be stated as follows:
+<p>Before going into such alternative coding schemes, we will take a slight detour and consider the traditional model for the case of Normal-distributed variables in multiple groups with (potentially) different means, but the same standard deviation. This model is also called the oneway ANOVA model, and can be stated as follows:
 <span class="math display" id="eq:glm-ANOVA-model">\[\begin{equation}
 Y_{j,i} = \mu + \tau_j + \epsilon_{j,i} \quad \quad \epsilon_{j,i} \sim \textbf{Normal}(0, \sigma_\epsilon)
 \tag{7.2}
@@ -513,7 +514,12 @@ Here, <span class="math inline">\(Y_{j,i}\)</span> denotes the value of the depe
 <span class="math display">\[\begin{equation}
 \tau_j = \mu_j - \mu
 \end{equation}\]</span></p>
-<p>The traditional goal of an ANOVA is to determine whether there is <em>any</em> treatment effect. That is, to test the null-hypothesis <span class="math inline">\(H_0: \tau_j = 0 \text{ for all } j = 1, \ldots, g\)</span>. Note that the hypothesis states that <span class="math inline">\(\tau_j = 0\)</span> for all groups. We could have also stated this hypothesis as <span class="math inline">\(H_0: \tau_1 = \tau_2 = \ldots = \tau_g = 0\)</span>, if you find that clearer. As the hypothesis states that the difference between the group-specific mean <span class="math inline">\(\mu_j\)</span> and the grand mean <span class="math inline">\(\mu\)</span> is 0 for every group, the implication is that <span class="math inline">\(\mu_j = \mu\)</span> for all groups (i.e. all groups have an identical mean <span class="math inline">\(\mu\)</span>). The test statistic for this null-hypothesis is the <span class="math inline">\(F\)</span> statistic, calculated as a ratio of the (estimated) sample variance of the treatment effects and the (estimated) variance of residual error terms. As we will see, we can perform this hypothesis test with the General Linear Model through an overall model test (comparing a “full” MODEL G to an intercept-only MODEL R). In addition, we can also test more specific hypotheses regarding differences between the group means and the overall mean, or specific hypotheses regarding differences between particular (combinations of) groups. In contrast to traditional ANOVA, the GLM approach also deals naturally with situations in which the groups have unequal sizes (i.e. <span class="math inline">\(n_j\)</span> differs between the groups). This is not straightforward with the traditional ANOVA test.</p>
+<p>The traditional goal of an ANOVA is to determine whether there is <em>any</em> treatment effect. That is, to test the null-hypothesis <span class="math inline">\(H_0: \tau_j = 0 \text{ for all } j = 1, \ldots, g\)</span>. Note that the hypothesis states that <span class="math inline">\(\tau_j = 0\)</span> for all groups. We could have also stated this hypothesis as <span class="math inline">\(H_0: \tau_1 = \tau_2 = \ldots = \tau_g = 0\)</span>, if you find that clearer. As the hypothesis states that the difference between the group-specific mean <span class="math inline">\(\mu_j\)</span> and the grand mean <span class="math inline">\(\mu\)</span> is 0 for every group, the implication is that <span class="math inline">\(\mu_j = \mu\)</span> for all groups (i.e. all groups have an identical mean <span class="math inline">\(\mu\)</span>).</p>
+<!--
+. In the case of the oneway ANOVA model, the expected value of the $F$-statistic (the mean of the sampling distribution of the $F$-statistic) is
+$$\mathrm{E}[F] = \frac{\sigma_\epsilon^2 + }{\sigma_\epsilon^2}$$
+-->
+<p>The test statistic for this null-hypothesis is the <span class="math inline">\(F\)</span> statistic, calculated as a ratio of the (estimated) sample variation of the treatment effects and the (estimated) variance of residual error terms. As we will see, we can perform this hypothesis test with the General Linear Model through an overall model test (comparing a “full” MODEL G to an intercept-only MODEL R). In addition, we can also test more specific hypotheses regarding differences between the group means and the overall mean, or specific hypotheses regarding differences between particular (combinations of) groups. In contrast to traditional ANOVA, the GLM approach also deals naturally with situations in which the groups have unequal sizes (i.e. <span class="math inline">\(n_j\)</span> differs between the groups). This is not straightforward with the traditional ANOVA test.</p>
 </div>
 <div id="contrast-coding" class="section level2" number="7.4">
 <h2><span class="header-section-number">7.4</span> Contrast coding</h2>
