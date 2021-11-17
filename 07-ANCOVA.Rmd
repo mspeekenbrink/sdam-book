@@ -56,7 +56,7 @@ knitr::kable(tab, caption = "Linear model predicting $\\texttt{post-power}$ by f
 options(opts)
 ```
 
-The results show a significant effect of power prime ($\\texttt{P}$). The slope is estimated as $\hat{\beta}_\text{P} = `r round(coefficients(modpost)[2],digits=2)`$. Remember that the slope of a contrast-coded predictor represents a difference between marginal means; in this case, we are comparing the marginal mean of conditions with a high-power prime to conditions with a low-power prime (averaging over the levels of experimenter Belief):
+The results show a significant effect of power prime ($\texttt{P}$). The slope is estimated as $\hat{\beta}_\text{P} = `r round(coefficients(modpost)[2],digits=2)`$. Remember that the slope of a contrast-coded predictor represents a difference between marginal means; in this case, we are comparing the marginal mean of conditions with a high-power prime to conditions with a low-power prime (averaging over the levels of experimenter Belief):
 $$
 \begin{aligned}
 \hat{\beta}_\text{P} &= \hat{\mu}_{\text{PH},\cdot} - \hat{\mu}_{\text{PL},\cdot} \\
