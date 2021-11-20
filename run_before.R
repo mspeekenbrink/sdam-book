@@ -57,6 +57,12 @@ pvalue <- function(x, limit = FALSE, limit_below = 1e-3) {
   return(sub("0.",".", x))
 }
 
+apa_pvalue <- function(x, digits = 3L, na_string = "", add_equals = FALSE) {
+  x <- papaja::printp(x = x, digits = digits, na_string = na_string, add_equals = add_equals)
+  if(substr(x,1,1) == ".") x <- paste0("= ",x)
+  x
+}
+
 write_GLM_equation <- function(mod, digits=NULL, include_sde = TRUE, dv_name, iv_names) {
   if(missing(dv_name)) dv_name <- attr(mod$terms,"variables")[[2]]
   if(!missing(dv_name) & knitr::is_latex_output()) {
@@ -150,3 +156,9 @@ numbers2words <- function(x){
   if (length(x) > 1) return(trim(sapply(x, helper)))
   helper(x)
 }
+
+write_anova_results <- function(mod) {
+  out <- paste0("$F(",mod$Df[2],",",mod$Res.Df[2],") = ", round(mod$F[2],2),"$, $p",apa_pvalue(mod[2,"Pr(>F)"]),"$")
+  out
+}
+

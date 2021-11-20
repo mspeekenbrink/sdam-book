@@ -10,4 +10,4 @@ before_chapter_script: "run_before.R"
 #edit: https://github.com/mspeekenbrink/sdam-book/edit/master/%s
 #output_dir: "book-output"
 clean: ["sdam.bbl", "R-packages.bib"]
-rmd_files: ["index.Rmd", "01-intro.Rmd", "02-modeling.Rmd", "03-GLM-simple.Rmd", "04-GLM-regression.Rmd", "04b-GLM-multiple-regression.Rmd", "05-GLM-moderation.Rmd", "06-ANOVA.Rmd", "06b-Factorial-ANOVA.Rmd", "07-ANCOVA.Rmd", "08-RM-ANOVA-dummy.Rmd", "09-LMER.Rmd", "10-Bayes-testing.Rmd", "11-responsible.Rmd", "999-references.Rmd"]
+rmd_files: ["index.Rmd", "01-intro.Rmd", "02-modeling.Rmd", "03-GLM-simple.Rmd", "04-GLM-regression.Rmd", "04b-GLM-multiple-regression.Rmd", "05-GLM-moderation.Rmd", "06-ANOVA.Rmd", "06b-Factorial-ANOVA.Rmd", "07-ANCOVA.Rmd", "08-RM-ANOVA.Rmd", "09-LMER.Rmd", "10-Bayes-testing.Rmd", "11-responsible.Rmd", "999-references.Rmd"]
