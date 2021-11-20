@@ -50,23 +50,33 @@ dat %>%
 
 ## A oneway repeated-measures ANOVA
 
-To keep matters relatively simple, we will for now just consider participants in the Variant condition. That means that we can treat the study as a oneway design, with three levels (condition: Alone, Different, or Same) that all vary within-participants. If we were to (wrongly!) treat all ratings as independent, and analyse the data with a regular oneway ANOVA, we would obtain the results in Table \@ref(tab:cheerleader-oneway-ANOVA-results). As you can see, this analysis indicates there is no effect of presenting a face alone or in a group.
+To keep matters relatively simple, we will for now just consider participants in the Variant condition. That means that we can treat the study as a oneway design, with three levels (condition: Alone, Different, or Same) that all vary within-participants. As the cheerleader effect predicts that faces presented as part of a group will be rated as more attractive, and that this effect will be larger if there is more variety in the faces within the group, a reasonable set of contrast codes is:
+```{r helmert-contrast-cheerleader}
+tab <- data.frame(c1 = c("$-\\tfrac{2}{3}$","$\\tfrac{1}{3}$","$\\tfrac{1}{3}$"),
+                  c2 = c("$0$","$\\tfrac{1}{2}$","$-\\tfrac{1}{2}$"))
+colnames(tab) <- c("$c_1$","$c_2$")
+rownames(tab) <- c("Alone","Different", "Same")
+knitr::kable(tab, booktabs=TRUE, linesep="", align="r")
+```
+The first contrast code reflects the expectation that a face in a group (Different or Same) will be rated as more attractive than faces in the Alone condition. The second contrast reflects the expectation that a face surrounded by different faces will be rated as more attractive than when surrounded by more similar faces.
+
+If we were to (wrongly!) treat all ratings as independent, and analyse the data with a regular oneway ANOVA, we would obtain the results in Table \@ref(tab:cheerleader-oneway-ANOVA-results). As you can see, this analysis indicates there is no effect of presenting a face alone or in a group.
 
 ```{r cheerleader-oneway-ANOVA-results}
 dat <- dat %>%
   filter(Task == "Variant") %>%
   mutate(Item = factor(Item))
-codes <- cbind(c(-1,1,0),
-               c(-1,0,1))
+codes <- cbind(c(-2/3,1/3,1/3),
+               c(0,1/2,-1/2))
 contrasts(dat$Item) <- codes
 modg <- lm(Response ~ Item, data=dat)
 opts <- options()
 opts <- options()
 options(knitr.kable.NA = "")
 tab <- cbind(estimate = c(coefficients(modg)[1],NA,coefficients(modg)[2:3],Error=NA),rbind(car::Anova(modg, type=3)[1:2,],expand_Anova(modg, type=3)[-1,]))
-rownames(tab) <- c("Intercept","Condition","$\\quad X_1$ (Different)","$\\quad X_2$ (Same)", "Error")
+rownames(tab) <- c("Intercept","Condition","$\\quad X_1$ (D+S vs A)","$\\quad X_2$ (D vs S)", "Error")
 colnames(tab) <- c("$\\hat{\\beta}$","$\\text{SS}$", "$\\text{df}$", "$F$", "$P(\\geq \\lvert F \\rvert)$")
-knitr::kable(tab, caption = "Linear model predicting attractiveness ratings in the three conditions, wrongly assuming independence. Effect-coding was used for Condition, with the first contrast representing the effect of Different, and the second the effect of Same.", escape = FALSE, digits=3, booktabs=TRUE, linesep="")
+knitr::kable(tab, caption = "Linear model predicting attractiveness ratings in the three conditions, wrongly assuming independence.", escape = FALSE, digits=3, booktabs=TRUE, linesep="")
 options(opts)
 ```
 
@@ -117,15 +127,15 @@ approach for the S-A difference scores we obtain a test result of `r write_anova
 
 The idea of computing difference scores and then using these in linear models is, essentially, how we will test for effects of manipulations that vary within persons. To do this more generally, we will apply orthogonal contrast codes to compute such difference scores. We will refer to the resulting within-person-difference-scores as __within-subjects composite scores__. 
 
-As the cheerleader effect predicts that faces presented as part of a group will be rated as more attractive, and that this effect will be larger if there is more variety in the faces within the group, a reasonable set of contrast codes is:
+We will use the same contrast codes as before:
 ```{r}
 tab <- data.frame(c1 = c("$-\\tfrac{2}{3}$","$\\tfrac{1}{3}$","$\\tfrac{1}{3}$"),
                   c2 = c("$0$","$\\tfrac{1}{2}$","$-\\tfrac{1}{2}$"))
 colnames(tab) <- c("$c_1$","$c_2$")
 rownames(tab) <- c("Alone","Different", "Same")
-knitr::kable(tab, booktabs=TRUE, linesep="")
+knitr::kable(tab, booktabs=TRUE, linesep="", align="r")
 ```
-The first contrast code reflects the expectation that a face in a group (Different or Same) will be rated as more attractive than faces in the Alone condition. The second contrast reflects the expectation that a face surrounded by different faces will be rated as more attractive than when surrounded by more similar faces.
+<!-- The first contrast code reflects the expectation that a face in a group (Different or Same) will be rated as more attractive than faces in the Alone condition. The second contrast reflects the expectation that a face surrounded by different faces will be rated as more attractive than when surrounded by more similar faces.-->
 
 For each contrast $c_j$, we compute a within-subjects composite score as:
 \begin{equation}
@@ -162,6 +172,29 @@ dat %>%
 
 ```
 
+```{r}
+wdat <- dat %>%
+  group_by(Participant) %>%
+  tidyr::pivot_wider(id_cols = Participant, names_from = Item, values_from = Response) %>%
+  ungroup() %>%
+  mutate("W0" = (Alone + Different + Same)/sqrt(3), 
+         "W1" = (-(2/3)*Alone + (1/3)*Different + (1/3)*Same)/sqrt((2/3)^2 + (1/3)^2 + (1/3)^2),
+         "W2" = (-(1/2)*Same + (1/2)*Different)/sqrt(1/2))
+aov1 <- anova(lm(W1~0, data=wdat), lm(W1~1, data=wdat))
+aov2 <- anova(lm(W2~0, data=wdat), lm(W2~1, data=wdat))
+```
+
+The first within-subjects composite variable reflects the difference between the Alone condition and the average of the Different and Same conditions. If the mean of this composite variable is positive, that indicates that faces in the Different and Same condition are on average rated as more attractive than in the Alone condition. If the mean of this composite variable is negative, that indicates that faces in the Different and Same condition are on average rated as less attractive than in the Alone condition. If the mean is equal to 0, that indicates there is no difference in attractiveness. To test whether there is an effect of presenting faces in a group, compared to alone, we can compare a MODEL G
+$$W_{1,i} = \beta_0 + \epsilon_i$$
+to a MODEL R:
+$$W_{1,i} = 0 + \epsilon_i$$
+The results of this model comparison are `r write_anova_results(aov1)`. We can thus reject the null hypothesis that there is no difference between the Alone condition and the other two. The estimated intercept of MODEL G is $\hat{\beta}_0 = `r round(coefficients(lm(W1~1, data=wdat))[1],2)`$. Due to the scaling applied in the within-subjects composite, this intercept does _not equal_ the average of $\frac{Y_{i,D} + Y_{i,S}}{2} - Y_{i,A}$. To get this value, we need to __rescale__ the within-subjects composite to the scale of the dependent variable. We do this by dividing the estimated intercept by the scaling factor, which is $\sqrt{ \left(-\tfrac{2}{3}\right)^2 + \left(\tfrac{1}{3}\right)^2 + \left(\tfrac{1}{3}\right)^2} = \sqrt{\tfrac{6}{9}}$. So
+$$\frac{\overline{Y}_{D} + \overline{Y}_{S}}{2} - \overline{Y}_{A} = \frac{`r round(coefficients(lm(W1~1, data=wdat))[1],2)`}{\sqrt{\tfrac{6}{9}}} = `r round(coefficients(lm(W1~1, data=wdat))[1]/sqrt(6/9),2)`$$
+We can conduct a similar model comparison for the second within-subjects composite, $W_2$. The results of this comparison are `r write_anova_results(aov2)`. Hence, we can not reject the null hypothesis that there is no difference between the Different and Alone condition. The estimated intercept of MODEL G is $\hat{\beta}_0 = `r round(coefficients(lm(W2~1, data=wdat))[1],2)`$. Rescaling this to the scale of the dependent variable indicates that
+$$\overline{Y}_{D} - \overline{Y}_{S} = \frac{`r round(coefficients(lm(W2~1, data=wdat))[1],2)`}{\sqrt{\tfrac{2}{4}}} = `r round(coefficients(lm(W2~1, data=wdat))[1]/sqrt(2/4),2)`$$.
+Comparing the results to the oneway ANOVA of Table ... shows that we get the same parameter estimates (after rescaling), but different test results. That is because 
+
+# A 2 (between) by 3 (within) mixed ANOVA
 
 <!--
 We could do this for any pair of conditions, but that might result in a large number of tests. A repeated-measures ANOVA allows us to to essentially this within a single analysis.
