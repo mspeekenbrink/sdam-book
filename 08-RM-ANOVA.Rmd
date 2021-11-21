@@ -194,7 +194,11 @@ We can conduct a similar model comparison for the second within-subjects composi
 $$\overline{Y}_{D} - \overline{Y}_{S} = \frac{`r round(coefficients(lm(W2~1, data=wdat))[1],2)`}{\sqrt{\tfrac{2}{4}}} = `r round(coefficients(lm(W2~1, data=wdat))[1]/sqrt(2/4),2)`$$.
 Comparing the results to the oneway ANOVA of Table ... shows that we get the same parameter estimates (after rescaling), but different test results. That is because 
 
-# A 2 (between) by 3 (within) mixed ANOVA
+## Partitioning the variance
+
+## A 2 (between) by 3 (within) mixed ANOVA
+
+Up to now, we just considered the data from the ... conditions. We are now in a position to consider all the data. Whether the other faces in the Similar condition where exact copies of a single photograph, or different photographs of the same person, was a manipulation that varied _between participants_ (i.e., a participant was only assigned to one of these manipulations, not both). The full design of the study is thus a 2 () by 3 design, where the last factor varied within participants.
 
 <!--
 We could do this for any pair of conditions, but that might result in a large number of tests. A repeated-measures ANOVA allows us to to essentially this within a single analysis.
@@ -284,9 +288,7 @@ Our objective here is to estimate the variability between persons, i.e. $\sigma_
 The generalization problem for fixed effects (experimental manipulations) is different: our objective is to infer from a sample what effect precisely these experimental manipulations will have in the whole population. The objective here is to get the most precise estimation of each $\tau_j^{(A)}$. 
 -->
 
-## Assumptions
-
-### Sphericity
+## Omnibus tests and sphericity
 
 $$\Sigma = \left[ \begin{matrix} \sigma_1^2 & \sigma_{12} & \sigma_{13} \\ \sigma_{21} & \sigma_2^2 & \sigma_{23} \\ \sigma_{31} & \sigma_{32} & \sigma_3^2 \end{matrix} \right]$$ 
 So homogeneity of variance means
@@ -299,8 +301,6 @@ $$\sigma_1^2 + \sigma_2^2 - 2\sigma_{12} = \sigma_{1}^2 + \sigma_{3}^2 - 2 \sigm
 If that seems like a complicated and stringent assumption: it is! And it is not that easy to check. Sphericity holds when a more stringent condition, called __compound symmetry__ holds. Compound symmetry means that all variances are identical to each other, and all covariances are identical to each other.
 
 ### Correcting for non-sphericity
-
-The assumption of 
 
 When the assumption of sphericity does _not_ hold (the assumption is violated) the $F$-statistic still follows an $F$ distribution, but with a smaller value for $\text{df}_1$ and $\text{df}_2$ than usual. The correct degrees of freedom can be stated as $\zeta \times \text{df}_1$ and $\zeta \times \text{df}_2$, where $0 \geq \zeta \geq 1$ is a correction fraction.^[The correction factor is usually denoted by $\epsilon$, but I'm using $\zeta$ ("zeta") as we are already using $\epsilon$ for the error terms.] Whilst the value of $\zeta$ depends on the true (co)variances underlying the data, it's value can be estimated. The Greenhouse-Geisser estimate. Huynh and Feldt showed that, if the true value is close to or higher than $\zeta = 0.75$, the Greenhouse-Geisser correction tends to be too conservative. They suggested a correction which provides an upward-adjusted estimate of $\zeta$, which will increase the power of the tests. Howell suggests to use the Huynh-Feldt correction when the Greenhouse-Geisser estimate of $\zeta$ is close to or higher than $\hat{\zeta} = 0.75$.
 
