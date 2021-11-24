@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 13 Being a responsible data analyst | Statistics: Data analysis and modelling</title>
   <meta name="description" content="A book about statistics for data analysis, with a main focus on statistical modelling." />
-  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 13 Being a responsible data analyst | Statistics: Data analysis and modelling" />
   <meta property="og:type" content="book" />
@@ -24,7 +24,7 @@
 <meta name="author" content="Maarten Speekenbrink" />
 
 
-<meta name="date" content="2021-11-17" />
+<meta name="date" content="2021-11-24" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -33,8 +33,9 @@
   
 <link rel="prev" href="introduction-to-bayesian-hypothesis-testing.html"/>
 <link rel="next" href="references.html"/>
-<script src="book_assets/header-attrs-2.7/header-attrs.js"></script>
-<script src="book_assets/jquery-3.5.1/jquery.min.js"></script>
+<script src="book_assets/header-attrs-2.11/header-attrs.js"></script>
+<script src="book_assets/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="book_assets/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="book_assets/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
 <link href="book_assets/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -50,40 +51,66 @@
 
 
 
-
-<script src="book_assets/htmlwidgets-1.5.3/htmlwidgets.js"></script>
+<link href="book_assets/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="book_assets/anchor-sections-1.0.1/anchor-sections.js"></script>
+<script src="book_assets/htmlwidgets-1.5.4/htmlwidgets.js"></script>
 <script src="book_assets/viz-1.8.2/viz.js"></script>
 <link href="book_assets/DiagrammeR-styles-0.2/styles.css" rel="stylesheet" />
 <script src="book_assets/grViz-binding-1.0.6.1/grViz.js"></script>
-<script src="book_assets/plotly-binding-4.9.3/plotly.js"></script>
+<script src="book_assets/plotly-binding-4.10.0/plotly.js"></script>
 <script src="book_assets/typedarray-0.1/typedarray.min.js"></script>
-<link href="book_assets/crosstalk-1.1.1/css/crosstalk.css" rel="stylesheet" />
-<script src="book_assets/crosstalk-1.1.1/js/crosstalk.min.js"></script>
-<link href="book_assets/plotly-htmlwidgets-css-1.57.1/plotly-htmlwidgets.css" rel="stylesheet" />
-<script src="book_assets/plotly-main-1.57.1/plotly-latest.min.js"></script>
+<link href="book_assets/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet" />
+<script src="book_assets/crosstalk-1.2.0/js/crosstalk.min.js"></script>
+<link href="book_assets/plotly-htmlwidgets-css-2.5.1/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="book_assets/plotly-main-2.5.1/plotly-latest.min.js"></script>
 <link href="book_assets/combineWidgetStyle-0.1/combineWidgets.css" rel="stylesheet" />
-<script src="book_assets/combineWidgets-binding-0.10.1/combineWidgets.js"></script>
-<script src="book_assets/rglWebGL-binding-0.106.6/rglWebGL.js"></script>
-<link href="book_assets/rglwidgetClass-0.106.6/rgl.css" rel="stylesheet" />
-<script src="book_assets/rglwidgetClass-0.106.6/rglClass.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.106.6/utils.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.106.6/subscenes.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.106.6/shaders.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.106.6/textures.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.106.6/projection.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.106.6/mouse.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.106.6/init.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.106.6/pieces.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.106.6/draw.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.106.6/controls.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.106.6/selection.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.106.6/rglTimer.src.js"></script>
-<script src="book_assets/CanvasMatrix4-0.106.6/CanvasMatrix.src.js"></script>
-<script src="book_assets/rglPlayer-binding-0.106.6/rglPlayer.js"></script>
+<script src="book_assets/combineWidgets-binding-0.11.1/combineWidgets.js"></script>
+<script src="book_assets/rglWebGL-binding-0.107.14/rglWebGL.js"></script>
+<link href="book_assets/rglwidgetClass-0.107.14/rgl.css" rel="stylesheet" />
+<script src="book_assets/rglwidgetClass-0.107.14/rglClass.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/utils.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/subscenes.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/shaders.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/textures.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/projection.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/mouse.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/init.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/pieces.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/draw.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/controls.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/selection.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/rglTimer.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/pretty.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/axes.src.js"></script>
+<script src="book_assets/CanvasMatrix4-0.107.14/CanvasMatrix.src.js"></script>
+<script src="book_assets/rglPlayer-binding-0.107.14/rglPlayer.js"></script>
 <script src="book_assets/kePrint-0.0.1/kePrint.js"></script>
 <link href="book_assets/lightable-0.0.1/lightable.css" rel="stylesheet" />
 
 
+
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
 
 <link rel="stylesheet" href="style.css" type="text/css" />
 </head>
@@ -283,10 +310,29 @@
 <li class="chapter" data-level="9.7" data-path="mixing-categorical-and-metric-predictors-ancova.html"><a href="mixing-categorical-and-metric-predictors-ancova.html#mediation-with-categorical-independent-variables"><i class="fa fa-check"></i><b>9.7</b> Mediation with categorical independent variables</a></li>
 <li class="chapter" data-level="9.8" data-path="mixing-categorical-and-metric-predictors-ancova.html"><a href="mixing-categorical-and-metric-predictors-ancova.html#ancova-vs-difference-scores"><i class="fa fa-check"></i><b>9.8</b> ANCOVA vs difference scores</a></li>
 </ul></li>
-<li class="chapter" data-level="10" data-path="repeated-measures-anova.html"><a href="repeated-measures-anova.html"><i class="fa fa-check"></i><b>10</b> Repeated-measures ANOVA</a></li>
+<li class="chapter" data-level="10" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html"><i class="fa fa-check"></i><b>10</b> Repeated-measures ANOVA</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#non-independence-in-linear-models"><i class="fa fa-check"></i><b>10.1</b> Non-independence in linear models</a></li>
+<li class="chapter" data-level="10.2" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#the-cheerleader-effect"><i class="fa fa-check"></i><b>10.2</b> The cheerleader effect</a></li>
+<li class="chapter" data-level="10.3" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#as-a-oneway-anova"><i class="fa fa-check"></i><b>10.3</b> As a oneway ANOVA</a></li>
+<li class="chapter" data-level="10.4" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#oneway-repeated-measures-anova"><i class="fa fa-check"></i><b>10.4</b> Oneway repeated-measures ANOVA</a>
+<ul>
+<li class="chapter" data-level="10.4.1" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#within-subjects-composite-scores"><i class="fa fa-check"></i><b>10.4.1</b> Within-subjects composite scores</a></li>
+<li class="chapter" data-level="10.4.2" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#a-composite-for-between-subjects-effects"><i class="fa fa-check"></i><b>10.4.2</b> A composite for between-subjects effects</a></li>
+<li class="chapter" data-level="10.4.3" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#collecting-all-results-and-omnibus-tests"><i class="fa fa-check"></i><b>10.4.3</b> Collecting all results and omnibus tests</a></li>
+</ul></li>
+<li class="chapter" data-level="10.5" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#partitioning-the-variance"><i class="fa fa-check"></i><b>10.5</b> Partitioning the variance</a></li>
+<li class="chapter" data-level="10.6" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#a-mixed-anova-with-between--and-within-subjects-effects"><i class="fa fa-check"></i><b>10.6</b> A mixed ANOVA with between- and within-subjects effects</a></li>
+<li class="chapter" data-level="10.7" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#assumptions-1"><i class="fa fa-check"></i><b>10.7</b> Assumptions</a>
+<ul>
+<li class="chapter" data-level="10.7.1" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#omnibus-tests-and-sphericity"><i class="fa fa-check"></i><b>10.7.1</b> Omnibus tests and sphericity</a></li>
+<li class="chapter" data-level="10.7.2" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#correcting-for-non-sphericity"><i class="fa fa-check"></i><b>10.7.2</b> Correcting for non-sphericity</a></li>
+</ul></li>
+<li class="chapter" data-level="10.8" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#in-practice-4"><i class="fa fa-check"></i><b>10.8</b> In practice</a></li>
+</ul></li>
 <li class="chapter" data-level="11" data-path="linear-mixed-effects-models.html"><a href="linear-mixed-effects-models.html"><i class="fa fa-check"></i><b>11</b> Linear mixed-effects models</a>
 <ul>
-<li class="chapter" data-level="11.1" data-path="linear-mixed-effects-models.html"><a href="linear-mixed-effects-models.html#non-independence-in-linear-models"><i class="fa fa-check"></i><b>11.1</b> Non-independence in linear models</a></li>
+<li class="chapter" data-level="11.1" data-path="linear-mixed-effects-models.html"><a href="linear-mixed-effects-models.html#non-independence-in-linear-models-1"><i class="fa fa-check"></i><b>11.1</b> Non-independence in linear models</a></li>
 <li class="chapter" data-level="11.2" data-path="linear-mixed-effects-models.html"><a href="linear-mixed-effects-models.html#random-intercept-models"><i class="fa fa-check"></i><b>11.2</b> Random intercept models</a></li>
 <li class="chapter" data-level="11.3" data-path="linear-mixed-effects-models.html"><a href="linear-mixed-effects-models.html#parameter-estimation-1"><i class="fa fa-check"></i><b>11.3</b> Parameter estimation</a></li>
 <li class="chapter" data-level="11.4" data-path="linear-mixed-effects-models.html"><a href="linear-mixed-effects-models.html#parameter-inference"><i class="fa fa-check"></i><b>11.4</b> Parameter inference</a></li>
@@ -366,9 +412,9 @@
 </div>
 <div id="evaluate-the-assumptions-underlying-your-analyses" class="section level2" number="13.3">
 <h2><span class="header-section-number">13.3</span> Evaluate the assumptions underlying your analyses</h2>
-<p>In most of the analyses covered here, which were (extensions of) the General Linear Model, we assumed the residuals were independent and Normal-distributed with a mean of 0 and a constant standard deviation <span class="math inline">\(\sigma_\epsilon\)</span>. A Normal distribution concerns continuous variables, and in reality, we do not have infinite precision in measurement. Hence, the assumption of continuity is strictly false. That doesn’t necessarily mean that the General Linear Model is invalid. As long as the assumptions are approximately true, we can quite safely use the GLM without worrying that the assumed Type 1 error (if staying within a Frequentist viewpoint) is far from the actual Type 1 error rate. “Approximately true” is obviously a vague statement. The general consensus is that ANOVAs are reasonably robust against deviations from Normal-distributed errors, and when sample sizes are equal, also to violations of homoscedasticity <span class="citation">(see <a href="references.html#ref-lix1996consequences" role="doc-biblioref">Lix et al., 1996</a>; <a href="references.html#ref-maxwell2017designing" role="doc-biblioref">Maxwell et al., 2017</a>)</span>. Regarding potential heteroscedasticity, <span class="citation"><a href="references.html#ref-maxwell2017designing" role="doc-biblioref">Maxwell et al.</a> (<a href="references.html#ref-maxwell2017designing" role="doc-biblioref">2017</a>)</span> offer the following advice: in a one-way ANOVA model with equal sample sizes, you may stick to the standard <span class="math inline">\(F\)</span> test if the ratio of the largest sample variance <span class="math inline">\(S^2_\text{max}\)</span> to the smallest sample variance <span class="math inline">\(S^2_\text{min}\)</span> is smaller than 4, i.e. <span class="math inline">\(\frac{S^2_\text{max}}{S^2_\text{min}} &lt; 4\)</span>. When sample sizes are unequal, things become a little more complicated. The suggestion is to also take the ratio of the sample size in the largest group, <span class="math inline">\(n_\text{max}\)</span> to the sample size of the smallest group, <span class="math inline">\(n_\text{min}\)</span> into account, and stick to the standard <span class="math inline">\(F\)</span> test whenever
+<p>In most of the analyses covered here, which were (extensions of) the General Linear Model, we assumed the residuals were independent and Normal-distributed with a mean of 0 and a constant standard deviation <span class="math inline">\(\sigma_\epsilon\)</span>. A Normal distribution concerns continuous variables, and in reality, we do not have infinite precision in measurement. Hence, the assumption of continuity is strictly false. That doesn’t necessarily mean that the General Linear Model is invalid. As long as the assumptions are approximately true, we can quite safely use the GLM without worrying that the assumed Type 1 error (if staying within a Frequentist viewpoint) is far from the actual Type 1 error rate. “Approximately true” is obviously a vague statement. The general consensus is that ANOVAs are reasonably robust against deviations from Normal-distributed errors, and when sample sizes are equal, also to violations of homoscedasticity <span class="citation">(see <a href="#ref-lix1996consequences" role="doc-biblioref">Lix et al., 1996</a>; <a href="#ref-maxwell2017designing" role="doc-biblioref">Maxwell et al., 2017</a>)</span>. Regarding potential heteroscedasticity, <span class="citation"><a href="#ref-maxwell2017designing" role="doc-biblioref">Maxwell et al.</a> (<a href="#ref-maxwell2017designing" role="doc-biblioref">2017</a>)</span> offer the following advice: in a one-way ANOVA model with equal sample sizes, you may stick to the standard <span class="math inline">\(F\)</span> test if the ratio of the largest sample variance <span class="math inline">\(S^2_\text{max}\)</span> to the smallest sample variance <span class="math inline">\(S^2_\text{min}\)</span> is smaller than 4, i.e. <span class="math inline">\(\frac{S^2_\text{max}}{S^2_\text{min}} &lt; 4\)</span>. When sample sizes are unequal, things become a little more complicated. The suggestion is to also take the ratio of the sample size in the largest group, <span class="math inline">\(n_\text{max}\)</span> to the sample size of the smallest group, <span class="math inline">\(n_\text{min}\)</span> into account, and stick to the standard <span class="math inline">\(F\)</span> test whenever
 <span class="math display">\[\frac{n_\text{max}}{n_\text{min}} \times \frac{S^2_\text{max}}{S^2_\text{min}} &lt; 4\]</span>
-When the ratio is larger than 4, you could decide to use an alternative test, such as the Brown-Forsythe or the Welch test <span class="citation">(see e.g. <a href="references.html#ref-tomarken1986comparison" role="doc-biblioref">Tomarken &amp; Serlin, 1986</a>)</span>. When the variance of a dependent variable increases with the mean, it may also be possible to transform the dependent variable using e.g. a logarithmic or square-root transformation. Such a relation between the mean value and the variance is often found for response times. Tasks which require relatively little time tend to show less variation between people or between occasions than tasks that require more time to complete. It is quite standard to analyse <span class="math inline">\(\log(\text{RT})\)</span> rather than “raw” RTs. But a transformation is not always necessary. One issue with transforming the dependent variable is that it will change the relation between predictors and the DV. If a relation is linear between a predictor and the dependent variable, the relation between the predictor and the transformed dependent variable will be nonlinear. This is not a concern in pure ANOVA type models, but may prove a thorny issue in linear regression models. Transformation of variables is therefore something that should be considered carefully. Determining the correct base of the logarithm to achieve the desired result of homogenising the variance can also be tricky. Some common transformations are provided in Table <a href="being-a-responsible-data-analyst.html#tab:common-data-transformations">13.1</a>. A general technique which aims to help you determine the appropriate transformation function is the so-called Box-Cox transformation <span class="citation">(see e.g. <a href="references.html#ref-sakia1992box" role="doc-biblioref">Sakia, 1992</a>)</span>.</p>
+When the ratio is larger than 4, you could decide to use an alternative test, such as the Brown-Forsythe or the Welch test <span class="citation">(see e.g. <a href="#ref-tomarken1986comparison" role="doc-biblioref">Tomarken &amp; Serlin, 1986</a>)</span>. When the variance of a dependent variable increases with the mean, it may also be possible to transform the dependent variable using e.g. a logarithmic or square-root transformation. Such a relation between the mean value and the variance is often found for response times. Tasks which require relatively little time tend to show less variation between people or between occasions than tasks that require more time to complete. It is quite standard to analyse <span class="math inline">\(\log(\text{RT})\)</span> rather than “raw” RTs. But a transformation is not always necessary. One issue with transforming the dependent variable is that it will change the relation between predictors and the DV. If a relation is linear between a predictor and the dependent variable, the relation between the predictor and the transformed dependent variable will be nonlinear. This is not a concern in pure ANOVA type models, but may prove a thorny issue in linear regression models. Transformation of variables is therefore something that should be considered carefully. Determining the correct base of the logarithm to achieve the desired result of homogenising the variance can also be tricky. Some common transformations are provided in Table <a href="being-a-responsible-data-analyst.html#tab:common-data-transformations">13.1</a>. A general technique which aims to help you determine the appropriate transformation function is the so-called Box-Cox transformation <span class="citation">(see e.g. <a href="#ref-sakia1992box" role="doc-biblioref">Sakia, 1992</a>)</span>.</p>
 <table>
 <caption><span id="tab:common-data-transformations">Table 13.1: </span> Some common transformations for the dependent variable in linear models.</caption>
 <colgroup>
@@ -411,12 +457,12 @@ When the ratio is larger than 4, you could decide to use an alternative test, su
 </div>
 <div id="distinguish-between-confirmatory-and-exploratory-analyses" class="section level2" number="13.4">
 <h2><span class="header-section-number">13.4</span> Distinguish between confirmatory and exploratory analyses</h2>
-<p>When embarking on a data analysis journey, you will often take a planned route, but also take some unplanned paths. It is important to distinguish between these, as unplanned routes may have been led by random noise or other idiosyncrasies in the dataset collected. Andrew Gelman quite nicely describes the various choices made during an analysis as a “garden of forking paths” <span class="citation">(<a href="references.html#ref-gelman2013garden" role="doc-biblioref">Gelman &amp; Loken, 2013</a>)</span>. Other authors talk of “researcher degrees of freedom” <span class="citation">(<a href="references.html#ref-simmons2011false" role="doc-biblioref">Simmons et al., 2011</a>)</span>. Consider the following hypothetical example:</p>
+<p>When embarking on a data analysis journey, you will often take a planned route, but also take some unplanned paths. It is important to distinguish between these, as unplanned routes may have been led by random noise or other idiosyncrasies in the dataset collected. Andrew Gelman quite nicely describes the various choices made during an analysis as a “garden of forking paths” <span class="citation">(<a href="#ref-gelman2013garden" role="doc-biblioref">Gelman &amp; Loken, 2013</a>)</span>. Other authors talk of “researcher degrees of freedom” <span class="citation">(<a href="#ref-simmons2011false" role="doc-biblioref">Simmons et al., 2011</a>)</span>. Consider the following hypothetical example:</p>
 <blockquote>
 <p>A researcher is interested in differences between Democrats and Republicans in how they perform in a short mathematics test when it is expressed in two different contexts, either involving health care or the military. The research hypothesis is that context matters, and one would expect Democrats to do better in the health-care context and Republicans in the military context. Party identification measured on a standard 7-point scale and various demographic information also available. At this point there is a huge number of possible comparisons that can be performed–all consistent with the data. For example, the pattern could be found (with statistical significance) among men and not among women–explicable under the theory that men are more ideological than women. Or the pattern could be found among women but not among men–explicable under the theory that women are more sensitive to context, compared to men. Or the pattern could be statistically significant for neither group, but the difference could be significant (still fitting the theory, as described above). Or the effect might only appear among men who are being asked the questions by female interviewers. We might see a difference between sexes in the health-care context but not the military context; this would make sense given that health care is currently a highly politically salient issue and the military is not. There are degrees of freedom in the classification of respondents into Democrats and Republicans from a 7-point scale. And how are independents and nonpartisans handled? They could be excluded entirely. Or perhaps the key pattern is between partisans and nonpartisans? And so on.<br />
-<span class="citation">(<a href="references.html#ref-gelman2013garden" role="doc-biblioref">Gelman &amp; Loken, 2013, p. 3</a>)</span></p>
+<span class="citation">(<a href="#ref-gelman2013garden" role="doc-biblioref">Gelman &amp; Loken, 2013, p. 3</a>)</span></p>
 </blockquote>
-<p>As this example illustrates, there are many potential ways to show evidence for a seemingly straightforward hypothesis regarding an interaction between political affiliation and context, each which can be justified by theory. An unscrupulous analyst hunting for a significant result might try all these, and choose to report just the comparison with the strongest test result. This is also called “p-hacking” <span class="citation">(<a href="references.html#ref-simmons2011false" role="doc-biblioref">Simmons et al., 2011</a>)</span>, and will result in a proliferation of Type 1 errors in the scientific literature. But even highly conscientious analysts can be led astray when allowing hypothesis tests to be inspired by patterns in the data. The results of unplanned analyses that were inspired by other analyses should be treated with caution. Data is inherently noisy, and patterns which may seem obvious and easy to provide a post-hoc explanation for are noisy too. Whilst Bayesian hypothesis testing is sometimes portrayed as being immune to researcher intentions, this holds really just for confirmatory analyses where the priors are determined before data collection. Bayesian analyses, like Frequentist ones, can be “hacked” too <span class="citation">(<a href="references.html#ref-simonsohn2014posterior" role="doc-biblioref">Simonsohn, 2014</a>)</span>.</p>
+<p>As this example illustrates, there are many potential ways to show evidence for a seemingly straightforward hypothesis regarding an interaction between political affiliation and context, each which can be justified by theory. An unscrupulous analyst hunting for a significant result might try all these, and choose to report just the comparison with the strongest test result. This is also called “p-hacking” <span class="citation">(<a href="#ref-simmons2011false" role="doc-biblioref">Simmons et al., 2011</a>)</span>, and will result in a proliferation of Type 1 errors in the scientific literature. But even highly conscientious analysts can be led astray when allowing hypothesis tests to be inspired by patterns in the data. The results of unplanned analyses that were inspired by other analyses should be treated with caution. Data is inherently noisy, and patterns which may seem obvious and easy to provide a post-hoc explanation for are noisy too. Whilst Bayesian hypothesis testing is sometimes portrayed as being immune to researcher intentions, this holds really just for confirmatory analyses where the priors are determined before data collection. Bayesian analyses, like Frequentist ones, can be “hacked” too <span class="citation">(<a href="#ref-simonsohn2014posterior" role="doc-biblioref">Simonsohn, 2014</a>)</span>.</p>
 <p>To diminish the likelihood of being led astray, it is important to clearly distinguish between confirmatory and exploratory analyses. Confirmatory analyses are those that are planned before seeing the data. To be truly confirmatory, you should not only decide exactly which particular model to use, and which parameters to test, but also what exclusion criteria (if any) to apply to data points (e.g., what are considered to be outliers). If all is decided before seeing the data, these confirmatory analyses can be preregistered. Such preregistration is useful because by committing to a particular analysis, you avoid the temptation to deviate from your initial plans in seemingly innocuous ways, which nevertheless will increase the chance of Type 1 errors. Preregistration of analyses does not preclude further exploratory analyses. But these can then be clearly identified as such, and their results treated with the additional caution they deserve. When you don’t have pilot data, preregistration is difficult however, as there are often unforeseen issues in the data (e.g., heteroscedasticity which may require a transformation of the data, or unforeseen outliers). In responding to such unforeseen issues, it may be necessary to change the planned analyses which in principle would render them “exploratory.” I don’t think it is always necessary to be this strict. But it will be up to the analyst to provide a strong justification for the deviation from the analysis plan. Simply providing such a justification is already a substantial advance over not clearly identifying data-driven choices which may have affected the results.</p>
 </div>
 <div id="aim-for-openness-and-reproducibility" class="section level2" number="13.5">
@@ -425,7 +471,7 @@ When the ratio is larger than 4, you could decide to use an alternative test, su
 </div>
 <div id="communicate-clearly-and-concisely" class="section level2" number="13.6">
 <h2><span class="header-section-number">13.6</span> Communicate clearly and concisely</h2>
-<p>When writing up the results of statistical analyses, you should aim for clarity and conciseness. Provide all the relevant details of statistical analyses. The American Psychological Association (APA) provides extensive guidelines for reporting results of psychological studies in the APA publication manual <span class="citation">(<a href="references.html#ref-apa2020publication" role="doc-biblioref">American Psychological Association, 2020</a>)</span>. Some of the APA rules can be a little tedious, but they are meant to provide standards to make scientific communication effective. A useful summary of the main APA style guide can be found <a href="https://owl.purdue.edu/owl/research_and_citation/apa_style/apa_formatting_and_style_guide/apa_sample_paper.html">here</a> and brief guidelines on reporting numbers and statistics can be found <a href="https://apastyle.apa.org/instructional-aids/numbers-statistics-guide.pdf">here</a>. Andy Fields has also written a useful <a href="https://www.discoveringstatistics.com/docs/writinglabreports.pdf">guide to writing research reports</a>.</p>
+<p>When writing up the results of statistical analyses, you should aim for clarity and conciseness. Provide all the relevant details of statistical analyses. The American Psychological Association (APA) provides extensive guidelines for reporting results of psychological studies in the APA publication manual <span class="citation">(<a href="#ref-apa2020publication" role="doc-biblioref">American Psychological Association, 2020</a>)</span>. Some of the APA rules can be a little tedious, but they are meant to provide standards to make scientific communication effective. A useful summary of the main APA style guide can be found <a href="https://owl.purdue.edu/owl/research_and_citation/apa_style/apa_formatting_and_style_guide/apa_sample_paper.html">here</a> and brief guidelines on reporting numbers and statistics can be found <a href="https://apastyle.apa.org/instructional-aids/numbers-statistics-guide.pdf">here</a>. Andy Fields has also written a useful <a href="https://www.discoveringstatistics.com/docs/writinglabreports.pdf">guide to writing research reports</a>.</p>
 <p>Here are some of my recommendations for describing analyses in the results section of a paper. They are mostly consistent with the APA guidelines, although I must admit the last version of the APA publication manual I read was the 5th edition from 2001.</p>
 <p>I will start by listing some general guidelines, and then provide two example write-ups, one for the multiple regression analysis that we focused on in Chapter <a href="ch-multiple-regression.html#ch-multiple-regression">5</a>, and another for the factorial ANOVA that we focused on in Chapter <a href="ch-factorial-ANOVA.html#ch-factorial-ANOVA">8</a>.</p>
 <ol style="list-style-type: decimal">
@@ -443,7 +489,7 @@ When the ratio is larger than 4, you could decide to use an alternative test, su
 <blockquote>
 <p>To determine the effect of hate groups on votes for Donald Trump in the 2016 US elections, we conducted a multiple regression analysis. The dependent variable was the percentage of votes for Donald Trump in each of the <span class="math inline">\(n=50\)</span> US states, and to account for variations in the size of the population of each state, the number of hate groups was measured per million citizens. As education level is expected to be related to voting behaviour, the regression model also included a measure of education level (as the percentage of citizens with a Bachelors degree or higher) as an additional predictor. This allowed us to determine the unique effect of hate groups on voting behaviour whilst controlling for the possibly confounding effect of education. Pairwise plots depicting the pairwise relations between percentage Trump votes, number of hate groups, and education level, are shown in Figure <a href="being-a-responsible-data-analyst.html#fig:example-multiple-regression-write-up-plot">13.1</a>. The model accounted for a significant proportion of the variance of voting behaviour (<span class="math inline">\(R^2 = .58\)</span>, <span class="math inline">\(F(2, 47) = 33.06\)</span>, <span class="math inline">\(p &lt; .001\)</span>). The analysis showed a significant unique effect of hate groups on votes for Donald Trump (<span class="math inline">\(b = 1.31\)</span>, 95% CI <span class="math inline">\([0.29\)</span>, <span class="math inline">\(2.34]\)</span>, <span class="math inline">\(t(47) = 2.58\)</span>, <span class="math inline">\(p = .013\)</span>). For every additional hate group per million citizens, votes for Donald Trump are predicted to increase by 1.31%. In addition, the analysis showed a significant effect of education level (<span class="math inline">\(b = -1.22\)</span>, 95% CI <span class="math inline">\([-1.59\)</span>, <span class="math inline">\(-0.85]\)</span>, <span class="math inline">\(t(47) = -6.63\)</span>, <span class="math inline">\(p &lt; .001\)</span>). For every additional one percent of citizens with at least a Bachelor’s degree, votes for Donald Trump are predicted to decrease by 1.22%.</p>
 </blockquote>
-<div class="figure" style="text-align: center"><span id="fig:example-multiple-regression-write-up-plot"></span>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:example-multiple-regression-write-up-plot"></span>
 <img src="_main_files/figure-html/example-multiple-regression-write-up-plot-1.svg" alt="Pairwise scatterplots, nonparametric density plots, and pairwise correlations for the percentage of votes for Donald Trump, hate groups (per million citizens) and education level ($\text{\%}$ of citizens with a Bachelors degree or higher)." width="95%" />
 <p class="caption">
 Figure 13.1: Pairwise scatterplots, nonparametric density plots, and pairwise correlations for the percentage of votes for Donald Trump, hate groups (per million citizens) and education level (<span class="math inline">\(\text{\%}\)</span> of citizens with a Bachelors degree or higher).
@@ -456,7 +502,7 @@ Figure 13.1: Pairwise scatterplots, nonparametric density plots, and pairwise co
 <blockquote>
 <p>To assess the effect of power prime and experimenter belief on participants’ speed in approaching and avoiding virtual targets, a 2 (power prime: low power vs high power) by 2 (experimenter belief: low power vs high power) factorial ANOVA was conducted. The dependent variable was the “approach advantage” score, computed as the difference in the average time (in milliseconds) between to making an approach vs an avoid response. The approach advantage scores in the four conditions are depicted in Figure <a href="being-a-responsible-data-analyst.html#fig:example-factorial-ANOVA-write-up-plot">13.2</a>. The analysis showed a significant main effect of experimenter belief (<span class="math inline">\(F(1, 396) = 17.82\)</span>, <span class="math inline">\(\mathit{MSE} = 45,974.87\)</span>, <span class="math inline">\(p &lt; .001\)</span>, <span class="math inline">\(\hat{\eta}^2_p = .043\)</span>). The approach advantage score was higher when the experimenter was made to believe participants were provided with a high power prime (<span class="math inline">\(M = 66.72\)</span>) compared to when they were made to believe participants were provided with a low power prime (<span class="math inline">\(M = -23.79\)</span>). The main effect of power prime was not significant (<span class="math inline">\(F(1, 396) = 0.31\)</span>, <span class="math inline">\(\mathit{MSE} = 45,974.87\)</span>, <span class="math inline">\(p = .577\)</span>, <span class="math inline">\(\hat{\eta}^2_p = .001\)</span>). The interaction between experimenter belief and power prime was also not significant (<span class="math inline">\(F(1, 396) = 0.77\)</span>, <span class="math inline">\(\mathit{MSE} = 45,974.87\)</span>, <span class="math inline">\(p = .381\)</span>, <span class="math inline">\(\hat{\eta}^2_p = .002\)</span>).</p>
 </blockquote>
-<div class="figure" style="text-align: center"><span id="fig:example-factorial-ANOVA-write-up-plot"></span>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:example-factorial-ANOVA-write-up-plot"></span>
 <img src="_main_files/figure-html/example-factorial-ANOVA-write-up-plot-1.svg" alt="Approach advantage scores by Experimenter belief and Power prime. Means and $\text{95\%}$ confidence intervals are shown as black dots and bands respectively. Raw data points are shown in grey." width="95%" />
 <p class="caption">
 Figure 13.2: Approach advantage scores by Experimenter belief and Power prime. Means and <span class="math inline">\(\text{95\%}\)</span> confidence intervals are shown as black dots and bands respectively. Raw data points are shown in grey.
@@ -470,6 +516,33 @@ Figure 13.2: Approach advantage scores by Experimenter belief and Power prime. M
 </div>
 </div>
 </div>
+<h3>References</h3>
+<div id="refs" class="references csl-bib-body hanging-indent" line-spacing="2">
+<div id="ref-apa2020publication" class="csl-entry">
+American Psychological Association. (2020). <em>Publication manual of the <span>A</span>merican <span>P</span>sychological <span>A</span>ssociation</em> (7th ed). Washington, DC: American Psychological Association.
+</div>
+<div id="ref-gelman2013garden" class="csl-entry">
+Gelman, A., &amp; Loken, E. (2013). <em>The garden of forking paths: Why multiple comparisons can be a problem, even when there is no "fishing expedition" or "p-hacking" and the research hypothesis was posited ahead of time</em>. Department of Statistics, Columbia University.
+</div>
+<div id="ref-lix1996consequences" class="csl-entry">
+Lix, L. M., Keselman, J. C., &amp; Keselman, H. J. (1996). Consequences of assumption violations revisited: A quantitative review of alternatives to the one-way analysis of variance <span>F</span> test. <em>Review of Educational Research</em>, <em>66</em>, 579–619.
+</div>
+<div id="ref-maxwell2017designing" class="csl-entry">
+Maxwell, S. E., Delaney, H. D., &amp; Kelley, K. (2017). <em>Designing experiments and analyzing data: A model comparison perspective</em>. Routledge.
+</div>
+<div id="ref-sakia1992box" class="csl-entry">
+Sakia, R. M. (1992). The box-cox transformation technique: A review. <em>Journal of the Royal Statistical Society: Series D (The Statistician)</em>, <em>41</em>, 169–178.
+</div>
+<div id="ref-simmons2011false" class="csl-entry">
+Simmons, J. P., Nelson, L. D., &amp; Simonsohn, U. (2011). False-positive psychology: Undisclosed flexibility in data collection and analysis allows presenting anything as significant. <em>Psychological Science</em>, <em>22</em>, 1359–1366.
+</div>
+<div id="ref-simonsohn2014posterior" class="csl-entry">
+Simonsohn, U. (2014). <em>Posterior-hacking: Selective reporting invalidates <span>B</span>ayesian results also</em>. Retrieved from <a href="https://dx.doi.org/10.2139/ssrn.2374040">https://dx.doi.org/10.2139/ssrn.2374040</a>
+</div>
+<div id="ref-tomarken1986comparison" class="csl-entry">
+Tomarken, A. J., &amp; Serlin, R. C. (1986). Comparison of ANOVA alternatives under variance heterogeneity and specific noncentrality structures. <em>Psychological Bulletin</em>, <em>99</em>, 90.
+</div>
+</div>
             </section>
 
           </div>
@@ -480,7 +553,6 @@ Figure 13.2: Approach advantage scores by Experimenter belief and Power prime. M
     </div>
   </div>
 <script src="book_assets/gitbook-2.6.7/js/app.min.js"></script>
-<script src="book_assets/gitbook-2.6.7/js/lunr.js"></script>
 <script src="book_assets/gitbook-2.6.7/js/clipboard.min.js"></script>
 <script src="book_assets/gitbook-2.6.7/js/plugin-search.js"></script>
 <script src="book_assets/gitbook-2.6.7/js/plugin-sharing.js"></script>
@@ -499,6 +571,7 @@ gitbook.start({
 "weibo": false,
 "instapaper": false,
 "vk": false,
+"whatsapp": false,
 "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
 },
 "fontsettings": {
@@ -516,11 +589,14 @@ gitbook.start({
 "text": null
 },
 "download": null,
+"search": {
+"engine": "fuse",
+"options": null
+},
 "toc": {
 "collapse": "subsection"
 },
-"source": null,
-"search": true
+"source": null
 });
 });
 </script>

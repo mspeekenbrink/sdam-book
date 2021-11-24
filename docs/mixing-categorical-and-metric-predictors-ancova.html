@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 9 Mixing categorical and metric predictors (ANCOVA) | Statistics: Data analysis and modelling</title>
   <meta name="description" content="A book about statistics for data analysis, with a main focus on statistical modelling." />
-  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 9 Mixing categorical and metric predictors (ANCOVA) | Statistics: Data analysis and modelling" />
   <meta property="og:type" content="book" />
@@ -24,7 +24,7 @@
 <meta name="author" content="Maarten Speekenbrink" />
 
 
-<meta name="date" content="2021-11-17" />
+<meta name="date" content="2021-11-24" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -32,9 +32,10 @@
   
   
 <link rel="prev" href="ch-factorial-ANOVA.html"/>
-<link rel="next" href="repeated-measures-anova.html"/>
-<script src="book_assets/header-attrs-2.7/header-attrs.js"></script>
-<script src="book_assets/jquery-3.5.1/jquery.min.js"></script>
+<link rel="next" href="ch-RM-ANOVA.html"/>
+<script src="book_assets/header-attrs-2.11/header-attrs.js"></script>
+<script src="book_assets/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="book_assets/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="book_assets/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
 <link href="book_assets/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -50,40 +51,66 @@
 
 
 
-
-<script src="book_assets/htmlwidgets-1.5.3/htmlwidgets.js"></script>
+<link href="book_assets/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="book_assets/anchor-sections-1.0.1/anchor-sections.js"></script>
+<script src="book_assets/htmlwidgets-1.5.4/htmlwidgets.js"></script>
 <script src="book_assets/viz-1.8.2/viz.js"></script>
 <link href="book_assets/DiagrammeR-styles-0.2/styles.css" rel="stylesheet" />
 <script src="book_assets/grViz-binding-1.0.6.1/grViz.js"></script>
-<script src="book_assets/plotly-binding-4.9.3/plotly.js"></script>
+<script src="book_assets/plotly-binding-4.10.0/plotly.js"></script>
 <script src="book_assets/typedarray-0.1/typedarray.min.js"></script>
-<link href="book_assets/crosstalk-1.1.1/css/crosstalk.css" rel="stylesheet" />
-<script src="book_assets/crosstalk-1.1.1/js/crosstalk.min.js"></script>
-<link href="book_assets/plotly-htmlwidgets-css-1.57.1/plotly-htmlwidgets.css" rel="stylesheet" />
-<script src="book_assets/plotly-main-1.57.1/plotly-latest.min.js"></script>
+<link href="book_assets/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet" />
+<script src="book_assets/crosstalk-1.2.0/js/crosstalk.min.js"></script>
+<link href="book_assets/plotly-htmlwidgets-css-2.5.1/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="book_assets/plotly-main-2.5.1/plotly-latest.min.js"></script>
 <link href="book_assets/combineWidgetStyle-0.1/combineWidgets.css" rel="stylesheet" />
-<script src="book_assets/combineWidgets-binding-0.10.1/combineWidgets.js"></script>
-<script src="book_assets/rglWebGL-binding-0.106.6/rglWebGL.js"></script>
-<link href="book_assets/rglwidgetClass-0.106.6/rgl.css" rel="stylesheet" />
-<script src="book_assets/rglwidgetClass-0.106.6/rglClass.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.106.6/utils.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.106.6/subscenes.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.106.6/shaders.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.106.6/textures.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.106.6/projection.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.106.6/mouse.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.106.6/init.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.106.6/pieces.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.106.6/draw.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.106.6/controls.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.106.6/selection.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.106.6/rglTimer.src.js"></script>
-<script src="book_assets/CanvasMatrix4-0.106.6/CanvasMatrix.src.js"></script>
-<script src="book_assets/rglPlayer-binding-0.106.6/rglPlayer.js"></script>
+<script src="book_assets/combineWidgets-binding-0.11.1/combineWidgets.js"></script>
+<script src="book_assets/rglWebGL-binding-0.107.14/rglWebGL.js"></script>
+<link href="book_assets/rglwidgetClass-0.107.14/rgl.css" rel="stylesheet" />
+<script src="book_assets/rglwidgetClass-0.107.14/rglClass.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/utils.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/subscenes.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/shaders.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/textures.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/projection.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/mouse.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/init.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/pieces.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/draw.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/controls.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/selection.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/rglTimer.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/pretty.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/axes.src.js"></script>
+<script src="book_assets/CanvasMatrix4-0.107.14/CanvasMatrix.src.js"></script>
+<script src="book_assets/rglPlayer-binding-0.107.14/rglPlayer.js"></script>
 <script src="book_assets/kePrint-0.0.1/kePrint.js"></script>
 <link href="book_assets/lightable-0.0.1/lightable.css" rel="stylesheet" />
 
 
+
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
 
 <link rel="stylesheet" href="style.css" type="text/css" />
 </head>
@@ -283,10 +310,29 @@
 <li class="chapter" data-level="9.7" data-path="mixing-categorical-and-metric-predictors-ancova.html"><a href="mixing-categorical-and-metric-predictors-ancova.html#mediation-with-categorical-independent-variables"><i class="fa fa-check"></i><b>9.7</b> Mediation with categorical independent variables</a></li>
 <li class="chapter" data-level="9.8" data-path="mixing-categorical-and-metric-predictors-ancova.html"><a href="mixing-categorical-and-metric-predictors-ancova.html#ancova-vs-difference-scores"><i class="fa fa-check"></i><b>9.8</b> ANCOVA vs difference scores</a></li>
 </ul></li>
-<li class="chapter" data-level="10" data-path="repeated-measures-anova.html"><a href="repeated-measures-anova.html"><i class="fa fa-check"></i><b>10</b> Repeated-measures ANOVA</a></li>
+<li class="chapter" data-level="10" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html"><i class="fa fa-check"></i><b>10</b> Repeated-measures ANOVA</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#non-independence-in-linear-models"><i class="fa fa-check"></i><b>10.1</b> Non-independence in linear models</a></li>
+<li class="chapter" data-level="10.2" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#the-cheerleader-effect"><i class="fa fa-check"></i><b>10.2</b> The cheerleader effect</a></li>
+<li class="chapter" data-level="10.3" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#as-a-oneway-anova"><i class="fa fa-check"></i><b>10.3</b> As a oneway ANOVA</a></li>
+<li class="chapter" data-level="10.4" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#oneway-repeated-measures-anova"><i class="fa fa-check"></i><b>10.4</b> Oneway repeated-measures ANOVA</a>
+<ul>
+<li class="chapter" data-level="10.4.1" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#within-subjects-composite-scores"><i class="fa fa-check"></i><b>10.4.1</b> Within-subjects composite scores</a></li>
+<li class="chapter" data-level="10.4.2" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#a-composite-for-between-subjects-effects"><i class="fa fa-check"></i><b>10.4.2</b> A composite for between-subjects effects</a></li>
+<li class="chapter" data-level="10.4.3" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#collecting-all-results-and-omnibus-tests"><i class="fa fa-check"></i><b>10.4.3</b> Collecting all results and omnibus tests</a></li>
+</ul></li>
+<li class="chapter" data-level="10.5" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#partitioning-the-variance"><i class="fa fa-check"></i><b>10.5</b> Partitioning the variance</a></li>
+<li class="chapter" data-level="10.6" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#a-mixed-anova-with-between--and-within-subjects-effects"><i class="fa fa-check"></i><b>10.6</b> A mixed ANOVA with between- and within-subjects effects</a></li>
+<li class="chapter" data-level="10.7" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#assumptions-1"><i class="fa fa-check"></i><b>10.7</b> Assumptions</a>
+<ul>
+<li class="chapter" data-level="10.7.1" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#omnibus-tests-and-sphericity"><i class="fa fa-check"></i><b>10.7.1</b> Omnibus tests and sphericity</a></li>
+<li class="chapter" data-level="10.7.2" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#correcting-for-non-sphericity"><i class="fa fa-check"></i><b>10.7.2</b> Correcting for non-sphericity</a></li>
+</ul></li>
+<li class="chapter" data-level="10.8" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#in-practice-4"><i class="fa fa-check"></i><b>10.8</b> In practice</a></li>
+</ul></li>
 <li class="chapter" data-level="11" data-path="linear-mixed-effects-models.html"><a href="linear-mixed-effects-models.html"><i class="fa fa-check"></i><b>11</b> Linear mixed-effects models</a>
 <ul>
-<li class="chapter" data-level="11.1" data-path="linear-mixed-effects-models.html"><a href="linear-mixed-effects-models.html#non-independence-in-linear-models"><i class="fa fa-check"></i><b>11.1</b> Non-independence in linear models</a></li>
+<li class="chapter" data-level="11.1" data-path="linear-mixed-effects-models.html"><a href="linear-mixed-effects-models.html#non-independence-in-linear-models-1"><i class="fa fa-check"></i><b>11.1</b> Non-independence in linear models</a></li>
 <li class="chapter" data-level="11.2" data-path="linear-mixed-effects-models.html"><a href="linear-mixed-effects-models.html#random-intercept-models"><i class="fa fa-check"></i><b>11.2</b> Random intercept models</a></li>
 <li class="chapter" data-level="11.3" data-path="linear-mixed-effects-models.html"><a href="linear-mixed-effects-models.html#parameter-estimation-1"><i class="fa fa-check"></i><b>11.3</b> Parameter estimation</a></li>
 <li class="chapter" data-level="11.4" data-path="linear-mixed-effects-models.html"><a href="linear-mixed-effects-models.html#parameter-inference"><i class="fa fa-check"></i><b>11.4</b> Parameter inference</a></li>
@@ -355,8 +401,8 @@
 <p>In this chapter, we will consider combining categorical and metric independent variables to predict a dependent variable. Such an analysis is generally called an Analysis of Covariance (ANCOVA). There are a number of reasons why you might want to include metric predictors (or “covariates”) in an ANOVA-type analysis: to statistically control for pre-existing differences between conditions of potential confounders, to reduce prediction error and increase the power of statistical tests, and because they are theoretically interesting as for instance potential mediators of the effect of experimental manipulations. In the course of this chapter, we will see examples of each of these. We will also discuss the interpretation of contrasts in ANCOVA models as reflecting differences between group means which are <em>adjusted</em> for the effect of the covariate.</p>
 <div id="subjective-feelings-of-power-and-priming" class="section level2" number="9.1">
 <h2><span class="header-section-number">9.1</span> Subjective feelings of power and priming</h2>
-<p>To illustrate the models, we will consider the data from <span class="citation"><a href="references.html#ref-gilder2018role" role="doc-biblioref">Gilder &amp; Heerey</a> (<a href="references.html#ref-gilder2018role" role="doc-biblioref">2018</a>)</span> again. As part of the experiment, the researchers measured participants’ subjective feeling of power, both before and after providing them with the power priming task. In the priming task, participants were presented with randomly scrambled sentences, and they were asked to reorder the words into grammatically correct sentences. In the high-power prime condition, half of the sentences included words associated with high power (e.g., “dominates,” “commands”) and the other half were neutral words, while in the low-power prime condition, half the sentences contained words associated with low power (e.g., “subordinate,” “obeys”). If the priming task had the desired effect, then participants in the high-power condition should report feeling more power after the priming task than participants in the low-power condition. Before the administration of the power priming task, we would expect no difference in subjective feeling of power. Figure <a href="mixing-categorical-and-metric-predictors-ancova.html#fig:expBelief-power-test-interaction-plots">9.1</a> shows the means of the subjective feeling of power before and after the power priming manipulation. As can be seen there, the task indeed appears to have the desired effect. Before the priming task, differences between the groups are relatively small and there appears to be no real difference between the priming conditions. After the priming task, the averages in the low-power prime conditions are lower and those in the high-power prime conditions higher than before the priming task.</p>
-<div class="figure" style="text-align: center"><span id="fig:expBelief-power-test-interaction-plots"></span>
+<p>To illustrate the models, we will consider the data from <span class="citation"><a href="#ref-gilder2018role" role="doc-biblioref">Gilder &amp; Heerey</a> (<a href="#ref-gilder2018role" role="doc-biblioref">2018</a>)</span> again. As part of the experiment, the researchers measured participants’ subjective feeling of power, both before and after providing them with the power priming task. In the priming task, participants were presented with randomly scrambled sentences, and they were asked to reorder the words into grammatically correct sentences. In the high-power prime condition, half of the sentences included words associated with high power (e.g., “dominates,” “commands”) and the other half were neutral words, while in the low-power prime condition, half the sentences contained words associated with low power (e.g., “subordinate,” “obeys”). If the priming task had the desired effect, then participants in the high-power condition should report feeling more power after the priming task than participants in the low-power condition. Before the administration of the power priming task, we would expect no difference in subjective feeling of power. Figure <a href="mixing-categorical-and-metric-predictors-ancova.html#fig:expBelief-power-test-interaction-plots">9.1</a> shows the means of the subjective feeling of power before and after the power priming manipulation. As can be seen there, the task indeed appears to have the desired effect. Before the priming task, differences between the groups are relatively small and there appears to be no real difference between the priming conditions. After the priming task, the averages in the low-power prime conditions are lower and those in the high-power prime conditions higher than before the priming task.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:expBelief-power-test-interaction-plots"></span>
 <img src="_main_files/figure-html/expBelief-power-test-interaction-plots-1.svg" alt="Means and standard errors of subjective feeling of power before (pre-test) and after (post-test) power prime." width="80%" />
 <p class="caption">
 Figure 9.1: Means and standard errors of subjective feeling of power before (pre-test) and after (post-test) power prime.
@@ -969,7 +1015,7 @@ The fact that these two formulations are equivalent again illustrates the main i
 <h2><span class="header-section-number">9.4</span> Homogeneity of slopes</h2>
 <p>The model of Equation <a href="mixing-categorical-and-metric-predictors-ancova.html#eq:post-power-ANOVA">(9.1)</a> does not include any interactions between the covariate and the contrast-coding differences. As such, the model assumes the effect of the covariate on the dependent variable is the same in each condition. This assumption is usuallty referred to as the assumption of <strong>homogeneity of regression slopes</strong>. The resulting regression lines for the relation between <span class="math inline">\(\texttt{power-pre}\)</span> and <span class="math inline">\(\texttt{power-post}\)</span> in the different conditions are depicted in Figure <a href="mixing-categorical-and-metric-predictors-ancova.html#fig:expBelief-modpostpre-regression-lines">9.2</a>. The assumption that the slopes are identical means that the the regression lines are parallel to each other. Note that the height of each regression line reflects the combined effect of power priming and experimenter belief. Within each condition, these effects are a constant, and hence the combined effect of these factors effectively is equal to the intercept of each regression line.</p>
 <p>As discussed above, you can think of an ANCOVA model as statistically correcting the conditions for any differences in the covariate. After this correction, the conditions effectively have the same value on the covariate. In the context of Figure <a href="mixing-categorical-and-metric-predictors-ancova.html#fig:expBelief-modpostpre-regression-lines">9.2</a>, you can pick any value of the covariate you like, and then think of the contrasts between the conditions as comparisons between the model predictions at that value of the covariate. Because the regression lines for both high-power prime conditions, and for both low-power prime conditions, are almost the same, it is clear that experimenter belief has little effect on feelings of power. The high-power and low-power conditions have more clearly separated regression lines, which is corroborated by the significant effect of power prime in the model.</p>
-<div class="figure" style="text-align: center"><span id="fig:expBelief-modpostpre-regression-lines"></span>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:expBelief-modpostpre-regression-lines"></span>
 <img src="_main_files/figure-html/expBelief-modpostpre-regression-lines-1.svg" alt="Regression lines reflecting the relation between $  exttt{power-pre}$ and $ exttt{power-post}$ in the four conditions of the experimenter belief and power priming experiment." width="95%" />
 <p class="caption">
 Figure 9.2: Regression lines reflecting the relation between $ exttt{power-pre}$ and $ exttt{power-post}$ in the four conditions of the experimenter belief and power priming experiment.
@@ -1196,7 +1242,7 @@ With <span class="math inline">\(\text{df}_1 = 3\)</span> and <span class="math 
 <p>A primary reason for including covariates in models with categorical independent variables is to assess group differences in the dependent variable whilst controlling for any possible differences in the covariates. But there is another reason why the inclusion of covariates can be a good idea: it may increase the power of the tests of group differences. We saw evidence of this when we included <span class="math inline">\(\texttt{pre-power}\)</span> in the model for <span class="math inline">\(\texttt{post-power}\)</span>. Comparing the results in Table <a href="mixing-categorical-and-metric-predictors-ancova.html#tab:expBelief-power-post-ANCOVA">9.3</a> to those in Table <a href="mixing-categorical-and-metric-predictors-ancova.html#tab:expBelief-power-post-ANOVA">9.1</a>, you can see that the test results for the main effect of priming are stronger after inclusion of the covariate. The reason for this is that the covariate can explain differences in <span class="math inline">\(\texttt{post-power}\)</span> within each condition. Accounting for this within-condition variance reduces the overall error variance of the model, which can subsequently increase the power of the tests. This is particularly the case when the covariate is strongly related to the dependent variable, but independent of the contrast-coded predictors. Such independence implies that the groups do not differ in the average value of the covariate.</p>
 <p>We can illustrate this with the Venn diagrams in Figure <a href="mixing-categorical-and-metric-predictors-ancova.html#fig:sse-partition-ANCOVA">9.3</a>. Let’s consider first the situation of no redundancy between the covariate <span class="math inline">\(Z\)</span> and the contrast-coded predictors <span class="math inline">\(X\)</span>, which is depicted in the left-hand plot. The SSR associated to the contrast-coded predictors is region <span class="math inline">\(B\)</span>, and the SSR associated to the covariate is region <span class="math inline">\(C\)</span>. The test of group differences (i.e. the test of the contrast-coded predictors) would involve a comparison of the SSR of region <span class="math inline">\(B\)</span> against the unexplained error of region <span class="math inline">\(A\)</span>. In a model without the covariate, the unexplained error would be the sum of region <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span>. As this error is larger, the <span class="math inline">\(F\)</span> statistic will be smaller, even though the SSR term for <span class="math inline">\(X\)</span> is the same. As such, inclusion of the covariate increases the power of the test of <span class="math inline">\(X\)</span>, and the increase in power is larger the stronger the relation between the covariate <span class="math inline">\(Z\)</span> and the dependent variable <span class="math inline">\(Y\)</span> (i.e. the larger region <span class="math inline">\(B\)</span>). The situation is more complicated when there is redundancy between the covariate and the contrast-coded predictors. This is the situation depicted in the right-hand plot. Whilst inclusion of the covariate again reduces the error – which would be the sum <span class="math inline">\(A+B\)</span> for a model without the covariate, but only <span class="math inline">\(A\)</span> for a model with the covariate – it also reduces the unique SSR that can be associated to the contrast-coded predictors. In a model without the covariate, <span class="math inline">\(\text{SSR}(X) = B + D\)</span>, and in a model with the covariate, <span class="math inline">\(\text{SSR}(X) = B\)</span>. The ANCOVA model is now no longer guaranteed to increase the power of the test of <span class="math inline">\(X\)</span>, as this depends on how the reduction in error compares to the reduction of the SSR.</p>
 <p>In conclusion, for purposes of increasing power, the covariate is ideally strongly related to the dependent variable, but unrelated to the other predictors in the model.</p>
-<div class="figure" style="text-align: center"><span id="fig:sse-partition-ANCOVA"></span>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:sse-partition-ANCOVA"></span>
 <img src="_main_files/figure-html/sse-partition-ANCOVA-1.svg" alt="Partitioning the variance in an ANCOVA model. the circle labelled as $Y$ represents the variance of the dependent variable, circle $X$ represents a (set of) contrast-coded predictor(s), and circle $Z$ the covariate. Overlapping regions represent shared variability (e.g. covariance) between variables." width="60%" />
 <p class="caption">
 Figure 9.3: Partitioning the variance in an ANCOVA model. the circle labelled as <span class="math inline">\(Y\)</span> represents the variance of the dependent variable, circle <span class="math inline">\(X\)</span> represents a (set of) contrast-coded predictor(s), and circle <span class="math inline">\(Z\)</span> the covariate. Overlapping regions represent shared variability (e.g. covariance) between variables.
@@ -1386,7 +1432,7 @@ i.e. the total adjustment of the slope consists of the sum of adjustments for e
 </div>
 <div id="mediation-with-categorical-independent-variables" class="section level2" number="9.7">
 <h2><span class="header-section-number">9.7</span> Mediation with categorical independent variables</h2>
-<p>The finding that experimenter belief has an effect on participants’ approach advantage indicates that experimenter expectations affect participants behaviour, even though the experimenters in the study of <span class="citation"><a href="references.html#ref-gilder2018role" role="doc-biblioref">Gilder &amp; Heerey</a> (<a href="references.html#ref-gilder2018role" role="doc-biblioref">2018</a>)</span> asserted that their knowledge of the condition had not affected their behaviour towards the participants. The question is then how experimenter belief changed their interaction with the participants to change their approach advantage scores. To attempt to answer this question, we assess whether experimenter belief changed participants’ perception of the experimenters, and whether such changes resulted in the difference in approach advantage. Thus, as another example of mixing categorical and metric independent variables, we can consider assessing whether the effect of experimenter belief on approach advantage is mediated by participants’ perceptions of the experimenters.</p>
+<p>The finding that experimenter belief has an effect on participants’ approach advantage indicates that experimenter expectations affect participants behaviour, even though the experimenters in the study of <span class="citation"><a href="#ref-gilder2018role" role="doc-biblioref">Gilder &amp; Heerey</a> (<a href="#ref-gilder2018role" role="doc-biblioref">2018</a>)</span> asserted that their knowledge of the condition had not affected their behaviour towards the participants. The question is then how experimenter belief changed their interaction with the participants to change their approach advantage scores. To attempt to answer this question, we assess whether experimenter belief changed participants’ perception of the experimenters, and whether such changes resulted in the difference in approach advantage. Thus, as another example of mixing categorical and metric independent variables, we can consider assessing whether the effect of experimenter belief on approach advantage is mediated by participants’ perceptions of the experimenters.</p>
 <p>At the end of the experiment, participants rated how attractive, competent, friendly, and trustworthy they found their experimenter. Preliminary analysis (not shown here for brevity) indicates that when experimenters believed participants were assigned to the high-power condition, they were rated as more attractive, friendly, and trustworthy. If the effect of experimenter belief is mediated by these changes in perception, then after including the ratings of attractiveness, friendliness, and trustworthiness, we would expect the effect of experimenter belief to be reduced. However, the results of the analysis (see Table <a href="mixing-categorical-and-metric-predictors-ancova.html#tab:expBelief-ApproachAdvantage-mediation-ANCOVA">9.6</a>) are only slighly suggestive of this. Controlling for attractiveness, friendliness, and trustworthiness, we still obtain a highly significant effect of experimenter belief, with a slope which is a little lower than in a model without these covariates. But none of the covariates appears to be related to the approach advantage.</p>
 <table>
 <caption>
@@ -1708,8 +1754,17 @@ Error
 <span class="math display">\[\texttt{post-power}_i - \texttt{pre-power}_i = \beta_0 + \beta_\text{P} \times \texttt{P}_i + \beta_\text{B} \times \texttt{B}_i + \beta_{\text{P}\times \text{B}} \times (\texttt{P} \times \texttt{B})_i + \epsilon_i\]</span>
 we can add <span class="math inline">\(\texttt{pre-power}\)</span> to both sides of the equation to obtain
 <span class="math display">\[\texttt{post-power}_i = \beta_0 + \beta_\text{P} \times \texttt{P}_i + \beta_\text{B} \times \texttt{B}_i + \beta_{\text{P}\times \text{B}} \times (\texttt{P} \times \texttt{B})_i +  \texttt{pre-power}_i + \epsilon_i\]</span>
-Note that this model is the same model as in Equation <a href="mixing-categorical-and-metric-predictors-ancova.html#eq:post-power-ANCOVA">(9.2)</a> if we fix <span class="math inline">\(\beta_\text{pre} = 1\)</span>. In other words, the difference model is a special case of the ANCOVA model, where we assume we know the slope of the covariate equals 1. If this assumption is (approximately) true, then the difference model can be preferred, because it has one parameter less to estimate. If, however, the true slope of the covariate is different from 1, then the difference model is less accurate than the ANCOVA model. If the slope of the covariate is sufficiently different from 1, then the ANCOVA model will provide more powerful tests of the contrasts than the difference model <span class="citation">(<a href="references.html#ref-judd2011data" role="doc-biblioref">Charles M. Judd et al., 2011</a>)</span>. In addition, if one is interested in modelling changes within participants, then approaches such as repeated-measures ANOVA and linear mixed-effects models are a better choice.</p>
+Note that this model is the same model as in Equation <a href="mixing-categorical-and-metric-predictors-ancova.html#eq:post-power-ANCOVA">(9.2)</a> if we fix <span class="math inline">\(\beta_\text{pre} = 1\)</span>. In other words, the difference model is a special case of the ANCOVA model, where we assume we know the slope of the covariate equals 1. If this assumption is (approximately) true, then the difference model can be preferred, because it has one parameter less to estimate. If, however, the true slope of the covariate is different from 1, then the difference model is less accurate than the ANCOVA model. If the slope of the covariate is sufficiently different from 1, then the ANCOVA model will provide more powerful tests of the contrasts than the difference model <span class="citation">(<a href="#ref-judd2011data" role="doc-biblioref">Charles M. Judd et al., 2011</a>)</span>. In addition, if one is interested in modelling changes within participants, then approaches such as repeated-measures ANOVA and linear mixed-effects models are a better choice.</p>
 
+</div>
+</div>
+<h3>References</h3>
+<div id="refs" class="references csl-bib-body hanging-indent" line-spacing="2">
+<div id="ref-gilder2018role" class="csl-entry">
+Gilder, T. S. E., &amp; Heerey, E. A. (2018). The role of experimenter belief in social priming. <em>Psychological Science</em>, <em>29</em>, 403–417.
+</div>
+<div id="ref-judd2011data" class="csl-entry">
+Judd, Charles M., McClelland, G. H., &amp; Ryan, C. S. (2011). <em>Data analysis: A model comparison approach</em>. Routledge.
 </div>
 </div>
 <div class="footnotes">
@@ -1724,11 +1779,10 @@ Note that this model is the same model as in Equation <a href="mixing-categorica
         </div>
       </div>
 <a href="ch-factorial-ANOVA.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="repeated-measures-anova.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="ch-RM-ANOVA.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="book_assets/gitbook-2.6.7/js/app.min.js"></script>
-<script src="book_assets/gitbook-2.6.7/js/lunr.js"></script>
 <script src="book_assets/gitbook-2.6.7/js/clipboard.min.js"></script>
 <script src="book_assets/gitbook-2.6.7/js/plugin-search.js"></script>
 <script src="book_assets/gitbook-2.6.7/js/plugin-sharing.js"></script>
@@ -1747,6 +1801,7 @@ gitbook.start({
 "weibo": false,
 "instapaper": false,
 "vk": false,
+"whatsapp": false,
 "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
 },
 "fontsettings": {
@@ -1764,11 +1819,14 @@ gitbook.start({
 "text": null
 },
 "download": null,
+"search": {
+"engine": "fuse",
+"options": null
+},
 "toc": {
 "collapse": "subsection"
 },
-"source": null,
-"search": true
+"source": null
 });
 });
 </script>

@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 3 A model with a mean (one sample t-test) | Statistics: Data analysis and modelling</title>
   <meta name="description" content="A book about statistics for data analysis, with a main focus on statistical modelling." />
-  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 3 A model with a mean (one sample t-test) | Statistics: Data analysis and modelling" />
   <meta property="og:type" content="book" />
@@ -24,7 +24,7 @@
 <meta name="author" content="Maarten Speekenbrink" />
 
 
-<meta name="date" content="2021-11-17" />
+<meta name="date" content="2021-11-24" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -33,8 +33,9 @@
   
 <link rel="prev" href="ch-modeling.html"/>
 <link rel="next" href="simple-linear-regression.html"/>
-<script src="book_assets/header-attrs-2.7/header-attrs.js"></script>
-<script src="book_assets/jquery-3.5.1/jquery.min.js"></script>
+<script src="book_assets/header-attrs-2.11/header-attrs.js"></script>
+<script src="book_assets/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="book_assets/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="book_assets/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
 <link href="book_assets/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -50,40 +51,66 @@
 
 
 
-
-<script src="book_assets/htmlwidgets-1.5.3/htmlwidgets.js"></script>
+<link href="book_assets/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="book_assets/anchor-sections-1.0.1/anchor-sections.js"></script>
+<script src="book_assets/htmlwidgets-1.5.4/htmlwidgets.js"></script>
 <script src="book_assets/viz-1.8.2/viz.js"></script>
 <link href="book_assets/DiagrammeR-styles-0.2/styles.css" rel="stylesheet" />
 <script src="book_assets/grViz-binding-1.0.6.1/grViz.js"></script>
-<script src="book_assets/plotly-binding-4.9.3/plotly.js"></script>
+<script src="book_assets/plotly-binding-4.10.0/plotly.js"></script>
 <script src="book_assets/typedarray-0.1/typedarray.min.js"></script>
-<link href="book_assets/crosstalk-1.1.1/css/crosstalk.css" rel="stylesheet" />
-<script src="book_assets/crosstalk-1.1.1/js/crosstalk.min.js"></script>
-<link href="book_assets/plotly-htmlwidgets-css-1.57.1/plotly-htmlwidgets.css" rel="stylesheet" />
-<script src="book_assets/plotly-main-1.57.1/plotly-latest.min.js"></script>
+<link href="book_assets/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet" />
+<script src="book_assets/crosstalk-1.2.0/js/crosstalk.min.js"></script>
+<link href="book_assets/plotly-htmlwidgets-css-2.5.1/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="book_assets/plotly-main-2.5.1/plotly-latest.min.js"></script>
 <link href="book_assets/combineWidgetStyle-0.1/combineWidgets.css" rel="stylesheet" />
-<script src="book_assets/combineWidgets-binding-0.10.1/combineWidgets.js"></script>
-<script src="book_assets/rglWebGL-binding-0.106.6/rglWebGL.js"></script>
-<link href="book_assets/rglwidgetClass-0.106.6/rgl.css" rel="stylesheet" />
-<script src="book_assets/rglwidgetClass-0.106.6/rglClass.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.106.6/utils.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.106.6/subscenes.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.106.6/shaders.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.106.6/textures.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.106.6/projection.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.106.6/mouse.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.106.6/init.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.106.6/pieces.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.106.6/draw.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.106.6/controls.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.106.6/selection.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.106.6/rglTimer.src.js"></script>
-<script src="book_assets/CanvasMatrix4-0.106.6/CanvasMatrix.src.js"></script>
-<script src="book_assets/rglPlayer-binding-0.106.6/rglPlayer.js"></script>
+<script src="book_assets/combineWidgets-binding-0.11.1/combineWidgets.js"></script>
+<script src="book_assets/rglWebGL-binding-0.107.14/rglWebGL.js"></script>
+<link href="book_assets/rglwidgetClass-0.107.14/rgl.css" rel="stylesheet" />
+<script src="book_assets/rglwidgetClass-0.107.14/rglClass.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/utils.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/subscenes.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/shaders.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/textures.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/projection.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/mouse.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/init.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/pieces.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/draw.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/controls.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/selection.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/rglTimer.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/pretty.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/axes.src.js"></script>
+<script src="book_assets/CanvasMatrix4-0.107.14/CanvasMatrix.src.js"></script>
+<script src="book_assets/rglPlayer-binding-0.107.14/rglPlayer.js"></script>
 <script src="book_assets/kePrint-0.0.1/kePrint.js"></script>
 <link href="book_assets/lightable-0.0.1/lightable.css" rel="stylesheet" />
 
 
+
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
 
 <link rel="stylesheet" href="style.css" type="text/css" />
 </head>
@@ -283,10 +310,29 @@
 <li class="chapter" data-level="9.7" data-path="mixing-categorical-and-metric-predictors-ancova.html"><a href="mixing-categorical-and-metric-predictors-ancova.html#mediation-with-categorical-independent-variables"><i class="fa fa-check"></i><b>9.7</b> Mediation with categorical independent variables</a></li>
 <li class="chapter" data-level="9.8" data-path="mixing-categorical-and-metric-predictors-ancova.html"><a href="mixing-categorical-and-metric-predictors-ancova.html#ancova-vs-difference-scores"><i class="fa fa-check"></i><b>9.8</b> ANCOVA vs difference scores</a></li>
 </ul></li>
-<li class="chapter" data-level="10" data-path="repeated-measures-anova.html"><a href="repeated-measures-anova.html"><i class="fa fa-check"></i><b>10</b> Repeated-measures ANOVA</a></li>
+<li class="chapter" data-level="10" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html"><i class="fa fa-check"></i><b>10</b> Repeated-measures ANOVA</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#non-independence-in-linear-models"><i class="fa fa-check"></i><b>10.1</b> Non-independence in linear models</a></li>
+<li class="chapter" data-level="10.2" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#the-cheerleader-effect"><i class="fa fa-check"></i><b>10.2</b> The cheerleader effect</a></li>
+<li class="chapter" data-level="10.3" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#as-a-oneway-anova"><i class="fa fa-check"></i><b>10.3</b> As a oneway ANOVA</a></li>
+<li class="chapter" data-level="10.4" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#oneway-repeated-measures-anova"><i class="fa fa-check"></i><b>10.4</b> Oneway repeated-measures ANOVA</a>
+<ul>
+<li class="chapter" data-level="10.4.1" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#within-subjects-composite-scores"><i class="fa fa-check"></i><b>10.4.1</b> Within-subjects composite scores</a></li>
+<li class="chapter" data-level="10.4.2" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#a-composite-for-between-subjects-effects"><i class="fa fa-check"></i><b>10.4.2</b> A composite for between-subjects effects</a></li>
+<li class="chapter" data-level="10.4.3" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#collecting-all-results-and-omnibus-tests"><i class="fa fa-check"></i><b>10.4.3</b> Collecting all results and omnibus tests</a></li>
+</ul></li>
+<li class="chapter" data-level="10.5" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#partitioning-the-variance"><i class="fa fa-check"></i><b>10.5</b> Partitioning the variance</a></li>
+<li class="chapter" data-level="10.6" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#a-mixed-anova-with-between--and-within-subjects-effects"><i class="fa fa-check"></i><b>10.6</b> A mixed ANOVA with between- and within-subjects effects</a></li>
+<li class="chapter" data-level="10.7" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#assumptions-1"><i class="fa fa-check"></i><b>10.7</b> Assumptions</a>
+<ul>
+<li class="chapter" data-level="10.7.1" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#omnibus-tests-and-sphericity"><i class="fa fa-check"></i><b>10.7.1</b> Omnibus tests and sphericity</a></li>
+<li class="chapter" data-level="10.7.2" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#correcting-for-non-sphericity"><i class="fa fa-check"></i><b>10.7.2</b> Correcting for non-sphericity</a></li>
+</ul></li>
+<li class="chapter" data-level="10.8" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#in-practice-4"><i class="fa fa-check"></i><b>10.8</b> In practice</a></li>
+</ul></li>
 <li class="chapter" data-level="11" data-path="linear-mixed-effects-models.html"><a href="linear-mixed-effects-models.html"><i class="fa fa-check"></i><b>11</b> Linear mixed-effects models</a>
 <ul>
-<li class="chapter" data-level="11.1" data-path="linear-mixed-effects-models.html"><a href="linear-mixed-effects-models.html#non-independence-in-linear-models"><i class="fa fa-check"></i><b>11.1</b> Non-independence in linear models</a></li>
+<li class="chapter" data-level="11.1" data-path="linear-mixed-effects-models.html"><a href="linear-mixed-effects-models.html#non-independence-in-linear-models-1"><i class="fa fa-check"></i><b>11.1</b> Non-independence in linear models</a></li>
 <li class="chapter" data-level="11.2" data-path="linear-mixed-effects-models.html"><a href="linear-mixed-effects-models.html#random-intercept-models"><i class="fa fa-check"></i><b>11.2</b> Random intercept models</a></li>
 <li class="chapter" data-level="11.3" data-path="linear-mixed-effects-models.html"><a href="linear-mixed-effects-models.html#parameter-estimation-1"><i class="fa fa-check"></i><b>11.3</b> Parameter estimation</a></li>
 <li class="chapter" data-level="11.4" data-path="linear-mixed-effects-models.html"><a href="linear-mixed-effects-models.html#parameter-inference"><i class="fa fa-check"></i><b>11.4</b> Parameter inference</a></li>
@@ -355,14 +401,14 @@
 <p>In this chapter, we will start our journey into the General Linear Model with the most basic example within the GLM: a model concerning a single Normal distribution, where we are interested in statements about the mean of that distribution. The resulting test is also known as the one-sample t-test. We will look at the Normal distribution in detail, and cover estimation of its parameters, before focusing on testing hypotheses about the mean. We will also introduce confidence intervals as an alternative, but mostly equivalent means to make inferences about parameters. We end the chapter by looking at the assumptions of the model, and what happens to the testing procedure if those assumptions are false. <!-- with a look ahead towards the other chapters, by providing a brief overview of the General Linear Model. --></p>
 <div id="numeric-judgement-and-anchoring" class="section level2" number="3.1">
 <h2><span class="header-section-number">3.1</span> Numeric judgement and anchoring</h2>
-<p>In 1906, Sir Francis Galton attended The West of England Fat Stock and Poultry Exhibition in Plymouth. One of the attractions at the fair was a contest to guess the weight of a “dressed” ox on display. The nearest guess to the actual weight of the ox would win a prize, and a total of 800 attendees participated for a small fee. Not only was Francis Galton a eugenicist<a href="#fn5" class="footnote-ref" id="fnref5"><sup>5</sup></a> – and rightly condemned for this in more modern times – he was also a statistician, and bought the used tickets off the stall holder. Back home he analysed the 787 usable tickets and later published his findings <span class="citation">(<a href="references.html#ref-galton1907vox" role="doc-biblioref">Galton, 1907</a>)</span>. What surprised Galton was that while the individual guesses were often far from the true weight of the ox, the average guess of the group as a whole was highly accurate. Such findings are now often referred to as the “Wisdom of the crowds.”</p>
+<p>In 1906, Sir Francis Galton attended The West of England Fat Stock and Poultry Exhibition in Plymouth. One of the attractions at the fair was a contest to guess the weight of a “dressed” ox on display. The nearest guess to the actual weight of the ox would win a prize, and a total of 800 attendees participated for a small fee. Not only was Francis Galton a eugenicist<a href="#fn5" class="footnote-ref" id="fnref5"><sup>5</sup></a> – and rightly condemned for this in more modern times – he was also a statistician, and bought the used tickets off the stall holder. Back home he analysed the 787 usable tickets and later published his findings <span class="citation">(<a href="#ref-galton1907vox" role="doc-biblioref">Galton, 1907</a>)</span>. What surprised Galton was that while the individual guesses were often far from the true weight of the ox, the average guess of the group as a whole was highly accurate. Such findings are now often referred to as the “Wisdom of the crowds.”</p>
 <p>Although the wisdom of the crowds has been demonstrated in various domains, from decades of research, we also know that human judgement is subject to a long list of biases. One such bias is called “anchoring,” and it pertains to the influence of prior exposure to a more or less arbitrary numerical value on the subsequent numerical judgement. For instance, if I ask you “How tall do you think Mount Everest is?” but first state that Mount Everest is taller than 2000 feet, you are likely to give a smaller number than if I first state that Mount Everest is shorter than 45,500 feet.</p>
-<p>In this example, we will focus on data obtained from a large scale replication study, covering the above described anchoring manipulation, as well as many other experiments <span class="citation">(<a href="references.html#ref-klein2014investigating" role="doc-biblioref">Klein et al., 2014</a>)</span>. This “Many Labs” study contained data collected by a large number of labs from different countries, and here we will use data collected by Konrad Bocian and Natalia Frankowska from the University of Social Sciences
+<p>In this example, we will focus on data obtained from a large scale replication study, covering the above described anchoring manipulation, as well as many other experiments <span class="citation">(<a href="#ref-klein2014investigating" role="doc-biblioref">Klein et al., 2014</a>)</span>. This “Many Labs” study contained data collected by a large number of labs from different countries, and here we will use data collected by Konrad Bocian and Natalia Frankowska from the University of Social Sciences
 and Humanities Campus in Sopot, Poland. In particular, we will focus on the judged height of Mount Everest (in meters, as their participants were Polish) after a low anchor (610 meters<a href="#fn6" class="footnote-ref" id="fnref6"><sup>6</sup></a>). From the wisdom of the crowds idea, we might expect the average judgement to be identical (or at least very close) to the true height of Mount Everest, which is 8848 meters above sea level. On the other hand, if the low anchor biased the judgements, we might expect the average judgement to deviate from the true height.</p>
 <div id="exploring-the-data" class="section level3" number="3.1.1">
 <h3><span class="header-section-number">3.1.1</span> Exploring the data</h3>
 <p>Before diving into statistical modelling, as discussed, it is always good to explore the data. There were judgements by <span class="math inline">\(n=109\)</span> people in this dataset. A graphical overview in the form of a histogram and raincloud plot is given in Figure <a href="ch-simple-GLM.html#fig:anchoring-eda-plots">3.1</a>. The minimum was judged height was 650 meters (so quite close to the anchor), and the maximum was 12,459 meters. The median judgement was 8000 and the mean 6312.193. The sample variance of the judgements was 9,742,645 and the sample standard deviation 3121.321.</p>
-<div class="figure" style="text-align: center"><span id="fig:anchoring-eda-plots"></span>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:anchoring-eda-plots"></span>
 <img src="_main_files/figure-html/anchoring-eda-plots-1.svg" alt="Histogram and boxplot of participants' judgments" width="48%" /><img src="_main_files/figure-html/anchoring-eda-plots-2.svg" alt="Histogram and boxplot of participants' judgments" width="48%" />
 <p class="caption">
 Figure 3.1: Histogram and boxplot of participants’ judgments
@@ -377,7 +423,7 @@ Figure 3.1: Histogram and boxplot of participants’ judgments
 <div id="the-normal-distribution" class="section level3" number="3.2.1">
 <h3><span class="header-section-number">3.2.1</span> The Normal distribution</h3>
 <p>The <strong>Normal distribution</strong> is the well-known bell-shaped curve depicted in Figure <a href="ch-simple-GLM.html#fig:normal-density-plot">3.2</a>.</p>
-<div class="figure" style="text-align: center"><span id="fig:normal-density-plot"></span>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:normal-density-plot"></span>
 <img src="_main_files/figure-html/normal-density-plot-1.svg" alt="The Normal density function for $\mu = 0$ and $\sigma = 1$" width="80%" />
 <p class="caption">
 Figure 3.2: The Normal density function for <span class="math inline">\(\mu = 0\)</span> and <span class="math inline">\(\sigma = 1\)</span>
@@ -392,7 +438,7 @@ p(y) = \frac{1}{\sqrt{2 \pi} \sigma} e^{-\frac{(y-\mu)^2}{2\sigma^2}}
 <p>While we can’t define probability of any particular value, the probability that an observation is within a particular range is well-defined. So, rather than asking “What is the probability that the height is exactly 8567.46384634748763…?” we can ask “What is the probability that the height is between 8567 and 8568?” or “What is the probability that the height is between 8567.575 and 8567.576?” These probabilities are defined by the “area under the curve” within that range. Using calculus, they can be computed as:</p>
 <p><span class="math display">\[P(a \leq Y \leq b) = \int_a^b \frac{1}{\sqrt{2 \pi} \sigma} e^{-\frac{(y-\mu)^2}{2\sigma^2}} d y\]</span></p>
 <p>If you are unfamiliar with calculus and have never seen an integration sign (<span class="math inline">\(\int\)</span>), don’t worry, you don’t have to solve equations like this, and there won’t be many more like this. You can just see it as a mathematical way of referring to the area under the curve between point <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span>. A proper probability density function respects the rule of total probability. The Normal distribution is defined over all real numbers (i.e. all possible numbers between minus infinity and infinity). Thus, the rule of total probability rquires that <span class="math inline">\(P(-\infty \leq Y \leq \infty) = 1\)</span>, and this is true for the Normal distribution. Figure <a href="ch-simple-GLM.html#fig:normal-distribution-plot">3.3</a> shows the probability of three ranges, each symmetrical around the mean. The probability of a value falling in the range between <span class="math inline">\(\mu - 3 \times \sigma\)</span> and <span class="math inline">\(\mu + 3 \times \sigma\)</span> is very close to 1. Hence, values more than three standard deviations from the mean are extremely unlikely.</p>
-<div class="figure" style="text-align: center"><span id="fig:normal-distribution-plot"></span>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:normal-distribution-plot"></span>
 <img src="_main_files/figure-html/normal-distribution-plot-1.svg" alt="Normal distribution and the probability of a value falling in one of three overlapping ranges. Note that the ranges are overlapping, so that the range between $\mu - 3 \sigma$ and $\mu + 3 \sigma$ also covers the range between $\mu - 2 \sigma$ and $\mu + 2 \sigma$, but that this isn't shown in the colours." width="95%" />
 <p class="caption">
 Figure 3.3: Normal distribution and the probability of a value falling in one of three overlapping ranges. Note that the ranges are overlapping, so that the range between <span class="math inline">\(\mu - 3 \sigma\)</span> and <span class="math inline">\(\mu + 3 \sigma\)</span> also covers the range between <span class="math inline">\(\mu - 2 \sigma\)</span> and <span class="math inline">\(\mu + 2 \sigma\)</span>, but that this isn’t shown in the colours.
@@ -458,7 +504,7 @@ Perhaps confusingly, we can now divide by <span class="math inline">\(n\)</span>
 <div id="sampling-distribution-of-the-estimated-mean" class="section level3" number="3.3.1">
 <h3><span class="header-section-number">3.3.1</span> Sampling distribution of the estimated mean</h3>
 <p>Remember that the estimator of the mean is an algorithm that provides estimates from data. Different datasets will give different estimates, even though all these datasets are generated from the same Data Generating Process. Our model of the Data Generating Process is the Normal distribution, which has two parameters: <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\sigma\)</span>. Let’s pick some values for these parameters, so that we can use our model to simulate data. For instance, suppose the judgements are on average equal to the true value, so <span class="math inline">\(\mu = 8848\)</span>. Individual judgements are quite variable, however, so let’s take <span class="math inline">\(\sigma = 2000\)</span>. Figure <a href="ch-simple-GLM.html#fig:histogram-sampling-mean-simple">3.4</a> shows the distribution of the estimated mean of 10,000 data sets each consisting of <span class="math inline">\(n=109\)</span> observations (the same number of observations as our anchoring data). Also shown (as a dotted line) is the Normal distribution of the model we used to generate the data. Clearly, the estimated means are much less variable than the simulated judgements themselves.</p>
-<div class="figure" style="text-align: center"><span id="fig:histogram-sampling-mean-simple"></span>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:histogram-sampling-mean-simple"></span>
 <img src="_main_files/figure-html/histogram-sampling-mean-simple-1.svg" alt="Estimated means for 10000 simulated data sets of $n = 109$, drawn from a Normal distribution with mean 8848 and standard deviation 2000. The dotted line represents the Normal distribution from which the data sets were generated, and the solid line the theoretical distribution of the estimated means." width="80%" />
 <p class="caption">
 Figure 3.4: Estimated means for 10000 simulated data sets of <span class="math inline">\(n = 109\)</span>, drawn from a Normal distribution with mean 8848 and standard deviation 2000. The dotted line represents the Normal distribution from which the data sets were generated, and the solid line the theoretical distribution of the estimated means.
@@ -476,8 +522,8 @@ Hence, the sampling distribution of the estimated means is a Normal distribution
 \end{equation}
 --></p>
 <p>To simulate judgements, we had to pick an arbitrary value of <span class="math inline">\(\sigma\)</span>. But how can we simulate the data when <span class="math inline">\(\sigma\)</span> is unknown? We could of course use the unbiased estimate <span class="math inline">\(\hat{\sigma}\)</span>. For MODEL R and the present data, that would be <span class="math inline">\(\hat{\sigma} = 4021.562\)</span>, which is obviously substantially larger than the value of 2000 we used before. If we’d use this value to simulate data sets and look at the distribution of the sample mean, we’d get a similar plot to the one of Figure <a href="ch-simple-GLM.html#fig:histogram-sampling-mean-simple">3.4</a>, but with a larger standard deviation.</p>
-<p>Suppose that MODEL R is true, that the Data Generating Process indeed results in a Normal distribution of people’s judgements with a mean <span class="math inline">\(\mu = 8848\)</span> and a standard deviation <span class="math inline">\(\sigma\)</span>. If we knew the value of <span class="math inline">\(\sigma\)</span>, then we’d know everything there is to know about the distribution of the DGP. And knowing this, we’d know everything there is to know about the distribution of the sample means. But we don’t know <span class="math inline">\(\sigma\)</span>. While it makes sense to use an estimate of <span class="math inline">\(\sigma\)</span>, this estimate will be noisy. We shouldn’t just pretend that our estimate <span class="math inline">\(\hat{\sigma}\)</span> is identical to the true <span class="math inline">\(\sigma\)</span>. The problem is that different values of <span class="math inline">\(\sigma\)</span> lead to different sampling distributions of the mean. Key to working out the sampling distribution of the mean when <span class="math inline">\(\sigma\)</span> is unknown is to also take into account the sampling distribution of the estimates of <span class="math inline">\(\sigma\)</span>. Roughly, the idea is that, for a given data set, we can work out how likely different values of <span class="math inline">\(\sigma\)</span> are, and we can then derive the average of all the Normal distributions that follow from each possible value of <span class="math inline">\(\sigma\)</span>. The resulting distribution is not a Normal distribution. It was derived by William Sealy Gosset (1876–1937) in 1904. Gosset worked as Head Experimental Brewer for Guinness in Dublin, and the company had a rule forbidding their chemists to publish their findings <span class="citation">(<a href="references.html#ref-zabell2008student" role="doc-biblioref">Zabell, 2008</a>)</span>. Gosset was able to convince his boss that his mathematical work was of no practical use to competing brewers, and was allowed to publish them in <span class="citation"><a href="references.html#ref-student1908probable" role="doc-biblioref">Student</a> (<a href="references.html#ref-student1908probable" role="doc-biblioref">1908</a>)</span>, but under a pseudonym to avoid his colleagues getting similar ideas. “Student” was the pseudonym chosen by the managing director of Guinness, and hence the distribution is now known as Student’s t-distribution.</p>
-<div class="figure" style="text-align: center"><span id="fig:comparing-normal-and-t-simple"></span>
+<p>Suppose that MODEL R is true, that the Data Generating Process indeed results in a Normal distribution of people’s judgements with a mean <span class="math inline">\(\mu = 8848\)</span> and a standard deviation <span class="math inline">\(\sigma\)</span>. If we knew the value of <span class="math inline">\(\sigma\)</span>, then we’d know everything there is to know about the distribution of the DGP. And knowing this, we’d know everything there is to know about the distribution of the sample means. But we don’t know <span class="math inline">\(\sigma\)</span>. While it makes sense to use an estimate of <span class="math inline">\(\sigma\)</span>, this estimate will be noisy. We shouldn’t just pretend that our estimate <span class="math inline">\(\hat{\sigma}\)</span> is identical to the true <span class="math inline">\(\sigma\)</span>. The problem is that different values of <span class="math inline">\(\sigma\)</span> lead to different sampling distributions of the mean. Key to working out the sampling distribution of the mean when <span class="math inline">\(\sigma\)</span> is unknown is to also take into account the sampling distribution of the estimates of <span class="math inline">\(\sigma\)</span>. Roughly, the idea is that, for a given data set, we can work out how likely different values of <span class="math inline">\(\sigma\)</span> are, and we can then derive the average of all the Normal distributions that follow from each possible value of <span class="math inline">\(\sigma\)</span>. The resulting distribution is not a Normal distribution. It was derived by William Sealy Gosset (1876–1937) in 1904. Gosset worked as Head Experimental Brewer for Guinness in Dublin, and the company had a rule forbidding their chemists to publish their findings <span class="citation">(<a href="#ref-zabell2008student" role="doc-biblioref">Zabell, 2008</a>)</span>. Gosset was able to convince his boss that his mathematical work was of no practical use to competing brewers, and was allowed to publish them in <span class="citation"><a href="#ref-student1908probable" role="doc-biblioref">Student</a> (<a href="#ref-student1908probable" role="doc-biblioref">1908</a>)</span>, but under a pseudonym to avoid his colleagues getting similar ideas. “Student” was the pseudonym chosen by the managing director of Guinness, and hence the distribution is now known as Student’s t-distribution.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:comparing-normal-and-t-simple"></span>
 <img src="_main_files/figure-html/comparing-normal-and-t-simple-1.svg" alt="(Understandardized) Student t-distribution which is the true sampling distribution of the mean under MODEL R with unknown $\sigma$ (solid line) and the Normal distribution that would be the sampling distribution if it were known that $\sigma = \hat{\sigma}$ (broken line). Note that these curves are drawn for the case of $n=10$ observations, to make the differences between the distributions more marked. For $n=109$, the t-distribution is almost identical to the Normal distribution." width="80%" />
 <p class="caption">
 Figure 3.5: (Understandardized) Student t-distribution which is the true sampling distribution of the mean under MODEL R with unknown <span class="math inline">\(\sigma\)</span> (solid line) and the Normal distribution that would be the sampling distribution if it were known that <span class="math inline">\(\sigma = \hat{\sigma}\)</span> (broken line). Note that these curves are drawn for the case of <span class="math inline">\(n=10\)</span> observations, to make the differences between the distributions more marked. For <span class="math inline">\(n=109\)</span>, the t-distribution is almost identical to the Normal distribution.
@@ -502,7 +548,7 @@ is the unbiased estimator of <span class="math inline">\(\sigma\)</span>. We cal
 <p>I won’t bore you with the mathematical details of the t-distribution. As I already mentioned, it looks quite like a Normal distribution. When the degrees of freedom get larger, the distributions looks more and more like the standard Normal distribution. Because we know that if MODEL R is true, the <span class="math inline">\(t\)</span> statistic follows a t-distribution with <span class="math inline">\(n-1\)</span> degrees of freedom, we know all there is to know about the sampling distribution of <span class="math inline">\(t\)</span>. If <span class="math inline">\(t\)</span> is far away from 0, that means that the estimate <span class="math inline">\(\hat{\mu}\)</span> of MODEL G is far away from the assumed value <span class="math inline">\(\underline{\mu}\)</span> in MODEL R, and hence we have reason to reject MODEL R. Following the logic of the null-hypothesis significance test, we will limit the number of wrong rejections of MODEL R by choosing critical values such that
 <span class="math display">\[P(t \leq \text{lower critical value} | \text{MODEL R}) + P(t \geq \text{upper critical value} | \text{MODEL R}) = \alpha\]</span>
 The resulting critical regions are depicted in Figure <a href="ch-simple-GLM.html#fig:critical-values-t-distribution">3.6</a>.</p>
-<div class="figure" style="text-align: center"><span id="fig:critical-values-t-distribution"></span>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:critical-values-t-distribution"></span>
 <img src="_main_files/figure-html/critical-values-t-distribution-1.svg" alt="Critical regions for rejecting $H_0$: $\mu = 8848$ with $\alpha = .05$" width="80%" />
 <p class="caption">
 Figure 3.6: Critical regions for rejecting <span class="math inline">\(H_0\)</span>: <span class="math inline">\(\mu = 8848\)</span> with <span class="math inline">\(\alpha = .05\)</span>
@@ -560,7 +606,7 @@ While difficult to interpret properly, the confidence interval for the mean of N
 \tag{3.6}
 \end{equation}\]</span>
 where <span class="math inline">\(t_{n-1; 1- \frac{\alpha}{2}}\)</span> stands for the upper critical value of a test with significance level <span class="math inline">\(\alpha\)</span>. In other words, we take our estimate of the mean (i.e. <span class="math inline">\(\hat{\mu} = \overline{Y}\)</span>), and add or subtract from that a multiple of the <strong>estimated standard error of the mean</strong> (which is <span class="math inline">\(\frac{\hat{\sigma}}{\sqrt{n}}\)</span>; remember that the standard error of a statistic is the standard deviation of the sampling distribution of that statistic). The multiple is derived from the t-distribution. As explained earlier, for the Normal distribution, we know that 95% of the observations lie in the range between <span class="math inline">\(\mu - 1.96 \times \sigma\)</span> and <span class="math inline">\(\mu + 1.96 \times \sigma\)</span>. Similarly, for the Normal distribution, 95% of the sample means lie in the range between <span class="math inline">\(\mu - 1.96 \times \frac{\sigma}{\sqrt{n}}\)</span> and <span class="math inline">\(\mu + 1.96 \times \frac{\sigma}{\sqrt{n}}\)</span>. The value <span class="math inline">\(t_{n-1; \frac{\alpha}{2}}\)</span> is effectively a replacement for 1.96, which takes into account that we have estimated <span class="math inline">\(\sigma\)</span>.
-<div class="figure" style="text-align: center"><span id="fig:simulated-confidence-intervals-one-sample-t-test"></span>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:simulated-confidence-intervals-one-sample-t-test"></span>
 <img src="_main_files/figure-html/simulated-confidence-intervals-one-sample-t-test-1.svg" alt="$\text{95%}$ confidence intervals for 100 simulated datasets with $\mu=8848$ and $\sigma=2000$. Most of the intervals contain the true value $\mu$, but some do not. If we would simulate an infinite number of datasets, then exactly $\text{95%}$ of the intervals would contain $\mu$, and exactly $\text{5%}$ would not." width="95%" />
 <p class="caption">
 Figure 3.7: <span class="math inline">\(\text{95%}\)</span> confidence intervals for 100 simulated datasets with <span class="math inline">\(\mu=8848\)</span> and <span class="math inline">\(\sigma=2000\)</span>. Most of the intervals contain the true value <span class="math inline">\(\mu\)</span>, but some do not. If we would simulate an infinite number of datasets, then exactly <span class="math inline">\(\text{95%}\)</span> of the intervals would contain <span class="math inline">\(\mu\)</span>, and exactly <span class="math inline">\(\text{5%}\)</span> would not.
@@ -576,7 +622,7 @@ Figure 3.7: <span class="math inline">\(\text{95%}\)</span> confidence intervals
 \end{aligned}
 \]</span></p>
 <p>Confidence intervals can be used to perform null hypothesis significance tests. In fact, a confidence interval contains all values of <span class="math inline">\(\underline{\mu}\)</span> for which MODEL R would not be rejected with the current data. In other words, if the confidence interval includes the value of <span class="math inline">\(\underline{\mu}\)</span> of interest (i.e. <span class="math inline">\(\underline{\mu} = 8848\)</span> in our example), that means that the null hypothesis would <em>not</em> be rejected. In addition, we can also determine a whole range of other values of <span class="math inline">\(\underline{\mu}\)</span> which, if purported as a null hypothesis, would also not be rejected. In that sense, a confidence interval provides more information than a simple “reject” or “not reject” decision of a null hypothesis significance test. If a confidence interval is very wide, that implies the significance test has low power. Of course, what “very wide” is, depends on the scale of the data, and a subjective evaluation by the researcher.</p>
-<p>There have been calls to abandon hypothesis tests in favour of estimation and reporting confidence intervals <span class="citation">(e.g. <a href="references.html#ref-cumming2014new" role="doc-biblioref">Cumming, 2014</a>)</span>. Given the tricky interpretation of confidence intervals <span class="citation">(<a href="references.html#ref-morey2016fallacy" role="doc-biblioref">Morey, Hoekstra, Rouder, Lee, &amp; Wagenmakers, 2016</a>)</span>, and their rather close ties to significance tests, such ideas seem to promise more than they can deliver. There is no need to abandon either significance tests or confidence intervals, provided you know how to interpret them.</p>
+<p>There have been calls to abandon hypothesis tests in favour of estimation and reporting confidence intervals <span class="citation">(e.g. <a href="#ref-cumming2014new" role="doc-biblioref">Cumming, 2014</a>)</span>. Given the tricky interpretation of confidence intervals <span class="citation">(<a href="#ref-morey2016fallacy" role="doc-biblioref">Morey, Hoekstra, Rouder, Lee, &amp; Wagenmakers, 2016</a>)</span>, and their rather close ties to significance tests, such ideas seem to promise more than they can deliver. There is no need to abandon either significance tests or confidence intervals, provided you know how to interpret them.</p>
 </div>
 <div id="effect-size" class="section level2" number="3.6">
 <h2><span class="header-section-number">3.6</span> Effect size</h2>
@@ -587,8 +633,8 @@ Figure 3.7: <span class="math inline">\(\text{95%}\)</span> confidence intervals
 \end{equation}\]</span>
 For our anchoring example, Cohen’s <span class="math inline">\(d\)</span> is
 <span class="math display">\[d = \frac{6312.193 - 8848}{3135.738} = -0.809\]</span></p>
-<p>Cohen’s <span class="math inline">\(d\)</span> quantifies an effect in units of the standard deviation in the sample data. As a rule of thumb, an absolute value of <span class="math inline">\(|d| = 0.2\)</span> is considered a small effect, an absolute value of <span class="math inline">\(|d| = 0.5\)</span> a medium effect, and an absolute value of <span class="math inline">\(|d| = 0.8\)</span> a large effect <span class="citation">(<a href="references.html#ref-cohen1988statistical" role="doc-biblioref">Cohen, 1988</a>)</span>. Thus, the effect-size we found can be classified as large. These rule-of-thumb values, relative to the Normal distribution, are depicted in Figure <a href="ch-simple-GLM.html#fig:one-sample-cohen-d-plot">3.8</a>. As you can see, even “large” effect sizes are still quite close to the center of the distribution. For example, 21.19% of observations from the Data Generating Process would exceed the deviation specified as a large positive effect size. But you should keep in mind that the objective of an effect size here is to quantify the deviation between a sample mean and an assumed mean, not between observations and that assumed mean.</p>
-<div class="figure" style="text-align: center"><span id="fig:one-sample-cohen-d-plot"></span>
+<p>Cohen’s <span class="math inline">\(d\)</span> quantifies an effect in units of the standard deviation in the sample data. As a rule of thumb, an absolute value of <span class="math inline">\(|d| = 0.2\)</span> is considered a small effect, an absolute value of <span class="math inline">\(|d| = 0.5\)</span> a medium effect, and an absolute value of <span class="math inline">\(|d| = 0.8\)</span> a large effect <span class="citation">(<a href="#ref-cohen1988statistical" role="doc-biblioref">Cohen, 1988</a>)</span>. Thus, the effect-size we found can be classified as large. These rule-of-thumb values, relative to the Normal distribution, are depicted in Figure <a href="ch-simple-GLM.html#fig:one-sample-cohen-d-plot">3.8</a>. As you can see, even “large” effect sizes are still quite close to the center of the distribution. For example, 21.19% of observations from the Data Generating Process would exceed the deviation specified as a large positive effect size. But you should keep in mind that the objective of an effect size here is to quantify the deviation between a sample mean and an assumed mean, not between observations and that assumed mean.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:one-sample-cohen-d-plot"></span>
 <img src="_main_files/figure-html/one-sample-cohen-d-plot-1.svg" alt="Small, medium, and large values of Cohen's $d$ in context of the data distribution." width="80%" />
 <p class="caption">
 Figure 3.8: Small, medium, and large values of Cohen’s <span class="math inline">\(d\)</span> in context of the data distribution.
@@ -603,7 +649,7 @@ Figure 3.8: Small, medium, and large values of Cohen’s <span class="math inlin
 <p>When we started modelling the data, we assumed each judgement was effectively an independent random draw from a Normal distribution. In MODEL R, we assumed that the mean of that Normal distribution was <span class="math inline">\(\mu = 8848\)</span>, while in MODEL G, we left both the mean and the standard deviation unknown. Both models thus assume the judgements follow a Normal distribution. Looking at Figure <a href="ch-simple-GLM.html#fig:anchoring-eda-plots">3.1</a>, you might wonder whether that’s a reasonable assumption. The histogram doesn’t look exactly Normal. With real and limited data, histograms can be deceiving though. A <strong>Q-Q (quantile-quantile) plot</strong> aims to provide a better means to visually inspect whether data (approximately) follows an assumed distribution. Quantiles are cut points dividing the range of a probability distribution into continuous intervals with equal probabilities, or dividing the observations in a sample in the same way. Percentiles are an example of quantiles, which divide a probability distribution into ranges each containing .01 of the total probability (i.e. 1%). By ordering the values of a variable in a data set in increasing order of magnitude, you can also obtain “empirical quantiles.” Suppose you have 5 observations ordered in increasing magnitude:</p>
 <p>1, 4, 4.5, 9, 20</p>
 <p>For each value, you can determine the proportion of values in the data which are equal or smaller than it. For instance, the proportion of observations equal to or smaller than 1 is <span class="math inline">\(1/5 = 0.2\)</span>, the proportion of observations equal to or smaller than 4 is <span class="math inline">\(2/5 = 0.4\)</span>, the proportion of observations equal to or smaller than 4.5 is <span class="math inline">\(3/5 = 0.6\)</span>, etc. For each of these proportions, we can also work out the corresponding value of the variable for the probability of a value equal to smaller than it equals this proportion. For instance, for a Normal distribution with mean <span class="math inline">\(\mu=7\)</span> and standard deviation <span class="math inline">\(\sigma = 7\)</span>, the quantile such that <span class="math inline">\(P(\text{value } \leq \text{ quantile}) = .2\)</span> is 1.109, and the quantile such that <span class="math inline">\(P(\text{value } \leq \text{ quantile}) = .4\)</span> is 5.227. In a Q-Q plot, the values of the observed data are plotted against these theoretical quantiles in a scatter-plot. If the data follows the assumed distribution, the empirical quantiles should generally match the theoretical quantiles, and hence the points in the plot should roughly lie on a straight line. Figure <a href="ch-simple-GLM.html#fig:anchoring-qq-plot">3.9</a> shows such a Q-Q plot for the judgements. As you can see, rather than on a straight-line, the points seem to lie on an s-shaped curve, which indicates that the assumption of a Normal distribution might not be a good match to the data.</p>
-<div class="figure" style="text-align: center"><span id="fig:anchoring-qq-plot"></span>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:anchoring-qq-plot"></span>
 <img src="_main_files/figure-html/anchoring-qq-plot-1.svg" alt="A Quantile-Quantile plot for the judgments of the height of Mount Everest" width="80%" />
 <p class="caption">
 Figure 3.9: A Quantile-Quantile plot for the judgments of the height of Mount Everest
@@ -611,7 +657,7 @@ Figure 3.9: A Quantile-Quantile plot for the judgments of the height of Mount Ev
 </div>
 <p>There are also two common tests for the null hypothesis that the distribution is Normal: the Kolmogorov-Smirnov, and the Shapiro-Wilk test. The former is a generic test, which can be used to check for other distributions besides the Normal one as well. The second one only focuses on the Normal distribution, and because it was specifically designed for this distribution, it is more powerful. I’m not going to describe how these tests actually work. You can look that up elsewhere if you like. I will tell you that both tests reject the null-hypothesis of a Normal distribution. For both tests, the <span class="math inline">\(p\)</span>-value (the probability of obtaining a test result equal to or more extreme, given that the null hypothesis of a Normal distribution is true), is <span class="math inline">\(p&lt;.001\)</span>. I should also caution you in relying too much on such tests. If you have large datasets, the tests are rather powerful, and may therefore reject the null hypothesis of a Normal distribution when there is just a small deviation from Normality in the data. Such small deviations might be rather inconsequential, so you should use your judgement and also rely on visual inspection of histograms and Q-Q plots. For the current data, both the plots and the tests indicate quite some deviation from a Normal distribution…</p>
 <p>Perhaps there are really two groups of participants: those who know the height of the Mount Everest, and those who don’t. The first group will provide a highly accurate answer (allowing for small deviations, as their knowledge may not be exact), while the second group will guess, providing much more variable judgements which are more likely to be influenced by the anchor. If the judgements of each of these groups can be represented by a Normal distribution, but with different means and variances, then the distribution as a whole might look a bit like the one depicted in Figure <a href="ch-simple-GLM.html#fig:anchoring-mixture-plot">3.10</a>. This is also called a <em>mixture</em> distribution and clearly, it is not a Normal distribution. How bad would it be if this were there case?</p>
-<div class="figure" style="text-align: center"><span id="fig:anchoring-mixture-plot"></span>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:anchoring-mixture-plot"></span>
 <img src="_main_files/figure-html/anchoring-mixture-plot-1.svg" alt="A bimodal distribution, arising when there are two groups of participants: those with good knowledge who provide answers close to the true height of Mount Everest, and those with poor knowledge, providing much more variable judgements. The distribution for each group is depicted by dotted lines, and the distribution over both groups as a solid line." width="80%" />
 <p class="caption">
 Figure 3.10: A bimodal distribution, arising when there are two groups of participants: those with good knowledge who provide answers close to the true height of Mount Everest, and those with poor knowledge, providing much more variable judgements. The distribution for each group is depicted by dotted lines, and the distribution over both groups as a solid line.
@@ -630,7 +676,7 @@ ffalse{-91-67-101-110-116-114-97-108-32-76-105-109-105-116-32-84-104-101-111-114
 <div id="the-central-limit-theorem-in-action" class="section level3" number="3.8.1">
 <h3><span class="header-section-number">3.8.1</span> The Central Limit Theorem in action</h3>
 <p>To see the central limit theorem in action, let’s pick an arbitrary probability distribution over 5 values, as shown in Figure <a href="ch-simple-GLM.html#fig:weird-prob-dist">3.11</a>. This will be the true distribution (i.e. the Data Generating Process) from which we can draw of simulate values.</p>
-<div class="figure" style="text-align: center"><span id="fig:weird-prob-dist"></span>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:weird-prob-dist"></span>
 <img src="_main_files/figure-html/weird-prob-dist-1.svg" alt="An aribitrary probability distribution over 5 values, clearly not a Normal distribution!" width="50%" />
 <p class="caption">
 Figure 3.11: An aribitrary probability distribution over 5 values, clearly not a Normal distribution!
@@ -638,7 +684,7 @@ Figure 3.11: An aribitrary probability distribution over 5 values, clearly not a
 </div>
 <p>When we repeatedly draw 5 values and calculate the mean over these 5 observations, we can look at the distribution of these sampled means. This is shown in Figure <a href="ch-simple-GLM.html#fig:clt-animation-1">3.12</a>. You can see that even when we draw just 5 values from a decidedly non-Normal distribution, the sample distribution of the resulting average already has the characteristic bell-shaped curve.
 <!-- Figure \@ref(fig:clt-animation-2) shows the same when we repeatedly sample 20 values and calculate the mean. --></p>
-<div class="figure" style="text-align: center"><span id="fig:clt-animation-1"></span>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:clt-animation-1"></span>
 <img src="_main_files/figure-html/clt-animation-1-1.gif" alt="The distribution of the mean of 5 observations by simulating 200 data sets (from the distribution in Figure \@ref(fig:weird-prob-dist))" width="50%" />
 <p class="caption">
 Figure 3.12: The distribution of the mean of 5 observations by simulating 200 data sets (from the distribution in Figure <a href="ch-simple-GLM.html#fig:weird-prob-dist">3.11</a>)
@@ -650,15 +696,15 @@ Figure 3.12: The distribution of the mean of 5 observations by simulating 200 da
 <p class="caption">(\#fig:clt-animation-2)The distribution of the mean of 20 samples from the distribution in Figure XX</p>
 </div>
 -->
-<p>From the Central Limit Theorem, we can conclude that if we focus on the mean of a sufficiently large number of independent observations, we can reasonably assume that the sampling distribution of the mean will be a Normal distribution, even when the distribution from which the actual values were drawn is far from Normal. We can also use this to argue that the <span class="math inline">\(t\)</span>-statistic is a valid means to test our hypothesis even when the data is not Normal-distributed. Indeed, simulations show that hypothesis tests with the <span class="math inline">\(t\)</span>-statistic are valid for sufficiently large data sets even when the distribution of the observations is far from Normal <span class="citation">(e.g. <a href="references.html#ref-lumley2002importance" role="doc-biblioref">Lumley, Diehr, Emerson, &amp; Chen, 2002</a>)</span>.</p>
+<p>From the Central Limit Theorem, we can conclude that if we focus on the mean of a sufficiently large number of independent observations, we can reasonably assume that the sampling distribution of the mean will be a Normal distribution, even when the distribution from which the actual values were drawn is far from Normal. We can also use this to argue that the <span class="math inline">\(t\)</span>-statistic is a valid means to test our hypothesis even when the data is not Normal-distributed. Indeed, simulations show that hypothesis tests with the <span class="math inline">\(t\)</span>-statistic are valid for sufficiently large data sets even when the distribution of the observations is far from Normal <span class="citation">(e.g. <a href="#ref-lumley2002importance" role="doc-biblioref">Lumley, Diehr, Emerson, &amp; Chen, 2002</a>)</span>.</p>
 <p>Finally, the Central Limit Theorem may also be applied to justify the assumption of a Normal distribution, at least for certain variables. For instance, in (cognitive) psychology, we might imagine that processes such as perception and judgement rely on processing and transforming information, and that various processing and transformation steps are subject to many independent sources of noise (e.g., things we might call visual, neural, and memory noise). If these sources of noise combine additively, we could argue that the resulting percept or judgement will follow a Normal distribution.</p>
 </div>
 <div id="bootstrapping-a-statistic" class="section level3" number="3.8.2">
 <h3><span class="header-section-number">3.8.2</span> Bootstrapping a statistic</h3>
 <p>The crucial thing to realise is that the assumption that the data is Normal-distributed is used to derive the sampling distribution of the test statistic. The sampling distribution of the test statistic allows us to calculate a <span class="math inline">\(p\)</span>-value, and if the true sampling distribution of the statistic is different from what is assumed, then the <span class="math inline">\(p\)</span>-value will be wrong. If the data is Normal-distributed, then we are guaranteed that the sampling distribution of the <span class="math inline">\(t\)</span> statistic follows a t-distribution. If the data is not Normal-distributed, the sampling distribution of the <span class="math inline">\(t\)</span> statistic may still be indistinguishable from a t distribution. In that case, the <span class="math inline">\(p\)</span>-value would still be highly accurate, and we would not need to worry that the data is not Normal-distributed. In short, what we really want to know is whether the assumed distribution of a test statistic is approximately correct.</p>
-<p>This is not something we can know for sure. All we have is a sample from the Data Generating Process; we do not know the true distribution of the data. But we can use this sample to do something similar as I did above to show the Central Limit Theorem in action: we can repeatedly draw samples and check the resulting distribution. In this case, we will treat the sample as what can be termed an <em>empirical distribution</em>. We can draw, with replacement, a large number of samples of size <span class="math inline">\(n\)</span> from the data, and then check the distribution of the sample mean, or even better, the distribution of the <span class="math inline">\(t\)</span> statistic. We need to draw samples with replacement (which means that the same observation can occur multiple times in our generated samples) to ensure that we obtain different generated samples. This procedure is also called a <strong>nonparametric bootstrap</strong> <span class="citation">(<a href="references.html#ref-davison1997bootstrap" role="doc-biblioref">Davison &amp; Hinkley, 1997</a>)</span>. It can be useful for a variety of purposes, including the computation of robust confidence intervals and hypothesis testing. Here, we use it to assess whether the assumed distribution by a parametric test such as the <span class="math inline">\(t\)</span>-test seems reasonable.</p>
+<p>This is not something we can know for sure. All we have is a sample from the Data Generating Process; we do not know the true distribution of the data. But we can use this sample to do something similar as I did above to show the Central Limit Theorem in action: we can repeatedly draw samples and check the resulting distribution. In this case, we will treat the sample as what can be termed an <em>empirical distribution</em>. We can draw, with replacement, a large number of samples of size <span class="math inline">\(n\)</span> from the data, and then check the distribution of the sample mean, or even better, the distribution of the <span class="math inline">\(t\)</span> statistic. We need to draw samples with replacement (which means that the same observation can occur multiple times in our generated samples) to ensure that we obtain different generated samples. This procedure is also called a <strong>nonparametric bootstrap</strong> <span class="citation">(<a href="#ref-davison1997bootstrap" role="doc-biblioref">Davison &amp; Hinkley, 1997</a>)</span>. It can be useful for a variety of purposes, including the computation of robust confidence intervals and hypothesis testing. Here, we use it to assess whether the assumed distribution by a parametric test such as the <span class="math inline">\(t\)</span>-test seems reasonable.</p>
 <p>Figure <a href="ch-simple-GLM.html#fig:bootstrap-sample-mean-and-t">3.13</a> shows the distribution of the sample mean and the <span class="math inline">\(t\)</span>-statistic for a total of 100,0000 bootstrap samples, drawn with replacement from the empirical distribution of the data (Figure <a href="ch-simple-GLM.html#fig:anchoring-eda-plots">3.1</a>). As these plots indicate, whilst the empirical distribution looks far from Normal, the sampling distribution of the mean does not appear to deviate too far from a Normal distribution. Whilst not perfect, both the histogram and Q-Q plot show that the distribution is approximately Normal. The sampling distribution of the <span class="math inline">\(t\)</span> statistic matches the assumed t distribution somewhat less well, with signs of left-skew. As such, the results of the <span class="math inline">\(t\)</span>-test may be somewhat biased. This would be of particular concern when the observed effect was small and the test result close to the border of significance. Given the large magnitude of the <span class="math inline">\(t\)</span>-statistic we computed for the actual data, and the very low <span class="math inline">\(p\)</span>-value, it doesn’t seem likely that these are due to wrongly assuming a t distribution.</p>
-<div class="figure" style="text-align: center"><span id="fig:bootstrap-sample-mean-and-t"></span>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:bootstrap-sample-mean-and-t"></span>
 <img src="_main_files/figure-html/bootstrap-sample-mean-and-t-1.png" alt="Boostrapped sample means and $t$ statistics, using 100,000 bootstrap samples from the empirical distribution. For both the sample mean and $t$ statistic, we show a histogram with the assumed theoretical distribution overlaid, and a Q-Q plot." width="95%" />
 <p class="caption">
 Figure 3.13: Boostrapped sample means and <span class="math inline">\(t\)</span> statistics, using 100,000 bootstrap samples from the empirical distribution. For both the sample mean and <span class="math inline">\(t\)</span> statistic, we show a histogram with the assumed theoretical distribution overlaid, and a Q-Q plot.
@@ -693,6 +739,36 @@ $$Y_i = \beta_0 + \beta_1 X_{1i} + \ldots + \beta_K X_{Ki} + \epsilon_i \quad \q
 
 </div>
 </div>
+<h3>References</h3>
+<div id="refs" class="references csl-bib-body hanging-indent" line-spacing="2">
+<div id="ref-cohen1988statistical" class="csl-entry">
+Cohen, J. (1988). <em>Statistical power analysis for the behavioral sciences</em>. Lawrence Erlbaum Associates.
+</div>
+<div id="ref-cumming2014new" class="csl-entry">
+Cumming, G. (2014). The new statistics: Why and how. <em>Psychological Science</em>, <em>25</em>, 7–29.
+</div>
+<div id="ref-davison1997bootstrap" class="csl-entry">
+Davison, A. C., &amp; Hinkley, D. V. (1997). <em>Bootstrap methods and their application</em>. Cambridge university press.
+</div>
+<div id="ref-galton1907vox" class="csl-entry">
+Galton, F. (1907). Vox populi. <em>Nature</em>, <em>75</em>, 450--451.
+</div>
+<div id="ref-klein2014investigating" class="csl-entry">
+Klein, R. A., Ratliff, K. A., Vianello, M., Adams Jr, R. B., Bahnı́k, Š., Bernstein, M. J., … others. (2014). Investigating variation in replicability: <span>A</span> "many labs"" replication project. <em>Social Psychology</em>, 142–152.
+</div>
+<div id="ref-lumley2002importance" class="csl-entry">
+Lumley, T., Diehr, P., Emerson, S., &amp; Chen, L. (2002). The importance of the normality assumption in large public health data sets. <em>Annual Review of Public Health</em>, <em>23</em>, 151–169.
+</div>
+<div id="ref-morey2016fallacy" class="csl-entry">
+Morey, R. D., Hoekstra, R., Rouder, J. N., Lee, M. D., &amp; Wagenmakers, E.-J. (2016). The fallacy of placing confidence in confidence intervals. <em>Psychonomic Bulletin &amp; Review</em>, <em>23</em>, 103–123.
+</div>
+<div id="ref-student1908probable" class="csl-entry">
+Student. (1908). The probable error of a mean. <em>Biometrika</em>, <em>6</em>, 1–25.
+</div>
+<div id="ref-zabell2008student" class="csl-entry">
+Zabell, S. L. (2008). On student’s 1908 article "the probable error of a mean"". <em>Journal of the American Statistical Association</em>, <em>103</em>, 1–7.
+</div>
+</div>
 <div class="footnotes">
 <hr />
 <ol start="5">
@@ -710,7 +786,6 @@ $$Y_i = \beta_0 + \beta_1 X_{1i} + \ldots + \beta_K X_{Ki} + \epsilon_i \quad \q
     </div>
   </div>
 <script src="book_assets/gitbook-2.6.7/js/app.min.js"></script>
-<script src="book_assets/gitbook-2.6.7/js/lunr.js"></script>
 <script src="book_assets/gitbook-2.6.7/js/clipboard.min.js"></script>
 <script src="book_assets/gitbook-2.6.7/js/plugin-search.js"></script>
 <script src="book_assets/gitbook-2.6.7/js/plugin-sharing.js"></script>
@@ -729,6 +804,7 @@ gitbook.start({
 "weibo": false,
 "instapaper": false,
 "vk": false,
+"whatsapp": false,
 "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
 },
 "fontsettings": {
@@ -746,11 +822,14 @@ gitbook.start({
 "text": null
 },
 "download": null,
+"search": {
+"engine": "fuse",
+"options": null
+},
 "toc": {
 "collapse": "subsection"
 },
-"source": null,
-"search": true
+"source": null
 });
 });
 </script>

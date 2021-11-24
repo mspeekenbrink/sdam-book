@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 7 A model of means (ANOVA) | Statistics: Data analysis and modelling</title>
   <meta name="description" content="A book about statistics for data analysis, with a main focus on statistical modelling." />
-  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 7 A model of means (ANOVA) | Statistics: Data analysis and modelling" />
   <meta property="og:type" content="book" />
@@ -24,7 +24,7 @@
 <meta name="author" content="Maarten Speekenbrink" />
 
 
-<meta name="date" content="2021-11-17" />
+<meta name="date" content="2021-11-24" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -33,8 +33,9 @@
   
 <link rel="prev" href="moderation-and-mediation.html"/>
 <link rel="next" href="ch-factorial-ANOVA.html"/>
-<script src="book_assets/header-attrs-2.7/header-attrs.js"></script>
-<script src="book_assets/jquery-3.5.1/jquery.min.js"></script>
+<script src="book_assets/header-attrs-2.11/header-attrs.js"></script>
+<script src="book_assets/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="book_assets/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="book_assets/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
 <link href="book_assets/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -50,40 +51,66 @@
 
 
 
-
-<script src="book_assets/htmlwidgets-1.5.3/htmlwidgets.js"></script>
+<link href="book_assets/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="book_assets/anchor-sections-1.0.1/anchor-sections.js"></script>
+<script src="book_assets/htmlwidgets-1.5.4/htmlwidgets.js"></script>
 <script src="book_assets/viz-1.8.2/viz.js"></script>
 <link href="book_assets/DiagrammeR-styles-0.2/styles.css" rel="stylesheet" />
 <script src="book_assets/grViz-binding-1.0.6.1/grViz.js"></script>
-<script src="book_assets/plotly-binding-4.9.3/plotly.js"></script>
+<script src="book_assets/plotly-binding-4.10.0/plotly.js"></script>
 <script src="book_assets/typedarray-0.1/typedarray.min.js"></script>
-<link href="book_assets/crosstalk-1.1.1/css/crosstalk.css" rel="stylesheet" />
-<script src="book_assets/crosstalk-1.1.1/js/crosstalk.min.js"></script>
-<link href="book_assets/plotly-htmlwidgets-css-1.57.1/plotly-htmlwidgets.css" rel="stylesheet" />
-<script src="book_assets/plotly-main-1.57.1/plotly-latest.min.js"></script>
+<link href="book_assets/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet" />
+<script src="book_assets/crosstalk-1.2.0/js/crosstalk.min.js"></script>
+<link href="book_assets/plotly-htmlwidgets-css-2.5.1/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="book_assets/plotly-main-2.5.1/plotly-latest.min.js"></script>
 <link href="book_assets/combineWidgetStyle-0.1/combineWidgets.css" rel="stylesheet" />
-<script src="book_assets/combineWidgets-binding-0.10.1/combineWidgets.js"></script>
-<script src="book_assets/rglWebGL-binding-0.106.6/rglWebGL.js"></script>
-<link href="book_assets/rglwidgetClass-0.106.6/rgl.css" rel="stylesheet" />
-<script src="book_assets/rglwidgetClass-0.106.6/rglClass.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.106.6/utils.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.106.6/subscenes.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.106.6/shaders.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.106.6/textures.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.106.6/projection.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.106.6/mouse.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.106.6/init.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.106.6/pieces.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.106.6/draw.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.106.6/controls.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.106.6/selection.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.106.6/rglTimer.src.js"></script>
-<script src="book_assets/CanvasMatrix4-0.106.6/CanvasMatrix.src.js"></script>
-<script src="book_assets/rglPlayer-binding-0.106.6/rglPlayer.js"></script>
+<script src="book_assets/combineWidgets-binding-0.11.1/combineWidgets.js"></script>
+<script src="book_assets/rglWebGL-binding-0.107.14/rglWebGL.js"></script>
+<link href="book_assets/rglwidgetClass-0.107.14/rgl.css" rel="stylesheet" />
+<script src="book_assets/rglwidgetClass-0.107.14/rglClass.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/utils.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/subscenes.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/shaders.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/textures.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/projection.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/mouse.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/init.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/pieces.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/draw.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/controls.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/selection.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/rglTimer.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/pretty.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/axes.src.js"></script>
+<script src="book_assets/CanvasMatrix4-0.107.14/CanvasMatrix.src.js"></script>
+<script src="book_assets/rglPlayer-binding-0.107.14/rglPlayer.js"></script>
 <script src="book_assets/kePrint-0.0.1/kePrint.js"></script>
 <link href="book_assets/lightable-0.0.1/lightable.css" rel="stylesheet" />
 
 
+
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
 
 <link rel="stylesheet" href="style.css" type="text/css" />
 </head>
@@ -283,10 +310,29 @@
 <li class="chapter" data-level="9.7" data-path="mixing-categorical-and-metric-predictors-ancova.html"><a href="mixing-categorical-and-metric-predictors-ancova.html#mediation-with-categorical-independent-variables"><i class="fa fa-check"></i><b>9.7</b> Mediation with categorical independent variables</a></li>
 <li class="chapter" data-level="9.8" data-path="mixing-categorical-and-metric-predictors-ancova.html"><a href="mixing-categorical-and-metric-predictors-ancova.html#ancova-vs-difference-scores"><i class="fa fa-check"></i><b>9.8</b> ANCOVA vs difference scores</a></li>
 </ul></li>
-<li class="chapter" data-level="10" data-path="repeated-measures-anova.html"><a href="repeated-measures-anova.html"><i class="fa fa-check"></i><b>10</b> Repeated-measures ANOVA</a></li>
+<li class="chapter" data-level="10" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html"><i class="fa fa-check"></i><b>10</b> Repeated-measures ANOVA</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#non-independence-in-linear-models"><i class="fa fa-check"></i><b>10.1</b> Non-independence in linear models</a></li>
+<li class="chapter" data-level="10.2" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#the-cheerleader-effect"><i class="fa fa-check"></i><b>10.2</b> The cheerleader effect</a></li>
+<li class="chapter" data-level="10.3" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#as-a-oneway-anova"><i class="fa fa-check"></i><b>10.3</b> As a oneway ANOVA</a></li>
+<li class="chapter" data-level="10.4" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#oneway-repeated-measures-anova"><i class="fa fa-check"></i><b>10.4</b> Oneway repeated-measures ANOVA</a>
+<ul>
+<li class="chapter" data-level="10.4.1" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#within-subjects-composite-scores"><i class="fa fa-check"></i><b>10.4.1</b> Within-subjects composite scores</a></li>
+<li class="chapter" data-level="10.4.2" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#a-composite-for-between-subjects-effects"><i class="fa fa-check"></i><b>10.4.2</b> A composite for between-subjects effects</a></li>
+<li class="chapter" data-level="10.4.3" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#collecting-all-results-and-omnibus-tests"><i class="fa fa-check"></i><b>10.4.3</b> Collecting all results and omnibus tests</a></li>
+</ul></li>
+<li class="chapter" data-level="10.5" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#partitioning-the-variance"><i class="fa fa-check"></i><b>10.5</b> Partitioning the variance</a></li>
+<li class="chapter" data-level="10.6" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#a-mixed-anova-with-between--and-within-subjects-effects"><i class="fa fa-check"></i><b>10.6</b> A mixed ANOVA with between- and within-subjects effects</a></li>
+<li class="chapter" data-level="10.7" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#assumptions-1"><i class="fa fa-check"></i><b>10.7</b> Assumptions</a>
+<ul>
+<li class="chapter" data-level="10.7.1" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#omnibus-tests-and-sphericity"><i class="fa fa-check"></i><b>10.7.1</b> Omnibus tests and sphericity</a></li>
+<li class="chapter" data-level="10.7.2" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#correcting-for-non-sphericity"><i class="fa fa-check"></i><b>10.7.2</b> Correcting for non-sphericity</a></li>
+</ul></li>
+<li class="chapter" data-level="10.8" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#in-practice-4"><i class="fa fa-check"></i><b>10.8</b> In practice</a></li>
+</ul></li>
 <li class="chapter" data-level="11" data-path="linear-mixed-effects-models.html"><a href="linear-mixed-effects-models.html"><i class="fa fa-check"></i><b>11</b> Linear mixed-effects models</a>
 <ul>
-<li class="chapter" data-level="11.1" data-path="linear-mixed-effects-models.html"><a href="linear-mixed-effects-models.html#non-independence-in-linear-models"><i class="fa fa-check"></i><b>11.1</b> Non-independence in linear models</a></li>
+<li class="chapter" data-level="11.1" data-path="linear-mixed-effects-models.html"><a href="linear-mixed-effects-models.html#non-independence-in-linear-models-1"><i class="fa fa-check"></i><b>11.1</b> Non-independence in linear models</a></li>
 <li class="chapter" data-level="11.2" data-path="linear-mixed-effects-models.html"><a href="linear-mixed-effects-models.html#random-intercept-models"><i class="fa fa-check"></i><b>11.2</b> Random intercept models</a></li>
 <li class="chapter" data-level="11.3" data-path="linear-mixed-effects-models.html"><a href="linear-mixed-effects-models.html#parameter-estimation-1"><i class="fa fa-check"></i><b>11.3</b> Parameter estimation</a></li>
 <li class="chapter" data-level="11.4" data-path="linear-mixed-effects-models.html"><a href="linear-mixed-effects-models.html#parameter-inference"><i class="fa fa-check"></i><b>11.4</b> Parameter inference</a></li>
@@ -356,7 +402,7 @@
 <div id="can-playing-tetris-reduce-intrusive-memories" class="section level2" number="7.1">
 <h2><span class="header-section-number">7.1</span> Can playing Tetris reduce intrusive memories?</h2>
 <p>After a traumatic experience, some people experience flashbacks, which are intrusive and involuntary memories that involve vivid imagery related to the traumatic event. These intrusive memories can be highly distressing and are a hallmark of acute stress disorder and posttraumatic stress disorder (PTSD). It has been suggested that recalling traumatic memories under certain conditions can reduce their negative impact. Memory consolidation refers to a collection of neural processes which stabilize a memory trace after it is acquired. According to reconsolidation theory, when a consolidated memory trace is reactivated (remembered), it again becomes malleable and will require restabilization for it to persist. Disruption of this reconsolidation after recall may then be a way to reduce the strength of traumatic memories, or even allow them to be forgotten.</p>
-<p><span class="citation"><a href="references.html#ref-james_computer_2015" role="doc-biblioref">James et al.</a> (<a href="references.html#ref-james_computer_2015" role="doc-biblioref">2015</a>)</span> conducted a study to investigate this idea. They reasoned that because intrusive memories of trauma are often visual in nature, performing a demanding visuospatial task (e.g. playing the computer game Tetris) after recall could interfere with the reconsolidation process and reduce subsequent intrusions of the traumatic memory. In their Experiment 2, they first created traumatic memories by showing their participants a 12-minute film with graphic scenes depicting death and serious injury (e.g. a van hitting a teenage boy while he was using his mobile phone crossing the road). Participants then went home and recorded the number of intrusive memories of the film during the subsequent 24-hour period (Day 0). The next day, they returned to the lab and were randomly assigned to one of four conditions:</p>
+<p><span class="citation"><a href="#ref-james_computer_2015" role="doc-biblioref">James et al.</a> (<a href="#ref-james_computer_2015" role="doc-biblioref">2015</a>)</span> conducted a study to investigate this idea. They reasoned that because intrusive memories of trauma are often visual in nature, performing a demanding visuospatial task (e.g. playing the computer game Tetris) after recall could interfere with the reconsolidation process and reduce subsequent intrusions of the traumatic memory. In their Experiment 2, they first created traumatic memories by showing their participants a 12-minute film with graphic scenes depicting death and serious injury (e.g. a van hitting a teenage boy while he was using his mobile phone crossing the road). Participants then went home and recorded the number of intrusive memories of the film during the subsequent 24-hour period (Day 0). The next day, they returned to the lab and were randomly assigned to one of four conditions:</p>
 <ol style="list-style-type: decimal">
 <li>No-task control: participants in this condition (<span class="math inline">\(n=18\)</span>) completed a 10-minute music filler task, rating excerpts of classical music for pleasantness.</li>
 <li>Tetris+Reactivation: participants in this condition (<span class="math inline">\(n=18\)</span>) were shown a series of images from the scenes in the trauma film to reactivate the memories of the scenes. After this reactivation task, they completed the 10-minute music filler task, and then played the video game Tetris for 12 minutes.</li>
@@ -398,7 +444,7 @@ were shown blurred images from the trauma film and asked to indicate whether eac
 </tbody>
 </table>
 <p>Boxplots for each condition are provided in Figure <a href="ch-ANOVA.html#fig:tetris-intrusive-memories">7.1</a>.</p>
-<div class="figure" style="text-align: center"><span id="fig:tetris-intrusive-memories"></span>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:tetris-intrusive-memories"></span>
 <img src="_main_files/figure-html/tetris-intrusive-memories-1.svg" alt="Number of intrusive memories during days 1 to 7 for each condition of Experiment 2 of James et al. (2015)." width="95%" />
 <p class="caption">
 Figure 7.1: Number of intrusive memories during days 1 to 7 for each condition of Experiment 2 of James et al. (2015).
@@ -417,7 +463,7 @@ Y_i = \mu_\text{con} + \epsilon_i \quad \quad \epsilon_i \sim \mathbf{Normal}(0,
 where <span class="math inline">\(\mu_\text{con}\)</span> is a placeholder for the mean of a particular condition. Specifying that mean explicitly, we can also write the model as</p>
 <p><span class="math display">\[Y_{i} = \begin{cases}  \mu_\text{t+r} + \epsilon_{i} \hspace{2em} \text{if condition = Tetris+Reactivation} \\ \mu_\text{react} + \epsilon_{i} \hspace{2em} \text{if condition = Reactivation-Only}  \end{cases} \quad \quad \epsilon_i \sim \mathbf{Normal}(0,\sigma_\epsilon)\]</span>
 Note that the model assumes that while the mean can differ between the conditions, deviations of the observations around the mean are assumed to have the same standard deviance <span class="math inline">\(\sigma_\epsilon\)</span>. An example of what the model might look like is given in Figure <a href="ch-ANOVA.html#fig:two-group-Normal-densities">7.2</a>.</p>
-<div class="figure" style="text-align: center"><span id="fig:two-group-Normal-densities"></span>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:two-group-Normal-densities"></span>
 <img src="_main_files/figure-html/two-group-Normal-densities-1.svg" alt="Two Normal density functions with a different mean but identical standard deviation." width="80%" />
 <p class="caption">
 Figure 7.2: Two Normal density functions with a different mean but identical standard deviation.
@@ -529,7 +575,7 @@ $$\mathrm{E}[F] = \frac{\sigma_\epsilon^2 + }{\sigma_\epsilon^2}$$
 <p>To illustrate the general concept of contrast coding in an intuitive manner, let’s consider a game in which you ask someone to pick a random number between 1 and 8 and your job is to determine the number they picked by asking questions which can be answered by “yes” or “no.” There are different ways in which you can play this game, and some of these are more efficient than others. For instance, you can ask sequential questions about the identity of the numbers such as “Is the number 1?” “Is the number 2?” “Is the number 3?” etc. If they picked the number 1, then you would have needed just a single question, and if the number was 3, you would need three questions. If the number was 8, however, you would not need an additional question. After having asked “Is the number 7?” either the answer would be “Yes,” in which case you would know the number to be 7, or “No” in which you would know the number to be 8. So the maximum number of questions is one less than the number of possibilities. As contrast coding is essentially asking such questions about group membership, you will always need one contrast-coding variable less than the number of groups.</p>
 <p>Going back to the game, to determine any number between 1 and 8, an optimal playing strategy will always consist of 7 possible questions. You would not need to ask all of these questions in each game, but sometimes you opponent would have chosen 7 or 8, in which case you would need to ask all 7 questions. The strategy of asking whether the chosen number is equal to each of a sequence of number resembles dummy coding. In this view, the final number 8 is the reference group, and each question such as “Is the number 1?” is implicitly the same as “Is the number 1 <em>and not 8</em>?”</p>
 <p>A different way to play the game is by a strategy which guarantees you to always correctly “guess” the number in three questions. This strategy is depicted in Figure <a href="ch-ANOVA.html#fig:number-guessing-game-contrast-coding">7.3</a>. In this strategy, each question halves the number of remaining options. If the first question “Is the number larger than 4?” is answered as “yes,” the number can only be 5, 6, 7, or 8. The options 1, 2, 3, or 4, are ruled out. Subsequently asking “Is the number larger than 6?” would reduce the remaining options by half again. If the answer to this question was “yes,” then the number would have to be either 7 or 8. If “no,” the remaining options would be 5 or 6. If the answer was “yes,” then subsequently asking the question “Is the number 7?” would allow you to finish the game (if the answer is “yes,” the number is 7, if “no,” it would have to be 8). Although more efficient in a single game, over all games, this strategy consists of a total of 7 questions: “Is the number greater than four?” “Is the number greater than two?” is the number greater than six?“,”Is the number seven?“, etc.</p>
-<div class="figure" style="text-align: center"><span id="fig:number-guessing-game-contrast-coding"></span>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:number-guessing-game-contrast-coding"></span>
 <img src="_main_files/figure-html/number-guessing-game-contrast-coding-1.svg" alt="Questions to guess a random number between 1 and 8" width="60%" />
 <p class="caption">
 Figure 7.3: Questions to guess a random number between 1 and 8
@@ -604,7 +650,7 @@ Just like for the dummy coding example discussed above, the idea is to construct
 This model is treated as any other regression model. So after re-coding a nominal variable “condition” with four levels (Control, Tetris+Reactivation, Tetris-Only, and Reactivation-Only) with three contrast codes <span class="math inline">\(c_1\)</span>, <span class="math inline">\(c_2\)</span>, and <span class="math inline">\(c_3\)</span>, each with a corresponding predictor <span class="math inline">\(X_1\)</span>, <span class="math inline">\(X_2\)</span>, and <span class="math inline">\(X_3\)</span>, we end up with a linear model that is effectively like any other multiple regression model. Estimating the model gives:
 <span class="math display">\[\texttt{intrusions}_i = 3.93 + 1.18 \times \texttt{}X_1\texttt{}_i  - 2.04 \times \texttt{}X_2\texttt{}_i  - 0.0417 \times \texttt{}X_3\texttt{}_i  + \hat{\epsilon}_i \quad \quad \hat{\epsilon}_i \sim \mathbf{Normal}(0, 3.18)\]</span>
 Figure <a href="ch-ANOVA.html#fig:tetris-effect-coding-parameter-plot">7.4</a> shows how the parameters of the model are related to the average number of intrusions in each condition.
-<div class="figure" style="text-align: center"><span id="fig:tetris-effect-coding-parameter-plot"></span>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:tetris-effect-coding-parameter-plot"></span>
 <img src="_main_files/figure-html/tetris-effect-coding-parameter-plot-1.svg" alt="Average number of instrusions in the four conditions in the Tetris study and how they are related to the parameters of the effect-coding model. The intercept $\hat{\beta}_0 = \hat{\mu}$ is the grand mean (dotted line). The slopes reflect treatment effects, which are deviations from the average intrusions in a condition and the grand mean. The averages of the first three conditions are equal to $\beta_0 + \beta_j$, the sum of the intercept and the slope of the effect-coding predictor $X_j$ representing the treatment effect of that condition. The mean of the last condition is the intercept minus the sum of the slopes of the effect-coding predictors." width="95%" />
 <p class="caption">
 Figure 7.4: Average number of instrusions in the four conditions in the Tetris study and how they are related to the parameters of the effect-coding model. The intercept <span class="math inline">\(\hat{\beta}_0 = \hat{\mu}\)</span> is the grand mean (dotted line). The slopes reflect treatment effects, which are deviations from the average intrusions in a condition and the grand mean. The averages of the first three conditions are equal to <span class="math inline">\(\beta_0 + \beta_j\)</span>, the sum of the intercept and the slope of the effect-coding predictor <span class="math inline">\(X_j\)</span> representing the treatment effect of that condition. The mean of the last condition is the intercept minus the sum of the slopes of the effect-coding predictors.
@@ -691,7 +737,7 @@ i.e., it is a “whole model test.” The result of this so-called <strong>omnib
 which is also equivalent to the test that the means of all conditions are equal to each other:
 <span class="math display">\[H_0\!: \mu_\text{contr} = \mu_\text{t+r} = \mu_\text{tetr} = \mu_\text{react} \]</span></p>
 <p>The result of the omnibus test indicates that there is at least one treatment effect which is different from 0. Omnibus tests for all slopes reflecting treatment effects are what is traditionally focused on in an ANOVA. But these omnibus tests are not always that informative. We’d generally like to know more than “there is at least one treatment that is likely to have an effect.” It seems inherently more interesting to know <em>which</em> conditions are associated with a treatment effect. This is where the tests of the individual slopes come in handy. Assessing the effect of the three effect-coding predictors, we can conclude that only the treatment effect of the Tetris+Reactivation condition is significant. As such, we only have sufficient evidence that a combination of memory reactivation and playing Tetris changes the number of subsequent memory intrusions.</p>
-<p>At this point, I’d like to make some important remarks. Firstly, the absence of sufficient evidence that any of the other treatment effects differs from 0 should <em>not</em> be taken as direct evidence that the true treatment effects equal 0. A non-significant result indicates a lack of evidence <em>against</em> the null-hypothesis, but not an abundance of evidence <em>for</em> the null hypothesis. You can think of this as follows: that a suspect in a murder trial is not able to provide evidence that she is innocent, is in itself not sufficient evidence that she is guilty. You might also think of black swans. While the empirical statement “All swans are white” is impossible to prove conclusively without checking the colour of all swans that have and will ever grace this world, finding a single black swan disproves that statement immediately <span class="citation">(<a href="references.html#ref-popper1959logic" role="doc-biblioref">Popper, 1959</a>)</span>. Although significance testing does not provide <em>conclusive evidence</em> for or against the null-hypothesis,<a href="#fn18" class="footnote-ref" id="fnref18"><sup>18</sup></a> the analogy can be described as follows: a significant test is like spotting a swan that is “off-white” enough for you to decide it is not exactly white. But not having spotted such a swan could either mean that such a swan does not exist (the null hypothesis is true), or that you have not searched hard enough (the null hypothesis is false, but your test lacked power).</p>
+<p>At this point, I’d like to make some important remarks. Firstly, the absence of sufficient evidence that any of the other treatment effects differs from 0 should <em>not</em> be taken as direct evidence that the true treatment effects equal 0. A non-significant result indicates a lack of evidence <em>against</em> the null-hypothesis, but not an abundance of evidence <em>for</em> the null hypothesis. You can think of this as follows: that a suspect in a murder trial is not able to provide evidence that she is innocent, is in itself not sufficient evidence that she is guilty. You might also think of black swans. While the empirical statement “All swans are white” is impossible to prove conclusively without checking the colour of all swans that have and will ever grace this world, finding a single black swan disproves that statement immediately <span class="citation">(<a href="#ref-popper1959logic" role="doc-biblioref">Popper, 1959</a>)</span>. Although significance testing does not provide <em>conclusive evidence</em> for or against the null-hypothesis,<a href="#fn18" class="footnote-ref" id="fnref18"><sup>18</sup></a> the analogy can be described as follows: a significant test is like spotting a swan that is “off-white” enough for you to decide it is not exactly white. But not having spotted such a swan could either mean that such a swan does not exist (the null hypothesis is true), or that you have not searched hard enough (the null hypothesis is false, but your test lacked power).</p>
 <p>Secondly, the effect-coding predictors only reflect three out of a total of four treatment effects. The treatment effect of the reactivation-Only condition follows directly as minus the sum of these three treatment effects. As such, it is redundant. But we don’t have a hypothesis test for this redundant treatment effect. If we had chosen a slightly different coding scheme, where we would have estimated the treatment effects of the Control, Tetris-Only, and Reactivation-Only condition, such that the treatment effect of the Tetris+Reactivation condition is redundant, then none of the significance tests of the slopes of this different model would have been significant. However, the omnibus test would give exactly the same results, thus indicating that at least one treatment effect does not equal 0. With the three treatment effects estimated in this different model, we couldn’t have easily spotted which treatment effect(s) these were. Whilst the estimates and slopes of contrast-coded predictors are often more specific and informative than an omnibus test, because we can only use <span class="math inline">\(g-1\)</span> of such predictors (one less than the number of groups), we can’t test for <em>all</em> treatment effects in a single model, nor test all hypotheses that we might be interested in. We will come back to this when we discuss “multiple testing” approaches. For now, a main thing to realise is that a significant omnibus test indicates that at least two groups differ in their means. If none of the tests of the slopes of the contrast-coded predictors in a linear model are significant, but you have obtained a significant omnibus test, that indicates that none of the predictors encoded this particular difference between groups.</p>
 <p>Whilst some authors bemoan the use of omnibus tests, they have a role to play in the inference process, for instance in spotting whether you have missed a potentially important effect. Other authors put too much emphasis on omnibus tests, for instance requiring a significant omnibus tests before you might consider tests of the individual slopes that comprise this omnibus test. It is perfectly possible for an omnibus test to be non-significant, whilst a slope for one (or more) contrast-coded predictors is significant. For instance, if you’d conduct an experiment with 10 conditions, and only one has an actual treatment effect, the omnibus test might be non-significant because it effectively assigns that one treatment effect to nine parameters (slopes for nine contrast-coded predictors). Let’s take an extreme example, where only <span class="math inline">\(X_1\)</span> (the first contrast-coded predictor) reduces the SSE with <span class="math inline">\(\text{SSR}(X_1) &gt; 0\)</span>, whilst the other predictors provide no reduction in the SSE whatsoever (i.e. <span class="math inline">\(\text{SSR}(X_j) = 0\)</span> for <span class="math inline">\(j=2, \ldots, 9\)</span>). Then the <span class="math inline">\(F\)</span> statistic of the omnibus test might be
 <span class="math display">\[\begin{aligned}
@@ -704,7 +750,7 @@ F &amp;= \frac{\frac{\text{SSE}(R) - \text{SSE}(G)}{\text{npar}(G) - \text{npar}
 &amp;= \frac{\text{SSR}(X_1)/1}{\text{SSE}(G)/(n-10)}
 \end{aligned}\]</span>
 which, with a higher value and smaller <span class="math inline">\(\text{df}_1\)</span>, would be more likely to be significant.</p>
-<p>Thirdly, when you look at the value of <span class="math inline">\(\text{SSR}(\text{Condition}) = 115\)</span> in Table <a href="ch-ANOVA.html#tab:tetris-effect-coding-ANOVA">7.2</a>, you can see that it is smaller than the sum of the SSR terms corresponding to the three predictors. This indicates that there is redundancy between the predictors <span class="math inline">\(X_1\)</span>, <span class="math inline">\(X_2\)</span>, and <span class="math inline">\(X_3\)</span> (i.e., some form of multicollinearity). Although Venn diagrams such as Figure <a href="ch-multiple-regression.html#fig:sse-partition-multicollinearity">5.10</a> imply that the SSR of the full model would be larger than the sum of the unique SSR terms attributable to each predictor, the opposite can also be true! This situation is commonly referred to as <strong>suppression</strong> and is rather difficult to explain here without a lengthy and detailed detour. For now, we will therefore leave it to the interested reader to consult other sources on this <span class="citation">(e.g. <a href="references.html#ref-mackinnon2000equivalence" role="doc-biblioref">MacKinnon, Krull, &amp; Lockwood, 2000</a>)</span>, and simply note that if the sum of the SSR terms of the predictors does not equal the “whole model” SSR, this indicates redundancy between the predictors.</p>
+<p>Thirdly, when you look at the value of <span class="math inline">\(\text{SSR}(\text{Condition}) = 115\)</span> in Table <a href="ch-ANOVA.html#tab:tetris-effect-coding-ANOVA">7.2</a>, you can see that it is smaller than the sum of the SSR terms corresponding to the three predictors. This indicates that there is redundancy between the predictors <span class="math inline">\(X_1\)</span>, <span class="math inline">\(X_2\)</span>, and <span class="math inline">\(X_3\)</span> (i.e., some form of multicollinearity). Although Venn diagrams such as Figure <a href="ch-multiple-regression.html#fig:sse-partition-multicollinearity">5.10</a> imply that the SSR of the full model would be larger than the sum of the unique SSR terms attributable to each predictor, the opposite can also be true! This situation is commonly referred to as <strong>suppression</strong> and is rather difficult to explain here without a lengthy and detailed detour. For now, we will therefore leave it to the interested reader to consult other sources on this <span class="citation">(e.g. <a href="#ref-mackinnon2000equivalence" role="doc-biblioref">MacKinnon, Krull, &amp; Lockwood, 2000</a>)</span>, and simply note that if the sum of the SSR terms of the predictors does not equal the “whole model” SSR, this indicates redundancy between the predictors.</p>
 </div>
 <div id="orthogonal-contrast-codes" class="section level3" number="7.4.2">
 <h3><span class="header-section-number">7.4.2</span> Orthogonal contrast codes</h3>
@@ -848,7 +894,7 @@ i.e. the difference between the average intrusions in the Reactivation-Only con
 <p>While it is important to understand what each slope reflects in terms of differences between the group means, you would not normally use these equations to actually estimate the slopes. It is much easier to use statistical software for that. Estimating a linear regression model with the three predictors <span class="math inline">\(X_1\)</span>, <span class="math inline">\(X_2\)</span>, and <span class="math inline">\(X_3\)</span>, which take values according to the contrast codes <span class="math inline">\(c_1\)</span>, <span class="math inline">\(c_2\)</span>, and <span class="math inline">\(c_3\)</span> respectively, gives us the following estimated model:</p>
 <span class="math display">\[\texttt{intrusions}_i = 3.93 + 1.57 \times \texttt{}X_1\texttt{}_i  + 0.528 \times \texttt{}X_2\texttt{}_i  + 2.94 \times \texttt{}X_3\texttt{}_i  + \hat{\epsilon}_i \quad \quad \hat{\epsilon}_i \sim \mathbf{Normal}(0, 3.18)\]</span>
 As you can see, the parameter estimates are identical to those worked out above using Equation <a href="ch-ANOVA.html#eq:estimate-slope-orthogonal-contrast-codes">(7.3)</a> and the sample means. Figure <a href="ch-ANOVA.html#fig:tetris-contrast-coding-parameter-plot">7.5</a> shows how the parameters of the model are related to the average number of intrusions in each condition.
-<div class="figure" style="text-align: center"><span id="fig:tetris-contrast-coding-parameter-plot"></span>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:tetris-contrast-coding-parameter-plot"></span>
 <img src="_main_files/figure-html/tetris-contrast-coding-parameter-plot-1.svg" alt="Average number of instrusions in the four conditions in the Tetris study and how they are related to the parameters of the orthogonal contrast-coding model. The intercept $\hat{\beta}_0 = \hat{\mu}$ is the grand mean (dotted line). The slopes reflect deviations from the average intrusions in a condition and combinations of other conditions." width="95%" />
 <p class="caption">
 Figure 7.5: Average number of instrusions in the four conditions in the Tetris study and how they are related to the parameters of the orthogonal contrast-coding model. The intercept <span class="math inline">\(\hat{\beta}_0 = \hat{\mu}\)</span> is the grand mean (dotted line). The slopes reflect deviations from the average intrusions in a condition and combinations of other conditions.
@@ -1422,18 +1468,18 @@ and
 <div id="assumptions" class="section level2" number="7.7">
 <h2><span class="header-section-number">7.7</span> Assumptions</h2>
 <p>The assumptions of the ANOVA model are the same as those for a (multiple) regression model (see Section <a href="ch-multiple-regression.html#sec:04b-assumptions">5.7</a>). Thus, we assume the errors <span class="math inline">\(\epsilon\)</span> are independent and Normal-distributed, with a mean of 0 and a homoscedastic standard deviation <span class="math inline">\(\sigma_\epsilon\)</span>. As an ANOVA model provides the same prediction for each case in a group/condition, the errors reflect variation in the dependent variable within each group or condition. Another way to state the assumptions of the General Linear Model in the case of an ANOVA model is then that the variance of the dependent variable within each group or condition is the same (see Figure <a href="ch-ANOVA.html#fig:four-group-Normal-densities">7.6</a>).</p>
-<div class="figure" style="text-align: center"><span id="fig:four-group-Normal-densities"></span>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:four-group-Normal-densities"></span>
 <img src="_main_files/figure-html/four-group-Normal-densities-1.svg" alt="An ANOVA model assumes that the variance within each condition or group is identical. The means of the conditions or groups can differ." width="80%" />
 <p class="caption">
 Figure 7.6: An ANOVA model assumes that the variance within each condition or group is identical. The means of the conditions or groups can differ.
 </p>
 </div>
-<p>We can use similar techniques to assess the assumptions as for multiple regression, such as QQ-plots and histograms of the errors. A predicted-vs-residual plot is less informative here, as there are only as many unique predictions as the number of conditions or groups. Because we have multiple observations within each group, we can test the homoscedasticity assumption. This assumption is also called the homogeneity of variance assumption. A widely-used test is known as <strong>Levene’s test</strong> <span class="citation">(<a href="references.html#ref-levene1960robust" role="doc-biblioref">Levene, 1960</a>)</span>. This is a test of the null-hypothesis <span class="math inline">\(H_0: \sigma^2_1 = \sigma^2_2 = \ldots = \sigma^2_g\)</span>, where <span class="math inline">\(\sigma^2_j\)</span> is the variance of <span class="math inline">\(Y\)</span> in a group <span class="math inline">\(j\)</span>. The test effectively uses absolute deviations between observed values of <span class="math inline">\(Y\)</span> and the group average <span class="math inline">\(\overline{Y}_g\)</span> as the dependent variable in an ANOVA model. If one group has a larger variance, then the absolute deviations will also be larger, on average, than those in another group. A significant Levene test indicates that the null-hypothesis of equal variances is likely false.</p>
-<p>As usual, the assumptions of the model allow us to derive the sampling distribution of the test statistic under the null-hypothesis. If the assumptions hold, then we are assured the distribution of the <span class="math inline">\(F\)</span>-statistic follows an <span class="math inline">\(F\)</span>-distribution with the given degrees of freedom. Even if the errors are not strictly Normal-distributed, or there are some small differences in the variance between the groups, the <span class="math inline">\(F\)</span>-statistic may still approximately follow the assumed <span class="math inline">\(F\)</span>-distribution. The general consensus is that ANOVAs are reasonably robust against deviations from Normal-distributed errors, as long as the error distributions are approximately symmetric, or have the same shape in each group <span class="citation">(<a href="references.html#ref-howell2012statistical" role="doc-biblioref">Howell, 2012</a>)</span>. When sample sizes are equal for each group, ANOVAs are also robust to violations of homoscedasticity <span class="citation">(<a href="references.html#ref-howell2012statistical" role="doc-biblioref">Howell, 2012</a>; see <a href="references.html#ref-lix1996consequences" role="doc-biblioref">Lix, Keselman, &amp; Keselman, 1996</a>; <a href="references.html#ref-maxwell2017designing" role="doc-biblioref">Maxwell, Delaney, &amp; Kelley, 2017</a>)</span>. So even if the Levene test is significant, you may still be able to use an ANOVA model.</p>
-<p>Regarding potential heteroscedasticity, <span class="citation"><a href="references.html#ref-maxwell2017designing" role="doc-biblioref">Maxwell et al.</a> (<a href="references.html#ref-maxwell2017designing" role="doc-biblioref">2017</a>)</span> offer the following practical advice: in a one-way ANOVA model with equal sample sizes, you may stick to the standard <span class="math inline">\(F\)</span> test if the ratio of the largest sample variance <span class="math inline">\(S^2_\text{max}\)</span> to the smallest sample variance <span class="math inline">\(S^2_\text{min}\)</span> is smaller than 4, i.e. <span class="math inline">\(\frac{S^2_\text{max}}{S^2_\text{min}} &lt; 4\)</span>. When sample sizes are unequal, things become a little more complicated. The suggestion is to also take the ratio of the sample size in the largest group, <span class="math inline">\(n_\text{max}\)</span> to the sample size of the smallest group, <span class="math inline">\(n_\text{min}\)</span> into account, and stick to the standard <span class="math inline">\(F\)</span> test whenever
+<p>We can use similar techniques to assess the assumptions as for multiple regression, such as QQ-plots and histograms of the errors. A predicted-vs-residual plot is less informative here, as there are only as many unique predictions as the number of conditions or groups. Because we have multiple observations within each group, we can test the homoscedasticity assumption. This assumption is also called the homogeneity of variance assumption. A widely-used test is known as <strong>Levene’s test</strong> <span class="citation">(<a href="#ref-levene1960robust" role="doc-biblioref">Levene, 1960</a>)</span>. This is a test of the null-hypothesis <span class="math inline">\(H_0: \sigma^2_1 = \sigma^2_2 = \ldots = \sigma^2_g\)</span>, where <span class="math inline">\(\sigma^2_j\)</span> is the variance of <span class="math inline">\(Y\)</span> in a group <span class="math inline">\(j\)</span>. The test effectively uses absolute deviations between observed values of <span class="math inline">\(Y\)</span> and the group average <span class="math inline">\(\overline{Y}_g\)</span> as the dependent variable in an ANOVA model. If one group has a larger variance, then the absolute deviations will also be larger, on average, than those in another group. A significant Levene test indicates that the null-hypothesis of equal variances is likely false.</p>
+<p>As usual, the assumptions of the model allow us to derive the sampling distribution of the test statistic under the null-hypothesis. If the assumptions hold, then we are assured the distribution of the <span class="math inline">\(F\)</span>-statistic follows an <span class="math inline">\(F\)</span>-distribution with the given degrees of freedom. Even if the errors are not strictly Normal-distributed, or there are some small differences in the variance between the groups, the <span class="math inline">\(F\)</span>-statistic may still approximately follow the assumed <span class="math inline">\(F\)</span>-distribution. The general consensus is that ANOVAs are reasonably robust against deviations from Normal-distributed errors, as long as the error distributions are approximately symmetric, or have the same shape in each group <span class="citation">(<a href="#ref-howell2012statistical" role="doc-biblioref">Howell, 2012</a>)</span>. When sample sizes are equal for each group, ANOVAs are also robust to violations of homoscedasticity <span class="citation">(<a href="#ref-howell2012statistical" role="doc-biblioref">Howell, 2012</a>; see <a href="#ref-lix1996consequences" role="doc-biblioref">Lix, Keselman, &amp; Keselman, 1996</a>; <a href="#ref-maxwell2017designing" role="doc-biblioref">Maxwell, Delaney, &amp; Kelley, 2017</a>)</span>. So even if the Levene test is significant, you may still be able to use an ANOVA model.</p>
+<p>Regarding potential heteroscedasticity, <span class="citation"><a href="#ref-maxwell2017designing" role="doc-biblioref">Maxwell et al.</a> (<a href="#ref-maxwell2017designing" role="doc-biblioref">2017</a>)</span> offer the following practical advice: in a one-way ANOVA model with equal sample sizes, you may stick to the standard <span class="math inline">\(F\)</span> test if the ratio of the largest sample variance <span class="math inline">\(S^2_\text{max}\)</span> to the smallest sample variance <span class="math inline">\(S^2_\text{min}\)</span> is smaller than 4, i.e. <span class="math inline">\(\frac{S^2_\text{max}}{S^2_\text{min}} &lt; 4\)</span>. When sample sizes are unequal, things become a little more complicated. The suggestion is to also take the ratio of the sample size in the largest group, <span class="math inline">\(n_\text{max}\)</span> to the sample size of the smallest group, <span class="math inline">\(n_\text{min}\)</span> into account, and stick to the standard <span class="math inline">\(F\)</span> test whenever
 <span class="math display">\[\frac{n_\text{max}}{n_\text{min}} \times \frac{S^2_\text{max}}{S^2_\text{min}} &lt; 4\]</span>
-When the ratio is larger than 4, you could decide to use an alternative test, such as the Brown-Forsythe or the Welch test <span class="citation">(see e.g. <a href="references.html#ref-tomarken1986comparison" role="doc-biblioref">Tomarken &amp; Serlin, 1986</a>)</span>. When the variance of a dependent variable increases with the mean, it may also be possible to transform the dependent variable using e.g. a logarithmic or square-root transformation.</p>
-<p><span class="citation"><a href="references.html#ref-box1954some" role="doc-biblioref">G. E. Box</a> (<a href="references.html#ref-box1954some" role="doc-biblioref">1954</a>)</span> showed that in the case of heteroscedasticity (unequal variances), when there are equal sample sizes, the correct critical value for the <span class="math inline">\(F\)</span>-test is somewhere between the critical value of the <span class="math inline">\(F\)</span>-statistic with the usual degrees of freedom (i.e. <span class="math inline">\(\text{df}_1 = \text{npar}(G) - \text{npar}(R)\)</span> and <span class="math inline">\(\text{df}_2 = n - \text{npar}(G)\)</span>), and a critical value of the <span class="math inline">\(F\)</span>-statistic with smaller degrees of freedom: <span class="math inline">\(\text{df}_1 = 1\)</span> and <span class="math inline">\(\text{df}_2 = \frac{n - \text{npar}(G)}{g}\)</span>. In the case of unequal variances, you may then also perform a conservative test, using the critical value for these smaller degrees of freedom. If this provides a significant result, that implies there are differences in group means regardless of whether the variances are equal or not.</p>
+When the ratio is larger than 4, you could decide to use an alternative test, such as the Brown-Forsythe or the Welch test <span class="citation">(see e.g. <a href="#ref-tomarken1986comparison" role="doc-biblioref">Tomarken &amp; Serlin, 1986</a>)</span>. When the variance of a dependent variable increases with the mean, it may also be possible to transform the dependent variable using e.g. a logarithmic or square-root transformation.</p>
+<p><span class="citation"><a href="#ref-box1954some" role="doc-biblioref">G. E. Box</a> (<a href="#ref-box1954some" role="doc-biblioref">1954</a>)</span> showed that in the case of heteroscedasticity (unequal variances), when there are equal sample sizes, the correct critical value for the <span class="math inline">\(F\)</span>-test is somewhere between the critical value of the <span class="math inline">\(F\)</span>-statistic with the usual degrees of freedom (i.e. <span class="math inline">\(\text{df}_1 = \text{npar}(G) - \text{npar}(R)\)</span> and <span class="math inline">\(\text{df}_2 = n - \text{npar}(G)\)</span>), and a critical value of the <span class="math inline">\(F\)</span>-statistic with smaller degrees of freedom: <span class="math inline">\(\text{df}_1 = 1\)</span> and <span class="math inline">\(\text{df}_2 = \frac{n - \text{npar}(G)}{g}\)</span>. In the case of unequal variances, you may then also perform a conservative test, using the critical value for these smaller degrees of freedom. If this provides a significant result, that implies there are differences in group means regardless of whether the variances are equal or not.</p>
 </div>
 <div id="multiple-testing-and-post-hoc-tests" class="section level2" number="7.8">
 <h2><span class="header-section-number">7.8</span> Multiple testing and post-hoc tests</h2>
@@ -1478,6 +1524,36 @@ The assumptions of the oneway ANOVA model are the same as the assumptions of any
 
 </div>
 </div>
+<h3>References</h3>
+<div id="refs" class="references csl-bib-body hanging-indent" line-spacing="2">
+<div id="ref-box1954some" class="csl-entry">
+Box, G. E. (1954). Some theorems on quadratic forms applied in the study of analysis of variance problems, i. Effect of inequality of variance in the one-way classification. <em>The Annals of Mathematical Statistics</em>, 290–302.
+</div>
+<div id="ref-howell2012statistical" class="csl-entry">
+Howell, D. C. (2012). <em>Statistical methods for psychology</em>. Cengage Learning.
+</div>
+<div id="ref-james_computer_2015" class="csl-entry">
+James, E. L., Bonsall, M. B., Hoppitt, L., Tunbridge, E. M., Geddes, J. R., Milton, A. L., &amp; Holmes, E. A. (2015). Computer game play reduces intrusive memories of experimental trauma via reconsolidation-update mechanisms. <em>Psychological Science</em>. <a href="https://doi.org/10.1177/0956797615583071">https://doi.org/10.1177/0956797615583071</a>
+</div>
+<div id="ref-levene1960robust" class="csl-entry">
+Levene, H. (1960). Robust tests for equality of variances. In I. Olkin (Ed.), <em>Contributions to probability and statistics. Essays in honor of <span>H</span>arold <span>H</span>otelling</em> (pp. 279–292). Palo Alto, CA: Stanford University Press.
+</div>
+<div id="ref-lix1996consequences" class="csl-entry">
+Lix, L. M., Keselman, J. C., &amp; Keselman, H. J. (1996). Consequences of assumption violations revisited: A quantitative review of alternatives to the one-way analysis of variance <span>F</span> test. <em>Review of Educational Research</em>, <em>66</em>, 579–619.
+</div>
+<div id="ref-mackinnon2000equivalence" class="csl-entry">
+MacKinnon, D. P., Krull, J. L., &amp; Lockwood, C. M. (2000). Equivalence of the mediation, confounding and suppression effect. <em>Prevention Science</em>, <em>1</em>, 173–181.
+</div>
+<div id="ref-maxwell2017designing" class="csl-entry">
+Maxwell, S. E., Delaney, H. D., &amp; Kelley, K. (2017). <em>Designing experiments and analyzing data: A model comparison perspective</em>. Routledge.
+</div>
+<div id="ref-popper1959logic" class="csl-entry">
+Popper, K. (1959). <em>The logic of scientific discovery</em>. Routledge.
+</div>
+<div id="ref-tomarken1986comparison" class="csl-entry">
+Tomarken, A. J., &amp; Serlin, R. C. (1986). Comparison of ANOVA alternatives under variance heterogeneity and specific noncentrality structures. <em>Psychological Bulletin</em>, <em>99</em>, 90.
+</div>
+</div>
 <div class="footnotes">
 <hr />
 <ol start="18">
@@ -1495,7 +1571,6 @@ The assumptions of the oneway ANOVA model are the same as the assumptions of any
     </div>
   </div>
 <script src="book_assets/gitbook-2.6.7/js/app.min.js"></script>
-<script src="book_assets/gitbook-2.6.7/js/lunr.js"></script>
 <script src="book_assets/gitbook-2.6.7/js/clipboard.min.js"></script>
 <script src="book_assets/gitbook-2.6.7/js/plugin-search.js"></script>
 <script src="book_assets/gitbook-2.6.7/js/plugin-sharing.js"></script>
@@ -1514,6 +1589,7 @@ gitbook.start({
 "weibo": false,
 "instapaper": false,
 "vk": false,
+"whatsapp": false,
 "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
 },
 "fontsettings": {
@@ -1531,11 +1607,14 @@ gitbook.start({
 "text": null
 },
 "download": null,
+"search": {
+"engine": "fuse",
+"options": null
+},
 "toc": {
 "collapse": "subsection"
 },
-"source": null,
-"search": true
+"source": null
 });
 });
 </script>

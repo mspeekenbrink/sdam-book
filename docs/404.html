@@ -24,7 +24,7 @@
 <meta name="author" content="Maarten Speekenbrink" />
 
 
-<meta name="date" content="2021-10-25" />
+<meta name="date" content="2021-11-24" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -53,6 +53,39 @@
 
 <link href="book_assets/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
 <script src="book_assets/anchor-sections-1.0.1/anchor-sections.js"></script>
+<script src="book_assets/htmlwidgets-1.5.4/htmlwidgets.js"></script>
+<script src="book_assets/viz-1.8.2/viz.js"></script>
+<link href="book_assets/DiagrammeR-styles-0.2/styles.css" rel="stylesheet" />
+<script src="book_assets/grViz-binding-1.0.6.1/grViz.js"></script>
+<script src="book_assets/plotly-binding-4.10.0/plotly.js"></script>
+<script src="book_assets/typedarray-0.1/typedarray.min.js"></script>
+<link href="book_assets/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet" />
+<script src="book_assets/crosstalk-1.2.0/js/crosstalk.min.js"></script>
+<link href="book_assets/plotly-htmlwidgets-css-2.5.1/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="book_assets/plotly-main-2.5.1/plotly-latest.min.js"></script>
+<link href="book_assets/combineWidgetStyle-0.1/combineWidgets.css" rel="stylesheet" />
+<script src="book_assets/combineWidgets-binding-0.11.1/combineWidgets.js"></script>
+<script src="book_assets/rglWebGL-binding-0.107.14/rglWebGL.js"></script>
+<link href="book_assets/rglwidgetClass-0.107.14/rgl.css" rel="stylesheet" />
+<script src="book_assets/rglwidgetClass-0.107.14/rglClass.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/utils.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/subscenes.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/shaders.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/textures.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/projection.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/mouse.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/init.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/pieces.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/draw.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/controls.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/selection.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/rglTimer.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/pretty.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/axes.src.js"></script>
+<script src="book_assets/CanvasMatrix4-0.107.14/CanvasMatrix.src.js"></script>
+<script src="book_assets/rglPlayer-binding-0.107.14/rglPlayer.js"></script>
+<script src="book_assets/kePrint-0.0.1/kePrint.js"></script>
+<link href="book_assets/lightable-0.0.1/lightable.css" rel="stylesheet" />
 
 
 
@@ -137,7 +170,6 @@ div.csl-indent {
 <li class="chapter" data-level="2.6" data-path="ch-modeling.html"><a href="ch-modeling.html#hypothesis-testing-directly-with-the-binomial-distribution"><i class="fa fa-check"></i><b>2.6</b> Hypothesis testing directly with the Binomial distribution</a></li>
 <li class="chapter" data-level="2.7" data-path="ch-modeling.html"><a href="ch-modeling.html#summary-1"><i class="fa fa-check"></i><b>2.7</b> Summary</a></li>
 <li class="chapter" data-level="2.8" data-path="ch-modeling.html"><a href="ch-modeling.html#epilogue"><i class="fa fa-check"></i><b>2.8</b> Epilogue</a></li>
-<li class="chapter" data-level="2.9" data-path="ch-modeling.html"><a href="ch-modeling.html#exercises"><i class="fa fa-check"></i><b>2.9</b> Exercises</a></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html"><i class="fa fa-check"></i><b>3</b> A model with a mean (one sample t-test)</a>
 <ul>
@@ -169,8 +201,6 @@ div.csl-indent {
 <li class="chapter" data-level="3.8.2" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#bootstrapping-a-statistic"><i class="fa fa-check"></i><b>3.8.2</b> Bootstrapping a statistic</a></li>
 </ul></li>
 <li class="chapter" data-level="3.9" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#in-practice"><i class="fa fa-check"></i><b>3.9</b> In practice</a></li>
-<li class="chapter" data-level="3.10" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#summary-2"><i class="fa fa-check"></i><b>3.10</b> Summary</a></li>
-<li class="chapter" data-level="3.11" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#the-general-linear-model"><i class="fa fa-check"></i><b>3.11</b> The General Linear Model</a></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html"><i class="fa fa-check"></i><b>4</b> Simple linear regression</a>
 <ul>
@@ -186,9 +216,7 @@ div.csl-indent {
 <li class="chapter" data-level="4.4.2" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#model-comparison"><i class="fa fa-check"></i><b>4.4.2</b> Model comparison</a></li>
 <li class="chapter" data-level="4.4.3" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#confidence-intervals"><i class="fa fa-check"></i><b>4.4.3</b> Confidence intervals</a></li>
 </ul></li>
-<li class="chapter" data-level="4.5" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#assumptions-and-outliers"><i class="fa fa-check"></i><b>4.5</b> Assumptions and outliers</a></li>
-<li class="chapter" data-level="4.6" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#summary-3"><i class="fa fa-check"></i><b>4.6</b> Summary</a></li>
-<li class="chapter" data-level="4.7" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#summary-4"><i class="fa fa-check"></i><b>4.7</b> Summary</a></li>
+<li class="chapter" data-level="4.5" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#summary-2"><i class="fa fa-check"></i><b>4.5</b> Summary</a></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html"><i class="fa fa-check"></i><b>5</b> Multiple regression</a>
 <ul>
@@ -204,19 +232,17 @@ div.csl-indent {
 <ul>
 <li class="chapter" data-level="5.6.1" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#r2-changes-and-the-coefficient-of-semi-partial-determination"><i class="fa fa-check"></i><b>5.6.1</b> <span class="math inline">\(R^2\)</span> changes and the coefficient of (semi-)partial determination</a></li>
 </ul></li>
-<li class="chapter" data-level="5.7" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#controlling-for-education-level-and-poverty"><i class="fa fa-check"></i><b>5.7</b> Controlling for education level and poverty</a></li>
-<li class="chapter" data-level="5.8" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#sec:04b-assumptions"><i class="fa fa-check"></i><b>5.8</b> Assumptions</a>
+<li class="chapter" data-level="5.7" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#sec:04b-assumptions"><i class="fa fa-check"></i><b>5.7</b> Assumptions</a>
 <ul>
-<li class="chapter" data-level="5.8.1" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#transforming-variables"><i class="fa fa-check"></i><b>5.8.1</b> Transforming variables</a></li>
-<li class="chapter" data-level="5.8.2" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#polynomial-regression"><i class="fa fa-check"></i><b>5.8.2</b> Polynomial regression</a></li>
+<li class="chapter" data-level="5.7.1" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#transforming-variables"><i class="fa fa-check"></i><b>5.7.1</b> Transforming variables</a></li>
+<li class="chapter" data-level="5.7.2" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#polynomial-regression"><i class="fa fa-check"></i><b>5.7.2</b> Polynomial regression</a></li>
 </ul></li>
-<li class="chapter" data-level="5.9" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#multicollinearity-redundancy-between-predictors"><i class="fa fa-check"></i><b>5.9</b> Multicollinearity: Redundancy between predictors</a>
+<li class="chapter" data-level="5.8" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#multicollinearity-redundancy-between-predictors"><i class="fa fa-check"></i><b>5.8</b> Multicollinearity: Redundancy between predictors</a>
 <ul>
-<li class="chapter" data-level="5.9.1" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#detecting-and-dealing-with-multicollinearity"><i class="fa fa-check"></i><b>5.9.1</b> Detecting and dealing with multicollinearity</a></li>
+<li class="chapter" data-level="5.8.1" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#detecting-and-dealing-with-multicollinearity"><i class="fa fa-check"></i><b>5.8.1</b> Detecting and dealing with multicollinearity</a></li>
 </ul></li>
-<li class="chapter" data-level="5.10" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#sec:04b-outliers"><i class="fa fa-check"></i><b>5.10</b> Outliers</a></li>
-<li class="chapter" data-level="5.11" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#in-practice-1"><i class="fa fa-check"></i><b>5.11</b> In practice</a></li>
-<li class="chapter" data-level="5.12" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#summary-5"><i class="fa fa-check"></i><b>5.12</b> Summary</a></li>
+<li class="chapter" data-level="5.9" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#sec:04b-outliers"><i class="fa fa-check"></i><b>5.9</b> Outliers</a></li>
+<li class="chapter" data-level="5.10" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#in-practice-1"><i class="fa fa-check"></i><b>5.10</b> In practice</a></li>
 </ul></li>
 <li class="chapter" data-level="6" data-path="moderation-and-mediation.html"><a href="moderation-and-mediation.html"><i class="fa fa-check"></i><b>6</b> Moderation and mediation</a>
 <ul>
@@ -271,6 +297,7 @@ div.csl-indent {
 <ul>
 <li class="chapter" data-level="8.5.1" data-path="ch-factorial-ANOVA.html"><a href="ch-factorial-ANOVA.html#comparison-schemes-and-ss-types"><i class="fa fa-check"></i><b>8.5.1</b> Comparison schemes and SS types</a></li>
 </ul></li>
+<li class="chapter" data-level="8.6" data-path="ch-factorial-ANOVA.html"><a href="ch-factorial-ANOVA.html#in-practice-3"><i class="fa fa-check"></i><b>8.6</b> In practice</a></li>
 </ul></li>
 <li class="chapter" data-level="9" data-path="mixing-categorical-and-metric-predictors-ancova.html"><a href="mixing-categorical-and-metric-predictors-ancova.html"><i class="fa fa-check"></i><b>9</b> Mixing categorical and metric predictors (ANCOVA)</a>
 <ul>
@@ -283,10 +310,29 @@ div.csl-indent {
 <li class="chapter" data-level="9.7" data-path="mixing-categorical-and-metric-predictors-ancova.html"><a href="mixing-categorical-and-metric-predictors-ancova.html#mediation-with-categorical-independent-variables"><i class="fa fa-check"></i><b>9.7</b> Mediation with categorical independent variables</a></li>
 <li class="chapter" data-level="9.8" data-path="mixing-categorical-and-metric-predictors-ancova.html"><a href="mixing-categorical-and-metric-predictors-ancova.html#ancova-vs-difference-scores"><i class="fa fa-check"></i><b>9.8</b> ANCOVA vs difference scores</a></li>
 </ul></li>
-<li class="chapter" data-level="10" data-path="repeated-measures-anova.html"><a href="repeated-measures-anova.html"><i class="fa fa-check"></i><b>10</b> Repeated-measures ANOVA</a></li>
+<li class="chapter" data-level="10" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html"><i class="fa fa-check"></i><b>10</b> Repeated-measures ANOVA</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#non-independence-in-linear-models"><i class="fa fa-check"></i><b>10.1</b> Non-independence in linear models</a></li>
+<li class="chapter" data-level="10.2" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#the-cheerleader-effect"><i class="fa fa-check"></i><b>10.2</b> The cheerleader effect</a></li>
+<li class="chapter" data-level="10.3" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#as-a-oneway-anova"><i class="fa fa-check"></i><b>10.3</b> As a oneway ANOVA</a></li>
+<li class="chapter" data-level="10.4" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#oneway-repeated-measures-anova"><i class="fa fa-check"></i><b>10.4</b> Oneway repeated-measures ANOVA</a>
+<ul>
+<li class="chapter" data-level="10.4.1" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#within-subjects-composite-scores"><i class="fa fa-check"></i><b>10.4.1</b> Within-subjects composite scores</a></li>
+<li class="chapter" data-level="10.4.2" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#a-composite-for-between-subjects-effects"><i class="fa fa-check"></i><b>10.4.2</b> A composite for between-subjects effects</a></li>
+<li class="chapter" data-level="10.4.3" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#collecting-all-results-and-omnibus-tests"><i class="fa fa-check"></i><b>10.4.3</b> Collecting all results and omnibus tests</a></li>
+</ul></li>
+<li class="chapter" data-level="10.5" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#partitioning-the-variance"><i class="fa fa-check"></i><b>10.5</b> Partitioning the variance</a></li>
+<li class="chapter" data-level="10.6" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#a-mixed-anova-with-between--and-within-subjects-effects"><i class="fa fa-check"></i><b>10.6</b> A mixed ANOVA with between- and within-subjects effects</a></li>
+<li class="chapter" data-level="10.7" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#assumptions-1"><i class="fa fa-check"></i><b>10.7</b> Assumptions</a>
+<ul>
+<li class="chapter" data-level="10.7.1" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#omnibus-tests-and-sphericity"><i class="fa fa-check"></i><b>10.7.1</b> Omnibus tests and sphericity</a></li>
+<li class="chapter" data-level="10.7.2" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#correcting-for-non-sphericity"><i class="fa fa-check"></i><b>10.7.2</b> Correcting for non-sphericity</a></li>
+</ul></li>
+<li class="chapter" data-level="10.8" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#in-practice-4"><i class="fa fa-check"></i><b>10.8</b> In practice</a></li>
+</ul></li>
 <li class="chapter" data-level="11" data-path="linear-mixed-effects-models.html"><a href="linear-mixed-effects-models.html"><i class="fa fa-check"></i><b>11</b> Linear mixed-effects models</a>
 <ul>
-<li class="chapter" data-level="11.1" data-path="linear-mixed-effects-models.html"><a href="linear-mixed-effects-models.html#non-independence-in-linear-models"><i class="fa fa-check"></i><b>11.1</b> Non-independence in linear models</a></li>
+<li class="chapter" data-level="11.1" data-path="linear-mixed-effects-models.html"><a href="linear-mixed-effects-models.html#non-independence-in-linear-models-1"><i class="fa fa-check"></i><b>11.1</b> Non-independence in linear models</a></li>
 <li class="chapter" data-level="11.2" data-path="linear-mixed-effects-models.html"><a href="linear-mixed-effects-models.html#random-intercept-models"><i class="fa fa-check"></i><b>11.2</b> Random intercept models</a></li>
 <li class="chapter" data-level="11.3" data-path="linear-mixed-effects-models.html"><a href="linear-mixed-effects-models.html#parameter-estimation-1"><i class="fa fa-check"></i><b>11.3</b> Parameter estimation</a></li>
 <li class="chapter" data-level="11.4" data-path="linear-mixed-effects-models.html"><a href="linear-mixed-effects-models.html#parameter-inference"><i class="fa fa-check"></i><b>11.4</b> Parameter inference</a></li>
@@ -317,7 +363,7 @@ div.csl-indent {
 <li class="chapter" data-level="12.4.3" data-path="introduction-to-bayesian-hypothesis-testing.html"><a href="introduction-to-bayesian-hypothesis-testing.html#results-of-a-nhst-are-often-misinterpreted"><i class="fa fa-check"></i><b>12.4.3</b> Results of a NHST are often misinterpreted</a></li>
 </ul></li>
 <li class="chapter" data-level="12.5" data-path="introduction-to-bayesian-hypothesis-testing.html"><a href="introduction-to-bayesian-hypothesis-testing.html#to-bayes-or-not-to-bayes-a-pragmatic-view"><i class="fa fa-check"></i><b>12.5</b> To Bayes or not to Bayes? A pragmatic view</a></li>
-<li class="chapter" data-level="12.6" data-path="introduction-to-bayesian-hypothesis-testing.html"><a href="introduction-to-bayesian-hypothesis-testing.html#summary-6"><i class="fa fa-check"></i><b>12.6</b> “Summary”</a></li>
+<li class="chapter" data-level="12.6" data-path="introduction-to-bayesian-hypothesis-testing.html"><a href="introduction-to-bayesian-hypothesis-testing.html#summary-3"><i class="fa fa-check"></i><b>12.6</b> “Summary”</a></li>
 </ul></li>
 <li class="chapter" data-level="13" data-path="being-a-responsible-data-analyst.html"><a href="being-a-responsible-data-analyst.html"><i class="fa fa-check"></i><b>13</b> Being a responsible data analyst</a>
 <ul>

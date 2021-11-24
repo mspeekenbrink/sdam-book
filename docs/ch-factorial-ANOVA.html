@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 8 Factorial ANOVA | Statistics: Data analysis and modelling</title>
   <meta name="description" content="A book about statistics for data analysis, with a main focus on statistical modelling." />
-  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 8 Factorial ANOVA | Statistics: Data analysis and modelling" />
   <meta property="og:type" content="book" />
@@ -24,7 +24,7 @@
 <meta name="author" content="Maarten Speekenbrink" />
 
 
-<meta name="date" content="2021-11-17" />
+<meta name="date" content="2021-11-24" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -33,8 +33,9 @@
   
 <link rel="prev" href="ch-ANOVA.html"/>
 <link rel="next" href="mixing-categorical-and-metric-predictors-ancova.html"/>
-<script src="book_assets/header-attrs-2.7/header-attrs.js"></script>
-<script src="book_assets/jquery-3.5.1/jquery.min.js"></script>
+<script src="book_assets/header-attrs-2.11/header-attrs.js"></script>
+<script src="book_assets/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="book_assets/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="book_assets/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
 <link href="book_assets/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -50,40 +51,66 @@
 
 
 
-
-<script src="book_assets/htmlwidgets-1.5.3/htmlwidgets.js"></script>
+<link href="book_assets/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="book_assets/anchor-sections-1.0.1/anchor-sections.js"></script>
+<script src="book_assets/htmlwidgets-1.5.4/htmlwidgets.js"></script>
 <script src="book_assets/viz-1.8.2/viz.js"></script>
 <link href="book_assets/DiagrammeR-styles-0.2/styles.css" rel="stylesheet" />
 <script src="book_assets/grViz-binding-1.0.6.1/grViz.js"></script>
-<script src="book_assets/plotly-binding-4.9.3/plotly.js"></script>
+<script src="book_assets/plotly-binding-4.10.0/plotly.js"></script>
 <script src="book_assets/typedarray-0.1/typedarray.min.js"></script>
-<link href="book_assets/crosstalk-1.1.1/css/crosstalk.css" rel="stylesheet" />
-<script src="book_assets/crosstalk-1.1.1/js/crosstalk.min.js"></script>
-<link href="book_assets/plotly-htmlwidgets-css-1.57.1/plotly-htmlwidgets.css" rel="stylesheet" />
-<script src="book_assets/plotly-main-1.57.1/plotly-latest.min.js"></script>
+<link href="book_assets/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet" />
+<script src="book_assets/crosstalk-1.2.0/js/crosstalk.min.js"></script>
+<link href="book_assets/plotly-htmlwidgets-css-2.5.1/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="book_assets/plotly-main-2.5.1/plotly-latest.min.js"></script>
 <link href="book_assets/combineWidgetStyle-0.1/combineWidgets.css" rel="stylesheet" />
-<script src="book_assets/combineWidgets-binding-0.10.1/combineWidgets.js"></script>
-<script src="book_assets/rglWebGL-binding-0.106.6/rglWebGL.js"></script>
-<link href="book_assets/rglwidgetClass-0.106.6/rgl.css" rel="stylesheet" />
-<script src="book_assets/rglwidgetClass-0.106.6/rglClass.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.106.6/utils.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.106.6/subscenes.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.106.6/shaders.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.106.6/textures.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.106.6/projection.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.106.6/mouse.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.106.6/init.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.106.6/pieces.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.106.6/draw.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.106.6/controls.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.106.6/selection.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.106.6/rglTimer.src.js"></script>
-<script src="book_assets/CanvasMatrix4-0.106.6/CanvasMatrix.src.js"></script>
-<script src="book_assets/rglPlayer-binding-0.106.6/rglPlayer.js"></script>
+<script src="book_assets/combineWidgets-binding-0.11.1/combineWidgets.js"></script>
+<script src="book_assets/rglWebGL-binding-0.107.14/rglWebGL.js"></script>
+<link href="book_assets/rglwidgetClass-0.107.14/rgl.css" rel="stylesheet" />
+<script src="book_assets/rglwidgetClass-0.107.14/rglClass.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/utils.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/subscenes.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/shaders.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/textures.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/projection.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/mouse.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/init.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/pieces.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/draw.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/controls.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/selection.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/rglTimer.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/pretty.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/axes.src.js"></script>
+<script src="book_assets/CanvasMatrix4-0.107.14/CanvasMatrix.src.js"></script>
+<script src="book_assets/rglPlayer-binding-0.107.14/rglPlayer.js"></script>
 <script src="book_assets/kePrint-0.0.1/kePrint.js"></script>
 <link href="book_assets/lightable-0.0.1/lightable.css" rel="stylesheet" />
 
 
+
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
 
 <link rel="stylesheet" href="style.css" type="text/css" />
 </head>
@@ -283,10 +310,29 @@
 <li class="chapter" data-level="9.7" data-path="mixing-categorical-and-metric-predictors-ancova.html"><a href="mixing-categorical-and-metric-predictors-ancova.html#mediation-with-categorical-independent-variables"><i class="fa fa-check"></i><b>9.7</b> Mediation with categorical independent variables</a></li>
 <li class="chapter" data-level="9.8" data-path="mixing-categorical-and-metric-predictors-ancova.html"><a href="mixing-categorical-and-metric-predictors-ancova.html#ancova-vs-difference-scores"><i class="fa fa-check"></i><b>9.8</b> ANCOVA vs difference scores</a></li>
 </ul></li>
-<li class="chapter" data-level="10" data-path="repeated-measures-anova.html"><a href="repeated-measures-anova.html"><i class="fa fa-check"></i><b>10</b> Repeated-measures ANOVA</a></li>
+<li class="chapter" data-level="10" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html"><i class="fa fa-check"></i><b>10</b> Repeated-measures ANOVA</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#non-independence-in-linear-models"><i class="fa fa-check"></i><b>10.1</b> Non-independence in linear models</a></li>
+<li class="chapter" data-level="10.2" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#the-cheerleader-effect"><i class="fa fa-check"></i><b>10.2</b> The cheerleader effect</a></li>
+<li class="chapter" data-level="10.3" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#as-a-oneway-anova"><i class="fa fa-check"></i><b>10.3</b> As a oneway ANOVA</a></li>
+<li class="chapter" data-level="10.4" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#oneway-repeated-measures-anova"><i class="fa fa-check"></i><b>10.4</b> Oneway repeated-measures ANOVA</a>
+<ul>
+<li class="chapter" data-level="10.4.1" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#within-subjects-composite-scores"><i class="fa fa-check"></i><b>10.4.1</b> Within-subjects composite scores</a></li>
+<li class="chapter" data-level="10.4.2" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#a-composite-for-between-subjects-effects"><i class="fa fa-check"></i><b>10.4.2</b> A composite for between-subjects effects</a></li>
+<li class="chapter" data-level="10.4.3" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#collecting-all-results-and-omnibus-tests"><i class="fa fa-check"></i><b>10.4.3</b> Collecting all results and omnibus tests</a></li>
+</ul></li>
+<li class="chapter" data-level="10.5" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#partitioning-the-variance"><i class="fa fa-check"></i><b>10.5</b> Partitioning the variance</a></li>
+<li class="chapter" data-level="10.6" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#a-mixed-anova-with-between--and-within-subjects-effects"><i class="fa fa-check"></i><b>10.6</b> A mixed ANOVA with between- and within-subjects effects</a></li>
+<li class="chapter" data-level="10.7" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#assumptions-1"><i class="fa fa-check"></i><b>10.7</b> Assumptions</a>
+<ul>
+<li class="chapter" data-level="10.7.1" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#omnibus-tests-and-sphericity"><i class="fa fa-check"></i><b>10.7.1</b> Omnibus tests and sphericity</a></li>
+<li class="chapter" data-level="10.7.2" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#correcting-for-non-sphericity"><i class="fa fa-check"></i><b>10.7.2</b> Correcting for non-sphericity</a></li>
+</ul></li>
+<li class="chapter" data-level="10.8" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#in-practice-4"><i class="fa fa-check"></i><b>10.8</b> In practice</a></li>
+</ul></li>
 <li class="chapter" data-level="11" data-path="linear-mixed-effects-models.html"><a href="linear-mixed-effects-models.html"><i class="fa fa-check"></i><b>11</b> Linear mixed-effects models</a>
 <ul>
-<li class="chapter" data-level="11.1" data-path="linear-mixed-effects-models.html"><a href="linear-mixed-effects-models.html#non-independence-in-linear-models"><i class="fa fa-check"></i><b>11.1</b> Non-independence in linear models</a></li>
+<li class="chapter" data-level="11.1" data-path="linear-mixed-effects-models.html"><a href="linear-mixed-effects-models.html#non-independence-in-linear-models-1"><i class="fa fa-check"></i><b>11.1</b> Non-independence in linear models</a></li>
 <li class="chapter" data-level="11.2" data-path="linear-mixed-effects-models.html"><a href="linear-mixed-effects-models.html#random-intercept-models"><i class="fa fa-check"></i><b>11.2</b> Random intercept models</a></li>
 <li class="chapter" data-level="11.3" data-path="linear-mixed-effects-models.html"><a href="linear-mixed-effects-models.html#parameter-estimation-1"><i class="fa fa-check"></i><b>11.3</b> Parameter estimation</a></li>
 <li class="chapter" data-level="11.4" data-path="linear-mixed-effects-models.html"><a href="linear-mixed-effects-models.html#parameter-inference"><i class="fa fa-check"></i><b>11.4</b> Parameter inference</a></li>
@@ -355,13 +401,13 @@
 <p>In this chapter, we will extend our discussion of including nominal predictors in the General Linear Model to the case of multiple nominal predictors, where all the combinations of the levels of each are included in the design of a study. The analysis of such designs, with a factorial combination of all levels, is generally called factorial ANOVA. While the method is, as we will see, not fundamentally different than a oneway ANOVA, treated in the previous chapter, the factorial nature allows one to distinguish between <em>main effects</em> of factors, and their <em>interactions</em>. After discussing how to interpret these effects, we turn to issues that arise when there are an unequal number of observations for the combinations of the levels.</p>
 <div id="experimenter-beliefs-and-social-priming" class="section level2" number="8.1">
 <h2><span class="header-section-number">8.1</span> Experimenter beliefs and social priming</h2>
-<p>Research suggests that stimuli that prime social concepts can fundamentally alter people’s behaviour. For instance, in one experiment people were primed with either a high-power or low-power social status. Not only did people differ in how powerful they felt, they also differed in their cognitive functioning, processing information more quickly when it was consistent with the induced status (low or high power). However, it is also known that experimenter expectations may alter participants’ behaviour. As many studies on social priming have not been conducted as double-blind experiments (where neither experimenters nor participants are aware of the actual experimental conditions), it may be the case that some of the results were due to experimenter expectations. To investigate this, <span class="citation"><a href="references.html#ref-gilder2018role" role="doc-biblioref">Gilder &amp; Heerey</a> (<a href="references.html#ref-gilder2018role" role="doc-biblioref">2018</a>)</span> conducted an experiment in which they systematically primed social status, as well as experimenters’ beliefs about which prime was used for which participant.</p>
+<p>Research suggests that stimuli that prime social concepts can fundamentally alter people’s behaviour. For instance, in one experiment people were primed with either a high-power or low-power social status. Not only did people differ in how powerful they felt, they also differed in their cognitive functioning, processing information more quickly when it was consistent with the induced status (low or high power). However, it is also known that experimenter expectations may alter participants’ behaviour. As many studies on social priming have not been conducted as double-blind experiments (where neither experimenters nor participants are aware of the actual experimental conditions), it may be the case that some of the results were due to experimenter expectations. To investigate this, <span class="citation"><a href="#ref-gilder2018role" role="doc-biblioref">Gilder &amp; Heerey</a> (<a href="#ref-gilder2018role" role="doc-biblioref">2018</a>)</span> conducted an experiment in which they systematically primed social status, as well as experimenters’ beliefs about which prime was used for which participant.</p>
 <p>A total of <span class="math inline">\(n = 400\)</span> students participated in their experiment. They first performed a priming task in which they were either assigned a high-power (“boss”) or low-power (“employee”) role. Independent of the actual condition, the experimenter (one of four research assistants) was made to believe that half of the participants in each condition were in the other condition (e.g., that people in the high-power condition were in the low-power condition). After the priming task, participants performed a lexical decision task, in which they as quickly as possible had to indicate whether a presented letter string was a word or non-word. Their response was made by pressing a key to move a stick figure closer (approach) or further away (avoid) from the word. Earlier research found that participants primed with high power were quicker to approach than avoid stimuli, while the reverse was true for those primed with low power. The dependent variable was therefore an “approach advantage,” calculated <span class="math inline">\(\texttt{ApproachAdvantage}_i = \overline{\texttt{RT}}_{\text{avoid},i} - \overline{\texttt{RT}}_{\text{approach},i}\)</span>).</p>
 <p>According to the “social priming hypothesis,” people will be faster to approach than avoid when they feel they have more power (and be faster to avoid than approach when they feel they have low power). If this hypothesis is true, then the <span class="math inline">\(\texttt{ApproachAdvantage}\)</span> measure would be positive on average in the high-power condition, and negative on average in the low-power condition. Alternatively, according to the “experimenter belief hypothesis,” it is the experimenter belief about the condition, and not the actual condition, that drives any effects. If this hypothesis is true, then the <span class="math inline">\(\texttt{ApproachAdvantage}\)</span> measure would be positive whenever the experimenter believes a participant is in the high-power condition, and negative when the experimenter believes a participant is in the low-power condition. Figure <a href="ch-factorial-ANOVA.html#fig:expBelief-raincloud">8.1</a> shows the data for the four conditions (the four possible combinations of prime and experimenter belief). The plot looks like the results are more consistent with the experimenter-belief hypothesis: the averages of <span class="math inline">\(\texttt{ApproachAdvantage}\)</span> in the two “experimenter low” conditions are lower than in the two “experimenter high” conditions.</p>
-<div class="figure" style="text-align: center"><span id="fig:expBelief-raincloud"></span>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:expBelief-raincloud"></span>
 <img src="_main_files/figure-html/expBelief-raincloud-1.svg" alt="Approach advantage scores in the four conditions of Experiment 5 of @gilder2018role; PL = Low-power prime, PH = high-power prime, EL = experimenter believes condition was PL, EH = experimenter believes condition was PH" width="95%" />
 <p class="caption">
-Figure 8.1: Approach advantage scores in the four conditions of Experiment 5 of <span class="citation"><a href="references.html#ref-gilder2018role" role="doc-biblioref">Gilder &amp; Heerey</a> (<a href="references.html#ref-gilder2018role" role="doc-biblioref">2018</a>)</span>; PL = Low-power prime, PH = high-power prime, EL = experimenter believes condition was PL, EH = experimenter believes condition was PH
+Figure 8.1: Approach advantage scores in the four conditions of Experiment 5 of <span class="citation"><a href="#ref-gilder2018role" role="doc-biblioref">Gilder &amp; Heerey</a> (<a href="#ref-gilder2018role" role="doc-biblioref">2018</a>)</span>; PL = Low-power prime, PH = high-power prime, EL = experimenter believes condition was PL, EH = experimenter believes condition was PH
 </p>
 </div>
 <div id="a-oneway-anova" class="section level3" number="8.1.1">
@@ -569,7 +615,7 @@ i.e. the difference between the true mean <span class="math inline">\(\mu_{j,k}
 <h2><span class="header-section-number">8.4</span> A threeway factorial ANOVA</h2>
 <p>One benefit of treating a factorial design as a factorial design, is that you only need to worry about defining contrast codes for the main effects of the different manipulations. If you choose orthogonal contrasts for these, then the remaining contrasts for the full factorial design are simple to work out. They are interactions and computed as pairwise products of contrasts.</p>
 <p>To see how this works in a more complex situation, let’s investigate whether the identity of the experimenter might also play a role in determining the approach advantage scores. In the study, there were four experimenters (the research assistants). Let’s treat the identity of the experimenter as another factor in the design. A plot of the data, separated by experimenter, is provided in Figure <a href="ch-factorial-ANOVA.html#fig:expBelief-threeway-raincloud">8.2</a>. As you can see there, while the first three experimenters show the same overall pattern as in Figure <a href="ch-factorial-ANOVA.html#fig:expBelief-raincloud">8.1</a>, with higher scores for the “EH” conditions than the “EL” conditions, this is not so obvious for Experimenter 4.</p>
-<div class="figure" style="text-align: center"><span id="fig:expBelief-threeway-raincloud"></span>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:expBelief-threeway-raincloud"></span>
 <img src="_main_files/figure-html/expBelief-threeway-raincloud-1.svg" alt="Approach advantage scores separated by condition and experimenter" width="100%" />
 <p class="caption">
 Figure 8.2: Approach advantage scores separated by condition and experimenter
@@ -1975,7 +2021,7 @@ Obviously, this is different from the estimate in MODEL G. While the slope still
 <div id="comparison-schemes-and-ss-types" class="section level3" number="8.5.1">
 <h3><span class="header-section-number">8.5.1</span> Comparison schemes and SS types</h3>
 <p>When predictors are dependent, they are partially redundant. Going back to our discussion of <em>multicollinearity</em>, that means that the predictors in a model together can account for more of the variance of the dependent variable than the sum of their unique contributions. In Figure <a href="ch-factorial-ANOVA.html#fig:sse-partition-type-SS">8.3</a>, as a whole, the model can account for a proportion <span class="math inline">\(B + C + D\)</span>, but the sum of the unique contributions is <span class="math inline">\(B + C\)</span>. This can result in a relative lack of power for the tests of main effects and interactions.</p>
-<div class="figure" style="text-align: center"><span id="fig:sse-partition-type-SS"></span>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:sse-partition-type-SS"></span>
 <img src="_main_files/figure-html/sse-partition-type-SS-1.svg" alt="Partitioning the variance in a General Linear Model. Each circle represents the variance of a variable. Overlapping regions represent shared variability (e.g. covariance) between variables. " width="50%" />
 <p class="caption">
 Figure 8.3: Partitioning the variance in a General Linear Model. Each circle represents the variance of a variable. Overlapping regions represent shared variability (e.g. covariance) between variables.
@@ -1989,7 +2035,7 @@ In this computation, all elements are the same as for the usual Type 3 procedure
 <p>If the sample-sizes are reflective of the actual proportions in which you might find the various factor levels in the Data Generating Process, then it might make sense to test such sample-size weighted equality between means. However, unequal sample sizes often do not reflect such meaningful differences in the DGP. In that case, the hypotheses tested with a Type 1 procedure might not be meaningful. Also, the results of a Type 1 SS procedure depend on the <em>order</em> in which you enter the main effects. If you start with the main effect of <span class="math inline">\(\texttt{B}\)</span> rather than <span class="math inline">\(\texttt{P}\)</span>, then the SSR of <span class="math inline">\(\texttt{B}\)</span> would have been <span class="math inline">\(C+D\)</span> rather than just <span class="math inline">\(C\)</span> in Figure <a href="ch-factorial-ANOVA.html#fig:sse-partition-type-SS">8.3</a>. There often isn’t a clear reason to prefer one order over another. Hence, because of these issues, I generally don’t recommend using a Type 1 SS procedure. The reason for mentioning it here is that some statistical software (e.g. base R) use Type 1 SS procedures by default, and it is important to be aware of this.</p>
 <p>The <strong>Type 2 SS</strong> procedure is (even) more complicated, in terms of the hypotheses that are tested. The comparisons involved in computing the SSR terms for the different effects can be described reasonably clearly though. The idea is to determine the SSR associated to an effect whilst controlling for any effects that do not fully contain that effect. For example, let’s consider the threeway Prime by Belief by Experimenter ANOVA we conducted earlier. To compute the SSR of main effect of Prime, you would construct a model with the contrast codes corresponding to the main effects of Prime, Belief, and Experimenter, as well as the Belief <span class="math inline">\(\times\)</span> Experimenter interaction, as the latter does not contain Prime. Because the Prime <span class="math inline">\(\times\)</span> Experimenter and Prime <span class="math inline">\(\times\)</span> Belief <span class="math inline">\(\times\)</span> Experimenter interactions do contain Prime, they would not be included. You would then compute the SSR for the main effect of Prime by computing the difference in the SSE of this model and a model that excludes the Prime main effect. Similarly, to compute the SSR for Belief, you would compare a model with the main effects of Prime, Belief, and Experimenter, and Prime <span class="math inline">\(\times\)</span> Experimenter interaction, to a model which excludes the Belief main effect. To compute the SSR for e.g. the Prime <span class="math inline">\(\times\)</span> Belief interaction, you would compare a model which includes the main effects of Prime, Belief, and Experimenter, and the Prime <span class="math inline">\(\times\)</span> Belief, Prime <span class="math inline">\(\times\)</span> Experimenter, and Belief <span class="math inline">\(\times\)</span> Experimenter interactions. All effects included, apart from the Prime <span class="math inline">\(\times\)</span> Belief interaction itself, do not fully contain this interaction (i.e. do not include both Prime and Belief). The Prime <span class="math inline">\(\times\)</span> Belief <span class="math inline">\(\times\)</span> Experimenter interaction is excluded, because it involves both Prime and Belief. As for the Type 1 procedure, these comparisons are solely used to compute the SSR terms for the main effects and interactions. Once these have been obtained, they are used in the usual formula for the <span class="math inline">\(F\)</span> statistic, where everything else is the same as in the Type 3 procedure.</p>
 <p>As for the Type 1 procedure, the hypotheses tested by the Type 2 procedure reflect a (complex) weighting of means by sample size. But, unlike the Type 1 procedure, the results are not dependent on the order in which you include effects. Some authors argue that a Type 2 procedure is preferable to a Type 3 procedure when you don’t expect interactions, as the tests of the main effects are more powerful. That may be so, but interactions are often difficult to rule out on theoretical grounds. Moreover, because the hypothesis tests are generally more straightforward to interpret in the Type 3 procedure, as they involve comparisons between unweighted population means, I would generally advice the use of Type 3 tests, unless you have a strong conviction that there are no interactions, and a good grasp of the hypotheses tested by the Type 2 procedure.</p>
-<p>The issue of different testing schemes for <em>unbalanced</em> designs (unequal sample sizes) is a complex one, and opinions differ on which scheme is preferred. I mainly want you to be aware of these different approaches, and you can determine your own preference once you have gained enough experience with the General Linear Model to do so. A more comprehensive treatment of the different schemes is given in Chapter 7 of <span class="citation"><a href="references.html#ref-maxwell2017designing" role="doc-biblioref">Maxwell et al.</a> (<a href="references.html#ref-maxwell2017designing" role="doc-biblioref">2017</a>)</span>.</p>
+<p>The issue of different testing schemes for <em>unbalanced</em> designs (unequal sample sizes) is a complex one, and opinions differ on which scheme is preferred. I mainly want you to be aware of these different approaches, and you can determine your own preference once you have gained enough experience with the General Linear Model to do so. A more comprehensive treatment of the different schemes is given in Chapter 7 of <span class="citation"><a href="#ref-maxwell2017designing" role="doc-biblioref">Maxwell et al.</a> (<a href="#ref-maxwell2017designing" role="doc-biblioref">2017</a>)</span>.</p>
 </div>
 </div>
 <div id="in-practice-3" class="section level2" number="8.6">
@@ -2012,6 +2058,15 @@ http://md.psych.bio.uni-goettingen.de/mv/unit/lm_cat/lm_cat_unbal_ss_explained.h
 
 </div>
 </div>
+<h3>References</h3>
+<div id="refs" class="references csl-bib-body hanging-indent" line-spacing="2">
+<div id="ref-gilder2018role" class="csl-entry">
+Gilder, T. S. E., &amp; Heerey, E. A. (2018). The role of experimenter belief in social priming. <em>Psychological Science</em>, <em>29</em>, 403–417.
+</div>
+<div id="ref-maxwell2017designing" class="csl-entry">
+Maxwell, S. E., Delaney, H. D., &amp; Kelley, K. (2017). <em>Designing experiments and analyzing data: A model comparison perspective</em>. Routledge.
+</div>
+</div>
 <div class="footnotes">
 <hr />
 <ol start="20">
@@ -2029,7 +2084,6 @@ http://md.psych.bio.uni-goettingen.de/mv/unit/lm_cat/lm_cat_unbal_ss_explained.h
     </div>
   </div>
 <script src="book_assets/gitbook-2.6.7/js/app.min.js"></script>
-<script src="book_assets/gitbook-2.6.7/js/lunr.js"></script>
 <script src="book_assets/gitbook-2.6.7/js/clipboard.min.js"></script>
 <script src="book_assets/gitbook-2.6.7/js/plugin-search.js"></script>
 <script src="book_assets/gitbook-2.6.7/js/plugin-sharing.js"></script>
@@ -2048,6 +2102,7 @@ gitbook.start({
 "weibo": false,
 "instapaper": false,
 "vk": false,
+"whatsapp": false,
 "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
 },
 "fontsettings": {
@@ -2065,11 +2120,14 @@ gitbook.start({
 "text": null
 },
 "download": null,
+"search": {
+"engine": "fuse",
+"options": null
+},
 "toc": {
 "collapse": "subsection"
 },
-"source": null,
-"search": true
+"source": null
 });
 });
 </script>

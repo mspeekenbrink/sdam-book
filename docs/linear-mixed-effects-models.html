@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 11 Linear mixed-effects models | Statistics: Data analysis and modelling</title>
   <meta name="description" content="A book about statistics for data analysis, with a main focus on statistical modelling." />
-  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 11 Linear mixed-effects models | Statistics: Data analysis and modelling" />
   <meta property="og:type" content="book" />
@@ -24,17 +24,18 @@
 <meta name="author" content="Maarten Speekenbrink" />
 
 
-<meta name="date" content="2021-11-17" />
+<meta name="date" content="2021-11-24" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="repeated-measures-anova.html"/>
+<link rel="prev" href="ch-RM-ANOVA.html"/>
 <link rel="next" href="introduction-to-bayesian-hypothesis-testing.html"/>
-<script src="book_assets/header-attrs-2.7/header-attrs.js"></script>
-<script src="book_assets/jquery-3.5.1/jquery.min.js"></script>
+<script src="book_assets/header-attrs-2.11/header-attrs.js"></script>
+<script src="book_assets/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="book_assets/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="book_assets/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
 <link href="book_assets/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -50,40 +51,66 @@
 
 
 
-
-<script src="book_assets/htmlwidgets-1.5.3/htmlwidgets.js"></script>
+<link href="book_assets/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="book_assets/anchor-sections-1.0.1/anchor-sections.js"></script>
+<script src="book_assets/htmlwidgets-1.5.4/htmlwidgets.js"></script>
 <script src="book_assets/viz-1.8.2/viz.js"></script>
 <link href="book_assets/DiagrammeR-styles-0.2/styles.css" rel="stylesheet" />
 <script src="book_assets/grViz-binding-1.0.6.1/grViz.js"></script>
-<script src="book_assets/plotly-binding-4.9.3/plotly.js"></script>
+<script src="book_assets/plotly-binding-4.10.0/plotly.js"></script>
 <script src="book_assets/typedarray-0.1/typedarray.min.js"></script>
-<link href="book_assets/crosstalk-1.1.1/css/crosstalk.css" rel="stylesheet" />
-<script src="book_assets/crosstalk-1.1.1/js/crosstalk.min.js"></script>
-<link href="book_assets/plotly-htmlwidgets-css-1.57.1/plotly-htmlwidgets.css" rel="stylesheet" />
-<script src="book_assets/plotly-main-1.57.1/plotly-latest.min.js"></script>
+<link href="book_assets/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet" />
+<script src="book_assets/crosstalk-1.2.0/js/crosstalk.min.js"></script>
+<link href="book_assets/plotly-htmlwidgets-css-2.5.1/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="book_assets/plotly-main-2.5.1/plotly-latest.min.js"></script>
 <link href="book_assets/combineWidgetStyle-0.1/combineWidgets.css" rel="stylesheet" />
-<script src="book_assets/combineWidgets-binding-0.10.1/combineWidgets.js"></script>
-<script src="book_assets/rglWebGL-binding-0.106.6/rglWebGL.js"></script>
-<link href="book_assets/rglwidgetClass-0.106.6/rgl.css" rel="stylesheet" />
-<script src="book_assets/rglwidgetClass-0.106.6/rglClass.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.106.6/utils.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.106.6/subscenes.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.106.6/shaders.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.106.6/textures.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.106.6/projection.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.106.6/mouse.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.106.6/init.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.106.6/pieces.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.106.6/draw.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.106.6/controls.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.106.6/selection.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.106.6/rglTimer.src.js"></script>
-<script src="book_assets/CanvasMatrix4-0.106.6/CanvasMatrix.src.js"></script>
-<script src="book_assets/rglPlayer-binding-0.106.6/rglPlayer.js"></script>
+<script src="book_assets/combineWidgets-binding-0.11.1/combineWidgets.js"></script>
+<script src="book_assets/rglWebGL-binding-0.107.14/rglWebGL.js"></script>
+<link href="book_assets/rglwidgetClass-0.107.14/rgl.css" rel="stylesheet" />
+<script src="book_assets/rglwidgetClass-0.107.14/rglClass.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/utils.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/subscenes.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/shaders.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/textures.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/projection.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/mouse.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/init.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/pieces.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/draw.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/controls.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/selection.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/rglTimer.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/pretty.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/axes.src.js"></script>
+<script src="book_assets/CanvasMatrix4-0.107.14/CanvasMatrix.src.js"></script>
+<script src="book_assets/rglPlayer-binding-0.107.14/rglPlayer.js"></script>
 <script src="book_assets/kePrint-0.0.1/kePrint.js"></script>
 <link href="book_assets/lightable-0.0.1/lightable.css" rel="stylesheet" />
 
 
+
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
 
 <link rel="stylesheet" href="style.css" type="text/css" />
 </head>
@@ -283,10 +310,29 @@
 <li class="chapter" data-level="9.7" data-path="mixing-categorical-and-metric-predictors-ancova.html"><a href="mixing-categorical-and-metric-predictors-ancova.html#mediation-with-categorical-independent-variables"><i class="fa fa-check"></i><b>9.7</b> Mediation with categorical independent variables</a></li>
 <li class="chapter" data-level="9.8" data-path="mixing-categorical-and-metric-predictors-ancova.html"><a href="mixing-categorical-and-metric-predictors-ancova.html#ancova-vs-difference-scores"><i class="fa fa-check"></i><b>9.8</b> ANCOVA vs difference scores</a></li>
 </ul></li>
-<li class="chapter" data-level="10" data-path="repeated-measures-anova.html"><a href="repeated-measures-anova.html"><i class="fa fa-check"></i><b>10</b> Repeated-measures ANOVA</a></li>
+<li class="chapter" data-level="10" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html"><i class="fa fa-check"></i><b>10</b> Repeated-measures ANOVA</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#non-independence-in-linear-models"><i class="fa fa-check"></i><b>10.1</b> Non-independence in linear models</a></li>
+<li class="chapter" data-level="10.2" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#the-cheerleader-effect"><i class="fa fa-check"></i><b>10.2</b> The cheerleader effect</a></li>
+<li class="chapter" data-level="10.3" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#as-a-oneway-anova"><i class="fa fa-check"></i><b>10.3</b> As a oneway ANOVA</a></li>
+<li class="chapter" data-level="10.4" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#oneway-repeated-measures-anova"><i class="fa fa-check"></i><b>10.4</b> Oneway repeated-measures ANOVA</a>
+<ul>
+<li class="chapter" data-level="10.4.1" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#within-subjects-composite-scores"><i class="fa fa-check"></i><b>10.4.1</b> Within-subjects composite scores</a></li>
+<li class="chapter" data-level="10.4.2" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#a-composite-for-between-subjects-effects"><i class="fa fa-check"></i><b>10.4.2</b> A composite for between-subjects effects</a></li>
+<li class="chapter" data-level="10.4.3" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#collecting-all-results-and-omnibus-tests"><i class="fa fa-check"></i><b>10.4.3</b> Collecting all results and omnibus tests</a></li>
+</ul></li>
+<li class="chapter" data-level="10.5" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#partitioning-the-variance"><i class="fa fa-check"></i><b>10.5</b> Partitioning the variance</a></li>
+<li class="chapter" data-level="10.6" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#a-mixed-anova-with-between--and-within-subjects-effects"><i class="fa fa-check"></i><b>10.6</b> A mixed ANOVA with between- and within-subjects effects</a></li>
+<li class="chapter" data-level="10.7" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#assumptions-1"><i class="fa fa-check"></i><b>10.7</b> Assumptions</a>
+<ul>
+<li class="chapter" data-level="10.7.1" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#omnibus-tests-and-sphericity"><i class="fa fa-check"></i><b>10.7.1</b> Omnibus tests and sphericity</a></li>
+<li class="chapter" data-level="10.7.2" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#correcting-for-non-sphericity"><i class="fa fa-check"></i><b>10.7.2</b> Correcting for non-sphericity</a></li>
+</ul></li>
+<li class="chapter" data-level="10.8" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#in-practice-4"><i class="fa fa-check"></i><b>10.8</b> In practice</a></li>
+</ul></li>
 <li class="chapter" data-level="11" data-path="linear-mixed-effects-models.html"><a href="linear-mixed-effects-models.html"><i class="fa fa-check"></i><b>11</b> Linear mixed-effects models</a>
 <ul>
-<li class="chapter" data-level="11.1" data-path="linear-mixed-effects-models.html"><a href="linear-mixed-effects-models.html#non-independence-in-linear-models"><i class="fa fa-check"></i><b>11.1</b> Non-independence in linear models</a></li>
+<li class="chapter" data-level="11.1" data-path="linear-mixed-effects-models.html"><a href="linear-mixed-effects-models.html#non-independence-in-linear-models-1"><i class="fa fa-check"></i><b>11.1</b> Non-independence in linear models</a></li>
 <li class="chapter" data-level="11.2" data-path="linear-mixed-effects-models.html"><a href="linear-mixed-effects-models.html#random-intercept-models"><i class="fa fa-check"></i><b>11.2</b> Random intercept models</a></li>
 <li class="chapter" data-level="11.3" data-path="linear-mixed-effects-models.html"><a href="linear-mixed-effects-models.html#parameter-estimation-1"><i class="fa fa-check"></i><b>11.3</b> Parameter estimation</a></li>
 <li class="chapter" data-level="11.4" data-path="linear-mixed-effects-models.html"><a href="linear-mixed-effects-models.html#parameter-inference"><i class="fa fa-check"></i><b>11.4</b> Parameter inference</a></li>
@@ -353,8 +399,8 @@
 <div id="linear-mixed-effects-models" class="section level1" number="11">
 <h1><span class="header-section-number">Chapter 11</span> Linear mixed-effects models</h1>
 <p>In this chapter, we will discuss how to deal with the non-independence of errors that can result from repeated-measures of the same individual, or otherwise multiple observations which come from different groupings in the data. Traditionally, such data has been generally analysed with repeated-measures ANOVA models. Linear mixed-effects models offer an alternative to repeated-measures ANOVA with certain benefits, particularly in dealing with missing values. Once you get your head around the idea of random effects, linear mixed-effects models are a natural extension of the General Linear Model, which can then make them easier to understand than repeated-measures ANOVA models, which either rely on complicated model comparison schemes and strong assumptions, or rely on a multivariate definition transforming repeated-measures into a set of orthogonal variables. Linear mixed-effects models offer a more flexible univariate modelling technique. This flexibility does mean, as we will see, that sometimes difficult choices need to be made regarding the random-effects structure of the model. As always, there are no set rules in defining statistical models, and this should be led by substantive concerns, in addition to issues of reliability and maintaining appropriate error rates. With practice and experience, you should become more confident in making such decisions.</p>
-<p>In writing this chapter, I have adapted some sections of <span class="citation"><a href="references.html#ref-Singmann2019-mixed" role="doc-biblioref">Singmann &amp; Kellen</a> (<a href="references.html#ref-Singmann2019-mixed" role="doc-biblioref">2019</a>)</span>. This is a very clear introduction to linear mixed-effects models, that you may wish to consult in addition to this Chapter (you can download it <a href="http://singmann.org/download/publications/singmann_kellen-introduction-mixed-models.pdf">here</a>).</p>
-<div id="non-independence-in-linear-models" class="section level2" number="11.1">
+<p>In writing this chapter, I have adapted some sections of <span class="citation"><a href="#ref-Singmann2019-mixed" role="doc-biblioref">Singmann &amp; Kellen</a> (<a href="#ref-Singmann2019-mixed" role="doc-biblioref">2019</a>)</span>. This is a very clear introduction to linear mixed-effects models, that you may wish to consult in addition to this Chapter (you can download it <a href="http://singmann.org/download/publications/singmann_kellen-introduction-mixed-models.pdf">here</a>).</p>
+<div id="non-independence-in-linear-models-1" class="section level2" number="11.1">
 <h2><span class="header-section-number">11.1</span> Non-independence in linear models</h2>
 <p>The General Linear Model we have considered thus far can be stated as follows:</p>
 <p><span class="math display">\[Y_i = \beta_0 + \beta_1 \times X_{1,i} + \beta_2 \times X_{2,i} + \ldots + \beta_m \times X_{m,i} + \epsilon_i \quad \quad \quad \epsilon_i \sim \mathbf{Normal}(0,\sigma_\epsilon)\]</span>
@@ -370,7 +416,7 @@ Y_i = \beta_0 + \epsilon_i
 Suppose <span class="math inline">\(Y\)</span> are again judgements of the height of Mount Everest, but that one of the labs in the ManyLabs study that collected the data, was based in Nepal. We might expect participants in Nepal to have a more accurate idea of the height of Mount Everest than participants in Poland (the country the participants were from in the subset of the data we considered in Chapter <a href="ch-simple-GLM.html#ch-simple-GLM">3</a>). As a result, participants in Nepal would likely be less influenced by the low anchor than those with less knowledge of Mount Everest. If <span class="math inline">\(\beta_0\)</span> represents the mean judgement over all participants, then participants in Nepal would generally provide judgements which are higher than <span class="math inline">\(\beta_0\)</span> (i.e positive errors), whilst participants in Poland would generally provide judgements that are lower than <span class="math inline">\(\beta_0\)</span> (i.e. negative errors). If our model does not account for such grouping in the data, then the errors for cases from Nepal would be correlated, because all would tend to be positive. Similarly, the errors for cases from Poland would also be correlated, as all would tend to be negative. What this example points to is that the simple model does not account for the fact that participants from different countries might have a different average judgement. As such, the model is misspecified. We could of course alleviate this problem by including an effect for country, using a contrast-coded predictor <span class="math inline">\(X_1\)</span> to reflect the difference between participants from Nepal (<span class="math inline">\(X_1 = \tfrac{1}{2}\)</span>) and Poland (<span class="math inline">\(X_1 = -\tfrac{1}{2}\)</span>) in an expanded model
 <span class="math display">\[Y_i = \beta_0 + \beta_1 \times X_{1,i} + \epsilon_i\]</span>
 This model would allow for a different mean judgement for cases from Nepal (<span class="math inline">\(\beta_0 + \tfrac{1}{2} \times \beta_1\)</span>) and cases from Poland (<span class="math inline">\(\beta_0 - \tfrac{1}{2} \times \beta_1\)</span>). Doing so for all labs in the data quickly becomes cumbersome, however. In this study, there were 31 labs involved, meaning we would need 30 contrast-coded predictors to reflect possible differences between them. Moreover, differences between the labs are not of primary interest here. The question we posed in Chapter <a href="ch-simple-GLM.html#ch-simple-GLM">3</a> was whether people in general would, on average, give an accurate judgement of the hight of Mount Everest, not whether the country they reside in influences this. Thus, country, if it has an effect, can be seen as a <em>nuisance effect</em>, something we have to consider for a valid model, but we would otherwise rather ignore. <strong>Linear mixed-effects models</strong> allow you to solve this conundrum gracefully, providing a way for effects to differ between groupings in the data, without dramatically increasing the number of to-be-estimated parameters. They do so by treating such effects as random, rather than fixed, effects. The model then focuses on estimating the distribution of these random effects, rather than estimating each separately.</p>
-<p>You can expect violations of the <em>iid</em> assumption if data are collected from units of observations that are clustered in groups. A common example of this in psychology is when you repeatedly observe behaviour from the same person. Other examples of this are data from experiments collected in group settings, students within classrooms, or patients within hospitals. In such situations one would expect that observations within each cluster (i.e., a specific group, classroom, or hospital) are more similar to each other than observations across clusters. Unfortunately, compared to violations of other assumptions, such as the normality assumption or the assumption of variance homogeneity, standard statistical procedures are usually not robust to violations of the independence assumption <span class="citation">(<a href="references.html#ref-judd_treating_2012" role="doc-biblioref">Charles M. Judd, Westfall, &amp; Kenny, 2012</a>; <a href="references.html#ref-kenny_consequences_1986" role="doc-biblioref">Kenny &amp; Judd, 1986</a>)</span>. They often lead to considerably increased Type I errors (i.e., false positives) and more generally can produce overconfident results (e.g., too narrow standard errors).</p>
+<p>You can expect violations of the <em>iid</em> assumption if data are collected from units of observations that are clustered in groups. A common example of this in psychology is when you repeatedly observe behaviour from the same person. Other examples of this are data from experiments collected in group settings, students within classrooms, or patients within hospitals. In such situations one would expect that observations within each cluster (i.e., a specific group, classroom, or hospital) are more similar to each other than observations across clusters. Unfortunately, compared to violations of other assumptions, such as the normality assumption or the assumption of variance homogeneity, standard statistical procedures are usually not robust to violations of the independence assumption <span class="citation">(<a href="#ref-judd_treating_2012" role="doc-biblioref">Charles M. Judd, Westfall, &amp; Kenny, 2012</a>; <a href="#ref-kenny_consequences_1986" role="doc-biblioref">Kenny &amp; Judd, 1986</a>)</span>. They often lead to considerably increased Type I errors (i.e., false positives) and more generally can produce overconfident results (e.g., too narrow standard errors).</p>
 </div>
 <div id="random-intercept-models" class="section level2" number="11.2">
 <h2><span class="header-section-number">11.2</span> Random intercept models</h2>
@@ -390,7 +436,7 @@ Let’s pause for a moment and consider the Equation above in detail. You can th
 This is similar to how the residuals <span class="math inline">\(\epsilon_{i,j}\)</span> reflect deviations of observations from the means <span class="math inline">\(\beta_{0,i}\)</span>. In the study, differences between the labs (grouping levels) are not of direct interest, and this is generally the case for random effects. As indicated earlier, they are usually nuisance factors, which we include in a model to make the model valid and precise, but we would otherwise like to ignore them. What is of interest in e.g. determining whether people’s judgements on average are equal to the true height of Mount Everest is the fixed effect <span class="math inline">\(\beta_0\)</span>. In our model with random intercepts <span class="math inline">\(\beta_{0,j}\)</span>, this parameter equals the mean of these intercepts, because we can rewrite Equation <a href="linear-mixed-effects-models.html#eq:random-intercept-model-level-2">(11.3)</a> in an equivalent form as
 <span class="math display">\[\beta_{0,j} \sim \mathbf{Normal}(\beta_0,\sigma_{\gamma_0})\]</span>
 A useful view of the model is then as a hierarchical model, as we have already done in our level-1 and level-2 formulation. This is depicted in Figure <a href="linear-mixed-effects-models.html#fig:random-intercepts-plot-hierarchy">11.1</a>.</p>
-<div class="figure" style="text-align: center"><span id="fig:random-intercepts-plot-hierarchy"></span>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:random-intercepts-plot-hierarchy"></span>
 <img src="_main_files/figure-html/random-intercepts-plot-hierarchy-1.svg" alt="Graphical depiction of the random-intercepts model. At the top you see the distribution of $\beta_{0,j}$, which is a Normal distribution with mean $\beta_0$ and standard deviation $\sigma_{\gamma_0}$. Each intercept $\beta_{0,j}$ in the middle layer is a random sample from this distribution. The $\beta_{0,j}$ terms are the means of the group-wise distributions from which the data points (lowest layer) are randomly sampled. Each data point $Y_{i,j}$ is drawn from the group-wise distributions depicted on the middle layer, which are all Normal distributions with mean $\beta_{0,j}$ and standard deviation $\sigma_{\gamma_0}$. The random effects $\gamma_{0,j}$ (only one shown) are the deviations between the group-wise mean $\beta_{0,j}$ and the overall mean $\beta_0$. The errors $\epsilon_{i,j}$ (only one shown) are the deviations between the observations $Y_{i,j}$ and the group-wise means $\beta_{0,j}$." width="95%" />
 <p class="caption">
 Figure 11.1: Graphical depiction of the random-intercepts model. At the top you see the distribution of <span class="math inline">\(\beta_{0,j}\)</span>, which is a Normal distribution with mean <span class="math inline">\(\beta_0\)</span> and standard deviation <span class="math inline">\(\sigma_{\gamma_0}\)</span>. Each intercept <span class="math inline">\(\beta_{0,j}\)</span> in the middle layer is a random sample from this distribution. The <span class="math inline">\(\beta_{0,j}\)</span> terms are the means of the group-wise distributions from which the data points (lowest layer) are randomly sampled. Each data point <span class="math inline">\(Y_{i,j}\)</span> is drawn from the group-wise distributions depicted on the middle layer, which are all Normal distributions with mean <span class="math inline">\(\beta_{0,j}\)</span> and standard deviation <span class="math inline">\(\sigma_{\gamma_0}\)</span>. The random effects <span class="math inline">\(\gamma_{0,j}\)</span> (only one shown) are the deviations between the group-wise mean <span class="math inline">\(\beta_{0,j}\)</span> and the overall mean <span class="math inline">\(\beta_0\)</span>. The errors <span class="math inline">\(\epsilon_{i,j}\)</span> (only one shown) are the deviations between the observations <span class="math inline">\(Y_{i,j}\)</span> and the group-wise means <span class="math inline">\(\beta_{0,j}\)</span>.
@@ -406,10 +452,10 @@ Figure 11.1: Graphical depiction of the random-intercepts model. At the top you 
 <div id="parameter-inference" class="section level2" number="11.4">
 <h2><span class="header-section-number">11.4</span> Parameter inference</h2>
 <p>After estimating the parameters of the linear mixed-effects model, the same procedures of model comparisons can be applied to obtain null hypothesis significance tests for the fixed effects. In the same way as for the General Linear Model, this can consist of computing <span class="math inline">\(F\)</span> statistics from comparisons of the Sum of Squared Errors of a general MODEL G and a restricted MODEL R which sets some of the fixed effects parameters to a priori values, often <span class="math inline">\(\beta = 0\)</span>.</p>
-<p>A complication with linear mixed-effects models concerns the appropriate degrees of freedom. In models with only fixed effects, we could use <span class="math inline">\(\text{df}_1 = \text{npar}(G) - \text{npar}(R)\)</span> and <span class="math inline">\(\text{df}_2 = n - \text{npar}(G)\)</span>. Unfortunately, this is not so for mixed-effects models. The problem is the inclusion of the random effects <span class="math inline">\(\gamma\)</span>. These are not parameters in the sense that the fixed effects <span class="math inline">\(\beta\)</span> and the variances <span class="math inline">\(\sigma\)</span> are parameters, they nevertheless are factors which influence the model errors <span class="math inline">\(\epsilon\)</span>. You might think of them as “partial” parameters, which you can assign a weight between 0 and 1, in terms of how they influence the model errors <span class="math inline">\(\epsilon\)</span>. Assigning each random effect <span class="math inline">\(\gamma_{0,j}\)</span> a weight of 1 would add, in our example above, a total of <span class="math inline">\(n_g\)</span> parameters to the model (and hence reduce <span class="math inline">\(\text{df}_2\)</span> by <span class="math inline">\(n_g\)</span>). But this generally assigns too much importance to the random effects, and the appropriate correction is somewhere between 0 and <span class="math inline">\(n_g\)</span>. Precisely what value the correction to the degrees of freedom should have is unfortunately not known for most models. Different approximations have been proposed. Two main ones are the Satterthwaite <span class="citation">(<a href="references.html#ref-satterthwaite_synthesis_1941" role="doc-biblioref">Satterthwaite, 1941</a>)</span> and the Kenward-Roger <span class="citation">(<a href="references.html#ref-kenward_small_1997" role="doc-biblioref">Kenward &amp; Roger, 1997</a>)</span> approximation. As the latter is known to provide the best control of Type I errors with the limited sample sizes that are common in psychology studies, this one is generally recommended.</p>
+<p>A complication with linear mixed-effects models concerns the appropriate degrees of freedom. In models with only fixed effects, we could use <span class="math inline">\(\text{df}_1 = \text{npar}(G) - \text{npar}(R)\)</span> and <span class="math inline">\(\text{df}_2 = n - \text{npar}(G)\)</span>. Unfortunately, this is not so for mixed-effects models. The problem is the inclusion of the random effects <span class="math inline">\(\gamma\)</span>. These are not parameters in the sense that the fixed effects <span class="math inline">\(\beta\)</span> and the variances <span class="math inline">\(\sigma\)</span> are parameters, they nevertheless are factors which influence the model errors <span class="math inline">\(\epsilon\)</span>. You might think of them as “partial” parameters, which you can assign a weight between 0 and 1, in terms of how they influence the model errors <span class="math inline">\(\epsilon\)</span>. Assigning each random effect <span class="math inline">\(\gamma_{0,j}\)</span> a weight of 1 would add, in our example above, a total of <span class="math inline">\(n_g\)</span> parameters to the model (and hence reduce <span class="math inline">\(\text{df}_2\)</span> by <span class="math inline">\(n_g\)</span>). But this generally assigns too much importance to the random effects, and the appropriate correction is somewhere between 0 and <span class="math inline">\(n_g\)</span>. Precisely what value the correction to the degrees of freedom should have is unfortunately not known for most models. Different approximations have been proposed. Two main ones are the Satterthwaite <span class="citation">(<a href="#ref-satterthwaite_synthesis_1941" role="doc-biblioref">Satterthwaite, 1941</a>)</span> and the Kenward-Roger <span class="citation">(<a href="#ref-kenward_small_1997" role="doc-biblioref">Kenward &amp; Roger, 1997</a>)</span> approximation. As the latter is known to provide the best control of Type I errors with the limited sample sizes that are common in psychology studies, this one is generally recommended.</p>
 <p>You may also be interested in testing evidence for the existence of random effects. If there are no random effects (i.e. all <span class="math inline">\(\gamma_{0,j} = 0\)</span>), that is equivalent to setting <span class="math inline">\(\sigma_{\gamma_0} = 0\)</span>. The <span class="math inline">\(F\)</span> statistic is not suitable for comparing a model where we set the standard deviation of a random effect <span class="math inline">\(\gamma\)</span> to <span class="math inline">\(\sigma_{\gamma} = 0\)</span> to a model where we allow it to take any value <span class="math inline">\(\sigma_{\gamma} \geq 0\)</span> (and hence need to estimate it). For such model comparisons, we can revert back to the general idea of comparing models via the likelihood ratio (e.g. Section <a href="ch-modeling.html#sec:02-likelihood-ratio">2.5</a>):</p>
 <p><span class="math display">\[\text{likelihood-ratio} = \frac{p(Y_1,\ldots,Y_n|\text{MODEL R})}{p(Y_1,\ldots,Y_n|\text{MODEL G})}\]</span>
-In particular, if the number of total observations <span class="math inline">\(n\)</span> is sufficiently large, we can rely on an important and general statistical theorem by <span class="citation"><a href="references.html#ref-wilks1938large" role="doc-biblioref">Wilks</a> (<a href="references.html#ref-wilks1938large" role="doc-biblioref">1938</a>)</span> that shows that as <span class="math inline">\(n \rightarrow \infty\)</span> (i.e., as the number of samples approaches infinity), then under the null-hypothesis that MODEL R is true:
+In particular, if the number of total observations <span class="math inline">\(n\)</span> is sufficiently large, we can rely on an important and general statistical theorem by <span class="citation"><a href="#ref-wilks1938large" role="doc-biblioref">Wilks</a> (<a href="#ref-wilks1938large" role="doc-biblioref">1938</a>)</span> that shows that as <span class="math inline">\(n \rightarrow \infty\)</span> (i.e., as the number of samples approaches infinity), then under the null-hypothesis that MODEL R is true:
 <span class="math display">\[\begin{equation}
 -2 \log \left(\text{likelihood-ratio}\right) \sim \mathbf{chi-squared}(\text{npar}(G) - \text{npar}(R))
 \end{equation}\]</span>
@@ -417,12 +463,12 @@ where the log likelihood ratio is usually computed as
 <span class="math display">\[\begin{aligned}
 -2 \log \left(\text{likelihood-ratio}\right) &amp;= -2 \log p(Y_1,\ldots,Y_n|\text{MODEL R}) - (-2 \log p(Y_1,\ldots,Y_n|\text{MODEL G}))
 \end{aligned}\]</span>
-In words, under the null-hypothesis that the restricted model is true, the sampling distribution of minus twice the natural logarithm of the likelihood ratio is distributed as a Chi-squared (<span class="math inline">\(\chi^2\)</span>) distribution. A Chi-squared distribution has one parameter, the degrees of freedom, which here equals the difference in the number of parameters of the two models. In this test, if there are any unknown parameters in the models, they need to be estimated by maximum likelihood (not by restricted maximum likelihood). This is because the ratio needs to be the ratio between the maximum value of each likelihood. The parameters to count are the fixed effects <span class="math inline">\(\beta\)</span> and the variances of the random effects <span class="math inline">\(\sigma^2_\gamma\)</span>, as well as any covariances between them (we will discuss this later), and the residual error variance <span class="math inline">\(\sigma^2_\epsilon\)</span>. In this test, you don’t have to worry about adjusting the degrees of freedom for the influence of the random effects <span class="math inline">\(\gamma\)</span>. An important caveat is however that Wilks’ theorem assumes that the restriction of the parameters in MODEL R are in the “interior” of the parameter space. That means that if parameters have upper or lower bounds, they can not be set at exactly these bounds in MODEL R. A variance can not be negative, so a variance parameter has a lower bound of <span class="math inline">\(\sigma^2 \geq 0\)</span>. Unfortunately, in the model comparison to test for random effects, we need to set the variance at exactly this lower bound in MODEL R. As a result, the chi-squared distribution is not an accurate approximation to the true sampling distribution. Usually, the tests are too conservative, providing too large <span class="math inline">\(p\)</span>-values (suggestions are that when testing a single variance of a random effect, they are approximately twice as large as they should be, see e.g. <span class="citation"><a href="references.html#ref-pinheiro2006mixed" role="doc-biblioref">Pinheiro &amp; Bates</a> (<a href="references.html#ref-pinheiro2006mixed" role="doc-biblioref">2006</a>)</span>).<a href="#fn23" class="footnote-ref" id="fnref23"><sup>23</sup></a> The general conservatism of the likelihood ratio tests means that if you obtain a significant result, you can be reassured that you have sufficient evidence for an effect. A conservative test procedure however means that the true rate of Type 1 errors will be lower than set by the significance level <span class="math inline">\(\alpha\)</span>. When it is crucial to maintain the rate of Type 1 errors sought for by the significance level, a better approach is to use a <strong>parametric bootstrap</strong> procedure where you simulate a large number of data sets according to the estimated MODEL R, and for each compute the value of the <span class="math inline">\(-2 \log\left(\text{likelihood-ratio}\right)\)</span> value, which provides an “empirical distribution” of the sampling distribution of this statistic. You can then determine how “unusual” the actual value computed for the true data is in the context of this simulated distribution.</p>
+In words, under the null-hypothesis that the restricted model is true, the sampling distribution of minus twice the natural logarithm of the likelihood ratio is distributed as a Chi-squared (<span class="math inline">\(\chi^2\)</span>) distribution. A Chi-squared distribution has one parameter, the degrees of freedom, which here equals the difference in the number of parameters of the two models. In this test, if there are any unknown parameters in the models, they need to be estimated by maximum likelihood (not by restricted maximum likelihood). This is because the ratio needs to be the ratio between the maximum value of each likelihood. The parameters to count are the fixed effects <span class="math inline">\(\beta\)</span> and the variances of the random effects <span class="math inline">\(\sigma^2_\gamma\)</span>, as well as any covariances between them (we will discuss this later), and the residual error variance <span class="math inline">\(\sigma^2_\epsilon\)</span>. In this test, you don’t have to worry about adjusting the degrees of freedom for the influence of the random effects <span class="math inline">\(\gamma\)</span>. An important caveat is however that Wilks’ theorem assumes that the restriction of the parameters in MODEL R are in the “interior” of the parameter space. That means that if parameters have upper or lower bounds, they can not be set at exactly these bounds in MODEL R. A variance can not be negative, so a variance parameter has a lower bound of <span class="math inline">\(\sigma^2 \geq 0\)</span>. Unfortunately, in the model comparison to test for random effects, we need to set the variance at exactly this lower bound in MODEL R. As a result, the chi-squared distribution is not an accurate approximation to the true sampling distribution. Usually, the tests are too conservative, providing too large <span class="math inline">\(p\)</span>-values (suggestions are that when testing a single variance of a random effect, they are approximately twice as large as they should be, see e.g. <span class="citation"><a href="#ref-pinheiro2006mixed" role="doc-biblioref">Pinheiro &amp; Bates</a> (<a href="#ref-pinheiro2006mixed" role="doc-biblioref">2006</a>)</span>).<a href="#fn27" class="footnote-ref" id="fnref27"><sup>27</sup></a> The general conservatism of the likelihood ratio tests means that if you obtain a significant result, you can be reassured that you have sufficient evidence for an effect. A conservative test procedure however means that the true rate of Type 1 errors will be lower than set by the significance level <span class="math inline">\(\alpha\)</span>. When it is crucial to maintain the rate of Type 1 errors sought for by the significance level, a better approach is to use a <strong>parametric bootstrap</strong> procedure where you simulate a large number of data sets according to the estimated MODEL R, and for each compute the value of the <span class="math inline">\(-2 \log\left(\text{likelihood-ratio}\right)\)</span> value, which provides an “empirical distribution” of the sampling distribution of this statistic. You can then determine how “unusual” the actual value computed for the true data is in the context of this simulated distribution.</p>
 </div>
 <div id="application-of-the-random-intercepts-model" class="section level2" number="11.5">
 <h2><span class="header-section-number">11.5</span> Application of the random-intercepts model</h2>
 <p>Having spent a bit of time discussing the estimation and testing of effects in linear mixed-effects models in abstract terms, let’s see how we can use a model like this in practice. For this first example, we will consider the data from the anchoring study again, focussing on those (non US or UK based) labs that were able to obtain estimates of the height of Mount Everest in meters, after having povided the participants with a low anchor. The judgements of participants acquired by these different labs, as well as the mean judgements and standard errors of the mean (remember, these standard errors are the standard deviation of the sampling distribution of the mean) are shown in Figure <a href="linear-mixed-effects-models.html#fig:anchoring-low-boxplot-by-referrer">11.2</a>.</p>
-<div class="figure" style="text-align: center"><span id="fig:anchoring-low-boxplot-by-referrer"></span>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:anchoring-low-boxplot-by-referrer"></span>
 <img src="_main_files/figure-html/anchoring-low-boxplot-by-referrer-1.svg" alt="Judged height of Mount Everest after a low anchor for all international labs where participants provided their answer in meters. Boxes represent the mean in each group plus or minus the standard error of the mean." width="95%" />
 <p class="caption">
 Figure 11.2: Judged height of Mount Everest after a low anchor for all international labs where participants provided their answer in meters. Boxes represent the mean in each group plus or minus the standard error of the mean.
@@ -444,7 +490,7 @@ Y_{i,j} &amp;= \beta_0 + \epsilon_{i,j} \\
 &amp;= 4471.43 + \epsilon_{i,j} \\
 \epsilon_{i,j} &amp;\sim \mathbf{Normal}(0,3344.03)
 \end{aligned}\]</span></p>
-<p>In the latter model, which is similar to the simple model we focused on in Chapter <a href="ch-simple-GLM.html#ch-simple-GLM">3</a>, the estimate of the intercept is the sample mean over all the cases. You can see that this differs from the estimated fixed intercept of the random intercepts model. This fixed effect represents the average of the random intercepts <span class="math inline">\(\beta_{0,j}\)</span>. Contrary to what you might have thought, the predicted<a href="#fn24" class="footnote-ref" id="fnref24"><sup>24</sup></a> random intercepts are not equal to the group-wise sample averages. Table <a href="linear-mixed-effects-models.html#tab:anchoring-means-random-intercepts-table">11.1</a> shows the sample averages, and the predicted random intercepts.</p>
+<p>In the latter model, which is similar to the simple model we focused on in Chapter <a href="ch-simple-GLM.html#ch-simple-GLM">3</a>, the estimate of the intercept is the sample mean over all the cases. You can see that this differs from the estimated fixed intercept of the random intercepts model. This fixed effect represents the average of the random intercepts <span class="math inline">\(\beta_{0,j}\)</span>. Contrary to what you might have thought, the predicted<a href="#fn28" class="footnote-ref" id="fnref28"><sup>28</sup></a> random intercepts are not equal to the group-wise sample averages. Table <a href="linear-mixed-effects-models.html#tab:anchoring-means-random-intercepts-table">11.1</a> shows the sample averages, and the predicted random intercepts.</p>
 <table>
 <caption>
 <span id="tab:anchoring-means-random-intercepts-table">Table 11.1: </span>Group-wise averages and sample sizes, estimated fixed intercept (<span class="math inline">\(\hat{\beta}_0\)</span>) and predicted random intercepts (<span class="math inline">\(\hat{\beta}_{0,j}\)</span>), random effects (<span class="math inline">\(\hat{\gamma}_{0,j}\)</span>). The latter are the deviations between the random intercepts and teh fixed intercept. For comparison, we also show the deviations between the sample means and the fixed intercept <span class="math inline">\((\overline{Y}_j - \hat{\beta}_0)\)</span>.
@@ -661,7 +707,7 @@ Y_{i,j} &amp;= \beta_0 + \epsilon_{i,j} \\
 <div id="models-with-random-intercepts-and-slopes" class="section level2" number="11.6">
 <h2><span class="header-section-number">11.6</span> Models with random intercepts and slopes</h2>
 <p>The model we dealt with so far is the simplest example of a linear mixed-effects model. Let’s now consider a slightly more complex model, where we will now assess the effect of the anchor that was given to participants. The data from the international labs providing judgements in meters are shown in Figure <a href="linear-mixed-effects-models.html#fig:anchoring-both-boxplot-by-referrer">11.3</a>. As for the low anchor condition, average judgements in the high anchor condition seem to different between the labs, albeit to a lesser extent.</p>
-<div class="figure" style="text-align: center"><span id="fig:anchoring-both-boxplot-by-referrer"></span>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:anchoring-both-boxplot-by-referrer"></span>
 <img src="_main_files/figure-html/anchoring-both-boxplot-by-referrer-1.svg" alt="Judged height of Mount Everest after a low or high anchor for all international labs where participants provided their answer in meters. Boxes represent the mean in each group plus or minus the standard error of the mean." width="95%" />
 <p class="caption">
 Figure 11.3: Judged height of Mount Everest after a low or high anchor for all international labs where participants provided their answer in meters. Boxes represent the mean in each group plus or minus the standard error of the mean.
@@ -720,7 +766,7 @@ This shows a negative correlation between the random intercepts and the random s
 </div>
 <div id="crossed-random-effects-dating-partners-in-the-speed-dating-experiment" class="section level2" number="11.7">
 <h2><span class="header-section-number">11.7</span> Crossed random effects: dating partners in the speed dating experiment</h2>
-<p>As a final example of a mixed-effects analysis, we will reconsider the data from the speed-dating experiment of <span class="citation"><a href="references.html#ref-fisman2006gender" role="doc-biblioref">Fisman et al.</a> (<a href="references.html#ref-fisman2006gender" role="doc-biblioref">2006</a>)</span>.</p>
+<p>As a final example of a mixed-effects analysis, we will reconsider the data from the speed-dating experiment of <span class="citation"><a href="#ref-fisman2006gender" role="doc-biblioref">Fisman et al.</a> (<a href="#ref-fisman2006gender" role="doc-biblioref">2006</a>)</span>.</p>
 <p>Please come back later for this.</p>
 <!-- 
 
@@ -728,19 +774,55 @@ This shows a negative correlation between the random intercepts and the random s
 </div>
 <div id="choosing-the-random-effects-structure" class="section level2" number="11.8">
 <h2><span class="header-section-number">11.8</span> Choosing the random effects structure</h2>
-<p>The correct specification of the random-effects structure in the model is very important. Omitting a random effect when there is in fact variability in this effect across the levels of a grouping factor can dramatically increase Type I errors well beyond the desired significance level <span class="citation">(<a href="references.html#ref-barr_random_2013-1" role="doc-biblioref">Barr, Levy, Scheepers, &amp; Tily, 2013</a>; <a href="references.html#ref-judd_treating_2012" role="doc-biblioref">Charles M. Judd et al., 2012</a>)</span>. As such, it has been recommended that one should initially start with the <strong>maximal random effects structure</strong> <span class="citation">(<a href="references.html#ref-barr_random_2013-1" role="doc-biblioref">Barr et al., 2013</a>; <a href="references.html#ref-Singmann2019-mixed" role="doc-biblioref">Singmann &amp; Kellen, 2019</a>)</span>. The maximal model is the model that includes random effects for all grouping factors in a study. Specifically, for each grouping factor, the maximal model contains random intercepts as well as random slopes for all fixed effects, plus all correlations among the random effects.</p>
-<p>By using a maximal structure, it is unlikely that you would miss a potentially important source of variability in the data. Inclusion of random effects which are not really there might, given sufficient data, not be too much of an issue, as the model would estimate the variance of such random effects to be low. However, if the sample size is limited, a common problem is that the maximal model is not fully identified <span class="citation">(<a href="references.html#ref-bates_parsimonious_2015" role="doc-biblioref">Bates, Kliegl, Vasishth, &amp; Baayen, 2015</a>)</span>, especially for mixed models with complicated random effects structures. An unidentified model means that not all parameters can be estimated properly. This is often evident by the estimated variance-covariance matrix of the random effects being degenerate or singular. In such cases, you may obtain estimated variances of 0, near 0, or even negative estimated variances,<a href="#fn25" class="footnote-ref" id="fnref25"><sup>25</sup></a> and correlations between random effects of <span class="math inline">\(\pm 1\)</span>. The occurrence of such situations is due to the fact the parameters associated to random effects (e.g., <span class="math inline">\(\sigma^2_{\gamma_1}\)</span>) are more difficult to estimate than fixed effects (e.g., <span class="math inline">\(\beta_1\)</span>).</p>
+<p>The correct specification of the random-effects structure in the model is very important. Omitting a random effect when there is in fact variability in this effect across the levels of a grouping factor can dramatically increase Type I errors well beyond the desired significance level <span class="citation">(<a href="#ref-barr_random_2013-1" role="doc-biblioref">Barr, Levy, Scheepers, &amp; Tily, 2013</a>; <a href="#ref-judd_treating_2012" role="doc-biblioref">Charles M. Judd et al., 2012</a>)</span>. As such, it has been recommended that one should initially start with the <strong>maximal random effects structure</strong> <span class="citation">(<a href="#ref-barr_random_2013-1" role="doc-biblioref">Barr et al., 2013</a>; <a href="#ref-Singmann2019-mixed" role="doc-biblioref">Singmann &amp; Kellen, 2019</a>)</span>. The maximal model is the model that includes random effects for all grouping factors in a study. Specifically, for each grouping factor, the maximal model contains random intercepts as well as random slopes for all fixed effects, plus all correlations among the random effects.</p>
+<p>By using a maximal structure, it is unlikely that you would miss a potentially important source of variability in the data. Inclusion of random effects which are not really there might, given sufficient data, not be too much of an issue, as the model would estimate the variance of such random effects to be low. However, if the sample size is limited, a common problem is that the maximal model is not fully identified <span class="citation">(<a href="#ref-bates_parsimonious_2015" role="doc-biblioref">Bates, Kliegl, Vasishth, &amp; Baayen, 2015</a>)</span>, especially for mixed models with complicated random effects structures. An unidentified model means that not all parameters can be estimated properly. This is often evident by the estimated variance-covariance matrix of the random effects being degenerate or singular. In such cases, you may obtain estimated variances of 0, near 0, or even negative estimated variances,<a href="#fn29" class="footnote-ref" id="fnref29"><sup>29</sup></a> and correlations between random effects of <span class="math inline">\(\pm 1\)</span>. The occurrence of such situations is due to the fact the parameters associated to random effects (e.g., <span class="math inline">\(\sigma^2_{\gamma_1}\)</span>) are more difficult to estimate than fixed effects (e.g., <span class="math inline">\(\beta_1\)</span>).</p>
 <!-- https://www.sciencedirect.com/science/article/pii/S0749596X17300013 for Matcuschek -->
-<p>When the maximal structure can not be used because of these estimation issues, it is generally recommended to reduce the complexity of the random effects structure, because degenerate or overparameterized models can reduce the statistical power of any tests conducted with them <span class="citation">(<a href="references.html#ref-matuschek_balancing_2017" role="doc-biblioref">Matuschek, Kliegl, Vasishth, Baayen, &amp; Bates, 2017</a>)</span>. A first step is generally to remove correlations among random slopes, as these tend to contribute the largest number of random effects parameters that need to be estimated. They are usually also more difficult to estimate than the variance parameters. If a model still shows problems after removing correlations, other random-effects parameters could be removed, starting with the highest-order random effects parameter with the lowest estimated variance. Iterative approaches to obtain the <strong>optimal random effects structure</strong>, rather than the maximal one, are provided by <span class="citation"><a href="references.html#ref-matuschek_balancing_2017" role="doc-biblioref">Matuschek et al.</a> (<a href="references.html#ref-matuschek_balancing_2017" role="doc-biblioref">2017</a>)</span> and <span class="citation"><a href="references.html#ref-bates_parsimonious_2015" role="doc-biblioref">Bates et al.</a> (<a href="references.html#ref-bates_parsimonious_2015" role="doc-biblioref">2015</a>)</span>. Applying these iterative procedures can be complicated. They are also data-driven, and hence the results may be influenced by random noise in the data. Sometimes, it might not be possible to reduce the random-effects structure such that all problematic random effects parameters are removed (e.g., in cases when there is random variability in higher-order effects, but not in lower-order effects). In those cases, one might accept a few problematic or degenerate parameters (e.g., variances of zero). This would provide more conservative tests for the fixed effects than simply removing justifiable random effects and inflating Type I error rates to an unknown degree. It is also advisable to check the robustness of results by comparing the fixed-effects estimates and associated hypothesis tests across all estimated models with a different random effects structure. It is often the case that the testing of fixed effects in highly overparameterized models diverge from the corresponding tests in reduced models. In these cases, the tests for the simpler models may be preferred.</p>
+<p>When the maximal structure can not be used because of these estimation issues, it is generally recommended to reduce the complexity of the random effects structure, because degenerate or overparameterized models can reduce the statistical power of any tests conducted with them <span class="citation">(<a href="#ref-matuschek_balancing_2017" role="doc-biblioref">Matuschek, Kliegl, Vasishth, Baayen, &amp; Bates, 2017</a>)</span>. A first step is generally to remove correlations among random slopes, as these tend to contribute the largest number of random effects parameters that need to be estimated. They are usually also more difficult to estimate than the variance parameters. If a model still shows problems after removing correlations, other random-effects parameters could be removed, starting with the highest-order random effects parameter with the lowest estimated variance. Iterative approaches to obtain the <strong>optimal random effects structure</strong>, rather than the maximal one, are provided by <span class="citation"><a href="#ref-matuschek_balancing_2017" role="doc-biblioref">Matuschek et al.</a> (<a href="#ref-matuschek_balancing_2017" role="doc-biblioref">2017</a>)</span> and <span class="citation"><a href="#ref-bates_parsimonious_2015" role="doc-biblioref">Bates et al.</a> (<a href="#ref-bates_parsimonious_2015" role="doc-biblioref">2015</a>)</span>. Applying these iterative procedures can be complicated. They are also data-driven, and hence the results may be influenced by random noise in the data. Sometimes, it might not be possible to reduce the random-effects structure such that all problematic random effects parameters are removed (e.g., in cases when there is random variability in higher-order effects, but not in lower-order effects). In those cases, one might accept a few problematic or degenerate parameters (e.g., variances of zero). This would provide more conservative tests for the fixed effects than simply removing justifiable random effects and inflating Type I error rates to an unknown degree. It is also advisable to check the robustness of results by comparing the fixed-effects estimates and associated hypothesis tests across all estimated models with a different random effects structure. It is often the case that the testing of fixed effects in highly overparameterized models diverge from the corresponding tests in reduced models. In these cases, the tests for the simpler models may be preferred.</p>
 
+</div>
+</div>
+<h3>References</h3>
+<div id="refs" class="references csl-bib-body hanging-indent" line-spacing="2">
+<div id="ref-barr_random_2013-1" class="csl-entry">
+Barr, D. J., Levy, R., Scheepers, C., &amp; Tily, H. J. (2013). Random effects structure for confirmatory hypothesis testing: Keep it maximal. <em>Journal of Memory and Language</em>, <em>68</em>, 255–278.
+</div>
+<div id="ref-bates_parsimonious_2015" class="csl-entry">
+Bates, D., Kliegl, R., Vasishth, S., &amp; Baayen, H. (2015). Parsimonious mixed models. <em><span>arXiv:1506.04967</span> [Stat]</em>.
+</div>
+<div id="ref-fisman2006gender" class="csl-entry">
+Fisman, R., Iyengar, S. S., Kamenica, E., &amp; Simonson, I. (2006). Gender differences in mate selection: Evidence from a speed dating experiment. <em>The Quarterly Journal of Economics</em>, <em>121</em>, 673–697.
+</div>
+<div id="ref-judd_treating_2012" class="csl-entry">
+Judd, Charles M., Westfall, J., &amp; Kenny, D. A. (2012). Treating stimuli as a random factor in social psychology: A new and comprehensive solution to a pervasive but largely ignored problem. <em>Journal of Personality and Social Psychology</em>, <em>103</em>, 54–69.
+</div>
+<div id="ref-kenny_consequences_1986" class="csl-entry">
+Kenny, D. A., &amp; Judd, C. M. (1986). Consequences of violating the independence assumption in analysis of variance. <em>Psychological Bulletin</em>, <em>99</em>, 422–431.
+</div>
+<div id="ref-kenward_small_1997" class="csl-entry">
+Kenward, M. G., &amp; Roger, J. H. (1997). Small sample inference for fixed effects from restricted maximum likelihood. <em>Biometrics</em>, <em>53</em>, 983–997.
+</div>
+<div id="ref-matuschek_balancing_2017" class="csl-entry">
+Matuschek, H., Kliegl, R., Vasishth, S., Baayen, H., &amp; Bates, D. (2017). Balancing type <span>\</span><span>{I<span>\</span>}</span> error and power in linear mixed models. <em>Journal of Memory and Language</em>, <em>94</em>, 305–315.
+</div>
+<div id="ref-pinheiro2006mixed" class="csl-entry">
+Pinheiro, J., &amp; Bates, D. (2006). <em>Mixed-effects models in s and s-PLUS</em>. Springer Science &amp; Business Media.
+</div>
+<div id="ref-satterthwaite_synthesis_1941" class="csl-entry">
+Satterthwaite, F. E. (1941). Synthesis of variance. <em>Psychometrika</em>, <em>6</em>, 309–316.
+</div>
+<div id="ref-Singmann2019-mixed" class="csl-entry">
+Singmann, H., &amp; Kellen, D. (2019). An introduction to linear mixed modeling in experimental psychology. In <em>New methods in cognitive psychology</em> (pp. 4–31). Psychology Press.
+</div>
+<div id="ref-wilks1938large" class="csl-entry">
+Wilks, S. S. (1938). The large-sample distribution of the likelihood ratio for testing composite hypotheses. <em>The Annals of Mathematical Statistics</em>, <em>9</em>, 60–62.
 </div>
 </div>
 <div class="footnotes">
 <hr />
-<ol start="23">
-<li id="fn23"><p>When parameters are set on the bounds of the parameter space, the sampling distribution of the statistic is a <em>mixture</em> of different Chi-squared distributions, which effectively is a weighted sum of chi-squared distributions. Although such mixture distributions are well-defined in principle, it is not straightforward to determine the component weights accurately in practice.<a href="linear-mixed-effects-models.html#fnref23" class="footnote-back">↩︎</a></p></li>
-<li id="fn24"><p>In the context of mixed-effects models, it is common to state that random effects are <em>predicted</em>, rather than <em>estimated</em>.<a href="linear-mixed-effects-models.html#fnref24" class="footnote-back">↩︎</a></p></li>
-<li id="fn25"><p>A variance can never be negative, so this is clearly an indication of issues in the estimation!<a href="linear-mixed-effects-models.html#fnref25" class="footnote-back">↩︎</a></p></li>
+<ol start="27">
+<li id="fn27"><p>When parameters are set on the bounds of the parameter space, the sampling distribution of the statistic is a <em>mixture</em> of different Chi-squared distributions, which effectively is a weighted sum of chi-squared distributions. Although such mixture distributions are well-defined in principle, it is not straightforward to determine the component weights accurately in practice.<a href="linear-mixed-effects-models.html#fnref27" class="footnote-back">↩︎</a></p></li>
+<li id="fn28"><p>In the context of mixed-effects models, it is common to state that random effects are <em>predicted</em>, rather than <em>estimated</em>.<a href="linear-mixed-effects-models.html#fnref28" class="footnote-back">↩︎</a></p></li>
+<li id="fn29"><p>A variance can never be negative, so this is clearly an indication of issues in the estimation!<a href="linear-mixed-effects-models.html#fnref29" class="footnote-back">↩︎</a></p></li>
 </ol>
 </div>
             </section>
@@ -748,12 +830,11 @@ This shows a negative correlation between the random intercepts and the random s
           </div>
         </div>
       </div>
-<a href="repeated-measures-anova.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="ch-RM-ANOVA.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
 <a href="introduction-to-bayesian-hypothesis-testing.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="book_assets/gitbook-2.6.7/js/app.min.js"></script>
-<script src="book_assets/gitbook-2.6.7/js/lunr.js"></script>
 <script src="book_assets/gitbook-2.6.7/js/clipboard.min.js"></script>
 <script src="book_assets/gitbook-2.6.7/js/plugin-search.js"></script>
 <script src="book_assets/gitbook-2.6.7/js/plugin-sharing.js"></script>
@@ -772,6 +853,7 @@ gitbook.start({
 "weibo": false,
 "instapaper": false,
 "vk": false,
+"whatsapp": false,
 "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
 },
 "fontsettings": {
@@ -789,11 +871,14 @@ gitbook.start({
 "text": null
 },
 "download": null,
+"search": {
+"engine": "fuse",
+"options": null
+},
 "toc": {
 "collapse": "subsection"
 },
-"source": null,
-"search": true
+"source": null
 });
 });
 </script>

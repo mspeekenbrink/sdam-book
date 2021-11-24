@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 10 Repeated-measures ANOVA | Statistics: Data analysis and modelling</title>
   <meta name="description" content="A book about statistics for data analysis, with a main focus on statistical modelling." />
-  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 10 Repeated-measures ANOVA | Statistics: Data analysis and modelling" />
   <meta property="og:type" content="book" />
@@ -24,7 +24,7 @@
 <meta name="author" content="Maarten Speekenbrink" />
 
 
-<meta name="date" content="2021-11-17" />
+<meta name="date" content="2021-11-19" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -33,8 +33,9 @@
   
 <link rel="prev" href="mixing-categorical-and-metric-predictors-ancova.html"/>
 <link rel="next" href="linear-mixed-effects-models.html"/>
-<script src="book_assets/header-attrs-2.7/header-attrs.js"></script>
-<script src="book_assets/jquery-3.5.1/jquery.min.js"></script>
+<script src="book_assets/header-attrs-2.11/header-attrs.js"></script>
+<script src="book_assets/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="book_assets/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="book_assets/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
 <link href="book_assets/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -50,40 +51,33 @@
 
 
 
-
-<script src="book_assets/htmlwidgets-1.5.3/htmlwidgets.js"></script>
-<script src="book_assets/viz-1.8.2/viz.js"></script>
-<link href="book_assets/DiagrammeR-styles-0.2/styles.css" rel="stylesheet" />
-<script src="book_assets/grViz-binding-1.0.6.1/grViz.js"></script>
-<script src="book_assets/plotly-binding-4.9.3/plotly.js"></script>
-<script src="book_assets/typedarray-0.1/typedarray.min.js"></script>
-<link href="book_assets/crosstalk-1.1.1/css/crosstalk.css" rel="stylesheet" />
-<script src="book_assets/crosstalk-1.1.1/js/crosstalk.min.js"></script>
-<link href="book_assets/plotly-htmlwidgets-css-1.57.1/plotly-htmlwidgets.css" rel="stylesheet" />
-<script src="book_assets/plotly-main-1.57.1/plotly-latest.min.js"></script>
-<link href="book_assets/combineWidgetStyle-0.1/combineWidgets.css" rel="stylesheet" />
-<script src="book_assets/combineWidgets-binding-0.10.1/combineWidgets.js"></script>
-<script src="book_assets/rglWebGL-binding-0.106.6/rglWebGL.js"></script>
-<link href="book_assets/rglwidgetClass-0.106.6/rgl.css" rel="stylesheet" />
-<script src="book_assets/rglwidgetClass-0.106.6/rglClass.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.106.6/utils.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.106.6/subscenes.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.106.6/shaders.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.106.6/textures.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.106.6/projection.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.106.6/mouse.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.106.6/init.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.106.6/pieces.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.106.6/draw.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.106.6/controls.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.106.6/selection.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.106.6/rglTimer.src.js"></script>
-<script src="book_assets/CanvasMatrix4-0.106.6/CanvasMatrix.src.js"></script>
-<script src="book_assets/rglPlayer-binding-0.106.6/rglPlayer.js"></script>
-<script src="book_assets/kePrint-0.0.1/kePrint.js"></script>
-<link href="book_assets/lightable-0.0.1/lightable.css" rel="stylesheet" />
+<link href="book_assets/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="book_assets/anchor-sections-1.0.1/anchor-sections.js"></script>
 
 
+
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
 
 <link rel="stylesheet" href="style.css" type="text/css" />
 </head>
@@ -143,6 +137,7 @@
 <li class="chapter" data-level="2.6" data-path="ch-modeling.html"><a href="ch-modeling.html#hypothesis-testing-directly-with-the-binomial-distribution"><i class="fa fa-check"></i><b>2.6</b> Hypothesis testing directly with the Binomial distribution</a></li>
 <li class="chapter" data-level="2.7" data-path="ch-modeling.html"><a href="ch-modeling.html#summary-1"><i class="fa fa-check"></i><b>2.7</b> Summary</a></li>
 <li class="chapter" data-level="2.8" data-path="ch-modeling.html"><a href="ch-modeling.html#epilogue"><i class="fa fa-check"></i><b>2.8</b> Epilogue</a></li>
+<li class="chapter" data-level="2.9" data-path="ch-modeling.html"><a href="ch-modeling.html#exercises"><i class="fa fa-check"></i><b>2.9</b> Exercises</a></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html"><i class="fa fa-check"></i><b>3</b> A model with a mean (one sample t-test)</a>
 <ul>
@@ -174,6 +169,8 @@
 <li class="chapter" data-level="3.8.2" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#bootstrapping-a-statistic"><i class="fa fa-check"></i><b>3.8.2</b> Bootstrapping a statistic</a></li>
 </ul></li>
 <li class="chapter" data-level="3.9" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#in-practice"><i class="fa fa-check"></i><b>3.9</b> In practice</a></li>
+<li class="chapter" data-level="3.10" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#summary-2"><i class="fa fa-check"></i><b>3.10</b> Summary</a></li>
+<li class="chapter" data-level="3.11" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#the-general-linear-model"><i class="fa fa-check"></i><b>3.11</b> The General Linear Model</a></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html"><i class="fa fa-check"></i><b>4</b> Simple linear regression</a>
 <ul>
@@ -189,7 +186,9 @@
 <li class="chapter" data-level="4.4.2" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#model-comparison"><i class="fa fa-check"></i><b>4.4.2</b> Model comparison</a></li>
 <li class="chapter" data-level="4.4.3" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#confidence-intervals"><i class="fa fa-check"></i><b>4.4.3</b> Confidence intervals</a></li>
 </ul></li>
-<li class="chapter" data-level="4.5" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#summary-2"><i class="fa fa-check"></i><b>4.5</b> Summary</a></li>
+<li class="chapter" data-level="4.5" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#assumptions-and-outliers"><i class="fa fa-check"></i><b>4.5</b> Assumptions and outliers</a></li>
+<li class="chapter" data-level="4.6" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#summary-3"><i class="fa fa-check"></i><b>4.6</b> Summary</a></li>
+<li class="chapter" data-level="4.7" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#summary-4"><i class="fa fa-check"></i><b>4.7</b> Summary</a></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html"><i class="fa fa-check"></i><b>5</b> Multiple regression</a>
 <ul>
@@ -205,17 +204,19 @@
 <ul>
 <li class="chapter" data-level="5.6.1" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#r2-changes-and-the-coefficient-of-semi-partial-determination"><i class="fa fa-check"></i><b>5.6.1</b> <span class="math inline">\(R^2\)</span> changes and the coefficient of (semi-)partial determination</a></li>
 </ul></li>
-<li class="chapter" data-level="5.7" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#sec:04b-assumptions"><i class="fa fa-check"></i><b>5.7</b> Assumptions</a>
+<li class="chapter" data-level="5.7" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#controlling-for-education-level-and-poverty"><i class="fa fa-check"></i><b>5.7</b> Controlling for education level and poverty</a></li>
+<li class="chapter" data-level="5.8" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#sec:04b-assumptions"><i class="fa fa-check"></i><b>5.8</b> Assumptions</a>
 <ul>
-<li class="chapter" data-level="5.7.1" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#transforming-variables"><i class="fa fa-check"></i><b>5.7.1</b> Transforming variables</a></li>
-<li class="chapter" data-level="5.7.2" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#polynomial-regression"><i class="fa fa-check"></i><b>5.7.2</b> Polynomial regression</a></li>
+<li class="chapter" data-level="5.8.1" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#transforming-variables"><i class="fa fa-check"></i><b>5.8.1</b> Transforming variables</a></li>
+<li class="chapter" data-level="5.8.2" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#polynomial-regression"><i class="fa fa-check"></i><b>5.8.2</b> Polynomial regression</a></li>
 </ul></li>
-<li class="chapter" data-level="5.8" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#multicollinearity-redundancy-between-predictors"><i class="fa fa-check"></i><b>5.8</b> Multicollinearity: Redundancy between predictors</a>
+<li class="chapter" data-level="5.9" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#multicollinearity-redundancy-between-predictors"><i class="fa fa-check"></i><b>5.9</b> Multicollinearity: Redundancy between predictors</a>
 <ul>
-<li class="chapter" data-level="5.8.1" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#detecting-and-dealing-with-multicollinearity"><i class="fa fa-check"></i><b>5.8.1</b> Detecting and dealing with multicollinearity</a></li>
+<li class="chapter" data-level="5.9.1" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#detecting-and-dealing-with-multicollinearity"><i class="fa fa-check"></i><b>5.9.1</b> Detecting and dealing with multicollinearity</a></li>
 </ul></li>
-<li class="chapter" data-level="5.9" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#sec:04b-outliers"><i class="fa fa-check"></i><b>5.9</b> Outliers</a></li>
-<li class="chapter" data-level="5.10" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#in-practice-1"><i class="fa fa-check"></i><b>5.10</b> In practice</a></li>
+<li class="chapter" data-level="5.10" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#sec:04b-outliers"><i class="fa fa-check"></i><b>5.10</b> Outliers</a></li>
+<li class="chapter" data-level="5.11" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#in-practice-1"><i class="fa fa-check"></i><b>5.11</b> In practice</a></li>
+<li class="chapter" data-level="5.12" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#summary-5"><i class="fa fa-check"></i><b>5.12</b> Summary</a></li>
 </ul></li>
 <li class="chapter" data-level="6" data-path="moderation-and-mediation.html"><a href="moderation-and-mediation.html"><i class="fa fa-check"></i><b>6</b> Moderation and mediation</a>
 <ul>
@@ -250,6 +251,7 @@
 <li class="chapter" data-level="7.7" data-path="ch-ANOVA.html"><a href="ch-ANOVA.html#assumptions"><i class="fa fa-check"></i><b>7.7</b> Assumptions</a></li>
 <li class="chapter" data-level="7.8" data-path="ch-ANOVA.html"><a href="ch-ANOVA.html#multiple-testing-and-post-hoc-tests"><i class="fa fa-check"></i><b>7.8</b> Multiple testing and post-hoc tests</a></li>
 <li class="chapter" data-level="7.9" data-path="ch-ANOVA.html"><a href="ch-ANOVA.html#in-practice-2"><i class="fa fa-check"></i><b>7.9</b> In practice</a></li>
+<li class="chapter" data-level="7.10" data-path="ch-ANOVA.html"><a href="ch-ANOVA.html#sec:06-assumptions"><i class="fa fa-check"></i><b>7.10</b> Assumptions</a></li>
 </ul></li>
 <li class="chapter" data-level="8" data-path="ch-factorial-ANOVA.html"><a href="ch-factorial-ANOVA.html"><i class="fa fa-check"></i><b>8</b> Factorial ANOVA</a>
 <ul>
@@ -283,10 +285,33 @@
 <li class="chapter" data-level="9.7" data-path="mixing-categorical-and-metric-predictors-ancova.html"><a href="mixing-categorical-and-metric-predictors-ancova.html#mediation-with-categorical-independent-variables"><i class="fa fa-check"></i><b>9.7</b> Mediation with categorical independent variables</a></li>
 <li class="chapter" data-level="9.8" data-path="mixing-categorical-and-metric-predictors-ancova.html"><a href="mixing-categorical-and-metric-predictors-ancova.html#ancova-vs-difference-scores"><i class="fa fa-check"></i><b>9.8</b> ANCOVA vs difference scores</a></li>
 </ul></li>
-<li class="chapter" data-level="10" data-path="repeated-measures-anova.html"><a href="repeated-measures-anova.html"><i class="fa fa-check"></i><b>10</b> Repeated-measures ANOVA</a></li>
+<li class="chapter" data-level="10" data-path="repeated-measures-anova.html"><a href="repeated-measures-anova.html"><i class="fa fa-check"></i><b>10</b> Repeated-measures ANOVA</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="repeated-measures-anova.html"><a href="repeated-measures-anova.html#non-independence-in-linear-models"><i class="fa fa-check"></i><b>10.1</b> Non-independence in linear models</a></li>
+<li class="chapter" data-level="10.2" data-path="repeated-measures-anova.html"><a href="repeated-measures-anova.html#the-cheerleader-effect"><i class="fa fa-check"></i><b>10.2</b> The cheerleader effect</a></li>
+<li class="chapter" data-level="10.3" data-path="repeated-measures-anova.html"><a href="repeated-measures-anova.html#a-oneway-repeated-measures-anova"><i class="fa fa-check"></i><b>10.3</b> A oneway repeated-measures ANOVA</a>
+<ul>
+<li class="chapter" data-level="10.3.1" data-path="repeated-measures-anova.html"><a href="repeated-measures-anova.html#including-effects-for-participants"><i class="fa fa-check"></i><b>10.3.1</b> Including effects for participants</a></li>
+<li class="chapter" data-level="10.3.2" data-path="repeated-measures-anova.html"><a href="repeated-measures-anova.html#fixed-vs-random-effects"><i class="fa fa-check"></i><b>10.3.2</b> Fixed vs random effects</a></li>
+</ul></li>
+<li class="chapter" data-level="10.4" data-path="repeated-measures-anova.html"><a href="repeated-measures-anova.html#assumptions-1"><i class="fa fa-check"></i><b>10.4</b> Assumptions</a>
+<ul>
+<li class="chapter" data-level="10.4.1" data-path="repeated-measures-anova.html"><a href="repeated-measures-anova.html#sphericity"><i class="fa fa-check"></i><b>10.4.1</b> Sphericity</a></li>
+<li class="chapter" data-level="10.4.2" data-path="repeated-measures-anova.html"><a href="repeated-measures-anova.html#correcting-for-non-sphericity"><i class="fa fa-check"></i><b>10.4.2</b> Correcting for non-sphericity</a></li>
+</ul></li>
+<li class="chapter" data-level="10.5" data-path="repeated-measures-anova.html"><a href="repeated-measures-anova.html#effect-size-1"><i class="fa fa-check"></i><b>10.5</b> Effect size</a></li>
+<li class="chapter" data-level="10.6" data-path="repeated-measures-anova.html"><a href="repeated-measures-anova.html#mixed-anova-with-between-and-within-factors"><i class="fa fa-check"></i><b>10.6</b> Mixed ANOVA with between and within factors</a></li>
+<li class="chapter" data-level="10.7" data-path="repeated-measures-anova.html"><a href="repeated-measures-anova.html#in-practice-4"><i class="fa fa-check"></i><b>10.7</b> In practice</a>
+<ul>
+<li class="chapter" data-level="10.7.1" data-path="repeated-measures-anova.html"><a href="repeated-measures-anova.html#defining-and-estimating-the-model"><i class="fa fa-check"></i><b>10.7.1</b> Defining and estimating the model</a></li>
+<li class="chapter" data-level="10.7.2" data-path="repeated-measures-anova.html"><a href="repeated-measures-anova.html#assessing-the-assumptions"><i class="fa fa-check"></i><b>10.7.2</b> Assessing the assumptions</a></li>
+<li class="chapter" data-level="10.7.3" data-path="repeated-measures-anova.html"><a href="repeated-measures-anova.html#reporting-the-results"><i class="fa fa-check"></i><b>10.7.3</b> Reporting the results</a></li>
+</ul></li>
+<li class="chapter" data-level="10.8" data-path="repeated-measures-anova.html"><a href="repeated-measures-anova.html#summary-6"><i class="fa fa-check"></i><b>10.8</b> Summary</a></li>
+</ul></li>
 <li class="chapter" data-level="11" data-path="linear-mixed-effects-models.html"><a href="linear-mixed-effects-models.html"><i class="fa fa-check"></i><b>11</b> Linear mixed-effects models</a>
 <ul>
-<li class="chapter" data-level="11.1" data-path="linear-mixed-effects-models.html"><a href="linear-mixed-effects-models.html#non-independence-in-linear-models"><i class="fa fa-check"></i><b>11.1</b> Non-independence in linear models</a></li>
+<li class="chapter" data-level="11.1" data-path="linear-mixed-effects-models.html"><a href="linear-mixed-effects-models.html#non-independence-in-linear-models-1"><i class="fa fa-check"></i><b>11.1</b> Non-independence in linear models</a></li>
 <li class="chapter" data-level="11.2" data-path="linear-mixed-effects-models.html"><a href="linear-mixed-effects-models.html#random-intercept-models"><i class="fa fa-check"></i><b>11.2</b> Random intercept models</a></li>
 <li class="chapter" data-level="11.3" data-path="linear-mixed-effects-models.html"><a href="linear-mixed-effects-models.html#parameter-estimation-1"><i class="fa fa-check"></i><b>11.3</b> Parameter estimation</a></li>
 <li class="chapter" data-level="11.4" data-path="linear-mixed-effects-models.html"><a href="linear-mixed-effects-models.html#parameter-inference"><i class="fa fa-check"></i><b>11.4</b> Parameter inference</a></li>
@@ -317,7 +342,7 @@
 <li class="chapter" data-level="12.4.3" data-path="introduction-to-bayesian-hypothesis-testing.html"><a href="introduction-to-bayesian-hypothesis-testing.html#results-of-a-nhst-are-often-misinterpreted"><i class="fa fa-check"></i><b>12.4.3</b> Results of a NHST are often misinterpreted</a></li>
 </ul></li>
 <li class="chapter" data-level="12.5" data-path="introduction-to-bayesian-hypothesis-testing.html"><a href="introduction-to-bayesian-hypothesis-testing.html#to-bayes-or-not-to-bayes-a-pragmatic-view"><i class="fa fa-check"></i><b>12.5</b> To Bayes or not to Bayes? A pragmatic view</a></li>
-<li class="chapter" data-level="12.6" data-path="introduction-to-bayesian-hypothesis-testing.html"><a href="introduction-to-bayesian-hypothesis-testing.html#summary-3"><i class="fa fa-check"></i><b>12.6</b> “Summary”</a></li>
+<li class="chapter" data-level="12.6" data-path="introduction-to-bayesian-hypothesis-testing.html"><a href="introduction-to-bayesian-hypothesis-testing.html#summary-7"><i class="fa fa-check"></i><b>12.6</b> “Summary”</a></li>
 </ul></li>
 <li class="chapter" data-level="13" data-path="being-a-responsible-data-analyst.html"><a href="being-a-responsible-data-analyst.html"><i class="fa fa-check"></i><b>13</b> Being a responsible data analyst</a>
 <ul>
@@ -352,8 +377,295 @@
             <section class="normal" id="section-">
 <div id="repeated-measures-anova" class="section level1" number="10">
 <h1><span class="header-section-number">Chapter 10</span> Repeated-measures ANOVA</h1>
-<p>In this chapter, we will discuss how to deal with the non-independence of errors that can result from repeated measures of the same individual or other forms of groupings in the data.</p>
+<p>In this chapter, we will discuss how to deal with the non-independence of errors that can result from repeated measures of the same individual or other forms of groupings in the data, within the context of ANOVA analyses. The resulting class of models is known as repeated-measures ANOVA.</p>
+<div id="non-independence-in-linear-models" class="section level2" number="10.1">
+<h2><span class="header-section-number">10.1</span> Non-independence in linear models</h2>
+<p>The General Linear Model we have considered thus far can be stated as follows:</p>
+<p><span class="math display">\[Y_i = \beta_0 + \beta_1 \times X_{1,i} + \beta_2 \times X_{2,i} + \ldots + \beta_m \times X_{m,i} + \epsilon_i \quad \quad \quad \epsilon_i \sim \mathbf{Normal}(0,\sigma_\epsilon)\]</span>
+The assumptions of this model concern the residuals or errors <span class="math inline">\(\epsilon_i\)</span>. They are assumed to be <em>independent and identically distributed</em> (iid), following a Normal distribution with a mean of 0 and a standard deviation <span class="math inline">\(\sigma_\epsilon\)</span>.</p>
+<p>You can expect violations of the <em>iid</em> assumption if data are collected from “units of observation” that are clustered in groups. A common example of this in psychology is when you repeatedly observe behaviour from the same person.<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> For example, suppose participants in an experiment perform two tests to measure their working memory capacity. A person with a high working memory capacity would score high on both tests, whilst a person with a low working memory capacity would score low on both. That means that the scores in the two tests are correlated, and hence <em>not</em> independent. If the model does not adequately account for this, then the residuals (errors) would also not be independent.</p>
+<!-- As another example of dependency between model residuals, let's go back to the simplest version of the GLM, the model with just an intercept that was the focus of Chapter \@ref(ch-simple-GLM):
+\begin{equation}
+Y_i = \beta_0 + \epsilon_i
+(\#eq:simple-glm-ch08)
+\end{equation}
+Suppose the dependent variable $Y$ again reflects judgements of the height of Mount Everest, but that one of the labs in the ManyLabs study that collected the data, was based in Nepal. We might expect participants in Nepal to have a more accurate idea of the height of Mount Everest than participants in Poland (the country the participants were from in the subset of the data we considered in Chapter \@ref(ch-simple-GLM)). As a result, participants in Nepal would likely be less influenced by the low anchor than those with less knowledge of Mount Everest. If $\beta_0$ represents the mean judgement over all participants, then participants in Nepal would generally provide judgements which are higher than $\beta_0$ (i.e positive errors), whilst participants in Poland would generally provide judgements that are lower than $\beta_0$ (i.e. negative errors). If our model does not account for such grouping in the data, then the errors for cases from Nepal would be correlated, because all would tend to be positive. Similarly, the errors for cases from Poland would also be correlated, as all would tend to be negative. 
 
+What this example points to is that the simple model does not account for the fact that participants from different countries might have a different average judgement. As such, the model is misspecified. Here, that leads to dependent errors. Unfortunately, compared to violations of other assumptions, such as the normality assumption or the assumption of variance homogeneity, standard statistical procedures are usually _not_ robust to violations of the independence assumption [@kenny_consequences_1986;@judd_treating_2012]. They often lead to considerably increased Type I errors (i.e., false positives) and more generally can produce overconfident results (e.g., too narrow standard errors).
+
+In the example above, we could alleviate the problem of dependent errors by including an effect for country, using a contrast-coding predictor $X_1$ to reflect the difference between participants from Nepal ($X_1 = \tfrac{1}{2}$) and Poland ($X_1 = -\tfrac{1}{2}$) in an expanded model
+$$Y_i = \beta_0 + \beta_1 \times X_{1,i} + \epsilon_i$$
+This model would allow for a different mean judgement for cases from Nepal ($\beta_0 + \tfrac{1}{2} \times \beta_1$) and cases from Poland ($\beta_0 - \tfrac{1}{2} \times \beta_1$). Effectively, this is the strategy employed in repeated-measures ANOVA: include an additional grouping factor in the model.
+
+<!-- The assumption that the errors are independent means that knowing the value of the error for one case $i$ in the data does not give you any information to determine the value of the error for another case $j$. More formally, statistical independence is defined in terms of conditional probabilities. Remember when we discussed the rules of probability (Section \@ref(sec:02-rules-of-probability))? In particular, we used independence to state rule 7, which is a specific case of the multiplication rule (rule 6). We can define the distribution of the error for case $i$ as a conditional probability $p(\epsilon_i | \epsilon_i, X_{1,i}, \ldots, X_{m,i})$, where we conditionalise on all the predictor values, as well as another error term $\epsilon_j$. The errors are independent when 
+$$p(\epsilon_i | \epsilon_j, X_{1,i}, \ldots, X_{m,i}) = p(\epsilon_i |  X_{1,i}, \ldots, X_{m,i})$$
+i.e. the distribution of $\epsilon_i$, conditional upon knowing the value of the predictors and the error $\epsilon_j$ of another case $j$, is the same as the distribution conditional upon just knowing the value of the predictors. This means that error $\epsilon_j$ provides no information about the error $\epsilon_i$.
+-->
+</div>
+<div id="the-cheerleader-effect" class="section level2" number="10.2">
+<h2><span class="header-section-number">10.2</span> The cheerleader effect</h2>
+<p>The attractiveness of a person’s face is traditionally considered to be related to physical features, such as how symmetrical the features are, how close a face is to the “average” face over many people, and sexual dimorphism (whether a face looks exclusively male or female). However, there is also evidence that perceived facial attractiveness can vary due to factors outside of the face. In what has become known as the “cheerleader effect,” the same face is perceived to be more attractive when seen in a group, as compared to when it is seen alone. <span class="citation"><a href="#ref-walker2014hierarchical" role="doc-biblioref">Walker &amp; Vul</a> (<a href="#ref-walker2014hierarchical" role="doc-biblioref">2014</a>)</span> proposed that the cheerleader effect arises due to people encoding faces in a hierarchical manner. When presented with a group of faces, people encode the display by first calculating an average face for the group, and then encoding individual faces through deviations from the group average. As average faces tend to be perceived as more attractive than individual faces, this then results in each face in the group being perceived as more attractive, because the average part of the encoding is perceived as attractive.
+<span class="citation"><a href="#ref-carragher2019limited" role="doc-biblioref">Carragher, Thomas, Gwinn, &amp; Nicholls</a> (<a href="#ref-carragher2019limited" role="doc-biblioref">2019</a>)</span> set out to test this explanation. In one part of the study (Experiment 1), they let participants rate the attractiveness of a face when presented by itself (the Alone condition), as part of a group of different faces (the Different condition), or as part of a group of similar faces (the Similar condition). There were two variants of the latter condition, and participants encountered only one of them in the experiment. In the Identical condition, the group consisted of three copies of exactly the same photo. In the Variant condition, the group consisted of three different photos of the same face.<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a> The authors argued that if the hierarchical-encoding explanation for the cheerleader effect is true, then the cheerleader effect should not be observed in the Identical condition. This is because the average of three identical photos is just the photo itself, so there is no difference between an encoded average face and the face itself. In the Variant condition however, variability between the different photos of the same face might still lead to an average face which is more attractive than each individual face. This is an example of a 2 (version: Identical, Same) by 3 (condition: Alone, Different, or Similar) design. The first factor (Version) varied between people, and the second (Condition) within people (each participant rated a face in each of the three conditions). The rated attractiveness of the faces in the different conditions are provided in Figure <a href="repeated-measures-anova.html#fig:cheerleader-raincloud-plot">10.1</a>.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:cheerleader-raincloud-plot"></span>
+<img src="_main_files/figure-html/cheerleader-raincloud-plot-1.svg" alt="Attractiveness ratings for photo's of faces when presented alone, as part of a group of dissimilar faces (Control), or as part of a group of similar faces (Distractor), which are either identical (Identical-distractors) or different photos (Self-distractors) ofd the same face." width="672" />
+<p class="caption">
+Figure 10.1: Attractiveness ratings for photo’s of faces when presented alone, as part of a group of dissimilar faces (Control), or as part of a group of similar faces (Distractor), which are either identical (Identical-distractors) or different photos (Self-distractors) ofd the same face.
+</p>
+</div>
+</div>
+<div id="a-oneway-repeated-measures-anova" class="section level2" number="10.3">
+<h2><span class="header-section-number">10.3</span> A oneway repeated-measures ANOVA</h2>
+<p>To keep matters relatively simple, we will for now just consider participants in the Variant condition. That means that we can treat the study as a oneway design, with three levels (condition: Alone, Different, or Same) that all vary within-participants.</p>
+<p>Table <a href="repeated-measures-anova.html#tab:cheerleader-self-attractiveness-table">10.1</a> shows the attractiveness ratings for 10 participants in the Variant condition. You can see there that when a participant rates a face as relatively attractive when presented alone, (s)he also tends to rate the face as relatively attractive when shown in a group of faces. Some participants (e.g. participant 37) rate the face as relatively unattractive in all conditions. This indicates individual differences in how attractive people find a face. People’s tastes differ. Whilst that may be interesting in its own right, for the purposes of the experiment, we do not care about such individual differences. What we want to know is whether the attractiveness of a face increases when presented as part of a group.</p>
+<table>
+<caption><span id="tab:cheerleader-self-attractiveness-table">Table 10.1: </span>Attractiveness ratings in the Alone, Different, and Same condition for 10 participants in the Variant condition. Also shown is the average over the three ratings for each participant.</caption>
+<thead>
+<tr class="header">
+<th align="left">Participant</th>
+<th align="right">Alone</th>
+<th align="right">Different</th>
+<th align="right">Same</th>
+<th align="right">Average</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">36</td>
+<td align="right">56.3</td>
+<td align="right">55.9</td>
+<td align="right">54.3</td>
+<td align="right">55.5</td>
+</tr>
+<tr class="even">
+<td align="left">37</td>
+<td align="right">13.3</td>
+<td align="right">13.5</td>
+<td align="right">11.6</td>
+<td align="right">12.8</td>
+</tr>
+<tr class="odd">
+<td align="left">39</td>
+<td align="right">49.8</td>
+<td align="right">49.8</td>
+<td align="right">51.2</td>
+<td align="right">50.3</td>
+</tr>
+<tr class="even">
+<td align="left">40</td>
+<td align="right">47.1</td>
+<td align="right">52.5</td>
+<td align="right">53.2</td>
+<td align="right">50.9</td>
+</tr>
+<tr class="odd">
+<td align="left">41</td>
+<td align="right">38.9</td>
+<td align="right">41.6</td>
+<td align="right">42.1</td>
+<td align="right">40.9</td>
+</tr>
+<tr class="even">
+<td align="left">42</td>
+<td align="right">60.0</td>
+<td align="right">58.9</td>
+<td align="right">59.5</td>
+<td align="right">59.5</td>
+</tr>
+<tr class="odd">
+<td align="left">44</td>
+<td align="right">44.7</td>
+<td align="right">47.0</td>
+<td align="right">50.5</td>
+<td align="right">47.4</td>
+</tr>
+<tr class="even">
+<td align="left">45</td>
+<td align="right">45.2</td>
+<td align="right">43.9</td>
+<td align="right">46.2</td>
+<td align="right">45.1</td>
+</tr>
+<tr class="odd">
+<td align="left">46</td>
+<td align="right">36.8</td>
+<td align="right">37.3</td>
+<td align="right">35.8</td>
+<td align="right">36.6</td>
+</tr>
+<tr class="even">
+<td align="left">47</td>
+<td align="right">53.8</td>
+<td align="right">52.7</td>
+<td align="right">52.9</td>
+<td align="right">53.1</td>
+</tr>
+</tbody>
+</table>
+<p>To answer this question, we should however take individual differences into account. If we were to (wrongly!) treat all ratings as independent, and analyse the data with a regular oneway ANOVA, we would obtain the results in Table <a href="repeated-measures-anova.html#tab:cheerleader-oneway-ANOVA-results">10.2</a>. As you can see, this analysis indicates there is no effect of presenting a face alone or in a group.</p>
+<table>
+<caption><span id="tab:cheerleader-oneway-ANOVA-results">Table 10.2: </span>Linear model predicting attractiveness ratings in the three conditions, wrongly assuming independence. Effect-coding was used for Condition.</caption>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="right"><span class="math inline">\(\hat{\beta}\)</span></th>
+<th align="right"><span class="math inline">\(\text{SS}\)</span></th>
+<th align="right"><span class="math inline">\(\text{df}\)</span></th>
+<th align="right"><span class="math inline">\(F\)</span></th>
+<th align="right"><span class="math inline">\(P(\geq \lvert F \rvert)\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Intercept</td>
+<td align="right">47.426</td>
+<td align="right">2.09e+05</td>
+<td align="right">1</td>
+<td align="right">2062.611</td>
+<td align="right">0.000</td>
+</tr>
+<tr class="even">
+<td align="left">Condition</td>
+<td align="right"></td>
+<td align="right">3.55e+01</td>
+<td align="right">2</td>
+<td align="right">0.175</td>
+<td align="right">0.840</td>
+</tr>
+<tr class="odd">
+<td align="left"><span class="math inline">\(\quad X_1\)</span> (Control)</td>
+<td align="right">0.338</td>
+<td align="right">5.32e+00</td>
+<td align="right">1</td>
+<td align="right">0.052</td>
+<td align="right">0.819</td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline">\(\quad X_2\)</span> (Distractor)</td>
+<td align="right">0.529</td>
+<td align="right">1.30e+01</td>
+<td align="right">1</td>
+<td align="right">0.128</td>
+<td align="right">0.721</td>
+</tr>
+<tr class="odd">
+<td align="left">Error</td>
+<td align="right"></td>
+<td align="right">9.13e+03</td>
+<td align="right">90</td>
+<td align="right"></td>
+<td align="right"></td>
+</tr>
+</tbody>
+</table>
+<p>The problem in this analysis is that it ignores the (sometimes rather large) differences between participants in how attractive they find a face on average (i.e. over the three conditions). This individual variability makes the ratings within each condition also highly variable. By ignoring that we have repeated measures for each participant, the model errors are the differences between each rating in a condition, and the average in that condition. If we let <span class="math inline">\(Y_{i,j}\)</span> denote a response by person <span class="math inline">\(i\)</span> in condition <span class="math inline">\(j\)</span>, the errors in this model are <span class="math inline">\(\hat{\epsilon}_{i,j} = Y_{i,j} - \overline{Y}_{\cdot,j}\)</span>. But, if you go back to Table <a href="repeated-measures-anova.html#tab:cheerleader-self-attractiveness-table">10.1</a>, you might realise that we can much more specific in considering what the effect of displaying a face in a group is. For each participant, we could consider whether the rating in e.g. the Control condition is higher than the rating in the Alone condition. For participant 36, the rating in the Control condition is a little lower than their rating in the Alone condition, and for participant 37, it is a little higher. We can then ask the question whether these differences are, on average, positive (indicating increased attractiveness) or negative (indicating decreased attractiveness). We could perform such an analysis by first computing difference scores, and then using a one-sample t-test to assess whether the difference scores are on average different from 0. We could do this for any pair of conditions, but that might result in a large number of tests. A repeated-measures ANOVA allows us to to essentially this within a single analysis.</p>
+<div id="including-effects-for-participants" class="section level3" number="10.3.1">
+<h3><span class="header-section-number">10.3.1</span> Including effects for participants</h3>
+<p>We can state an ANOVA model as
+<!--
+\begin{equation}
+Y_{i,j} = \mu + \tau^{(P)}_i + \tau^{(A)}_j + \epsilon_{i,j}
+(\#eq:glm-oneway-RM-ANOVA-model)
+\end{equation}
+But this assumes that the effect of a treatment $j$ is the same for all
+individuals $i$. If we would allow the effect of a treatment to be different
+for participants, that would amount to including an interaction term (the 
+effect of treatment $j$ is moderated by individual $i$). This could be stated as
+-->
+<span class="math display" id="eq:one-RM-ANOVA-model-ch08">\[\begin{equation}
+Y_{i,j} = \mu + \pi_i + \tau_j + (\pi \tau)_{i,j} + \epsilon_{i,j}
+\tag{10.1}
+\end{equation}\]</span>
+There is one complication, however. We only have a single observation for each combination of person and condition. That means that the average for each combination of person and condition, which is what the model predicts, equals the observation <span class="math inline">\(Y_{i,j}\)</span>. As such, the errors in this model would all be equal to <span class="math inline">\(\epsilon_{i,j} = 0\)</span>. Our model would fit the data perfectly!</p>
+<p>Although you might think that a perfectly fitting model is ideal (why wouldn’t you be happy when a model predicts the data perfectly?), that is far from the case here. Let’s consider the number of parameters in the model. If we have <span class="math inline">\(P\)</span> people, and <span class="math inline">\(A\)</span> levels for condition, our model estimates <span class="math inline">\(1 + (P-1) + (A-1) + (P-1)\times(A-1) = P \times A\)</span> parameters, which is equal to the total number of observations <span class="math inline">\(n = P \times A\)</span>. A model with as many parameters as observations is bound to <em>overfit</em> the data.</p>
+<p>While the model specified in Equation <a href="repeated-measures-anova.html#eq:one-RM-ANOVA-model-ch08">(10.1)</a> makes sense, in practice, we can not distinguish between the interaction term <span class="math inline">\(\tau^{(P\times A)}_{i,j}\)</span> and the error term <span class="math inline">\(\epsilon_{i,j}\)</span>. To signify this, we could rewrite the model as
+<span class="math display">\[\begin{equation}
+Y_{i,j} = \mu + \tau^{(P)}_i + \tau^{(A)}_j + (\tau^{(P\times A)} + \epsilon)_{i,j}
+\end{equation}\]</span></p>
+<!--
+both $\tau_{i,j}$ and $\epsilon_{i,j}$ target the same difference between observation $Y_{i,j}$ and $\mu + \tau^{(P)}_i + \tau^{(A)}_j$. Whilst it is straightforward to compute this difference
+$$Y_{i,j} - (\mu + \tau^{(P)}_i + \tau^{(A)}_j)$$
+we cannot determine which part of this belongs to $\tau^{(P\times A)}_{i,j}$, and which part to $\epsilon_{i,j}$.
+-->
+<!-- It's like a pizza,  where some part is yours, and some part belongs to a random stranger. Halves may seem fair, but what if you haven't eaten for days, and perhaps the stranger is starving. Without knowing anything else, it could be just as fair to give on person everything and the other nothing, as splitting in equal halves. The right way to split is, in that case, indeterminate. When two terms in an equation "fight" for the same slice of the pie, that is similar. There is no way to  determine what belongs to what. -->
+<p>To test for the main effect of experimental factor <span class="math inline">\(A\)</span>, we can compare the full model to a reduced model where we set <span class="math inline">\(\tau^{(A)}_j = 0\)</span> for all <span class="math inline">\(j\)</span>. This provides MODEL R:
+<span class="math display">\[\begin{equation}
+Y_{i,j} = \mu + \tau^{(P)}_i + (\tau^{(P\times A)} + \epsilon)_{i,j}
+\end{equation}\]</span></p>
+<p>You might wonder if you can or should also test for the main effect of persons (P). The short answer is: no. The longer answer is that the inability to distinguish between the interaction term <span class="math inline">\(\tau^{(P\times A)}_{i,j}\)</span> and the error term <span class="math inline">\(\epsilon_{i,j}\)</span> affects the estimates of the person effects <span class="math inline">\(\hat{\tau}^{(P)}_i\)</span> and treatment effects <span class="math inline">\(\hat{\tau}^{(A)}_j\)</span> differently. Whilst the variance of the sampling distribution of the estimates of the treatment effects <span class="math inline">\(\hat{\tau}^{(A)}_j\)</span> depends on both the variance in the interaction term <span class="math inline">\(\tau^{(P\times A)}_{i,j}\)</span> and the error term <span class="math inline">\(\epsilon_{i,j}\)</span>, the variance of the sampling distribution of the person effects depends only on the variance of the error term <span class="math inline">\(\epsilon_{i,j}\)</span>. Intuitively, you might think of this as follows: whilst the treatment effects may differ between persons (as reflected in the interaction term <span class="math inline">\(\tau^{(P\times A)}_{i,j}\)</span>), these deviations from the average treatment effects (as reflected in the treatment term <span class="math inline">\(\tau^{(A)}_{j}\)</span>) are random, and will cancel each other out.</p>
+<p>involves me telling you why, and requires us first to consider the difference between fixed and random effects.</p>
+</div>
+<div id="fixed-vs-random-effects" class="section level3" number="10.3.2">
+<h3><span class="header-section-number">10.3.2</span> Fixed vs random effects</h3>
+<p>A set of participants in a study is generally a sample from a (much) larger population of potential participants. Insofar as we are interested in differences between participants (i.e., an effect of P), we are not so much interested in whether there are differences between the actual participants included in the study, but whether there are differences between the people in the whole population. In other words, we would like to infer from variability between participants in a study whether there are differences between people in the population of interest. That means we want to generalize person effects in a particular sample of participants to person effects in the general population. To make such a leap from sample to population, we need a DGP for person effects, and commonly we might assume that each person effect is drawn from a Normal distribution:
+<span class="math display">\[\tau_i^{(P)} \sim \mathbf{Normal}(0,\sigma_\text{P})\]</span>
+Our objective here is to estimate the variability between persons, i.e. <span class="math inline">\(\sigma_\text{P}\)</span>, and <em>not</em> to estimate each <span class="math inline">\(\tau^{P}_i\)</span> as precisely as possible.</p>
+<p>The generalization problem for fixed effects (experimental manipulations) is different: our objective is to infer from a sample what effect precisely these experimental manipulations will have in the whole population. The objective here is to get the most precise estimation of each <span class="math inline">\(\tau_j^{(A)}\)</span>.</p>
+</div>
+</div>
+<div id="assumptions-1" class="section level2" number="10.4">
+<h2><span class="header-section-number">10.4</span> Assumptions</h2>
+<div id="sphericity" class="section level3" number="10.4.1">
+<h3><span class="header-section-number">10.4.1</span> Sphericity</h3>
+<p><span class="math display">\[\Sigma = \left[ \begin{matrix} \sigma_1^2 &amp; \sigma_{12} &amp; \sigma_{13} \\ \sigma_{21} &amp; \sigma_2^2 &amp; \sigma_{23} \\ \sigma_{31} &amp; \sigma_{32} &amp; \sigma_3^2 \end{matrix} \right]\]</span>
+So homogeneity of variance means
+<span class="math display">\[\sigma_1^2 = \sigma_2^2 = \sigma_3^2\]</span>
+For repeated-measures analyses, an additional assumption is necessary for the covariances, namely that of <strong>sphericity</strong>. This assumption means that the <em>variances of all pairwise differences are equal</em>. The variance of a pairwise difference between two (possibly correlated) variables <span class="math inline">\(Y_1\)</span> and <span class="math inline">\(Y_2\)</span> is <span class="math inline">\(\sigma_1^2 + \sigma_2^2 - 2 \sigma_{12}\)</span>, i.e. the sum of the variances of the two variables, minus twice the covariance. Hence, the assumption of sphericity can be stated as:
+<span class="math display">\[\sigma_j^2 + \sigma_k^2 - 2\sigma_{jk} = \sigma_{l}^2 + \sigma_{m}^2 - 2 \sigma_{lm} \quad \quad \text{for all } j,k,l,m\]</span>
+For example, for three variables, there are 3 pairwise differences, and hence the assumption is</p>
+<p><span class="math display">\[\sigma_1^2 + \sigma_2^2 - 2\sigma_{12} = \sigma_{1}^2 + \sigma_{3}^2 - 2 \sigma_{13} = \sigma_{2}^2 + \sigma_{3}^2 - 2 \sigma_{23}\]</span>
+If that seems like a complicated and stringent assumption: it is! And it is not that easy to check. Sphericity holds when a more stringent condition, called <strong>compound symmetry</strong> holds. Compound symmetry means that all variances are identical to each other, and all covariances are identical to each other.</p>
+</div>
+<div id="correcting-for-non-sphericity" class="section level3" number="10.4.2">
+<h3><span class="header-section-number">10.4.2</span> Correcting for non-sphericity</h3>
+<p>The assumption of</p>
+<p>When the assumption of sphericity does <em>not</em> hold (the assumption is violated) the <span class="math inline">\(F\)</span>-statistic still follows an <span class="math inline">\(F\)</span> distribution, but with a smaller value for <span class="math inline">\(\text{df}_1\)</span> and <span class="math inline">\(\text{df}_2\)</span> than usual. The correct degrees of freedom can be stated as <span class="math inline">\(\zeta \times \text{df}_1\)</span> and <span class="math inline">\(\zeta \times \text{df}_2\)</span>, where <span class="math inline">\(0 \geq \zeta \geq 1\)</span> is a correction fraction.<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a> Whilst the value of <span class="math inline">\(\zeta\)</span> depends on the true (co)variances underlying the data, it’s value can be estimated. The Greenhouse-Geisser estimate. Huynh and Feldt showed that, if the true value is close to or higher than <span class="math inline">\(\zeta = 0.75\)</span>, the Greenhouse-Geisser correction tends to be too conservative. They suggested a correction which provides an upward-adjusted estimate of <span class="math inline">\(\zeta\)</span>, which will increase the power of the tests. Howell suggests to use the Huynh-Feldt correction when the Greenhouse-Geisser estimate of <span class="math inline">\(\zeta\)</span> is close to or higher than <span class="math inline">\(\hat{\zeta} = 0.75\)</span>.</p>
+<p>A statistical test for the assumption of sphericity was developed by Mauchly (1940) and is known as Mauchly’s sphericity test. Whilst routinely provided by statistical software, it is not an ideal test, as it rests strongly on the assumption of normality and it commonly has low power. Rather than only correcting the degrees of freedom after a significant Mauchly test, one might consider <em>always</em> adjusting the degrees of freedom according to the Greenhouse-Geisser or Huynh-Feldt correction (whichever is deemed more appropriate).</p>
+</div>
+</div>
+<div id="effect-size-1" class="section level2" number="10.5">
+<h2><span class="header-section-number">10.5</span> Effect size</h2>
+</div>
+<div id="mixed-anova-with-between-and-within-factors" class="section level2" number="10.6">
+<h2><span class="header-section-number">10.6</span> Mixed ANOVA with between and within factors</h2>
+<p><span class="math display" id="eq:glm-mixed-RM-ANOVA-model">\[\begin{equation}
+Y_{i,j,k} = \mu + \tau^{(P)}_i + \tau^{(A)}_j + \tau^{(B)}_k + \tau^{(P \times A)}_{i,j} + \tau^{(P \times B)}_{i,k} + \tau^{(A \times B)}_{j,k} + \epsilon_{i,j,k}
+\tag{10.2}
+\end{equation}\]</span>
+Note that we are excluding the three-way interaction term <span class="math inline">\(\tau^{(P \times A \times B)}_{i,j,k}\)</span> as again, this can not be distinguished from the error term <span class="math inline">\(\epsilon_{i,j,k}\)</span>.</p>
+</div>
+<div id="in-practice-4" class="section level2" number="10.7">
+<h2><span class="header-section-number">10.7</span> In practice</h2>
+<div id="defining-and-estimating-the-model" class="section level3" number="10.7.1">
+<h3><span class="header-section-number">10.7.1</span> Defining and estimating the model</h3>
+</div>
+<div id="assessing-the-assumptions" class="section level3" number="10.7.2">
+<h3><span class="header-section-number">10.7.2</span> Assessing the assumptions</h3>
+</div>
+<div id="reporting-the-results" class="section level3" number="10.7.3">
+<h3><span class="header-section-number">10.7.3</span> Reporting the results</h3>
+</div>
+</div>
+<div id="summary-6" class="section level2" number="10.8">
+<h2><span class="header-section-number">10.8</span> Summary</h2>
+
+</div>
+</div>
+<h3>References</h3>
+<div id="refs" class="references csl-bib-body hanging-indent" line-spacing="2">
+<div id="ref-carragher2019limited" class="csl-entry">
+Carragher, D. J., Thomas, N. A., Gwinn, O. S., &amp; Nicholls, M. E. (2019). Limited evidence of hierarchical encoding in the cheerleader effect. <em>Scientific Reports</em>, <em>9</em>, 1–13.
+</div>
+<div id="ref-walker2014hierarchical" class="csl-entry">
+Walker, D., &amp; Vul, E. (2014). Hierarchical encoding makes individuals in a group seem more attractive. <em>Psychological Science</em>, <em>25</em>, 230–235.
+</div>
+</div>
+<div class="footnotes">
+<hr />
+<ol start="1">
+<li id="fn1"><p>Other examples of such clustering in data are when data is collected in group settings, such as students within classrooms, or patients within hospitals. In such situations one could expect again that observations within each cluster (i.e., a specific group, classroom, or hospital) are more similar to each other than observations across clusters.<a href="repeated-measures-anova.html#fnref1" class="footnote-back">↩︎</a></p></li>
+<li id="fn2"><p><span class="citation"><a href="#ref-carragher2019limited" role="doc-biblioref">Carragher et al.</a> (<a href="#ref-carragher2019limited" role="doc-biblioref">2019</a>)</span> use different names for the conditions. They call the Different condition the Control condition, the Similar condition the Distractor condition, the Identical condition the Identical-distractors condition, and the Variant condition the Self-distractors condition.<a href="repeated-measures-anova.html#fnref2" class="footnote-back">↩︎</a></p></li>
+<li id="fn3"><p>The correction factor is usually denoted by <span class="math inline">\(\epsilon\)</span>, but I’m using <span class="math inline">\(\zeta\)</span> (“zeta”) as we are already using <span class="math inline">\(\epsilon\)</span> for the error terms.<a href="repeated-measures-anova.html#fnref3" class="footnote-back">↩︎</a></p></li>
+</ol>
 </div>
             </section>
 
@@ -365,7 +677,6 @@
     </div>
   </div>
 <script src="book_assets/gitbook-2.6.7/js/app.min.js"></script>
-<script src="book_assets/gitbook-2.6.7/js/lunr.js"></script>
 <script src="book_assets/gitbook-2.6.7/js/clipboard.min.js"></script>
 <script src="book_assets/gitbook-2.6.7/js/plugin-search.js"></script>
 <script src="book_assets/gitbook-2.6.7/js/plugin-sharing.js"></script>
@@ -384,6 +695,7 @@ gitbook.start({
 "weibo": false,
 "instapaper": false,
 "vk": false,
+"whatsapp": false,
 "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
 },
 "fontsettings": {
@@ -401,11 +713,14 @@ gitbook.start({
 "text": null
 },
 "download": null,
+"search": {
+"engine": "fuse",
+"options": null
+},
 "toc": {
 "collapse": "subsection"
 },
-"source": null,
-"search": true
+"source": null
 });
 });
 </script>

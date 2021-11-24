@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>References | Statistics: Data analysis and modelling</title>
   <meta name="description" content="A book about statistics for data analysis, with a main focus on statistical modelling." />
-  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
 
   <meta property="og:title" content="References | Statistics: Data analysis and modelling" />
   <meta property="og:type" content="book" />
@@ -24,7 +24,7 @@
 <meta name="author" content="Maarten Speekenbrink" />
 
 
-<meta name="date" content="2021-11-17" />
+<meta name="date" content="2021-11-24" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -33,8 +33,9 @@
   
 <link rel="prev" href="being-a-responsible-data-analyst.html"/>
 
-<script src="book_assets/header-attrs-2.7/header-attrs.js"></script>
-<script src="book_assets/jquery-3.5.1/jquery.min.js"></script>
+<script src="book_assets/header-attrs-2.11/header-attrs.js"></script>
+<script src="book_assets/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="book_assets/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="book_assets/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
 <link href="book_assets/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -50,40 +51,66 @@
 
 
 
-
-<script src="book_assets/htmlwidgets-1.5.3/htmlwidgets.js"></script>
+<link href="book_assets/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="book_assets/anchor-sections-1.0.1/anchor-sections.js"></script>
+<script src="book_assets/htmlwidgets-1.5.4/htmlwidgets.js"></script>
 <script src="book_assets/viz-1.8.2/viz.js"></script>
 <link href="book_assets/DiagrammeR-styles-0.2/styles.css" rel="stylesheet" />
 <script src="book_assets/grViz-binding-1.0.6.1/grViz.js"></script>
-<script src="book_assets/plotly-binding-4.9.3/plotly.js"></script>
+<script src="book_assets/plotly-binding-4.10.0/plotly.js"></script>
 <script src="book_assets/typedarray-0.1/typedarray.min.js"></script>
-<link href="book_assets/crosstalk-1.1.1/css/crosstalk.css" rel="stylesheet" />
-<script src="book_assets/crosstalk-1.1.1/js/crosstalk.min.js"></script>
-<link href="book_assets/plotly-htmlwidgets-css-1.57.1/plotly-htmlwidgets.css" rel="stylesheet" />
-<script src="book_assets/plotly-main-1.57.1/plotly-latest.min.js"></script>
+<link href="book_assets/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet" />
+<script src="book_assets/crosstalk-1.2.0/js/crosstalk.min.js"></script>
+<link href="book_assets/plotly-htmlwidgets-css-2.5.1/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="book_assets/plotly-main-2.5.1/plotly-latest.min.js"></script>
 <link href="book_assets/combineWidgetStyle-0.1/combineWidgets.css" rel="stylesheet" />
-<script src="book_assets/combineWidgets-binding-0.10.1/combineWidgets.js"></script>
-<script src="book_assets/rglWebGL-binding-0.106.6/rglWebGL.js"></script>
-<link href="book_assets/rglwidgetClass-0.106.6/rgl.css" rel="stylesheet" />
-<script src="book_assets/rglwidgetClass-0.106.6/rglClass.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.106.6/utils.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.106.6/subscenes.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.106.6/shaders.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.106.6/textures.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.106.6/projection.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.106.6/mouse.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.106.6/init.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.106.6/pieces.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.106.6/draw.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.106.6/controls.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.106.6/selection.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.106.6/rglTimer.src.js"></script>
-<script src="book_assets/CanvasMatrix4-0.106.6/CanvasMatrix.src.js"></script>
-<script src="book_assets/rglPlayer-binding-0.106.6/rglPlayer.js"></script>
+<script src="book_assets/combineWidgets-binding-0.11.1/combineWidgets.js"></script>
+<script src="book_assets/rglWebGL-binding-0.107.14/rglWebGL.js"></script>
+<link href="book_assets/rglwidgetClass-0.107.14/rgl.css" rel="stylesheet" />
+<script src="book_assets/rglwidgetClass-0.107.14/rglClass.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/utils.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/subscenes.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/shaders.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/textures.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/projection.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/mouse.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/init.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/pieces.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/draw.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/controls.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/selection.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/rglTimer.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/pretty.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/axes.src.js"></script>
+<script src="book_assets/CanvasMatrix4-0.107.14/CanvasMatrix.src.js"></script>
+<script src="book_assets/rglPlayer-binding-0.107.14/rglPlayer.js"></script>
 <script src="book_assets/kePrint-0.0.1/kePrint.js"></script>
 <link href="book_assets/lightable-0.0.1/lightable.css" rel="stylesheet" />
 
 
+
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
 
 <link rel="stylesheet" href="style.css" type="text/css" />
 </head>
@@ -283,10 +310,29 @@
 <li class="chapter" data-level="9.7" data-path="mixing-categorical-and-metric-predictors-ancova.html"><a href="mixing-categorical-and-metric-predictors-ancova.html#mediation-with-categorical-independent-variables"><i class="fa fa-check"></i><b>9.7</b> Mediation with categorical independent variables</a></li>
 <li class="chapter" data-level="9.8" data-path="mixing-categorical-and-metric-predictors-ancova.html"><a href="mixing-categorical-and-metric-predictors-ancova.html#ancova-vs-difference-scores"><i class="fa fa-check"></i><b>9.8</b> ANCOVA vs difference scores</a></li>
 </ul></li>
-<li class="chapter" data-level="10" data-path="repeated-measures-anova.html"><a href="repeated-measures-anova.html"><i class="fa fa-check"></i><b>10</b> Repeated-measures ANOVA</a></li>
+<li class="chapter" data-level="10" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html"><i class="fa fa-check"></i><b>10</b> Repeated-measures ANOVA</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#non-independence-in-linear-models"><i class="fa fa-check"></i><b>10.1</b> Non-independence in linear models</a></li>
+<li class="chapter" data-level="10.2" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#the-cheerleader-effect"><i class="fa fa-check"></i><b>10.2</b> The cheerleader effect</a></li>
+<li class="chapter" data-level="10.3" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#as-a-oneway-anova"><i class="fa fa-check"></i><b>10.3</b> As a oneway ANOVA</a></li>
+<li class="chapter" data-level="10.4" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#oneway-repeated-measures-anova"><i class="fa fa-check"></i><b>10.4</b> Oneway repeated-measures ANOVA</a>
+<ul>
+<li class="chapter" data-level="10.4.1" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#within-subjects-composite-scores"><i class="fa fa-check"></i><b>10.4.1</b> Within-subjects composite scores</a></li>
+<li class="chapter" data-level="10.4.2" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#a-composite-for-between-subjects-effects"><i class="fa fa-check"></i><b>10.4.2</b> A composite for between-subjects effects</a></li>
+<li class="chapter" data-level="10.4.3" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#collecting-all-results-and-omnibus-tests"><i class="fa fa-check"></i><b>10.4.3</b> Collecting all results and omnibus tests</a></li>
+</ul></li>
+<li class="chapter" data-level="10.5" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#partitioning-the-variance"><i class="fa fa-check"></i><b>10.5</b> Partitioning the variance</a></li>
+<li class="chapter" data-level="10.6" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#a-mixed-anova-with-between--and-within-subjects-effects"><i class="fa fa-check"></i><b>10.6</b> A mixed ANOVA with between- and within-subjects effects</a></li>
+<li class="chapter" data-level="10.7" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#assumptions-1"><i class="fa fa-check"></i><b>10.7</b> Assumptions</a>
+<ul>
+<li class="chapter" data-level="10.7.1" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#omnibus-tests-and-sphericity"><i class="fa fa-check"></i><b>10.7.1</b> Omnibus tests and sphericity</a></li>
+<li class="chapter" data-level="10.7.2" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#correcting-for-non-sphericity"><i class="fa fa-check"></i><b>10.7.2</b> Correcting for non-sphericity</a></li>
+</ul></li>
+<li class="chapter" data-level="10.8" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#in-practice-4"><i class="fa fa-check"></i><b>10.8</b> In practice</a></li>
+</ul></li>
 <li class="chapter" data-level="11" data-path="linear-mixed-effects-models.html"><a href="linear-mixed-effects-models.html"><i class="fa fa-check"></i><b>11</b> Linear mixed-effects models</a>
 <ul>
-<li class="chapter" data-level="11.1" data-path="linear-mixed-effects-models.html"><a href="linear-mixed-effects-models.html#non-independence-in-linear-models"><i class="fa fa-check"></i><b>11.1</b> Non-independence in linear models</a></li>
+<li class="chapter" data-level="11.1" data-path="linear-mixed-effects-models.html"><a href="linear-mixed-effects-models.html#non-independence-in-linear-models-1"><i class="fa fa-check"></i><b>11.1</b> Non-independence in linear models</a></li>
 <li class="chapter" data-level="11.2" data-path="linear-mixed-effects-models.html"><a href="linear-mixed-effects-models.html#random-intercept-models"><i class="fa fa-check"></i><b>11.2</b> Random intercept models</a></li>
 <li class="chapter" data-level="11.3" data-path="linear-mixed-effects-models.html"><a href="linear-mixed-effects-models.html#parameter-estimation-1"><i class="fa fa-check"></i><b>11.3</b> Parameter estimation</a></li>
 <li class="chapter" data-level="11.4" data-path="linear-mixed-effects-models.html"><a href="linear-mixed-effects-models.html#parameter-inference"><i class="fa fa-check"></i><b>11.4</b> Parameter inference</a></li>
@@ -354,182 +400,201 @@
 <h1>References</h1>
 
 <div id="refs" class="references csl-bib-body hanging-indent" line-spacing="2">
-<div id="ref-ajzen1991theory" class="csl-entry">
+<div class="csl-entry">
 Ajzen, I. (1991). The theory of planned behavior. <em>Organizational Behavior and Human Decision Processes</em>, <em>50</em>, 179–211.
 </div>
-<div id="ref-allen2019raincloud" class="csl-entry">
+<div class="csl-entry">
 Allen, M., Poggiali, D., Whitaker, K., Marshall, T. R., &amp; Kievit, R. A. (2019). Raincloud plots: A multi-platform tool for robust data visualization [version 1; peer review: 2 approved]. <em>Wellcome Open Research</em>, <em>4</em>. <a href="https://doi.org/10.12688/wellcomeopenres.15191.1">https://doi.org/10.12688/wellcomeopenres.15191.1</a>
 </div>
-<div id="ref-apa2020publication" class="csl-entry">
+<div class="csl-entry">
 American Psychological Association. (2020). <em>Publication manual of the <span>A</span>merican <span>P</span>sychological <span>A</span>ssociation</em> (7th ed). Washington, DC: American Psychological Association.
 </div>
-<div id="ref-baron1986moderator" class="csl-entry">
+<div class="csl-entry">
 Baron, R. M., &amp; Kenny, D. A. (1986). The moderator–mediator variable distinction in social psychological research: Conceptual, strategic, and statistical considerations. <em>Journal of Personality and Social Psychology</em>, <em>51</em>, 1173.
 </div>
-<div id="ref-barr_random_2013-1" class="csl-entry">
+<div class="csl-entry">
 Barr, D. J., Levy, R., Scheepers, C., &amp; Tily, H. J. (2013). Random effects structure for confirmatory hypothesis testing: Keep it maximal. <em>Journal of Memory and Language</em>, <em>68</em>, 255–278.
 </div>
-<div id="ref-bates_parsimonious_2015" class="csl-entry">
+<div class="csl-entry">
 Bates, D., Kliegl, R., Vasishth, S., &amp; Baayen, H. (2015). Parsimonious mixed models. <em><span>arXiv:1506.04967</span> [Stat]</em>.
 </div>
-<div id="ref-bayes1763" class="csl-entry">
+<div class="csl-entry">
 Bayes, T. (1763). An essay towards solving a problem in the doctrine of chances. <em>Philosophical Transactions of the Royal Society of London</em>, <em>53</em>, 370–418.
 </div>
-<div id="ref-berger1988likelihood" class="csl-entry">
+<div class="csl-entry">
 Berger, J. O., &amp; Wolpert, R. L. (1988). <em>The likelihood principle</em>. Hayward, CA: Institute of Mathematical Statistics.
 </div>
-<div id="ref-box1954some" class="csl-entry">
+<div class="csl-entry">
 Box, G. E. (1954). Some theorems on quadratic forms applied in the study of analysis of variance problems, i. Effect of inequality of variance in the one-way classification. <em>The Annals of Mathematical Statistics</em>, 290–302.
 </div>
-<div id="ref-Box1987" class="csl-entry">
+<div class="csl-entry">
 Box, G. E. P., &amp; Draper, N. R. (1987). <em>Empirical model-building and response surfaces</em>. New York, NY: John Wiley &amp; Sons.
 </div>
-<div id="ref-cohen1988statistical" class="csl-entry">
+<div class="csl-entry">
+Carragher, D. J., Thomas, N. A., Gwinn, O. S., &amp; Nicholls, M. E. (2019). Limited evidence of hierarchical encoding in the cheerleader effect. <em>Scientific Reports</em>, <em>9</em>, 1–13.
+</div>
+<div class="csl-entry">
 Cohen, J. (1988). <em>Statistical power analysis for the behavioral sciences</em>. Lawrence Erlbaum Associates.
 </div>
-<div id="ref-Cohen94" class="csl-entry">
+<div class="csl-entry">
 Cohen, J. (1994). The earth is round (p&lt;. 05). <em>American Psychologist</em>, <em>49</em>, 997–1003.
 </div>
-<div id="ref-cumming2014new" class="csl-entry">
+<div class="csl-entry">
 Cumming, G. (2014). The new statistics: Why and how. <em>Psychological Science</em>, <em>25</em>, 7–29.
 </div>
-<div id="ref-davison1997bootstrap" class="csl-entry">
+<div class="csl-entry">
 Davison, A. C., &amp; Hinkley, D. V. (1997). <em>Bootstrap methods and their application</em>. Cambridge university press.
 </div>
-<div id="ref-fisman2006gender" class="csl-entry">
+<div class="csl-entry">
 Fisman, R., Iyengar, S. S., Kamenica, E., &amp; Simonson, I. (2006). Gender differences in mate selection: Evidence from a speed dating experiment. <em>The Quarterly Journal of Economics</em>, <em>121</em>, 673–697.
 </div>
-<div id="ref-galton1907vox" class="csl-entry">
+<div class="csl-entry">
 Galton, F. (1907). Vox populi. <em>Nature</em>, <em>75</em>, 450--451.
 </div>
-<div id="ref-gelman2013garden" class="csl-entry">
+<div class="csl-entry">
 Gelman, A., &amp; Loken, E. (2013). <em>The garden of forking paths: Why multiple comparisons can be a problem, even when there is no "fishing expedition" or "p-hacking" and the research hypothesis was posited ahead of time</em>. Department of Statistics, Columbia University.
 </div>
-<div id="ref-gilder2018role" class="csl-entry">
+<div class="csl-entry">
 Gilder, T. S. E., &amp; Heerey, E. A. (2018). The role of experimenter belief in social priming. <em>Psychological Science</em>, <em>29</em>, 403–417.
 </div>
-<div id="ref-hoerl1970ridge" class="csl-entry">
+<div class="csl-entry">
+Greenhouse, S. W., &amp; Geisser, S. (1959). On methods in the analysis of profile data. <em>Psychometrika</em>, <em>24</em>, 95–112.
+</div>
+<div class="csl-entry">
 Hoerl, A. E., &amp; Kennard, R. W. (1970). Ridge regression: Biased estimation for nonorthogonal problems. <em>Technometrics</em>, <em>12</em>, 55–67.
 </div>
-<div id="ref-howell2012statistical" class="csl-entry">
+<div class="csl-entry">
 Howell, D. C. (2012). <em>Statistical methods for psychology</em>. Cengage Learning.
 </div>
-<div id="ref-james_computer_2015" class="csl-entry">
+<div class="csl-entry">
+Huynh, H., &amp; Feldt, L. S. (1976). Estimation of the <span>B</span>ox correction for degrees of freedom from sample data in randomized block and split-plot designs. <em>Journal of Educational Statistics</em>, <em>1</em>, 69–82.
+</div>
+<div class="csl-entry">
 James, E. L., Bonsall, M. B., Hoppitt, L., Tunbridge, E. M., Geddes, J. R., Milton, A. L., &amp; Holmes, E. A. (2015). Computer game play reduces intrusive memories of experimental trauma via reconsolidation-update mechanisms. <em>Psychological Science</em>. <a href="https://doi.org/10.1177/0956797615583071">https://doi.org/10.1177/0956797615583071</a>
 </div>
-<div id="ref-jeffreys1939theory" class="csl-entry">
+<div class="csl-entry">
 Jeffreys, H. (1939). <em>The theory of probability</em>. Oxford: Oxford University Press.
 </div>
-<div id="ref-judd2011data" class="csl-entry">
+<div class="csl-entry">
 Judd, Charles M., McClelland, G. H., &amp; Ryan, C. S. (2011). <em>Data analysis: A model comparison approach</em>. Routledge.
 </div>
-<div id="ref-judd_treating_2012" class="csl-entry">
+<div class="csl-entry">
 Judd, Charles M., Westfall, J., &amp; Kenny, D. A. (2012). Treating stimuli as a random factor in social psychology: A new and comprehensive solution to a pervasive but largely ignored problem. <em>Journal of Personality and Social Psychology</em>, <em>103</em>, 54–69.
 </div>
-<div id="ref-kenny_consequences_1986" class="csl-entry">
+<div class="csl-entry">
 Kenny, D. A., &amp; Judd, C. M. (1986). Consequences of violating the independence assumption in analysis of variance. <em>Psychological Bulletin</em>, <em>99</em>, 422–431.
 </div>
-<div id="ref-kenward_small_1997" class="csl-entry">
+<div class="csl-entry">
 Kenward, M. G., &amp; Roger, J. H. (1997). Small sample inference for fixed effects from restricted maximum likelihood. <em>Biometrics</em>, <em>53</em>, 983–997.
 </div>
-<div id="ref-klein2014investigating" class="csl-entry">
+<div class="csl-entry">
 Klein, R. A., Ratliff, K. A., Vianello, M., Adams Jr, R. B., Bahnı́k, Š., Bernstein, M. J., … others. (2014). Investigating variation in replicability: <span>A</span> "many labs"" replication project. <em>Social Psychology</em>, 142–152.
 </div>
-<div id="ref-kruschke2014doing" class="csl-entry">
+<div class="csl-entry">
 Kruschke, J. (2014). <em>Doing bayesian data analysis: A tutorial with r, JAGS, and stan</em>. Academic Press.
 </div>
-<div id="ref-levene1960robust" class="csl-entry">
+<div class="csl-entry">
 Levene, H. (1960). Robust tests for equality of variances. In I. Olkin (Ed.), <em>Contributions to probability and statistics. Essays in honor of <span>H</span>arold <span>H</span>otelling</em> (pp. 279–292). Palo Alto, CA: Stanford University Press.
 </div>
-<div id="ref-liang2008mixtures" class="csl-entry">
+<div class="csl-entry">
 Liang, F., Paulo, R., Molina, G., Clyde, M. A., &amp; Berger, J. O. (2008). Mixtures of g priors for <span>B</span>ayesian variable selection. <em>Journal of the American Statistical Association</em>, <em>103</em>, 410–423.
 </div>
-<div id="ref-lix1996consequences" class="csl-entry">
+<div class="csl-entry">
 Lix, L. M., Keselman, J. C., &amp; Keselman, H. J. (1996). Consequences of assumption violations revisited: A quantitative review of alternatives to the one-way analysis of variance <span>F</span> test. <em>Review of Educational Research</em>, <em>66</em>, 579–619.
 </div>
-<div id="ref-lumley2002importance" class="csl-entry">
+<div class="csl-entry">
 Lumley, T., Diehr, P., Emerson, S., &amp; Chen, L. (2002). The importance of the normality assumption in large public health data sets. <em>Annual Review of Public Health</em>, <em>23</em>, 151–169.
 </div>
-<div id="ref-mackinnon2007mediation" class="csl-entry">
+<div class="csl-entry">
 MacKinnon, D. P., Fairchild, A. J., &amp; Fritz, M. S. (2007). Mediation analysis. <em>Annual Review of Psychology</em>, <em>58</em>, 593–614.
 </div>
-<div id="ref-mackinnon2000equivalence" class="csl-entry">
+<div class="csl-entry">
 MacKinnon, D. P., Krull, J. L., &amp; Lockwood, C. M. (2000). Equivalence of the mediation, confounding and suppression effect. <em>Prevention Science</em>, <em>1</em>, 173–181.
 </div>
-<div id="ref-matuschek_balancing_2017" class="csl-entry">
+<div class="csl-entry">
 Matuschek, H., Kliegl, R., Vasishth, S., Baayen, H., &amp; Bates, D. (2017). Balancing type <span>\</span><span>{I<span>\</span>}</span> error and power in linear mixed models. <em>Journal of Memory and Language</em>, <em>94</em>, 305–315.
 </div>
-<div id="ref-maxwell2017designing" class="csl-entry">
+<div class="csl-entry">
+Mauchly, J. W. (1940). Significance test for sphericity of a normal n-variate distribution. <em>The Annals of Mathematical Statistics</em>, <em>11</em>, 204–209.
+</div>
+<div class="csl-entry">
 Maxwell, S. E., Delaney, H. D., &amp; Kelley, K. (2017). <em>Designing experiments and analyzing data: A model comparison perspective</em>. Routledge.
 </div>
-<div id="ref-morey2016fallacy" class="csl-entry">
+<div class="csl-entry">
 Morey, R. D., Hoekstra, R., Rouder, J. N., Lee, M. D., &amp; Wagenmakers, E.-J. (2016). The fallacy of placing confidence in confidence intervals. <em>Psychonomic Bulletin &amp; Review</em>, <em>23</em>, 103–123.
 </div>
-<div id="ref-Nickerson00" class="csl-entry">
+<div class="csl-entry">
 Nickerson, R. S. (2000). Null hypothesis significance testing: A review of an old and continuing controversy. <em>Psychological Methods</em>, <em>5</em>, 241.
 </div>
-<div id="ref-pinheiro2006mixed" class="csl-entry">
+<div class="csl-entry">
 Pinheiro, J., &amp; Bates, D. (2006). <em>Mixed-effects models in s and s-PLUS</em>. Springer Science &amp; Business Media.
 </div>
-<div id="ref-popper1959logic" class="csl-entry">
+<div class="csl-entry">
 Popper, K. (1959). <em>The logic of scientific discovery</em>. Routledge.
 </div>
-<div id="ref-preacher2008asymptotic" class="csl-entry">
+<div class="csl-entry">
 Preacher, K. J., &amp; Hayes, A. F. (2008). Asymptotic and resampling strategies for assessing and comparing indirect effects in multiple mediator models. <em>Behavior Research Methods</em>, <em>40</em>, 879–891.
 </div>
-<div id="ref-rosenthal1963interpretation" class="csl-entry">
+<div class="csl-entry">
 Rosenthal, R., &amp; Gaito, J. (1963). The interpretation of levels of significance by psychological researchers. <em>The Journal of Psychology</em>, <em>55</em>, 33–38.
 </div>
-<div id="ref-rouder2012default" class="csl-entry">
+<div class="csl-entry">
 Rouder, J. N., Morey, R. D., Speckman, P. L., &amp; Province, J. M. (2012). Default <span>B</span>ayes factors for <span>ANOVA</span> designs. <em>Journal of Mathematical Psychology</em>, <em>56</em>, 356–374.
 </div>
-<div id="ref-rouder2009bayesian" class="csl-entry">
+<div class="csl-entry">
 Rouder, J. N., Speckman, P. L., Sun, D., Morey, R. D., &amp; Iverson, G. (2009). Bayesian t tests for accepting and rejecting the null hypothesis. <em>Psychonomic Bulletin &amp; Review</em>, <em>16</em>, 225–237.
 </div>
-<div id="ref-sakia1992box" class="csl-entry">
+<div class="csl-entry">
 Sakia, R. M. (1992). The box-cox transformation technique: A review. <em>Journal of the Royal Statistical Society: Series D (The Statistician)</em>, <em>41</em>, 169–178.
 </div>
-<div id="ref-satterthwaite_synthesis_1941" class="csl-entry">
+<div class="csl-entry">
 Satterthwaite, F. E. (1941). Synthesis of variance. <em>Psychometrika</em>, <em>6</em>, 309–316.
 </div>
-<div id="ref-schaffner_understanding_2018" class="csl-entry">
+<div class="csl-entry">
 Schaffner, B. F., Macwilliams, M., &amp; Nteta, T. (2018). Understanding white polarization in the 2016 vote for president: The sobering role of racism and sexism. <em>Political Science Quarterly</em>, <em>133</em>, 9–34.
 </div>
-<div id="ref-simmons2011false" class="csl-entry">
+<div class="csl-entry">
 Simmons, J. P., Nelson, L. D., &amp; Simonsohn, U. (2011). False-positive psychology: Undisclosed flexibility in data collection and analysis allows presenting anything as significant. <em>Psychological Science</em>, <em>22</em>, 1359–1366.
 </div>
-<div id="ref-simonsohn2014posterior" class="csl-entry">
+<div class="csl-entry">
 Simonsohn, U. (2014). <em>Posterior-hacking: Selective reporting invalidates <span>B</span>ayesian results also</em>. Retrieved from <a href="https://dx.doi.org/10.2139/ssrn.2374040">https://dx.doi.org/10.2139/ssrn.2374040</a>
 </div>
-<div id="ref-Singmann2019-mixed" class="csl-entry">
+<div class="csl-entry">
 Singmann, H., &amp; Kellen, D. (2019). An introduction to linear mixed modeling in experimental psychology. In <em>New methods in cognitive psychology</em> (pp. 4–31). Psychology Press.
 </div>
-<div id="ref-student1908probable" class="csl-entry">
+<div class="csl-entry">
 Student. (1908). The probable error of a mean. <em>Biometrika</em>, <em>6</em>, 1–25.
 </div>
-<div id="ref-thompson1992two" class="csl-entry">
+<div class="csl-entry">
 Thompson, B. (1992). Two and one-half decades of leadership in measurement and evaluation. <em>Journal of Counseling &amp; Development</em>, <em>70</em>, 434–438.
 </div>
-<div id="ref-tomarken1986comparison" class="csl-entry">
+<div class="csl-entry">
 Tomarken, A. J., &amp; Serlin, R. C. (1986). Comparison of ANOVA alternatives under variance heterogeneity and specific noncentrality structures. <em>Psychological Bulletin</em>, <em>99</em>, 90.
 </div>
-<div id="ref-Tukey1977EDA" class="csl-entry">
+<div class="csl-entry">
 Tukey, J. W. (1977). <em>Exploratory data analysis</em>. Reading, MA: Addison-Wesley,.
 </div>
-<div id="ref-Wagenmakers07" class="csl-entry">
+<div class="csl-entry">
 Wagenmakers, E.-J. (2007). A practical solution to the pervasive problems of p values. <em>Psychonomic Bulletin &amp; Review</em>, <em>14</em>, 779–804.
 </div>
-<div id="ref-wilks1938large" class="csl-entry">
+<div class="csl-entry">
+Walker, D., &amp; Vul, E. (2014). Hierarchical encoding makes individuals in a group seem more attractive. <em>Psychological Science</em>, <em>25</em>, 230–235.
+</div>
+<div class="csl-entry">
 Wilks, S. S. (1938). The large-sample distribution of the likelihood ratio for testing composite hypotheses. <em>The Annals of Mathematical Statistics</em>, <em>9</em>, 60–62.
 </div>
-<div id="ref-zabell2008student" class="csl-entry">
+<div class="csl-entry">
 Zabell, S. L. (2008). On student’s 1908 article "the probable error of a mean"". <em>Journal of the American Statistical Association</em>, <em>103</em>, 1–7.
 </div>
-<div id="ref-zaval_how_2015" class="csl-entry">
+<div class="csl-entry">
 Zaval, L., Markowitz, E. M., &amp; Weber, E. U. (2015). How will <span>I</span> be remembered? Conserving the environment for the sake of one’s legacy. <em>Psychological Science</em>, <em>26</em>, 231–236.
 </div>
 </div>
 </div>
+
+
+
+
 
 
 
@@ -572,7 +637,6 @@ Zaval, L., Markowitz, E. M., &amp; Weber, E. U. (2015). How will <span>I</span> 
     </div>
   </div>
 <script src="book_assets/gitbook-2.6.7/js/app.min.js"></script>
-<script src="book_assets/gitbook-2.6.7/js/lunr.js"></script>
 <script src="book_assets/gitbook-2.6.7/js/clipboard.min.js"></script>
 <script src="book_assets/gitbook-2.6.7/js/plugin-search.js"></script>
 <script src="book_assets/gitbook-2.6.7/js/plugin-sharing.js"></script>
@@ -591,6 +655,7 @@ gitbook.start({
 "weibo": false,
 "instapaper": false,
 "vk": false,
+"whatsapp": false,
 "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
 },
 "fontsettings": {
@@ -608,11 +673,14 @@ gitbook.start({
 "text": null
 },
 "download": null,
+"search": {
+"engine": "fuse",
+"options": null
+},
 "toc": {
 "collapse": "subsection"
 },
-"source": null,
-"search": true
+"source": null
 });
 });
 </script>

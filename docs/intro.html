@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 1 Introduction | Statistics: Data analysis and modelling</title>
   <meta name="description" content="A book about statistics for data analysis, with a main focus on statistical modelling." />
-  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 1 Introduction | Statistics: Data analysis and modelling" />
   <meta property="og:type" content="book" />
@@ -24,7 +24,7 @@
 <meta name="author" content="Maarten Speekenbrink" />
 
 
-<meta name="date" content="2021-11-17" />
+<meta name="date" content="2021-11-24" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -33,8 +33,9 @@
   
 <link rel="prev" href="index.html"/>
 <link rel="next" href="ch-modeling.html"/>
-<script src="book_assets/header-attrs-2.7/header-attrs.js"></script>
-<script src="book_assets/jquery-3.5.1/jquery.min.js"></script>
+<script src="book_assets/header-attrs-2.11/header-attrs.js"></script>
+<script src="book_assets/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="book_assets/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="book_assets/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
 <link href="book_assets/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -50,40 +51,66 @@
 
 
 
-
-<script src="book_assets/htmlwidgets-1.5.3/htmlwidgets.js"></script>
+<link href="book_assets/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="book_assets/anchor-sections-1.0.1/anchor-sections.js"></script>
+<script src="book_assets/htmlwidgets-1.5.4/htmlwidgets.js"></script>
 <script src="book_assets/viz-1.8.2/viz.js"></script>
 <link href="book_assets/DiagrammeR-styles-0.2/styles.css" rel="stylesheet" />
 <script src="book_assets/grViz-binding-1.0.6.1/grViz.js"></script>
-<script src="book_assets/plotly-binding-4.9.3/plotly.js"></script>
+<script src="book_assets/plotly-binding-4.10.0/plotly.js"></script>
 <script src="book_assets/typedarray-0.1/typedarray.min.js"></script>
-<link href="book_assets/crosstalk-1.1.1/css/crosstalk.css" rel="stylesheet" />
-<script src="book_assets/crosstalk-1.1.1/js/crosstalk.min.js"></script>
-<link href="book_assets/plotly-htmlwidgets-css-1.57.1/plotly-htmlwidgets.css" rel="stylesheet" />
-<script src="book_assets/plotly-main-1.57.1/plotly-latest.min.js"></script>
+<link href="book_assets/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet" />
+<script src="book_assets/crosstalk-1.2.0/js/crosstalk.min.js"></script>
+<link href="book_assets/plotly-htmlwidgets-css-2.5.1/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="book_assets/plotly-main-2.5.1/plotly-latest.min.js"></script>
 <link href="book_assets/combineWidgetStyle-0.1/combineWidgets.css" rel="stylesheet" />
-<script src="book_assets/combineWidgets-binding-0.10.1/combineWidgets.js"></script>
-<script src="book_assets/rglWebGL-binding-0.106.6/rglWebGL.js"></script>
-<link href="book_assets/rglwidgetClass-0.106.6/rgl.css" rel="stylesheet" />
-<script src="book_assets/rglwidgetClass-0.106.6/rglClass.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.106.6/utils.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.106.6/subscenes.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.106.6/shaders.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.106.6/textures.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.106.6/projection.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.106.6/mouse.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.106.6/init.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.106.6/pieces.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.106.6/draw.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.106.6/controls.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.106.6/selection.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.106.6/rglTimer.src.js"></script>
-<script src="book_assets/CanvasMatrix4-0.106.6/CanvasMatrix.src.js"></script>
-<script src="book_assets/rglPlayer-binding-0.106.6/rglPlayer.js"></script>
+<script src="book_assets/combineWidgets-binding-0.11.1/combineWidgets.js"></script>
+<script src="book_assets/rglWebGL-binding-0.107.14/rglWebGL.js"></script>
+<link href="book_assets/rglwidgetClass-0.107.14/rgl.css" rel="stylesheet" />
+<script src="book_assets/rglwidgetClass-0.107.14/rglClass.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/utils.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/subscenes.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/shaders.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/textures.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/projection.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/mouse.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/init.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/pieces.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/draw.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/controls.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/selection.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/rglTimer.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/pretty.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/axes.src.js"></script>
+<script src="book_assets/CanvasMatrix4-0.107.14/CanvasMatrix.src.js"></script>
+<script src="book_assets/rglPlayer-binding-0.107.14/rglPlayer.js"></script>
 <script src="book_assets/kePrint-0.0.1/kePrint.js"></script>
 <link href="book_assets/lightable-0.0.1/lightable.css" rel="stylesheet" />
 
 
+
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
 
 <link rel="stylesheet" href="style.css" type="text/css" />
 </head>
@@ -283,10 +310,29 @@
 <li class="chapter" data-level="9.7" data-path="mixing-categorical-and-metric-predictors-ancova.html"><a href="mixing-categorical-and-metric-predictors-ancova.html#mediation-with-categorical-independent-variables"><i class="fa fa-check"></i><b>9.7</b> Mediation with categorical independent variables</a></li>
 <li class="chapter" data-level="9.8" data-path="mixing-categorical-and-metric-predictors-ancova.html"><a href="mixing-categorical-and-metric-predictors-ancova.html#ancova-vs-difference-scores"><i class="fa fa-check"></i><b>9.8</b> ANCOVA vs difference scores</a></li>
 </ul></li>
-<li class="chapter" data-level="10" data-path="repeated-measures-anova.html"><a href="repeated-measures-anova.html"><i class="fa fa-check"></i><b>10</b> Repeated-measures ANOVA</a></li>
+<li class="chapter" data-level="10" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html"><i class="fa fa-check"></i><b>10</b> Repeated-measures ANOVA</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#non-independence-in-linear-models"><i class="fa fa-check"></i><b>10.1</b> Non-independence in linear models</a></li>
+<li class="chapter" data-level="10.2" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#the-cheerleader-effect"><i class="fa fa-check"></i><b>10.2</b> The cheerleader effect</a></li>
+<li class="chapter" data-level="10.3" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#as-a-oneway-anova"><i class="fa fa-check"></i><b>10.3</b> As a oneway ANOVA</a></li>
+<li class="chapter" data-level="10.4" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#oneway-repeated-measures-anova"><i class="fa fa-check"></i><b>10.4</b> Oneway repeated-measures ANOVA</a>
+<ul>
+<li class="chapter" data-level="10.4.1" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#within-subjects-composite-scores"><i class="fa fa-check"></i><b>10.4.1</b> Within-subjects composite scores</a></li>
+<li class="chapter" data-level="10.4.2" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#a-composite-for-between-subjects-effects"><i class="fa fa-check"></i><b>10.4.2</b> A composite for between-subjects effects</a></li>
+<li class="chapter" data-level="10.4.3" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#collecting-all-results-and-omnibus-tests"><i class="fa fa-check"></i><b>10.4.3</b> Collecting all results and omnibus tests</a></li>
+</ul></li>
+<li class="chapter" data-level="10.5" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#partitioning-the-variance"><i class="fa fa-check"></i><b>10.5</b> Partitioning the variance</a></li>
+<li class="chapter" data-level="10.6" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#a-mixed-anova-with-between--and-within-subjects-effects"><i class="fa fa-check"></i><b>10.6</b> A mixed ANOVA with between- and within-subjects effects</a></li>
+<li class="chapter" data-level="10.7" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#assumptions-1"><i class="fa fa-check"></i><b>10.7</b> Assumptions</a>
+<ul>
+<li class="chapter" data-level="10.7.1" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#omnibus-tests-and-sphericity"><i class="fa fa-check"></i><b>10.7.1</b> Omnibus tests and sphericity</a></li>
+<li class="chapter" data-level="10.7.2" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#correcting-for-non-sphericity"><i class="fa fa-check"></i><b>10.7.2</b> Correcting for non-sphericity</a></li>
+</ul></li>
+<li class="chapter" data-level="10.8" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#in-practice-4"><i class="fa fa-check"></i><b>10.8</b> In practice</a></li>
+</ul></li>
 <li class="chapter" data-level="11" data-path="linear-mixed-effects-models.html"><a href="linear-mixed-effects-models.html"><i class="fa fa-check"></i><b>11</b> Linear mixed-effects models</a>
 <ul>
-<li class="chapter" data-level="11.1" data-path="linear-mixed-effects-models.html"><a href="linear-mixed-effects-models.html#non-independence-in-linear-models"><i class="fa fa-check"></i><b>11.1</b> Non-independence in linear models</a></li>
+<li class="chapter" data-level="11.1" data-path="linear-mixed-effects-models.html"><a href="linear-mixed-effects-models.html#non-independence-in-linear-models-1"><i class="fa fa-check"></i><b>11.1</b> Non-independence in linear models</a></li>
 <li class="chapter" data-level="11.2" data-path="linear-mixed-effects-models.html"><a href="linear-mixed-effects-models.html#random-intercept-models"><i class="fa fa-check"></i><b>11.2</b> Random intercept models</a></li>
 <li class="chapter" data-level="11.3" data-path="linear-mixed-effects-models.html"><a href="linear-mixed-effects-models.html#parameter-estimation-1"><i class="fa fa-check"></i><b>11.3</b> Parameter estimation</a></li>
 <li class="chapter" data-level="11.4" data-path="linear-mixed-effects-models.html"><a href="linear-mixed-effects-models.html#parameter-inference"><i class="fa fa-check"></i><b>11.4</b> Parameter inference</a></li>
@@ -361,7 +407,7 @@
 Source: <a href="https://www.irishcentral.com/sports/paul-the-psychic-octopus-picks-all-the-world-cup-winners-98010019-238038511">Irish central</a></p>
 </blockquote>
 <p>Paul the Octopus (26 January 2008 – 26 October 2010) was born in the Sea Life Centre in Weymouth, England, and subsequently moved to the aquarium chain’s centre in Oberhausen, Germany. It was there he found world-wide fame as a cephalopod oracle.</p>
-<div class="figure" style="text-align: center"><span id="fig:paul-the-octopus-image"></span>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:paul-the-octopus-image"></span>
 <img src="https://static.guim.co.uk/sys-images/Guardian/Pix/pictures/2010/7/15/1279193684789/Paul-the-octopus-005.jpg" alt="Paul the octopus predicts Spain to win the final of the 2010 FIFA World Cup. Source: [The Guardian](https://www.theguardian.com/football/2010/jul/09/psychic-octopus-paul-picks-spain)" width="95%" />
 <p class="caption">
 Figure 1.1: Paul the octopus predicts Spain to win the final of the 2010 FIFA World Cup. Source: <a href="https://www.theguardian.com/football/2010/jul/09/psychic-octopus-paul-picks-spain">The Guardian</a>
@@ -515,7 +561,7 @@ Figure 1.1: Paul the octopus predicts Spain to win the final of the 2010 FIFA Wo
 </div>
 <div id="exploring-and-describing-data" class="section level2" number="1.4">
 <h2><span class="header-section-number">1.4</span> Exploring and describing data</h2>
-<p>Once you have collected data, you may feel the urge to immediately apply some statistical model or test to it. But really, a first step should be to explore the data. Statistical tests are designed to confirm or reject hypotheses, and part of <strong>confirmatory data analysis</strong>. They are a very important part of scientific research, but they always rely on assumptions about the data generating process. Before conducting these analyses, it is crucial to assess whether these assumptions are reasonable, and this is where <strong>exploratory data analysis</strong> can help. <span class="citation"><a href="references.html#ref-Tukey1977EDA" role="doc-biblioref">Tukey</a> (<a href="references.html#ref-Tukey1977EDA" role="doc-biblioref">1977</a>)</span>, a major proponent of exploratory data analysis, points out that exploratory data analysis can also suggest new hypotheses about the causes of observed phenomena, and with that provide a basis for further experimentation and data collection.</p>
+<p>Once you have collected data, you may feel the urge to immediately apply some statistical model or test to it. But really, a first step should be to explore the data. Statistical tests are designed to confirm or reject hypotheses, and part of <strong>confirmatory data analysis</strong>. They are a very important part of scientific research, but they always rely on assumptions about the data generating process. Before conducting these analyses, it is crucial to assess whether these assumptions are reasonable, and this is where <strong>exploratory data analysis</strong> can help. <span class="citation"><a href="#ref-Tukey1977EDA" role="doc-biblioref">Tukey</a> (<a href="#ref-Tukey1977EDA" role="doc-biblioref">1977</a>)</span>, a major proponent of exploratory data analysis, points out that exploratory data analysis can also suggest new hypotheses about the causes of observed phenomena, and with that provide a basis for further experimentation and data collection.</p>
 <p>As the distribution of Paul’s predictions is not so interesting to look into exploration of data, we will focus on other data. We will stay in the context of the 2010 FIFA World Cup, and consider team statistics such as the number of goals scored and the number of games played.</p>
 <table>
 <caption><span id="tab:fifa2010teams-table">Table 1.3: </span>Team statistics in the 2010 FIFA World cup</caption>
@@ -850,7 +896,7 @@ For the total goals scored, the standard deviation is
 <h3><span class="header-section-number">1.4.2</span> Visual exploration</h3>
 <p>Exploring a data set is generally done visually, using various plots such as histograms, boxplots,
 scatterplots, etc. A good plot can immediately provide a lot more information than summary measures. So before proceeding with statistical analysis: plot your data! Visualizing data in the most effective and pleasant way is an art form in itself. But here are some standard plots that are helpful and relatively easy to produce:</p>
-<div class="figure" style="text-align: center"><span id="fig:example-histogram-and-boxplot"></span>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:example-histogram-and-boxplot"></span>
 <img src="_main_files/figure-html/example-histogram-and-boxplot-1.svg" alt="A histogram and boxplot of the total goals scored by each team" width="49%" /><img src="_main_files/figure-html/example-histogram-and-boxplot-2.svg" alt="A histogram and boxplot of the total goals scored by each team" width="49%" />
 <p class="caption">
 Figure 1.2: A histogram and boxplot of the total goals scored by each team
@@ -859,14 +905,14 @@ Figure 1.2: A histogram and boxplot of the total goals scored by each team
 <p>A <strong>histogram</strong> (left plot in Figure <a href="intro.html#fig:example-histogram-and-boxplot">1.2</a>) counts the number of occurrences of values, or ranges of values in the case of continuous variables with a lot of possible values. For the latter, it divides the range of possible values into “bins” (equally sized ranges of values). The count of observations in each bin is then plotted as the height of a bar, and the width of the bar reflects the range (in the case of discrete values, the range is defined by the midpoints between these values. A histogram is useful to depict the distribution of values of a variable. The size of the bins is important though, as it determines how smooth or rough the histogram looks, and often requires some tweaking. If you make the bins too wide, it may be hard to spot the intricacies in a distribution. If you make the bins too narrow, on the other hand, each bin will contain only a small number of values and you won’t summarize the distribution in a visually meaningful way. In the extreme case, each bin will either contain just one observation, or none.</p>
 <p>A <strong>boxplot</strong> (right plot in Figure <a href="intro.html#fig:example-histogram-and-boxplot">1.2</a>), also called a box and whiskers plot, depicts the inter-quartile range as a box, in which a line is placed to depict the median. Two lines extend from either side of the box. These are the “whiskers” and they depict the range of values in the data excluding any potential outliers. More precisely, the endpoints of the whiskers are the smallest and largest value in the data which are no more than <span class="math inline">\(1.5 \times \text{IQR}\)</span> away from the 25% and 75% quartiles, respectively. If there are values in the data which extend beyond these endpoints, they are considered “outliers,” and plotted as points outside of the whiskers. In the example boxplot, you can see that there are three such outliers.</p>
 A <strong>scatterplot</strong> is useful to see the relation between the values of two variables. For instance, it is likely that the total goals scored by each team will depend on the number of games they played. We can visually inspect this by plotting each team as a point with the value of the x-axis representing the value of one variable, and the value on the y-axis as the value of the other variable. This is done in Figure <a href="intro.html#fig:example-scatter-plot">1.3</a>, from which it seems quite clear that those teams who played more games generally also scored more points.
-<div class="figure" style="text-align: center"><span id="fig:example-scatter-plot"></span>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:example-scatter-plot"></span>
 <img src="_main_files/figure-html/example-scatter-plot-1.svg" alt="A scatter plot of total goals scored by total matches played" width="50%" />
 <p class="caption">
 Figure 1.3: A scatter plot of total goals scored by total matches played
 </p>
 </div>
-<p>As all the plots above can tell us something meaningful about the data, and they often highlight different aspects of the data, it can be useful to combine them. One form of such a combination plot has been called a <strong>raincloud plot</strong> <span class="citation">(<a href="references.html#ref-allen2019raincloud" role="doc-biblioref">Allen, Poggiali, Whitaker, Marshall, &amp; Kievit, 2019</a>)</span>. A raincloud plot combines a boxplot with a scatterplot of the observed values and a type of continuous histogram called a nonparametric density plot. In my version of such plots (<a href="intro.html#fig:example-raincloud-plot">1.4</a>), a boxplot is placed in the middle, with an additional point representing the sample mean. On the left are the observed values, where the points are “jittered” (randomly displaced on the x-axis) to try to avoid overlapping points. On the right of the boxplot is the nonparametric density plot. This part aims to depict the distribution in a smooth, continuous way.</p>
-<div class="figure" style="text-align: center"><span id="fig:example-raincloud-plot"></span>
+<p>As all the plots above can tell us something meaningful about the data, and they often highlight different aspects of the data, it can be useful to combine them. One form of such a combination plot has been called a <strong>raincloud plot</strong> <span class="citation">(<a href="#ref-allen2019raincloud" role="doc-biblioref">Allen, Poggiali, Whitaker, Marshall, &amp; Kievit, 2019</a>)</span>. A raincloud plot combines a boxplot with a scatterplot of the observed values and a type of continuous histogram called a nonparametric density plot. In my version of such plots (<a href="intro.html#fig:example-raincloud-plot">1.4</a>), a boxplot is placed in the middle, with an additional point representing the sample mean. On the left are the observed values, where the points are “jittered” (randomly displaced on the x-axis) to try to avoid overlapping points. On the right of the boxplot is the nonparametric density plot. This part aims to depict the distribution in a smooth, continuous way.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:example-raincloud-plot"></span>
 <img src="_main_files/figure-html/example-raincloud-plot-1.svg" alt="A raincloud plot of the average goals scored per match" width="50%" />
 <p class="caption">
 Figure 1.4: A raincloud plot of the average goals scored per match
@@ -878,8 +924,8 @@ Figure 1.4: A raincloud plot of the average goals scored per match
 <h2><span class="header-section-number">1.5</span> Analysis and modelling</h2>
 <p>Analysing data can mean lots of things. According to <a href="https://en.wikipedia.org/wiki/Data_analysis">WikiPedia</a> “Data analysis is a process of inspecting, cleansing, transforming and modelling data with the goal of discovering useful information, informing conclusions and supporting decision-making.” That is a reasonably accurate, but also a quite lengthy and boring definition. An alternative to this I quite like is that data analysis is <em>identifying a signal within noise</em>.</p>
 <p>Data is noisy for many reasons. For one thing, the data that we have access to is generally limited, in the sense that we could have obtained other and/or more data. Other sources of noise include measurement error. Such sources of noise imply that the data set we have only gives a limited, incomplete, and corrupted view on the process that generated it (the Data Generating Process). We are not interested solely in describing the data set we have, we generally want to infer something about the Data Generating Process. We don’t just want to state that Paul made 8 out of 8 accurate predictions in the 2010 FIFA World Cup, we want to use this data to assess whether Paul had psychic abilities. Whether, had Paul’s keeper allowed Paul to make predictions for other matches, he would have also been correct. Such inferences go beyond the data that we have. Perhaps Paul was just lucky in those 8 predictions, and his 100% hit rate is not a good reflection of his hit rate in general.</p>
-<p>Statistical modelling can be viewed as describing the Data Generating Process in the language of mathematics. At its core, a statistical model defines the distribution of possible values of variables. In an ideal world, this model distribution is identical to the true distribution that follows from the Data Generating Process. In general, though, there will be some mismatch between the model distribution and the DGP distribution. Models are simplifications and idealizations. As statistician George Box famously noted “all models are wrong, but some are useful” <span class="citation">(<a href="references.html#ref-Box1987" role="doc-biblioref">G. E. P. Box &amp; Draper, 1987</a>)</span>. What do we mean by this? Consider the famous London tube map (Figure <a href="intro.html#fig:london-tube-map">1.5</a>). This map is “wrong” because as any map, it is a simplification of reality. It does not provide a completely accurate representation of the world. But what is special about the tube map is that, unlike standard maps, it does not even attempt to reflect the geographical location of the different underground (or “tube”) lines and stations. Its initial designer, Harry Beck, realised that because the lines run mostly underground, the exact physical locations of the stations were largely irrelevant to the traveller wanting to know how to get from one station to another. What matters to them is the relation between the stations, and which lines connect them. Hence, he designed the map as a schematic diagram which clearly shows the lines connecting stations. If you used the map to determine the walking distance between stations, you’d be very disappointed. But to determine your underground journey, the map is very useful.</p>
-<div class="figure" style="text-align: center"><span id="fig:london-tube-map"></span>
+<p>Statistical modelling can be viewed as describing the Data Generating Process in the language of mathematics. At its core, a statistical model defines the distribution of possible values of variables. In an ideal world, this model distribution is identical to the true distribution that follows from the Data Generating Process. In general, though, there will be some mismatch between the model distribution and the DGP distribution. Models are simplifications and idealizations. As statistician George Box famously noted “all models are wrong, but some are useful” <span class="citation">(<a href="#ref-Box1987" role="doc-biblioref">G. E. P. Box &amp; Draper, 1987</a>)</span>. What do we mean by this? Consider the famous London tube map (Figure <a href="intro.html#fig:london-tube-map">1.5</a>). This map is “wrong” because as any map, it is a simplification of reality. It does not provide a completely accurate representation of the world. But what is special about the tube map is that, unlike standard maps, it does not even attempt to reflect the geographical location of the different underground (or “tube”) lines and stations. Its initial designer, Harry Beck, realised that because the lines run mostly underground, the exact physical locations of the stations were largely irrelevant to the traveller wanting to know how to get from one station to another. What matters to them is the relation between the stations, and which lines connect them. Hence, he designed the map as a schematic diagram which clearly shows the lines connecting stations. If you used the map to determine the walking distance between stations, you’d be very disappointed. But to determine your underground journey, the map is very useful.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:london-tube-map"></span>
 <img src="https://tfl.gov.uk/cdn/static/cms/images/tube-map.gif" alt="London tube map. Source: [TfL](https://tfl.gov.uk/maps/track/tube)" width="95%" />
 <p class="caption">
 Figure 1.5: London tube map. Source: <a href="https://tfl.gov.uk/maps/track/tube">TfL</a>
@@ -891,6 +937,18 @@ Figure 1.5: London tube map. Source: <a href="https://tfl.gov.uk/maps/track/tube
 <h2><span class="header-section-number">1.6</span> Summary</h2>
 <p>The objective of statistical data analysis is to go beyond a given data set, and make claims about aspects of the process that generated the data (the Data Generating Process). To make inferences beyond the limited data we have collected, we need statistical models which aim to describe the distribution of all possible data that we could have collected. Data can be of different types. The measurement scale of a variable determines the way in which numbers assigned to values of the variable can be interpreted and manipulated. Aspects of the data collection, such as whether data was collected in an experiment with random assignment, or whether the data was observed in a more naturalistic setting, are important aspects of the Data Generating Process, and determine to what extent we can rule out confounds that may bias our conclusions. Paul was one amazing octopus.</p>
 
+</div>
+</div>
+<h3>References</h3>
+<div id="refs" class="references csl-bib-body hanging-indent" line-spacing="2">
+<div id="ref-allen2019raincloud" class="csl-entry">
+Allen, M., Poggiali, D., Whitaker, K., Marshall, T. R., &amp; Kievit, R. A. (2019). Raincloud plots: A multi-platform tool for robust data visualization [version 1; peer review: 2 approved]. <em>Wellcome Open Research</em>, <em>4</em>. <a href="https://doi.org/10.12688/wellcomeopenres.15191.1">https://doi.org/10.12688/wellcomeopenres.15191.1</a>
+</div>
+<div id="ref-Box1987" class="csl-entry">
+Box, G. E. P., &amp; Draper, N. R. (1987). <em>Empirical model-building and response surfaces</em>. New York, NY: John Wiley &amp; Sons.
+</div>
+<div id="ref-Tukey1977EDA" class="csl-entry">
+Tukey, J. W. (1977). <em>Exploratory data analysis</em>. Reading, MA: Addison-Wesley,.
 </div>
 </div>
 <div class="footnotes">
@@ -909,7 +967,6 @@ Figure 1.5: London tube map. Source: <a href="https://tfl.gov.uk/maps/track/tube
     </div>
   </div>
 <script src="book_assets/gitbook-2.6.7/js/app.min.js"></script>
-<script src="book_assets/gitbook-2.6.7/js/lunr.js"></script>
 <script src="book_assets/gitbook-2.6.7/js/clipboard.min.js"></script>
 <script src="book_assets/gitbook-2.6.7/js/plugin-search.js"></script>
 <script src="book_assets/gitbook-2.6.7/js/plugin-sharing.js"></script>
@@ -928,6 +985,7 @@ gitbook.start({
 "weibo": false,
 "instapaper": false,
 "vk": false,
+"whatsapp": false,
 "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
 },
 "fontsettings": {
@@ -945,11 +1003,14 @@ gitbook.start({
 "text": null
 },
 "download": null,
+"search": {
+"engine": "fuse",
+"options": null
+},
 "toc": {
 "collapse": "subsection"
 },
-"source": null,
-"search": true
+"source": null
 });
 });
 </script>

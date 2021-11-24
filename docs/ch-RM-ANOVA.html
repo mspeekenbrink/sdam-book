@@ -1,0 +1,3010 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 10 Repeated-measures ANOVA | Statistics: Data analysis and modelling</title>
+  <meta name="description" content="A book about statistics for data analysis, with a main focus on statistical modelling." />
+  <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 10 Repeated-measures ANOVA | Statistics: Data analysis and modelling" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="A book about statistics for data analysis, with a main focus on statistical modelling." />
+  <meta name="github-repo" content="mspeekenbrink/sdam-book" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 10 Repeated-measures ANOVA | Statistics: Data analysis and modelling" />
+  
+  <meta name="twitter:description" content="A book about statistics for data analysis, with a main focus on statistical modelling." />
+  
+
+<meta name="author" content="Maarten Speekenbrink" />
+
+
+<meta name="date" content="2021-11-24" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="mixing-categorical-and-metric-predictors-ancova.html"/>
+<link rel="next" href="linear-mixed-effects-models.html"/>
+<script src="book_assets/header-attrs-2.11/header-attrs.js"></script>
+<script src="book_assets/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="book_assets/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="book_assets/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="book_assets/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="book_assets/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="book_assets/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="book_assets/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="book_assets/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="book_assets/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="book_assets/anchor-sections-1.0.1/anchor-sections.js"></script>
+<script src="book_assets/htmlwidgets-1.5.4/htmlwidgets.js"></script>
+<script src="book_assets/viz-1.8.2/viz.js"></script>
+<link href="book_assets/DiagrammeR-styles-0.2/styles.css" rel="stylesheet" />
+<script src="book_assets/grViz-binding-1.0.6.1/grViz.js"></script>
+<script src="book_assets/plotly-binding-4.10.0/plotly.js"></script>
+<script src="book_assets/typedarray-0.1/typedarray.min.js"></script>
+<link href="book_assets/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet" />
+<script src="book_assets/crosstalk-1.2.0/js/crosstalk.min.js"></script>
+<link href="book_assets/plotly-htmlwidgets-css-2.5.1/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="book_assets/plotly-main-2.5.1/plotly-latest.min.js"></script>
+<link href="book_assets/combineWidgetStyle-0.1/combineWidgets.css" rel="stylesheet" />
+<script src="book_assets/combineWidgets-binding-0.11.1/combineWidgets.js"></script>
+<script src="book_assets/rglWebGL-binding-0.107.14/rglWebGL.js"></script>
+<link href="book_assets/rglwidgetClass-0.107.14/rgl.css" rel="stylesheet" />
+<script src="book_assets/rglwidgetClass-0.107.14/rglClass.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/utils.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/subscenes.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/shaders.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/textures.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/projection.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/mouse.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/init.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/pieces.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/draw.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/controls.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/selection.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/rglTimer.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/pretty.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.107.14/axes.src.js"></script>
+<script src="book_assets/CanvasMatrix4-0.107.14/CanvasMatrix.src.js"></script>
+<script src="book_assets/rglPlayer-binding-0.107.14/rglPlayer.js"></script>
+<script src="book_assets/kePrint-0.0.1/kePrint.js"></script>
+<link href="book_assets/lightable-0.0.1/lightable.css" rel="stylesheet" />
+
+
+
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a>
+<ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#acknowledgements"><i class="fa fa-check"></i>Acknowledgements</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#notation"><i class="fa fa-check"></i>Notation</a></li>
+</ul></li>
+<li class="chapter" data-level="1" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i><b>1</b> Introduction</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="intro.html"><a href="intro.html#paul-the-octopus"><i class="fa fa-check"></i><b>1.1</b> Paul the octopus</a></li>
+<li class="chapter" data-level="1.2" data-path="intro.html"><a href="intro.html#experiments-and-observations"><i class="fa fa-check"></i><b>1.2</b> Experiments and observations</a></li>
+<li class="chapter" data-level="1.3" data-path="intro.html"><a href="intro.html#data"><i class="fa fa-check"></i><b>1.3</b> Data</a>
+<ul>
+<li class="chapter" data-level="1.3.1" data-path="intro.html"><a href="intro.html#measurement-scales"><i class="fa fa-check"></i><b>1.3.1</b> Measurement scales</a></li>
+<li class="chapter" data-level="1.3.2" data-path="intro.html"><a href="intro.html#the-data-generating-process"><i class="fa fa-check"></i><b>1.3.2</b> The Data Generating Process</a></li>
+</ul></li>
+<li class="chapter" data-level="1.4" data-path="intro.html"><a href="intro.html#exploring-and-describing-data"><i class="fa fa-check"></i><b>1.4</b> Exploring and describing data</a>
+<ul>
+<li class="chapter" data-level="1.4.1" data-path="intro.html"><a href="intro.html#summary-statistics"><i class="fa fa-check"></i><b>1.4.1</b> Summary statistics</a></li>
+<li class="chapter" data-level="1.4.2" data-path="intro.html"><a href="intro.html#visual-exploration"><i class="fa fa-check"></i><b>1.4.2</b> Visual exploration</a></li>
+</ul></li>
+<li class="chapter" data-level="1.5" data-path="intro.html"><a href="intro.html#analysis-and-modelling"><i class="fa fa-check"></i><b>1.5</b> Analysis and modelling</a></li>
+<li class="chapter" data-level="1.6" data-path="intro.html"><a href="intro.html#summary"><i class="fa fa-check"></i><b>1.6</b> Summary</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="ch-modeling.html"><a href="ch-modeling.html"><i class="fa fa-check"></i><b>2</b> Statistical modelling</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="ch-modeling.html"><a href="ch-modeling.html#coin-flipping-defining-a-statistical-model"><i class="fa fa-check"></i><b>2.1</b> Coin flipping: Defining a statistical model</a></li>
+<li class="chapter" data-level="2.2" data-path="ch-modeling.html"><a href="ch-modeling.html#probability"><i class="fa fa-check"></i><b>2.2</b> Probability</a>
+<ul>
+<li class="chapter" data-level="2.2.1" data-path="ch-modeling.html"><a href="ch-modeling.html#sec:02-probability-definition"><i class="fa fa-check"></i><b>2.2.1</b> What is probability?</a></li>
+<li class="chapter" data-level="2.2.2" data-path="ch-modeling.html"><a href="ch-modeling.html#distributions"><i class="fa fa-check"></i><b>2.2.2</b> Distributions</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="ch-modeling.html"><a href="ch-modeling.html#sec:02-binomial-model"><i class="fa fa-check"></i><b>2.3</b> Flipping a biased coin: An alternative model</a></li>
+<li class="chapter" data-level="2.4" data-path="ch-modeling.html"><a href="ch-modeling.html#estimation"><i class="fa fa-check"></i><b>2.4</b> Estimation</a>
+<ul>
+<li class="chapter" data-level="2.4.1" data-path="ch-modeling.html"><a href="ch-modeling.html#maximum-likelihood-estimation"><i class="fa fa-check"></i><b>2.4.1</b> Maximum likelihood estimation</a></li>
+<li class="chapter" data-level="2.4.2" data-path="ch-modeling.html"><a href="ch-modeling.html#properties-of-good-estimators"><i class="fa fa-check"></i><b>2.4.2</b> Properties of good estimators</a></li>
+</ul></li>
+<li class="chapter" data-level="2.5" data-path="ch-modeling.html"><a href="ch-modeling.html#sec:02-likelihood-ratio"><i class="fa fa-check"></i><b>2.5</b> Comparing models: Null-hypothesis significance testing</a>
+<ul>
+<li class="chapter" data-level="2.5.1" data-path="ch-modeling.html"><a href="ch-modeling.html#decisions-and-types-of-error"><i class="fa fa-check"></i><b>2.5.1</b> Decisions and types of error</a></li>
+<li class="chapter" data-level="2.5.2" data-path="ch-modeling.html"><a href="ch-modeling.html#significance-and-power"><i class="fa fa-check"></i><b>2.5.2</b> Significance and power</a></li>
+<li class="chapter" data-level="2.5.3" data-path="ch-modeling.html"><a href="ch-modeling.html#testing-whether-paul-was-guessing"><i class="fa fa-check"></i><b>2.5.3</b> Testing whether Paul was guessing</a></li>
+</ul></li>
+<li class="chapter" data-level="2.6" data-path="ch-modeling.html"><a href="ch-modeling.html#hypothesis-testing-directly-with-the-binomial-distribution"><i class="fa fa-check"></i><b>2.6</b> Hypothesis testing directly with the Binomial distribution</a></li>
+<li class="chapter" data-level="2.7" data-path="ch-modeling.html"><a href="ch-modeling.html#summary-1"><i class="fa fa-check"></i><b>2.7</b> Summary</a></li>
+<li class="chapter" data-level="2.8" data-path="ch-modeling.html"><a href="ch-modeling.html#epilogue"><i class="fa fa-check"></i><b>2.8</b> Epilogue</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html"><i class="fa fa-check"></i><b>3</b> A model with a mean (one sample t-test)</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#numeric-judgement-and-anchoring"><i class="fa fa-check"></i><b>3.1</b> Numeric judgement and anchoring</a>
+<ul>
+<li class="chapter" data-level="3.1.1" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#exploring-the-data"><i class="fa fa-check"></i><b>3.1.1</b> Exploring the data</a></li>
+</ul></li>
+<li class="chapter" data-level="3.2" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#a-statistical-model-of-judgements"><i class="fa fa-check"></i><b>3.2</b> A statistical model of judgements</a>
+<ul>
+<li class="chapter" data-level="3.2.1" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#the-normal-distribution"><i class="fa fa-check"></i><b>3.2.1</b> The Normal distribution</a></li>
+<li class="chapter" data-level="3.2.2" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#two-useful-properties-of-the-normal-distribution"><i class="fa fa-check"></i><b>3.2.2</b> Two useful properties of the Normal distribution</a></li>
+<li class="chapter" data-level="3.2.3" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#back-to-anchoring"><i class="fa fa-check"></i><b>3.2.3</b> Back to anchoring</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#parameter-estimation"><i class="fa fa-check"></i><b>3.3</b> Parameter estimation</a>
+<ul>
+<li class="chapter" data-level="3.3.1" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#sampling-distribution-of-the-estimated-mean"><i class="fa fa-check"></i><b>3.3.1</b> Sampling distribution of the estimated mean</a></li>
+</ul></li>
+<li class="chapter" data-level="3.4" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#testing-whether-mu-has-an-specific-value"><i class="fa fa-check"></i><b>3.4</b> Testing whether <span class="math inline">\(\mu\)</span> has an specific value</a>
+<ul>
+<li class="chapter" data-level="3.4.1" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#the-classical-way"><i class="fa fa-check"></i><b>3.4.1</b> The classical way</a></li>
+<li class="chapter" data-level="3.4.2" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#the-model-comparison-way"><i class="fa fa-check"></i><b>3.4.2</b> The model comparison way</a></li>
+</ul></li>
+<li class="chapter" data-level="3.5" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#ch3-confidence-interval"><i class="fa fa-check"></i><b>3.5</b> Confidence intervals</a></li>
+<li class="chapter" data-level="3.6" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#effect-size"><i class="fa fa-check"></i><b>3.6</b> Effect size</a></li>
+<li class="chapter" data-level="3.7" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#sec:02-assumptions"><i class="fa fa-check"></i><b>3.7</b> Assumptions</a></li>
+<li class="chapter" data-level="3.8" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#the-central-limit-theorem"><i class="fa fa-check"></i><b>3.8</b> The Central Limit Theorem</a>
+<ul>
+<li class="chapter" data-level="3.8.1" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#the-central-limit-theorem-in-action"><i class="fa fa-check"></i><b>3.8.1</b> The Central Limit Theorem in action</a></li>
+<li class="chapter" data-level="3.8.2" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#bootstrapping-a-statistic"><i class="fa fa-check"></i><b>3.8.2</b> Bootstrapping a statistic</a></li>
+</ul></li>
+<li class="chapter" data-level="3.9" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#in-practice"><i class="fa fa-check"></i><b>3.9</b> In practice</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html"><i class="fa fa-check"></i><b>4</b> Simple linear regression</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#trump-votes-and-hate-groups"><i class="fa fa-check"></i><b>4.1</b> Trump, votes, and hate groups</a></li>
+<li class="chapter" data-level="4.2" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#the-model"><i class="fa fa-check"></i><b>4.2</b> The model</a></li>
+<li class="chapter" data-level="4.3" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#sec:04-estimation"><i class="fa fa-check"></i><b>4.3</b> Estimation</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#estimating-the-relation-between-trump-votes-and-hate-groups"><i class="fa fa-check"></i><b>4.3.1</b> Estimating the relation between Trump votes and hate groups</a></li>
+</ul></li>
+<li class="chapter" data-level="4.4" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#hypothesis-testing"><i class="fa fa-check"></i><b>4.4</b> Hypothesis testing</a>
+<ul>
+<li class="chapter" data-level="4.4.1" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#sampling-distribution-of-estimates"><i class="fa fa-check"></i><b>4.4.1</b> Sampling distribution of estimates</a></li>
+<li class="chapter" data-level="4.4.2" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#model-comparison"><i class="fa fa-check"></i><b>4.4.2</b> Model comparison</a></li>
+<li class="chapter" data-level="4.4.3" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#confidence-intervals"><i class="fa fa-check"></i><b>4.4.3</b> Confidence intervals</a></li>
+</ul></li>
+<li class="chapter" data-level="4.5" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#summary-2"><i class="fa fa-check"></i><b>4.5</b> Summary</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html"><i class="fa fa-check"></i><b>5</b> Multiple regression</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#trump-votes-and-hate-groups-again"><i class="fa fa-check"></i><b>5.1</b> Trump, votes, and hate groups (again)</a>
+<ul>
+<li class="chapter" data-level="5.1.1" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#controlling-for-education-level"><i class="fa fa-check"></i><b>5.1.1</b> Controlling for education level</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#the-multiple-regression-model"><i class="fa fa-check"></i><b>5.2</b> The multiple regression model</a></li>
+<li class="chapter" data-level="5.3" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#sec:04b-estimation"><i class="fa fa-check"></i><b>5.3</b> Estimation</a></li>
+<li class="chapter" data-level="5.4" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#sec:04b-inference"><i class="fa fa-check"></i><b>5.4</b> Inference</a></li>
+<li class="chapter" data-level="5.5" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#partitioning-and-explaining-variance"><i class="fa fa-check"></i><b>5.5</b> Partitioning and explaining variance</a></li>
+<li class="chapter" data-level="5.6" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#sec:04b-effect-size"><i class="fa fa-check"></i><b>5.6</b> Effect size and the importance of predictors</a>
+<ul>
+<li class="chapter" data-level="5.6.1" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#r2-changes-and-the-coefficient-of-semi-partial-determination"><i class="fa fa-check"></i><b>5.6.1</b> <span class="math inline">\(R^2\)</span> changes and the coefficient of (semi-)partial determination</a></li>
+</ul></li>
+<li class="chapter" data-level="5.7" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#sec:04b-assumptions"><i class="fa fa-check"></i><b>5.7</b> Assumptions</a>
+<ul>
+<li class="chapter" data-level="5.7.1" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#transforming-variables"><i class="fa fa-check"></i><b>5.7.1</b> Transforming variables</a></li>
+<li class="chapter" data-level="5.7.2" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#polynomial-regression"><i class="fa fa-check"></i><b>5.7.2</b> Polynomial regression</a></li>
+</ul></li>
+<li class="chapter" data-level="5.8" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#multicollinearity-redundancy-between-predictors"><i class="fa fa-check"></i><b>5.8</b> Multicollinearity: Redundancy between predictors</a>
+<ul>
+<li class="chapter" data-level="5.8.1" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#detecting-and-dealing-with-multicollinearity"><i class="fa fa-check"></i><b>5.8.1</b> Detecting and dealing with multicollinearity</a></li>
+</ul></li>
+<li class="chapter" data-level="5.9" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#sec:04b-outliers"><i class="fa fa-check"></i><b>5.9</b> Outliers</a></li>
+<li class="chapter" data-level="5.10" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#in-practice-1"><i class="fa fa-check"></i><b>5.10</b> In practice</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="moderation-and-mediation.html"><a href="moderation-and-mediation.html"><i class="fa fa-check"></i><b>6</b> Moderation and mediation</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="moderation-and-mediation.html"><a href="moderation-and-mediation.html#moderation"><i class="fa fa-check"></i><b>6.1</b> Moderation</a>
+<ul>
+<li class="chapter" data-level="6.1.1" data-path="moderation-and-mediation.html"><a href="moderation-and-mediation.html#physical-attractiveness-and-intelligence-in-speed-dating"><i class="fa fa-check"></i><b>6.1.1</b> Physical attractiveness and intelligence in speed dating</a></li>
+<li class="chapter" data-level="6.1.2" data-path="moderation-and-mediation.html"><a href="moderation-and-mediation.html#conditional-slopes"><i class="fa fa-check"></i><b>6.1.2</b> Conditional slopes</a></li>
+<li class="chapter" data-level="6.1.3" data-path="moderation-and-mediation.html"><a href="moderation-and-mediation.html#modeling-slopes-with-linear-models"><i class="fa fa-check"></i><b>6.1.3</b> Modeling slopes with linear models</a></li>
+<li class="chapter" data-level="6.1.4" data-path="moderation-and-mediation.html"><a href="moderation-and-mediation.html#simple-slopes-and-centering"><i class="fa fa-check"></i><b>6.1.4</b> Simple slopes and centering</a></li>
+<li class="chapter" data-level="6.1.5" data-path="moderation-and-mediation.html"><a href="moderation-and-mediation.html#sec:05-dont-forget-about-the-fun"><i class="fa fa-check"></i><b>6.1.5</b> Don’t forget about fun! A model with multiple interactions</a></li>
+</ul></li>
+<li class="chapter" data-level="6.2" data-path="moderation-and-mediation.html"><a href="moderation-and-mediation.html#mediation"><i class="fa fa-check"></i><b>6.2</b> Mediation</a>
+<ul>
+<li class="chapter" data-level="6.2.1" data-path="moderation-and-mediation.html"><a href="moderation-and-mediation.html#legacy-motives-and-pro-environmental-behaviours"><i class="fa fa-check"></i><b>6.2.1</b> Legacy motives and pro-environmental behaviours</a></li>
+<li class="chapter" data-level="6.2.2" data-path="moderation-and-mediation.html"><a href="moderation-and-mediation.html#causal-steps"><i class="fa fa-check"></i><b>6.2.2</b> Causal steps</a></li>
+<li class="chapter" data-level="6.2.3" data-path="moderation-and-mediation.html"><a href="moderation-and-mediation.html#estimating-the-mediated-effect"><i class="fa fa-check"></i><b>6.2.3</b> Estimating the mediated effect</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="ch-ANOVA.html"><a href="ch-ANOVA.html"><i class="fa fa-check"></i><b>7</b> A model of means (ANOVA)</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="ch-ANOVA.html"><a href="ch-ANOVA.html#can-playing-tetris-reduce-intrusive-memories"><i class="fa fa-check"></i><b>7.1</b> Can playing Tetris reduce intrusive memories?</a></li>
+<li class="chapter" data-level="7.2" data-path="ch-ANOVA.html"><a href="ch-ANOVA.html#sec:06-two-groups"><i class="fa fa-check"></i><b>7.2</b> Comparing two groups</a></li>
+<li class="chapter" data-level="7.3" data-path="ch-ANOVA.html"><a href="ch-ANOVA.html#the-anova-model"><i class="fa fa-check"></i><b>7.3</b> The ANOVA model</a></li>
+<li class="chapter" data-level="7.4" data-path="ch-ANOVA.html"><a href="ch-ANOVA.html#contrast-coding"><i class="fa fa-check"></i><b>7.4</b> Contrast coding</a>
+<ul>
+<li class="chapter" data-level="7.4.1" data-path="ch-ANOVA.html"><a href="ch-ANOVA.html#effect-coding"><i class="fa fa-check"></i><b>7.4.1</b> Effect coding</a></li>
+<li class="chapter" data-level="7.4.2" data-path="ch-ANOVA.html"><a href="ch-ANOVA.html#orthogonal-contrast-codes"><i class="fa fa-check"></i><b>7.4.2</b> Orthogonal contrast codes</a></li>
+<li class="chapter" data-level="7.4.3" data-path="ch-ANOVA.html"><a href="ch-ANOVA.html#defining-your-own-orthogonal-contrasts"><i class="fa fa-check"></i><b>7.4.3</b> Defining your own (orthogonal) contrasts</a></li>
+</ul></li>
+<li class="chapter" data-level="7.5" data-path="ch-ANOVA.html"><a href="ch-ANOVA.html#default-orthogonal-coding-schemes"><i class="fa fa-check"></i><b>7.5</b> Default orthogonal coding schemes</a></li>
+<li class="chapter" data-level="7.6" data-path="ch-ANOVA.html"><a href="ch-ANOVA.html#effect-size-in-anova"><i class="fa fa-check"></i><b>7.6</b> Effect-size in ANOVA</a></li>
+<li class="chapter" data-level="7.7" data-path="ch-ANOVA.html"><a href="ch-ANOVA.html#assumptions"><i class="fa fa-check"></i><b>7.7</b> Assumptions</a></li>
+<li class="chapter" data-level="7.8" data-path="ch-ANOVA.html"><a href="ch-ANOVA.html#multiple-testing-and-post-hoc-tests"><i class="fa fa-check"></i><b>7.8</b> Multiple testing and post-hoc tests</a></li>
+<li class="chapter" data-level="7.9" data-path="ch-ANOVA.html"><a href="ch-ANOVA.html#in-practice-2"><i class="fa fa-check"></i><b>7.9</b> In practice</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="ch-factorial-ANOVA.html"><a href="ch-factorial-ANOVA.html"><i class="fa fa-check"></i><b>8</b> Factorial ANOVA</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="ch-factorial-ANOVA.html"><a href="ch-factorial-ANOVA.html#experimenter-beliefs-and-social-priming"><i class="fa fa-check"></i><b>8.1</b> Experimenter beliefs and social priming</a>
+<ul>
+<li class="chapter" data-level="8.1.1" data-path="ch-factorial-ANOVA.html"><a href="ch-factorial-ANOVA.html#a-oneway-anova"><i class="fa fa-check"></i><b>8.1.1</b> A oneway ANOVA</a></li>
+</ul></li>
+<li class="chapter" data-level="8.2" data-path="ch-factorial-ANOVA.html"><a href="ch-factorial-ANOVA.html#factorial-designs"><i class="fa fa-check"></i><b>8.2</b> Factorial designs</a>
+<ul>
+<li class="chapter" data-level="8.2.1" data-path="ch-factorial-ANOVA.html"><a href="ch-factorial-ANOVA.html#sec:06-main-effects-and-interactions"><i class="fa fa-check"></i><b>8.2.1</b> Main effects and interactions</a></li>
+</ul></li>
+<li class="chapter" data-level="8.3" data-path="ch-factorial-ANOVA.html"><a href="ch-factorial-ANOVA.html#the-factorial-anova-model"><i class="fa fa-check"></i><b>8.3</b> The factorial ANOVA model</a></li>
+<li class="chapter" data-level="8.4" data-path="ch-factorial-ANOVA.html"><a href="ch-factorial-ANOVA.html#a-threeway-factorial-anova"><i class="fa fa-check"></i><b>8.4</b> A threeway factorial ANOVA</a>
+<ul>
+<li class="chapter" data-level="8.4.1" data-path="ch-factorial-ANOVA.html"><a href="ch-factorial-ANOVA.html#interpreting-interactions"><i class="fa fa-check"></i><b>8.4.1</b> Interpreting interactions</a></li>
+</ul></li>
+<li class="chapter" data-level="8.5" data-path="ch-factorial-ANOVA.html"><a href="ch-factorial-ANOVA.html#orthogonal-contrast-codes-and-unequal-sample-sizes"><i class="fa fa-check"></i><b>8.5</b> Orthogonal contrast codes and unequal sample sizes</a>
+<ul>
+<li class="chapter" data-level="8.5.1" data-path="ch-factorial-ANOVA.html"><a href="ch-factorial-ANOVA.html#comparison-schemes-and-ss-types"><i class="fa fa-check"></i><b>8.5.1</b> Comparison schemes and SS types</a></li>
+</ul></li>
+<li class="chapter" data-level="8.6" data-path="ch-factorial-ANOVA.html"><a href="ch-factorial-ANOVA.html#in-practice-3"><i class="fa fa-check"></i><b>8.6</b> In practice</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="mixing-categorical-and-metric-predictors-ancova.html"><a href="mixing-categorical-and-metric-predictors-ancova.html"><i class="fa fa-check"></i><b>9</b> Mixing categorical and metric predictors (ANCOVA)</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="mixing-categorical-and-metric-predictors-ancova.html"><a href="mixing-categorical-and-metric-predictors-ancova.html#subjective-feelings-of-power-and-priming"><i class="fa fa-check"></i><b>9.1</b> Subjective feelings of power and priming</a></li>
+<li class="chapter" data-level="9.2" data-path="mixing-categorical-and-metric-predictors-ancova.html"><a href="mixing-categorical-and-metric-predictors-ancova.html#acounting-for-pre-existing-differences"><i class="fa fa-check"></i><b>9.2</b> Acounting for pre-existing differences</a></li>
+<li class="chapter" data-level="9.3" data-path="mixing-categorical-and-metric-predictors-ancova.html"><a href="mixing-categorical-and-metric-predictors-ancova.html#slopes-of-contrast-coded-predictors-in-ancova-models"><i class="fa fa-check"></i><b>9.3</b> Slopes of contrast-coded predictors in ANCOVA models</a></li>
+<li class="chapter" data-level="9.4" data-path="mixing-categorical-and-metric-predictors-ancova.html"><a href="mixing-categorical-and-metric-predictors-ancova.html#homogeneity-of-slopes"><i class="fa fa-check"></i><b>9.4</b> Homogeneity of slopes</a></li>
+<li class="chapter" data-level="9.5" data-path="mixing-categorical-and-metric-predictors-ancova.html"><a href="mixing-categorical-and-metric-predictors-ancova.html#sec:ANCOVA-power"><i class="fa fa-check"></i><b>9.5</b> Power considerations in ANCOVA</a></li>
+<li class="chapter" data-level="9.6" data-path="mixing-categorical-and-metric-predictors-ancova.html"><a href="mixing-categorical-and-metric-predictors-ancova.html#models-with-multiple-covariates"><i class="fa fa-check"></i><b>9.6</b> Models with multiple covariates</a></li>
+<li class="chapter" data-level="9.7" data-path="mixing-categorical-and-metric-predictors-ancova.html"><a href="mixing-categorical-and-metric-predictors-ancova.html#mediation-with-categorical-independent-variables"><i class="fa fa-check"></i><b>9.7</b> Mediation with categorical independent variables</a></li>
+<li class="chapter" data-level="9.8" data-path="mixing-categorical-and-metric-predictors-ancova.html"><a href="mixing-categorical-and-metric-predictors-ancova.html#ancova-vs-difference-scores"><i class="fa fa-check"></i><b>9.8</b> ANCOVA vs difference scores</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html"><i class="fa fa-check"></i><b>10</b> Repeated-measures ANOVA</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#non-independence-in-linear-models"><i class="fa fa-check"></i><b>10.1</b> Non-independence in linear models</a></li>
+<li class="chapter" data-level="10.2" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#the-cheerleader-effect"><i class="fa fa-check"></i><b>10.2</b> The cheerleader effect</a></li>
+<li class="chapter" data-level="10.3" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#as-a-oneway-anova"><i class="fa fa-check"></i><b>10.3</b> As a oneway ANOVA</a></li>
+<li class="chapter" data-level="10.4" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#oneway-repeated-measures-anova"><i class="fa fa-check"></i><b>10.4</b> Oneway repeated-measures ANOVA</a>
+<ul>
+<li class="chapter" data-level="10.4.1" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#within-subjects-composite-scores"><i class="fa fa-check"></i><b>10.4.1</b> Within-subjects composite scores</a></li>
+<li class="chapter" data-level="10.4.2" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#a-composite-for-between-subjects-effects"><i class="fa fa-check"></i><b>10.4.2</b> A composite for between-subjects effects</a></li>
+<li class="chapter" data-level="10.4.3" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#collecting-all-results-and-omnibus-tests"><i class="fa fa-check"></i><b>10.4.3</b> Collecting all results and omnibus tests</a></li>
+</ul></li>
+<li class="chapter" data-level="10.5" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#partitioning-the-variance"><i class="fa fa-check"></i><b>10.5</b> Partitioning the variance</a></li>
+<li class="chapter" data-level="10.6" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#a-mixed-anova-with-between--and-within-subjects-effects"><i class="fa fa-check"></i><b>10.6</b> A mixed ANOVA with between- and within-subjects effects</a></li>
+<li class="chapter" data-level="10.7" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#assumptions-1"><i class="fa fa-check"></i><b>10.7</b> Assumptions</a>
+<ul>
+<li class="chapter" data-level="10.7.1" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#omnibus-tests-and-sphericity"><i class="fa fa-check"></i><b>10.7.1</b> Omnibus tests and sphericity</a></li>
+<li class="chapter" data-level="10.7.2" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#correcting-for-non-sphericity"><i class="fa fa-check"></i><b>10.7.2</b> Correcting for non-sphericity</a></li>
+</ul></li>
+<li class="chapter" data-level="10.8" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#in-practice-4"><i class="fa fa-check"></i><b>10.8</b> In practice</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="linear-mixed-effects-models.html"><a href="linear-mixed-effects-models.html"><i class="fa fa-check"></i><b>11</b> Linear mixed-effects models</a>
+<ul>
+<li class="chapter" data-level="11.1" data-path="linear-mixed-effects-models.html"><a href="linear-mixed-effects-models.html#non-independence-in-linear-models-1"><i class="fa fa-check"></i><b>11.1</b> Non-independence in linear models</a></li>
+<li class="chapter" data-level="11.2" data-path="linear-mixed-effects-models.html"><a href="linear-mixed-effects-models.html#random-intercept-models"><i class="fa fa-check"></i><b>11.2</b> Random intercept models</a></li>
+<li class="chapter" data-level="11.3" data-path="linear-mixed-effects-models.html"><a href="linear-mixed-effects-models.html#parameter-estimation-1"><i class="fa fa-check"></i><b>11.3</b> Parameter estimation</a></li>
+<li class="chapter" data-level="11.4" data-path="linear-mixed-effects-models.html"><a href="linear-mixed-effects-models.html#parameter-inference"><i class="fa fa-check"></i><b>11.4</b> Parameter inference</a></li>
+<li class="chapter" data-level="11.5" data-path="linear-mixed-effects-models.html"><a href="linear-mixed-effects-models.html#application-of-the-random-intercepts-model"><i class="fa fa-check"></i><b>11.5</b> Application of the random-intercepts model</a></li>
+<li class="chapter" data-level="11.6" data-path="linear-mixed-effects-models.html"><a href="linear-mixed-effects-models.html#models-with-random-intercepts-and-slopes"><i class="fa fa-check"></i><b>11.6</b> Models with random intercepts and slopes</a>
+<ul>
+<li class="chapter" data-level="11.6.1" data-path="linear-mixed-effects-models.html"><a href="linear-mixed-effects-models.html#correlation-between-random-effects"><i class="fa fa-check"></i><b>11.6.1</b> Correlation between random effects</a></li>
+</ul></li>
+<li class="chapter" data-level="11.7" data-path="linear-mixed-effects-models.html"><a href="linear-mixed-effects-models.html#crossed-random-effects-dating-partners-in-the-speed-dating-experiment"><i class="fa fa-check"></i><b>11.7</b> Crossed random effects: dating partners in the speed dating experiment</a></li>
+<li class="chapter" data-level="11.8" data-path="linear-mixed-effects-models.html"><a href="linear-mixed-effects-models.html#choosing-the-random-effects-structure"><i class="fa fa-check"></i><b>11.8</b> Choosing the random effects structure</a></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="introduction-to-bayesian-hypothesis-testing.html"><a href="introduction-to-bayesian-hypothesis-testing.html"><i class="fa fa-check"></i><b>12</b> Introduction to Bayesian hypothesis testing</a>
+<ul>
+<li class="chapter" data-level="12.1" data-path="introduction-to-bayesian-hypothesis-testing.html"><a href="introduction-to-bayesian-hypothesis-testing.html#fundamentals-of-bayesian-inference"><i class="fa fa-check"></i><b>12.1</b> Fundamentals of Bayesian inference</a>
+<ul>
+<li class="chapter" data-level="12.1.1" data-path="introduction-to-bayesian-hypothesis-testing.html"><a href="introduction-to-bayesian-hypothesis-testing.html#probability-in-times-of-covid"><i class="fa fa-check"></i><b>12.1.1</b> Probability in times of Covid</a></li>
+<li class="chapter" data-level="12.1.2" data-path="introduction-to-bayesian-hypothesis-testing.html"><a href="introduction-to-bayesian-hypothesis-testing.html#bayes-rule"><i class="fa fa-check"></i><b>12.1.2</b> Bayes’ rule</a></li>
+<li class="chapter" data-level="12.1.3" data-path="introduction-to-bayesian-hypothesis-testing.html"><a href="introduction-to-bayesian-hypothesis-testing.html#we-missed-you-paul"><i class="fa fa-check"></i><b>12.1.3</b> We missed you Paul!</a></li>
+<li class="chapter" data-level="12.1.4" data-path="introduction-to-bayesian-hypothesis-testing.html"><a href="introduction-to-bayesian-hypothesis-testing.html#the-marginal-likelihood-and-prior-predictive-distribution"><i class="fa fa-check"></i><b>12.1.4</b> The marginal likelihood and prior predictive distribution</a></li>
+<li class="chapter" data-level="12.1.5" data-path="introduction-to-bayesian-hypothesis-testing.html"><a href="introduction-to-bayesian-hypothesis-testing.html#hypothesis-testing-relative-evidence-and-the-bayes-factor"><i class="fa fa-check"></i><b>12.1.5</b> Hypothesis testing, relative evidence, and the Bayes factor</a></li>
+</ul></li>
+<li class="chapter" data-level="12.2" data-path="introduction-to-bayesian-hypothesis-testing.html"><a href="introduction-to-bayesian-hypothesis-testing.html#a-bayesian-t-test"><i class="fa fa-check"></i><b>12.2</b> A Bayesian t-test</a></li>
+<li class="chapter" data-level="12.3" data-path="introduction-to-bayesian-hypothesis-testing.html"><a href="introduction-to-bayesian-hypothesis-testing.html#bayes-factors-for-general-linear-models"><i class="fa fa-check"></i><b>12.3</b> Bayes factors for General Linear Models</a></li>
+<li class="chapter" data-level="12.4" data-path="introduction-to-bayesian-hypothesis-testing.html"><a href="introduction-to-bayesian-hypothesis-testing.html#some-objections-to-null-hypothesis-significance-testing"><i class="fa fa-check"></i><b>12.4</b> Some objections to null-hypothesis significance testing</a>
+<ul>
+<li class="chapter" data-level="12.4.1" data-path="introduction-to-bayesian-hypothesis-testing.html"><a href="introduction-to-bayesian-hypothesis-testing.html#the-p-value-is-not-a-proper-measure-of-evidential-support"><i class="fa fa-check"></i><b>12.4.1</b> The <span class="math inline">\(p\)</span>-value is not a proper measure of evidential support</a></li>
+<li class="chapter" data-level="12.4.2" data-path="introduction-to-bayesian-hypothesis-testing.html"><a href="introduction-to-bayesian-hypothesis-testing.html#the-p-value-depends-on-researcher-intentions"><i class="fa fa-check"></i><b>12.4.2</b> The <span class="math inline">\(p\)</span>-value depends on researcher intentions</a></li>
+<li class="chapter" data-level="12.4.3" data-path="introduction-to-bayesian-hypothesis-testing.html"><a href="introduction-to-bayesian-hypothesis-testing.html#results-of-a-nhst-are-often-misinterpreted"><i class="fa fa-check"></i><b>12.4.3</b> Results of a NHST are often misinterpreted</a></li>
+</ul></li>
+<li class="chapter" data-level="12.5" data-path="introduction-to-bayesian-hypothesis-testing.html"><a href="introduction-to-bayesian-hypothesis-testing.html#to-bayes-or-not-to-bayes-a-pragmatic-view"><i class="fa fa-check"></i><b>12.5</b> To Bayes or not to Bayes? A pragmatic view</a></li>
+<li class="chapter" data-level="12.6" data-path="introduction-to-bayesian-hypothesis-testing.html"><a href="introduction-to-bayesian-hypothesis-testing.html#summary-3"><i class="fa fa-check"></i><b>12.6</b> “Summary”</a></li>
+</ul></li>
+<li class="chapter" data-level="13" data-path="being-a-responsible-data-analyst.html"><a href="being-a-responsible-data-analyst.html"><i class="fa fa-check"></i><b>13</b> Being a responsible data analyst</a>
+<ul>
+<li class="chapter" data-level="13.1" data-path="being-a-responsible-data-analyst.html"><a href="being-a-responsible-data-analyst.html#consider-analysis-before-data-collection"><i class="fa fa-check"></i><b>13.1</b> Consider analysis before data collection</a></li>
+<li class="chapter" data-level="13.2" data-path="being-a-responsible-data-analyst.html"><a href="being-a-responsible-data-analyst.html#explore-the-data"><i class="fa fa-check"></i><b>13.2</b> Explore the data</a></li>
+<li class="chapter" data-level="13.3" data-path="being-a-responsible-data-analyst.html"><a href="being-a-responsible-data-analyst.html#evaluate-the-assumptions-underlying-your-analyses"><i class="fa fa-check"></i><b>13.3</b> Evaluate the assumptions underlying your analyses</a></li>
+<li class="chapter" data-level="13.4" data-path="being-a-responsible-data-analyst.html"><a href="being-a-responsible-data-analyst.html#distinguish-between-confirmatory-and-exploratory-analyses"><i class="fa fa-check"></i><b>13.4</b> Distinguish between confirmatory and exploratory analyses</a></li>
+<li class="chapter" data-level="13.5" data-path="being-a-responsible-data-analyst.html"><a href="being-a-responsible-data-analyst.html#aim-for-openness-and-reproducibility"><i class="fa fa-check"></i><b>13.5</b> Aim for openness and reproducibility</a></li>
+<li class="chapter" data-level="13.6" data-path="being-a-responsible-data-analyst.html"><a href="being-a-responsible-data-analyst.html#communicate-clearly-and-concisely"><i class="fa fa-check"></i><b>13.6</b> Communicate clearly and concisely</a>
+<ul>
+<li class="chapter" data-level="13.6.1" data-path="being-a-responsible-data-analyst.html"><a href="being-a-responsible-data-analyst.html#example-of-reporting-a-multiple-regression-analysis"><i class="fa fa-check"></i><b>13.6.1</b> Example of reporting a multiple regression analysis</a></li>
+<li class="chapter" data-level="13.6.2" data-path="being-a-responsible-data-analyst.html"><a href="being-a-responsible-data-analyst.html#example-of-reporting-a-factorial-anova"><i class="fa fa-check"></i><b>13.6.2</b> Example of reporting a factorial ANOVA</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Statistics: Data analysis and modelling</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="ch-RM-ANOVA" class="section level1" number="10">
+<h1><span class="header-section-number">Chapter 10</span> Repeated-measures ANOVA</h1>
+<p>In this chapter, we will discuss how to deal with the non-independence of errors that can result from repeated measures of the same individual or from other groupings in the data, within the context of ANOVA-type analyses (i.e. a GLM with only categorical predictors). The resulting class of models is known as repeated-measures ANOVA. We will consider one way to construct this class of models, by constructing new dependent variables by applying orthogonal contrasts to create difference scores between the observed dependent variables. For each of these new dependent variables, we can use a GLM as usual. The main conceptual leap will be in interpreting these new dependent variables, which we’ll call <em>within-subjects composite scores</em>. The alternative approach is to apply contrast codes to the different “units of observation” (e.g. participants), and then treat this as a factorial design involving a mix of fixed and random experimental factors. As random and fixed effects are more straightforwardly dealt with in mixed-effects regression models – the topic of the next chapter – we will leave such considerations until later. The way we’ll will discuss repeated-measures ANOVA is close to how most modern computational approaches actually conduct these analyses.</p>
+<div id="non-independence-in-linear-models" class="section level2" number="10.1">
+<h2><span class="header-section-number">10.1</span> Non-independence in linear models</h2>
+<p>The General Linear Model we have considered thus far can be stated as follows:</p>
+<p><span class="math display">\[Y_i = \beta_0 + \beta_1 \times X_{1,i} + \beta_2 \times X_{2,i} + \ldots + \beta_m \times X_{m,i} + \epsilon_i \quad \quad \quad \epsilon_i \sim \mathbf{Normal}(0,\sigma_\epsilon)\]</span>
+The assumptions of this model concern the errors, or residuals, <span class="math inline">\(\epsilon_i\)</span>. These are assumed to be <em>independent and identically distributed</em> (iid), following a Normal distribution with a mean of 0 and a standard deviation <span class="math inline">\(\sigma_\epsilon\)</span>.</p>
+<p>You can expect violations of the <em>iid</em> assumption if data are collected from “units of observation” that are clustered in groups. A common example of this in psychology is when you repeatedly observe behaviour from the same person.<a href="#fn23" class="footnote-ref" id="fnref23"><sup>23</sup></a> For example, suppose participants in an experiment perform two tests to measure their working memory capacity. A person with a high working memory capacity would likely score high on both tests, whilst a person with a low working memory capacity would likely score low on both. In that case, the scores in the two tests are correlated and hence <em>not</em> independent. If the model does not adequately account for this, then the errors (residuals) would also not be independent. Violating the independence or errors assumption implies that the General Linear Model is misspecified, and does not account for all the structure in the data. This has consequences for the tests of parameters of the model. In addition to the test statistics no following the assumed distributions, the tests often have less power than when properly accounting for the dependencies. Following <span class="citation"><a href="#ref-judd2011data" role="doc-biblioref">Charles M. Judd et al.</a> (<a href="#ref-judd2011data" role="doc-biblioref">2011</a>)</span>, the approach we take here is to remove the dependencies by transforming the data. In a nutshell, using orthogonal contrast codes, we transform a set of correlated dependent variables (e.g. two tests of working memory) into a set of orthogonal (uncorrelated) dependent variables. We then apply General Linear Models to each of these transformed dependent variables.</p>
+<!-- As another example of dependency between model residuals, let's go back to the simplest version of the GLM, the model with just an intercept that was the focus of Chapter \@ref(ch-simple-GLM):
+\begin{equation}
+Y_i = \beta_0 + \epsilon_i
+(\#eq:simple-glm-ch08)
+\end{equation}
+Suppose the dependent variable $Y$ again reflects judgements of the height of Mount Everest, but that one of the labs in the ManyLabs study that collected the data, was based in Nepal. We might expect participants in Nepal to have a more accurate idea of the height of Mount Everest than participants in Poland (the country the participants were from in the subset of the data we considered in Chapter \@ref(ch-simple-GLM)). As a result, participants in Nepal would likely be less influenced by the low anchor than those with less knowledge of Mount Everest. If $\beta_0$ represents the mean judgement over all participants, then participants in Nepal would generally provide judgements which are higher than $\beta_0$ (i.e positive errors), whilst participants in Poland would generally provide judgements that are lower than $\beta_0$ (i.e. negative errors). If our model does not account for such grouping in the data, then the errors for cases from Nepal would be correlated, because all would tend to be positive. Similarly, the errors for cases from Poland would also be correlated, as all would tend to be negative. 
+
+What this example points to is that the simple model does not account for the fact that participants from different countries might have a different average judgement. As such, the model is misspecified. Here, that leads to dependent errors. Unfortunately, compared to violations of other assumptions, such as the normality assumption or the assumption of variance homogeneity, standard statistical procedures are usually _not_ robust to violations of the independence assumption [@kenny_consequences_1986;@judd_treating_2012]. They often lead to considerably increased Type I errors (i.e., false positives) and more generally can produce overconfident results (e.g., too narrow standard errors).
+
+In the example above, we could alleviate the problem of dependent errors by including an effect for country, using a contrast-coding predictor $X_1$ to reflect the difference between participants from Nepal ($X_1 = \tfrac{1}{2}$) and Poland ($X_1 = -\tfrac{1}{2}$) in an expanded model
+$$Y_i = \beta_0 + \beta_1 \times X_{1,i} + \epsilon_i$$
+This model would allow for a different mean judgement for cases from Nepal ($\beta_0 + \tfrac{1}{2} \times \beta_1$) and cases from Poland ($\beta_0 - \tfrac{1}{2} \times \beta_1$). Effectively, this is the strategy employed in repeated-measures ANOVA: include an additional grouping factor in the model.
+
+<!-- The assumption that the errors are independent means that knowing the value of the error for one case $i$ in the data does not give you any information to determine the value of the error for another case $j$. More formally, statistical independence is defined in terms of conditional probabilities. Remember when we discussed the rules of probability (Section \@ref(sec:02-rules-of-probability))? In particular, we used independence to state rule 7, which is a specific case of the multiplication rule (rule 6). We can define the distribution of the error for case $i$ as a conditional probability $p(\epsilon_i | \epsilon_i, X_{1,i}, \ldots, X_{m,i})$, where we conditionalise on all the predictor values, as well as another error term $\epsilon_j$. The errors are independent when 
+$$p(\epsilon_i | \epsilon_j, X_{1,i}, \ldots, X_{m,i}) = p(\epsilon_i |  X_{1,i}, \ldots, X_{m,i})$$
+i.e. the distribution of $\epsilon_i$, conditional upon knowing the value of the predictors and the error $\epsilon_j$ of another case $j$, is the same as the distribution conditional upon just knowing the value of the predictors. This means that error $\epsilon_j$ provides no information about the error $\epsilon_i$.
+-->
+</div>
+<div id="the-cheerleader-effect" class="section level2" number="10.2">
+<h2><span class="header-section-number">10.2</span> The cheerleader effect</h2>
+<p>The attractiveness of a person’s face is traditionally considered to be related to physical features, such as how symmetrical the features are, how close a face is to the “average” face over many people, and sexual dimorphism (whether a face looks exclusively male or female). However, there is also evidence that perceived facial attractiveness can vary due to factors outside of the face. In what has become known as the “cheerleader effect,” the same face is perceived to be more attractive when seen in a group, as compared to when it is seen alone. <span class="citation"><a href="#ref-walker2014hierarchical" role="doc-biblioref">Walker &amp; Vul</a> (<a href="#ref-walker2014hierarchical" role="doc-biblioref">2014</a>)</span> proposed that the cheerleader effect arises due to people encoding faces in a hierarchical manner. When presented with a group of faces, people encode the display by first calculating an average face for the group, and then encoding individual faces as deviations from the group average. Because faces which are closer to the average face tend to be perceived as more attractive than individual faces, the encoded group average lifts the attractiveness of each face in the group, resulting in each face in the group being perceived as more attractive than if it were presented by itself.<br />
+<span class="citation"><a href="#ref-carragher2019limited" role="doc-biblioref">Carragher, Thomas, Gwinn, &amp; Nicholls</a> (<a href="#ref-carragher2019limited" role="doc-biblioref">2019</a>)</span> set out to test this explanation. In one part of their study (Experiment 1), they let participants rate the attractiveness of a face when presented by itself (the Alone condition), as part of a group of different faces (the Different condition), or as part of a group of similar faces (the Similar condition). There were two variants of the latter condition, and participants encountered only one of them in the experiment. In the Identical condition, the group consisted of three copies of exactly the same photo. In the Variant condition, the group consisted of three different photos of the same face.<a href="#fn24" class="footnote-ref" id="fnref24"><sup>24</sup></a> The authors argued that if the hierarchical-encoding explanation for the cheerleader effect is true, then the cheerleader effect should not be observed in the Identical condition. This is because the average of three identical photos is just the photo itself, so there should be no difference between an encoded average face and the face itself. In the Variant condition however, variability between the different photos of the same face might still lead to an average face which is deemed more attractive than each individual face.</p>
+<p>The design of the study is an example of a 2 (Version: Identical, Variant) by 3 (Presentation: Alone, Different, or Similar) design. The first factor (Version) varied between people, and the second (Presentation) within people (each participant rated a face in each of the three conditions). The rated attractiveness of the faces in the different conditions are provided in Figure <a href="ch-RM-ANOVA.html#fig:cheerleader-raincloud-plot">10.1</a>.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:cheerleader-raincloud-plot"></span>
+<img src="_main_files/figure-html/cheerleader-raincloud-plot-1.svg" alt="Attractiveness ratings for photo's of faces when presented alone, as part of a group of dissimilar faces (Different), or as part of a group of similar faces (Similar), which are either identical (Identical) or different photos (Variant) of the same face." width="95%" />
+<p class="caption">
+Figure 10.1: Attractiveness ratings for photo’s of faces when presented alone, as part of a group of dissimilar faces (Different), or as part of a group of similar faces (Similar), which are either identical (Identical) or different photos (Variant) of the same face.
+</p>
+</div>
+</div>
+<div id="as-a-oneway-anova" class="section level2" number="10.3">
+<h2><span class="header-section-number">10.3</span> As a oneway ANOVA</h2>
+To keep matters relatively simple, we will for now just consider the <span class="math inline">\(n=31\)</span> participants in the Variant conditions. We can now treat the study as a oneway design, with three levels (Presentation: Alone, Different, or Similar) that all vary within-participants. As the cheerleader effect predicts that faces presented as part of a group will be rated as more attractive, and that this effect will be larger if there is more variety in the faces within the group, a reasonable set of contrast codes is:
+<table>
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:right;">
+<span class="math inline">\(c_1\)</span>
+</th>
+<th style="text-align:right;">
+<span class="math inline">\(c_2\)</span>
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Alone
+</td>
+<td style="text-align:right;">
+<span class="math inline">\(-\tfrac{2}{3}\)</span>
+</td>
+<td style="text-align:right;">
+<span class="math inline">\(0\)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Different
+</td>
+<td style="text-align:right;">
+<span class="math inline">\(\tfrac{1}{3}\)</span>
+</td>
+<td style="text-align:right;">
+<span class="math inline">\(\tfrac{1}{2}\)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Similar
+</td>
+<td style="text-align:right;">
+<span class="math inline">\(\tfrac{1}{3}\)</span>
+</td>
+<td style="text-align:right;">
+<span class="math inline">\(-\tfrac{1}{2}\)</span>
+</td>
+</tr>
+</tbody>
+</table>
+<p>The first contrast code reflects the expectation that a face in a group (Different or Similar) will be rated as more attractive than faces in the Alone condition. The second contrast reflects the expectation that a face surrounded by different faces will be rated as more attractive than when surrounded by more similar faces.</p>
+<p>If we were to (wrongly!) treat all ratings as independent, and analyse the data with a regular oneway ANOVA, we would obtain the results in Table <a href="ch-RM-ANOVA.html#tab:cheerleader-oneway-ANOVA-results">10.1</a>. As you can see, this analysis indicates there is no effect of presenting a face alone or in a group.</p>
+<table>
+<caption>
+<span id="tab:cheerleader-oneway-ANOVA-results">Table 10.1: </span>Linear model predicting attractiveness ratings in the three conditions, wrongly assuming independence.
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:right;">
+<span class="math inline">\(\hat{\beta}\)</span>
+</th>
+<th style="text-align:right;">
+<span class="math inline">\(\text{SS}\)</span>
+</th>
+<th style="text-align:right;">
+<span class="math inline">\(\text{df}\)</span>
+</th>
+<th style="text-align:right;">
+<span class="math inline">\(F\)</span>
+</th>
+<th style="text-align:right;">
+<span class="math inline">\(P(\geq \lvert F \rvert)\)</span>
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Intercept
+</td>
+<td style="text-align:right;">
+47.43
+</td>
+<td style="text-align:right;">
+209177
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+2062.61
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Presentation
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+36
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+0.18
+</td>
+<td style="text-align:right;">
+0.840
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<span class="math inline">\(\quad X_1\)</span> (D+S vs A)
+</td>
+<td style="text-align:right;">
+1.30
+</td>
+<td style="text-align:right;">
+35
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.34
+</td>
+<td style="text-align:right;">
+0.559
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<span class="math inline">\(\quad X_2\)</span> (D vs S)
+</td>
+<td style="text-align:right;">
+-0.19
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.01
+</td>
+<td style="text-align:right;">
+0.941
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Error
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+9127
+</td>
+<td style="text-align:right;">
+90
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+</td>
+</tr>
+</tbody>
+</table>
+<!-- If we let $Y_{i,j}$ denote a response by person $i$ in condition $j$, the errors in this model are $\hat{\epsilon}_{i,j} = Y_{i,j} - \overline{Y}_{\cdot,j}$. But if you consider Table \@ref(tab:cheerleader-self-attractiveness-table), you might realise that we can much more specific in considering what the effect of displaying a face amongst in a group is. -->
+<p>The problem with this analysis is that it ignores the (on occasion rather large) differences between participants in how attractive they find a face on average (i.e. over the three conditions). Table <a href="ch-RM-ANOVA.html#tab:cheerleader-self-attractiveness-table">10.2</a> shows the attractiveness ratings for 10 participants in the Variant condition. You can see there that when a participant rates a face as relatively attractive when presented alone, (s)he also tends to rate the face as relatively attractive when shown in a group of faces. Some participants (e.g. participant 37) rate the face as relatively unattractive in all conditions. This indicates individual differences in how attractive people find a face. Simply put: people’s tastes differ. Whilst that may be interesting in its own right, for the purposes of the experiment, we do not care about such individual differences. What we want to know is whether the attractiveness of a face increases when presented as part of a group vs when presented in isolation. To answer this question, we can’t completely ignore individual differences.</p>
+<table>
+<caption>
+<span id="tab:cheerleader-self-attractiveness-table">Table 10.2: </span>Attractiveness ratings in the Alone, Different, and Similar condition for 10 participants in the Variant condition. Also shown is the average over the three ratings for each participant, as well as differences between the rating in the Different and Alone condition (D-A) and between the Similar and Alone condition (S-A).
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+Participant
+</th>
+<th style="text-align:left;">
+Alone
+</th>
+<th style="text-align:left;">
+Different
+</th>
+<th style="text-align:left;">
+Similar
+</th>
+<th style="text-align:right;">
+Average
+</th>
+<th style="text-align:right;">
+D-A
+</th>
+<th style="text-align:right;">
+S-A
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+36
+</td>
+<td style="text-align:left;">
+56.32
+</td>
+<td style="text-align:left;">
+55.92
+</td>
+<td style="text-align:left;">
+54.30
+</td>
+<td style="text-align:right;">
+55.5
+</td>
+<td style="text-align:right;">
+-0.40
+</td>
+<td style="text-align:right;">
+-2.02
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+37
+</td>
+<td style="text-align:left;">
+13.31
+</td>
+<td style="text-align:left;">
+13.52
+</td>
+<td style="text-align:left;">
+11.64
+</td>
+<td style="text-align:right;">
+12.8
+</td>
+<td style="text-align:right;">
+0.21
+</td>
+<td style="text-align:right;">
+-1.67
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+39
+</td>
+<td style="text-align:left;">
+49.81
+</td>
+<td style="text-align:left;">
+49.77
+</td>
+<td style="text-align:left;">
+51.20
+</td>
+<td style="text-align:right;">
+50.3
+</td>
+<td style="text-align:right;">
+-0.03
+</td>
+<td style="text-align:right;">
+1.40
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+40
+</td>
+<td style="text-align:left;">
+47.10
+</td>
+<td style="text-align:left;">
+52.48
+</td>
+<td style="text-align:left;">
+53.19
+</td>
+<td style="text-align:right;">
+50.9
+</td>
+<td style="text-align:right;">
+5.38
+</td>
+<td style="text-align:right;">
+6.09
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+41
+</td>
+<td style="text-align:left;">
+38.93
+</td>
+<td style="text-align:left;">
+41.62
+</td>
+<td style="text-align:left;">
+42.13
+</td>
+<td style="text-align:right;">
+40.9
+</td>
+<td style="text-align:right;">
+2.69
+</td>
+<td style="text-align:right;">
+3.20
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+42
+</td>
+<td style="text-align:left;">
+60.04
+</td>
+<td style="text-align:left;">
+58.93
+</td>
+<td style="text-align:left;">
+59.47
+</td>
+<td style="text-align:right;">
+59.5
+</td>
+<td style="text-align:right;">
+-1.11
+</td>
+<td style="text-align:right;">
+-0.57
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+44
+</td>
+<td style="text-align:left;">
+44.74
+</td>
+<td style="text-align:left;">
+47.02
+</td>
+<td style="text-align:left;">
+50.47
+</td>
+<td style="text-align:right;">
+47.4
+</td>
+<td style="text-align:right;">
+2.28
+</td>
+<td style="text-align:right;">
+5.73
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+45
+</td>
+<td style="text-align:left;">
+45.24
+</td>
+<td style="text-align:left;">
+43.92
+</td>
+<td style="text-align:left;">
+46.22
+</td>
+<td style="text-align:right;">
+45.1
+</td>
+<td style="text-align:right;">
+-1.32
+</td>
+<td style="text-align:right;">
+0.98
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+46
+</td>
+<td style="text-align:left;">
+36.79
+</td>
+<td style="text-align:left;">
+37.28
+</td>
+<td style="text-align:left;">
+35.80
+</td>
+<td style="text-align:right;">
+36.6
+</td>
+<td style="text-align:right;">
+0.49
+</td>
+<td style="text-align:right;">
+-0.99
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+47
+</td>
+<td style="text-align:left;">
+53.78
+</td>
+<td style="text-align:left;">
+52.69
+</td>
+<td style="text-align:left;">
+52.90
+</td>
+<td style="text-align:right;">
+53.1
+</td>
+<td style="text-align:right;">
+-1.08
+</td>
+<td style="text-align:right;">
+-0.88
+</td>
+</tr>
+</tbody>
+</table>
+<!-- This individual variability makes the ratings within each condition also highly variable. By ignoring that we have repeated measures for each participant, the model errors are the differences between each rating in a condition and the average in that condition. -->
+</div>
+<div id="oneway-repeated-measures-anova" class="section level2" number="10.4">
+<h2><span class="header-section-number">10.4</span> Oneway repeated-measures ANOVA</h2>
+<p>For each participant, we could consider whether the rating in e.g. the Different condition is higher than the rating in the Alone condition. These difference scores are provided in the D-A and S-A columns in Table <a href="ch-RM-ANOVA.html#tab:cheerleader-self-attractiveness-table">10.2</a>. For participant 36, the rating in the Different condition is a little lower than their rating in the Alone condition, and for participant 37, it is a little higher. These difference scores remove variability in how attracted people are to a face in general. The difference scores just reflect whether people find a face more or less attractive when presented in the context of a group of faces, compared to when presented alone. We can then simply ask whether these differences are, on average, positive (indicating increased attractiveness) or negative (indicating decreased attractiveness). We can answer this question by using a one-sample t-test on the difference scores, comparing a general intercept-only MODEL G to an even simpler MODEL R where we fix the intercept to 0. If we can reject the null hypothesis that the mean of the difference is equal to 0, that is evidence of an effect of the experimental manipulation.</p>
+<p>For example, we can compare attractiveness ratings between the Different and Alone conditions by, for the D-A difference scores, comparing a MODEL G
+<span class="math display">\[\begin{aligned} (\text{D - A})_i &amp;= Y_{i,\text{D}} - Y_{i,\text{A}} \\ &amp;= \beta_0 + \epsilon_{\text{D-A},i} \end{aligned}\]</span>
+to a MODEL R:
+<span class="math display">\[\begin{aligned} (\text{D - A})_i &amp;= Y_{i,\text{D}} - Y_{i,\text{A}} \\ &amp;= 0 + \epsilon_{\text{D-A},i} \end{aligned}\]</span></p>
+<p>This comparison is a test whether the mean of the D-A difference score is equal to 0. The result of this test is <span class="math inline">\(F(1,30) = 10.52\)</span>, <span class="math inline">\(p= .003\)</span>. We can therefore conclude there is evidence for a difference between the Different and Alone presentions, as would be expected from the “cheerleader effect.”</p>
+<p>Using a similar model comparison
+approach for the S-A difference scores, we obtain a test result of <span class="math inline">\(F(1,30) = 10.28\)</span>, <span class="math inline">\(p= .003\)</span>. So, if we focus on differences between the conditions “within persons” (by computing differences between the conditions for each person), we find evidence that both the Different and Similar condition differ from the Alone condition. On average, participants’ rating of the attractiveness of a face was 1.21 points higher when presented amongst a group of different faces, and 1.4 points higher when presented amongst a group of similar faces, compared to when the face was presented by itself. Given that attractiveness was rated on a scale between 1-100, these are not large differences, but they are statistically significant.</p>
+<div id="within-subjects-composite-scores" class="section level3" number="10.4.1">
+<h3><span class="header-section-number">10.4.1</span> Within-subjects composite scores</h3>
+<p>The idea of computing difference scores and then using these in linear models is essentially how we will test for effects of manipulations that vary within persons. To do this more generally, we will apply orthogonal contrast codes to compute such difference scores. We will refer to the resulting within-person-difference-scores as <strong>within-subjects composite scores</strong>.</p>
+We will use the same contrast codes as before, but denote them as <span class="math inline">\(d_j\)</span> to separate them from between-subjects contrasts (<span class="math inline">\(c_j\)</span>):
+<table>
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:right;">
+<span class="math inline">\(d_1\)</span>
+</th>
+<th style="text-align:right;">
+<span class="math inline">\(d_2\)</span>
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Alone
+</td>
+<td style="text-align:right;">
+<span class="math inline">\(-\tfrac{2}{3}\)</span>
+</td>
+<td style="text-align:right;">
+<span class="math inline">\(0\)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Different
+</td>
+<td style="text-align:right;">
+<span class="math inline">\(\tfrac{1}{3}\)</span>
+</td>
+<td style="text-align:right;">
+<span class="math inline">\(\tfrac{1}{2}\)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Similar
+</td>
+<td style="text-align:right;">
+<span class="math inline">\(\tfrac{1}{3}\)</span>
+</td>
+<td style="text-align:right;">
+<span class="math inline">\(-\tfrac{1}{2}\)</span>
+</td>
+</tr>
+</tbody>
+</table>
+<!-- The first contrast code reflects the expectation that a face in a group (Different or Similar) will be rated as more attractive than faces in the Alone condition. The second contrast reflects the expectation that a face surrounded by different faces will be rated as more attractive than when surrounded by more similar faces.-->
+<p>For each within-subjects contrast <span class="math inline">\(d_j\)</span>, we compute a within-subjects composite score as:
+<span class="math display" id="eq:within-subjects-composite-scores-ch08">\[\begin{equation}
+W_{j,i} = \frac{\sum_{k=1}^g d_{j,k} Y_{i,k}}{\sqrt{\sum_{k=1}^g d_{j,k}^2}}
+\tag{10.1}
+\end{equation}\]</span>
+The top part of this equation (the numerator) is just the sum of a participant <span class="math inline">\(i\)</span>’s score in each condition <span class="math inline">\(k\)</span> multiplied by the corresponding value of contrast code <span class="math inline">\(d_j\)</span>. The bottom part (the denominator) is a scaling factor, computed as the square-root of the sum of the squared contrast values. The reason for applying this scaling factor is to make the sums of squares of the resulting analyses add up to the total sum of squares (i.e. the Sum of Squared Error of an intercept-only model). Otherwise, it is not of theoretical importance.</p>
+As an example, let’s compute the within-subjects composite scores for participant 36 in Table <a href="ch-RM-ANOVA.html#tab:cheerleader-self-attractiveness-table">10.2</a>. For contrast <span class="math inline">\(d_1\)</span>, we compute
+<span class="math display">\[\begin{aligned}
+W_{1,36} &amp;= \frac{-\tfrac{2}{3} \times 56.32 + \tfrac{1}{3} \times 55.92 + \tfrac{1}{3} \times 54.30}{\sqrt{ \left(-\tfrac{2}{3}\right)^2 + \left(\tfrac{1}{3}\right)^2 + \left(\tfrac{1}{3}\right)^2)}} \\
+&amp;= \frac{-0.81}{\sqrt{\tfrac{6}{9}}} = -0.99
+\end{aligned}\]</span>
+For contrast <span class="math inline">\(d_2\)</span>, the within-subjects composite is computed as:
+<span class="math display">\[\begin{aligned}
+W_{2,36} &amp;= \frac{\tfrac{1}{2} \times 55.92 + (-\tfrac{1}{2}) \times 54.30}{\sqrt{\left(\tfrac{1}{2}\right)^2 + \left(-\tfrac{1}{2}\right)^2)}} \\
+&amp;= \frac{-0.81}{\sqrt{\tfrac{2}{4}}} = 1.15
+\end{aligned}\]</span>
+Table <a href="ch-RM-ANOVA.html#tab:cheerleader-self-composite-table">10.3</a> shows the resulting values for other participants as well.
+<table>
+<caption>
+<span id="tab:cheerleader-self-composite-table">Table 10.3: </span>Attractiveness ratings in the Alone, Different, and Similar condition for 10 participants in the Variant condition. Also shown are three within-subjects composite scores.
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+Participant
+</th>
+<th style="text-align:left;">
+Alone
+</th>
+<th style="text-align:left;">
+Different
+</th>
+<th style="text-align:left;">
+Similar
+</th>
+<th style="text-align:right;">
+<span class="math inline">\(W_0\)</span>
+</th>
+<th style="text-align:right;">
+<span class="math inline">\(W_1\)</span>
+</th>
+<th style="text-align:right;">
+<span class="math inline">\(W_2\)</span>
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+36
+</td>
+<td style="text-align:left;">
+56.32
+</td>
+<td style="text-align:left;">
+55.92
+</td>
+<td style="text-align:left;">
+54.30
+</td>
+<td style="text-align:right;">
+96.2
+</td>
+<td style="text-align:right;">
+-0.99
+</td>
+<td style="text-align:right;">
+1.15
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+37
+</td>
+<td style="text-align:left;">
+13.31
+</td>
+<td style="text-align:left;">
+13.52
+</td>
+<td style="text-align:left;">
+11.64
+</td>
+<td style="text-align:right;">
+22.2
+</td>
+<td style="text-align:right;">
+-0.60
+</td>
+<td style="text-align:right;">
+1.33
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+39
+</td>
+<td style="text-align:left;">
+49.81
+</td>
+<td style="text-align:left;">
+49.77
+</td>
+<td style="text-align:left;">
+51.20
+</td>
+<td style="text-align:right;">
+87.1
+</td>
+<td style="text-align:right;">
+0.56
+</td>
+<td style="text-align:right;">
+-1.01
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+40
+</td>
+<td style="text-align:left;">
+47.10
+</td>
+<td style="text-align:left;">
+52.48
+</td>
+<td style="text-align:left;">
+53.19
+</td>
+<td style="text-align:right;">
+88.2
+</td>
+<td style="text-align:right;">
+4.68
+</td>
+<td style="text-align:right;">
+-0.50
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+41
+</td>
+<td style="text-align:left;">
+38.93
+</td>
+<td style="text-align:left;">
+41.62
+</td>
+<td style="text-align:left;">
+42.13
+</td>
+<td style="text-align:right;">
+70.8
+</td>
+<td style="text-align:right;">
+2.40
+</td>
+<td style="text-align:right;">
+-0.36
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+42
+</td>
+<td style="text-align:left;">
+60.04
+</td>
+<td style="text-align:left;">
+58.93
+</td>
+<td style="text-align:left;">
+59.47
+</td>
+<td style="text-align:right;">
+103.0
+</td>
+<td style="text-align:right;">
+-0.69
+</td>
+<td style="text-align:right;">
+-0.38
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+44
+</td>
+<td style="text-align:left;">
+44.74
+</td>
+<td style="text-align:left;">
+47.02
+</td>
+<td style="text-align:left;">
+50.47
+</td>
+<td style="text-align:right;">
+82.1
+</td>
+<td style="text-align:right;">
+3.27
+</td>
+<td style="text-align:right;">
+-2.44
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+45
+</td>
+<td style="text-align:left;">
+45.24
+</td>
+<td style="text-align:left;">
+43.92
+</td>
+<td style="text-align:left;">
+46.22
+</td>
+<td style="text-align:right;">
+78.2
+</td>
+<td style="text-align:right;">
+-0.14
+</td>
+<td style="text-align:right;">
+-1.63
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+46
+</td>
+<td style="text-align:left;">
+36.79
+</td>
+<td style="text-align:left;">
+37.28
+</td>
+<td style="text-align:left;">
+35.80
+</td>
+<td style="text-align:right;">
+63.4
+</td>
+<td style="text-align:right;">
+-0.20
+</td>
+<td style="text-align:right;">
+1.05
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+47
+</td>
+<td style="text-align:left;">
+53.78
+</td>
+<td style="text-align:left;">
+52.69
+</td>
+<td style="text-align:left;">
+52.90
+</td>
+<td style="text-align:right;">
+92.0
+</td>
+<td style="text-align:right;">
+-0.80
+</td>
+<td style="text-align:right;">
+-0.15
+</td>
+</tr>
+</tbody>
+</table>
+<p>The first within-subjects composite variable (<span class="math inline">\(W_1\)</span>) reflects the difference between the average of the Different and Similar conditions and the Alone condition. If the mean of this composite variable is positive, that indicates that faces in the Different and Similar condition are on average rated as more attractive than in the Alone condition. If the mean of this composite variable is negative, that indicates that faces in the Different and Similar condition are on average rated as less attractive than in the Alone condition. If the mean is equal to 0, that indicates there is no difference in attractiveness ratings between the marginal mean of the Different and Similar conditions, compared to the Alone condition. To test whether this latter option is truem we can compare a MODEL G
+<span class="math display">\[W_{1,i} = \beta_0 + \epsilon_i\]</span>
+to a MODEL R:
+<span class="math display">\[W_{1,i} = 0 + \epsilon_i\]</span>
+The Sum of Squared Error of MODEL R is <span class="math inline">\(\text{SSE}(R) = 123.28\)</span>, and for MODEL G this is <span class="math inline">\(\text{SSE}(G) = 88.33\)</span>. There are <span class="math inline">\(n=31\)</span> participants, and <span class="math inline">\(\text{npar}(R) = 0\)</span> and <span class="math inline">\(\text{npar}(G) = 1\)</span>. The test result of the model comparison is therefore <span class="math inline">\(F(1,30) = 11.87\)</span>, <span class="math inline">\(p= .002\)</span>. We can thus reject the null hypothesis that there is no difference between the Alone condition and the marginal mean of the other two conditions. The estimated intercept of MODEL G is <span class="math inline">\(\hat{\beta}_0 = 1.06\)</span>. Due to the scaling applied in the within-subjects composite, this intercept does <em>not</em> equal the average of <span class="math inline">\(\frac{Y_{i,D} + Y_{i,S}}{2} - Y_{i,A}\)</span>. To get this value, we need to <strong>rescale</strong> the within-subjects composite to the scale of the dependent variable. We do this by dividing the estimated parameter by the scaling factor. The scaling factor equals <span class="math inline">\(\sqrt{ \left(-\tfrac{2}{3}\right)^2 + \left(\tfrac{1}{3}\right)^2 + \left(\tfrac{1}{3}\right)^2} = \sqrt{\tfrac{6}{9}}\)</span>. So
+<span class="math display">\[\frac{\overline{Y}_{D} + \overline{Y}_{S}}{2} - \overline{Y}_{A} = \frac{1.06}{\sqrt{\tfrac{6}{9}}} = 1.3\]</span>
+We can conduct a similar model comparison for the second within-subjects composite, <span class="math inline">\(W_2\)</span>. The Sum of Squared Error of MODEL R is <span class="math inline">\(\text{SSE}(R) = 40.17\)</span>, and for MODEL G this is <span class="math inline">\(\text{SSE}(G) = 39.61\)</span>. The results of this comparison are then <span class="math inline">\(F(1,30) = 0.42\)</span>, <span class="math inline">\(p= .519\)</span>. Hence, we can not reject the null hypothesis that there is no difference between the Different and Alone condition. The estimated intercept of MODEL G is <span class="math inline">\(\hat{\beta}_0 = -0.13\)</span>. Rescaling this to the scale of the dependent variable indicates that
+<span class="math display">\[\overline{Y}_{D} - \overline{Y}_{S} = \frac{-0.13}{\sqrt{\tfrac{2}{4}}} = -0.19\]</span></p>
+<p>Comparing the results to the oneway ANOVA of Table <a href="ch-RM-ANOVA.html#tab:cheerleader-oneway-ANOVA-results">10.1</a> shows that we get the same parameter estimates (after rescaling), but different test results. That is because the analyses using within-subjects composite scores consider the effects of the within-subjects effects regardless of whether someone is generally attracted to that face or not. In the oneway ANOVA, a substantial part of the variation within the conditions is due to individual differences in how attracted people are to a particular face. Some participants gave higher attractiveness ratings (regardless of condition) than other participants (see Table <a href="ch-RM-ANOVA.html#tab:cheerleader-self-attractiveness-table">10.2</a>). This relatively high variability within the conditions can’t be “explained” in the oneway ANOVA. This leads to relatively large errors, and with that relatively low power for the tests of condition. If we know that one participant is relatively more attracted to a face than other participants, we could use that knowledge to make better predictions of their attractiveness ratings. This is, roughly, what repeated-measures ANOVA is about: separating individual differences in average scores (over all within-subjects conditions) from effects of the within-subjects manipulations.</p>
+</div>
+<div id="a-composite-for-between-subjects-effects" class="section level3" number="10.4.2">
+<h3><span class="header-section-number">10.4.2</span> A composite for between-subjects effects</h3>
+<p>In the analyses above, we did not consider individual differences in how attractive people found a face in general. For each participant, we can compute an average attractiveness rating over all conditions as:</p>
+<p><span class="math display">\[\overline{Y}_{i,\cdot} = \frac{Y_{i,A} + Y_{i,D} + Y_{i,S}}{3}\]</span>
+(see Table <a href="ch-RM-ANOVA.html#tab:cheerleader-self-attractiveness-table">10.2</a>). Variation in these averages reflects variation between participants.</p>
+<p>To analyze this variation between participants, we can use another composite score by applying a special “contrast” <span class="math inline">\(d_0 = (1, 1, 1)\)</span>. This is not really a contrast in the usual sense, as it does not compare conditions. Also, you don’t have freedom in choosing the values: you have to use a 1 for each condition to make this work in the same way as the within-subjects composite scores.<a href="#fn25" class="footnote-ref" id="fnref25"><sup>25</sup></a> Plugging these values into Equation <a href="ch-RM-ANOVA.html#eq:within-subjects-composite-scores-ch08">(10.1)</a> provides us with the <span class="math inline">\(W_0\)</span> composite score. For example, the computation of this score for participant 36 is:
+<span class="math display">\[\begin{aligned}
+W_{0,36} &amp;= \frac{56.32 + 55.92 + 54.30}{\sqrt{ 1^2 + 1^2 + 1^2 }} \\
+&amp;= \frac{166.54}{\sqrt{3}} = 96.15
+\end{aligned}\]</span>
+Values for the other participants are provided in Table <a href="ch-RM-ANOVA.html#tab:cheerleader-self-composite-table">10.3</a>. Like the values of the <span class="math inline">\(W_1\)</span> and <span class="math inline">\(W_2\)</span> composite scores, these are <em>scaled</em> values to ensure that the Sums of Squares add up appropriately. But you can think of them conceptually as averages, for each participant, over the three conditions.</p>
+<p>We can apply a similar analysis to these <span class="math inline">\(W_0\)</span> scores as for <span class="math inline">\(W_1\)</span> and <span class="math inline">\(W_2\)</span>, comparing a MODEL G
+<span class="math display">\[W_{0,i} = \beta_0 + \epsilon_i\]</span>
+to a MODEL R:
+<span class="math display">\[W_{0,i} = 0 + \epsilon_i\]</span>
+The Sum of Squared Error of MODEL R is <span class="math inline">\(\text{SSE}(R) = 218176\)</span>, and for MODEL G this is <span class="math inline">\(\text{SSE}(G) = 8999.28\)</span>. The results of this comparison are then <span class="math inline">\(F(1,30) = 697.31\)</span>, <span class="math inline">\(p&lt; .001\)</span>. Hence, we can reject the null hypothesis that the average rating of attractiveness is equal to 0. The estimated intercept of MODEL G is <span class="math inline">\(\hat{\beta}_0 = 82.14\)</span>. Rescaling this to the scale of the dependent variable indicates that
+<span class="math display">\[\overline{Y} = \frac{82.14}{\sqrt{3}} = 47.43\]</span>
+Note that this is equal to the intercept of the oneway ANOVA in Table <a href="ch-RM-ANOVA.html#tab:cheerleader-oneway-ANOVA-results">10.1</a>. As in that model, a test of the hypothesis that the intercept equals 0 is not overly interesting. But when we consider between-subjects effects, the composite score <span class="math inline">\(W_0\)</span> is crucial.</p>
+<p>Presently, a main realisation is that through the models for the three composite scores (<span class="math inline">\(W_0\)</span>, <span class="math inline">\(W_1\)</span>, and <span class="math inline">\(W_2\)</span>), we can compute SSR terms which together add up to the “total SS.” The “total SS” is the Sum of Squared Error of the intercept-only model:
+<span class="math display">\[Y_{i,j} = \beta_0 + \epsilon_{i,j}\]</span>
+(i.e. a model which makes a single prediction all the observations, both over participants and over conditions).</p>
+</div>
+<div id="collecting-all-results-and-omnibus-tests" class="section level3" number="10.4.3">
+<h3><span class="header-section-number">10.4.3</span> Collecting all results and omnibus tests</h3>
+<p>Table <a href="ch-RM-ANOVA.html#tab:rm-anova-model-summary">10.4</a> summarizes the results we have obtained thus far. This is admittedly not an easy table to read. But it does highlight some important aspects of repeated-measures ANOVA. So let’s give it a go. The first thing to remember is that we have just performed three different model comparisons, one for <span class="math inline">\(W_0\)</span>, one for <span class="math inline">\(W_1\)</span>, and one for <span class="math inline">\(W_2\)</span>. Each of these model comparisons used a different dependent variable, and therefore each had a different <span class="math inline">\(\text{SSE}(G)\)</span>. The Sum of Squares attributable to an effect is simply the difference between these SSE terms: <span class="math inline">\(\text{SSR} = \text{SSE}(R) - \text{SSE}(G)\)</span>. The degrees of freedom associated to this Sum of Squares Reduced is <span class="math inline">\(\text{df}_1 = \text{npar}(G) - \text{npar}(R)\)</span>, i.e. the number of additional parameters in MODEL G used to reduce the SSE. The degrees of freedom associated to <span class="math inline">\(\text{SSE}(G)\)</span> is <span class="math inline">\(\text{df}_2 = n - \text{npar}(G)\)</span>. For each model comparison, the <span class="math inline">\(F\)</span>-statistic is, as usual
+<span class="math display">\[F = \frac{\text{SSR}/\text{df}_1}{\text{SSE}(G)/\text{df}_2}\]</span>
+The resulting statistics are provided in Table <a href="ch-RM-ANOVA.html#tab:rm-anova-model-summary">10.4</a>. For easy comparison, the results of the oneway ANOVA are repeated in Table <a href="ch-RM-ANOVA.html#tab:cheerleader-oneway-ANOVA-results-2">10.5</a>.</p>
+<table>
+<caption>
+<span id="tab:rm-anova-model-summary">Table 10.4: </span>(Rescaled) parameter estimates, model comparison SS terms, degrees of freedom, and <span class="math inline">\(F\)</span> values, for the three composite scores. The last three rows show different summations over these, where relevant.
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:right;">
+<span class="math inline">\(\hat{\beta}\)</span>
+</th>
+<th style="text-align:right;">
+<span class="math inline">\(\text{SSE}(R)\)</span>
+</th>
+<th style="text-align:right;">
+<span class="math inline">\(\text{SSE}(G)\)</span>
+</th>
+<th style="text-align:right;">
+<span class="math inline">\(\text{SSR}\)</span>
+</th>
+<th style="text-align:right;">
+<span class="math inline">\(\text{df}_1\)</span>
+</th>
+<th style="text-align:right;">
+<span class="math inline">\(\text{df}_2\)</span>
+</th>
+<th style="text-align:right;">
+<span class="math inline">\(F\)</span>
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+<span class="math inline">\(W_0\)</span>
+</td>
+<td style="text-align:right;">
+47.43
+</td>
+<td style="text-align:right;">
+218176
+</td>
+<td style="text-align:right;">
+8999
+</td>
+<td style="text-align:right;">
+209177
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+30
+</td>
+<td style="text-align:right;">
+697.31
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<span class="math inline">\(W_1\)</span>
+</td>
+<td style="text-align:right;">
+1.30
+</td>
+<td style="text-align:right;">
+123
+</td>
+<td style="text-align:right;">
+88
+</td>
+<td style="text-align:right;">
+35
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+30
+</td>
+<td style="text-align:right;">
+11.87
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<span class="math inline">\(W_2\)</span>
+</td>
+<td style="text-align:right;">
+-0.19
+</td>
+<td style="text-align:right;">
+40
+</td>
+<td style="text-align:right;">
+40
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+30
+</td>
+<td style="text-align:right;">
+0.42
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Sum Between (<span class="math inline">\(W_0\)</span>)
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+218176
+</td>
+<td style="text-align:right;">
+8999
+</td>
+<td style="text-align:right;">
+209177
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+30
+</td>
+<td style="text-align:right;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Sum Within (<span class="math inline">\(W_1 + W_2\)</span>)
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+163
+</td>
+<td style="text-align:right;">
+128
+</td>
+<td style="text-align:right;">
+36
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+60
+</td>
+<td style="text-align:right;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Sum Total (<span class="math inline">\(W_0 + W_1 + W_2\)</span>)
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+218340
+</td>
+<td style="text-align:right;">
+9127
+</td>
+<td style="text-align:right;">
+209212
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+90
+</td>
+<td style="text-align:right;">
+</td>
+</tr>
+</tbody>
+</table>
+<table>
+<caption>
+<span id="tab:cheerleader-oneway-ANOVA-results-2">Table 10.5: </span>Linear model predicting attractiveness ratings in the three conditions, wrongly assuming independence.
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:right;">
+<span class="math inline">\(\hat{\beta}\)</span>
+</th>
+<th style="text-align:right;">
+<span class="math inline">\(\text{SS}\)</span>
+</th>
+<th style="text-align:right;">
+<span class="math inline">\(\text{df}\)</span>
+</th>
+<th style="text-align:right;">
+<span class="math inline">\(F\)</span>
+</th>
+<th style="text-align:right;">
+<span class="math inline">\(P(\geq \lvert F \rvert)\)</span>
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Intercept
+</td>
+<td style="text-align:right;">
+47.43
+</td>
+<td style="text-align:right;">
+209177
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+2062.61
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Presentation
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+36
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+0.18
+</td>
+<td style="text-align:right;">
+0.840
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<span class="math inline">\(\quad X_1\)</span> (D+S vs A)
+</td>
+<td style="text-align:right;">
+1.30
+</td>
+<td style="text-align:right;">
+35
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.34
+</td>
+<td style="text-align:right;">
+0.559
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<span class="math inline">\(\quad X_2\)</span> (D vs S)
+</td>
+<td style="text-align:right;">
+-0.19
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.01
+</td>
+<td style="text-align:right;">
+0.941
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Error
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+9127
+</td>
+<td style="text-align:right;">
+90
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+</td>
+</tr>
+</tbody>
+</table>
+<p>Comparing the results between the oneway ANOVA which wrongly assumed independence, and the results of the repeated-measured ANOVA, you can see that the parameter estimates and the SSR terms for the effects are identical between the two. However, the values of the <span class="math inline">\(F\)</span>-statistic are different. The main reason for this is that the oneway ANOVA compares different MODEL Rs to the <em>same</em> MODEL G. In other words, the <span class="math inline">\(\text{SSE}(G)\)</span> term is the same for each test. In the repeated-measures ANOVA with composite scores, each test uses a different MODEL G, and hence a different <span class="math inline">\(\text{SSE}(G)\)</span> term. The sum of these three SSE terms is equal to the SS Error term in the oneway ANOVA (which equals 9127). But each test uses a different part of this overall error. As the SSR terms are the same between the two analyses, that implies that the relative value of the SSR terms compared to the SSE term(s) is <em>larger</em> in the repeated-measures ANOVA. This will increase <span class="math inline">\(F\)</span>-values and the power of the tests. However, by splitting the analysis into different models for the between-subjects effects and within-subjects contrasts, the <span class="math inline">\(\text{df}_2\)</span> values are smaller in the repeated-measures ANOVA. This in turn reduces the <span class="math inline">\(F\)</span> values and decreases the power of the tests. Although it would be wrong to say that you can choose whichever analysis provides you the highest <span class="math inline">\(F\)</span> values (the assumptions of a standard ANOVA are generally violated with repeated-measures data), understanding how the Sums of Squares Reduced (SSR), Sums of Squared Errors (SSE), and degrees of freedom (df) terms relate between the two analyses is important in understanding the nuances of these different approaches.</p>
+<p>There is one test in the oneway ANOVA that we haven’t yet considered an alternative for: the omnibus test for Presentation. It is possible to conduct such a test, by aggregating results over the within-subjects composites <span class="math inline">\(W_1\)</span> and <span class="math inline">\(W_2\)</span>. Like the contrasts in the oneway ANOVA (<span class="math inline">\(c_1\)</span> and <span class="math inline">\(c_2\)</span>), the set of within-subjects contrasts (<span class="math inline">\(d_1\)</span> and <span class="math inline">\(d_2\)</span>) together allow you to reconstruct all differences between the (marginal) means of conditions. By fixing both <span class="math inline">\(\beta_0\)</span> in MODEL G for <span class="math inline">\(W_1\)</span> and MODEL G for <span class="math inline">\(W_2\)</span> to <span class="math inline">\(\beta_0 = 0\)</span>), we obtain two models which together imply that there are no differences between these (marginal) means. A complication of such aggregation over models is that we need an additional assumption to the standard assumptions of the GLM. This assumption is called sphericity, and we will discuss it later. For the moment, let’s focus on how you would compute this omnibus test. Computationally, it is actually straightforward: we compute the omnibus SSR, SSE, <span class="math inline">\(\text{df}_1\)</span>, and <span class="math inline">\(\text{df}_2\)</span> terms, simply by summing for each of these the respective terms for <span class="math inline">\(W_1\)</span> and <span class="math inline">\(W_2\)</span>. So the <span class="math inline">\(F\)</span>-statistic for the omnibus test of Presentation can be computed as</p>
+<span class="math display">\[\begin{aligned} 
+F &amp;= \frac{\text{SSR}/\text{df}_1}{\text{SSE}(G)/\text{df}_2} \\
+&amp;= \frac{(35 + 1)/(1+1)}{(88 + 40)/(30 + 30)} \\
+&amp;= 8.33
+\end{aligned}\]</span>
+To determine the <span class="math inline">\(p\)</span>-value, we can compute the exceedance probability of this value in an <span class="math inline">\(F\)</span>-distribution with <span class="math inline">\(\text{df}_1 = 2\)</span> and <span class="math inline">\(\text{df}_2 = 60\)</span>, and find that <span class="math inline">\(p &lt; .001\)</span>. Hence, the omnibus test is significant. But, as I said before, this omnibus test rests on a new assumption of sphericity. We will discuss this after generalizing a repeated-measures ANOVA to a so-called “mixed design,” with some experimental manipulations that vary within, and other manipulations that vary between participants. Before we take this step, let’s summarize what we have done so far. Table <a href="ch-RM-ANOVA.html#tab:collated-results-oneway-rm-anova-cheerleader">10.6</a> collates the results of all previous analyses.
+<table>
+<caption>
+<span id="tab:collated-results-oneway-rm-anova-cheerleader">Table 10.6: </span>Complete results of the oneway (Presentation: Alone, Different, Similar) repeated-measures ANOVA for the data in the Variant condition.
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:right;">
+<span class="math inline">\(\hat{\beta}\)</span>
+</th>
+<th style="text-align:right;">
+<span class="math inline">\(\text{SS}\)</span>
+</th>
+<th style="text-align:right;">
+<span class="math inline">\(\text{df}\)</span>
+</th>
+<th style="text-align:right;">
+<span class="math inline">\(F\)</span>
+</th>
+<th style="text-align:right;">
+<span class="math inline">\(P(\geq F)\)</span>
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+<em>Between-subjects</em>
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+218176
+</td>
+<td style="text-align:right;">
+31
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+  Intercept
+</td>
+<td style="text-align:right;">
+47.43
+</td>
+<td style="text-align:right;">
+209177
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+697.31
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+  Error between
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+8999
+</td>
+<td style="text-align:right;">
+30
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<em>Within-subjects</em>
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+163
+</td>
+<td style="text-align:right;">
+62
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+  <span class="math inline">\(d_1\)</span> (D + S vs A)
+</td>
+<td style="text-align:right;">
+1.84
+</td>
+<td style="text-align:right;">
+35
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+11.87
+</td>
+<td style="text-align:right;">
+0.002
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+  Error (<span class="math inline">\(d_1\)</span>)
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+88
+</td>
+<td style="text-align:right;">
+30
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+  <span class="math inline">\(d_2\)</span> (D vs S)
+</td>
+<td style="text-align:right;">
+-0.19
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.42
+</td>
+<td style="text-align:right;">
+0.519
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+  Error (<span class="math inline">\(d_2\)</span>)
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+40
+</td>
+<td style="text-align:right;">
+30
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<em>Total</em>
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+218340
+</td>
+<td style="text-align:right;">
+93
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="partitioning-the-variance" class="section level2" number="10.5">
+<h2><span class="header-section-number">10.5</span> Partitioning the variance</h2>
+<p>The crux of repeated-measures ANOVA is that we can separate between-subjects effects (e.g. individual differences) from within-subjects effects. This means we can separate the total variance in <span class="math inline">\(Y_{j,i}\)</span> scores into parts that are due to between-subjects effects (e.g. individual differences) and within-subjects effects (e.g. differences due to within-subjects manipulations). This often provides more powerful tests, at least for the within-subjects effects. A graphical representation of the partitioning of the total variation into the between and within parts is provided in Figure <a href="ch-RM-ANOVA.html#fig:partitioning-variance-rm-anova">10.2</a>.</p>
+<!-- TODO: why is svg not working well with fonts? -->
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:partitioning-variance-rm-anova"></span>
+<img src="_main_files/figure-html/partitioning-variance-rm-anova-1.png" alt="Partitioning the total Sum of Squares in a oneway repeated-measures ANOVA." width="95%" />
+<p class="caption">
+Figure 10.2: Partitioning the total Sum of Squares in a oneway repeated-measures ANOVA.
+</p>
+</div>
+</div>
+<div id="a-mixed-anova-with-between--and-within-subjects-effects" class="section level2" number="10.6">
+<h2><span class="header-section-number">10.6</span> A mixed ANOVA with between- and within-subjects effects</h2>
+<p>Up to now, we just considered the data from the Variant conditions. Having worked out how to perform effective comparisons of the within-subjects conditions, we are now in a position to consider the data from the whole experiment. Whether the other faces in the Similar condition where exact copies of a single photograph, or different photographs of the same person, was a manipulation that varied <em>between participants</em> (i.e., a participant was only assigned to one of these manipulations, not both). The full design of the study is thus a 2 (Version: Identical, Variant) by 3 (Presentation: Alone, Different, Similar) design, where the first factor (Version) varied between, and the last factor (Presentation) varied within participants.</p>
+<p>Just like in a “normal” factorial ANOVA, we would like to consider main effects of, and the interaction between, these two experimental manipulations. And just like in a “normal” factorial ANOVA, we will focus on defining contrasts for the main effects, and let the interactions follow from these. We have already defined our <span class="math inline">\(d_j\)</span> contrasts for the within-subjects effects. There is no need to change these when considering the full experiment, as we still would expect the attractiveness ratings to be different for the Alone conditions compared to the Different and Similar conditions. And while the theory would predict no difference between the Alone condition and the Similar condition when the Version is Identical, we could expect a higher attractiveness rating when the Version is Variant. So, aggregating over the levels of Version, we could still expect a higher attractiveness rating for the Similar conditions. So we just have to define a suitable contrast for the Identical and Variant manipulation. This manipulation only affected the nature of the Similar conditions, and as already indicated, according to the theory, we should expect a higher attractiveness rating when the Version is Variant compared to Identical. So a reasonable contrast code for our single between-subjects manipulation is <span class="math inline">\(c_1 = (-\tfrac{1}{2},\tfrac{1}{2})\)</span> for the Identical and Variant levels respectively.</p>
+<p>Having defined the contrast codes for the main effects, we would normally proceed by defining product-contrasts to reflect the interactions. But in this mixed design, the within-subjects contrasts (<span class="math inline">\(d\)</span>) are used to transform a set of correlated dependent variables (<span class="math inline">\(Y\)</span>) in a set of orthogonal dependent variables (<span class="math inline">\(W\)</span>), whilst the between-subjects contrast (<span class="math inline">\(c\)</span>) are used to compare different subsets for each of these dependent variables (i.e. because some of the <span class="math inline">\(W\)</span> values are obtained for the Version: Identical manipulation, and the remainder for the Version: Variant manipulation). Rather than computing product-contrasts, what we will do now is to consider the effect of a contrast-coded predictor <span class="math inline">\(X_1\)</span> (which takes its values from <span class="math inline">\(c_1\)</span>) on our three composite variables. As <span class="math inline">\(W_0\)</span> effectively encodes the marginal mean over all within-subjects conditions, the effect of this contrast-coded predictor on <span class="math inline">\(W_0\)</span> is equal to a main effect of the between-subjects manipulation. As the within-subjects composite scores encode differences between the within-subjects conditions, an effect of the between-subjects manipulation on such differences is identical to an interaction: The effect of within-subjects manipulations is moderated by the between-subjects manipulation.</p>
+To make this less abstract, let’s apply this idea now. Table <a href="ch-RM-ANOVA.html#tab:cheerleader-all-composite-table">10.7</a> shows the values of the composite variables (computed in the same way as before), as well as the contrast-coded predictor (<span class="math inline">\(X\)</span>) which codes for Version.
+<table>
+<caption>
+<span id="tab:cheerleader-all-composite-table">Table 10.7: </span>Attractiveness ratings in the Alone, Different, and Similar condition for 5 participants in the Identical and 5 participants in the Variant condition. Also shown are three within-subjects composite scores.
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+Participant
+</th>
+<th style="text-align:left;">
+Version
+</th>
+<th style="text-align:left;">
+Alone
+</th>
+<th style="text-align:left;">
+Different
+</th>
+<th style="text-align:left;">
+Similar
+</th>
+<th style="text-align:right;">
+<span class="math inline">\(X_1\)</span>
+</th>
+<th style="text-align:right;">
+<span class="math inline">\(W_0\)</span>
+</th>
+<th style="text-align:right;">
+<span class="math inline">\(W_1\)</span>
+</th>
+<th style="text-align:right;">
+<span class="math inline">\(W_2\)</span>
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+1
+</td>
+<td style="text-align:left;">
+Identical
+</td>
+<td style="text-align:left;">
+52.71
+</td>
+<td style="text-align:left;">
+56.16
+</td>
+<td style="text-align:left;">
+53.28
+</td>
+<td style="text-align:right;">
+-0.5
+</td>
+<td style="text-align:right;">
+93.6
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+2.04
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2
+</td>
+<td style="text-align:left;">
+Identical
+</td>
+<td style="text-align:left;">
+52.47
+</td>
+<td style="text-align:left;">
+55.30
+</td>
+<td style="text-align:left;">
+55.18
+</td>
+<td style="text-align:right;">
+-0.5
+</td>
+<td style="text-align:right;">
+94.1
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+0.09
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+3
+</td>
+<td style="text-align:left;">
+Identical
+</td>
+<td style="text-align:left;">
+45.89
+</td>
+<td style="text-align:left;">
+47.91
+</td>
+<td style="text-align:left;">
+47.74
+</td>
+<td style="text-align:right;">
+-0.5
+</td>
+<td style="text-align:right;">
+81.7
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+0.12
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+4
+</td>
+<td style="text-align:left;">
+Identical
+</td>
+<td style="text-align:left;">
+43.86
+</td>
+<td style="text-align:left;">
+50.26
+</td>
+<td style="text-align:left;">
+44.23
+</td>
+<td style="text-align:right;">
+-0.5
+</td>
+<td style="text-align:right;">
+79.9
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+4.27
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+5
+</td>
+<td style="text-align:left;">
+Identical
+</td>
+<td style="text-align:left;">
+37.47
+</td>
+<td style="text-align:left;">
+34.71
+</td>
+<td style="text-align:left;">
+37.79
+</td>
+<td style="text-align:right;">
+-0.5
+</td>
+<td style="text-align:right;">
+63.5
+</td>
+<td style="text-align:right;">
+-1
+</td>
+<td style="text-align:right;">
+-2.17
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+36
+</td>
+<td style="text-align:left;">
+Variant
+</td>
+<td style="text-align:left;">
+56.32
+</td>
+<td style="text-align:left;">
+55.92
+</td>
+<td style="text-align:left;">
+54.30
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+<td style="text-align:right;">
+96.2
+</td>
+<td style="text-align:right;">
+-1
+</td>
+<td style="text-align:right;">
+1.15
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+37
+</td>
+<td style="text-align:left;">
+Variant
+</td>
+<td style="text-align:left;">
+13.31
+</td>
+<td style="text-align:left;">
+13.52
+</td>
+<td style="text-align:left;">
+11.64
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+<td style="text-align:right;">
+22.2
+</td>
+<td style="text-align:right;">
+-1
+</td>
+<td style="text-align:right;">
+1.33
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+39
+</td>
+<td style="text-align:left;">
+Variant
+</td>
+<td style="text-align:left;">
+49.81
+</td>
+<td style="text-align:left;">
+49.77
+</td>
+<td style="text-align:left;">
+51.20
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+<td style="text-align:right;">
+87.1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+-1.01
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+40
+</td>
+<td style="text-align:left;">
+Variant
+</td>
+<td style="text-align:left;">
+47.10
+</td>
+<td style="text-align:left;">
+52.48
+</td>
+<td style="text-align:left;">
+53.19
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+<td style="text-align:right;">
+88.2
+</td>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:right;">
+-0.50
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+41
+</td>
+<td style="text-align:left;">
+Variant
+</td>
+<td style="text-align:left;">
+38.93
+</td>
+<td style="text-align:left;">
+41.62
+</td>
+<td style="text-align:left;">
+42.13
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+<td style="text-align:right;">
+70.8
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+-0.36
+</td>
+</tr>
+</tbody>
+</table>
+<p>Let’s start with the tests for <span class="math inline">\(W_0\)</span>, the composite variable for between-subjects effects. We formulate a MODEL G as:
+<span class="math display">\[W_{0,i} = \beta_0 + \beta_1 \times X_{1,i} + \epsilon_{i}\]</span>
+The main effect of between-subjects contrast <span class="math inline">\(c_1\)</span> is tested by comparing this model to a MODEL R:
+<span class="math display">\[W_{0,i} = \beta_0 + \epsilon_{i}\]</span>
+A test of the hypothesis that <span class="math inline">\(\beta_0 = 0\)</span> is, as usual, obtained by comparing MODEL G to an alternative MODEL R:
+<span class="math display">\[W_{0,i} = \beta_1 \times X_{1,i} + \epsilon_{i}\]</span>
+The results of these two model comparisons are provided in Table <a href="ch-RM-ANOVA.html#tab:cheerleader-W0-ANOVA-table">10.8</a>. We can see that the test of the intercept is significant, tells us that the grand mean of the attractiveness ratings is not likely to equal 0. More interesting is the test of <span class="math inline">\(X_1\)</span>, which compares the marginal means of the attractiveness ratings between the Variant and Identical versions. This test is not significant. Hence, the main effect of Version is not significant: aggregating over the levels of Presentation, there are no differences between the two levels of Version. This is perhaps not overly surprising, as the Version manipulation only concerned the identity of the Similar presentation (whether identical photos or different photos of the same face). The Alone and Different presentations were the same between the Variant and Identical presentation conditions. Therefore, any effect of Version should only affect the attractiveness ratings in the Similar presentation. If the effect on Similar is large enough, this might also show as a difference in the average over Alone, Different, and Similar. But we see here that this is not the case.</p>
+<table>
+<caption>
+<span id="tab:cheerleader-W0-ANOVA-table">Table 10.8: </span>Results of the model for <span class="math inline">\(W_0\)</span>, testing for between-subjects effects.
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:right;">
+<span class="math inline">\(\hat{\beta}\)</span>
+</th>
+<th style="text-align:right;">
+<span class="math inline">\(\text{SS}\)</span>
+</th>
+<th style="text-align:right;">
+<span class="math inline">\(\text{df}\)</span>
+</th>
+<th style="text-align:right;">
+<span class="math inline">\(F\)</span>
+</th>
+<th style="text-align:right;">
+<span class="math inline">\(P(\geq F)\)</span>
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Intercept
+</td>
+<td style="text-align:right;">
+47.675
+</td>
+<td style="text-align:right;">
+401272
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1523.99
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<span class="math inline">\(X_1\)</span> (Variant vs Identical)
+</td>
+<td style="text-align:right;">
+-0.499
+</td>
+<td style="text-align:right;">
+11
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.04
+</td>
+<td style="text-align:right;">
+0.839
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Error
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+15008
+</td>
+<td style="text-align:right;">
+57
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+</td>
+</tr>
+</tbody>
+</table>
+<p>We now turn to the analysis of the first within-subjects composite variable, <span class="math inline">\(W_1\)</span>. Remember that this variable encodes the first within-subjects contrast <span class="math inline">\(d_1\)</span>, which compares the Different and Similar conditions to the Alone condition. We formulate a MODEL G as:
+<span class="math display">\[W_{1,i} = \beta_0 + \beta_1 \times X_{1,i} + \epsilon_{i}\]</span>
+As when we conducted a oneway repeated-measures ANOVA, a difference between the Alone vs Different and Similar conditions would show itself through a non-zero intercept. Hence, the main effect of the within-subjects contrast <span class="math inline">\(d_1\)</span> is tested by comparing this model to a MODEL R where we fix the intercept to 0:
+<span class="math display">\[W_{1,i} = \beta_1 \times X_{1,i} + \epsilon_{i}\]</span>
+Note that this model allows the value of <span class="math inline">\(W_1\)</span> to be non-zero through the effect of <span class="math inline">\(X_1\)</span>. Crucially, however, as we are using a sum-to-zero contrast in the construction of <span class="math inline">\(X_1\)</span> (i.e. the values in <span class="math inline">\(c_1 = (-\tfrac{1}{2}, \tfrac{1}{2})\)</span> sum to 0), the intercept represents the marginal mean of <span class="math inline">\(W_1\)</span> over the Identical and Variant versions. In other words, it represents the midpoint of the Identical and Variant versions, or the average effect of the within-subjects contrast <span class="math inline">\(d_1\)</span> over the levels of the between-subjects factor.</p>
+<p>To test whether the effect of <span class="math inline">\(d_1\)</span> is moderated by <span class="math inline">\(c_1\)</span>, we compare MODEL G to an alternative MODEL R:
+<span class="math display">\[W_{1,i} = \beta_0 + \epsilon_{i}\]</span>
+If the D + S vs A difference varies over the Identical and Variant groups, then the value of <span class="math inline">\(W_1\)</span> would be different over these groups. If the D + S vs A difference is not affected by Version, then this last MODEL R would be just as good as MODEL G.</p>
+<p>The results of these two model comparisons are provided in Table <a href="ch-RM-ANOVA.html#tab:cheerleader-W1-ANOVA-table">10.9</a>. We see a significant and positive intercept. In this model, the intercept is highly relevant, as it reflects a main effect of the <span class="math inline">\(d_1\)</span> contrast. We thus find evidence that the attractiveness ratings are on average higher in the Different and Similar conditions, compared to the Alone condition. In other words, when presented in the context of a group of faces, a face is rated as more attractive then when presented alone. The test for the slope of <span class="math inline">\(X_1\)</span>, which reflects an interaction between <span class="math inline">\(d_1\)</span> and <span class="math inline">\(c_1\)</span>, is not significant. Hence, there is no evidence that the D + S vs A contrast is moderated by Version.</p>
+<table>
+<caption>
+<span id="tab:cheerleader-W1-ANOVA-table">Table 10.9: </span>Results of the model for <span class="math inline">\(W_1\)</span>, testing for the within-subjects difference between the Different and Similar vs Alone presentations, and the interaction of this effect with Version.
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:right;">
+<span class="math inline">\(\hat{\beta}\)</span>
+</th>
+<th style="text-align:right;">
+<span class="math inline">\(\text{SS}\)</span>
+</th>
+<th style="text-align:right;">
+<span class="math inline">\(\text{df}\)</span>
+</th>
+<th style="text-align:right;">
+<span class="math inline">\(F\)</span>
+</th>
+<th style="text-align:right;">
+<span class="math inline">\(P(\geq F)\)</span>
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Intercept
+</td>
+<td style="text-align:right;">
+1.29
+</td>
+<td style="text-align:right;">
+65.8
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+30.7
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<span class="math inline">\(X_1\)</span> (Variant vs Identical)
+</td>
+<td style="text-align:right;">
+0.01
+</td>
+<td style="text-align:right;">
+0.0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.0
+</td>
+<td style="text-align:right;">
+0.983
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Error
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+122.2
+</td>
+<td style="text-align:right;">
+57
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+</td>
+</tr>
+</tbody>
+</table>
+The procedure for <span class="math inline">\(W_2\)</span> is the same as for <span class="math inline">\(W_1\)</span>. The results of the two model comparisons are provided in Table <a href="ch-RM-ANOVA.html#tab:cheerleader-W2-ANOVA-table">10.10</a>. Here, we see that the intercept is not significant. Hence, there is no evidence of a main effect of <span class="math inline">\(d_2\)</span>, which compares the Different presentation to the Similar presentation. But the slope of <span class="math inline">\(X_1\)</span>, which reflects the <span class="math inline">\(d_2\)</span> by <span class="math inline">\(c_1\)</span> interaction, is significant and estimated as negative. There is thus evidence that the difference between the Different and Similar presentation varies over the two versions of the Similar presentation.
+<table>
+<caption>
+<span id="tab:cheerleader-W2-ANOVA-table">Table 10.10: </span>Results of the model for <span class="math inline">\(W_2\)</span>, testing for the within-subjects difference between the Different and Similar vs Alone presentations, and the interaction of this effect with Version.
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:right;">
+<span class="math inline">\(\hat{\beta}\)</span>
+</th>
+<th style="text-align:right;">
+<span class="math inline">\(\text{SS}\)</span>
+</th>
+<th style="text-align:right;">
+<span class="math inline">\(\text{df}\)</span>
+</th>
+<th style="text-align:right;">
+<span class="math inline">\(F\)</span>
+</th>
+<th style="text-align:right;">
+<span class="math inline">\(P(\geq F)\)</span>
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Intercept
+</td>
+<td style="text-align:right;">
+0.396
+</td>
+<td style="text-align:right;">
+4.62
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+2.80
+</td>
+<td style="text-align:right;">
+0.100
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<span class="math inline">\(X_1\)</span> (Variant vs Identical)
+</td>
+<td style="text-align:right;">
+-1.173
+</td>
+<td style="text-align:right;">
+10.12
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+6.13
+</td>
+<td style="text-align:right;">
+0.016
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Error
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+94.05
+</td>
+<td style="text-align:right;">
+57
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+</td>
+</tr>
+</tbody>
+</table>
+<p>To interpret the <span class="math inline">\(d_2\)</span> by <span class="math inline">\(c_1\)</span> interaction, we can The predicted D - S difference for the Variant condition is:
+<span class="math display">\[\hat{W}_{2,V} = \hat{\beta}_0 + \hat{\beta}_1 \times X_{1,i} = 0.28 + -0.829 \times \tfrac{1}{2} = -0.135\]</span>
+For the Identical condition, it is
+<span class="math display">\[\hat{W}_{2,I} = 0.28 + -0.829 \times (-\tfrac{1}{2}) = 0.695\]</span>
+Thus, there appears to be a relatively small difference between presenting a face in the context of a group if different faces, or a group of different images of the same face (Variant version). However, compared to presenting a face within a group of identical photos of the same face (Identical version), a face presented within a group of dissimilar faces is rated as more attractive. This is consistent with the hierarchical encoding hypothesis.</p>
+<p>We have considered the effect of Presentation, and the Version by Presentation interaction, through two separate contrasts (<span class="math inline">\(d_1\)</span> and <span class="math inline">\(d_2\)</span>). We can also perform omnibus tests of these effects. This is done by summing the relevant SSR, SSE, and df terms. For the main effect of Presentation, we sum the SS terms for the intercept in Table <a href="ch-RM-ANOVA.html#tab:cheerleader-W1-ANOVA-table">10.9</a> and <a href="ch-RM-ANOVA.html#tab:cheerleader-W2-ANOVA-table">10.10</a> to obtain an omnibus SSR for Presentation:
+<span class="math display">\[\text{SSR}(\text{Presentation}) = 65.84 + 4.62 = 70.46\]</span>
+The error term for this test is computed by summing the SS Error values in these tables:
+<span class="math display">\[\text{SSE}(\text{Presentation}) = 122.25 + 94.05 = 216.3\]</span>
+The value of <span class="math inline">\(\text{df}_1\)</span> is the sum of the df terms for the intercept (<span class="math inline">\(\text{df}_1 = 1 + 1 = 2\)</span>), and the value of <span class="math inline">\(\text{df}_2\)</span> is the sum of the df terms for the Error (<span class="math inline">\(\text{df}_2 = 57 + 57 = 114)\)</span>. So the resulting <span class="math inline">\(F\)</span>-statistic is
+<span class="math display">\[F = \frac{70.46/2}{216.3/114} = 18.57\]</span>
+The exceedence probability of this value in an <span class="math inline">\(F\)</span>-distribution with <span class="math inline">\(\text{df}_1 = 2\)</span> and <span class="math inline">\(\text{df}_2 = 114\)</span> degrees of freedom is <span class="math inline">\(P(F_{2,114} \geq 18.57) &lt; .001\)</span>, and hence this omnibus test is significant.</p>
+<p>Similarly, for the Version by Presentation interaction, the omnibus test statistic is computed as
+<span class="math display">\[F = \frac{(0 + 10.12)/2}{(122.25 + 94.05)/114} = 2.67\]</span>
+The exceedence probability of this value is <span class="math inline">\(P(F_{2,114} \geq 2.67) = .074\)</span>, and hence this omnibus test is not significant. However, we know from our earlier analysis of <span class="math inline">\(W_2\)</span> that there is evidence for an interaction between <span class="math inline">\(d_2\)</span> and <span class="math inline">\(c_1\)</span>. Looking at specific contrasts can provide more powerful and interesting tests than an omnibus test whether there is <em>any</em> moderation.</p>
+The collated results of all analyses are provided in Table <a href="ch-RM-ANOVA.html#tab:cheerleader-rm-anova-collated-results-table">10.11</a>. This table is separated in a between-subjects part, and a within-subjects part. Relevant omnibus tests and tests for specific contrasts are provided for each. The final row shows the Total Sum of Squares, which is the sum over the between-subjects and within-subjects Sum of Squares. This shows how the Total Sum of Squares is partitioned in the different (between- and within-subjects) effects.
+<table>
+<caption>
+<span id="tab:cheerleader-rm-anova-collated-results-table">Table 10.11: </span>Complete results of the 2 (Version: Identical, Variant) by 3 (Presentation: Alone, Different, Similar) ANOVA with repeated-measures on the last factor.
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:right;">
+<span class="math inline">\(\hat{\beta}\)</span>
+</th>
+<th style="text-align:right;">
+<span class="math inline">\(\text{SS}\)</span>
+</th>
+<th style="text-align:right;">
+<span class="math inline">\(\text{df}\)</span>
+</th>
+<th style="text-align:right;">
+<span class="math inline">\(F\)</span>
+</th>
+<th style="text-align:right;">
+<span class="math inline">\(P(\geq F)\)</span>
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+<em>Between-subjects</em>
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+416291.5
+</td>
+<td style="text-align:right;">
+59
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+  Intercept
+</td>
+<td style="text-align:right;">
+47.675
+</td>
+<td style="text-align:right;">
+401272.2
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1523.99
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+  <span class="math inline">\(c_1\)</span> (Variant vs Identical)
+</td>
+<td style="text-align:right;">
+-0.499
+</td>
+<td style="text-align:right;">
+11.0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.04
+</td>
+<td style="text-align:right;">
+0.839
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+  Error between
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+15008.3
+</td>
+<td style="text-align:right;">
+57
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<em>Within-subjects</em>
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+296.9
+</td>
+<td style="text-align:right;">
+118
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+  Presentation
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+70.5
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+18.57
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+    <span class="math inline">\(d_1\)</span> (D + S vs A)
+</td>
+<td style="text-align:right;">
+1.295
+</td>
+<td style="text-align:right;">
+65.8
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+30.70
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+    Error (<span class="math inline">\(d_1\)</span>)
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+122.2
+</td>
+<td style="text-align:right;">
+57
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+    <span class="math inline">\(d_2\)</span> (D vs S)
+</td>
+<td style="text-align:right;">
+-1.173
+</td>
+<td style="text-align:right;">
+10.1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+6.13
+</td>
+<td style="text-align:right;">
+0.016
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+    Error (<span class="math inline">\(d_2\)</span>)
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+94.0
+</td>
+<td style="text-align:right;">
+57
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+  Version <span class="math inline">\(\times\)</span> Presentation
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+10.1
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+2.67
+</td>
+<td style="text-align:right;">
+0.074
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+    <span class="math inline">\(c_1 \times d_1\)</span>
+</td>
+<td style="text-align:right;">
+0.010
+</td>
+<td style="text-align:right;">
+0.0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.00
+</td>
+<td style="text-align:right;">
+0.983
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+    Error (<span class="math inline">\(c_1 \times d_1\)</span>)
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+122.2
+</td>
+<td style="text-align:right;">
+57
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+    <span class="math inline">\(c_1 \times d_2\)</span>
+</td>
+<td style="text-align:right;">
+-1.173
+</td>
+<td style="text-align:right;">
+10.1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+6.13
+</td>
+<td style="text-align:right;">
+0.016
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+    Error (<span class="math inline">\(c_1 \times d_2\)</span>)
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+94.0
+</td>
+<td style="text-align:right;">
+57
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+  Error within
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+216.3
+</td>
+<td style="text-align:right;">
+114
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<em>Total</em>
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+416588.4
+</td>
+<td style="text-align:right;">
+177
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+</td>
+</tr>
+</tbody>
+</table>
+<p>A graphical overview of how the variation in <span class="math inline">\(Y\)</span> is partitioned in this analysis is provided in Figure <a href="ch-RM-ANOVA.html#fig:partitioning-variance-rm-anova-full">10.3</a>.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:partitioning-variance-rm-anova-full"></span>
+<img src="_main_files/figure-html/partitioning-variance-rm-anova-full-1.png" alt="Partitioning the total Sum of Squares in a 2 by 3 mixed repeated-measures ANOVA." width="95%" />
+<p class="caption">
+Figure 10.3: Partitioning the total Sum of Squares in a 2 by 3 mixed repeated-measures ANOVA.
+</p>
+</div>
+<!--
+We could do this for any pair of conditions, but that might result in a large number of tests. A repeated-measures ANOVA allows us to to essentially this within a single analysis.
+
+### Including effects for participants
+
+In a repeated-measures ANOVA, we include Person as another factor in the design, in addition to the Condition factor. As the design includes each combination of Person and Condition, this can be treated as a Person by Item factorial design. We can state an ANOVA model as
+<!--
+\begin{equation}
+Y_{i,j} = \mu + \tau^{(P)}_i + \tau^{(A)}_j + \epsilon_{i,j}
+(\#eq:glm-oneway-RM-ANOVA-model)
+\end{equation}
+But this assumes that the effect of a treatment $j$ is the same for all
+individuals $i$. If we would allow the effect of a treatment to be different
+for participants, that would amount to including an interaction term (the 
+effect of treatment $j$ is moderated by individual $i$). This could be stated as
+
+\begin{equation}
+Y_{i,j} = \mu + \pi_i + \tau_j + (\pi \tau)_{i,j} + \epsilon_{i,j}
+(\#eq:one-RM-ANOVA-model-ch08)
+\end{equation}
+Here, I'm using a somewhat different notation than in Equation \@ref(eq:glm-factorial-ANOVA-model). Here, $\pi_i$ stands for the person-effect of participant $i$:
+$$\pi_i = \mu_{i,\cdot} - \mu$$
+and as usual, $\tau_j$ represents the treatment-effect of level $j$ of the experimental factor (Condition):
+$$\tau_j = \mu_{\cdot, j} - \mu$$
+$(\pi \tau)_{i,j}$ reflects the person-by-treatment interaction effect:
+$$(\pi \tau)_{i,j} = \mu_{i,j} - (\mu+\pi_i + \tau_j)$$
+There is one complication, however. We only have a single observation for each combination of person and condition. That means that the average for each combination of person and condition, $\overline{Y}_{i,j} = \hat{\mu}_{i,j}$, which is what the model aims to predict, equals the observation $Y_{i,j}$. As such, the errors of the estimated model would all be equal to $\hat{\epsilon}_{i,j} = 0$. In other words, the model fits the data perfectly!
+
+Although you might think that a perfectly fitting model is ideal (why wouldn't you be happy when a model predicts the data perfectly?), that is far from the case here. Let's consider the number of parameters in the model. If we have $P$ people, and $A$ levels for condition, our model estimates $1 + (P-1) + (A-1) + (P-1)\times(A-1) = P \times A$ parameters, which is equal to the total number of observations: $n = P \times A$. A model with as many parameters as observations is bound to _overfit_ the data.
+
+The model of Equation \@ref(eq:one-RM-ANOVA-model-ch08) makes intuitive sense. In practice, however, because there is just one observation for each participant/condition combination, we can not distinguish between the interaction term $\pi\tau_{i,j}$ and the error term $\epsilon_{i,j}$. To make this explicit, we could rewrite the model as
+\begin{equation}
+Y_{i,j} = \mu + \pi_i + \tau_j + (\tau\pi + \epsilon)_{i,j}
+\end{equation}
+This is just notational, and does not resolve anything. A more practical version is the following MODEL G:
+\begin{equation}
+Y_{i,j} = \mu + \pi_i + \tau_j + \epsilon_{i,j}
+\end{equation}
+which is a model that can be estimated by assigning appropriate contrasts to the Item and Participant factors. 
+<!--
+both $\tau_{i,j}$ and $\epsilon_{i,j}$ target the same difference between observation $Y_{i,j}$ and $\mu + \tau^{(P)}_i + \tau^{(A)}_j$. Whilst it is straightforward to compute this difference
+$$Y_{i,j} - (\mu + \tau^{(P)}_i + \tau^{(A)}_j)$$
+we cannot determine which part of this belongs to $\tau^{(P\times A)}_{i,j}$, and which part to $\epsilon_{i,j}$.
+-->
+<!-- It's like a pizza,  where some part is yours, and some part belongs to a random stranger. Halves may seem fair, but what if you haven't eaten for days, and perhaps the stranger is starving. Without knowing anything else, it could be just as fair to give on person everything and the other nothing, as splitting in equal halves. The right way to split is, in that case, indeterminate. When two terms in an equation "fight" for the same slice of the pie, that is similar. There is no way to  determine what belongs to what. -->
+<!--
+To test for the main effect of Condition, we can compare MODEL G above to a reduced model where we set $\tau_j = 0$ for all $j$. This provides MODEL R:
+\begin{equation}
+Y_{i,j} = \mu + \pi_i + \epsilon_{i,j}
+\end{equation}
+
+
+```
+## Analysis of Variance Table
+## 
+## Model 1: Response ~ Participant
+## Model 2: Response ~ Participant + Item
+##   Res.Df RSS Df Sum of Sq    F  Pr(>F)    
+## 1    118 296                              
+## 2    116 226  2        70 17.9 1.6e-07 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+```
+
+Comparing MODEL G to MODEL R provides an appropriate (omnibus) test for the main effect of Condition. [INCLUDE RESULTS] You might wonder if you can or should also test for the main effect of Person. The short answer is: no. The longer answer is that the inability to distinguish between the interaction term $(\pi\tau)_{i,j}$ and the error term $\epsilon_{i,j}$ affects the sampling distribution of the estimates of the person effects $\hat{\pi}_i$ and treatment effects $\hat{\tau}_j$ differently. That is because Person should usually be treated as a __random effect__, whilst an experimental manipulation such as Condition should be treated as a __fixed effect__.
+
+### Random vs fixed effects
+
+Unlike Condition, Person is not really an experimental manipulation. Whilst the levels of Condition (i.e. whether participants viewed a photo by itself, in the context of a group of different faces, or in the context of a group of similar faces) were carefully designed to test a hypothesis of interest, the persons participating in a study are generally sampled from a wider population. We don't want to make claims just about those persons who happened to be available as participants in a study. We want to generalize the results to the wider population. For the levels of Condition, however, we are just interested in claims about these carefully designed levels. We wouldn't pretend that the study would also speak to what would have happened if the face was presented surrounded by photos of a participant's own face, for example. That implies that if we were to replicate the experiment a second or third time, the true effects of Condition would be the same, as we would use exactly the same condition. However, as we would include different participants, the effects of Person would vary from replication to replication. As the Data Generating Process concerns how data varies over repetitions of an experiment or scientific procedure, the status of fixed and random effects is different. Obtaining more observations means we should have better estimates of fixed effects. But by adding other people to an experiment, we cannot obtain a better estimate of how one particular participant differs from the average person. 
+
+Insofar as we want to make any claims about random effects, these would concern the variability of those effects, rather than each specific effect for each person. To make such leaps from sample to population, we need a DGP for person effects. Commonly, we might assume that each person effect is drawn from a Normal distribution:
+$$\pi_i \sim \mathbf{Normal}(0,\sigma_\pi)$$
+Similarly, for the interaction effect, which is also random (as the persons are sample from the population), we might make a similar assumption:
+$$(\pi\tau)_{i,j} \sim \mathbf{Normal}(0,\sigma_{\pi\tau})$$
+For fixed effects, we would not need to make any assumption about their distribution, because we don't need to generalize beyond the specific effects included in the design.
+
+Whilst the variance of the sampling distribution of the estimated treatment effects $\hat{\tau}_j$ depends on both the variance in the interaction term $(\pi\tau)_{i,j}$ and the error term $\epsilon_{i,j}$, whilst the variance of the sampling distribution of the person effects depends only on the variance of the error term $\epsilon_{i,j}$. 
+<!--
+$$\hat{\tau}_j \sim \mathbf{Normal}(\tau_j,\sqrt{\sigma^2_{\pi\tau} + \sigma^2_\epsilon})$$
+$$\hat{\pi}_i \sim \mathbf{Normal}(\pi_i,\sigma_\epsilon)$$
+-->
+<!-- 
+Intuitively, you might think of this as follows: whilst the treatment effects may differ between persons (as reflected in the interaction term $(\pi\tau)_{i,j}$), these deviations from the average treatment effects (as reflected in the treatment term $\tau_{j}$) are random, and will cancel each other out.  
+
+<!--
+A set of participants in a study is generally a sample from a (much) larger population of potential participants. Insofar as we are interested in differences between participants (i.e., an effect of P), we are not so much interested in whether there are differences between the actual participants included in the study, but whether there are differences between the people in the whole population. In other words, we would like to infer from variability between participants in a study whether there are differences between people in the population of interest. That means we want to generalize person effects in a particular sample of participants to person effects in the general population. To make such a leap from sample to population, we need a DGP for person effects, and commonly we might assume that each person effect is drawn from a Normal distribution:
+$$\tau_i^{(P)} \sim \mathbf{Normal}(0,\sigma_\text{P})$$
+Our objective here is to estimate the variability between persons, i.e. $\sigma_\text{P}$, and _not_ to estimate each $\tau^{P}_i$ as precisely as possible. 
+
+The generalization problem for fixed effects (experimental manipulations) is different: our objective is to infer from a sample what effect precisely these experimental manipulations will have in the whole population. The objective here is to get the most precise estimation of each $\tau_j^{(A)}$. 
+-->
+</div>
+<div id="assumptions-1" class="section level2" number="10.7">
+<h2><span class="header-section-number">10.7</span> Assumptions</h2>
+<p>The assumptions for the analyses for each composite variable are the same as for any General Linear Model: the errors are assumed to be independent and Normal-distributed, with a mean of 0 and a constant variance. If the model includes between-subjects groups, then this translates in the assumption that within these groups, each composite score is Normal distributed with the same variance, but a possibly different mean. These assumptions are not guaranteed to hold. However, by focusing on separate analyses of composite scores which, by construction, are orthogonal to each other, there is no immediate reason to suspect a violation of the independence assumption.</p>
+<p>When performing omnibus tests of main or interaction effects with a within-subjects component, an additional assumption is required: the assumption of sphericity.</p>
+<div id="omnibus-tests-and-sphericity" class="section level3" number="10.7.1">
+<h3><span class="header-section-number">10.7.1</span> Omnibus tests and sphericity</h3>
+<p>Omnibus tests involving within-subjects components were performed by aggregating SSR and SSE terms over different models. This is sensible only insofar as the SSE terms are comparable between the models. If the true variances of the errors are substantially different between the models of the within-subjects composite scores, then aggregating them to perform an omnibus test is like treating apples and oranges as the same fruit. As a result, the <span class="math inline">\(F\)</span>-statistic will not follow the assumed <span class="math inline">\(F\)</span>-distribution. The omnibus tests are valid when the Data Generating Process is fulfills the requirement of <strong>sphericity</strong>.</p>
+<p>Sphericity means that the variances of all pairwise differences between within-subjects measurements are equal. In our example, there were three within-subjects measurements: the Alone, Different, and Similar attractiveness ratings. As these are ratings by the same person, they are likely to be correlated (the reason for going through the effort in performing a repeated-measures ANOVA). For a more precise definition of sphericity, let’s consider the true variance-covariance matrix of these three measures:</p>
+<p><span class="math display">\[\Sigma = \left[ \begin{matrix} \sigma_A^2 &amp; \sigma_{A,D} &amp; \sigma_{A,S} \\ \sigma_{D,A} &amp; \sigma_D^2 &amp; \sigma_{D,S} \\ \sigma_{S,A} &amp; \sigma_{S,D} &amp; \sigma_S^2 \end{matrix} \right]\]</span>
+Here, <span class="math inline">\(\sigma^2_A\)</span> represents the true variance of the Alone measurement in the DGP, and <span class="math inline">\(\sigma_{A,D}\)</span> the true covariance between the Alone and Different measurement. Note that this matrix is symmetric, as the covariance between the Alone and Different measurement is the same as the covariance between the Different and Alone measurement, i.e. <span class="math inline">\(\sigma_{A,D} = \sigma_{D,A}\)</span>. <!--Homogeneity of variance means that
+$$\sigma_A^2 = \sigma_D^2 = \sigma_S^2$$
+For omnibus tests in repeated-measures analyses, an additional assumption is necessary for the covariances, namely that of __sphericity__. This assumption means that the _variances of all pairwise differences are equal_. -->
+The variance of a pairwise difference between e.g. the Alone and Different measures is <span class="math inline">\(\sigma_A^2 + \sigma_D^2 - 2 \sigma_{A,D}\)</span>, i.e. the sum of the variances of the two variables, minus twice the covariance. Hence, the assumption of sphericity can be stated as:
+<span class="math display">\[\sigma_j^2 + \sigma_k^2 - 2\sigma_{jk} = \sigma_{l}^2 + \sigma_{m}^2 - 2 \sigma_{lm} \quad \quad \text{for all } j,k,l,m\]</span>
+For example, for our three variables, there are 3 pairwise differences, and hence the assumption is</p>
+<p><span class="math display">\[\sigma_A^2 + \sigma_D^2 - 2\sigma_{A,D} = \sigma_{A}^2 + \sigma_{S}^2 - 2 \sigma_{A,S} = \sigma_{D}^2 + \sigma_{S}^2 - 2 \sigma_{D,S}\]</span>
+If that seems like a complicated and stringent assumption: it is! And it is not that easy to check. Moreover, if there are between-subjects groups, then the variance-covariance matrix should be equal for each of those groups as well. Sphericity holds when a more stringent condition, called <strong>compound symmetry</strong> holds. Compound symmetry means that all variances are identical to each other (i.e. <span class="math inline">\(\sigma_A^2 = \sigma_D^2 = \sigma^2_S = \sigma^2\)</span>), and all covariances are identical to each other (i.e. <span class="math inline">\(\sigma_{A,D} = \sigma_{A,S} = \sigma_{D,S} = \sigma_{\cdot,\cdot}\)</span>). The variance-covariance can then be stated as
+<span class="math display">\[\Sigma = \left[ \begin{matrix} \sigma^2 &amp; \sigma_{\cdot,\cdot} &amp; \sigma_{\cdot,\cdot} \\ \sigma_{\cdot,\cdot} &amp; \sigma^2 &amp; \sigma_{\cdot,\cdot} \\ \sigma_{\cdot,\cdot} &amp; \sigma_{\cdot,\cdot} &amp; \sigma^2 \end{matrix} \right]\]</span></p>
+</div>
+<div id="correcting-for-non-sphericity" class="section level3" number="10.7.2">
+<h3><span class="header-section-number">10.7.2</span> Correcting for non-sphericity</h3>
+<p>When the assumption of sphericity does <em>not</em> hold (the assumption is violated) the <span class="math inline">\(F\)</span>-statistic still (approximately) follows an <span class="math inline">\(F\)</span> distribution, but with a smaller value for <span class="math inline">\(\text{df}_1\)</span> and <span class="math inline">\(\text{df}_2\)</span> than usual. <span class="citation"><a href="#ref-greenhouse1959methods" role="doc-biblioref">Greenhouse &amp; Geisser</a> (<a href="#ref-greenhouse1959methods" role="doc-biblioref">1959</a>)</span> showed that the correct degrees of freedom can be stated as <span class="math inline">\(\zeta \times \text{df}_1\)</span> and <span class="math inline">\(\zeta \times \text{df}_2\)</span>, where <span class="math inline">\(0 \geq \zeta \geq 1\)</span> is a correction fraction.<a href="#fn26" class="footnote-ref" id="fnref26"><sup>26</sup></a> Whilst the value of <span class="math inline">\(\zeta\)</span> depends on the true (co)variances underlying the data, it’s value can be estimated. The estimator proposed by <span class="citation"><a href="#ref-greenhouse1959methods" role="doc-biblioref">Greenhouse &amp; Geisser</a> (<a href="#ref-greenhouse1959methods" role="doc-biblioref">1959</a>)</span> is known as the Greenhouse-Geisser estimate, and the corrected degrees of freedom using this estimate as the Greenhouse-Geisser correction. <span class="citation"><a href="#ref-huynh1976estimation" role="doc-biblioref">Huynh &amp; Feldt</a> (<a href="#ref-huynh1976estimation" role="doc-biblioref">1976</a>)</span> showed that, if the true value is close to or higher than <span class="math inline">\(\zeta = 0.75\)</span>, the Greenhouse-Geisser correction tends to be too conservative. They suggested a correction which provides an upward-adjusted estimate of <span class="math inline">\(\zeta\)</span>, which will increase the power of the tests. The suggestion is thus to use the Huynh-Feldt correction when the Greenhouse-Geisser estimate of <span class="math inline">\(\zeta\)</span> is close to or higher than <span class="math inline">\(\hat{\zeta} = 0.75\)</span>.</p>
+<p>A statistical test for the assumption of sphericity was developed by <span class="citation"><a href="#ref-mauchly1940significance" role="doc-biblioref">Mauchly</a> (<a href="#ref-mauchly1940significance" role="doc-biblioref">1940</a>)</span> and is known as Mauchly’s sphericity test. Whilst routinely provided by statistical software, it is not an ideal test, as it rests strongly on the assumption of normality and it commonly has low power. Rather than only correcting the degrees of freedom after a significant Mauchly test, <span class="citation"><a href="#ref-howell2012statistical" role="doc-biblioref">Howell</a> (<a href="#ref-howell2012statistical" role="doc-biblioref">2012</a>)</span> suggests to <em>always</em> adjust the degrees of freedom according to the either the Greenhouse-Geisser or Huynh-Feldt correction (whichever is more appropriate given the estimated <span class="math inline">\(\hat{\zeta}\)</span>). As sphericity is only required for omnibus tests, another consideration is to avoid these omnibus tests, and only focus on tests for individual within-subjects contrasts <span class="citation">(<a href="#ref-judd2011data" role="doc-biblioref">Charles M. Judd et al., 2011</a>)</span>.</p>
+<p>For the present analysis, the Greenhouse-Geisser estimate is <span class="math inline">\(\hat{\zeta} = 0.982\)</span>. This is very close to 1, and hence there is no strong evidence for a violation of sphericity. In this case, that is supported by a non-significant Mauchly test for sphericity, <span class="math inline">\(W = 0.982\)</span>, <span class="math inline">\(p = .599\)</span>. Whilst there is little need to do this in this case, if we were to apply the Greenhouse-Geisser correction for the omnibus test of presentation, we would compare the value of the <span class="math inline">\(F\)</span>-statistic to an <span class="math inline">\(F\)</span>-distribution with <span class="math inline">\(\text{df}_1&#39; = \hat{\zeta} \times \text{df}_1 = 0.982 \times 2 = 1.964\)</span> and <span class="math inline">\(\text{df}_2&#39; = \hat{\zeta} \times \text{df}_2 = 0.982 \times 114 = 111.971\)</span> degrees of freedom. The exceedence probability is then <span class="math inline">\(P(F_{1.964,111.971} \geq 18.57) &lt; .001\)</span>. The Greenhouse-Geisser corrected test of the Version by Presentation interaction is <span class="math inline">\(P(F_{1.964,111.971} \geq 2.67) = .075\)</span>. As the correction is only minor, neither test result is changed much.</p>
+<!-- ## Effect size -->
+<!-- 
+## Mixed ANOVA with between and within factors
+
+\begin{equation}
+Y_{i,j,k} = \mu + \tau^{(P)}_i + \tau^{(A)}_j + \tau^{(B)}_k + \tau^{(P \times A)}_{i,j} + \tau^{(P \times B)}_{i,k} + \tau^{(A \times B)}_{j,k} + \epsilon_{i,j,k}
+(\#eq:glm-mixed-RM-ANOVA-model)
+\end{equation}
+Note that we are excluding the three-way interaction term $\tau^{(P \times A \times B)}_{i,j,k}$ as again, this can not be distinguished from the error term $\epsilon_{i,j,k}$.
+-->
+</div>
+</div>
+<div id="in-practice-4" class="section level2" number="10.8">
+<h2><span class="header-section-number">10.8</span> In practice</h2>
+<p>Performing a repeated-measures ANOVA is, as you may have noticed, a somewhat laborious affair. It is therefore usually left to statistical software to conduct the various model comparisons. The steps are mostly similar to that of a factorial ANOVA:</p>
+<ol style="list-style-type: decimal">
+<li><p>Explore the data. For each repeated measure, check the distribution of the scores within each between-subjects condition. Are there outlying or otherwise “strange” observations? If so, you may consider removing these from the dataset. Note that as repeated-measures ANOVA requires complete data for each participant, this implies that you would remove all data from a participant with outlying data.</p></li>
+<li><p>Define a useful set of contrast codes for the main effects of the within-subjects factors, and any between-subjects factors. Aim for these codes to represent the most important comparisons between the levels of the experimental factors. Then, separately for the within- and between-subjects factors, compute the interaction contrasts as (pairwise, threeway, fourway, …) products of the main-effects contrasts. Compute within-subjects composite scores for all within-subjects effects. Then, for each composite score, estimate a linear model with the relevant contrast-coded predictors for the between-subjects effects. For each of these models, check again for potential issues in the assumptions with e.g. histograms for the residuals and QQ-plots. If there are clear outliers in the data, remove these, and then re-estimate the models.</p></li>
+<li><p>If you want to compute omnibus tests, check whether the assumption of sphericity is likely to hold. This is best assessed through the Greenhouse-Geisser estimate of the correction factor (which was denoted as <span class="math inline">\(\hat{\zeta}\)</span> here, but most software will refer to this as <span class="math inline">\(\hat{\epsilon}\)</span>). If the estimate is far from 1, then the sphericity assumption is likely violated. If the estimate is <span class="math inline">\(\hat{\zeta} \geq .75\)</span>, consider using a Huynh-Feldt correction, rather than Greenhouse-Geisser correction.</p></li>
+<li><p>If the contrasts do not encode all the comparisons you wish to make, perform follow-up tests with other contrasts. If there are many of these tests, consider correcting for this by using e.g. a Scheffe-adjusted critical value.</p></li>
+<li><p>Interpret and report the results. When reporting the results, make sure that you include all relevant statistics. For example, one way to write the results of the analysis of Table <a href="ch-RM-ANOVA.html#tab:cheerleader-rm-anova-collated-results-table">10.11</a>, is as follows:</p></li>
+</ol>
+<blockquote>
+<p>Attractiveness ratings were analysed with a 2 (Version: Identical, Variant) by 3 (Presentation: Alone, Different, Similar) ANOVA, with repeated-measures on the last factor. A Greenhouse-Geisser correction was applied to the degrees of freedom, to correct for any potential problems of non-sphericity. The analysis showed a significant effect of Presentation, <span class="math inline">\(F(1.96, 111.97) = 18.57\)</span>, <span class="math inline">\(p &lt; .001\)</span>, <span class="math inline">\(\hat{\eta}^2_p = .246\)</span>. Contrast analysis showed that attractiveness ratings were higher in the Different and Similar conditions compared to the Alone conditions, <span class="math inline">\(b = 1.06\)</span>, 95% CI <span class="math inline">\([0.68\)</span>, <span class="math inline">\(1.44]\)</span>, <span class="math inline">\(t(57) = 5.54\)</span>, <span class="math inline">\(p &lt; .001\)</span>. The contrast between the Different and Similar conditions was not significant, <span class="math inline">\(b = 0.28\)</span>, 95% CI <span class="math inline">\([-0.06\)</span>, <span class="math inline">\(0.62]\)</span>, <span class="math inline">\(t(57) = 1.67\)</span>, <span class="math inline">\(p = .100\)</span>. Whilst the omnibus test for the interaction between Version and Presentation was not significant, <span class="math inline">\(F(1.96, 111.97) = 2.67\)</span>, <span class="math inline">\(p = .075\)</span>, <span class="math inline">\(\hat{\eta}^2_p = .045\)</span>, contrast analysis indicates that the difference between the Different and Similar conditions varied between the two Versions, <span class="math inline">\(b = -0.83\)</span>, 95% CI <span class="math inline">\([-1.50\)</span>, <span class="math inline">\(-0.16]\)</span>, <span class="math inline">\(t(57) = -2.48\)</span>, <span class="math inline">\(p = .016\)</span>. When the Similar condition corresponded to a group of identical photos, the attractiveness ratings were 0.695 points higher in the Different compared to the Similar condition. This difference was only -0.135 when the Similar condition corresponded to a group of different photos of the same individual. The analysis showed no further significant results.</p>
+</blockquote>
+<!-- 
+### Defining and estimating the model
+
+### Assessing the assumptions
+
+### Reporting the results
+
+## Summary
+
+-->
+
+</div>
+</div>
+<h3>References</h3>
+<div id="refs" class="references csl-bib-body hanging-indent" line-spacing="2">
+<div id="ref-carragher2019limited" class="csl-entry">
+Carragher, D. J., Thomas, N. A., Gwinn, O. S., &amp; Nicholls, M. E. (2019). Limited evidence of hierarchical encoding in the cheerleader effect. <em>Scientific Reports</em>, <em>9</em>, 1–13.
+</div>
+<div id="ref-greenhouse1959methods" class="csl-entry">
+Greenhouse, S. W., &amp; Geisser, S. (1959). On methods in the analysis of profile data. <em>Psychometrika</em>, <em>24</em>, 95–112.
+</div>
+<div id="ref-howell2012statistical" class="csl-entry">
+Howell, D. C. (2012). <em>Statistical methods for psychology</em>. Cengage Learning.
+</div>
+<div id="ref-huynh1976estimation" class="csl-entry">
+Huynh, H., &amp; Feldt, L. S. (1976). Estimation of the <span>B</span>ox correction for degrees of freedom from sample data in randomized block and split-plot designs. <em>Journal of Educational Statistics</em>, <em>1</em>, 69–82.
+</div>
+<div id="ref-judd2011data" class="csl-entry">
+Judd, Charles M., McClelland, G. H., &amp; Ryan, C. S. (2011). <em>Data analysis: A model comparison approach</em>. Routledge.
+</div>
+<div id="ref-mauchly1940significance" class="csl-entry">
+Mauchly, J. W. (1940). Significance test for sphericity of a normal n-variate distribution. <em>The Annals of Mathematical Statistics</em>, <em>11</em>, 204–209.
+</div>
+<div id="ref-walker2014hierarchical" class="csl-entry">
+Walker, D., &amp; Vul, E. (2014). Hierarchical encoding makes individuals in a group seem more attractive. <em>Psychological Science</em>, <em>25</em>, 230–235.
+</div>
+</div>
+<div class="footnotes">
+<hr />
+<ol start="23">
+<li id="fn23"><p>Other examples of such clustering in data are when data is collected in group settings, such as students within classrooms, or patients within hospitals. In such situations one could expect again that observations within each cluster (i.e., a specific group, classroom, or hospital) are more similar to each other than observations across clusters.<a href="ch-RM-ANOVA.html#fnref23" class="footnote-back">↩︎</a></p></li>
+<li id="fn24"><p><span class="citation"><a href="#ref-carragher2019limited" role="doc-biblioref">Carragher et al.</a> (<a href="#ref-carragher2019limited" role="doc-biblioref">2019</a>)</span> use different names for the conditions. They call the Different condition the Control condition, the Similar condition the Distractor condition, the Identical condition the Identical-distractors condition, and the Variant condition the Self-distractors condition.<a href="ch-RM-ANOVA.html#fnref24" class="footnote-back">↩︎</a></p></li>
+<li id="fn25"><p>You might think that it would make sense to use the values <span class="math inline">\(\left(\tfrac{1}{3}, \tfrac{1}{3}, \tfrac{1}{3}\right)\)</span>. Whilst this would give you exactly the same computed values of <span class="math inline">\(W_{0,i}\)</span>, rescaling back to <span class="math inline">\(Y\)</span> from <span class="math inline">\(\sqrt{\left(\tfrac{1}{3}\right)^2 + \left(\tfrac{1}{3}\right)^2 + \left(\tfrac{1}{3}\right)^2}\)</span> does not work then. You have to rescale from <span class="math inline">\(\sqrt{3}\)</span>.<a href="ch-RM-ANOVA.html#fnref25" class="footnote-back">↩︎</a></p></li>
+<li id="fn26"><p>The correction factor is usually denoted by <span class="math inline">\(\epsilon\)</span>, but I’m using <span class="math inline">\(\zeta\)</span> (“zeta”) as we are already using <span class="math inline">\(\epsilon\)</span> for the error terms.<a href="ch-RM-ANOVA.html#fnref26" class="footnote-back">↩︎</a></p></li>
+</ol>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="mixing-categorical-and-metric-predictors-ancova.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="linear-mixed-effects-models.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="book_assets/gitbook-2.6.7/js/app.min.js"></script>
+<script src="book_assets/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="book_assets/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="book_assets/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="book_assets/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="book_assets/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="book_assets/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="book_assets/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "serif",
+"size": 2
+},
+"edit": null,
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+},
+"source": null
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
