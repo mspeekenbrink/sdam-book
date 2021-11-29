@@ -24,7 +24,7 @@
 <meta name="author" content="Maarten Speekenbrink" />
 
 
-<meta name="date" content="2021-11-24" />
+<meta name="date" content="2021-11-29" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -65,25 +65,26 @@
 <script src="book_assets/plotly-main-2.5.1/plotly-latest.min.js"></script>
 <link href="book_assets/combineWidgetStyle-0.1/combineWidgets.css" rel="stylesheet" />
 <script src="book_assets/combineWidgets-binding-0.11.1/combineWidgets.js"></script>
-<script src="book_assets/rglWebGL-binding-0.107.14/rglWebGL.js"></script>
-<link href="book_assets/rglwidgetClass-0.107.14/rgl.css" rel="stylesheet" />
-<script src="book_assets/rglwidgetClass-0.107.14/rglClass.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.107.14/utils.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.107.14/subscenes.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.107.14/shaders.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.107.14/textures.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.107.14/projection.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.107.14/mouse.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.107.14/init.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.107.14/pieces.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.107.14/draw.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.107.14/controls.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.107.14/selection.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.107.14/rglTimer.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.107.14/pretty.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.107.14/axes.src.js"></script>
-<script src="book_assets/CanvasMatrix4-0.107.14/CanvasMatrix.src.js"></script>
-<script src="book_assets/rglPlayer-binding-0.107.14/rglPlayer.js"></script>
+<script src="book_assets/rglWebGL-binding-0.108.3/rglWebGL.js"></script>
+<link href="book_assets/rglwidgetClass-0.108.3/rgl.css" rel="stylesheet" />
+<script src="book_assets/rglwidgetClass-0.108.3/rglClass.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.108.3/utils.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.108.3/buffer.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.108.3/subscenes.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.108.3/shaders.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.108.3/textures.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.108.3/projection.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.108.3/mouse.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.108.3/init.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.108.3/pieces.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.108.3/draw.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.108.3/controls.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.108.3/selection.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.108.3/rglTimer.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.108.3/pretty.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.108.3/axes.src.js"></script>
+<script src="book_assets/CanvasMatrix4-0.108.3/CanvasMatrix.src.js"></script>
+<script src="book_assets/rglPlayer-binding-0.108.3/rglPlayer.js"></script>
 <script src="book_assets/kePrint-0.0.1/kePrint.js"></script>
 <link href="book_assets/lightable-0.0.1/lightable.css" rel="stylesheet" />
 
@@ -425,8 +426,8 @@ i.e. the distribution of $\epsilon_i$, conditional upon knowing the value of the
 </div>
 <div id="the-cheerleader-effect" class="section level2" number="10.2">
 <h2><span class="header-section-number">10.2</span> The cheerleader effect</h2>
-<p>The attractiveness of a person’s face is traditionally considered to be related to physical features, such as how symmetrical the features are, how close a face is to the “average” face over many people, and sexual dimorphism (whether a face looks exclusively male or female). However, there is also evidence that perceived facial attractiveness can vary due to factors outside of the face. In what has become known as the “cheerleader effect,” the same face is perceived to be more attractive when seen in a group, as compared to when it is seen alone. <span class="citation"><a href="#ref-walker2014hierarchical" role="doc-biblioref">Walker &amp; Vul</a> (<a href="#ref-walker2014hierarchical" role="doc-biblioref">2014</a>)</span> proposed that the cheerleader effect arises due to people encoding faces in a hierarchical manner. When presented with a group of faces, people encode the display by first calculating an average face for the group, and then encoding individual faces as deviations from the group average. Because faces which are closer to the average face tend to be perceived as more attractive than individual faces, the encoded group average lifts the attractiveness of each face in the group, resulting in each face in the group being perceived as more attractive than if it were presented by itself.<br />
-<span class="citation"><a href="#ref-carragher2019limited" role="doc-biblioref">Carragher, Thomas, Gwinn, &amp; Nicholls</a> (<a href="#ref-carragher2019limited" role="doc-biblioref">2019</a>)</span> set out to test this explanation. In one part of their study (Experiment 1), they let participants rate the attractiveness of a face when presented by itself (the Alone condition), as part of a group of different faces (the Different condition), or as part of a group of similar faces (the Similar condition). There were two variants of the latter condition, and participants encountered only one of them in the experiment. In the Identical condition, the group consisted of three copies of exactly the same photo. In the Variant condition, the group consisted of three different photos of the same face.<a href="#fn24" class="footnote-ref" id="fnref24"><sup>24</sup></a> The authors argued that if the hierarchical-encoding explanation for the cheerleader effect is true, then the cheerleader effect should not be observed in the Identical condition. This is because the average of three identical photos is just the photo itself, so there should be no difference between an encoded average face and the face itself. In the Variant condition however, variability between the different photos of the same face might still lead to an average face which is deemed more attractive than each individual face.</p>
+<p>The attractiveness of a person’s face is traditionally considered to be related to physical features, such as how symmetrical the features are, how close a face is to the “average” face over many people, and sexual dimorphism (whether a face looks exclusively male or female). However, there is also evidence that perceived facial attractiveness can vary due to factors outside of the face. In what has become known as the “cheerleader effect,” the same face is perceived to be more attractive when seen in a group, as compared to when it is seen alone. <span class="citation"><a href="#ref-walker2014hierarchical" role="doc-biblioref">Walker &amp; Vul</a> (<a href="#ref-walker2014hierarchical" role="doc-biblioref">2014</a>)</span> proposed that the cheerleader effect arises due to people encoding faces in a hierarchical manner. When presented with a group of faces, people encode the display by first calculating an average face for the group, and then encoding individual faces as deviations from the group average. Because faces which are closer to the average face tend to be perceived as more attractive than individual faces, the encoded group average lifts the attractiveness of each face in the group, resulting in each face in the group being perceived as more attractive than if it were presented by itself.</p>
+<p><span class="citation"><a href="#ref-carragher2019limited" role="doc-biblioref">Carragher, Thomas, Gwinn, &amp; Nicholls</a> (<a href="#ref-carragher2019limited" role="doc-biblioref">2019</a>)</span> set out to test this explanation. In one part of their study (Experiment 1), they let participants rate the attractiveness of a face when presented by itself (the Alone condition), as part of a group of different faces (the Different condition), or as part of a group of similar faces (the Similar condition). There were two variants of the latter condition, and participants encountered only one of them in the experiment. In the Identical condition, the group consisted of three copies of exactly the same photo. In the Variant condition, the group consisted of three different photos of the same face.<a href="#fn24" class="footnote-ref" id="fnref24"><sup>24</sup></a> The authors argued that if the hierarchical-encoding explanation for the cheerleader effect is true, then the cheerleader effect should not be observed in the Identical condition. This is because the average of three identical photos is just the photo itself, so there should be no difference between an encoded average face and the face itself. In the Variant condition however, variability between the different photos of the same face might still lead to an average face which is deemed more attractive than each individual face.</p>
 <p>The design of the study is an example of a 2 (Version: Identical, Variant) by 3 (Presentation: Alone, Different, or Similar) design. The first factor (Version) varied between people, and the second (Presentation) within people (each participant rated a face in each of the three conditions). The rated attractiveness of the faces in the different conditions are provided in Figure <a href="ch-RM-ANOVA.html#fig:cheerleader-raincloud-plot">10.1</a>.</p>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:cheerleader-raincloud-plot"></span>
 <img src="_main_files/figure-html/cheerleader-raincloud-plot-1.svg" alt="Attractiveness ratings for photo's of faces when presented alone, as part of a group of dissimilar faces (Different), or as part of a group of similar faces (Similar), which are either identical (Identical) or different photos (Variant) of the same face." width="95%" />
@@ -1843,7 +1844,7 @@ Identical
 93.6
 </td>
 <td style="text-align:right;">
-2
+1.64
 </td>
 <td style="text-align:right;">
 2.04
@@ -1872,7 +1873,7 @@ Identical
 94.1
 </td>
 <td style="text-align:right;">
-2
+2.26
 </td>
 <td style="text-align:right;">
 0.09
@@ -1901,7 +1902,7 @@ Identical
 81.7
 </td>
 <td style="text-align:right;">
-2
+1.58
 </td>
 <td style="text-align:right;">
 0.12
@@ -1930,7 +1931,7 @@ Identical
 79.9
 </td>
 <td style="text-align:right;">
-3
+2.76
 </td>
 <td style="text-align:right;">
 4.27
@@ -1959,7 +1960,7 @@ Identical
 63.5
 </td>
 <td style="text-align:right;">
--1
+-1.00
 </td>
 <td style="text-align:right;">
 -2.17
@@ -1988,7 +1989,7 @@ Variant
 96.2
 </td>
 <td style="text-align:right;">
--1
+-0.99
 </td>
 <td style="text-align:right;">
 1.15
@@ -2017,7 +2018,7 @@ Variant
 22.2
 </td>
 <td style="text-align:right;">
--1
+-0.60
 </td>
 <td style="text-align:right;">
 1.33
@@ -2046,7 +2047,7 @@ Variant
 87.1
 </td>
 <td style="text-align:right;">
-1
+0.56
 </td>
 <td style="text-align:right;">
 -1.01
@@ -2075,7 +2076,7 @@ Variant
 88.2
 </td>
 <td style="text-align:right;">
-5
+4.68
 </td>
 <td style="text-align:right;">
 -0.50
@@ -2104,7 +2105,7 @@ Variant
 70.8
 </td>
 <td style="text-align:right;">
-2
+2.40
 </td>
 <td style="text-align:right;">
 -0.36

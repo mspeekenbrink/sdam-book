@@ -24,7 +24,7 @@
 <meta name="author" content="Maarten Speekenbrink" />
 
 
-<meta name="date" content="2021-11-24" />
+<meta name="date" content="2021-11-29" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -65,25 +65,26 @@
 <script src="book_assets/plotly-main-2.5.1/plotly-latest.min.js"></script>
 <link href="book_assets/combineWidgetStyle-0.1/combineWidgets.css" rel="stylesheet" />
 <script src="book_assets/combineWidgets-binding-0.11.1/combineWidgets.js"></script>
-<script src="book_assets/rglWebGL-binding-0.107.14/rglWebGL.js"></script>
-<link href="book_assets/rglwidgetClass-0.107.14/rgl.css" rel="stylesheet" />
-<script src="book_assets/rglwidgetClass-0.107.14/rglClass.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.107.14/utils.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.107.14/subscenes.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.107.14/shaders.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.107.14/textures.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.107.14/projection.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.107.14/mouse.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.107.14/init.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.107.14/pieces.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.107.14/draw.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.107.14/controls.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.107.14/selection.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.107.14/rglTimer.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.107.14/pretty.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.107.14/axes.src.js"></script>
-<script src="book_assets/CanvasMatrix4-0.107.14/CanvasMatrix.src.js"></script>
-<script src="book_assets/rglPlayer-binding-0.107.14/rglPlayer.js"></script>
+<script src="book_assets/rglWebGL-binding-0.108.3/rglWebGL.js"></script>
+<link href="book_assets/rglwidgetClass-0.108.3/rgl.css" rel="stylesheet" />
+<script src="book_assets/rglwidgetClass-0.108.3/rglClass.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.108.3/utils.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.108.3/buffer.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.108.3/subscenes.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.108.3/shaders.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.108.3/textures.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.108.3/projection.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.108.3/mouse.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.108.3/init.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.108.3/pieces.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.108.3/draw.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.108.3/controls.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.108.3/selection.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.108.3/rglTimer.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.108.3/pretty.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.108.3/axes.src.js"></script>
+<script src="book_assets/CanvasMatrix4-0.108.3/CanvasMatrix.src.js"></script>
+<script src="book_assets/rglPlayer-binding-0.108.3/rglPlayer.js"></script>
 <script src="book_assets/kePrint-0.0.1/kePrint.js"></script>
 <link href="book_assets/lightable-0.0.1/lightable.css" rel="stylesheet" />
 
@@ -653,7 +654,22 @@ Figure 12.5: Bayes factor <span class="math inline">\(\text{BF}_{1,0}\)</span> t
 <div id="bayes-factors-for-general-linear-models" class="section level2" number="12.3">
 <h2><span class="header-section-number">12.3</span> Bayes factors for General Linear Models</h2>
 <p>The suggested default prior distributions can be generalized straightforwardly to more complex versions of the General Linear Model, such as multiple regression <span class="citation">(<a href="#ref-liang2008mixtures" role="doc-biblioref">Liang, Paulo, Molina, Clyde, &amp; Berger, 2008</a>)</span> and ANOVA models <span class="citation">(<a href="#ref-rouder2012default" role="doc-biblioref">Rouder, Morey, Speckman, &amp; Province, 2012</a>)</span>, by specifying analogous JZS prior distributions over all parameters. This provides a means to test each parameter in a model individually, as well as computing omnibus tests by comparing a general model to one where the prior distribution allows only a single value (i.e. <span class="math inline">\(\beta_j = 0\)</span>) for multiple parameters.</p>
-Table <a href="introduction-to-bayesian-hypothesis-testing.html#tab:bayesian-lm-speedate">12.2</a> shows the results of a Bayesian equivalent to the moderated regression model discussed in Section <a href="moderation-and-mediation.html#sec:05-dont-forget-about-the-fun">6.1.5</a>. The results generally confirm the results of the frequenist tests employed there, although evidence for the interaction between fun and intelligence can be classified as “anecdotal.”
+<p>Table <a href="introduction-to-bayesian-hypothesis-testing.html#tab:bayesian-lm-speedate">12.2</a> shows the results of a Bayesian equivalent to the moderated regression model discussed in Section <a href="moderation-and-mediation.html#sec:05-dont-forget-about-the-fun">6.1.5</a>. The results generally confirm the results of the frequenist tests employed there, although evidence for the interaction between fun and intelligence can be classified as “anecdotal.”</p>
+<pre><code>## 
+  |                                                                          
+  |                                                                    |   0%
+  |                                                                          
+  |===========                                                         |  17%
+  |                                                                          
+  |=======================                                             |  33%
+  |                                                                          
+  |==================================                                  |  50%
+  |                                                                          
+  |=============================================                       |  67%
+  |                                                                          
+  |=========================================================           |  83%
+  |                                                                          
+  |====================================================================| 100%</code></pre>
 <table>
 <caption>
 <span id="tab:bayesian-lm-speedate">Table 12.2: </span>Results of a Bayesian regression analysis for the Speed Dating data (cf Table <a href="moderation-and-mediation.html#tab:full-model-like">6.4</a>) with a default JZS prior with scale <span class="math inline">\(r = \sqrt{2}/4\)</span>. The test of each effect compares the full model to one with that effect excluded.
@@ -712,6 +728,17 @@ BF
 </tbody>
 </table>
 <p>Table <a href="introduction-to-bayesian-hypothesis-testing.html#tab:bayesian-anova-expBelief">12.3</a> shows the Bayesian equivalent of the factorial ANOVA reported in Section <a href="ch-factorial-ANOVA.html#sec:06-main-effects-and-interactions">8.2.1</a>. The results show “extreme” evidence for an effect of experimenter belief, and no evidence for an effect of power prime, nor for an interaction between power prime and experimenter belief. In the Frequentist null-hypothesis significance test, the absence of a significant test result can not be taken as direct evidence for the null hypothesis. There is actually no straightforward way to quantify the evidence for the null hypothesis in a Frequentist framework. This is not so for the Bayesian hypothesis tests. Indeed, the Bayes factor directly quantifies the relative evidence for either the alternative or null hypothesis. Hence, we find “moderate” evidence that the null hypothesis is true for power prime, and for the interaction between power prime and experimenter belief. This ability to quantify evidence both for and against the null hypothesis is one of the major benefits of a Bayesian hypothesis testing procedure.</p>
+<pre><code>## 
+  |                                                                          
+  |                                                                    |   0%
+  |                                                                          
+  |=================                                                   |  25%
+  |                                                                          
+  |==================================                                  |  50%
+  |                                                                          
+  |===================================================                 |  75%
+  |                                                                          
+  |====================================================================| 100%</code></pre>
 <table>
 <caption>
 <span id="tab:bayesian-anova-expBelief">Table 12.3: </span>Results of a Bayesian factorial ANOVA analysis for the social priming data (cf Table <a href="ch-factorial-ANOVA.html#tab:expBelief-factorial-ANOVA-results">8.2</a>) with a default JZS prior with scale <span class="math inline">\(r = .5\)</span>. The test of each effect compares the full model to one with that effect excluded.
