@@ -1,6 +1,6 @@
 # Linear mixed-effects models
 
-In this chapter, we will discuss how to deal with the non-independence of errors that can result from repeated-measures of the same individual, or otherwise multiple observations which come from different groupings in the data. Traditionally, such data has been generally analysed with repeated-measures ANOVA models. Linear mixed-effects models offer an alternative to repeated-measures ANOVA with certain benefits, particularly in dealing with missing values. Once you get your head around the idea of random effects, linear mixed-effects models are a natural extension of the General Linear Model, which can then make them easier to understand than repeated-measures ANOVA models, which either rely on complicated model comparison schemes and strong assumptions, or rely on a multivariate definition transforming repeated-measures into a set of orthogonal variables. Linear mixed-effects models offer a more flexible univariate modelling technique. This flexibility does mean, as we will see, that sometimes difficult choices need to be made regarding the random-effects structure of the model. As always, there are no set rules in defining statistical models, and this should be led by substantive concerns, in addition to issues of reliability and maintaining appropriate error rates. With practice and experience, you should become more confident in making such decisions. 
+In this chapter, we will discuss an alternative approach to dealing with the non-independence of errors that can result from repeated-measures of the same individual, or otherwise multiple observations which come from different groupings in the data. Traditionally, such data has been analysed with repeated-measures ANOVA models. Linear mixed-effects models offer an alternative to repeated-measures ANOVA with certain benefits, particularly in dealing with missing values. Once you get your head around the idea of random effects, linear mixed-effects models are a natural extension of the General Linear Model, which can then make them easier to understand than repeated-measures ANOVA models, which rely on complicated model comparison schemes and strong assumptions. Linear mixed-effects models offer a more flexible univariate modelling technique. This flexibility does mean, as we will see, that sometimes difficult choices need to be made regarding the random-effects structure of the model. As always, there are no set rules in defining statistical models, and this should be led by substantive concerns, in addition to issues of reliability and maintaining appropriate error rates. With practice and experience, you should become more confident in making such decisions. 
 
 In writing this chapter, I have adapted some sections of @Singmann2019-mixed. This is a very clear introduction to linear mixed-effects models, that you may wish to consult in addition to this Chapter (you can download it [here](http://singmann.org/download/publications/singmann_kellen-introduction-mixed-models.pdf)).
 
@@ -33,12 +33,14 @@ We will now define a model which allows for each grouping (e.g., lab) in the dat
 Y_{i,j} = \beta_{0,j} + \epsilon_{i,j} \quad \quad \quad  \epsilon_{i,j} \sim \mathbf{Normal}(0,\sigma_{\epsilon})
 (\#eq:random-intercept-model-level-1)
 \end{equation}
-For each observation $Y_{i,j}$, we thus assume the intercept $\beta_{0,j}$ which is different for each group $j$. In other respects, the model is exactly the same as the one of Equation \@ref(eq:simple-glm-ch09), and observations can deviate from the intercept (which represents the mean in group $j$) through the error term $\epsilon_{i,j}$, which is assumed Normal-distributed with a mean of 0 and constant (homogeneous) standard deviation $\sigma_\epsilon$. While the model effectively states that the structural part $\beta_{0,j}$ is different for each grouping level $j$, the groupings are linked because they share the same distribution for the error term. The second step is to define a model for the grouping-dependent intercepts:
+For each observation $Y_{i,j}$, we thus assume the intercept $\beta_{0,j}$ which is different for each group $j$. In other respects, the model is exactly the same as the one of Equation \@ref(eq:simple-glm-ch09), and observations can deviate from the intercept (which represents the mean in group $j$) through the error term $\epsilon_{i,j}$, which is assumed Normal-distributed with a mean of 0 and constant (homogeneous) standard deviation $\sigma_\epsilon$. Whilst the model effectively states that the structural part $\beta_{0,j}$ is different for each grouping level $j$, the groupings are linked because they share the same distribution for the error term. 
+
+The second step is to define a model for the grouping-dependent intercepts:
 \begin{equation}
 \beta_{0,j} = \beta_0 + \gamma_{0,j} \quad \quad \quad \gamma_{0,j} \sim \mathbf{Normal}(0,\sigma_{\gamma_0})
 (\#eq:random-intercept-model-level-2)
 \end{equation}
-Let's pause for a moment and consider the Equation above in detail. You can think of $\beta_{0,j}$ as the dependent variable here. On the right hand side, there are two terms, an intercept $\beta_0$, and a residual term $\gamma_{0,j}$ which is assumed Normal-distributed with a mean of 0 and a constant (homogeneous) standard deviation $\sigma_{\gamma_0}$. Note that this model is structurally identical to that of Equation \@ref(eq:simple-glm-ch09). If you'd replace $\beta_{0,j}$ by $Y_i$, $\gamma_{0,j}$ by $\epsilon_i$, and $\sigma_{\gamma_0}$ by $\sigma_\epsilon$, you'd reproduce Equation \@ref(eq:simple-glm-ch09) exactly. We thus have a simple model for the parameter $\beta_{0,j}$ as an outcome. In such a __parameters as outcomes__ formulation of linear mixed-effects models, it is customary to call Equation \@ref(eq:random-intercept-model-level-1) a __level 1__ model. It is a model on the level of the observed values $Y_{i,j}$. Equation \@ref(eq:random-intercept-model-level-2) is then a __level 2__ model, a higher-order model which is on the level of the parameters of the model on the level below it (level 2). As we will see later on, further higher-order models can be specified, leading to so-called multilevel models. For present purposes, a level 2 model suffices.
+Let's pause for a moment and consider the Equation \@ref(eq:random-intercept-model-level-2) above in detail. You can think of $\beta_{0,j}$ as the dependent variable here. On the right hand side, there are two terms, an intercept $\beta_0$, and a residual term $\gamma_{0,j}$ which is assumed Normal-distributed with a mean of 0 and a constant (homogeneous) standard deviation $\sigma_{\gamma_0}$. Note that this model is structurally identical to that of Equation \@ref(eq:simple-glm-ch09). If you'd replace $\beta_{0,j}$ by $Y_i$, $\gamma_{0,j}$ by $\epsilon_i$, and $\sigma_{\gamma_0}$ by $\sigma_\epsilon$, you'd reproduce Equation \@ref(eq:simple-glm-ch09) exactly. We thus have a simple model for the parameter $\beta_{0,j}$ as an outcome. In such a __parameters as outcomes__ formulation of linear mixed-effects models, it is customary to call Equation \@ref(eq:random-intercept-model-level-1) a __level 1__ model. It is a model on the level of the observed values $Y_{i,j}$. Equation \@ref(eq:random-intercept-model-level-2) is then a __level 2__ model, a higher-order model which is on the level of the parameters of the model on the level below it (level 2). As we will see later on, further higher-order models can be specified, leading to so-called multilevel models. For present purposes, a level 2 model suffices.
 
 The random-intercepts model defined by equations \@ref(eq:random-intercept-model-level-1) and \@ref(eq:random-intercept-model-level-2) has random elements ($\gamma_{0,j}$ and $\epsilon_{i,j}$), and non-random elements ($\beta_0$). Parameter $\beta_0$ is an (unknown) constant, and in the context of mixed-effects models is called a __fixed effect__. The $\gamma_{0,j}$ terms are called __random effects__. The reflect deviations between the means in the groupings from the overall mean $\beta_0$:
 $$\gamma_{j,0} = \beta_{0,j} - \beta_0$$
@@ -267,11 +269,26 @@ Please come back later for this.
 
 <!-- 
 ```{r, cache= TRUE, results='hide'}
+library(sdamr)
 data("speeddate")
+
 dat <- speeddate
-dat$iid <- as.factor(dat$iid)
-dat$pid <- as.factor(dat$pid)
-summary(afex::mixed(other_like ~ other_attr + other_sinc + other_intel + other_fun + other_amb + (1|iid) + (1|pid), data=dat))
+dat$other_attr_c <- center(dat$other_attr)
+dat$other_intel_c <- center(dat$other_intel)
+dat$iid <- factor(dat$iid)
+dat$pid <- factor(dat$pid)
+
+
+lmemod <- lme4::lmer(other_like ~ other_attr_c*other_intel_c + (1 + other_attr_c*other_intel_c|iid) + (1 + other_attr_c*other_intel_c|pid), data=dat)
+
+mod <- afex::mixed(other_like ~ other_attr_c*other_intel_c + (1 + other_attr_c*other_intel_c|iid) + (1 + other_attr_c*other_intel_c|pid), data=dat)
+
+
+#data("speeddate")
+#dat <- speeddate
+#dat$iid <- as.factor(dat$iid)
+#dat$pid <- as.factor(dat$pid)
+#summary(afex::mixed(other_like ~ other_attr + other_sinc + other_intel + other_fun + other_amb + (1|iid) + (1|pid), data=dat))
 ```
 -->
 
