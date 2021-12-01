@@ -1,4 +1,4 @@
-# Introduction {#intro}
+# Introduction {#ch-intro}
 
 ```{r setup2, echo=FALSE}
 knitr::opts_chunk$set(echo = FALSE,

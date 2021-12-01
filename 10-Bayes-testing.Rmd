@@ -1,4 +1,4 @@
-# Introduction to Bayesian hypothesis testing
+# Introduction to Bayesian hypothesis testing {#ch-Bayes-factors}
 
 In this chapter, we will introduce an alternative to the Frequentist null-hypothesis significance testing procedure employed up to now, namely a Bayesian hypothesis testing procedure. Like before, this consists of comparing statistical models. What is new here is that Bayesian models contain a prior distribution for the model parameters. In doing so for both the null and alternative model, Bayesian model comparisons provide a more direct measure of the relative evidence for both the null and alternative hypothesis. We will start with an introduction to the fundamental aspects of Bayesian inference, which concerns a revision of beliefs in light of observed data. We then go on to discuss "default priors" which can be useful in a Bayesian testing procedure. We end with an overview of some objections to the traditional Frequentist method of hypothesis testing, and a comparison between the two approaches.  
 

@@ -168,6 +168,9 @@ tab:anchoring-means-random-intercepts-table
 fig:anchoring-both-boxplot-by-referrer
 eq:random-intercept-and-slope-model-level-1
 eq:random-intercept-and-slope-model-level-2
+tab:cross-mixed-fixed-results-table
+tab:random-P-effects-covariance-speeddating
+tab:random-I-effects-covariance-speeddating
 fig:covid-19-test-tree
 eq:bayes-rule
 fig:prior-distributions-Paul
@@ -180,11 +183,11 @@ fig:bayesian-t-tests-different-rscale
 tab:bayesian-lm-speedate
 tab:bayesian-anova-expBelief
 fig:simulation-p-value-distribution
-fig:unnamed-chunk-62
+fig:unnamed-chunk-61
 tab:common-data-transformations
 fig:example-multiple-regression-write-up-plot
 fig:example-factorial-ANOVA-write-up-plot
-intro
+ch-intro
 paul-the-octopus
 experiments-and-observations
 data
@@ -234,7 +237,7 @@ the-central-limit-theorem
 the-central-limit-theorem-in-action
 bootstrapping-a-statistic
 in-practice
-simple-linear-regression
+ch-simple-regression
 trump-votes-and-hate-groups
 the-model
 sec:04-estimation
@@ -260,7 +263,7 @@ multicollinearity-redundancy-between-predictors
 detecting-and-dealing-with-multicollinearity
 sec:04b-outliers
 in-practice-1
-moderation-and-mediation
+ch-moderation-mediation
 moderation
 physical-attractiveness-and-intelligence-in-speed-dating
 conditional-slopes
@@ -319,7 +322,7 @@ assumptions-1
 omnibus-tests-and-sphericity
 correcting-for-non-sphericity
 in-practice-4
-linear-mixed-effects-models
+ch-linear-mixed-effects-models
 non-independence-in-linear-models-1
 random-intercept-models
 parameter-estimation-1
@@ -329,7 +332,7 @@ models-with-random-intercepts-and-slopes
 correlation-between-random-effects
 crossed-random-effects-dating-partners-in-the-speed-dating-experiment
 choosing-the-random-effects-structure
-introduction-to-bayesian-hypothesis-testing
+ch-Bayes-factors
 fundamentals-of-bayesian-inference
 probability-in-times-of-covid
 bayes-rule
@@ -344,7 +347,7 @@ the-p-value-depends-on-researcher-intentions
 results-of-a-nhst-are-often-misinterpreted
 to-bayes-or-not-to-bayes-a-pragmatic-view
 summary-3
-being-a-responsible-data-analyst
+ch-responsible-data-analyst
 consider-analysis-before-data-collection
 explore-the-data
 evaluate-the-assumptions-underlying-your-analyses
