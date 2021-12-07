@@ -24,7 +24,7 @@
 <meta name="author" content="Maarten Speekenbrink" />
 
 
-<meta name="date" content="2021-12-01" />
+<meta name="date" content="2021-12-07" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -354,6 +354,7 @@ div.csl-indent {
 <li class="chapter" data-level="12.1.3" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#we-missed-you-paul"><i class="fa fa-check"></i><b>12.1.3</b> We missed you Paul!</a></li>
 <li class="chapter" data-level="12.1.4" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#the-marginal-likelihood-and-prior-predictive-distribution"><i class="fa fa-check"></i><b>12.1.4</b> The marginal likelihood and prior predictive distribution</a></li>
 <li class="chapter" data-level="12.1.5" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#hypothesis-testing-relative-evidence-and-the-bayes-factor"><i class="fa fa-check"></i><b>12.1.5</b> Hypothesis testing, relative evidence, and the Bayes factor</a></li>
+<li class="chapter" data-level="12.1.6" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#parameter-estimates-and-credible-intervals"><i class="fa fa-check"></i><b>12.1.6</b> Parameter estimates and credible intervals</a></li>
 </ul></li>
 <li class="chapter" data-level="12.2" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#a-bayesian-t-test"><i class="fa fa-check"></i><b>12.2</b> A Bayesian t-test</a></li>
 <li class="chapter" data-level="12.3" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#bayes-factors-for-general-linear-models"><i class="fa fa-check"></i><b>12.3</b> Bayes factors for General Linear Models</a></li>
@@ -364,7 +365,8 @@ div.csl-indent {
 <li class="chapter" data-level="12.4.3" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#results-of-a-nhst-are-often-misinterpreted"><i class="fa fa-check"></i><b>12.4.3</b> Results of a NHST are often misinterpreted</a></li>
 </ul></li>
 <li class="chapter" data-level="12.5" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#to-bayes-or-not-to-bayes-a-pragmatic-view"><i class="fa fa-check"></i><b>12.5</b> To Bayes or not to Bayes? A pragmatic view</a></li>
-<li class="chapter" data-level="12.6" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#summary-3"><i class="fa fa-check"></i><b>12.6</b> “Summary”</a></li>
+<li class="chapter" data-level="12.6" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#in-practice-5"><i class="fa fa-check"></i><b>12.6</b> In practice</a></li>
+<li class="chapter" data-level="12.7" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#summary-3"><i class="fa fa-check"></i><b>12.7</b> “Summary”</a></li>
 </ul></li>
 <li class="chapter" data-level="13" data-path="ch-responsible-data-analyst.html"><a href="ch-responsible-data-analyst.html"><i class="fa fa-check"></i><b>13</b> Being a responsible data analyst</a>
 <ul>
@@ -516,7 +518,7 @@ MacKinnon, D. P., Fairchild, A. J., &amp; Fritz, M. S. (2007). Mediation analysi
 MacKinnon, D. P., Krull, J. L., &amp; Lockwood, C. M. (2000). Equivalence of the mediation, confounding and suppression effect. <em>Prevention Science</em>, <em>1</em>, 173–181.
 </div>
 <div class="csl-entry">
-Matuschek, H., Kliegl, R., Vasishth, S., Baayen, H., &amp; Bates, D. (2017). Balancing type <span>\</span><span>{I<span>\</span>}</span> error and power in linear mixed models. <em>Journal of Memory and Language</em>, <em>94</em>, 305–315.
+Matuschek, H., Kliegl, R., Vasishth, S., Baayen, H., &amp; Bates, D. (2017). Balancing type i error and power in linear mixed models. <em>Journal of Memory and Language</em>, <em>94</em>, 305–315.
 </div>
 <div class="csl-entry">
 Mauchly, J. W. (1940). Significance test for sphericity of a normal n-variate distribution. <em>The Annals of Mathematical Statistics</em>, <em>11</em>, 204–209.
@@ -525,7 +527,10 @@ Mauchly, J. W. (1940). Significance test for sphericity of a normal n-variate di
 Maxwell, S. E., Delaney, H. D., &amp; Kelley, K. (2017). <em>Designing experiments and analyzing data: A model comparison perspective</em>. Routledge.
 </div>
 <div class="csl-entry">
-Morey, R. D., Hoekstra, R., Rouder, J. N., Lee, M. D., &amp; Wagenmakers, E.-J. (2016). The fallacy of placing confidence in confidence intervals. <em>Psychonomic Bulletin &amp; Review</em>, <em>23</em>, 103–123.
+Morey, Richard D., Hoekstra, R., Rouder, J. N., Lee, M. D., &amp; Wagenmakers, E.-J. (2016). The fallacy of placing confidence in confidence intervals. <em>Psychonomic Bulletin &amp; Review</em>, <em>23</em>, 103–123.
+</div>
+<div class="csl-entry">
+Morey, Richard D., &amp; Rouder, J. N. (2018). <em>BayesFactor: Computation of bayes factors for common designs</em>. Retrieved from <a href="https://CRAN.R-project.org/package=BayesFactor">https://CRAN.R-project.org/package=BayesFactor</a>
 </div>
 <div class="csl-entry">
 Nickerson, R. S. (2000). Null hypothesis significance testing: A review of an old and continuing controversy. <em>Psychological Methods</em>, <em>5</em>, 241.
@@ -541,6 +546,9 @@ Preacher, K. J., &amp; Hayes, A. F. (2008). Asymptotic and resampling strategies
 </div>
 <div class="csl-entry">
 Rosenthal, R., &amp; Gaito, J. (1963). The interpretation of levels of significance by psychological researchers. <em>The Journal of Psychology</em>, <em>55</em>, 33–38.
+</div>
+<div class="csl-entry">
+Rouder, J. N., &amp; Morey, R. D. (2012). Default bayes factors for model selection in regression. <em>Multivariate Behavioral Research</em>, <em>47</em>, 877–903.
 </div>
 <div class="csl-entry">
 Rouder, J. N., Morey, R. D., Speckman, P. L., &amp; Province, J. M. (2012). Default <span>B</span>ayes factors for <span>ANOVA</span> designs. <em>Journal of Mathematical Psychology</em>, <em>56</em>, 356–374.
@@ -595,6 +603,7 @@ Zaval, L., Markowitz, E. M., &amp; Weber, E. U. (2015). How will <span>I</span> 
 </div>
 </div>
 </div>
+
 
 
 

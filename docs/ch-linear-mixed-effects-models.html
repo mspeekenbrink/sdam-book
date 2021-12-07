@@ -24,7 +24,7 @@
 <meta name="author" content="Maarten Speekenbrink" />
 
 
-<meta name="date" content="2021-12-01" />
+<meta name="date" content="2021-12-07" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -354,6 +354,7 @@ div.csl-indent {
 <li class="chapter" data-level="12.1.3" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#we-missed-you-paul"><i class="fa fa-check"></i><b>12.1.3</b> We missed you Paul!</a></li>
 <li class="chapter" data-level="12.1.4" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#the-marginal-likelihood-and-prior-predictive-distribution"><i class="fa fa-check"></i><b>12.1.4</b> The marginal likelihood and prior predictive distribution</a></li>
 <li class="chapter" data-level="12.1.5" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#hypothesis-testing-relative-evidence-and-the-bayes-factor"><i class="fa fa-check"></i><b>12.1.5</b> Hypothesis testing, relative evidence, and the Bayes factor</a></li>
+<li class="chapter" data-level="12.1.6" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#parameter-estimates-and-credible-intervals"><i class="fa fa-check"></i><b>12.1.6</b> Parameter estimates and credible intervals</a></li>
 </ul></li>
 <li class="chapter" data-level="12.2" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#a-bayesian-t-test"><i class="fa fa-check"></i><b>12.2</b> A Bayesian t-test</a></li>
 <li class="chapter" data-level="12.3" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#bayes-factors-for-general-linear-models"><i class="fa fa-check"></i><b>12.3</b> Bayes factors for General Linear Models</a></li>
@@ -364,7 +365,8 @@ div.csl-indent {
 <li class="chapter" data-level="12.4.3" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#results-of-a-nhst-are-often-misinterpreted"><i class="fa fa-check"></i><b>12.4.3</b> Results of a NHST are often misinterpreted</a></li>
 </ul></li>
 <li class="chapter" data-level="12.5" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#to-bayes-or-not-to-bayes-a-pragmatic-view"><i class="fa fa-check"></i><b>12.5</b> To Bayes or not to Bayes? A pragmatic view</a></li>
-<li class="chapter" data-level="12.6" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#summary-3"><i class="fa fa-check"></i><b>12.6</b> “Summary”</a></li>
+<li class="chapter" data-level="12.6" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#in-practice-5"><i class="fa fa-check"></i><b>12.6</b> In practice</a></li>
+<li class="chapter" data-level="12.7" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#summary-3"><i class="fa fa-check"></i><b>12.7</b> “Summary”</a></li>
 </ul></li>
 <li class="chapter" data-level="13" data-path="ch-responsible-data-analyst.html"><a href="ch-responsible-data-analyst.html"><i class="fa fa-check"></i><b>13</b> Being a responsible data analyst</a>
 <ul>
@@ -439,7 +441,7 @@ This is similar to how the residuals <span class="math inline">\(\epsilon_{i,j}\
 <span class="math display">\[\beta_{0,j} \sim \mathbf{Normal}(\beta_0,\sigma_{\gamma_0})\]</span>
 A useful view of the model is then as a hierarchical model, as we have already done in our level-1 and level-2 formulation. This is depicted in Figure <a href="ch-linear-mixed-effects-models.html#fig:random-intercepts-plot-hierarchy">11.1</a>.</p>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:random-intercepts-plot-hierarchy"></span>
-<img src="_main_files/figure-html/random-intercepts-plot-hierarchy-1.svg" alt="Graphical depiction of the random-intercepts model. At the top you see the distribution of $\beta_{0,j}$, which is a Normal distribution with mean $\beta_0$ and standard deviation $\sigma_{\gamma_0}$. Each intercept $\beta_{0,j}$ in the middle layer is a random sample from this distribution. The $\beta_{0,j}$ terms are the means of the group-wise distributions from which the data points (lowest layer) are randomly sampled. Each data point $Y_{i,j}$ is drawn from the group-wise distributions depicted on the middle layer, which are all Normal distributions with mean $\beta_{0,j}$ and standard deviation $\sigma_{\gamma_0}$. The random effects $\gamma_{0,j}$ (only one shown) are the deviations between the group-wise mean $\beta_{0,j}$ and the overall mean $\beta_0$. The errors $\epsilon_{i,j}$ (only one shown) are the deviations between the observations $Y_{i,j}$ and the group-wise means $\beta_{0,j}$." width="95%" />
+<img src="09-LMER_files/figure-html/random-intercepts-plot-hierarchy-1.svg" alt="Graphical depiction of the random-intercepts model. At the top you see the distribution of $\beta_{0,j}$, which is a Normal distribution with mean $\beta_0$ and standard deviation $\sigma_{\gamma_0}$. Each intercept $\beta_{0,j}$ in the middle layer is a random sample from this distribution. The $\beta_{0,j}$ terms are the means of the group-wise distributions from which the data points (lowest layer) are randomly sampled. Each data point $Y_{i,j}$ is drawn from the group-wise distributions depicted on the middle layer, which are all Normal distributions with mean $\beta_{0,j}$ and standard deviation $\sigma_{\gamma_0}$. The random effects $\gamma_{0,j}$ (only one shown) are the deviations between the group-wise mean $\beta_{0,j}$ and the overall mean $\beta_0$. The errors $\epsilon_{i,j}$ (only one shown) are the deviations between the observations $Y_{i,j}$ and the group-wise means $\beta_{0,j}$." width="672" />
 <p class="caption">
 Figure 11.1: Graphical depiction of the random-intercepts model. At the top you see the distribution of <span class="math inline">\(\beta_{0,j}\)</span>, which is a Normal distribution with mean <span class="math inline">\(\beta_0\)</span> and standard deviation <span class="math inline">\(\sigma_{\gamma_0}\)</span>. Each intercept <span class="math inline">\(\beta_{0,j}\)</span> in the middle layer is a random sample from this distribution. The <span class="math inline">\(\beta_{0,j}\)</span> terms are the means of the group-wise distributions from which the data points (lowest layer) are randomly sampled. Each data point <span class="math inline">\(Y_{i,j}\)</span> is drawn from the group-wise distributions depicted on the middle layer, which are all Normal distributions with mean <span class="math inline">\(\beta_{0,j}\)</span> and standard deviation <span class="math inline">\(\sigma_{\gamma_0}\)</span>. The random effects <span class="math inline">\(\gamma_{0,j}\)</span> (only one shown) are the deviations between the group-wise mean <span class="math inline">\(\beta_{0,j}\)</span> and the overall mean <span class="math inline">\(\beta_0\)</span>. The errors <span class="math inline">\(\epsilon_{i,j}\)</span> (only one shown) are the deviations between the observations <span class="math inline">\(Y_{i,j}\)</span> and the group-wise means <span class="math inline">\(\beta_{0,j}\)</span>.
 </p>
@@ -475,7 +477,7 @@ In words, under the null-hypothesis that the restricted model is true, the sampl
 <h2><span class="header-section-number">11.5</span> Application of the random-intercepts model</h2>
 <p>Having spent a bit of time discussing the estimation and testing of effects in linear mixed-effects models in abstract terms, let’s see how we can use a model like this in practice. For this first example, we will consider the data from the anchoring study again, focussing on those (non US or UK based) labs that were able to obtain estimates of the height of Mount Everest in meters, after having provided the participants with a low anchor. The judgements of participants acquired by these different labs, as well as the mean judgements and standard errors of the mean (remember, these standard errors are the standard deviation of the sampling distribution of the mean) are shown in Figure <a href="ch-linear-mixed-effects-models.html#fig:anchoring-low-boxplot-by-referrer">11.2</a>.</p>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:anchoring-low-boxplot-by-referrer"></span>
-<img src="_main_files/figure-html/anchoring-low-boxplot-by-referrer-1.svg" alt="Judged height of Mount Everest after a low anchor for all international labs where participants provided their answer in meters. Boxes represent the mean in each group plus or minus the standard error of the mean." width="95%" />
+<img src="09-LMER_files/figure-html/anchoring-low-boxplot-by-referrer-1.svg" alt="Judged height of Mount Everest after a low anchor for all international labs where participants provided their answer in meters. Boxes represent the mean in each group plus or minus the standard error of the mean." width="672" />
 <p class="caption">
 Figure 11.2: Judged height of Mount Everest after a low anchor for all international labs where participants provided their answer in meters. Boxes represent the mean in each group plus or minus the standard error of the mean.
 </p>
@@ -498,211 +500,97 @@ Y_{i,j} &amp;= \beta_0 + \epsilon_{i,j} \\
 \end{aligned}\]</span></p>
 <p>In the latter model, which is similar to the simple model we focused on in Chapter <a href="ch-simple-GLM.html#ch-simple-GLM">3</a>, the estimate of the intercept is the sample mean over all the observations. You can see that this differs from the estimated fixed intercept of the random intercepts model. This fixed effect represents the average of the random intercepts <span class="math inline">\(\beta_{0,j}\)</span>. Contrary to what you might have thought, the predicted<a href="#fn28" class="footnote-ref" id="fnref28"><sup>28</sup></a> random intercepts are not equal to the group-wise sample averages. Table <a href="ch-linear-mixed-effects-models.html#tab:anchoring-means-random-intercepts-table">11.1</a> shows the sample averages, and the predicted random intercepts, as well as the estimated random effects.</p>
 <table>
-<caption>
-<span id="tab:anchoring-means-random-intercepts-table">Table 11.1: </span>Group-wise averages and sample sizes, estimated fixed intercept (<span class="math inline">\(\hat{\beta}_0\)</span>) and predicted random intercepts (<span class="math inline">\(\hat{\beta}_{0,j}\)</span>), random effects (<span class="math inline">\(\hat{\gamma}_{0,j}\)</span>). The latter are the deviations between the random intercepts and teh fixed intercept. For comparison, we also show the deviations between the sample means and the fixed intercept <span class="math inline">\((\overline{Y}_j - \hat{\beta}_0)\)</span>.
-</caption>
+<caption><span id="tab:anchoring-means-random-intercepts-table">Table 11.1: </span>Group-wise averages and sample sizes, estimated fixed intercept (<span class="math inline">\(\hat{\beta}_0\)</span>) and predicted random intercepts (<span class="math inline">\(\hat{\beta}_{0,j}\)</span>), random effects (<span class="math inline">\(\hat{\gamma}_{0,j}\)</span>). The latter are the deviations between the random intercepts and teh fixed intercept. For comparison, we also show the deviations between the sample means and the fixed intercept <span class="math inline">\((\overline{Y}_j - \hat{\beta}_0)\)</span>.</caption>
+<colgroup>
+<col width="14%" />
+<col width="5%" />
+<col width="15%" />
+<col width="16%" />
+<col width="17%" />
+<col width="31%" />
+</colgroup>
 <thead>
-<tr>
-<th style="text-align:right;">
-<span class="math inline">\(\overline{Y}_j\)</span>
-</th>
-<th style="text-align:right;">
-<span class="math inline">\(n_j\)</span>
-</th>
-<th style="text-align:right;">
-<span class="math inline">\(\hat{\beta}_{0}\)</span>
-</th>
-<th style="text-align:right;">
-<span class="math inline">\(\hat{\beta}_{0,j}\)</span>
-</th>
-<th style="text-align:right;">
-<span class="math inline">\(\hat{\gamma}_{0,j}\)</span>
-</th>
-<th style="text-align:right;">
-<span class="math inline">\((\overline{Y}_j - \hat{\beta}_{0})\)</span>
-</th>
+<tr class="header">
+<th align="right"><span class="math inline">\(\overline{Y}_j\)</span></th>
+<th align="right"><span class="math inline">\(n_j\)</span></th>
+<th align="right"><span class="math inline">\(\hat{\beta}_{0}\)</span></th>
+<th align="right"><span class="math inline">\(\hat{\beta}_{0,j}\)</span></th>
+<th align="right"><span class="math inline">\(\hat{\gamma}_{0,j}\)</span></th>
+<th align="right"><span class="math inline">\((\overline{Y}_j - \hat{\beta}_{0})\)</span></th>
 </tr>
 </thead>
 <tbody>
-<tr>
-<td style="text-align:right;">
-2746
-</td>
-<td style="text-align:right;">
-44
-</td>
-<td style="text-align:right;">
-4393
-</td>
-<td style="text-align:right;">
-2797
-</td>
-<td style="text-align:right;">
--1596
-</td>
-<td style="text-align:right;">
--1646.6
-</td>
+<tr class="odd">
+<td align="right">2746</td>
+<td align="right">44</td>
+<td align="right">4393</td>
+<td align="right">2797</td>
+<td align="right">-1596</td>
+<td align="right">-1646.6</td>
 </tr>
-<tr>
-<td style="text-align:right;">
-8650
-</td>
-<td style="text-align:right;">
-2
-</td>
-<td style="text-align:right;">
-4393
-</td>
-<td style="text-align:right;">
-6907
-</td>
-<td style="text-align:right;">
-2514
-</td>
-<td style="text-align:right;">
-4257.1
-</td>
+<tr class="even">
+<td align="right">8650</td>
+<td align="right">2</td>
+<td align="right">4393</td>
+<td align="right">6907</td>
+<td align="right">2514</td>
+<td align="right">4257.1</td>
 </tr>
-<tr>
-<td style="text-align:right;">
-4488
-</td>
-<td style="text-align:right;">
-36
-</td>
-<td style="text-align:right;">
-4393
-</td>
-<td style="text-align:right;">
-4485
-</td>
-<td style="text-align:right;">
-92
-</td>
-<td style="text-align:right;">
-95.5
-</td>
+<tr class="odd">
+<td align="right">4488</td>
+<td align="right">36</td>
+<td align="right">4393</td>
+<td align="right">4485</td>
+<td align="right">92</td>
+<td align="right">95.5</td>
 </tr>
-<tr>
-<td style="text-align:right;">
-1946
-</td>
-<td style="text-align:right;">
-48
-</td>
-<td style="text-align:right;">
-4393
-</td>
-<td style="text-align:right;">
-2015
-</td>
-<td style="text-align:right;">
--2378
-</td>
-<td style="text-align:right;">
--2446.6
-</td>
+<tr class="even">
+<td align="right">1946</td>
+<td align="right">48</td>
+<td align="right">4393</td>
+<td align="right">2015</td>
+<td align="right">-2378</td>
+<td align="right">-2446.6</td>
 </tr>
-<tr>
-<td style="text-align:right;">
-1432
-</td>
-<td style="text-align:right;">
-31
-</td>
-<td style="text-align:right;">
-4393
-</td>
-<td style="text-align:right;">
-1558
-</td>
-<td style="text-align:right;">
--2834
-</td>
-<td style="text-align:right;">
--2961.3
-</td>
+<tr class="odd">
+<td align="right">1432</td>
+<td align="right">31</td>
+<td align="right">4393</td>
+<td align="right">1558</td>
+<td align="right">-2834</td>
+<td align="right">-2961.3</td>
 </tr>
-<tr>
-<td style="text-align:right;">
-4258
-</td>
-<td style="text-align:right;">
-36
-</td>
-<td style="text-align:right;">
-4393
-</td>
-<td style="text-align:right;">
-4263
-</td>
-<td style="text-align:right;">
--130
-</td>
-<td style="text-align:right;">
--135.1
-</td>
+<tr class="even">
+<td align="right">4258</td>
+<td align="right">36</td>
+<td align="right">4393</td>
+<td align="right">4263</td>
+<td align="right">-130</td>
+<td align="right">-135.1</td>
 </tr>
-<tr>
-<td style="text-align:right;">
-7325
-</td>
-<td style="text-align:right;">
-73
-</td>
-<td style="text-align:right;">
-4393
-</td>
-<td style="text-align:right;">
-7271
-</td>
-<td style="text-align:right;">
-2878
-</td>
-<td style="text-align:right;">
-2932.4
-</td>
+<tr class="odd">
+<td align="right">7325</td>
+<td align="right">73</td>
+<td align="right">4393</td>
+<td align="right">7271</td>
+<td align="right">2878</td>
+<td align="right">2932.4</td>
 </tr>
-<tr>
-<td style="text-align:right;">
-3571
-</td>
-<td style="text-align:right;">
-48
-</td>
-<td style="text-align:right;">
-4393
-</td>
-<td style="text-align:right;">
-3594
-</td>
-<td style="text-align:right;">
--799
-</td>
-<td style="text-align:right;">
--822.1
-</td>
+<tr class="even">
+<td align="right">3571</td>
+<td align="right">48</td>
+<td align="right">4393</td>
+<td align="right">3594</td>
+<td align="right">-799</td>
+<td align="right">-822.1</td>
 </tr>
-<tr>
-<td style="text-align:right;">
-6703
-</td>
-<td style="text-align:right;">
-56
-</td>
-<td style="text-align:right;">
-4393
-</td>
-<td style="text-align:right;">
-6647
-</td>
-<td style="text-align:right;">
-2254
-</td>
-<td style="text-align:right;">
-2310.1
-</td>
+<tr class="odd">
+<td align="right">6703</td>
+<td align="right">56</td>
+<td align="right">4393</td>
+<td align="right">6647</td>
+<td align="right">2254</td>
+<td align="right">2310.1</td>
 </tr>
 </tbody>
 </table>
@@ -714,7 +602,7 @@ Y_{i,j} &amp;= \beta_0 + \epsilon_{i,j} \\
 <h2><span class="header-section-number">11.6</span> Models with random intercepts and slopes</h2>
 <p>The model we dealt with so far is the simplest example of a linear mixed-effects model. Let’s now consider a slightly more complex model, where we will now assess the effect of the anchor that was given to participants. The data from the international labs providing judgements in meters are shown in Figure <a href="ch-linear-mixed-effects-models.html#fig:anchoring-both-boxplot-by-referrer">11.3</a>. As for the low anchor condition, average judgements in the high anchor condition seem to differ between the labs, albeit to a lesser extent.</p>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:anchoring-both-boxplot-by-referrer"></span>
-<img src="_main_files/figure-html/anchoring-both-boxplot-by-referrer-1.svg" alt="Judged height of Mount Everest after a low or high anchor for all international labs where participants provided their answer in meters. Boxes represent the mean in each group plus or minus the standard error of the mean." width="95%" />
+<img src="09-LMER_files/figure-html/anchoring-both-boxplot-by-referrer-1.svg" alt="Judged height of Mount Everest after a low or high anchor for all international labs where participants provided their answer in meters. Boxes represent the mean in each group plus or minus the standard error of the mean." width="768" />
 <p class="caption">
 Figure 11.3: Judged height of Mount Everest after a low or high anchor for all international labs where participants provided their answer in meters. Boxes represent the mean in each group plus or minus the standard error of the mean.
 </p>
@@ -832,298 +720,135 @@ As the name suggests, a block-diagonal structure implies there are blocks (group
 -->
 <p>The results for the fixed effects of the model, where <span class="math inline">\(\texttt{attr}\)</span> and <span class="math inline">\(\texttt{intel}\)</span> were mean-centered, are provided in Table <a href="ch-linear-mixed-effects-models.html#tab:cross-mixed-fixed-results-table">11.2</a>. Compared to Table <a href="ch-moderation-mediation.html#tab:multiple-regression-with-interaction-ANOVA-centered">6.3</a>, which effectively considered the same model without random effects, we generally obtain similar results, although the estimates and <span class="math inline">\(F\)</span>-values do differ due to the partial pooling and shrinkage of the mixed-effects model. As dependency between ratings from the same rater, and for the same ratee (“item”) is rather likely, this new analysis should be preferred to the one in Table <a href="ch-moderation-mediation.html#tab:multiple-regression-with-interaction-ANOVA-centered">6.3</a>.</p>
 <table>
-<caption>
-<span id="tab:cross-mixed-fixed-results-table">Table 11.2: </span>Estimates and tests (Kenward-Roger approximation) for the fixed-effects of a model with crossed random Person and Item effects.
-</caption>
+<caption><span id="tab:cross-mixed-fixed-results-table">Table 11.2: </span>Estimates and tests (Kenward-Roger approximation) for the fixed-effects of a model with crossed random Person and Item effects.</caption>
 <thead>
-<tr>
-<th style="text-align:left;">
-</th>
-<th style="text-align:right;">
-<span class="math inline">\(\hat{\beta}\)</span>
-</th>
-<th style="text-align:right;">
-<span class="math inline">\(\text{df}_1\)</span>
-</th>
-<th style="text-align:right;">
-<span class="math inline">\(\text{df}_2\)</span>
-</th>
-<th style="text-align:right;">
-<span class="math inline">\(F\)</span>
-</th>
-<th style="text-align:right;">
-<span class="math inline">\(P(\geq F)\)</span>
-</th>
+<tr class="header">
+<th align="left"></th>
+<th align="right"><span class="math inline">\(\hat{\beta}\)</span></th>
+<th align="right"><span class="math inline">\(\text{df}_1\)</span></th>
+<th align="right"><span class="math inline">\(\text{df}_2\)</span></th>
+<th align="right"><span class="math inline">\(F\)</span></th>
+<th align="right"><span class="math inline">\(P(\geq F)\)</span></th>
 </tr>
 </thead>
 <tbody>
-<tr>
-<td style="text-align:left;">
-Intercept
-</td>
-<td style="text-align:right;">
-6.224
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-122.8
-</td>
-<td style="text-align:right;">
-7783.26
-</td>
-<td style="text-align:right;">
-0.000
-</td>
+<tr class="odd">
+<td align="left">Intercept</td>
+<td align="right">6.224</td>
+<td align="right">1</td>
+<td align="right">122.8</td>
+<td align="right">7778.39</td>
+<td align="right">0.000</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-<span class="math inline">\(\texttt{attr}\)</span>
-</td>
-<td style="text-align:right;">
-0.555
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-120.3
-</td>
-<td style="text-align:right;">
-263.45
-</td>
-<td style="text-align:right;">
-0.000
-</td>
+<tr class="even">
+<td align="left"><span class="math inline">\(\texttt{attr}\)</span></td>
+<td align="right">0.555</td>
+<td align="right">1</td>
+<td align="right">120.3</td>
+<td align="right">263.42</td>
+<td align="right">0.000</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-<span class="math inline">\(\texttt{intel}\)</span>
-</td>
-<td style="text-align:right;">
-0.375
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-100.3
-</td>
-<td style="text-align:right;">
-86.97
-</td>
-<td style="text-align:right;">
-0.000
-</td>
+<tr class="odd">
+<td align="left"><span class="math inline">\(\texttt{intel}\)</span></td>
+<td align="right">0.374</td>
+<td align="right">1</td>
+<td align="right">100.3</td>
+<td align="right">86.98</td>
+<td align="right">0.000</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-<span class="math inline">\(\texttt{attr}\times\texttt{intel}\)</span>
-</td>
-<td style="text-align:right;">
--0.009
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-48.3
-</td>
-<td style="text-align:right;">
-0.42
-</td>
-<td style="text-align:right;">
-0.521
-</td>
+<tr class="even">
+<td align="left"><span class="math inline">\(\texttt{attr}\times\texttt{intel}\)</span></td>
+<td align="right">-0.009</td>
+<td align="right">1</td>
+<td align="right">48.3</td>
+<td align="right">0.42</td>
+<td align="right">0.522</td>
 </tr>
 </tbody>
 </table>
 <p>The estimated covariance matrix for the random Person effects is provided in Table <a href="ch-linear-mixed-effects-models.html#tab:random-P-effects-covariance-speeddating">11.3</a>.</p>
 <table>
-<caption>
-<span id="tab:random-P-effects-covariance-speeddating">Table 11.3: </span>Variance-covariance matrix for the Person random effects for the linear mixed-effects model predicting liking from attractiveness, intelligence, and their interaction.
-</caption>
+<caption><span id="tab:random-P-effects-covariance-speeddating">Table 11.3: </span>Variance-covariance matrix for the Person random effects for the linear mixed-effects model predicting liking from attractiveness, intelligence, and their interaction.</caption>
 <thead>
-<tr>
-<th style="text-align:left;">
-</th>
-<th style="text-align:right;">
-<span class="math inline">\(\gamma_{P,0}\)</span>
-</th>
-<th style="text-align:right;">
-<span class="math inline">\(\gamma_{P,1}\)</span>
-</th>
-<th style="text-align:right;">
-<span class="math inline">\(\gamma_{P,2}\)</span>
-</th>
-<th style="text-align:right;">
-<span class="math inline">\(\gamma_{P,3}\)</span>
-</th>
+<tr class="header">
+<th align="left"></th>
+<th align="right"><span class="math inline">\(\gamma_{P,0}\)</span></th>
+<th align="right"><span class="math inline">\(\gamma_{P,1}\)</span></th>
+<th align="right"><span class="math inline">\(\gamma_{P,2}\)</span></th>
+<th align="right"><span class="math inline">\(\gamma_{P,3}\)</span></th>
 </tr>
 </thead>
 <tbody>
-<tr>
-<td style="text-align:left;">
-<span class="math inline">\(\gamma_{P,0}\)</span>
-</td>
-<td style="text-align:right;">
-0.079
-</td>
-<td style="text-align:right;">
--0.023
-</td>
-<td style="text-align:right;">
-0.021
-</td>
-<td style="text-align:right;">
--0.004
-</td>
+<tr class="odd">
+<td align="left"><span class="math inline">\(\gamma_{P,0}\)</span></td>
+<td align="right">0.079</td>
+<td align="right">-0.023</td>
+<td align="right">0.021</td>
+<td align="right">-0.004</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-<span class="math inline">\(\gamma_{P,1}\)</span>
-</td>
-<td style="text-align:right;">
--0.023
-</td>
-<td style="text-align:right;">
-0.023
-</td>
-<td style="text-align:right;">
--0.021
-</td>
-<td style="text-align:right;">
--0.001
-</td>
+<tr class="even">
+<td align="left"><span class="math inline">\(\gamma_{P,1}\)</span></td>
+<td align="right">-0.023</td>
+<td align="right">0.023</td>
+<td align="right">-0.021</td>
+<td align="right">-0.001</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-<span class="math inline">\(\gamma_{P,2}\)</span>
-</td>
-<td style="text-align:right;">
-0.021
-</td>
-<td style="text-align:right;">
--0.021
-</td>
-<td style="text-align:right;">
-0.023
-</td>
-<td style="text-align:right;">
-0.002
-</td>
+<tr class="odd">
+<td align="left"><span class="math inline">\(\gamma_{P,2}\)</span></td>
+<td align="right">0.021</td>
+<td align="right">-0.021</td>
+<td align="right">0.023</td>
+<td align="right">0.002</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-<span class="math inline">\(\gamma_{P,3}\)</span>
-</td>
-<td style="text-align:right;">
--0.004
-</td>
-<td style="text-align:right;">
--0.001
-</td>
-<td style="text-align:right;">
-0.002
-</td>
-<td style="text-align:right;">
-0.001
-</td>
+<tr class="even">
+<td align="left"><span class="math inline">\(\gamma_{P,3}\)</span></td>
+<td align="right">-0.004</td>
+<td align="right">-0.001</td>
+<td align="right">0.002</td>
+<td align="right">0.001</td>
 </tr>
 </tbody>
 </table>
 <p>The estimated covariance matrix for the random Item effects is provided in Table <a href="ch-linear-mixed-effects-models.html#tab:random-I-effects-covariance-speeddating">11.4</a>.</p>
 <table>
-<caption>
-<span id="tab:random-I-effects-covariance-speeddating">Table 11.4: </span>Variance-covariance matrix for the Item random effects for the linear mixed-effects model predicting liking from attractiveness, intelligence, and their interaction.
-</caption>
+<caption><span id="tab:random-I-effects-covariance-speeddating">Table 11.4: </span>Variance-covariance matrix for the Item random effects for the linear mixed-effects model predicting liking from attractiveness, intelligence, and their interaction.</caption>
 <thead>
-<tr>
-<th style="text-align:left;">
-</th>
-<th style="text-align:right;">
-<span class="math inline">\(\gamma_{I,0}\)</span>
-</th>
-<th style="text-align:right;">
-<span class="math inline">\(\gamma_{I,1}\)</span>
-</th>
-<th style="text-align:right;">
-<span class="math inline">\(\gamma_{I,2}\)</span>
-</th>
-<th style="text-align:right;">
-<span class="math inline">\(\gamma_{PI,3}\)</span>
-</th>
+<tr class="header">
+<th align="left"></th>
+<th align="right"><span class="math inline">\(\gamma_{I,0}\)</span></th>
+<th align="right"><span class="math inline">\(\gamma_{I,1}\)</span></th>
+<th align="right"><span class="math inline">\(\gamma_{I,2}\)</span></th>
+<th align="right"><span class="math inline">\(\gamma_{PI,3}\)</span></th>
 </tr>
 </thead>
 <tbody>
-<tr>
-<td style="text-align:left;">
-<span class="math inline">\(\gamma_{I,0}\)</span>
-</td>
-<td style="text-align:right;">
-0.285
-</td>
-<td style="text-align:right;">
--0.051
-</td>
-<td style="text-align:right;">
-0.013
-</td>
-<td style="text-align:right;">
--0.008
-</td>
+<tr class="odd">
+<td align="left"><span class="math inline">\(\gamma_{I,0}\)</span></td>
+<td align="right">0.285</td>
+<td align="right">-0.051</td>
+<td align="right">0.013</td>
+<td align="right">-0.009</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-<span class="math inline">\(\gamma_{I,1}\)</span>
-</td>
-<td style="text-align:right;">
--0.051
-</td>
-<td style="text-align:right;">
-0.042
-</td>
-<td style="text-align:right;">
--0.029
-</td>
-<td style="text-align:right;">
-0.002
-</td>
+<tr class="even">
+<td align="left"><span class="math inline">\(\gamma_{I,1}\)</span></td>
+<td align="right">-0.051</td>
+<td align="right">0.042</td>
+<td align="right">-0.029</td>
+<td align="right">0.002</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-<span class="math inline">\(\gamma_{I,2}\)</span>
-</td>
-<td style="text-align:right;">
-0.013
-</td>
-<td style="text-align:right;">
--0.029
-</td>
-<td style="text-align:right;">
-0.049
-</td>
-<td style="text-align:right;">
--0.002
-</td>
+<tr class="odd">
+<td align="left"><span class="math inline">\(\gamma_{I,2}\)</span></td>
+<td align="right">0.013</td>
+<td align="right">-0.029</td>
+<td align="right">0.049</td>
+<td align="right">-0.002</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-<span class="math inline">\(\gamma_{PI,3}\)</span>
-</td>
-<td style="text-align:right;">
--0.008
-</td>
-<td style="text-align:right;">
-0.002
-</td>
-<td style="text-align:right;">
--0.002
-</td>
-<td style="text-align:right;">
-0.002
-</td>
+<tr class="even">
+<td align="left"><span class="math inline">\(\gamma_{PI,3}\)</span></td>
+<td align="right">-0.009</td>
+<td align="right">0.002</td>
+<td align="right">-0.002</td>
+<td align="right">0.002</td>
 </tr>
 </tbody>
 </table>
@@ -1141,8 +866,8 @@ Y_{i,j} &= \beta_0 + \gamma_{0,i} + \gamma_{0,j} + (\beta_1 + \gamma_{1,i} + \ga
 0 & 0 & \rho_{\gamma_{0,o},\gamma_{1,o}} \sigma_{\gamma_{0,o}} \sigma_{\gamma_{1,o}} & \sigma^2_{\gamma_{1,o}}
 \end{matrix} \right] \right) \\
 & \sim \mathbf{Normal}\left( \left[ \begin{matrix} 0 \\ 0 \\ 0 \\ 0 \end{matrix} \right] , \left[ \begin{matrix} 
-(0.281)^2 &-0.543 \times 0.281 \times 0.153 & 0 & 0 \\
--0.543 \times 0.281 \times 0.153 & (0.281)^2 & 0 & 0 \\
+(0.281)^2 &-0.542 \times 0.281 \times 0.153 & 0 & 0 \\
+-0.542 \times 0.281 \times 0.153 & (0.281)^2 & 0 & 0 \\
 0 & 0 & (0.534)^2 & \rho_{\gamma_{0,o},\gamma_{1,o}} \sigma_{\gamma_{0,o}} \sigma_{\gamma_{1,o}} \\ 
 0 & 0 & -0.467 \times 0.534 \times 0.206 & (0.534)^2
 \end{matrix} \right] \right)
@@ -1184,7 +909,7 @@ Kenward, M. G., &amp; Roger, J. H. (1997). Small sample inference for fixed effe
 Luke, S. G. (2017). Evaluating significance in linear mixed-effects models in r. <em>Behavior Research Methods</em>, <em>49</em>, 1494–1502.
 </div>
 <div id="ref-matuschek_balancing_2017" class="csl-entry">
-Matuschek, H., Kliegl, R., Vasishth, S., Baayen, H., &amp; Bates, D. (2017). Balancing type <span>\</span><span>{I<span>\</span>}</span> error and power in linear mixed models. <em>Journal of Memory and Language</em>, <em>94</em>, 305–315.
+Matuschek, H., Kliegl, R., Vasishth, S., Baayen, H., &amp; Bates, D. (2017). Balancing type i error and power in linear mixed models. <em>Journal of Memory and Language</em>, <em>94</em>, 305–315.
 </div>
 <div id="ref-pinheiro2006mixed" class="csl-entry">
 Pinheiro, J., &amp; Bates, D. (2006). <em>Mixed-effects models in s and s-PLUS</em>. Springer Science &amp; Business Media.

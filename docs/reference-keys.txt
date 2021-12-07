@@ -178,12 +178,13 @@ eq:posterior-parameter-specification
 fig:prior-predictive-samples-binomial-bayesian-models
 eq:Bayesfactor-definition
 tab:Bayes-Factor-values-interpretation
+fig:posterior-distribution-Paul
 fig:scaled-cauchy-distribution
 fig:bayesian-t-tests-different-rscale
 tab:bayesian-lm-speedate
 tab:bayesian-anova-expBelief
 fig:simulation-p-value-distribution
-fig:unnamed-chunk-61
+fig:unnamed-chunk-1
 tab:common-data-transformations
 fig:example-multiple-regression-write-up-plot
 fig:example-factorial-ANOVA-write-up-plot
@@ -339,6 +340,7 @@ bayes-rule
 we-missed-you-paul
 the-marginal-likelihood-and-prior-predictive-distribution
 hypothesis-testing-relative-evidence-and-the-bayes-factor
+parameter-estimates-and-credible-intervals
 a-bayesian-t-test
 bayes-factors-for-general-linear-models
 some-objections-to-null-hypothesis-significance-testing
@@ -346,6 +348,7 @@ the-p-value-is-not-a-proper-measure-of-evidential-support
 the-p-value-depends-on-researcher-intentions
 results-of-a-nhst-are-often-misinterpreted
 to-bayes-or-not-to-bayes-a-pragmatic-view
+in-practice-5
 summary-3
 ch-responsible-data-analyst
 consider-analysis-before-data-collection

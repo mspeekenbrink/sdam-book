@@ -24,7 +24,7 @@
 <meta name="author" content="Maarten Speekenbrink" />
 
 
-<meta name="date" content="2021-12-01" />
+<meta name="date" content="2021-12-07" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -354,6 +354,7 @@ div.csl-indent {
 <li class="chapter" data-level="12.1.3" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#we-missed-you-paul"><i class="fa fa-check"></i><b>12.1.3</b> We missed you Paul!</a></li>
 <li class="chapter" data-level="12.1.4" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#the-marginal-likelihood-and-prior-predictive-distribution"><i class="fa fa-check"></i><b>12.1.4</b> The marginal likelihood and prior predictive distribution</a></li>
 <li class="chapter" data-level="12.1.5" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#hypothesis-testing-relative-evidence-and-the-bayes-factor"><i class="fa fa-check"></i><b>12.1.5</b> Hypothesis testing, relative evidence, and the Bayes factor</a></li>
+<li class="chapter" data-level="12.1.6" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#parameter-estimates-and-credible-intervals"><i class="fa fa-check"></i><b>12.1.6</b> Parameter estimates and credible intervals</a></li>
 </ul></li>
 <li class="chapter" data-level="12.2" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#a-bayesian-t-test"><i class="fa fa-check"></i><b>12.2</b> A Bayesian t-test</a></li>
 <li class="chapter" data-level="12.3" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#bayes-factors-for-general-linear-models"><i class="fa fa-check"></i><b>12.3</b> Bayes factors for General Linear Models</a></li>
@@ -364,7 +365,8 @@ div.csl-indent {
 <li class="chapter" data-level="12.4.3" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#results-of-a-nhst-are-often-misinterpreted"><i class="fa fa-check"></i><b>12.4.3</b> Results of a NHST are often misinterpreted</a></li>
 </ul></li>
 <li class="chapter" data-level="12.5" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#to-bayes-or-not-to-bayes-a-pragmatic-view"><i class="fa fa-check"></i><b>12.5</b> To Bayes or not to Bayes? A pragmatic view</a></li>
-<li class="chapter" data-level="12.6" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#summary-3"><i class="fa fa-check"></i><b>12.6</b> “Summary”</a></li>
+<li class="chapter" data-level="12.6" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#in-practice-5"><i class="fa fa-check"></i><b>12.6</b> In practice</a></li>
+<li class="chapter" data-level="12.7" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#summary-3"><i class="fa fa-check"></i><b>12.7</b> “Summary”</a></li>
 </ul></li>
 <li class="chapter" data-level="13" data-path="ch-responsible-data-analyst.html"><a href="ch-responsible-data-analyst.html"><i class="fa fa-check"></i><b>13</b> Being a responsible data analyst</a>
 <ul>
@@ -399,74 +401,57 @@ div.csl-indent {
             <section class="normal" id="section-">
 <div id="ch-Bayes-factors" class="section level1" number="12">
 <h1><span class="header-section-number">Chapter 12</span> Introduction to Bayesian hypothesis testing</h1>
-<p>In this chapter, we will introduce an alternative to the Frequentist null-hypothesis significance testing procedure employed up to now, namely a Bayesian hypothesis testing procedure. Like before, this consists of comparing statistical models. What is new here is that Bayesian models contain a prior distribution for the model parameters. In doing so for both the null and alternative model, Bayesian model comparisons provide a more direct measure of the relative evidence for both the null and alternative hypothesis. We will start with an introduction to the fundamental aspects of Bayesian inference, which concerns a revision of beliefs in light of observed data. We then go on to discuss “default priors” which can be useful in a Bayesian testing procedure. We end with an overview of some objections to the traditional Frequentist method of hypothesis testing, and a comparison between the two approaches.</p>
+<p>In this chapter, we will introduce an alternative to the Frequentist null-hypothesis significance testing procedure employed up to now, namely a Bayesian hypothesis testing procedure. This also consists of comparing statistical models. What is new here is that Bayesian models contain a prior distribution over the values of the model parameters. In doing so for both the null and the alternative model, Bayesian model comparisons provide a more direct measure of the relative evidence of the null model compared to the alternative. We will start with an introduction to the fundamental aspects of Bayesian inference, which concerns revising beliefs in light of observed data. We then go on to discuss “default priors,” which can be useful in a Bayesian testing procedure. We end with an overview of some objections to the traditional Frequentist method of hypothesis testing, and a comparison between the two approaches.</p>
 <div id="fundamentals-of-bayesian-inference" class="section level2" number="12.1">
 <h2><span class="header-section-number">12.1</span> Fundamentals of Bayesian inference</h2>
 <div id="probability-in-times-of-covid" class="section level3" number="12.1.1">
 <h3><span class="header-section-number">12.1.1</span> Probability in times of Covid</h3>
-<p>Let’s start with a classic example in a topical guise. As we hopefully move to a new phase in the covid-19 pandemic,<a href="#fn30" class="footnote-ref" id="fnref30"><sup>30</sup></a> the UK government plans to employ mass testing as part of a wider strategy also involving vaccination (<a href="https://www.theguardian.com/world/2020/dec/01/funds-for-mass-covid-testing-offered-to-local-authorities-in-tier-3">Guardian, 1 December 2020</a>). The testing will involve lateral flow tests, which are relatively inexpensive and give a result in about 20 minutes. Estimates are that these tests give a positive test result in 76.8% of cases of covid-19, and a negative test result in 99.68% of cases (<a href="https://www.gov.uk/government/news/oxford-university-and-phe-confirm-high-sensitivity-of-lateral-flow-tests">Department of Health and Social Care, 11 November 2020</a>). The true positive rate (76.8%) is also called the <strong>sensitivity</strong> of a test, and the true negative rate (99.68%) the <strong>specificity</strong>. On 26 November, the <a href="https://www.ons.gov.uk/peoplepopulationandcommunity/healthandsocialcare/conditionsanddiseases/bulletins/coronaviruscovid19infectionsurveypilot/26november2020">Office of National Statistics</a> estimates the rate of covid-19 cases in the general population of England to be 1.17%. That implies that about 1 in 85 people carry the virus, which is also called the <strong>base rate</strong>. Suppose someone is tested and the test result is positive. What is the probability that they are currently infected with covid-19? The probability is <em>not</em> .768. This is the conditional probability <span class="math inline">\(P(\text{positive test}|\text{covid-19})\)</span>. What we would like to know however is a different conditional probability, namely <span class="math inline">\(P(\text{covid-19}|\text{positive test})\)</span>. And these are <em>not</em> the same!</p>
-We can work out the desired probability using the rules of probability discussed in Section <a href="ch-modeling.html#sec:02-rules-of-probability">2.2.1.1</a>.
-<span class="math display">\[P(\text{covid-19}|\text{positive test}) = \frac{P(\text{covid-19 and positive test})}{P(\text{positive test})}\]</span>
+<p>Let’s start with a classic example in a topical guise. With the aim to move to a new phase in the Covid-19 pandemic, the UK government planned to employ mass testing as part of a wider strategy also involving general vaccination (<a href="https://www.theguardian.com/world/2020/dec/01/funds-for-mass-covid-testing-offered-to-local-authorities-in-tier-3">Guardian, 1 December 2020</a>).<a href="#fn30" class="footnote-ref" id="fnref30"><sup>30</sup></a> The testing involves lateral flow tests, which are relatively inexpensive and give a result in about 20 minutes. At the time, estimates were that these tests give a positive test result in 76.8% of cases of Covid-19, and a negative test result in 99.68% of cases (<a href="https://www.gov.uk/government/news/oxford-university-and-phe-confirm-high-sensitivity-of-lateral-flow-tests">Department of Health and Social Care, 11 November 2020</a>).<a href="#fn31" class="footnote-ref" id="fnref31"><sup>31</sup></a>. The true positive rate (76.8%) is also called the <strong>sensitivity</strong> of a test, and the true negative rate (99.68%) the <strong>specificity</strong>. On 26 November 2020, the <a href="https://www.ons.gov.uk/peoplepopulationandcommunity/healthandsocialcare/conditionsanddiseases/bulletins/coronaviruscovid19infectionsurveypilot/26november2020">Office of National Statistics</a> estimated the rate of Covid-19 cases in the general population of England to be 1.17%. That implies that about 1 in 85 people carried the virus, which is also called the <strong>base rate</strong>. Suppose someone is tested and the test result is positive. What is the probability that they are actually infected with Covid-19? Perhaps surprisingly, this probability does <em>not</em> equal .768. This is the conditional probability <span class="math inline">\(P(\text{positive test}|\text{Covid-19})\)</span>, i.e. the sensitivity. What we would like to know however is a different conditional probability, namely <span class="math inline">\(P(\text{Covid-19}|\text{positive test})\)</span>. And these are <em>not</em> the same!</p>
+<p>We can work out the desired probability using the rules of probability discussed in Section <a href="ch-modeling.html#sec:02-rules-of-probability">2.2.1.1</a>.
+<span class="math display">\[P(\text{Covid-19}|\text{positive test}) = \frac{P(\text{Covid-19 and positive test})}{P(\text{positive test})}\]</span>
 From the multiplication rule, we know that
-<span class="math display">\[P(\text{covid-19 and positive test}) = P(\text{positive test}|\text{covid-19}) \times P(\text{covid-19})\]</span>
-To work out <span class="math inline">\(P(\text{positive test})\)</span>, we need to consider all the ways in which someone can obtain a positive test result. In this situation, there are two: the person can carry covid-19 and have a positive test result, or the person can not carry covid-19 and obtain a positive test result. Thus
-<span class="math display">\[P(\text{positive test}) = P(\text{covid-19 and positive test}) + P(\text{no covid-19 and positive test})\]</span>
-We have already specified how to calculate <span class="math inline">\(P(\text{covid-19 and positive test})\)</span>. Similarly, we can compute <span class="math inline">\(P(\text{no covid-19 and positive test})\)</span> as
-<span class="math display">\[P(\text{no covid-19 and positive test}) = P(\text{positive test}|\text{no covid-19}) \times P(\text{no covid-19})\]</span>
-Now we are in a position to calculate <span class="math inline">\(P(\text{covid-19}|\text{positive test})\)</span> from the sensitivity and specificity of the test, and the base rate of covid-19 infection. We know that <span class="math inline">\(P(\text{covid-19}) = .0117\)</span>, hence <span class="math inline">\(P(\text{no covid-19}) = 1 - P(\text{covid-19}) = 1 - .0117 = .9883\)</span>. Putting all the numbers in a table:
+<span class="math display">\[P(\text{Covid-19 and positive test}) = P(\text{positive test}|\text{Covid-19}) \times P(\text{Covid-19})\]</span>
+To work out <span class="math inline">\(P(\text{positive test})\)</span>, we need to consider all the ways in which someone can obtain a positive test result. In this situation, there are two: the person can carry Covid-19 and have a positive test result, or the person can not carry Covid-19 and obtain a positive test result. Thus
+<span class="math display">\[P(\text{positive test}) = P(\text{Covid-19 and positive test}) + P(\text{no Covid-19 and positive test})\]</span>
+We have already specified how to calculate <span class="math inline">\(P(\text{Covid-19 and positive test})\)</span>. Similarly, we can compute <span class="math inline">\(P(\text{no Covid-19 and positive test})\)</span> as
+<span class="math display">\[P(\text{no Covid-19 and positive test}) = P(\text{positive test}|\text{no Covid-19}) \times P(\text{no Covid-19})\]</span>
+Now we are in a position to calculate <span class="math inline">\(P(\text{Covid-19}|\text{positive test})\)</span> from the sensitivity and specificity of the test, and the base rate of Covid-19 infection. We know that <span class="math inline">\(P(\text{Covid-19}) = .0117\)</span>, hence <span class="math inline">\(P(\text{no Covid-19}) = 1 - P(\text{Covid-19}) = 1 - .0117 = .9883\)</span>. Putting all the numbers in a table:</p>
 <table>
 <thead>
-<tr>
-<th style="text-align:left;">
-</th>
-<th style="text-align:right;">
-covid-19 (1.17%)
-</th>
-<th style="text-align:right;">
-no covid-19 (98.83%)
-</th>
+<tr class="header">
+<th align="left"></th>
+<th align="right">Covid-19 (1.17%)</th>
+<th align="right">no Covid-19 (98.83%)</th>
 </tr>
 </thead>
 <tbody>
-<tr>
-<td style="text-align:left;">
-positive test
-</td>
-<td style="text-align:right;">
-76.8%
-</td>
-<td style="text-align:right;">
-0.32%
-</td>
+<tr class="odd">
+<td align="left">positive test</td>
+<td align="right">76.8%</td>
+<td align="right">0.32%</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-negative test
-</td>
-<td style="text-align:right;">
-23.2%
-</td>
-<td style="text-align:right;">
-99.68%
-</td>
+<tr class="even">
+<td align="left">negative test</td>
+<td align="right">23.2%</td>
+<td align="right">99.68%</td>
 </tr>
 </tbody>
 </table>
 <p><span class="math display">\[\begin{aligned}
-P(\text{covid-19}|\text{positive test}) &amp;= \frac{P(\text{covid-19 and positive test})}{P(\text{positive test})} \\
-&amp;= \frac{P(\text{positive test}|\text{covid-19}) P(\text{covid-19})}{P(\text{pos. test}|\text{covid-19}) P(\text{covid-19}) + P(\text{pos. test}|\text{no covid-19}) P(\text{no covid-19})} \\
+P(\text{Covid-19}|\text{positive test}) &amp;= \frac{P(\text{Covid-19 and positive test})}{P(\text{positive test})} \\
+&amp;= \frac{P(\text{positive test}|\text{Covid-19}) P(\text{Covid-19})}{P(\text{pos. test}|\text{Covid-19}) P(\text{Covid-19}) + P(\text{pos. test}|\text{no Covid-19}) P(\text{no Covid-19})} \\
 &amp;= \frac{.768 \times .0117}{.768 \times .0117 + .0032 \times .9883} \\
 &amp;= 0.7396
 \end{aligned}\]</span>
-So just under 3 out of all 4 people that test positive in this scenario would actually carry covid-19. As a result, 1 out of 4 people might be asked to quarantine without really needing to do so. Although of course very unfortunate for those people, that does not seem like a too-high price to pay to me. But the base-rate is very important here. If the rate of covid-19 infections is lowered to <span class="math inline">\(P(\text{covid-19}) = .001\)</span> (i.e. 0.1%), then the result would be <span class="math inline">\(P(\text{covid-19}|\text{positive test}) = 0.1937\)</span>, which means that only about one in five people who test positive are actually infected by covid-19! When the base-rate is lowered, massive testing seems like a much less useful procedure.</p>
-<p>Perhaps the equations seem a little abstract. Another way to explain the resulting conditional probability is through the tree diagram of Figure <a href="ch-Bayes-factors.html#fig:covid-19-test-tree">12.1</a>. The tree represents a group of 100,000 people from the general population, of which 1,176 would have covid-19, and 903 of these would also get a positive test result. Of the 98,824 people without covid-19, 316 would receive a positive test result. While the change of a false positive is very low, because so many people do not have covid-19, the actual frequency of people without covid-19 who obtain a positive test result is not that much smaller than the number of people with covid-19 who obtain a positive test result. The conditional probability can then be computed simply as
-<span class="math display">\[P(\text{covid-19}|\text{positive test}) = \frac{903}{903 + 316} = .74\]</span>
+So just under 3 out of all 4 people that test positive in this scenario would actually carry Covid-19. As a result, 1 out of 4 people might be asked to quarantine without really needing to do so. Although of course very unfortunate for those people, that does not seem like a too-high price to pay to me. But the base-rate is very important here. If the rate of Covid-19 infections is lowered to <span class="math inline">\(P(\text{Covid-19}) = .001\)</span> (i.e. 0.1%), then the result would be <span class="math inline">\(P(\text{Covid-19}|\text{positive test}) = 0.1937\)</span>, which means that only about one in five people who test positive are actually infected by Covid-19! When the base-rate is lowered, massive testing seems like a much less useful procedure.</p>
+<p>Perhaps the equations seem a little abstract. Another way to explain the resulting conditional probability is through the tree diagram of Figure <a href="ch-Bayes-factors.html#fig:covid-19-test-tree">12.1</a>. The tree represents a group of 100,000 people from the general population, of which 1,176 would have Covid-19, and 903 of these would also get a positive test result. Of the 98,824 people without Covid-19, 316 would receive a positive test result. While the change of a false positive is very low, because so many people do not have Covid-19, the actual frequency of people without Covid-19 who obtain a positive test result is not that much smaller than the number of people with Covid-19 who obtain a positive test result. The conditional probability can then be computed simply as
+<span class="math display">\[P(\text{Covid-19}|\text{positive test}) = \frac{903}{903 + 316} = .74\]</span>
 which is equal to the value computed earlier (up to rounding error resulting from converting probabilities to whole people).</p>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:covid-19-test-tree"></span>
-<div id="htmlwidget-e55646f976e9e0d92b47" style="width:95%;height:480px;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-e55646f976e9e0d92b47">{"x":{"diagram":"\n  digraph cvid_tree_plot {\n\n    graph [layout = dot,\n           rankdir = LR]\n\n    node [shape = box] \n    S [label = \"100,000 people\"]\n    \n    node [shape = oval, style = filled]\n    H [label = \"covid-19\", fillcolor = \"#cc0000\"]\n    T [label = \"no covid-19\", fillcolor = \"#00cc00\"]\n    HH [label = \"positive test\", fillcolor = \"#ff0000\" ]\n    HT [label = \"negative test\", fillcolor = \"#990000\"]\n    TH [label = \"positive-test\", fillcolor =  \"#00ff00\"]\n    TT [label = \"negative-test\", fillcolor = \"#009900\"]\n    \n    edge [label = \"1,176\"]\n    S -> {H}\n    \n    edge [label = \"98,824\", labelloc=b]\n    S -> {T}\n    \n    edge [label = \"903\"]\n    H -> {HH}\n    \n    edge [label = \"273\", labelloc=b]\n    H -> {HT}\n    \n    edge [label = \"316\" ]\n    T -> {TH}\n    \n    edge [label = \"98,508\", labelloc=b]\n    T -> {TT}\n}\n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-73e7dd5cbd10b8eb60af" style="width:672px;height:480px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-73e7dd5cbd10b8eb60af">{"x":{"diagram":"\n  digraph cvid_tree_plot {\n\n    graph [layout = dot,\n           rankdir = LR]\n\n    node [shape = box] \n    S [label = \"100,000 people\"]\n    \n    node [shape = oval, style = filled]\n    H [label = \"Covid-19\", fillcolor = \"#cc0000\"]\n    T [label = \"no Covid-19\", fillcolor = \"#00cc00\"]\n    HH [label = \"positive test\", fillcolor = \"#ff0000\" ]\n    HT [label = \"negative test\", fillcolor = \"#990000\"]\n    TH [label = \"positive-test\", fillcolor =  \"#00ff00\"]\n    TT [label = \"negative-test\", fillcolor = \"#009900\"]\n    \n    edge [label = \"1,176\"]\n    S -> {H}\n    \n    edge [label = \"98,824\", labelloc=b]\n    S -> {T}\n    \n    edge [label = \"903\"]\n    H -> {HH}\n    \n    edge [label = \"273\", labelloc=b]\n    H -> {HT}\n    \n    edge [label = \"316\" ]\n    T -> {TH}\n    \n    edge [label = \"98,508\", labelloc=b]\n    T -> {TT}\n}\n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 <p class="caption">
-Figure 12.1: Outcome tree representing mass testing for covid-19.
+Figure 12.1: Outcome tree representing mass testing for Covid-19.
 </p>
 </div>
 </div>
@@ -478,13 +463,13 @@ P(A|B) = \frac{P(B|A) P(A)}{P(B|A)P(A) + P(B|\neg A) P(\neg A)}
 \tag{12.1}
 \end{equation}\]</span></p>
 <p>Again, there is nothing special about this formula itself, it follows from the rules of probability. These rules were however not clearly specified when Reverend Thomas Bayes defined the rule in an essay which was posthumously published <span class="citation">(<a href="#ref-bayes1763" role="doc-biblioref">Bayes, 1763</a>)</span>. More importantly, he used the rule to infer an unknown parameter of a statistical model. According to the Frequentist View (see Section <a href="ch-modeling.html#sec:02-probability-definition">2.2.1</a>), a parameter has a true value, but you cannot assign a probability to it, because it is not a random event that has a long-run frequency. It just has one value: the true value.</p>
-<p>In assigning probabilities to parameters, Thomas Bayes can be seen as the founding father of the Subjectivist View of probability. There has been quite a lot of philosophical discussion about probability interpretations. The subjectivist view is that a probability represents a rational degree of belief. This belief can be about anything, whether actual events in the world, or more abstract concepts such as hypotheses or model parameters. Bayesian inference concerns adjusting prior beliefs in light of evidence. The resulting adjusted belief is called the posterior belief. In the previous example, the base-rate of covid-19 infections can be seen as a rational prior belief that a randomly chosen person from the general population in England has covid-19. Upon observing a positive test result, this <strong>prior probability</strong> <span class="math inline">\(P(\text{covid-19})\)</span> can be adjusted to become the <strong>posterior probability</strong> <span class="math inline">\(P(\text{covid-19}|\text{positive test})\)</span>.</p>
+<p>In assigning probabilities to parameters, Thomas Bayes can be seen as the founding father of the Subjectivist View of probability. There has been quite a lot of philosophical discussion about probability interpretations. The subjectivist view is that a probability represents a rational degree of belief. This belief can be about anything, whether actual events in the world, or more abstract concepts such as hypotheses or model parameters. Bayesian inference concerns adjusting prior beliefs in light of evidence. The resulting adjusted belief is called the posterior belief. In the previous example, the base-rate of Covid-19 infections can be seen as a rational prior belief that a randomly chosen person from the general population in England has Covid-19. Upon observing a positive test result, this <strong>prior probability</strong> <span class="math inline">\(P(\text{Covid-19})\)</span> can be adjusted to become the <strong>posterior probability</strong> <span class="math inline">\(P(\text{Covid-19}|\text{positive test})\)</span>.</p>
 </div>
 <div id="we-missed-you-paul" class="section level3" number="12.1.3">
 <h3><span class="header-section-number">12.1.3</span> We missed you Paul!</h3>
 <p>In Bayesian statistics, we can apply the principles of Bayesian inference to anything we can assign degrees of belief to. For instance, our belief that Paul the Octopus had psychic abilities. In our general model of Paul’s predictions (Section <a href="ch-modeling.html#sec:02-binomial-model">2.3</a>, Equation <a href="ch-modeling.html#eq:definition-binomial-distribution">(2.1)</a>), we assumed there was a probability that he made a correct prediction, which we denoted by <span class="math inline">\(\theta\)</span>. This parameter probability could in principle take any value <span class="math inline">\(0 \leq \theta \leq 1\)</span>. The idea of a prior distribution for such a parameter is to assign to each possible value of <span class="math inline">\(\theta\)</span> a “degree of belief” that this is the true value. These degrees of belief should obey the rules of probability. In the coin-flipping model, which assumed Paul was randomly guessing, there was only one possible value, namely <span class="math inline">\(\theta=.5\)</span>. That means that, if we were to believe this model is true, we would consequently believe that any other value is impossible: <span class="math inline">\(P(\theta \neq .5) = 0\)</span>, which implies <span class="math inline">\(P(\theta = .5) = 1\)</span>. If we don’t believe that Paul is necessarily randomly guessing, then the parameter could have other values as well. Figure <a href="ch-Bayes-factors.html#fig:prior-distributions-Paul">12.2</a> shows two possible prior distributions. In the plot on the left, the prior assigns an equal probability to any possible value of <span class="math inline">\(\theta\)</span>. This is also called a uniform distribution, and reflects the beliefs of someone who considers that “anything goes” when it comes to Paul’s ability to predict the outcome of football matches. In the plot on the right, the prior distribution reflects the beliefs of someone who quite strongly considers Paul a good predictor of the outcome of football matches.</p>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:prior-distributions-Paul"></span>
-<img src="_main_files/figure-html/prior-distributions-Paul-1.svg" alt="Two different prior distributions for the probability that Paul makes a correct prediction, the normalised likelihood function ($P(Y|\theta)/P(Y)$) and the resulting posterior distributions after observing that Paul made $Y=12$ out of $n=14$ correct predictions. Wherever the normalised likelihood is larger than 1, the posterior probability is larger than the prior probability, while the posterior probability is lower than the prior probability wherever the normalised likelihood is lower than 1. Note that in MODEL 1, the normalised likelihood and posterior distribution are identical and therefore overlapping on the plot." width="90%" />
+<img src="10-Bayes-testing_files/figure-html/prior-distributions-Paul-1.svg" alt="Two different prior distributions for the probability that Paul makes a correct prediction, the normalised likelihood function ($P(Y|\theta)/P(Y)$) and the resulting posterior distributions after observing that Paul made $Y=12$ out of $n=14$ correct predictions. Wherever the normalised likelihood is larger than 1, the posterior probability is larger than the prior probability, while the posterior probability is lower than the prior probability wherever the normalised likelihood is lower than 1. Note that in MODEL 1, the normalised likelihood and posterior distribution are identical and therefore overlapping on the plot." width="90%" />
 <p class="caption">
 Figure 12.2: Two different prior distributions for the probability that Paul makes a correct prediction, the normalised likelihood function (<span class="math inline">\(P(Y|\theta)/P(Y)\)</span>) and the resulting posterior distributions after observing that Paul made <span class="math inline">\(Y=12\)</span> out of <span class="math inline">\(n=14\)</span> correct predictions. Wherever the normalised likelihood is larger than 1, the posterior probability is larger than the prior probability, while the posterior probability is lower than the prior probability wherever the normalised likelihood is lower than 1. Note that in MODEL 1, the normalised likelihood and posterior distribution are identical and therefore overlapping on the plot.
 </p>
@@ -501,6 +486,7 @@ i.e. as the integral of the product of the likelihood function and prior over a
 <p>In words, we can describe Equation <a href="ch-Bayes-factors.html#eq:posterior-parameter-specification">(12.2)</a> as:
 <span class="math display">\[\begin{aligned}
 \text{posterior} &amp;= \frac{\text{likelihood} \times \text{prior}}{\text{marginal likelihood}} \\
+&amp;= \frac{\text{likelihood}}{\text{marginal likelihood}} \times \text{prior} \\
 &amp;= \text{normalised likelihood} \times \text{prior}
 \end{aligned}\]</span>
 The values of the normalized likelihood and the resulting posterior distribution are also shown in Figure <a href="ch-Bayes-factors.html#fig:prior-distributions-Paul">12.2</a>. Because the posterior probabilities are calculated by multiplying the prior probability by the normalised likelihood, the posterior probability will be <em>higher</em> than the prior probability when the normalised likelihood is <em>larger</em> than 1. You can think of the normalised likelihood as an average likelihood over all possible values of <span class="math inline">\(\theta\)</span> (we will discuss this in a little more detail soon). So when a particular value of <span class="math inline">\(\theta\)</span> assigns a higher likelihood to the data than the average likelihood of the data, i.e. <span class="math inline">\(\frac{P(Y|\theta)}{P(Y)} &gt; 1\)</span>, the evidence that this value of <span class="math inline">\(\theta\)</span> is the true value increases. Conversely, the posterior probability will be <em>lower</em> than than the prior probability when the normalised likelihood is <em>smaller</em> than 1. So when a particular value of <span class="math inline">\(\theta\)</span> assigns a lower likelihood to the data than average, the evidence that this value of <span class="math inline">\(\theta\)</span> is the true value decreases. This, in a nutshell, is how Bayesian inference of parameters works.</p>
@@ -515,7 +501,7 @@ Y_j &amp;\sim P(Y|\theta_j) \\
 \end{align}\]</span>
 Not only can we use each sampled parameter value <span class="math inline">\(\theta_j\)</span> to sample a value of the dependent variable, we can also use each to compute the likelihood of the data actually observed, e.g. <span class="math inline">\(P(Y=12|\theta_j)\)</span>. Figure <a href="ch-Bayes-factors.html#fig:prior-predictive-samples-binomial-bayesian-models">12.3</a> shows 1000 samples parameter values (prior samples), corresponding samples of the dependent variable (prior predictive samples), and the likelihood value for Paul’s predictions (sampled likelihood), for both models in Figure <a href="ch-Bayes-factors.html#fig:prior-distributions-Paul">12.2</a>. Note that all these are based on the same set of sampled parameter values <span class="math inline">\(\theta\)</span>.</p>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:prior-predictive-samples-binomial-bayesian-models"></span>
-<img src="_main_files/figure-html/prior-predictive-samples-binomial-bayesian-models-1.svg" alt="Number of correct predictions (out of 14) for 1000 simulations from both Bayesian models of Figure \@ref(fig:prior-distributions-Paul)." width="95%" /><img src="_main_files/figure-html/prior-predictive-samples-binomial-bayesian-models-2.svg" alt="Number of correct predictions (out of 14) for 1000 simulations from both Bayesian models of Figure \@ref(fig:prior-distributions-Paul)." width="95%" /><img src="_main_files/figure-html/prior-predictive-samples-binomial-bayesian-models-3.svg" alt="Number of correct predictions (out of 14) for 1000 simulations from both Bayesian models of Figure \@ref(fig:prior-distributions-Paul)." width="95%" />
+<img src="10-Bayes-testing_files/figure-html/prior-predictive-samples-binomial-bayesian-models-1.svg" alt="Number of correct predictions (out of 14) for 1000 simulations from both Bayesian models of Figure \@ref(fig:prior-distributions-Paul)." width="576" /><img src="10-Bayes-testing_files/figure-html/prior-predictive-samples-binomial-bayesian-models-2.svg" alt="Number of correct predictions (out of 14) for 1000 simulations from both Bayesian models of Figure \@ref(fig:prior-distributions-Paul)." width="576" /><img src="10-Bayes-testing_files/figure-html/prior-predictive-samples-binomial-bayesian-models-3.svg" alt="Number of correct predictions (out of 14) for 1000 simulations from both Bayesian models of Figure \@ref(fig:prior-distributions-Paul)." width="576" />
 <p class="caption">
 Figure 12.3: Number of correct predictions (out of 14) for 1000 simulations from both Bayesian models of Figure <a href="ch-Bayes-factors.html#fig:prior-distributions-Paul">12.2</a>.
 </p>
@@ -524,7 +510,7 @@ Figure 12.3: Number of correct predictions (out of 14) for 1000 simulations from
 <p>The sampled likelihoods can be used to compute an average likelihood for each model. This average is an estimate of the marginal likelihood, and computed simply as
 <span class="math display">\[\hat{P}(Y=12) = \sum_{j=1}^n P(Y|\theta_j)\]</span>
 Because most of the sampled likelihoods are low for MODEL 1, the average is relatively low as well: <span class="math inline">\(\hat{P}(Y=12) = 0.0663\)</span>. For MODEL 3, most of the sampled likelihoods are relatively high, and hence the average is higher than for MODEL 1: <span class="math inline">\(\hat{P}(Y=12) = 0.204\)</span>. Because MODEL 2 on average assigns a higher probability to the observed data, it offers a better account of the observed data than MODEL 1. As we will see, a Bayesian version of the likelihood ratio called the Bayes factor, which reflects the ratio of marginal likelihoods for models, is central in the Bayesian version of hypothesis testing.</p>
-<p>Before we go on to look at the Bayes factor in more detail, I would like to point out a close correspondence between the marginal likelihood and the prior predictive distribution. In fact, the marginal likelihood is just the prior predictive distribution evaluated at the observed data point. The prior predictive distribution is the marginal distribution of the data, whilst the marginal likelihood is the value of this distribution for a particular value of the dependent variable. So we can also estimate the marginal likelihood by computing the relative frequency of <span class="math inline">\(Y=12\)</span> in the prior predictive distribution. For MODEL 1, this gives <span class="math inline">\(\hat{P}(Y=12) = 0.076\)</span>, and for MODEL 2, it is <span class="math inline">\(\hat{P}(Y=12) = 0.2\)</span>. These two ways of estimating the marginal likelihood are not exactly the same, because they approach the same quantity via a different route.<a href="#fn31" class="footnote-ref" id="fnref31"><sup>31</sup></a> And both are subject to random sampling variation due to simulating a limited number of parameter values. Accurately computing marginal likelihoods is, for most models, a rather complicated thing, but we won’t go into the details here.</p>
+<p>Before we go on to look at the Bayes factor in more detail, I would like to point out a close correspondence between the marginal likelihood and the prior predictive distribution. In fact, the marginal likelihood is just the prior predictive distribution evaluated at the observed data point. The prior predictive distribution is the marginal distribution of the data, whilst the marginal likelihood is the value of this distribution for a particular value of the dependent variable. So we can also estimate the marginal likelihood by computing the relative frequency of <span class="math inline">\(Y=12\)</span> in the prior predictive distribution. For MODEL 1, this gives <span class="math inline">\(\hat{P}(Y=12) = 0.076\)</span>, and for MODEL 2, it is <span class="math inline">\(\hat{P}(Y=12) = 0.2\)</span>. These two ways of estimating the marginal likelihood are not exactly the same, because they approach the same quantity via a different route.<a href="#fn32" class="footnote-ref" id="fnref32"><sup>32</sup></a> And both are subject to random sampling variation due to simulating a limited number of parameter values. Accurately computing marginal likelihoods is, for most models, a rather complicated thing, but we won’t go into the details here.</p>
 </div>
 <div id="hypothesis-testing-relative-evidence-and-the-bayes-factor" class="section level3" number="12.1.5">
 <h3><span class="header-section-number">12.1.5</span> Hypothesis testing, relative evidence, and the Bayes factor</h3>
@@ -618,6 +604,19 @@ which indicates that the data (12 out of 14 correct predictions) is roughly 12 t
 which indicates that the data is roughly 36 times as likely under MODEL 2 compared to MODEL 0, which would be classified as very strong evidence for MODEL 2. In both cases, the data favours the alternative model to the null model and may be taken as sufficient to reject MODEL 0. However, the strength of the evidence varies with the choice of prior distribution of the alternative model. This is as it should be. A model such as such as MODEL 2, which places stronger belief on higher values of <span class="math inline">\(\theta\)</span>, is more consistent with Paul’s high number of correct predictions.</p>
 <p>Bayesian hypothesis testing with Bayes factors is, at it’s heart, a model comparison procedure. Bayesian models consist of a likelihood function <em>and</em> a prior distribution. A different prior distribution means a different model, and therefore a different result of the model comparison. Because there are an infinite number of alternative prior distributions to the one of the null model, there really isn’t a single test of the null hypothesis <span class="math inline">\(H_0: \theta = .5\)</span>. The prior distribution of MODEL 1, where each possible value of <span class="math inline">\(\theta\)</span> is equally likely, is the Bayesian equivalent of the alternative hypothesis in a null-hypothesis significance testing, and as such might seem a natural default against which to compare the null hypothesis. But there is nothing to force this choice, and other priors are in principle equally valid, as long as they reflect your <em>a priori</em> beliefs about likely values of the parameter. Notice the “a priori” specification in the last sentence: it is vital that the prior distribution is chosen <em>before</em> observing the data. If you choose the a prior distribution to match the data <em>after</em> having looked at it, the procedure loses some of its meaning as a hypothesis test, even if the Bayes factor is still an accurate reflection of the evidential support of the models.</p>
 </div>
+<div id="parameter-estimates-and-credible-intervals" class="section level3" number="12.1.6">
+<h3><span class="header-section-number">12.1.6</span> Parameter estimates and credible intervals</h3>
+<p>Maximum likelihood estimation provides a single point-estimate for each parameter. In a Bayesian framework, estimation involves updating prior beliefs to posterior beliefs. What we end up with is a posterior distribution over the parameter values. If you want to report a single estimate, you could chose one of the measures of location: the mean, median, or mode of the posterior distribution. Unless the posterior is symmetric, these will have different values (see Figure <a href="ch-Bayes-factors.html#fig:posterior-distribution-Paul">12.4</a>), and one is not necessarily better than the other. I would usually choose the posterior mean, but if the posterior is very skewed, a measure such as the mode or median might provide a better reflection of the location of the distribution.</p>
+<p>In addition to reporting an estimate, it is generally also a good idea to consider the uncertainty in the posterior distribution. A Bayesian version of a confidence interval (with a more straightforward interpretation!) is a <strong>credible interval</strong>. A credible interval is an interval in the posterior distribution which contains a given proportion of the probability mass. A common interval is the <strong>Highest Density Interval</strong> (HDI), which is the narrowest interval which contains a given proportion of the probability mass. Figure <a href="ch-Bayes-factors.html#fig:posterior-distribution-Paul">12.4</a> shows the 95% HDI of the posterior probability that Paul makes a correct prediction, where the prior distribution was the uniform distribution of MODEL 1 in Figure <a href="ch-Bayes-factors.html#fig:prior-distributions-Paul">12.2</a>.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:posterior-distribution-Paul"></span>
+<img src="10-Bayes-testing_files/figure-html/posterior-distribution-Paul-1.svg" alt="Posterior distribution for the probability that Paul makes a correct prediction, for MODEL 1 in Figure \@ref(fig:prior-distributions-Paul).  " width="90%" />
+<p class="caption">
+Figure 12.4: Posterior distribution for the probability that Paul makes a correct prediction, for MODEL 1 in Figure <a href="ch-Bayes-factors.html#fig:prior-distributions-Paul">12.2</a>.
+</p>
+</div>
+<p>A slightly different way to compute a credible interval is as the <strong>central credible interval</strong>. For such an interval, the excluded left and right tail of the distribution each contain <span class="math inline">\(\tfrac{\alpha}{2}\)</span> of the probability mass (where e.g. <span class="math inline">\(\alpha = .05\)</span> for a 95% credible interval). Unlike the HDI, the central credible interval is not generally the most narrow interval which contains a given proportion of the posterior probability. But it is generally more straightforward to compute. Nevertheless, the HDI is more often reported than the central credible interval.</p>
+<p>A nice thing about credible intervals is that they have a straightforward interpretation: the (subjective) probability that the true value of a parameter lies within an <span class="math inline">\(x\)</span>% credible interval is <span class="math inline">\(x\)</span>%. Compare this to the correct interpretation of an <span class="math inline">\(x\)</span>% Frequentist confidence interval, which is that for infinite samples from the DGP, and computing an infinite number of corresponding confidence intervals, <span class="math inline">\(x\)</span>% of those intervals would contain the true value of the parameter.</p>
+</div>
 </div>
 <div id="a-bayesian-t-test" class="section level2" number="12.2">
 <h2><span class="header-section-number">12.2</span> A Bayesian t-test</h2>
@@ -629,154 +628,84 @@ where <span class="math inline">\(X_{1,i}\)</span> is a contrast-coded predictor
 H_0\!: &amp; \quad \beta_1 = 0 \\
 H_1\!: &amp; \quad \beta_1 \neq 0 \\
 \end{aligned}\]</span></p>
-<p>To do this in a Bayesian framework, we need prior distributions for all the model parameters (<span class="math inline">\(\beta_0\)</span>, <span class="math inline">\(\beta_1\)</span>, and <span class="math inline">\(\sigma\)</span>). <span class="citation"><a href="#ref-rouder2009bayesian" role="doc-biblioref">Rouder et al.</a> (<a href="#ref-rouder2009bayesian" role="doc-biblioref">2009</a>)</span> propose to use so-called uninformative priors for <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\sigma\)</span> (effectively meaning that for these parameters, “anything goes”). The main consideration is then the prior distribution for <span class="math inline">\(\beta_1\)</span>. Rather than defining a prior distribution for <span class="math inline">\(\beta_1\)</span> directly, they propose to define a prior distribution for <span class="math inline">\(\frac{\beta_1}{\sigma}\)</span>, which is the difference between the group means divided by the variance of the dependent variable within each group. This is a measure of effect-size and is also known as Cohen’s <span class="math inline">\(d\)</span>:</p>
+<p>To do this in a Bayesian framework, we need prior distributions for all the model parameters (<span class="math inline">\(\beta_0\)</span>, <span class="math inline">\(\beta_1\)</span>, and <span class="math inline">\(\sigma_\epsilon\)</span>). <span class="citation"><a href="#ref-rouder2009bayesian" role="doc-biblioref">Rouder et al.</a> (<a href="#ref-rouder2009bayesian" role="doc-biblioref">2009</a>)</span> propose to use so-called uninformative priors for <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\sigma_\epsilon\)</span> (effectively meaning that for these parameters, “anything goes”). The main consideration is then the prior distribution for <span class="math inline">\(\beta_1\)</span>. Rather than defining a prior distribution for <span class="math inline">\(\beta_1\)</span> directly, they propose to define a prior distribution for <span class="math inline">\(\frac{\beta_1}{\sigma_\epsilon}\)</span>, which is the difference between the group means divided by the variance of the dependent variable within each group. This is a measure of effect-size and is also known as Cohen’s <span class="math inline">\(d\)</span>:</p>
 <p><span class="math display">\[\text{Cohen&#39;s } d = \frac{\mu_1 - \mu_2}{\sigma_\epsilon} \quad \left(= \frac{\beta_1}{\sigma_\epsilon}\right)\]</span>
 Defining the prior distribution for the effect-size is more convenient than defining the prior distribution for the difference between the means, as the latter difference is dependent on the scale of the dependent variable, which makes it difficult to define a general prior distribution suitable for all two-group comparisons. The “default” prior distribution they propose is a so-called scaled Cauchy distribution:</p>
 <p><span class="math display">\[\frac{\beta_1}{\sigma_\epsilon} \sim \mathbf{Cauchy}(r)\]</span>
-The Cauchy distribution is identical to a t-distribution with one degree of freedom (<span class="math inline">\(\text{df} = 1\)</span>). The scaling factor <span class="math inline">\(r\)</span> can be used to change the width of the distribution, so that either smaller or larger effect sizes become more probable. Examples of the distribution, with three common values for the scaling factor <span class="math inline">\(r\)</span> (“medium”: <span class="math inline">\(r = \frac{\sqrt{2}}{2}\)</span>, “wide”: <span class="math inline">\(r = 1\)</span>, and “ultrawide”: <span class="math inline">\(r = \sqrt{2}\)</span>), are depicted in Figure <a href="ch-Bayes-factors.html#fig:scaled-cauchy-distribution">12.4</a>.</p>
+The Cauchy distribution is identical to a <span class="math inline">\(t\)</span>-distribution with one degree of freedom (<span class="math inline">\(\text{df} = 1\)</span>). The scaling factor <span class="math inline">\(r\)</span> can be used to change the width of the distribution, so that either smaller or larger effect sizes become more probable. Examples of the distribution, with three common values for the scaling factor <span class="math inline">\(r\)</span> (“medium”: <span class="math inline">\(r = \frac{\sqrt{2}}{2}\)</span>, “wide”: <span class="math inline">\(r = 1\)</span>, and “ultrawide”: <span class="math inline">\(r = \sqrt{2}\)</span>), are depicted in Figure <a href="ch-Bayes-factors.html#fig:scaled-cauchy-distribution">12.5</a>.</p>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:scaled-cauchy-distribution"></span>
-<img src="_main_files/figure-html/scaled-cauchy-distribution-1.svg" alt="Scaled Cauchy prior distributions on the effect size $\frac{\beta_1}{\sigma_\epsilon}$" width="95%" />
+<img src="10-Bayes-testing_files/figure-html/scaled-cauchy-distribution-1.svg" alt="Scaled Cauchy prior distributions on the effect size $\frac{\beta_1}{\sigma_\epsilon}$" width="672" />
 <p class="caption">
-Figure 12.4: Scaled Cauchy prior distributions on the effect size <span class="math inline">\(\frac{\beta_1}{\sigma_\epsilon}\)</span>
+Figure 12.5: Scaled Cauchy prior distributions on the effect size <span class="math inline">\(\frac{\beta_1}{\sigma_\epsilon}\)</span>
 </p>
 </div>
 <p><span class="citation"><a href="#ref-rouder2009bayesian" role="doc-biblioref">Rouder et al.</a> (<a href="#ref-rouder2009bayesian" role="doc-biblioref">2009</a>)</span> call the combination of the priors for the effect size and error variance the Jeffreys-Zellner-Siow prior (JZS prior). The “default” Bayesian t-test is to compare the model with these priors to one which assumes <span class="math inline">\(\beta_1 = 0\)</span>, i.e. a model with a prior <span class="math inline">\(P(\beta_1 = 0) = 1\)</span> and <span class="math inline">\(P(\beta_1 \neq 0) = 0\)</span>, whilst using the same prior distributions for the other parameters (<span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\sigma_\epsilon\)</span>).</p>
 <p>As an example, we can apply the Bayesian t-test to the data from the Tetris study analysed in Chapter <a href="ch-ANOVA.html#ch-ANOVA">7</a>. Comparing the Tetris+Reactivation condition to the Reactivation-Only condition, and setting the scale of the prior distribution for the effects size in the alternative MODEL 1 to <span class="math inline">\(r=1\)</span>, provides a Bayes factor comparing the alternative hypothesis <span class="math inline">\(H_1\)</span> (<span class="math inline">\(\beta \neq 0\)</span>) to the null-hypothesis <span class="math inline">\(H_0\)</span> (<span class="math inline">\(\beta_1 = 0\)</span>) of <span class="math inline">\(\text{BF}_{1,0} = 17.225\)</span>, which can be interpreted as strong evidence against the null hypothesis.</p>
-<p>As we indicated earlier, the value of the Bayes factor depends on the prior distribution for the tested parameter in the model representing the alternative hypothesis. This dependence is shown in Figure <a href="ch-Bayes-factors.html#fig:bayesian-t-tests-different-rscale">12.5</a> by varying the scaling factor <span class="math inline">\(r\)</span>.</p>
+<p>As we indicated earlier, the value of the Bayes factor depends on the prior distribution for the tested parameter in the model representing the alternative hypothesis. This dependence is shown in Figure <a href="ch-Bayes-factors.html#fig:bayesian-t-tests-different-rscale">12.6</a> by varying the scaling factor <span class="math inline">\(r\)</span>.</p>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:bayesian-t-tests-different-rscale"></span>
-<img src="_main_files/figure-html/bayesian-t-tests-different-rscale-1.svg" alt="Bayes factor $\text{BF}_{1,0}$ testing equivalence of the means of the Tetris+Reactivation and Reactivation-Only conditions for different values of the scaling factor $r$ of the scaled Cauchy distribution." width="95%" />
+<img src="10-Bayes-testing_files/figure-html/bayesian-t-tests-different-rscale-1.svg" alt="Bayes factor $\text{BF}_{1,0}$ testing equivalence of the means of the Tetris+Reactivation and Reactivation-Only conditions for different values of the scaling factor $r$ of the scaled Cauchy distribution." width="672" />
 <p class="caption">
-Figure 12.5: Bayes factor <span class="math inline">\(\text{BF}_{1,0}\)</span> testing equivalence of the means of the Tetris+Reactivation and Reactivation-Only conditions for different values of the scaling factor <span class="math inline">\(r\)</span> of the scaled Cauchy distribution.
+Figure 12.6: Bayes factor <span class="math inline">\(\text{BF}_{1,0}\)</span> testing equivalence of the means of the Tetris+Reactivation and Reactivation-Only conditions for different values of the scaling factor <span class="math inline">\(r\)</span> of the scaled Cauchy distribution.
 </p>
 </div>
-<p>As this figure shows, the Bayes factor is small for values of <span class="math inline">\(r\)</span> close to 0. The lower the value of <span class="math inline">\(r\)</span>, the less wide the resulting Cauchy distribution becomes. In the limit, as <span class="math inline">\(r\)</span> reaches 0, the prior distribution in the alternative model becomes the same as that of the null model (i.e., assigning only probability to the value <span class="math inline">\(\beta_1 = 0\)</span>). This makes the models indistinguishable, and the Bayes factor would be 1, regardless of the data. As <span class="math inline">\(r\)</span> increases in value, we see that the Bayes factor quickly rises, showing support for the alternative model. For this data, the Bayes factor is largest for a scaling factor just below <span class="math inline">\(r=1\)</span>. When the prior distribution becomes wider than this, the Bayes factor decreases again. This is because the prior distribution then effectively assigns too much probability to high values of the effect size, and as a result lower probability to small and medium values of the effect size. At some point, the probability assigned to the effect size in the data becomes so low, that the null model will provide a better account of the data than the alternative model. A plot like the one in Figure <a href="ch-Bayes-factors.html#fig:bayesian-t-tests-different-rscale">12.5</a> is useful to inspect the robustness of a test result to the specification of the prior distribution. In this case, the Bayes factor shows strong evidence (<span class="math inline">\(\text{BF}_{1,0} &gt; 10\)</span>) for a wide range of sensible values of <span class="math inline">\(r\)</span>, and hence one might consider the test result quite robust. You should not use a plot like this to determine the “optimal” choice of the prior distribution (i.e. the one with the highest Bayes factor). If you did this, then the prior distribution would depend on the data, which is sometimes referred to as “double-dipping.” You would then end up with similar issues as in Frequentist hypothesis testing, where substituting an unknown parameter with a maximum likelihood estimate biases the likelihood ratio to favour the alternative hypothesis, which we then needed to correct for by considering the sampling distribution of the likelihood ratio statistic under the assumption that the null hypothesis is true. A nice thing about Bayes factors is that we do not need to worry about such complications. But that changes if you try to “optimise” a prior distribution by looking at the data.</p>
+<p>As this figure shows, the Bayes factor is small for values of <span class="math inline">\(r\)</span> close to 0. The lower the value of <span class="math inline">\(r\)</span>, the less wide the resulting Cauchy distribution becomes. In the limit, as <span class="math inline">\(r\)</span> reaches 0, the prior distribution in the alternative model becomes the same as that of the null model (i.e., assigning only probability to the value <span class="math inline">\(\beta_1 = 0\)</span>). This makes the models indistinguishable, and the Bayes factor would be 1, regardless of the data. As <span class="math inline">\(r\)</span> increases in value, we see that the Bayes factor quickly rises, showing support for the alternative model. For this data, the Bayes factor is largest for a scaling factor just below <span class="math inline">\(r=1\)</span>. When the prior distribution becomes wider than this, the Bayes factor decreases again. This is because the prior distribution then effectively assigns too much probability to high values of the effect size, and as a result lower probability to small and medium values of the effect size. At some point, the probability assigned to the effect size in the data becomes so low, that the null model will provide a better account of the data than the alternative model. A plot like the one in Figure <a href="ch-Bayes-factors.html#fig:bayesian-t-tests-different-rscale">12.6</a> is useful to inspect the robustness of a test result to the specification of the prior distribution. In this case, the Bayes factor shows strong evidence (<span class="math inline">\(\text{BF}_{1,0} &gt; 10\)</span>) for a wide range of sensible values of <span class="math inline">\(r\)</span>, and hence one might consider the test result quite robust. You should not use a plot like this to determine the “optimal” choice of the prior distribution (i.e. the one with the highest Bayes factor). If you did this, then the prior distribution would depend on the data, which is sometimes referred to as “double-dipping.” You would then end up with similar issues as in Frequentist hypothesis testing, where substituting an unknown parameter with a maximum likelihood estimate biases the likelihood ratio to favour the alternative hypothesis, which we then needed to correct for by considering the sampling distribution of the likelihood ratio statistic under the assumption that the null hypothesis is true. A nice thing about Bayes factors is that we do not need to worry about such complications. But that changes if you try to “optimise” a prior distribution by looking at the data.</p>
 </div>
 <div id="bayes-factors-for-general-linear-models" class="section level2" number="12.3">
 <h2><span class="header-section-number">12.3</span> Bayes factors for General Linear Models</h2>
 <p>The suggested default prior distributions can be generalized straightforwardly to more complex versions of the General Linear Model, such as multiple regression <span class="citation">(<a href="#ref-liang2008mixtures" role="doc-biblioref">Liang, Paulo, Molina, Clyde, &amp; Berger, 2008</a>)</span> and ANOVA models <span class="citation">(<a href="#ref-rouder2012default" role="doc-biblioref">Rouder, Morey, Speckman, &amp; Province, 2012</a>)</span>, by specifying analogous JZS prior distributions over all parameters. This provides a means to test each parameter in a model individually, as well as computing omnibus tests by comparing a general model to one where the prior distribution allows only a single value (i.e. <span class="math inline">\(\beta_j = 0\)</span>) for multiple parameters.</p>
 <p>Table <a href="ch-Bayes-factors.html#tab:bayesian-lm-speedate">12.2</a> shows the results of a Bayesian equivalent to the moderated regression model discussed in Section <a href="ch-moderation-mediation.html#sec:05-dont-forget-about-the-fun">6.1.5</a>. The results generally confirm the results of the frequenist tests employed there, although evidence for the interaction between fun and intelligence can be classified as “anecdotal.”</p>
-<pre><code>## 
-  |                                                     
-  |                                               |   0%
-  |                                                     
-  |========                                       |  17%
-  |                                                     
-  |================                               |  33%
-  |                                                     
-  |========================                       |  50%
-  |                                                     
-  |===============================                |  67%
-  |                                                     
-  |=======================================        |  83%
-  |                                                     
-  |===============================================| 100%</code></pre>
 <table>
-<caption>
-<span id="tab:bayesian-lm-speedate">Table 12.2: </span>Results of a Bayesian regression analysis for the Speed Dating data (cf Table <a href="ch-moderation-mediation.html#tab:full-model-like">6.4</a>) with a default JZS prior with scale <span class="math inline">\(r = \sqrt{2}/4\)</span>. The test of each effect compares the full model to one with that effect excluded.
-</caption>
+<caption><span id="tab:bayesian-lm-speedate">Table 12.2: </span>Results of a Bayesian regression analysis for the Speed Dating data (cf Table <a href="ch-moderation-mediation.html#tab:full-model-like">6.4</a>) with a default JZS prior with ‘medium’ scaling factor <span class="math inline">\(r = \sqrt{2}/4\)</span> (for regression models, default scaling factors are <span class="math inline">\(\sqrt{2}/4\)</span>, <span class="math inline">\(1/2\)</span>, and <span class="math inline">\(\sqrt{2}/2\)</span> for medium, wide, and ultrawide, respectively). The test of each effect compares the full model to one with that effect excluded.</caption>
 <thead>
-<tr>
-<th style="text-align:left;">
-effect
-</th>
-<th style="text-align:left;">
-BF
-</th>
+<tr class="header">
+<th align="left">effect</th>
+<th align="left">BF</th>
 </tr>
 </thead>
 <tbody>
-<tr>
-<td style="text-align:left;">
-<span class="math inline">\(\texttt{attr}\)</span>
-</td>
-<td style="text-align:left;">
-&gt; 1000
-</td>
+<tr class="odd">
+<td align="left"><span class="math inline">\(\texttt{attr}\)</span></td>
+<td align="left">&gt; 1000</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-<span class="math inline">\(\texttt{intel}\)</span>
-</td>
-<td style="text-align:left;">
-&gt; 1000
-</td>
+<tr class="even">
+<td align="left"><span class="math inline">\(\texttt{intel}\)</span></td>
+<td align="left">&gt; 1000</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-<span class="math inline">\(\texttt{fun}\)</span>
-</td>
-<td style="text-align:left;">
-&gt; 1000
-</td>
+<tr class="odd">
+<td align="left"><span class="math inline">\(\texttt{fun}\)</span></td>
+<td align="left">&gt; 1000</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-<span class="math inline">\(\texttt{attr} \times \texttt{intel}\)</span>
-</td>
-<td style="text-align:left;">
-37.46
-</td>
+<tr class="even">
+<td align="left"><span class="math inline">\(\texttt{attr} \times \texttt{intel}\)</span></td>
+<td align="left">37.46</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-<span class="math inline">\(\texttt{fun} \times \texttt{intel}\)</span>
-</td>
-<td style="text-align:left;">
-2.05
-</td>
+<tr class="odd">
+<td align="left"><span class="math inline">\(\texttt{fun} \times \texttt{intel}\)</span></td>
+<td align="left">2.05</td>
 </tr>
 </tbody>
 </table>
 <p>Table <a href="ch-Bayes-factors.html#tab:bayesian-anova-expBelief">12.3</a> shows the Bayesian equivalent of the factorial ANOVA reported in Section <a href="ch-factorial-ANOVA.html#sec:06-main-effects-and-interactions">8.2.1</a>. The results show “extreme” evidence for an effect of experimenter belief, and no evidence for an effect of power prime, nor for an interaction between power prime and experimenter belief. In the Frequentist null-hypothesis significance test, the absence of a significant test result can not be taken as direct evidence for the null hypothesis. There is actually no straightforward way to quantify the evidence for the null hypothesis in a Frequentist framework. This is not so for the Bayesian hypothesis tests. Indeed, the Bayes factor directly quantifies the relative evidence for either the alternative or null hypothesis. Hence, we find “moderate” evidence that the null hypothesis is true for power prime, and for the interaction between power prime and experimenter belief. This ability to quantify evidence both for and against the null hypothesis is one of the major benefits of a Bayesian hypothesis testing procedure.</p>
-<pre><code>## 
-  |                                                     
-  |                                               |   0%
-  |                                                     
-  |============                                   |  25%
-  |                                                     
-  |========================                       |  50%
-  |                                                     
-  |===================================            |  75%
-  |                                                     
-  |===============================================| 100%</code></pre>
 <table>
-<caption>
-<span id="tab:bayesian-anova-expBelief">Table 12.3: </span>Results of a Bayesian factorial ANOVA analysis for the social priming data (cf Table <a href="ch-factorial-ANOVA.html#tab:expBelief-factorial-ANOVA-results">8.2</a>) with a default JZS prior with scale <span class="math inline">\(r = .5\)</span>. The test of each effect compares the full model to one with that effect excluded.
-</caption>
+<caption><span id="tab:bayesian-anova-expBelief">Table 12.3: </span>Results of a Bayesian factorial ANOVA analysis for the social priming data (cf Table <a href="ch-factorial-ANOVA.html#tab:expBelief-factorial-ANOVA-results">8.2</a>) with a default JZS prior with a ‘medium’ scaling factor of <span class="math inline">\(r = 1/2\)</span> (for ANOVA models, default scaling factors are <span class="math inline">\(1/2\)</span>, <span class="math inline">\(\sqrt{2}/2\)</span>, and <span class="math inline">\(1\)</span> for medium, wide, and ultrawide, respectively; this assumes standard effect coding for the contrast-coded predictors, which then matches the priors to those set for the linear regression model). The test of each effect compares the full model to one with that effect excluded.</caption>
 <thead>
-<tr>
-<th style="text-align:left;">
-effect
-</th>
-<th style="text-align:right;">
-BF
-</th>
+<tr class="header">
+<th align="left">effect</th>
+<th align="right">BF</th>
 </tr>
 </thead>
 <tbody>
-<tr>
-<td style="text-align:left;">
-<span class="math inline">\(\texttt{P}\)</span>
-</td>
-<td style="text-align:right;">
-0.127
-</td>
+<tr class="odd">
+<td align="left"><span class="math inline">\(\texttt{P}\)</span></td>
+<td align="right">0.127</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-<span class="math inline">\(\texttt{B}\)</span>
-</td>
-<td style="text-align:right;">
-537.743
-</td>
+<tr class="even">
+<td align="left"><span class="math inline">\(\texttt{B}\)</span></td>
+<td align="right">537.743</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-<span class="math inline">\(\texttt{P} \times \texttt{B}\)</span>
-</td>
-<td style="text-align:right;">
-0.216
-</td>
+<tr class="odd">
+<td align="left"><span class="math inline">\(\texttt{P} \times \texttt{B}\)</span></td>
+<td align="right">0.216</td>
 </tr>
 </tbody>
 </table>
@@ -793,11 +722,11 @@ BF
 <h3><span class="header-section-number">12.4.1</span> The <span class="math inline">\(p\)</span>-value is not a proper measure of evidential support</h3>
 <!-- For a given true effect size not equal to 0, the (expected) $p$-value becomes smaller and smaller as the sample size increases. As a result, very small effect sizes will be significant for a sufficient sample size.-->
 <p>It is common practice to interpret the magnitude of the <span class="math inline">\(p\)</span>-value as an indication of the strength of the evidence against the null hypothesis. That is, a smaller <span class="math inline">\(p\)</span>-value is taken to indicate stronger evidence against the null hypothesis than a larger <span class="math inline">\(p\)</span>-value. Indeed, Fisher himself seems to have subscribed to this view <span class="citation">(<a href="#ref-Wagenmakers07" role="doc-biblioref">Wagenmakers, 2007</a>)</span>. While it is true that the magnitude is often correlated with the strength of evidence, there are some tricky issues regarding this. If a <span class="math inline">\(p\)</span>-value were a “proper” measure of evidential support, then if two experiments provide the same <span class="math inline">\(p\)</span>-value, they should provide the same support against the null hypothesis. But what if the first experiment had a sample size of 10, and the second a sample size of 10,000? Would a <span class="math inline">\(p\)</span>-value of say <span class="math inline">\(p=.04\)</span> indicate the same evidence against the null-hypothesis? The general consensus is that sample size is an important consideration in the interpretation of the <span class="math inline">\(p\)</span>-value, although not always for the same reason. On the one hand, many researchers argue that the <span class="math inline">\(p\)</span>-value of the larger study provides stronger evidence, possibly because the significant result in the larger study might be less likely due to random sample variability <span class="citation">(see e.g. <a href="#ref-rosenthal1963interpretation" role="doc-biblioref">Rosenthal &amp; Gaito, 1963</a>)</span>. On the other hand, it can be argued that the smaller study actually provides stronger evidence, because to obtain the same <span class="math inline">\(p\)</span>-value, the effect size must be larger in the smaller study. Bayesian analysis suggests the latter interpretation is the correct one <span class="citation">(<a href="#ref-Wagenmakers07" role="doc-biblioref">Wagenmakers, 2007</a>)</span>. That the same <span class="math inline">\(p\)</span>-value can indicate a different strength of evidence means that the <span class="math inline">\(p\)</span>-value does not directly reflect evidential support (at least not without considering the sample size).</p>
-<p>Another thing worth pointing out is that, if the null hypothesis is true, any <span class="math inline">\(p\)</span>-value is equally likely. This is by definition. Remember that the <span class="math inline">\(p\)</span>-value is defined as the probability of obtaining the same test statistic, or one more extreme, assuming the null-hypothesis is true. A <span class="math inline">\(p\)</span>-value of say <span class="math inline">\(p=.04\)</span> indicates that you would expect to find an equal or more extreme value of the test statistic in 4% of all possible replications of the experiment. Conversely, in 4% of all replications would you obtain a <span class="math inline">\(p\)</span>-value of <span class="math inline">\(p \leq .04\)</span>. For a <span class="math inline">\(p\)</span>-value of <span class="math inline">\(p=.1\)</span>, you would expect to find a similar or smaller <span class="math inline">\(p\)</span>-value in 10% of all replications of the experiment. The only distribution for which this relation between the value (<span class="math inline">\(p\)</span>) and the probability of obtaining a value equal-or-smaller than it <span class="math inline">\(P(p-\text{value} \leq p)\)</span>, is the uniform distribution. So, when the null hypothesis is true, there is no reason to expect a large <span class="math inline">\(p\)</span>-value, because every <span class="math inline">\(p\)</span>-value is equally likely. When the null hypothesis is false, smaller <span class="math inline">\(p\)</span>-values are more likely than higher <span class="math inline">\(p\)</span>-values, especially as the sample size increases. This is show by simulation for a one-sample t-test in Figure <a href="ch-Bayes-factors.html#fig:simulation-p-value-distribution">12.6</a>. Under the null hypothesis (left plot), the distribution of the <span class="math inline">\(p\)</span>-values is uniform.</p>
+<p>Another thing worth pointing out is that, if the null hypothesis is true, any <span class="math inline">\(p\)</span>-value is equally likely. This is by definition. Remember that the <span class="math inline">\(p\)</span>-value is defined as the probability of obtaining the same test statistic, or one more extreme, assuming the null-hypothesis is true. A <span class="math inline">\(p\)</span>-value of say <span class="math inline">\(p=.04\)</span> indicates that you would expect to find an equal or more extreme value of the test statistic in 4% of all possible replications of the experiment. Conversely, in 4% of all replications would you obtain a <span class="math inline">\(p\)</span>-value of <span class="math inline">\(p \leq .04\)</span>. For a <span class="math inline">\(p\)</span>-value of <span class="math inline">\(p=.1\)</span>, you would expect to find a similar or smaller <span class="math inline">\(p\)</span>-value in 10% of all replications of the experiment. The only distribution for which this relation between the value (<span class="math inline">\(p\)</span>) and the probability of obtaining a value equal-or-smaller than it <span class="math inline">\(P(p-\text{value} \leq p)\)</span>, is the uniform distribution. So, when the null hypothesis is true, there is no reason to expect a large <span class="math inline">\(p\)</span>-value, because every <span class="math inline">\(p\)</span>-value is equally likely. When the null hypothesis is false, smaller <span class="math inline">\(p\)</span>-values are more likely than higher <span class="math inline">\(p\)</span>-values, especially as the sample size increases. This is show by simulation for a one-sample t-test in Figure <a href="ch-Bayes-factors.html#fig:simulation-p-value-distribution">12.7</a>. Under the null hypothesis (left plot), the distribution of the <span class="math inline">\(p\)</span>-values is uniform.</p>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:simulation-p-value-distribution"></span>
-<img src="_main_files/figure-html/simulation-p-value-distribution-1.svg" alt="Distribution of $p$-values for 10,000 simulations of a one-sample $t$-test. $\delta = \frac{\mu - \mu_0}{\sigma}$ refers to the effect size. Under the null hypothesis (left plot; $\delta = 0$) the distribution of the $p$-values is uniform. When the null-hypothesis is false ($\delta = .3$), the distribution is skewed, with smaller $p$-values being more probable, especially when the sample size is larger (compare the middle plot with $n=10$ to the right-hand plot with $n=50$)." width="95%" />
+<img src="10-Bayes-testing_files/figure-html/simulation-p-value-distribution-1.svg" alt="Distribution of $p$-values for 10,000 simulations of a one-sample $t$-test. $\delta = \frac{\mu - \mu_0}{\sigma}$ refers to the effect size. Under the null hypothesis (left plot; $\delta = 0$) the distribution of the $p$-values is uniform. When the null-hypothesis is false ($\delta = .3$), the distribution is skewed, with smaller $p$-values being more probable, especially when the sample size is larger (compare the middle plot with $n=10$ to the right-hand plot with $n=50$)." width="768" />
 <p class="caption">
-Figure 12.6: Distribution of <span class="math inline">\(p\)</span>-values for 10,000 simulations of a one-sample <span class="math inline">\(t\)</span>-test. <span class="math inline">\(\delta = \frac{\mu - \mu_0}{\sigma}\)</span> refers to the effect size. Under the null hypothesis (left plot; <span class="math inline">\(\delta = 0\)</span>) the distribution of the <span class="math inline">\(p\)</span>-values is uniform. When the null-hypothesis is false (<span class="math inline">\(\delta = .3\)</span>), the distribution is skewed, with smaller <span class="math inline">\(p\)</span>-values being more probable, especially when the sample size is larger (compare the middle plot with <span class="math inline">\(n=10\)</span> to the right-hand plot with <span class="math inline">\(n=50\)</span>).
+Figure 12.7: Distribution of <span class="math inline">\(p\)</span>-values for 10,000 simulations of a one-sample <span class="math inline">\(t\)</span>-test. <span class="math inline">\(\delta = \frac{\mu - \mu_0}{\sigma}\)</span> refers to the effect size. Under the null hypothesis (left plot; <span class="math inline">\(\delta = 0\)</span>) the distribution of the <span class="math inline">\(p\)</span>-values is uniform. When the null-hypothesis is false (<span class="math inline">\(\delta = .3\)</span>), the distribution is skewed, with smaller <span class="math inline">\(p\)</span>-values being more probable, especially when the sample size is larger (compare the middle plot with <span class="math inline">\(n=10\)</span> to the right-hand plot with <span class="math inline">\(n=50\)</span>).
 </p>
 </div>
 </div>
@@ -824,14 +753,28 @@ Figure 12.6: Distribution of <span class="math inline">\(p\)</span>-values for 1
 <p>At this point, you might feel slightly annoyed. Perhaps even <em>very</em> annoyed. We have spent all the preceding chapters focusing on the Frequentist null hypothesis significance testing procedure, and after all that work I’m informing you of these issues. Why? Was all that work for nothing?</p>
 <p>No, obviously not. Although much of the criticism regarding the NHST is appropriate, as long as you understand what it does and apply the procedure properly, there is no need to abandon it. The NHST is designed to limit the rate of Type 1 errors (rejecting the null hypothesis when it is true). It does this well. And, when using the appropriate test statistic, in the most powerful way possible. Limiting Type 1 errors is, whilst modest, a reasonable concern in scientific practice. The Bayesian alternative allows you to do more, such as evaluate the relative evidence for and against the null hypothesis, and even calculate the posterior probability of both (as long as you are willing to assign a prior probability to both as well).</p>
 <p>An advantage of the NHST is its “objectiveness”: once you have determined a suitable distribution of the data, and decided on a particular value for a parameter to test, there are no other decisions to make apart from setting the significance level of the test. In the Bayesian hypothesis testing procedure, you also need to specify a prior distribution for the parameter of interest in the alternative hypothesis. Although considering what parameter values you would expect if the null hypothesis were false is an inherently important consideration, it is often not straightforward when you start a research project, or rely on measures you have not used before in a particular context. Although much work has been devoted to deriving sensible “default priors,” I don’t believe there is a sensible objective prior applicable to all situations. Given a freedom to choose a prior distribution for the alternative hypothesis, this makes the Bayesian testing procedure inherently subjective. This is perfectly in keeping with the subjectivist interpretation of probability as the rational belief of an agent endowed with (subjective) prior beliefs. Moreover, at some point, if you were to accumulate all data, the effect of prior beliefs “washes out” (as long as you don’t assign a probability of zero to the true parameter value).</p>
-<p>My pragmatic answer to the question whether you should use a Bayesian test or a Frequentist one is then the following: if you can define a suitable prior distribution to reflect what you expect to observe in a study, before you actually conduct that study, then use a Bayesian testing procedure. This will allow you to do what you most likely would like to do, namely quantify the evidence for your hypotheses against alternative hypotheses. If you are unable to form any expectations regarding the effects within your study, you probably should consider a traditional NHST to assess whether there is an indication of any effect, and limiting your Type 1 error rate in doing so. In some sense, this is a “last resort,” but in psychology, where quantitative predictions are inherently difficult, something I reluctantly have to rely on quite frequently. Instead of a hypothesis test, you could also consider simply estimating the effect in that case, with a suitable confidence bound (the Bayesian alternative to this is called a “credible interval,” which is an interval defined for the posterior distribution of a parameter, but we won’t go into the details of this here).</p>
+<p>My pragmatic answer to the question whether you should use a Bayesian test or a Frequentist one is then the following: if you can define a suitable prior distribution to reflect what you expect to observe in a study, before you actually conduct that study, then use a Bayesian testing procedure. This will allow you to do what you most likely would like to do, namely quantify the evidence for your hypotheses against alternative hypotheses. If you are unable to form any expectations regarding the effects within your study, you probably should consider a traditional NHST to assess whether there is an indication of any effect, and limiting your Type 1 error rate in doing so. In some sense, this is a “last resort,” but in psychology, where quantitative predictions are inherently difficult, something I reluctantly have to rely on quite frequently. Instead of a hypothesis test, you could also consider simply estimating the effect-size in that case, with a suitable credible interval.</p>
 </div>
-<div id="summary-3" class="section level2" number="12.6">
-<h2><span class="header-section-number">12.6</span> “Summary”</h2>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-61"></span>
-<img src="https://phdcomics.com/comics/archive/phd082707s.gif" alt="'Piled Higher and Deeper' by Jorge Cham www.phdcomics.com. Source: https://phdcomics.com/comics/archive.php?comicid=905" width="95%" />
+<div id="in-practice-5" class="section level2" number="12.6">
+<h2><span class="header-section-number">12.6</span> In practice</h2>
+<p>The steps involved in conducting a Bayesian hypothesis test are not too different from the steps involved in conducting a Frequentist hypothesis test, with the additional step of choosing prior distributions over the values of the model parameters.</p>
+<ol style="list-style-type: decimal">
+<li><p>Explore the data. Plot distributions of the data within the conditions of the experiment (if any), pairwise scatterplots between numerical predictors and the dependent variable, etc. Consider what model you might use to analyse the data, and assess the validity of the underlying assumptions.</p></li>
+<li><p>Choose an appropriate general statistical model. In many cases, this will be a version of the GLM or an extension such as a linear mixed-effects model, perhaps using suitably transformed dependent and independent variables.</p></li>
+<li><p>Choose appropriate prior distributions for the model parameters. This is generally the most difficult part. If you have prior data, then you could base the prior distributions on this. If not, then ideally, formulate prior distributions which reflect your beliefs about the data. You can check whether the prior distributions lead to sensible predictions by simulating data from the resulting model (i.e., computing prior predictive distributions). Otherwise, you can resort to “default” prior distributions.</p></li>
+<li><p>Conduct the analysis. To test null-hypotheses, compare the general model to a set of restricted models which fix a parameter to a particular value (e.g. 0), and compute the Bayes Factor for each of these comparisons. To help you interpret the magnitude of the Bayes Factor, you can consult Table <a href="ch-Bayes-factors.html#tab:Bayes-Factor-values-interpretation">12.1</a>. Where possible, consider conducting a robustness analysis, by e.g. varying the scaling factor of the prior distributions. This will inform you about the extent to which the results hinge on a particular choice of prior, or whether they hold for a range of prior distributions.</p></li>
+<li><p>Report the results. Make sure that you describe the statistical model, as well as the prior distributions chosen. The latter is crucial, as Bayes Factors are not interpretable without knowing the prior distributions. For example, the results of the analysis in Table <a href="ch-Bayes-factors.html#tab:bayesian-lm-speedate">12.2</a>, with additional results from the posterior parameter distributions, may be reported as:</p></li>
+</ol>
+<blockquote>
+<p>To analyse the effect of rated attractiveness, intelligence, and fun on the liking of dating partners, we used a Bayesian linear regression analysis <span class="citation">(<a href="#ref-rouder2012default2" role="doc-biblioref">Rouder &amp; Morey, 2012</a>)</span>. In the model, we allowed the effect of attractiveness and fun to be moderated by intelligence. All predictors were mean-centered before entering the analysis. We used a default JZS-prior for all parameters, with a medium scaling factor of <span class="math inline">\(r = \sqrt{2}/4\)</span>, as recommended by <span class="citation"><a href="#ref-R-BayesFactor" role="doc-biblioref">Richard D. Morey &amp; Rouder</a> (<a href="#ref-R-BayesFactor" role="doc-biblioref">2018</a>)</span>. The analysis showed “extreme” evidence for effects of attractiveness, intelligence, and fun (<span class="math inline">\(\text{BF}_{1,0} &gt; 1000\)</span>; comparing the model to one with a point-prior at 0 for each effect). All effects were positive, with the posterior means of the slopes equalling <span class="math inline">\(\hat{\beta}_\text{attr} = 0.345\)</span>, 95% HDI [0.309; 0.384], <span class="math inline">\(\hat{\beta}_\text{intel} = 0.257\)</span>, 95% HDI [0.212; 0.304], and <span class="math inline">\(\hat{\beta}_\text{fun} = 0.382\)</span>, 95% HDI [0.342; 0.423]. In addition, we found “very strong” evidence for a moderation of the effect of attractiveness by intelligence (<span class="math inline">\(BF_{0,1} = 37.459\)</span>). For every one-unit increase in rated intelligence, the effect of attraciveness reduced by <span class="math inline">\(\hat{\beta}_{\text{attr} \times \text{intel}} = 0.043\)</span>, 95% HDI [-0.066; -0.02]. There was only “anecdotal” evidence for a moderation of the effect of fun by intelligence (<span class="math inline">\(BF_{0,1} = 2.052\)</span>). Although we don’t place too much confidence in this result, it indicates that for every one-unit increase in rated intelligence, the effect of fun increased by <span class="math inline">\(\hat{\beta}_{\text{fun} \times \text{intel}} = 0.032\)</span>, 95% HDI [0.01; 0.055].</p>
+</blockquote>
+</div>
+<div id="summary-3" class="section level2" number="12.7">
+<h2><span class="header-section-number">12.7</span> “Summary”</h2>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-1"></span>
+<img src="https://phdcomics.com/comics/archive/phd082707s.gif" alt="'Piled Higher and Deeper' by Jorge Cham www.phdcomics.com. Source: https://phdcomics.com/comics/archive.php?comicid=905"  />
 <p class="caption">
-Figure 12.7: ‘Piled Higher and Deeper’ by Jorge Cham www.phdcomics.com. Source: <a href="https://phdcomics.com/comics/archive.php?comicid=905" class="uri">https://phdcomics.com/comics/archive.php?comicid=905</a>
+Figure 12.8: ‘Piled Higher and Deeper’ by Jorge Cham www.phdcomics.com. Source: <a href="https://phdcomics.com/comics/archive.php?comicid=905" class="uri">https://phdcomics.com/comics/archive.php?comicid=905</a>
 </p>
 </div>
 
@@ -854,11 +797,17 @@ Jeffreys, H. (1939). <em>The theory of probability</em>. Oxford: Oxford Universi
 <div id="ref-liang2008mixtures" class="csl-entry">
 Liang, F., Paulo, R., Molina, G., Clyde, M. A., &amp; Berger, J. O. (2008). Mixtures of g priors for <span>B</span>ayesian variable selection. <em>Journal of the American Statistical Association</em>, <em>103</em>, 410–423.
 </div>
+<div id="ref-R-BayesFactor" class="csl-entry">
+Morey, Richard D., &amp; Rouder, J. N. (2018). <em>BayesFactor: Computation of bayes factors for common designs</em>. Retrieved from <a href="https://CRAN.R-project.org/package=BayesFactor">https://CRAN.R-project.org/package=BayesFactor</a>
+</div>
 <div id="ref-Nickerson00" class="csl-entry">
 Nickerson, R. S. (2000). Null hypothesis significance testing: A review of an old and continuing controversy. <em>Psychological Methods</em>, <em>5</em>, 241.
 </div>
 <div id="ref-rosenthal1963interpretation" class="csl-entry">
 Rosenthal, R., &amp; Gaito, J. (1963). The interpretation of levels of significance by psychological researchers. <em>The Journal of Psychology</em>, <em>55</em>, 33–38.
+</div>
+<div id="ref-rouder2012default2" class="csl-entry">
+Rouder, J. N., &amp; Morey, R. D. (2012). Default bayes factors for model selection in regression. <em>Multivariate Behavioral Research</em>, <em>47</em>, 877–903.
 </div>
 <div id="ref-rouder2012default" class="csl-entry">
 Rouder, J. N., Morey, R. D., Speckman, P. L., &amp; Province, J. M. (2012). Default <span>B</span>ayes factors for <span>ANOVA</span> designs. <em>Journal of Mathematical Psychology</em>, <em>56</em>, 356–374.
@@ -879,8 +828,9 @@ Wagenmakers, E.-J. (2007). A practical solution to the pervasive problems of p v
 <div class="footnotes">
 <hr />
 <ol start="30">
-<li id="fn30"><p>I’m writing this bit on 3 December 2020<a href="ch-Bayes-factors.html#fnref30" class="footnote-back">↩︎</a></p></li>
-<li id="fn31"><p>The first method is generally more reliable.<a href="ch-Bayes-factors.html#fnref31" class="footnote-back">↩︎</a></p></li>
+<li id="fn30"><p>I originally wrote most of this chapter in the first week of December 2020. Revising the chapter in the first week of December 2021, not too much has changed.<a href="ch-Bayes-factors.html#fnref30" class="footnote-back">↩︎</a></p></li>
+<li id="fn31"><p>Later evidence indicates that the tests may be more accurate than thought at first (<a href="https://www.bbc.co.uk/news/health-58899612">BBC, 14 October 2021</a>)<a href="ch-Bayes-factors.html#fnref31" class="footnote-back">↩︎</a></p></li>
+<li id="fn32"><p>The first method is generally more reliable.<a href="ch-Bayes-factors.html#fnref32" class="footnote-back">↩︎</a></p></li>
 </ol>
 </div>
             </section>

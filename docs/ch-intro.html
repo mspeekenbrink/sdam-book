@@ -24,7 +24,7 @@
 <meta name="author" content="Maarten Speekenbrink" />
 
 
-<meta name="date" content="2021-12-01" />
+<meta name="date" content="2021-12-07" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -354,6 +354,7 @@ div.csl-indent {
 <li class="chapter" data-level="12.1.3" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#we-missed-you-paul"><i class="fa fa-check"></i><b>12.1.3</b> We missed you Paul!</a></li>
 <li class="chapter" data-level="12.1.4" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#the-marginal-likelihood-and-prior-predictive-distribution"><i class="fa fa-check"></i><b>12.1.4</b> The marginal likelihood and prior predictive distribution</a></li>
 <li class="chapter" data-level="12.1.5" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#hypothesis-testing-relative-evidence-and-the-bayes-factor"><i class="fa fa-check"></i><b>12.1.5</b> Hypothesis testing, relative evidence, and the Bayes factor</a></li>
+<li class="chapter" data-level="12.1.6" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#parameter-estimates-and-credible-intervals"><i class="fa fa-check"></i><b>12.1.6</b> Parameter estimates and credible intervals</a></li>
 </ul></li>
 <li class="chapter" data-level="12.2" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#a-bayesian-t-test"><i class="fa fa-check"></i><b>12.2</b> A Bayesian t-test</a></li>
 <li class="chapter" data-level="12.3" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#bayes-factors-for-general-linear-models"><i class="fa fa-check"></i><b>12.3</b> Bayes factors for General Linear Models</a></li>
@@ -364,7 +365,8 @@ div.csl-indent {
 <li class="chapter" data-level="12.4.3" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#results-of-a-nhst-are-often-misinterpreted"><i class="fa fa-check"></i><b>12.4.3</b> Results of a NHST are often misinterpreted</a></li>
 </ul></li>
 <li class="chapter" data-level="12.5" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#to-bayes-or-not-to-bayes-a-pragmatic-view"><i class="fa fa-check"></i><b>12.5</b> To Bayes or not to Bayes? A pragmatic view</a></li>
-<li class="chapter" data-level="12.6" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#summary-3"><i class="fa fa-check"></i><b>12.6</b> “Summary”</a></li>
+<li class="chapter" data-level="12.6" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#in-practice-5"><i class="fa fa-check"></i><b>12.6</b> In practice</a></li>
+<li class="chapter" data-level="12.7" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#summary-3"><i class="fa fa-check"></i><b>12.7</b> “Summary”</a></li>
 </ul></li>
 <li class="chapter" data-level="13" data-path="ch-responsible-data-analyst.html"><a href="ch-responsible-data-analyst.html"><i class="fa fa-check"></i><b>13</b> Being a responsible data analyst</a>
 <ul>
@@ -409,7 +411,7 @@ Source: <a href="https://www.irishcentral.com/sports/paul-the-psychic-octopus-pi
 </blockquote>
 <p>Paul the Octopus (26 January 2008 – 26 October 2010) was born in the Sea Life Centre in Weymouth, England, and subsequently moved to the aquarium chain’s centre in Oberhausen, Germany. It was there he found world-wide fame as a cephalopod oracle.</p>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:paul-the-octopus-image"></span>
-<img src="https://static.guim.co.uk/sys-images/Guardian/Pix/pictures/2010/7/15/1279193684789/Paul-the-octopus-005.jpg" alt="Paul the octopus predicts Spain to win the final of the 2010 FIFA World Cup. Source: [The Guardian](https://www.theguardian.com/football/2010/jul/09/psychic-octopus-paul-picks-spain)" width="95%" />
+<img src="https://static.guim.co.uk/sys-images/Guardian/Pix/pictures/2010/7/15/1279193684789/Paul-the-octopus-005.jpg" alt="Paul the octopus predicts Spain to win the final of the 2010 FIFA World Cup. Source: [The Guardian](https://www.theguardian.com/football/2010/jul/09/psychic-octopus-paul-picks-spain)"  />
 <p class="caption">
 Figure 1.1: Paul the octopus predicts Spain to win the final of the 2010 FIFA World Cup. Source: <a href="https://www.theguardian.com/football/2010/jul/09/psychic-octopus-paul-picks-spain">The Guardian</a>
 </p>
@@ -898,7 +900,7 @@ For the total goals scored, the standard deviation is
 <p>Exploring a data set is generally done visually, using various plots such as histograms, boxplots,
 scatterplots, etc. A good plot can immediately provide a lot more information than summary measures. So before proceeding with statistical analysis: plot your data! Visualizing data in the most effective and pleasant way is an art form in itself. But here are some standard plots that are helpful and relatively easy to produce:</p>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:example-histogram-and-boxplot"></span>
-<img src="_main_files/figure-html/example-histogram-and-boxplot-1.svg" alt="A histogram and boxplot of the total goals scored by each team" width="49%" /><img src="_main_files/figure-html/example-histogram-and-boxplot-2.svg" alt="A histogram and boxplot of the total goals scored by each team" width="49%" />
+<img src="01-intro_files/figure-html/example-histogram-and-boxplot-1.svg" alt="A histogram and boxplot of the total goals scored by each team" width="49%" /><img src="01-intro_files/figure-html/example-histogram-and-boxplot-2.svg" alt="A histogram and boxplot of the total goals scored by each team" width="49%" />
 <p class="caption">
 Figure 1.2: A histogram and boxplot of the total goals scored by each team
 </p>
@@ -907,14 +909,14 @@ Figure 1.2: A histogram and boxplot of the total goals scored by each team
 <p>A <strong>boxplot</strong> (right plot in Figure <a href="ch-intro.html#fig:example-histogram-and-boxplot">1.2</a>), also called a box and whiskers plot, depicts the inter-quartile range as a box, in which a line is placed to depict the median. Two lines extend from either side of the box. These are the “whiskers” and they depict the range of values in the data excluding any potential outliers. More precisely, the endpoints of the whiskers are the smallest and largest value in the data which are no more than <span class="math inline">\(1.5 \times \text{IQR}\)</span> away from the 25% and 75% quartiles, respectively. If there are values in the data which extend beyond these endpoints, they are considered “outliers,” and plotted as points outside of the whiskers. In the example boxplot, you can see that there are three such outliers.</p>
 A <strong>scatterplot</strong> is useful to see the relation between the values of two variables. For instance, it is likely that the total goals scored by each team will depend on the number of games they played. We can visually inspect this by plotting each team as a point with the value of the x-axis representing the value of one variable, and the value on the y-axis as the value of the other variable. This is done in Figure <a href="ch-intro.html#fig:example-scatter-plot">1.3</a>, from which it seems quite clear that those teams who played more games generally also scored more points.
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:example-scatter-plot"></span>
-<img src="_main_files/figure-html/example-scatter-plot-1.svg" alt="A scatter plot of total goals scored by total matches played" width="50%" />
+<img src="01-intro_files/figure-html/example-scatter-plot-1.svg" alt="A scatter plot of total goals scored by total matches played" width="50%" />
 <p class="caption">
 Figure 1.3: A scatter plot of total goals scored by total matches played
 </p>
 </div>
 <p>As all the plots above can tell us something meaningful about the data, and they often highlight different aspects of the data, it can be useful to combine them. One form of such a combination plot has been called a <strong>raincloud plot</strong> <span class="citation">(<a href="#ref-allen2019raincloud" role="doc-biblioref">Allen, Poggiali, Whitaker, Marshall, &amp; Kievit, 2019</a>)</span>. A raincloud plot combines a boxplot with a scatterplot of the observed values and a type of continuous histogram called a nonparametric density plot. In my version of such plots (<a href="ch-intro.html#fig:example-raincloud-plot">1.4</a>), a boxplot is placed in the middle, with an additional point representing the sample mean. On the left are the observed values, where the points are “jittered” (randomly displaced on the x-axis) to try to avoid overlapping points. On the right of the boxplot is the nonparametric density plot. This part aims to depict the distribution in a smooth, continuous way.</p>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:example-raincloud-plot"></span>
-<img src="_main_files/figure-html/example-raincloud-plot-1.svg" alt="A raincloud plot of the average goals scored per match" width="50%" />
+<img src="01-intro_files/figure-html/example-raincloud-plot-1.svg" alt="A raincloud plot of the average goals scored per match" width="50%" />
 <p class="caption">
 Figure 1.4: A raincloud plot of the average goals scored per match
 </p>
@@ -927,7 +929,7 @@ Figure 1.4: A raincloud plot of the average goals scored per match
 <p>Data is noisy for many reasons. For one thing, the data that we have access to is generally limited, in the sense that we could have obtained other and/or more data. Other sources of noise include measurement error. Such sources of noise imply that the data set we have only gives a limited, incomplete, and corrupted view on the process that generated it (the Data Generating Process). We are not interested solely in describing the data set we have, we generally want to infer something about the Data Generating Process. We don’t just want to state that Paul made 8 out of 8 accurate predictions in the 2010 FIFA World Cup, we want to use this data to assess whether Paul had psychic abilities. Whether, had Paul’s keeper allowed Paul to make predictions for other matches, he would have also been correct. Such inferences go beyond the data that we have. Perhaps Paul was just lucky in those 8 predictions, and his 100% hit rate is not a good reflection of his hit rate in general.</p>
 <p>Statistical modelling can be viewed as describing the Data Generating Process in the language of mathematics. At its core, a statistical model defines the distribution of possible values of variables. In an ideal world, this model distribution is identical to the true distribution that follows from the Data Generating Process. In general, though, there will be some mismatch between the model distribution and the DGP distribution. Models are simplifications and idealizations. As statistician George Box famously noted “all models are wrong, but some are useful” <span class="citation">(<a href="#ref-Box1987" role="doc-biblioref">G. E. P. Box &amp; Draper, 1987</a>)</span>. What do we mean by this? Consider the famous London tube map (Figure <a href="ch-intro.html#fig:london-tube-map">1.5</a>). This map is “wrong” because as any map, it is a simplification of reality. It does not provide a completely accurate representation of the world. But what is special about the tube map is that, unlike standard maps, it does not even attempt to reflect the geographical location of the different underground (or “tube”) lines and stations. Its initial designer, Harry Beck, realised that because the lines run mostly underground, the exact physical locations of the stations were largely irrelevant to the traveller wanting to know how to get from one station to another. What matters to them is the relation between the stations, and which lines connect them. Hence, he designed the map as a schematic diagram which clearly shows the lines connecting stations. If you used the map to determine the walking distance between stations, you’d be very disappointed. But to determine your underground journey, the map is very useful.</p>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:london-tube-map"></span>
-<img src="https://tfl.gov.uk/cdn/static/cms/images/tube-map.gif" alt="London tube map. Source: [TfL](https://tfl.gov.uk/maps/track/tube)" width="95%" />
+<img src="https://tfl.gov.uk/cdn/static/cms/images/tube-map.gif" alt="London tube map. Source: [TfL](https://tfl.gov.uk/maps/track/tube)"  />
 <p class="caption">
 Figure 1.5: London tube map. Source: <a href="https://tfl.gov.uk/maps/track/tube">TfL</a>
 </p>

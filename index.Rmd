@@ -66,7 +66,7 @@ knitr::kable(
   data.frame(
     symbol = paste0("$\\",greek_symbols,"$"),
     name = greek_symbols,
-    usage = c("significance level","parameter (slope or intercept) in the General Linear Model","random effect in a linear mixed-effects model","","error","","","a parameter in general","","","","mean","","","","correlation","standard deviation","","","","Chi-squared distribution","","")
+    usage = c("significance level","parameter (slope or intercept) in the General Linear Model","random effect in a linear mixed-effects model","","error","correction factor for non-sphericity","","a parameter in general","","","","mean","","","","correlation","standard deviation","treatment effect (ANOVA)","","","Chi-squared distribution","","")
   ),
   escape = FALSE,
   booktabs = TRUE

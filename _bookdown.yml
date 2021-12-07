@@ -5,6 +5,7 @@ language:
   ui:
     chapter_name: "Chapter "
 before_chapter_script: "run_before.R"
+new_session: yes
 # after_chapter_script: "script3.R"
 #view: https://github.com/mspeekenbrink/sdam-book/blob/master/%s
 #edit: https://github.com/mspeekenbrink/sdam-book/edit/master/%s

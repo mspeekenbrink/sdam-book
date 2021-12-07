@@ -24,7 +24,7 @@
 <meta name="author" content="Maarten Speekenbrink" />
 
 
-<meta name="date" content="2021-12-01" />
+<meta name="date" content="2021-12-07" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -354,6 +354,7 @@ div.csl-indent {
 <li class="chapter" data-level="12.1.3" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#we-missed-you-paul"><i class="fa fa-check"></i><b>12.1.3</b> We missed you Paul!</a></li>
 <li class="chapter" data-level="12.1.4" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#the-marginal-likelihood-and-prior-predictive-distribution"><i class="fa fa-check"></i><b>12.1.4</b> The marginal likelihood and prior predictive distribution</a></li>
 <li class="chapter" data-level="12.1.5" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#hypothesis-testing-relative-evidence-and-the-bayes-factor"><i class="fa fa-check"></i><b>12.1.5</b> Hypothesis testing, relative evidence, and the Bayes factor</a></li>
+<li class="chapter" data-level="12.1.6" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#parameter-estimates-and-credible-intervals"><i class="fa fa-check"></i><b>12.1.6</b> Parameter estimates and credible intervals</a></li>
 </ul></li>
 <li class="chapter" data-level="12.2" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#a-bayesian-t-test"><i class="fa fa-check"></i><b>12.2</b> A Bayesian t-test</a></li>
 <li class="chapter" data-level="12.3" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#bayes-factors-for-general-linear-models"><i class="fa fa-check"></i><b>12.3</b> Bayes factors for General Linear Models</a></li>
@@ -364,7 +365,8 @@ div.csl-indent {
 <li class="chapter" data-level="12.4.3" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#results-of-a-nhst-are-often-misinterpreted"><i class="fa fa-check"></i><b>12.4.3</b> Results of a NHST are often misinterpreted</a></li>
 </ul></li>
 <li class="chapter" data-level="12.5" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#to-bayes-or-not-to-bayes-a-pragmatic-view"><i class="fa fa-check"></i><b>12.5</b> To Bayes or not to Bayes? A pragmatic view</a></li>
-<li class="chapter" data-level="12.6" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#summary-3"><i class="fa fa-check"></i><b>12.6</b> “Summary”</a></li>
+<li class="chapter" data-level="12.6" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#in-practice-5"><i class="fa fa-check"></i><b>12.6</b> In practice</a></li>
+<li class="chapter" data-level="12.7" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#summary-3"><i class="fa fa-check"></i><b>12.7</b> “Summary”</a></li>
 </ul></li>
 <li class="chapter" data-level="13" data-path="ch-responsible-data-analyst.html"><a href="ch-responsible-data-analyst.html"><i class="fa fa-check"></i><b>13</b> Being a responsible data analyst</a>
 <ul>
@@ -446,7 +448,7 @@ were shown blurred images from the trauma film and asked to indicate whether eac
 </table>
 <p>Boxplots for each condition are provided in Figure <a href="ch-ANOVA.html#fig:tetris-intrusive-memories">7.1</a>.</p>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:tetris-intrusive-memories"></span>
-<img src="_main_files/figure-html/tetris-intrusive-memories-1.svg" alt="Number of intrusive memories during days 1 to 7 for each condition of Experiment 2 of James et al. (2015)." width="95%" />
+<img src="06-ANOVA_files/figure-html/tetris-intrusive-memories-1.svg" alt="Number of intrusive memories during days 1 to 7 for each condition of Experiment 2 of James et al. (2015)." width="672" />
 <p class="caption">
 Figure 7.1: Number of intrusive memories during days 1 to 7 for each condition of Experiment 2 of James et al. (2015).
 </p>
@@ -465,7 +467,7 @@ where <span class="math inline">\(\mu_\text{con}\)</span> is a placeholder for t
 <p><span class="math display">\[Y_{i} = \begin{cases}  \mu_\text{t+r} + \epsilon_{i} \hspace{2em} \text{if condition = Tetris+Reactivation} \\ \mu_\text{react} + \epsilon_{i} \hspace{2em} \text{if condition = Reactivation-Only}  \end{cases} \quad \quad \epsilon_i \sim \mathbf{Normal}(0,\sigma_\epsilon)\]</span>
 Note that the model assumes that while the mean can differ between the conditions, deviations of the observations around the mean are assumed to have the same standard deviance <span class="math inline">\(\sigma_\epsilon\)</span>. An example of what the model might look like is given in Figure <a href="ch-ANOVA.html#fig:two-group-Normal-densities">7.2</a>.</p>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:two-group-Normal-densities"></span>
-<img src="_main_files/figure-html/two-group-Normal-densities-1.svg" alt="Two Normal density functions with a different mean but identical standard deviation." width="80%" />
+<img src="06-ANOVA_files/figure-html/two-group-Normal-densities-1.svg" alt="Two Normal density functions with a different mean but identical standard deviation." width="80%" />
 <p class="caption">
 Figure 7.2: Two Normal density functions with a different mean but identical standard deviation.
 </p>
@@ -577,7 +579,7 @@ $$\mathrm{E}[F] = \frac{\sigma_\epsilon^2 + }{\sigma_\epsilon^2}$$
 <p>Going back to the game, to determine any number between 1 and 8, an optimal playing strategy will always consist of 7 possible questions. You would not need to ask all of these questions in each game, but sometimes you opponent would have chosen 7 or 8, in which case you would need to ask all 7 questions. The strategy of asking whether the chosen number is equal to each of a sequence of number resembles dummy coding. In this view, the final number 8 is the reference group, and each question such as “Is the number 1?” is implicitly the same as “Is the number 1 <em>and not 8</em>?”</p>
 <p>A different way to play the game is by a strategy which guarantees you to always correctly “guess” the number in three questions. This strategy is depicted in Figure <a href="ch-ANOVA.html#fig:number-guessing-game-contrast-coding">7.3</a>. In this strategy, each question halves the number of remaining options. If the first question “Is the number larger than 4?” is answered as “yes,” the number can only be 5, 6, 7, or 8. The options 1, 2, 3, or 4, are ruled out. Subsequently asking “Is the number larger than 6?” would reduce the remaining options by half again. If the answer to this question was “yes,” then the number would have to be either 7 or 8. If “no,” the remaining options would be 5 or 6. If the answer was “yes,” then subsequently asking the question “Is the number 7?” would allow you to finish the game (if the answer is “yes,” the number is 7, if “no,” it would have to be 8). Although more efficient in a single game, over all games, this strategy consists of a total of 7 questions: “Is the number greater than four?” “Is the number greater than two?” is the number greater than six?“,”Is the number seven?“, etc.</p>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:number-guessing-game-contrast-coding"></span>
-<img src="_main_files/figure-html/number-guessing-game-contrast-coding-1.svg" alt="Questions to guess a random number between 1 and 8" width="60%" />
+<img src="06-ANOVA_files/figure-html/number-guessing-game-contrast-coding-1.svg" alt="Questions to guess a random number between 1 and 8" width="60%" />
 <p class="caption">
 Figure 7.3: Questions to guess a random number between 1 and 8
 </p>
@@ -652,7 +654,7 @@ This model is treated as any other regression model. So after re-coding a nomina
 <span class="math display">\[\texttt{intrusions}_i = 3.93 + 1.18 \times \texttt{}X_1\texttt{}_i  - 2.04 \times \texttt{}X_2\texttt{}_i  - 0.0417 \times \texttt{}X_3\texttt{}_i  + \hat{\epsilon}_i \quad \quad \hat{\epsilon}_i \sim \mathbf{Normal}(0, 3.18)\]</span>
 Figure <a href="ch-ANOVA.html#fig:tetris-effect-coding-parameter-plot">7.4</a> shows how the parameters of the model are related to the average number of intrusions in each condition.
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:tetris-effect-coding-parameter-plot"></span>
-<img src="_main_files/figure-html/tetris-effect-coding-parameter-plot-1.svg" alt="Average number of instrusions in the four conditions in the Tetris study and how they are related to the parameters of the effect-coding model. The intercept $\hat{\beta}_0 = \hat{\mu}$ is the grand mean (dotted line). The slopes reflect treatment effects, which are deviations from the average intrusions in a condition and the grand mean. The averages of the first three conditions are equal to $\beta_0 + \beta_j$, the sum of the intercept and the slope of the effect-coding predictor $X_j$ representing the treatment effect of that condition. The mean of the last condition is the intercept minus the sum of the slopes of the effect-coding predictors." width="95%" />
+<img src="06-ANOVA_files/figure-html/tetris-effect-coding-parameter-plot-1.svg" alt="Average number of instrusions in the four conditions in the Tetris study and how they are related to the parameters of the effect-coding model. The intercept $\hat{\beta}_0 = \hat{\mu}$ is the grand mean (dotted line). The slopes reflect treatment effects, which are deviations from the average intrusions in a condition and the grand mean. The averages of the first three conditions are equal to $\beta_0 + \beta_j$, the sum of the intercept and the slope of the effect-coding predictor $X_j$ representing the treatment effect of that condition. The mean of the last condition is the intercept minus the sum of the slopes of the effect-coding predictors." width="672" />
 <p class="caption">
 Figure 7.4: Average number of instrusions in the four conditions in the Tetris study and how they are related to the parameters of the effect-coding model. The intercept <span class="math inline">\(\hat{\beta}_0 = \hat{\mu}\)</span> is the grand mean (dotted line). The slopes reflect treatment effects, which are deviations from the average intrusions in a condition and the grand mean. The averages of the first three conditions are equal to <span class="math inline">\(\beta_0 + \beta_j\)</span>, the sum of the intercept and the slope of the effect-coding predictor <span class="math inline">\(X_j\)</span> representing the treatment effect of that condition. The mean of the last condition is the intercept minus the sum of the slopes of the effect-coding predictors.
 </p>
@@ -896,7 +898,7 @@ i.e. the difference between the average intrusions in the Reactivation-Only con
 <span class="math display">\[\texttt{intrusions}_i = 3.93 + 1.57 \times \texttt{}X_1\texttt{}_i  + 0.528 \times \texttt{}X_2\texttt{}_i  + 2.94 \times \texttt{}X_3\texttt{}_i  + \hat{\epsilon}_i \quad \quad \hat{\epsilon}_i \sim \mathbf{Normal}(0, 3.18)\]</span>
 As you can see, the parameter estimates are identical to those worked out above using Equation <a href="ch-ANOVA.html#eq:estimate-slope-orthogonal-contrast-codes">(7.3)</a> and the sample means. Figure <a href="ch-ANOVA.html#fig:tetris-contrast-coding-parameter-plot">7.5</a> shows how the parameters of the model are related to the average number of intrusions in each condition.
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:tetris-contrast-coding-parameter-plot"></span>
-<img src="_main_files/figure-html/tetris-contrast-coding-parameter-plot-1.svg" alt="Average number of instrusions in the four conditions in the Tetris study and how they are related to the parameters of the orthogonal contrast-coding model. The intercept $\hat{\beta}_0 = \hat{\mu}$ is the grand mean (dotted line). The slopes reflect deviations from the average intrusions in a condition and combinations of other conditions." width="95%" />
+<img src="06-ANOVA_files/figure-html/tetris-contrast-coding-parameter-plot-1.svg" alt="Average number of instrusions in the four conditions in the Tetris study and how they are related to the parameters of the orthogonal contrast-coding model. The intercept $\hat{\beta}_0 = \hat{\mu}$ is the grand mean (dotted line). The slopes reflect deviations from the average intrusions in a condition and combinations of other conditions." width="672" />
 <p class="caption">
 Figure 7.5: Average number of instrusions in the four conditions in the Tetris study and how they are related to the parameters of the orthogonal contrast-coding model. The intercept <span class="math inline">\(\hat{\beta}_0 = \hat{\mu}\)</span> is the grand mean (dotted line). The slopes reflect deviations from the average intrusions in a condition and combinations of other conditions.
 </p>
@@ -1470,7 +1472,7 @@ and
 <h2><span class="header-section-number">7.7</span> Assumptions</h2>
 <p>The assumptions of the ANOVA model are the same as those for a (multiple) regression model (see Section <a href="ch-multiple-regression.html#sec:04b-assumptions">5.7</a>). Thus, we assume the errors <span class="math inline">\(\epsilon\)</span> are independent and Normal-distributed, with a mean of 0 and a homoscedastic standard deviation <span class="math inline">\(\sigma_\epsilon\)</span>. As an ANOVA model provides the same prediction for each case in a group/condition, the errors reflect variation in the dependent variable within each group or condition. Another way to state the assumptions of the General Linear Model in the case of an ANOVA model is then that the variance of the dependent variable within each group or condition is the same (see Figure <a href="ch-ANOVA.html#fig:four-group-Normal-densities">7.6</a>).</p>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:four-group-Normal-densities"></span>
-<img src="_main_files/figure-html/four-group-Normal-densities-1.svg" alt="An ANOVA model assumes that the variance within each condition or group is identical. The means of the conditions or groups can differ." width="80%" />
+<img src="06-ANOVA_files/figure-html/four-group-Normal-densities-1.svg" alt="An ANOVA model assumes that the variance within each condition or group is identical. The means of the conditions or groups can differ." width="80%" />
 <p class="caption">
 Figure 7.6: An ANOVA model assumes that the variance within each condition or group is identical. The means of the conditions or groups can differ.
 </p>
