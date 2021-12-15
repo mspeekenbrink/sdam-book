@@ -24,7 +24,7 @@
 <meta name="author" content="Maarten Speekenbrink" />
 
 
-<meta name="date" content="2021-12-07" />
+<meta name="date" content="2021-12-15" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -448,8 +448,8 @@ So just under 3 out of all 4 people that test positive in this scenario would ac
 <span class="math display">\[P(\text{Covid-19}|\text{positive test}) = \frac{903}{903 + 316} = .74\]</span>
 which is equal to the value computed earlier (up to rounding error resulting from converting probabilities to whole people).</p>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:covid-19-test-tree"></span>
-<div id="htmlwidget-73e7dd5cbd10b8eb60af" style="width:672px;height:480px;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-73e7dd5cbd10b8eb60af">{"x":{"diagram":"\n  digraph cvid_tree_plot {\n\n    graph [layout = dot,\n           rankdir = LR]\n\n    node [shape = box] \n    S [label = \"100,000 people\"]\n    \n    node [shape = oval, style = filled]\n    H [label = \"Covid-19\", fillcolor = \"#cc0000\"]\n    T [label = \"no Covid-19\", fillcolor = \"#00cc00\"]\n    HH [label = \"positive test\", fillcolor = \"#ff0000\" ]\n    HT [label = \"negative test\", fillcolor = \"#990000\"]\n    TH [label = \"positive-test\", fillcolor =  \"#00ff00\"]\n    TT [label = \"negative-test\", fillcolor = \"#009900\"]\n    \n    edge [label = \"1,176\"]\n    S -> {H}\n    \n    edge [label = \"98,824\", labelloc=b]\n    S -> {T}\n    \n    edge [label = \"903\"]\n    H -> {HH}\n    \n    edge [label = \"273\", labelloc=b]\n    H -> {HT}\n    \n    edge [label = \"316\" ]\n    T -> {TH}\n    \n    edge [label = \"98,508\", labelloc=b]\n    T -> {TT}\n}\n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-5765284d1490f7e601f1" style="width:672px;height:480px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-5765284d1490f7e601f1">{"x":{"diagram":"\n  digraph cvid_tree_plot {\n\n    graph [layout = dot,\n           rankdir = LR]\n\n    node [shape = box] \n    S [label = \"100,000 people\"]\n    \n    node [shape = oval, style = filled]\n    H [label = \"Covid-19\", fillcolor = \"#cc0000\"]\n    T [label = \"no Covid-19\", fillcolor = \"#00cc00\"]\n    HH [label = \"positive test\", fillcolor = \"#ff0000\" ]\n    HT [label = \"negative test\", fillcolor = \"#990000\"]\n    TH [label = \"positive-test\", fillcolor =  \"#00ff00\"]\n    TT [label = \"negative-test\", fillcolor = \"#009900\"]\n    \n    edge [label = \"1,176\"]\n    S -> {H}\n    \n    edge [label = \"98,824\", labelloc=b]\n    S -> {T}\n    \n    edge [label = \"903\"]\n    H -> {HH}\n    \n    edge [label = \"273\", labelloc=b]\n    H -> {HT}\n    \n    edge [label = \"316\" ]\n    T -> {TH}\n    \n    edge [label = \"98,508\", labelloc=b]\n    T -> {TT}\n}\n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 <p class="caption">
 Figure 12.1: Outcome tree representing mass testing for Covid-19.
 </p>

@@ -185,7 +185,6 @@ tab:bayesian-lm-speedate
 tab:bayesian-anova-expBelief
 fig:simulation-p-value-distribution
 fig:unnamed-chunk-1
-tab:common-data-transformations
 fig:example-multiple-regression-write-up-plot
 fig:example-factorial-ANOVA-write-up-plot
 ch-intro
