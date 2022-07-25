@@ -1,0 +1,10 @@
+# Structural Equation Modeling: Latent variable models
+
+The previous chapter concerned a multivariate model to describe relations between observed variables.  
+
+## Factor analysis
+
+## Item response theory
+
+## General SEMs
+

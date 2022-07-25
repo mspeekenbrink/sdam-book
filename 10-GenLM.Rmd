@@ -1,0 +1,50 @@
+# Generalized Linear Models
+
+Up to now, we have considered models for which the residuals (model errors) could be assumed to follow a Normal distribution. In other words, we modelled the conditional distribution of a dependent variable $Y$, conditional upon the values of predictor variables $X_j$, as a Normal distribution. Many of the techniques and ideas of such models can be generalized to situations where we can assume that the distribution of a dependent variable $Y$, conditional upon the values of predictor variables $X_j$, follows a different distribution from a class of distributions known as the _exponential family_. Such models are known as _generalized linear models_, which is easy to confuse with the _general linear model_, yet should not be done. 
+
+## The exponential family of distributions
+
+The Normal distribution is part of the exponential family of distribution, but so are many other distributions.
+
+The generalized linear model is defined for a subset of exponential family distributions, where .... can be assumed to be known. 
+
+### Binomial distribution
+
+### Poisson distribution
+
+### Categorical distribution
+
+### Gamma distribution
+
+## Link functions
+
+When considering the General Linear Model for "tricky" data, we have considered transforming the dependent variable (as well as the predictors) to fit the data into the assumptions of the GLM. In some sense, the idea of a _link function_ is similar: it involves a transformation. But the transformation is not for the observed data, but rather for the predictions of the model. In the GLM, we modelled the conditional mean of a Normal-distributed variable as:
+$$\mu_{Y|X_1, \ldots, X_K} = \sum_j \beta_j \times X_j$$
+In a generalized linear model, we model the conditional mean of a wider class of distributions as
+$$\mu_{Y|X_1, \ldots, X_K} = h(\sum_j \beta_j \times X_j)$$
+where $h$ denotes the so-called _inverse link function_. Another way to state this is  
+$$g(\mu_{Y|X_1, \ldots, X_K}) = \sum_j \beta_j \times X_j$$
+where $g$ now denotes the _link function_. You can think of the the link function and its inverse as follows. Suppose you have ten pounds and need to convert this into dollars. The conversion rate (at the time of writing this) is £1 = \$1.25. So if $g$ is meant to convert pounds ($Y$) to dollars ($X$), we would have 
+$$g(Y) = 1.25 \times X$$
+If we were to convert our dollars back to pounds, we would need a different function, which is the inverse of our function $g$. Calling this $h$, we would need
+$$h(X) = \frac{1}{1.25} \times Y = 0.8 \times Y$$
+Such transformations are also called _one-to-one-mappings_: for every amount in pounds, there is an equivalent amount in dollars, and vice versa. If I know the amount in one currency, there is only a single amount in the currency that this refers to. The link function needs to be such a one-to-one mapping, but otherwise, we are free to choose it. The example is a linear function, but we can also choose a nonlinear function, e.g.
+$$\begin{aligned}
+g(Y) &= \exp X \\
+h(X) &= \log Y
+\end{aligned}$$
+You can also think of the inverse link function as "undoing" the link function, in the sense that
+$$h(g(X)) = X$$
+
+* Log link
+* Logit link
+* Probit link
+* Negative inverse
+
+
+## Logistic regression
+
+## Log-linear models
+
+## Generalized linear mixed-effects models
+
