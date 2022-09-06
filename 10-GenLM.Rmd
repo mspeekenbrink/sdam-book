@@ -1,30 +1,32 @@
 # Generalized Linear Models
 
-Up to now, we have considered models for which the residuals (model errors) could be assumed to follow a Normal distribution. In other words, we modelled the conditional distribution of a dependent variable $Y$, conditional upon the values of predictor variables $X_j$, as a Normal distribution. Many of the techniques and ideas of such models can be generalized to situations where we can assume that the distribution of a dependent variable $Y$, conditional upon the values of predictor variables $X_j$, follows a different distribution from a class of distributions known as the _exponential family_. Such models are known as _generalized linear models_, which is easy to confuse with the _general linear model_, yet should not be done. 
+References: McCullagh and Nelder, Dobson, Agresti.
 
-## The exponential family of distributions
-
-The Normal distribution is part of the exponential family of distribution, but so are many other distributions.
-
-The generalized linear model is defined for a subset of exponential family distributions, where .... can be assumed to be known. 
-
-### Binomial distribution
-
-### Poisson distribution
-
-### Categorical distribution
-
-### Gamma distribution
+Up to now, we have considered models for which the residuals (model errors) could be assumed to follow a Normal distribution. This is equivalent to modelling the conditional distribution of a dependent variable $Y$, given the values of predictor variables $X_j$, as a Normal distribution. Many of the techniques and ideas of such models can be generalised to situations where we can assume that the distribution of a dependent variable $Y$, conditional upon the values of predictor variables $X_j$, follows a different distribution from a class of distributions known as the _exponential family_. Such models are known as _generalised linear models_. This name makes for easy confusion with the _general linear model_, so make sure you don't ignore the presence or absence of "-ised"! 
 
 ## Link functions
 
-When considering the General Linear Model for "tricky" data, we have considered transforming the dependent variable (as well as the predictors) to fit the data into the assumptions of the GLM. In some sense, the idea of a _link function_ is similar: it involves a transformation. But the transformation is not for the observed data, but rather for the predictions of the model. In the GLM, we modelled the conditional mean of a Normal-distributed variable as:
+The Normal distribution is part of the exponential family of distributions, but so are many other distributions. These other distributions include the Binomial, Poisson, and Gamma distributions. Some of these distributions are defined for non-negative integer variables (i.e. variables with values $0, 1, 2, \ldots$), and others for positive continuous variables (i.e. variables with values $>0$), and others for unbounded continuous variables (i.e. variables with values between $\-infty$ and $\infty$). Exponential-family distributions can all be expressed in the same form, but we won't go into the details of that here. For now, what is important is that there are many variables which are *not* continuous and unbounded. It generally does not make sense to assume a Normal distribution for such variables. But because exponential-family distributions share important characteristics with the Normal distribution, assuming a different exponential-family distributions allows you to choose a distribution which is more natural for the variable in question, whilst still being able to formulate useful models for it.
+
+
+```{r}
+data.frame(distribution = c("Normal", "Gamma", "Poisson", "Binomial"),
+           dv = c("Continuous, unbounded","Continuous, positive", "Non-negative integer", "Non-negative integer between 0 and $N$"),
+           link = c("Indentiy", "Negative inverse", "Log", "Logit"))
+
+```
+
+When we previously discussed applying the general linear model to "tricky" data, we have considered transforming the dependent variable and/or the predictor variables, in order to "force" the data to approximately conform to the assumptions of the GLM. Generalised linear models also use transformations, which are called *link functions*. However, link functions are not applied the variables themselves, but rather to the predictions of a linear model. 
+
+In the general linear model, we modelled the conditional mean of a Normal-distributed variable as:
 $$\mu_{Y|X_1, \ldots, X_K} = \sum_j \beta_j \times X_j$$
-In a generalized linear model, we model the conditional mean of a wider class of distributions as
+In a generalised linear model, we model the conditional mean of a wider class of distributions as
 $$\mu_{Y|X_1, \ldots, X_K} = h(\sum_j \beta_j \times X_j)$$
 where $h$ denotes the so-called _inverse link function_. Another way to state this is  
 $$g(\mu_{Y|X_1, \ldots, X_K}) = \sum_j \beta_j \times X_j$$
-where $g$ now denotes the _link function_. You can think of the the link function and its inverse as follows. Suppose you have ten pounds and need to convert this into dollars. The conversion rate (at the time of writing this) is £1 = \$1.25. So if $g$ is meant to convert pounds ($Y$) to dollars ($X$), we would have 
+where $g$ now denotes the _link function_. 
+
+Intuitively, you can think of a link function and its inverse as follows. Suppose you have ten British pounds and need to convert this into US dollars. The conversion rate (at the time of writing this) is £1 = \$1.25. So if $g$ is meant to convert pounds ($Y$) to dollars ($X$), we would have 
 $$g(Y) = 1.25 \times X$$
 If we were to convert our dollars back to pounds, we would need a different function, which is the inverse of our function $g$. Calling this $h$, we would need
 $$h(X) = \frac{1}{1.25} \times Y = 0.8 \times Y$$
@@ -33,7 +35,7 @@ $$\begin{aligned}
 g(Y) &= \exp X \\
 h(X) &= \log Y
 \end{aligned}$$
-You can also think of the inverse link function as "undoing" the link function, in the sense that
+You can also think of the inverse link function as "undoing" the link function, in the sense that applying the inverse link function to the link function itself, we get the values put into the link function:
 $$h(g(X)) = X$$
 
 * Log link
@@ -41,10 +43,175 @@ $$h(g(X)) = X$$
 * Probit link
 * Negative inverse
 
+As in the general linear model, we can think of generalized linear models as consisting of a structural part, and a random part:
+$$\begin{aligned}
+Y|X_1,\ldots,X_m &= \mu_{Y|X_1,\ldots,X_m} + \epsilon && \epsilon \sim \mathbf{Normal}(0,\sigma_\epsilon) \\
+\mu_{Y|X_1,\ldots,X_m} &= \beta_0 + \beta_1 \times X_1 + \ldots + \beta_m \times X_m
+\end{aligned}$$
+The random part describes how the observations deviate from the predictions of the structural part. 
+
+## Estimation
+
+As usual, we will focus on maximum likelihood estimates of the model parameters. Unlike for the parameters of the general linear model, analytical solutions for maximum likelihood parameters of generalized linear models of usually not available. They are obtained by an iterative procedure
+
+## Inference in generalised linear models
+
+As usual, we are not just interested in the estimated model parameters, as we know data is noisy and the parameter estimates are likely to differ from the true parameter values in the population. As for the general linear model, there are different ways to test whether a parameter differs from a hypothesised value. 
+
+### Wald test
+
+For large samples, the test statistic
+\begin{equation}
+z = \frac{\hat{\beta_j}}{\text{SE}(\beta_j)}
+\end{equation}
+follows a standard Normal distribution. 
+
+Alternatively, the Wald statistic
+\begin{equation}
+W = \left(\frac{\hat{\beta_j}}{\text{SE}(\beta_j)}\right)^2
+\end{equation}
+follows a Chi-squared distribution with $\text{df} = 1$.
+
+Both tests give entirely equivalent results, although the $z$ statistic can be used to obtain one-sided tests, whilst the Wald statistic can only be used to obtain two-sided tests.  
+
+### Likelihood-ratio test
+
+The Wald test is easy to compute and works well for large enough samples. A more powerful and reliable test for smaller samples is the likelihood ratio test. This is a model comparison
+
+### Confidence intervals
 
 ## Logistic regression
 
+Logistic regression is used for binary data, such as whether an item in a test is answered correctly ($Y = 1$) or incorrectly ($Y=0$). As a binary dependent variable can take only two values, assuming it follows a Normal distribution is nonsensical. Binary data can be assumed to follow a so-called **Bernoulli distribution**:
+
+\begin{equation}
+p(Y = k) = \mu^k \times \mu^{1-k}
+(\#eq:Bernoulli-distribution)
+\end{equation}
+with $k=0, 1$. Note that this is a simple case of the Binomial distribution we encountered in the first chapters.
+
+$$\mu_{Y|X_1, \ldots, X_K} = p(Y=1|X_1, \ldots, X_K)$$
+As there are only two possible outcomes, the laws of probability prescribe that
+
+$$p(Y=0|X_1, \ldots, X_K) = 1 - p(Y=1|X_1, \ldots, X_K) = 1 - \mu_{Y|X_1, \ldots, X_K}$$
+
+The canonical link function for Bernoulli-distributed data is the so-called **logit link** function:
+\begin{equation}
+\log \left(\frac{\mu_{Y|X_1, \ldots, X_K}}{1-\mu_{Y|X_1, \ldots, X_K}}\right) = \beta_0 + \sum \beta_j X_{j}
+(\#eq:glm-logit-link-function)
+\end{equation}
+
+```{r logit-link-plot}
+library(dplyr)
+library(ggplot2)
+x <- seq(-5,5,length=100) 
+rbind(data.frame(b0 = 0, b1 = 1, x=x, p = 1/(1+exp(-x))),
+      data.frame(b0 = 0, b1 = 2, x=x, p = 1/(1+exp(-2*x))),
+      data.frame(b0 = 1, b1=1, x=x, p = 1/(1+exp(-(1 + x))))) %>%
+  mutate(case = paste0("b0 = ", b0, ", b1 = ", b1)) %>%
+  ggplot(aes(x=x,y=p, colour=case)) + geom_line() + ylab("p(Y = 1)")
+```
+
+The inverse link function is called the **inverse logit link** function:
+\begin{equation}
+\mu_{Y|X_1, \ldots, X_K} = \frac{\exp \{ \beta_0 + \sum \beta_j X_{j} \}}{1 + \exp \{ \beta_0 + \sum \beta_j X_{j} \}}
+(\#eq:glm-inverse-logit-link-function)
+\end{equation}
+
+### Example: Metacognition in visual perception
+
+Metacognition refers to the ability ascertain how (un)certain we are in our inferences about the world. The "meta" qualifier indicates that this is a cognitive process that is about (i.e. reflects upon) other cognitive processes. For example, @rausch2016visibility asked participants to judge whether a stimulus (a so-called grating pattern) was directed horizontally to vertically. To make this task difficult for their participants, they presented each stimuli for a brief time (200 ms) and with a variety of relatively low-contrast displays. They also asked participants to indicate their certainty that their judgement was correct. 
+
+
+```{r}
+library(sdamr)
+data("metacognition")
+
+dat <- subset(metacognition, id == 1)
+mod <- glm(correct ~ scale(confidence) * scale(contrast), family=binomial(), data=dat)
+summary(mod)
+
+car::Anova(mod, type=3)
+```
+
+### Parameter interpretation
+
+In the general linear model, $\beta_j$, the slope of a predictor variable, reflects the predicted change in the dependent variable for a one-unit increase in the predictor variable $X_j$. Because the model is linear, the predicted change is the same, no matter what base value we choose for $X_j$. That means that $Y$ is predicted to change by $\beta_j$, whether we increase $X_j$ from 0 to 1, or from 100 to 101. This is not the case when we consider the predicted change in $p(Y=1|X_j)$ for different values of $X_j$. For example, for a model with $\beta_0 = 0$ and $\beta_1 = 1$, Figure XXX shows that this probability increases more rapidly when we move from $X_1 = 0$ to $X_1 = 1$ than when we move from $X_1 = 3$ to $X_1 = 4$. 
+
+$$\log \frac{p(Y=1|X_1)}{p(Y=0|X_1)} = \exp{\beta_0 + \beta_1 X_1} = \exp{\beta_0} \times \exp{\beta_1 X_1}$$
+
+
+### Probit regression: Using a different link function
+
+The Probit link function
+
+$$\begin{aligned} p(Y \leq y) && Y \sim \mathbf{Normal}(\mu = 0, \sigma = 1) \end{aligned}$$ 
+
+```{r}
+library(sdamr)
+data("metacognition")
+
+dat <- subset(metacognition, id == 1)
+mod <- glm(correct ~ scale(confidence) * scale(contrast), family=binomial(link = "probit"), data=dat)
+summary(mod)
+
+car::Anova(mod, type=3)
+```
+
+## Poisson regression
+
+<!-- https://online.ucpress.edu/collabra/article/7/1/27242/118591/Poisson-Regressions-A-Little-Fishy -->
+
+$$p(Y=k) \frac{\mu^k \exp \{-\mu \}}{k!}$$
+with $k=0, 1, 2, \ldots$ denoting the number of occurrences, which is a non-negative integer.
+
+The canonical link function for Poisson-distributed data is the *log* function:
+$$\log\left(\mu_{Y|X_1, \ldots, X_K}) = \beta_0 + \sum \beta_j X_{j}$$
+The inverse link function is:
+$$\mu_{Y|X_1, \ldots, X_K} = \exp \{ \beta_0 + \sum \beta_j X_{j} \}$$
+
+### Example: Competitive fish eating
+
 ## Log-linear models
 
+Log-linear models are used to analyse relations in multivariate categorical data. Such data can be expressed in the form of *multiway contingency tables* that contain counts for combinations of categorical classifications. For example, the political party someone has last voted for (e.g., Conservative, Green, Labour, Liberal Democrats) and newspaper they read most often (e.g., Daily Mail, Guardian, Sun, Times). For a random sample of people from the general population, we can then count how often people who report voting for the Conservative Party also report reading the Daily Mail, and how many report reading the Guardian, etc (see e.g. https://www.statista.com/chart/9897/general-election-voting-by-newspaper-readership/ and https://yougov.co.uk/topics/politics/articles-reports/2017/06/13/how-britain-voted-2017-general-election for an example of such data).
+
+This is an extension of the Chi-squared test for a two-way contingency table.
+
+### Example: Newspapers and voting
+
+## Multinomial logistic regression
+
+
 ## Generalized linear mixed-effects models
+
+As in the linear model, the generalized linear model can be extended by including random effects. Whilst estimation of such generalized linear mixed-effects models is (a lot) more involved than for linear mixed-effects models, conceptually, the models are the same. Again, we can write each intercept and slope as consisting of a fixed and a random part, and assume that each random effect is drawn from a (multivariate) Normal distribution, with mean 0.
+
+```{r}
+library(sdamr)
+data("metacognition")
+glmer_mod <- metacognition %>%
+  mutate(confidence_c = scale(confidence),
+         contrast_c = scale(contrast)) %>%
+  lme4::glmer(correct ~ confidence_c * contrast_c + (confidence_c + contrast_c||id), family=binomial(), data=.)
+
+car::Anova(mod, type=3)
+```
+
+### Item response theory
+
+
+## In practice
+
+As you will have noticed, generalised linear models are even more general than the general linear model, and can a useful way to model a wide variety of data. 
+
+1. Choose a sensible distribution (family)
+
+2. Choose a useful link function
+
+3. With repeated-measures, consider applying a generalised linear mixed-effects model
+
+4. Choose a strategy for parameter inference
+
+5. Report the results
 

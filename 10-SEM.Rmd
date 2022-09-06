@@ -1,3 +1,9 @@
-# Structural Equation Modeling: Path models
+# Path modelling (SEM 1)
 
-Up to now, we have considered models with a single dependent variable, allowing the value of this to depend on multiple predictors or independent variables. Whilst flexible, this can be restrictive. When we considered mediation and the causal steps approach, we needed to estimate a number of separate models, with inference being based on a comparison of estimated parameters between these models.  
+Up to now, we have considered models with a single dependent variable, allowing the value of this to depend on multiple predictors or independent variables. Whilst flexible, this can be restrictive. When we considered mediation and the causal steps approach, we needed to estimate a number of separate models, with inference being based on a comparison of estimated parameters between these models.
+
+## Multivariate Normal distribution
+
+## A tiny bit of matrix algebra
+
+## Errors-in-variable models

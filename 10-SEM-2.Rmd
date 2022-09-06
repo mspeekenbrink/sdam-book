@@ -1,10 +1,15 @@
-# Structural Equation Modeling: Latent variable models
+# Latent variable models (SEM 2)
 
 The previous chapter concerned a multivariate model to describe relations between observed variables.  
 
 ## Factor analysis
 
-## Item response theory
+### Exploratory vs confirmatory factor analysis
 
 ## General SEMs
 
+### Evaluating model fit: A tale of too many fit indices
+
+## Multi-group SEM
+
+## In practice
