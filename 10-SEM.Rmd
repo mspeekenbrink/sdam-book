@@ -2,17 +2,27 @@
 
 <!-- https://stats.oarc.ucla.edu/r/seminars/rsem/ -->
 
-Up to now, we have considered models with a single dependent variable, allowing the value of this to depend on multiple predictors or independent variables. Whilst flexible, this can be restrictive. When we considered mediation and the causal steps approach, we needed to estimate a number of separate models, with inference being based on a comparison of estimated parameters between these models.
+Up to now, we have considered models with a single dependent variable, allowing the value of this to depend on multiple predictors or independent variables. Whilst flexible, this can be restrictive. There are many situations where we would like to model how a set of variables relate to eachother. We saw an example of this when we considered *mediation*, where we were interested in how an independent variable affects a mediator variable, and how this mediator variable subsequently affects the dependent variable. Applying the causal steps approach, we needed to estimate a number of separate models, with inference being based on a comparison of estimated parameters between three models.
+
+In the next few chapters, we will consider ways in which to account for relations between many variables within a single model. The general term for such a model is a **Structural Equation Model** (SEM). As we will see, this term encapsulates a wide variety of models, including many of those we have discussed before. These models even allow us to incorporate **latent variables**, which are variables that are not directly observed, but whose values can be inferred (or measured) from their relations with observed variables. We will consider such latent variable models in the next chapter. Here, we will focus on models which contain only observed variables. 
 
 ## Graphical models
 
-A graphical model in statistics refers to a ... The nodes represent variables and the edges the relations between these.
+A graphical model -- or more precisely a **probabilistic graphical model** -- in statistics refers to an abstract way to represent dependencies and independences in a set of random variables. ... In mathematics, a graph consists of a set of nodes, and edges between them. For example, in social network graphs, the nodes represent people, and edges represent whether they are friends, or communicate with each other. So **nodes** are the objects, and **edges** are the relations between these objects we focus on. For our purposes, the nodes represent variables and the edges the statistical relations between these.
 
-The graphical models used in structural equation modelling are often slighty more detailed. There are types of nodes to distinguish between observed variables, latent (unobserved) variables, constants (e.g. intercepts), and residuals. 
+Probabilistic graphical models take many guises. For one thing, edges can be directed, or undirected. A directed edge means that the relation goes one way. For instance, the value of one variable can cause the value of another. An undirected relation means that two variables covary, but a causal relation is not assumed. This can be also represented by a dual-directed edge (indicating that both variables influence each other).
+
+A nice aspect of graphical models is that they visualise often complex multiple relations in a large set of variables. This can aid our understanding of a model. Graphs are, in a sense, a visual language to express models. The model itself doesn't need the graph, but our understanding of them often does.
+
+In **Directed graphs** with directed edges (arrows), nodes (variables) can have parents (edges coming in from other nodes) and children (edges going out to other nodes). Relations between parents and children can be viewed as lines of communication. Parents can send messages to their children, but in a directed graph, not the other way round.
+
+### Conventions in graphical representations of structural equation models
+
+Graphical representations of structural equation models are often slightly more detailed than general probabilistic graphical models. In particular, different symbols are used to distinguish between observed variables, latent (unobserved) variables, constants (e.g. intercepts). 
 
 ## Exogenous and endogenous variables
 
-**Exogeneous variables** are variables that are not "accounted" for by other variables in the model. In terms of a graphical model, these variables have no parents (i.e. incoming arrows from other variables). **Endogeneous variables** are accounted for by other variables in the model; they do have parents (e.g. incoming arrows from other variables in the model).
+**Exogeneous variables** are variables that are not "accounted for" by other variables in the model. In terms of a graphical model, these variables have no parents (i.e. incoming arrows from other variables). **Endogeneous variables** are accounted for by other variables in the model; they do have parents (e.g. incoming arrows from other variables in the model).
 
 ## Multiple regression model
 
@@ -56,8 +66,10 @@ summary(fmod2)
 
 ```
 
-## Multivariate Normal distribution
+## Looking ahead
 
-## A tiny bit of matrix algebra
+### Multivariate Normal distribution
+
+### A bit of matrix algebra
 
 ## Errors-in-variable models

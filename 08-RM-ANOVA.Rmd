@@ -81,7 +81,7 @@ opts <- options()
 options(knitr.kable.NA = "")
 tab <- cbind(estimate = c(coefficients(modg)[1],NA,coefficients(modg)[2:3],Error=NA),rbind(car::Anova(modg, type=3)[1:2,],expand_Anova(modg, type=3)[-1,]))
 rownames(tab) <- c("Intercept","Presentation","$\\quad X_1$ (D+S vs A)","$\\quad X_2$ (D vs S)", "Error")
-colnames(tab) <- c("$\\hat{\\beta}$","$\\text{SS}$", "$\\text{df}$", "$F$", "$P(\\geq \\lvert F \\rvert)$")
+colnames(tab) <- c("$\\hat{\\beta}$","$\\text{SS}$", "$\\text{df}$", "$F$", "$p(\\geq \\lvert F \\rvert)$")
 knitr::kable(tab, caption = "Linear model predicting attractiveness ratings in the three conditions, wrongly assuming independence.", escape = FALSE, digits=c(3,0,0,2,3), booktabs=TRUE, linesep="")
 options(opts)
 ```
@@ -273,7 +273,7 @@ opts <- options()
 options(knitr.kable.NA = "")
 tab <- cbind(estimate = c(coefficients(modg)[1],NA,coefficients(modg)[2:3],Error=NA),rbind(car::Anova(modg, type=3)[1:2,],expand_Anova(modg, type=3)[-1,]))
 rownames(tab) <- c("Intercept","Presentation","$\\quad X_1$ (D+S vs A)","$\\quad X_2$ (D vs S)", "Error")
-colnames(tab) <- c("$\\hat{\\beta}$","$\\text{SS}$", "$\\text{df}$", "$F$", "$P(\\geq \\lvert F \\rvert)$")
+colnames(tab) <- c("$\\hat{\\beta}$","$\\text{SS}$", "$\\text{df}$", "$F$", "$p(\\geq \\lvert F \\rvert)$")
 knitr::kable(tab, caption = "Linear model predicting attractiveness ratings in the three conditions, wrongly assuming independence.", escape = FALSE, digits=c(3,0,0,2,3), booktabs=TRUE, linesep="")
 options(opts)
 ```
@@ -332,7 +332,7 @@ atab <- rbind(
   c(NA, sum(c(tab0[,2], tab1[,2], tab2[,2])), sum(c(tab0[,3], tab1[,3], tab2[,3])), NA, NA)
 )
 rownames(atab) <- c("*Between-subjects*", "&nbsp;&nbsp;Intercept", "&nbsp;&nbsp;Error between", "*Within-subjects*", "&nbsp;&nbsp;$d_1$ (D + S vs A)", "&nbsp;&nbsp;Error ($d_1$)", "&nbsp;&nbsp;$d_2$ (D vs S)", "&nbsp;&nbsp;Error ($d_2$)", "*Total*")
-colnames(atab) <- c("$\\hat{\\beta}$","$\\text{SS}$", "$\\text{df}$", "$F$",  "$P(\\geq F)$")
+colnames(atab) <- c("$\\hat{\\beta}$","$\\text{SS}$", "$\\text{df}$", "$F$",  "$p(\\geq F)$")
 opts <- options()
 options(knitr.kable.NA = "")
 knitr::kable(atab, caption="Complete results of the oneway (Presentation: Alone, Different, Similar) repeated-measures ANOVA for the data in the Variant condition.", digits=c(3,0,0,2,3), escape = FALSE, booktabs = TRUE, linesep="")
@@ -435,7 +435,7 @@ opts <- options()
 options(knitr.kable.NA = "")
 tab0 <- cbind(estimate = c(coefficients(mod)/sqrt(3),Error=NA),car::Anova(mod, type=3))
 rownames(tab0) <- c("Intercept","$X_1$ (Variant vs Identical)","Error")
-colnames(tab0) <- c("$\\hat{\\beta}$","$\\text{SS}$", "$\\text{df}$", "$F$",  "$P(\\geq F)$")
+colnames(tab0) <- c("$\\hat{\\beta}$","$\\text{SS}$", "$\\text{df}$", "$F$",  "$p(\\geq F)$")
 knitr::kable(tab0, caption = "Results of the model for $W_0$, testing for between-subjects effects.", digits=c(3,0,0,2,3), escape = FALSE, booktabs = TRUE, linesep="")
 options(opts)
 ```
@@ -458,7 +458,7 @@ opts <- options()
 options(knitr.kable.NA = "")
 tab1 <- cbind(estimate = c(coefficients(mod)/sqrt(6/9),Error=NA),car::Anova(mod, type=3))
 rownames(tab1) <- c("Intercept","$X_1$ (Variant vs Identical)","Error")
-colnames(tab1) <- c("$\\hat{\\beta}$","$\\text{SS}$", "$\\text{df}$", "$F$",  "$P(\\geq F)$")
+colnames(tab1) <- c("$\\hat{\\beta}$","$\\text{SS}$", "$\\text{df}$", "$F$",  "$p(\\geq F)$")
 knitr::kable(tab1, caption = "Results of the model for $W_1$, testing for the within-subjects difference between the Different and Similar vs Alone presentations, and the interaction of this effect with Version.", digits=c(3,2,0,2,3), escape = FALSE, booktabs = TRUE, linesep="")
 options(opts)
 ```
@@ -470,7 +470,7 @@ opts <- options()
 options(knitr.kable.NA = "")
 tab2 <- cbind(estimate = c(coefficients(mod)/sqrt(1/2),Error=NA),car::Anova(mod, type=3))
 rownames(tab2) <- c("Intercept","$X_1$ (Variant vs Identical)","Error")
-colnames(tab2) <- c("$\\hat{\\beta}$","$\\text{SS}$", "$\\text{df}$", "$F$",  "$P(\\geq F)$")
+colnames(tab2) <- c("$\\hat{\\beta}$","$\\text{SS}$", "$\\text{df}$", "$F$",  "$p(\\geq F)$")
 knitr::kable(tab2, caption = "Results of the model for $W_2$, testing for the within-subjects difference between the Different and Similar vs Alone presentations, and the interaction of this effect with Version.", digits=c(3,2,0,2,3), escape = FALSE, booktabs = TRUE, linesep="")
 options(opts)
 ```
@@ -486,11 +486,11 @@ The error term for this test is computed by summing the SS Error values in these
 $$\text{SSE}(\text{Presentation}) = `r round(tab1[3,2],2)` + `r round(tab2[3,2],2)` = `r round(tab1[3,2] + tab2[3,2],2)`$$
 The value of $\text{df}_1$ is the sum of the df terms for the intercept ($\text{df}_1 = 1 + 1 = 2$), and the value of $\text{df}_2$ is the sum of the df terms for the Error ($\text{df}_2 = 57 + 57 = 114)$. So the resulting $F$-statistic is
 $$F = \frac{`r round(tab1[1,2] + tab2[1,2],2)`/2}{`r round(tab1[3,2] + tab2[3,2],2)`/114} = `r round( ((tab1[1,2] + tab2[1,2])/2)/( (tab1[3,2] + tab2[3,2])/114),2)`$$
-The exceedence probability of this value in an $F$-distribution with $\text{df}_1 = 2$ and $\text{df}_2 = 114$ degrees of freedom is $P(F_{2,114} \geq `r round( ((tab1[1,2] + tab2[1,2])/2)/( (tab1[3,2] + tab2[3,2])/114),2)`) < .001$, and hence this omnibus test is significant.
+The exceedence probability of this value in an $F$-distribution with $\text{df}_1 = 2$ and $\text{df}_2 = 114$ degrees of freedom is $p(F_{2,114} \geq `r round( ((tab1[1,2] + tab2[1,2])/2)/( (tab1[3,2] + tab2[3,2])/114),2)`) < .001$, and hence this omnibus test is significant.
 
 Similarly, for the Version by Presentation interaction, the omnibus test statistic is computed as
 $$F = \frac{(`r round(tab1[2,2],2)` + `r round(tab2[2,2],2)`)/2}{(`r round(tab1[3,2],2)` + `r round(tab2[3,2],2)`)/114} = `r round( ((tab1[2,2] + tab2[2,2])/2)/( (tab1[3,2] + tab2[3,2])/114),2)`$$
-The exceedence probability of this value is $P(F_{2,114} \geq `r round( ((tab1[2,2] + tab2[2,2])/2)/( (tab1[3,2] + tab2[3,2])/114),2)`) = `r pvalue(round(1-pf(((tab1[2,2] + tab2[2,2])/2)/( (tab1[3,2] + tab2[3,2])/114), 2, 114),3))`$, and hence this omnibus test is not significant. However, we know from our earlier analysis of $W_2$ that there is evidence for an interaction between $d_2$ and $c_1$. Looking at specific contrasts can provide more powerful and interesting tests than an omnibus test whether there is _any_ moderation.
+The exceedence probability of this value is $p(F_{2,114} \geq `r round( ((tab1[2,2] + tab2[2,2])/2)/( (tab1[3,2] + tab2[3,2])/114),2)`) = `r pvalue(round(1-pf(((tab1[2,2] + tab2[2,2])/2)/( (tab1[3,2] + tab2[3,2])/114), 2, 114),3))`$, and hence this omnibus test is not significant. However, we know from our earlier analysis of $W_2$ that there is evidence for an interaction between $d_2$ and $c_1$. Looking at specific contrasts can provide more powerful and interesting tests than an omnibus test whether there is _any_ moderation.
 
 The collated results of all analyses are provided in Table \@ref(tab:cheerleader-rm-anova-collated-results-table). This table is separated in a between-subjects part, and a within-subjects part. Relevant omnibus tests and tests for specific contrasts are provided for each. The final row shows the Total Sum of Squares, which is the sum over the between-subjects and within-subjects Sum of Squares. This shows how the Total Sum of Squares is partitioned in the different (between- and within-subjects) effects. 
 ```{r cheerleader-rm-anova-collated-results-table}
@@ -510,7 +510,7 @@ atab <- rbind(
   c(NA, sum(c(tab0[,2], tab1[,2], tab2[,2])), sum(c(tab0[,3], tab1[,3], tab2[,3])), NA, NA)
 )
 rownames(atab) <- c("*Between-subjects*", "&nbsp;&nbsp;Intercept", "&nbsp;&nbsp;$c_1$ (Variant vs Identical)", "&nbsp;&nbsp;Error between", "*Within-subjects*", "&nbsp;&nbsp;Presentation", "&nbsp;&nbsp;&nbsp;&nbsp;$d_1$ (D + S vs A)", "&nbsp;&nbsp;&nbsp;&nbsp;Error ($d_1$)", "&nbsp;&nbsp;&nbsp;&nbsp;$d_2$ (D vs S)", "&nbsp;&nbsp;&nbsp;&nbsp;Error ($d_2$)", "&nbsp;&nbsp;Version $\\times$ Presentation", "&nbsp;&nbsp;&nbsp;&nbsp;$c_1 \\times d_1$", "&nbsp;&nbsp;&nbsp;&nbsp;Error ($c_1 \\times d_1$)", "&nbsp;&nbsp;&nbsp;&nbsp;$c_1 \\times d_2$", "&nbsp;&nbsp;&nbsp;&nbsp;Error ($c_1 \\times d_2$)", "&nbsp;&nbsp;Error within", "*Total*")
-colnames(atab) <- c("$\\hat{\\beta}$","$\\text{SS}$", "$\\text{df}$", "$F$",  "$P(\\geq F)$")
+colnames(atab) <- c("$\\hat{\\beta}$","$\\text{SS}$", "$\\text{df}$", "$F$",  "$p(\\geq F)$")
 opts <- options()
 options(knitr.kable.NA = "")
 knitr::kable(atab, caption = "Complete results of the 2 (Version: Identical, Variant) by 3 (Presentation: Alone, Different, Similar) ANOVA with repeated-measures on the last factor.", digits=c(3,2,0,2,3), escape = FALSE, booktabs = TRUE, linesep="")
@@ -685,7 +685,7 @@ cmod <- afex::aov_car(Response ~ Task*Item + Error(Participant/Item), data=dat)
 scmod <- summary(cmod$Anova, multivariate=FALSE)
 ```
 
-For the present analysis, the Greenhouse-Geisser estimate is $\hat{\zeta} = `r round(scmod$pval.adjustments[1,1],3)`$. This is very close to 1, and hence there is no strong evidence for a violation of sphericity. In this case, that is supported by a non-significant Mauchly test for sphericity, $W = `r scmod$sphericity.tests[1,1]`$, $p = `r pvalue(round(scmod$sphericity.tests[1,2],3))`$. Whilst there is little need to do this in this case, if we were to apply the Greenhouse-Geisser correction for the omnibus test of presentation, we would compare the value of the $F$-statistic to an $F$-distribution with $\text{df}_1' = \hat{\zeta} \times \text{df}_1 = `r round(scmod$pval.adjustments[1,1],3)` \times 2 = `r round(scmod$pval.adjustments[1,1]*2,3)`$ and $\text{df}_2' = \hat{\zeta} \times \text{df}_2 = `r round(scmod$pval.adjustments[1,1],3)` \times 114 = `r round(scmod$pval.adjustments[1,1]*114,3)`$ degrees of freedom. The exceedence probability is then $P(F_{`r round(scmod$pval.adjustments[1,1]*2,3)`,`r round(scmod$pval.adjustments[1,1]*114,3)`} \geq `r round( ((tab1[1,2] + tab2[1,2])/2)/( (tab1[3,2] + tab2[3,2])/114),2)`) < .001$. The Greenhouse-Geisser corrected test of the Version by Presentation interaction is $P(F_{`r round(scmod$pval.adjustments[1,1]*2,3)`,`r round(scmod$pval.adjustments[1,1]*114,3)`} \geq `r round( ((tab1[2,2] + tab2[2,2])/2)/( (tab1[3,2] + tab2[3,2])/114),2)`) = `r pvalue(round(1-pf(((tab1[2,2] + tab2[2,2])/2)/( (tab1[3,2] + tab2[3,2])/114), scmod$pval.adjustments[1,1]*2, scmod$pval.adjustments[1,1]*114),3))`$. As the correction is only minor, neither test result is changed much.
+For the present analysis, the Greenhouse-Geisser estimate is $\hat{\zeta} = `r round(scmod$pval.adjustments[1,1],3)`$. This is very close to 1, and hence there is no strong evidence for a violation of sphericity. In this case, that is supported by a non-significant Mauchly test for sphericity, $W = `r scmod$sphericity.tests[1,1]`$, $p = `r pvalue(round(scmod$sphericity.tests[1,2],3))`$. Whilst there is little need to do this in this case, if we were to apply the Greenhouse-Geisser correction for the omnibus test of presentation, we would compare the value of the $F$-statistic to an $F$-distribution with $\text{df}_1' = \hat{\zeta} \times \text{df}_1 = `r round(scmod$pval.adjustments[1,1],3)` \times 2 = `r round(scmod$pval.adjustments[1,1]*2,3)`$ and $\text{df}_2' = \hat{\zeta} \times \text{df}_2 = `r round(scmod$pval.adjustments[1,1],3)` \times 114 = `r round(scmod$pval.adjustments[1,1]*114,3)`$ degrees of freedom. The exceedence probability is then $p(F_{`r round(scmod$pval.adjustments[1,1]*2,3)`,`r round(scmod$pval.adjustments[1,1]*114,3)`} \geq `r round( ((tab1[1,2] + tab2[1,2])/2)/( (tab1[3,2] + tab2[3,2])/114),2)`) < .001$. The Greenhouse-Geisser corrected test of the Version by Presentation interaction is $p(F_{`r round(scmod$pval.adjustments[1,1]*2,3)`,`r round(scmod$pval.adjustments[1,1]*114,3)`} \geq `r round( ((tab1[2,2] + tab2[2,2])/2)/( (tab1[3,2] + tab2[3,2])/114),2)`) = `r pvalue(round(1-pf(((tab1[2,2] + tab2[2,2])/2)/( (tab1[3,2] + tab2[3,2])/114), scmod$pval.adjustments[1,1]*2, scmod$pval.adjustments[1,1]*114),3))`$. As the correction is only minor, neither test result is changed much.
 
 <!-- ## Effect size -->
 <!-- 

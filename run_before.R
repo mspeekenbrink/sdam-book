@@ -162,3 +162,41 @@ write_anova_results <- function(mod) {
   out
 }
 
+
+
+# Formatting formula
+format_p <- function(p, precision = 0.001) {
+  digits <- -log(precision, base = 10)
+  p <- formatC(p, format = 'f', digits = digits)
+  if (p < .001) {
+    p = paste0('< ', precision)}
+  if (p >= .001) {
+    # p = paste0('= ', p)    
+  }
+  sub("0", "", p)
+}
+
+expSup <- function(w, digits=0) {
+  sprintf(paste0("%.", digits, "f \\times 10^%d"), w/10^floor(log10(abs(w))), floor(log10(abs(w))))
+}
+
+sdam_table <- function(obj, names=NULL, digits=2) {
+  UseMethod("sdam_table")
+}
+
+sdam_table.lm <- function(obj, names=NULL, digits=2) {
+  tab <- as.data.frame(summary(mod)$coefficients)
+  if(!is.null(names)) {
+    if(length(names) != length(coef(mod))) stop("Names should have length", length(coef(mod)))
+    rownames(tab) <- names
+  }
+  colnames(tab) <- c("$\\hat{\\beta}$","$\\text{SE}(\\hat{\\beta})$", "$t$", "$P(\\geq \\lvert t \\rvert)$")
+  tab[,4] <- sapply(tab[,4], function(x) format_p(p = x, precision = .001))
+  return(tab)
+}
+
+sdam_table.glm <- function(obj, names=NULL, digits=2) {
+  tab <- sdam_table.lm(obj, names=names)
+  colnames(tab) <-  c("$\\hat{\\beta}$","$\\text{SE}(\\hat{\\beta})$", "$z$", "$P(\\geq \\lvert z \\rvert)$")
+  return(tab)
+}

@@ -56,7 +56,7 @@ data("speeddate")
 modg <- lm(other_like ~ other_attr + other_intel + other_fun, data=speeddate)
 tab <- summary(modg)$coefficients
 rownames(tab) <- c("Intercept","Attractiveness","Intelligence","Fun")
-colnames(tab) <- c("$\\hat{\\beta}$","$\\text{SE}(\\hat{\\beta})$", "$t$", "$P(\\geq \\lvert t \\rvert)$")
+colnames(tab) <- c("$\\hat{\\beta}$","$\\text{SE}(\\hat{\\beta})$", "$t$", "$p(\\geq \\lvert t \\rvert)$")
 knitr::kable(tab, caption="Multiple regression predicting liking from attractiveness, intelligence, and fun.", escape=FALSE, booktabs=TRUE, linesep="")
 ```
 
@@ -157,13 +157,13 @@ opts <- options()
 options(knitr.kable.NA = "")
 tab <- cbind(estimate = c(coefficients(mod1),Error=NA),car::Anova(mod1, type=3))
 rownames(tab) <- c("Intercept","$\\texttt{attr}$", "$\\texttt{intel}$","$\\texttt{intel} \\times \\texttt{attr}$","Error")
-colnames(tab) <- c("$\\hat{\\beta}$","$\\text{SS}$", "$\\text{df}$", "$F$", "$P(\\geq \\lvert F \\rvert)$")
+colnames(tab) <- c("$\\hat{\\beta}$","$\\text{SS}$", "$\\text{df}$", "$F$", "$p(\\geq \\lvert F \\rvert)$")
 knitr::kable(tab, caption = "Multiple regression predicting liking from attractiveness, intelligence, and their interaction.", escape = FALSE, booktabs=TRUE, linesep="")
 options(opts)
 
 # tab <- summary(mod1)$coefficients
 # rownames(tab) <- c("Intercept","Attractiveness","Intelligence","Attr $\\times$ Intel")
-# colnames(tab) <- c("$\\hat{\\beta}$","$\\text{SE}(\\hat{\\beta})$", "$t$", "$P(\\geq \\lvert t \\rvert)$")
+# colnames(tab) <- c("$\\hat{\\beta}$","$\\text{SE}(\\hat{\\beta})$", "$t$", "$p(\\geq \\lvert t \\rvert)$")
 # knitr::kable(tab, caption="Multiple regression predicting liking from attractiveness, intelligence, and their interaction.")
 ```
 
@@ -226,7 +226,7 @@ opts <- options()
 options(knitr.kable.NA = "")
 tab <- cbind(estimate = c(coefficients(mod1c),Error=NA),car::Anova(mod1c, type=3))
 rownames(tab) <- c("Intercept","$\\texttt{attr_cent}$", "$\\texttt{intel_cent}$","$\\texttt{intel_cent} \\times \\texttt{attr_cent}$","Error")
-colnames(tab) <- c("$\\hat{\\beta}$","$\\text{SS}$", "$\\text{df}$", "$F$", "$P(\\geq \\lvert F \\rvert)$")
+colnames(tab) <- c("$\\hat{\\beta}$","$\\text{SS}$", "$\\text{df}$", "$F$", "$p(\\geq \\lvert F \\rvert)$")
 knitr::kable(tab, caption = "Null-hypothesis significance tests after centering both predictors.", escape = FALSE, booktabs=TRUE, linesep="")
 options(opts)
 ```
@@ -249,7 +249,7 @@ opts <- options()
 options(knitr.kable.NA = "")
 tab <- cbind(estimate = c(coefficients(modg),Error=NA),car::Anova(modg, type=3))
 rownames(tab) <- c("Intercept","$\\texttt{attr}$", "$\\texttt{intel}$","$\\texttt{fun}$","$\\texttt{attr} \\times \\texttt{intel}$", "$\\texttt{fun} \\times \\texttt{intel}$", "Error")
-colnames(tab) <- c("$\\hat{\\beta}$","$\\text{SS}$", "$\\text{df}$", "$F$", "$P(\\geq \\lvert F \\rvert)$")
+colnames(tab) <- c("$\\hat{\\beta}$","$\\text{SS}$", "$\\text{df}$", "$F$", "$p(\\geq \\lvert F \\rvert)$")
 knitr::kable(tab, caption = "A model predicting liking from attractiveness, intelligence, and fun, and their interactions. All predictors are centered.", escape = FALSE, booktabs=TRUE, linesep="")
 options(opts)
 
@@ -279,7 +279,7 @@ According to the [Theory of Planned Behavior](https://en.wikipedia.org/wiki/Theo
 
 ### Causal steps
 
-A traditional method to assess mediation is the so-called __causal steps__ approach [@baron1986moderator]. The basic idea behind the causal steps approach is as follows: if there is a causal chain from predictor ($X$) to mediator ($M$) to dependent variable ($Y$), then, ignoring the mediator for the moment, we should be able to see a relation between the predictor and dependent variable. This relation reflects the indirect effect of the predictor on the dependent variable. We should also be able to detect an effect of the predictor on the mediator, as well as an effect of the mediator on the dependent variable. Crucially, if there is a true causal chain, then the predictor should not offer any additional predictive power over the mediator. Because the effect of the predictor is assumed to go only "through" the mediator, once we know the value of the mediator, this should be all we need to predict the dependent variable. In more fancy statistical terms, this means that conditional on the mediator, the dependent variable is independent of the predictor, i.e. $P(Y \mid M, X) = P(Y \mid M)$. In the context of a multiple regression model, we could say that in a model where we predict $Y$ from $M$, the predictor $X$ would not have a unique effect on $Y$ (i.e. its slope would equal $\beta_X = 0$).
+A traditional method to assess mediation is the so-called __causal steps__ approach [@baron1986moderator]. The basic idea behind the causal steps approach is as follows: if there is a causal chain from predictor ($X$) to mediator ($M$) to dependent variable ($Y$), then, ignoring the mediator for the moment, we should be able to see a relation between the predictor and dependent variable. This relation reflects the indirect effect of the predictor on the dependent variable. We should also be able to detect an effect of the predictor on the mediator, as well as an effect of the mediator on the dependent variable. Crucially, if there is a true causal chain, then the predictor should not offer any additional predictive power over the mediator. Because the effect of the predictor is assumed to go only "through" the mediator, once we know the value of the mediator, this should be all we need to predict the dependent variable. In more fancy statistical terms, this means that conditional on the mediator, the dependent variable is independent of the predictor, i.e. $p(Y \mid M, X) = p(Y \mid M)$. In the context of a multiple regression model, we could say that in a model where we predict $Y$ from $M$, the predictor $X$ would not have a unique effect on $Y$ (i.e. its slope would equal $\beta_X = 0$).
 
 The causal steps (Figure \@ref(fig:causal-steps-models)) approach involves assessing a pattern of significant relations in three different regression models. The first model is a simple regression model where we predict $Y$ from $X$. In this model, we should find evidence for a relation between $X$ and $Y$, meaning that we can reject the null hypothesis that the slope of $X$ on $Y$ (referred to here as $\beta_X = c$) equals 0. The second model is a simple regression model where we predict $M$ from $X$. In this model, we should find evidence for a relation between $X$ and $M$, meaning that we can reject the null hypothesis that the slope of $X$ on $M$ (referred to here as $\beta_X = a$ here) equals 0. The third model is a multiple regression model where we predict $Y$ from both $M$ and $X$. In this model, we should find evidence for a unique relation between $M$ and $Y$, meaning that we can reject the null hypothesis that the slope of $M$ on $Y$ (referred to here as $\beta_M = b$ here) equals 0. Controlling for the effect of $M$ on $Y$, in a true causal chain, there should no longer be evidence for a relation between $X$ and $Y$ (as any relation between $X$ and $Y$ is captured through $M$). Hence, we should not be able to reject the null hypothesis that the slope of $X$ on $Y$ in this model (referred to here as $\beta_X = c$', to distinguish it from the relation between $X$ and $Y$ in the first model, which was labelled as $c$) equals 0. If this is so, then we speak of __full mediation__. When there is still evidence of a unique relation between $X$ and $Y$ in the model that includes $M$, but the relation is reduced (i.e. $|c'| < |c|$), we speak of __partial mediation__.
 
@@ -343,7 +343,7 @@ In MODEL 1 (Table \@ref(tab:causal-steps-mod1-results)), we assess the relation 
 mod1 <- lm(donation ~ legacy, data=legacy2015)
 tab <- summary(mod1)$coefficients
 rownames(tab) <- c("Intercept","Legacy motive")
-colnames(tab) <- c("$\\hat{\\beta}$","$\\text{SE}(\\hat{\\beta})$", "$t$", "$P(\\geq \\lvert t \\rvert)$")
+colnames(tab) <- c("$\\hat{\\beta}$","$\\text{SE}(\\hat{\\beta})$", "$t$", "$p(\\geq \\lvert t \\rvert)$")
 knitr::kable(tab, caption="Model 1: Simple regression model predicting donations from legacy motive", escape=FALSE, booktabs=TRUE, linesep="")
 ```
 
@@ -353,7 +353,7 @@ In MODEL 2 (Table \@ref(tab:causal-steps-mod2-results)), we assess the relation 
 mod2 <- lm(intention ~ legacy, data=legacy2015)
 tab <- summary(mod2)$coefficients
 rownames(tab) <- c("Intercept","Legacy motive")
-colnames(tab) <- c("$\\hat{\\beta}$","$\\text{SE}(\\hat{\\beta})$", "$t$", "$P(\\geq \\lvert t \\rvert)$")
+colnames(tab) <- c("$\\hat{\\beta}$","$\\text{SE}(\\hat{\\beta})$", "$t$", "$p(\\geq \\lvert t \\rvert)$")
 knitr::kable(tab, caption="Model 2: Simple regression model predicting pro-environmental intent from legacy motive", escape=FALSE, booktabs=TRUE, linesep="")
 ```
 
@@ -364,7 +364,7 @@ In MODEL 3 (Table \@ref(tab:causal-steps-mod3-results)), we assess the relation 
 mod3 <- lm(donation ~ legacy + intention, data=legacy2015)
 tab <- summary(mod3)$coefficients
 rownames(tab) <- c("Intercept","Legacy motive", "Behavioral intent")
-colnames(tab) <- c("$\\hat{\\beta}$","$\\text{SE}(\\hat{\\beta})$", "$t$", "$P(\\geq \\lvert t \\rvert)$")
+colnames(tab) <- c("$\\hat{\\beta}$","$\\text{SE}(\\hat{\\beta})$", "$t$", "$p(\\geq \\lvert t \\rvert)$")
 knitr::kable(tab, caption="Model 3: Multiple regression model predicting donations from legacy motive and pro-environmental intent.", escape=FALSE, booktabs=TRUE, linesep="")
 ```
 

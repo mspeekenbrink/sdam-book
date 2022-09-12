@@ -195,7 +195,7 @@ Testing, for each parameter, the null hypothesis $H_0: \beta_j = 0$, where $j = 
 ```{r t-test-results-multiple-regression-table}
 tab <- summary(mod)$coefficients
 rownames(tab) <- c("Intercept","Hate groups per million", "% bachelors degree or higher")
-colnames(tab) <- c("$\\hat{\\beta}$","$\\text{SE}(\\hat{\\beta})$", "$t$", "$P(\\geq \\lvert t \\rvert)$")
+colnames(tab) <- c("$\\hat{\\beta}$","$\\text{SE}(\\hat{\\beta})$", "$t$", "$p(\\geq \\lvert t \\rvert)$")
 knitr::kable(tab, caption = "Null-hypothesis significance tests using the t statistic.", escape = FALSE, booktabs=TRUE, linesep="")
 ```
 
@@ -259,7 +259,7 @@ opts <- options()
 options(knitr.kable.NA = "")
 tab <- cbind(estimate = c(coefficients(mod),Error=NA),car::Anova(mod, type=3))
 rownames(tab) <- c("Intercept","Hate groups per million", "% bachelors degree or higher","Error")
-colnames(tab) <- c("$\\hat{\\beta}$","$\\text{SS}$", "$\\text{df}$", "$F$",  "$P(\\geq F)$")
+colnames(tab) <- c("$\\hat{\\beta}$","$\\text{SS}$", "$\\text{df}$", "$F$",  "$p(\\geq F)$")
 knitr::kable(tab, caption = "Null-hypothesis significance tests by model comparisons and the F statistic.", escape = FALSE, booktabs = TRUE, linesep="")
 options(opts)
 ```
@@ -648,7 +648,7 @@ opts <- options()
 options(knitr.kable.NA = "")
 tab <- cbind(estimate = c(coefficients(mod),Error=NA),car::Anova(mod, type=3))
 rownames(tab) <- c("Intercept","Hate groups per million", "% bachelors degree or higher","Error")
-colnames(tab) <- c("$\\hat{\\beta}$","$\\text{SS}$", "$\\text{df}$", "$F$", "$P(\\geq \\lvert F \\rvert)$")
+colnames(tab) <- c("$\\hat{\\beta}$","$\\text{SS}$", "$\\text{df}$", "$F$", "$p(\\geq \\lvert F \\rvert)$")
 knitr::kable(tab, caption = "Null-hypothesis significance tests by model comparisons and the F statistic.", escape = FALSE, booktabs=TRUE, linesep="")
 options(opts)
 ```
