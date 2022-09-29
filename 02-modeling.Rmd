@@ -96,7 +96,7 @@ for(i in 1:n_sim) {
 
 Flipping a coin can be viewed as an experiment, that we can repeat. Figure \@ref(fig:coin-flip-relative-frequency-multiple) shows the results of flipping a coin for `r n_flip` times when repeating the experiment `r n_sim` times. As you can see, the results of our experiments (the relative frequencies) are different each time. The differences are quite marked for a small number of flips, but become more alike after flipping the coin more times. This illustrates something known as __The Law of Large Numbers__, to which we will come back soon. For now, let's focus on a different matter. If probability is a relative frequency, then which one is it? Each repetition of the experiment, as well as each number of throws, would give us a different answer! 
 
-```{r coin-flip-relative-frequency-multiple, dev='png', echo=FALSE,fig.cap=paste("Relative frequency of heads when flipping a coin",n_sim,"times for",n_flip,"times"), cache=TRUE}
+```{r coin-flip-relative-frequency-multiple, dev='png', echo=FALSE, fig.cap=paste("Relative frequency of heads when flipping a coin",n_sim,"times for",n_flip,"times"), cache=TRUE}
 if(knitr::is_html_output()) {
   ggplot(dat,aes(x=flip,y=y,colour=factor(simulation))) + geom_line() + ylim(c(0,1)) + ylab("relative frequency of heads") + theme(legend.position="none") + transition_reveal(flip)
 } else {

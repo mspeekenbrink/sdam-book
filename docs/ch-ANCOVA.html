@@ -1,0 +1,1446 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 9 Mixing categorical and metric predictors (ANCOVA) | Statistics: Data analysis and modelling</title>
+  <meta name="description" content="A book about statistics for data analysis, with a main focus on statistical modelling." />
+  <meta name="generator" content="bookdown 0.29 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 9 Mixing categorical and metric predictors (ANCOVA) | Statistics: Data analysis and modelling" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="A book about statistics for data analysis, with a main focus on statistical modelling." />
+  <meta name="github-repo" content="mspeekenbrink/sdam-book" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 9 Mixing categorical and metric predictors (ANCOVA) | Statistics: Data analysis and modelling" />
+  
+  <meta name="twitter:description" content="A book about statistics for data analysis, with a main focus on statistical modelling." />
+  
+
+<meta name="author" content="Maarten Speekenbrink" />
+
+
+<meta name="date" content="2022-09-29" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="ch-factorial-ANOVA.html"/>
+<link rel="next" href="ch-RM-ANOVA.html"/>
+<script src="book_assets/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="book_assets/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="book_assets/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="book_assets/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="book_assets/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="book_assets/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="book_assets/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="book_assets/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="book_assets/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="book_assets/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="book_assets/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script src="book_assets/htmlwidgets-1.5.4/htmlwidgets.js"></script>
+<script src="book_assets/viz-1.8.2/viz.js"></script>
+<link href="book_assets/DiagrammeR-styles-0.2/styles.css" rel="stylesheet" />
+<script src="book_assets/grViz-binding-1.0.9/grViz.js"></script>
+<script src="book_assets/plotly-binding-4.10.0/plotly.js"></script>
+<script src="book_assets/typedarray-0.1/typedarray.min.js"></script>
+<link href="book_assets/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet" />
+<script src="book_assets/crosstalk-1.2.0/js/crosstalk.min.js"></script>
+<link href="book_assets/plotly-htmlwidgets-css-2.5.1/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="book_assets/plotly-main-2.5.1/plotly-latest.min.js"></script>
+<script src="book_assets/rglPlayer-binding-0.110.2/rglPlayer.js"></script>
+<link href="book_assets/rglwidgetClass-0.110.2/rgl.css" rel="stylesheet" />
+<script src="book_assets/rglwidgetClass-0.110.2/rglClass.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.110.2/utils.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.110.2/buffer.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.110.2/subscenes.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.110.2/shaders.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.110.2/textures.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.110.2/projection.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.110.2/mouse.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.110.2/init.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.110.2/pieces.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.110.2/draw.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.110.2/controls.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.110.2/selection.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.110.2/rglTimer.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.110.2/pretty.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.110.2/axes.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.110.2/animation.src.js"></script>
+<!--html_preserve--><script type = "text/plain" id = "rgl-vertex-shader">
+#line 2 1
+// File 1 is the vertex shader
+#ifdef GL_ES
+#ifdef GL_FRAGMENT_PRECISION_HIGH
+precision highp float;
+#else
+precision mediump float;
+#endif
+#endif
+
+attribute vec3 aPos;
+attribute vec4 aCol;
+uniform mat4 mvMatrix;
+uniform mat4 prMatrix;
+varying vec4 vCol;
+varying vec4 vPosition;
+
+#ifdef NEEDS_VNORMAL
+attribute vec3 aNorm;
+uniform mat4 normMatrix;
+varying vec4 vNormal;
+#endif
+
+#if defined(HAS_TEXTURE) || defined (IS_TEXT)
+attribute vec2 aTexcoord;
+varying vec2 vTexcoord;
+#endif
+
+#ifdef FIXED_SIZE
+uniform vec3 textScale;
+#endif
+
+#ifdef FIXED_QUADS
+attribute vec3 aOfs;
+#endif
+
+#ifdef IS_TWOSIDED
+#ifdef HAS_NORMALS
+varying float normz;
+uniform mat4 invPrMatrix;
+#else
+attribute vec3 aPos1;
+attribute vec3 aPos2;
+varying float normz;
+#endif
+#endif // IS_TWOSIDED
+
+#ifdef FAT_LINES
+attribute vec3 aNext;
+attribute vec2 aPoint;
+varying vec2 vPoint;
+varying float vLength;
+uniform float uAspect;
+uniform float uLwd;
+#endif
+
+
+void main(void) {
+  
+#ifndef IS_BRUSH
+#if defined(NCLIPPLANES) || !defined(FIXED_QUADS) || defined(HAS_FOG)
+  vPosition = mvMatrix * vec4(aPos, 1.);
+#endif
+  
+#ifndef FIXED_QUADS
+  gl_Position = prMatrix * vPosition;
+#endif
+#endif // !IS_BRUSH
+  
+#ifdef IS_POINTS
+  gl_PointSize = POINTSIZE;
+#endif
+  
+  vCol = aCol;
+  
+#ifdef NEEDS_VNORMAL
+  vNormal = normMatrix * vec4(-aNorm, dot(aNorm, aPos));
+#endif
+  
+#ifdef IS_TWOSIDED
+#ifdef HAS_NORMALS
+  /* normz should be calculated *after* projection */
+  normz = (invPrMatrix*vNormal).z;
+#else
+  vec4 pos1 = prMatrix*(mvMatrix*vec4(aPos1, 1.));
+  pos1 = pos1/pos1.w - gl_Position/gl_Position.w;
+  vec4 pos2 = prMatrix*(mvMatrix*vec4(aPos2, 1.));
+  pos2 = pos2/pos2.w - gl_Position/gl_Position.w;
+  normz = pos1.x*pos2.y - pos1.y*pos2.x;
+#endif
+#endif // IS_TWOSIDED
+  
+#ifdef NEEDS_VNORMAL
+  vNormal = vec4(normalize(vNormal.xyz/vNormal.w), 1);
+#endif
+  
+#if defined(HAS_TEXTURE) || defined(IS_TEXT)
+  vTexcoord = aTexcoord;
+#endif
+  
+#if defined(FIXED_SIZE) && !defined(ROTATING)
+  vec4 pos = prMatrix * mvMatrix * vec4(aPos, 1.);
+  pos = pos/pos.w;
+  gl_Position = pos + vec4(aOfs*textScale, 0.);
+#endif
+  
+#if defined(IS_SPRITES) && !defined(FIXED_SIZE)
+  vec4 pos = mvMatrix * vec4(aPos, 1.);
+  pos = pos/pos.w + vec4(aOfs,  0.);
+  gl_Position = prMatrix*pos;
+#endif
+  
+#ifdef FAT_LINES
+  /* This code was inspired by Matt Deslauriers' code in 
+   https://mattdesl.svbtle.com/drawing-lines-is-hard */
+  vec2 aspectVec = vec2(uAspect, 1.0);
+  mat4 projViewModel = prMatrix * mvMatrix;
+  vec4 currentProjected = projViewModel * vec4(aPos, 1.0);
+  currentProjected = currentProjected/currentProjected.w;
+  vec4 nextProjected = projViewModel * vec4(aNext, 1.0);
+  vec2 currentScreen = currentProjected.xy * aspectVec;
+  vec2 nextScreen = (nextProjected.xy / nextProjected.w) * aspectVec;
+  float len = uLwd;
+  vec2 dir = vec2(1.0, 0.0);
+  vPoint = aPoint;
+  vLength = length(nextScreen - currentScreen)/2.0;
+  vLength = vLength/(vLength + len);
+  if (vLength > 0.0) {
+    dir = normalize(nextScreen - currentScreen);
+  }
+  vec2 normal = vec2(-dir.y, dir.x);
+  dir.x /= uAspect;
+  normal.x /= uAspect;
+  vec4 offset = vec4(len*(normal*aPoint.x*aPoint.y - dir), 0.0, 0.0);
+  gl_Position = currentProjected + offset;
+#endif
+  
+#ifdef IS_BRUSH
+  gl_Position = vec4(aPos, 1.);
+#endif
+}
+</script>
+<script type = "text/plain" id = "rgl-fragment-shader">
+#line 2 2
+// File 2 is the fragment shader
+#ifdef GL_ES
+#ifdef GL_FRAGMENT_PRECISION_HIGH
+precision highp float;
+#else
+precision mediump float;
+#endif
+#endif
+varying vec4 vCol; // carries alpha
+varying vec4 vPosition;
+#if defined(HAS_TEXTURE) || defined (IS_TEXT)
+varying vec2 vTexcoord;
+uniform sampler2D uSampler;
+#endif
+
+#ifdef HAS_FOG
+uniform int uFogMode;
+uniform vec3 uFogColor;
+uniform vec4 uFogParms;
+#endif
+
+#if defined(IS_LIT) && !defined(FIXED_QUADS)
+varying vec4 vNormal;
+#endif
+
+#if NCLIPPLANES > 0
+uniform vec4 vClipplane[NCLIPPLANES];
+#endif
+
+#if NLIGHTS > 0
+uniform mat4 mvMatrix;
+#endif
+
+#ifdef IS_LIT
+uniform vec3 emission;
+uniform float shininess;
+#if NLIGHTS > 0
+uniform vec3 ambient[NLIGHTS];
+uniform vec3 specular[NLIGHTS]; // light*material
+uniform vec3 diffuse[NLIGHTS];
+uniform vec3 lightDir[NLIGHTS];
+uniform bool viewpoint[NLIGHTS];
+uniform bool finite[NLIGHTS];
+#endif
+#endif // IS_LIT
+
+#ifdef IS_TWOSIDED
+uniform bool front;
+varying float normz;
+#endif
+
+#ifdef FAT_LINES
+varying vec2 vPoint;
+varying float vLength;
+#endif
+
+void main(void) {
+  vec4 fragColor;
+#ifdef FAT_LINES
+  vec2 point = vPoint;
+  bool neg = point.y < 0.0;
+  point.y = neg ? (point.y + vLength)/(1.0 - vLength) :
+                 -(point.y - vLength)/(1.0 - vLength);
+#if defined(IS_TRANSPARENT) && defined(IS_LINESTRIP)
+  if (neg && length(point) <= 1.0) discard;
+#endif
+  point.y = min(point.y, 0.0);
+  if (length(point) > 1.0) discard;
+#endif // FAT_LINES
+  
+#ifdef ROUND_POINTS
+  vec2 coord = gl_PointCoord - vec2(0.5);
+  if (length(coord) > 0.5) discard;
+#endif
+  
+#if NCLIPPLANES > 0
+  for (int i = 0; i < NCLIPPLANES; i++)
+    if (dot(vPosition, vClipplane[i]) < 0.0) discard;
+#endif
+    
+#ifdef FIXED_QUADS
+    vec3 n = vec3(0., 0., 1.);
+#elif defined(IS_LIT)
+    vec3 n = normalize(vNormal.xyz);
+#endif
+    
+#ifdef IS_TWOSIDED
+    if ((normz <= 0.) != front) discard;
+#endif
+    
+#ifdef IS_LIT
+    vec3 eye = normalize(-vPosition.xyz/vPosition.w);
+    vec3 lightdir;
+    vec4 colDiff;
+    vec3 halfVec;
+    vec4 lighteffect = vec4(emission, 0.);
+    vec3 col;
+    float nDotL;
+#ifdef FIXED_QUADS
+    n = -faceforward(n, n, eye);
+#endif
+    
+#if NLIGHTS > 0
+    for (int i=0;i<NLIGHTS;i++) {
+      colDiff = vec4(vCol.rgb * diffuse[i], vCol.a);
+      lightdir = lightDir[i];
+      if (!viewpoint[i])
+        lightdir = (mvMatrix * vec4(lightdir, 1.)).xyz;
+      if (!finite[i]) {
+        halfVec = normalize(lightdir + eye);
+      } else {
+        lightdir = normalize(lightdir - vPosition.xyz/vPosition.w);
+        halfVec = normalize(lightdir + eye);
+      }
+      col = ambient[i];
+      nDotL = dot(n, lightdir);
+      col = col + max(nDotL, 0.) * colDiff.rgb;
+      col = col + pow(max(dot(halfVec, n), 0.), shininess) * specular[i];
+      lighteffect = lighteffect + vec4(col, colDiff.a);
+    }
+#endif
+    
+#else // not IS_LIT
+    vec4 colDiff = vCol;
+    vec4 lighteffect = colDiff;
+#endif
+    
+#ifdef IS_TEXT
+    vec4 textureColor = lighteffect*texture2D(uSampler, vTexcoord);
+#endif
+    
+#ifdef HAS_TEXTURE
+#ifdef TEXTURE_rgb
+    vec4 textureColor = lighteffect*vec4(texture2D(uSampler, vTexcoord).rgb, 1.);
+#endif
+    
+#ifdef TEXTURE_rgba
+    vec4 textureColor = lighteffect*texture2D(uSampler, vTexcoord);
+#endif
+    
+#ifdef TEXTURE_alpha
+    vec4 textureColor = texture2D(uSampler, vTexcoord);
+    float luminance = dot(vec3(1.,1.,1.), textureColor.rgb)/3.;
+    textureColor =  vec4(lighteffect.rgb, lighteffect.a*luminance);
+#endif
+    
+#ifdef TEXTURE_luminance
+    vec4 textureColor = vec4(lighteffect.rgb*dot(texture2D(uSampler, vTexcoord).rgb, vec3(1.,1.,1.))/3., lighteffect.a);
+#endif
+    
+#ifdef TEXTURE_luminance_alpha
+    vec4 textureColor = texture2D(uSampler, vTexcoord);
+    float luminance = dot(vec3(1.,1.,1.),textureColor.rgb)/3.;
+    textureColor = vec4(lighteffect.rgb*luminance, lighteffect.a*textureColor.a);
+#endif
+    
+    fragColor = textureColor;
+
+#elif defined(IS_TEXT)
+    if (textureColor.a < 0.1)
+      discard;
+    else
+      fragColor = textureColor;
+#else
+    fragColor = lighteffect;
+#endif // HAS_TEXTURE
+    
+#ifdef HAS_FOG
+    // uFogParms elements: x = near, y = far, z = fogscale, w = (1-sin(FOV/2))/(1+sin(FOV/2))
+    // In Exp and Exp2: use density = density/far
+    // fogF will be the proportion of fog
+    // Initialize it to the linear value
+    float fogF;
+    if (uFogMode > 0) {
+      fogF = (uFogParms.y - vPosition.z/vPosition.w)/(uFogParms.y - uFogParms.x);
+      if (uFogMode > 1)
+        fogF = mix(uFogParms.w, 1.0, fogF);
+      fogF = fogF*uFogParms.z;
+      if (uFogMode == 2)
+        fogF = 1.0 - exp(-fogF);
+      // Docs are wrong: use (density*c)^2, not density*c^2
+      // https://gitlab.freedesktop.org/mesa/mesa/-/blob/master/src/mesa/swrast/s_fog.c#L58
+      else if (uFogMode == 3)
+        fogF = 1.0 - exp(-fogF*fogF);
+      fogF = clamp(fogF, 0.0, 1.0);
+      gl_FragColor = vec4(mix(fragColor.rgb, uFogColor, fogF), fragColor.a);
+    } else gl_FragColor = fragColor;
+#else
+    gl_FragColor = fragColor;
+#endif // HAS_FOG
+    
+}
+</script><!--/html_preserve-->
+<script src="book_assets/kePrint-0.0.1/kePrint.js"></script>
+<link href="book_assets/lightable-0.0.1/lightable.css" rel="stylesheet" />
+
+
+
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a><ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#acknowledgements"><i class="fa fa-check"></i>Acknowledgements</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#notation"><i class="fa fa-check"></i>Notation</a></li>
+</ul></li>
+<li class="chapter" data-level="1" data-path="ch-intro.html"><a href="ch-intro.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
+<li class="chapter" data-level="1.1" data-path="ch-intro.html"><a href="ch-intro.html#paul-the-octopus"><i class="fa fa-check"></i><b>1.1</b> Paul the octopus</a></li>
+<li class="chapter" data-level="1.2" data-path="ch-intro.html"><a href="ch-intro.html#experiments-and-observations"><i class="fa fa-check"></i><b>1.2</b> Experiments and observations</a></li>
+<li class="chapter" data-level="1.3" data-path="ch-intro.html"><a href="ch-intro.html#data"><i class="fa fa-check"></i><b>1.3</b> Data</a><ul>
+<li class="chapter" data-level="1.3.1" data-path="ch-intro.html"><a href="ch-intro.html#measurement-scales"><i class="fa fa-check"></i><b>1.3.1</b> Measurement scales</a></li>
+<li class="chapter" data-level="1.3.2" data-path="ch-intro.html"><a href="ch-intro.html#the-data-generating-process"><i class="fa fa-check"></i><b>1.3.2</b> The Data Generating Process</a></li>
+</ul></li>
+<li class="chapter" data-level="1.4" data-path="ch-intro.html"><a href="ch-intro.html#exploring-and-describing-data"><i class="fa fa-check"></i><b>1.4</b> Exploring and describing data</a><ul>
+<li class="chapter" data-level="1.4.1" data-path="ch-intro.html"><a href="ch-intro.html#summary-statistics"><i class="fa fa-check"></i><b>1.4.1</b> Summary statistics</a></li>
+<li class="chapter" data-level="1.4.2" data-path="ch-intro.html"><a href="ch-intro.html#visual-exploration"><i class="fa fa-check"></i><b>1.4.2</b> Visual exploration</a></li>
+</ul></li>
+<li class="chapter" data-level="1.5" data-path="ch-intro.html"><a href="ch-intro.html#analysis-and-modelling"><i class="fa fa-check"></i><b>1.5</b> Analysis and modelling</a></li>
+<li class="chapter" data-level="1.6" data-path="ch-intro.html"><a href="ch-intro.html#summary"><i class="fa fa-check"></i><b>1.6</b> Summary</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="ch-modeling.html"><a href="ch-modeling.html"><i class="fa fa-check"></i><b>2</b> Statistical modelling</a><ul>
+<li class="chapter" data-level="2.1" data-path="ch-modeling.html"><a href="ch-modeling.html#coin-flipping-defining-a-statistical-model"><i class="fa fa-check"></i><b>2.1</b> Coin flipping: Defining a statistical model</a></li>
+<li class="chapter" data-level="2.2" data-path="ch-modeling.html"><a href="ch-modeling.html#probability"><i class="fa fa-check"></i><b>2.2</b> Probability</a><ul>
+<li class="chapter" data-level="2.2.1" data-path="ch-modeling.html"><a href="ch-modeling.html#sec:02-probability-definition"><i class="fa fa-check"></i><b>2.2.1</b> What is probability?</a></li>
+<li class="chapter" data-level="2.2.2" data-path="ch-modeling.html"><a href="ch-modeling.html#distributions"><i class="fa fa-check"></i><b>2.2.2</b> Distributions</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="ch-modeling.html"><a href="ch-modeling.html#sec:02-binomial-model"><i class="fa fa-check"></i><b>2.3</b> Flipping a biased coin: An alternative model</a></li>
+<li class="chapter" data-level="2.4" data-path="ch-modeling.html"><a href="ch-modeling.html#estimation"><i class="fa fa-check"></i><b>2.4</b> Estimation</a><ul>
+<li class="chapter" data-level="2.4.1" data-path="ch-modeling.html"><a href="ch-modeling.html#maximum-likelihood-estimation"><i class="fa fa-check"></i><b>2.4.1</b> Maximum likelihood estimation</a></li>
+<li class="chapter" data-level="2.4.2" data-path="ch-modeling.html"><a href="ch-modeling.html#properties-of-good-estimators"><i class="fa fa-check"></i><b>2.4.2</b> Properties of good estimators</a></li>
+</ul></li>
+<li class="chapter" data-level="2.5" data-path="ch-modeling.html"><a href="ch-modeling.html#sec:02-likelihood-ratio"><i class="fa fa-check"></i><b>2.5</b> Comparing models: Null-hypothesis significance testing</a><ul>
+<li class="chapter" data-level="2.5.1" data-path="ch-modeling.html"><a href="ch-modeling.html#decisions-and-types-of-error"><i class="fa fa-check"></i><b>2.5.1</b> Decisions and types of error</a></li>
+<li class="chapter" data-level="2.5.2" data-path="ch-modeling.html"><a href="ch-modeling.html#significance-and-power"><i class="fa fa-check"></i><b>2.5.2</b> Significance and power</a></li>
+<li class="chapter" data-level="2.5.3" data-path="ch-modeling.html"><a href="ch-modeling.html#testing-whether-paul-was-guessing"><i class="fa fa-check"></i><b>2.5.3</b> Testing whether Paul was guessing</a></li>
+</ul></li>
+<li class="chapter" data-level="2.6" data-path="ch-modeling.html"><a href="ch-modeling.html#hypothesis-testing-directly-with-the-binomial-distribution"><i class="fa fa-check"></i><b>2.6</b> Hypothesis testing directly with the Binomial distribution</a></li>
+<li class="chapter" data-level="2.7" data-path="ch-modeling.html"><a href="ch-modeling.html#summary-1"><i class="fa fa-check"></i><b>2.7</b> Summary</a></li>
+<li class="chapter" data-level="2.8" data-path="ch-modeling.html"><a href="ch-modeling.html#epilogue"><i class="fa fa-check"></i><b>2.8</b> Epilogue</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html"><i class="fa fa-check"></i><b>3</b> A model with a mean (one sample t-test)</a><ul>
+<li class="chapter" data-level="3.1" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#numeric-judgement-and-anchoring"><i class="fa fa-check"></i><b>3.1</b> Numeric judgement and anchoring</a><ul>
+<li class="chapter" data-level="3.1.1" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#exploring-the-data"><i class="fa fa-check"></i><b>3.1.1</b> Exploring the data</a></li>
+</ul></li>
+<li class="chapter" data-level="3.2" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#a-statistical-model-of-judgements"><i class="fa fa-check"></i><b>3.2</b> A statistical model of judgements</a><ul>
+<li class="chapter" data-level="3.2.1" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#the-normal-distribution"><i class="fa fa-check"></i><b>3.2.1</b> The Normal distribution</a></li>
+<li class="chapter" data-level="3.2.2" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#two-useful-properties-of-the-normal-distribution"><i class="fa fa-check"></i><b>3.2.2</b> Two useful properties of the Normal distribution</a></li>
+<li class="chapter" data-level="3.2.3" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#back-to-anchoring"><i class="fa fa-check"></i><b>3.2.3</b> Back to anchoring</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#parameter-estimation"><i class="fa fa-check"></i><b>3.3</b> Parameter estimation</a><ul>
+<li class="chapter" data-level="3.3.1" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#sampling-distribution-of-the-estimated-mean"><i class="fa fa-check"></i><b>3.3.1</b> Sampling distribution of the estimated mean</a></li>
+</ul></li>
+<li class="chapter" data-level="3.4" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#testing-whether-mu-has-an-specific-value"><i class="fa fa-check"></i><b>3.4</b> Testing whether <span class="math inline">\(\mu\)</span> has an specific value</a><ul>
+<li class="chapter" data-level="3.4.1" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#the-classical-way"><i class="fa fa-check"></i><b>3.4.1</b> The classical way</a></li>
+<li class="chapter" data-level="3.4.2" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#the-model-comparison-way"><i class="fa fa-check"></i><b>3.4.2</b> The model comparison way</a></li>
+</ul></li>
+<li class="chapter" data-level="3.5" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#ch3-confidence-interval"><i class="fa fa-check"></i><b>3.5</b> Confidence intervals</a></li>
+<li class="chapter" data-level="3.6" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#effect-size"><i class="fa fa-check"></i><b>3.6</b> Effect size</a></li>
+<li class="chapter" data-level="3.7" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#sec:02-assumptions"><i class="fa fa-check"></i><b>3.7</b> Assumptions</a></li>
+<li class="chapter" data-level="3.8" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#the-central-limit-theorem"><i class="fa fa-check"></i><b>3.8</b> The Central Limit Theorem</a><ul>
+<li class="chapter" data-level="3.8.1" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#the-central-limit-theorem-in-action"><i class="fa fa-check"></i><b>3.8.1</b> The Central Limit Theorem in action</a></li>
+<li class="chapter" data-level="3.8.2" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#bootstrapping-a-statistic"><i class="fa fa-check"></i><b>3.8.2</b> Bootstrapping a statistic</a></li>
+</ul></li>
+<li class="chapter" data-level="3.9" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#in-practice"><i class="fa fa-check"></i><b>3.9</b> In practice</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="ch-simple-regression.html"><a href="ch-simple-regression.html"><i class="fa fa-check"></i><b>4</b> Simple linear regression</a><ul>
+<li class="chapter" data-level="4.1" data-path="ch-simple-regression.html"><a href="ch-simple-regression.html#trump-votes-and-hate-groups"><i class="fa fa-check"></i><b>4.1</b> Trump, votes, and hate groups</a></li>
+<li class="chapter" data-level="4.2" data-path="ch-simple-regression.html"><a href="ch-simple-regression.html#the-model"><i class="fa fa-check"></i><b>4.2</b> The model</a></li>
+<li class="chapter" data-level="4.3" data-path="ch-simple-regression.html"><a href="ch-simple-regression.html#sec:04-estimation"><i class="fa fa-check"></i><b>4.3</b> Estimation</a><ul>
+<li class="chapter" data-level="4.3.1" data-path="ch-simple-regression.html"><a href="ch-simple-regression.html#estimating-the-relation-between-trump-votes-and-hate-groups"><i class="fa fa-check"></i><b>4.3.1</b> Estimating the relation between Trump votes and hate groups</a></li>
+</ul></li>
+<li class="chapter" data-level="4.4" data-path="ch-simple-regression.html"><a href="ch-simple-regression.html#hypothesis-testing"><i class="fa fa-check"></i><b>4.4</b> Hypothesis testing</a><ul>
+<li class="chapter" data-level="4.4.1" data-path="ch-simple-regression.html"><a href="ch-simple-regression.html#sampling-distribution-of-estimates"><i class="fa fa-check"></i><b>4.4.1</b> Sampling distribution of estimates</a></li>
+<li class="chapter" data-level="4.4.2" data-path="ch-simple-regression.html"><a href="ch-simple-regression.html#model-comparison"><i class="fa fa-check"></i><b>4.4.2</b> Model comparison</a></li>
+<li class="chapter" data-level="4.4.3" data-path="ch-simple-regression.html"><a href="ch-simple-regression.html#confidence-intervals"><i class="fa fa-check"></i><b>4.4.3</b> Confidence intervals</a></li>
+</ul></li>
+<li class="chapter" data-level="4.5" data-path="ch-simple-regression.html"><a href="ch-simple-regression.html#summary-2"><i class="fa fa-check"></i><b>4.5</b> Summary</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html"><i class="fa fa-check"></i><b>5</b> Multiple regression</a><ul>
+<li class="chapter" data-level="5.1" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#trump-votes-and-hate-groups-again"><i class="fa fa-check"></i><b>5.1</b> Trump, votes, and hate groups (again)</a><ul>
+<li class="chapter" data-level="5.1.1" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#controlling-for-education-level"><i class="fa fa-check"></i><b>5.1.1</b> Controlling for education level</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#the-multiple-regression-model"><i class="fa fa-check"></i><b>5.2</b> The multiple regression model</a></li>
+<li class="chapter" data-level="5.3" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#sec:04b-estimation"><i class="fa fa-check"></i><b>5.3</b> Estimation</a></li>
+<li class="chapter" data-level="5.4" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#sec:04b-inference"><i class="fa fa-check"></i><b>5.4</b> Inference</a></li>
+<li class="chapter" data-level="5.5" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#partitioning-and-explaining-variance"><i class="fa fa-check"></i><b>5.5</b> Partitioning and explaining variance</a></li>
+<li class="chapter" data-level="5.6" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#sec:04b-effect-size"><i class="fa fa-check"></i><b>5.6</b> Effect size and the importance of predictors</a><ul>
+<li class="chapter" data-level="5.6.1" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#r2-changes-and-the-coefficient-of-semi-partial-determination"><i class="fa fa-check"></i><b>5.6.1</b> <span class="math inline">\(R^2\)</span> changes and the coefficient of (semi-)partial determination</a></li>
+</ul></li>
+<li class="chapter" data-level="5.7" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#sec:04b-assumptions"><i class="fa fa-check"></i><b>5.7</b> Assumptions</a><ul>
+<li class="chapter" data-level="5.7.1" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#transforming-variables"><i class="fa fa-check"></i><b>5.7.1</b> Transforming variables</a></li>
+<li class="chapter" data-level="5.7.2" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#polynomial-regression"><i class="fa fa-check"></i><b>5.7.2</b> Polynomial regression</a></li>
+</ul></li>
+<li class="chapter" data-level="5.8" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#multicollinearity-redundancy-between-predictors"><i class="fa fa-check"></i><b>5.8</b> Multicollinearity: Redundancy between predictors</a><ul>
+<li class="chapter" data-level="5.8.1" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#detecting-and-dealing-with-multicollinearity"><i class="fa fa-check"></i><b>5.8.1</b> Detecting and dealing with multicollinearity</a></li>
+</ul></li>
+<li class="chapter" data-level="5.9" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#sec:04b-outliers"><i class="fa fa-check"></i><b>5.9</b> Outliers</a></li>
+<li class="chapter" data-level="5.10" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#in-practice-1"><i class="fa fa-check"></i><b>5.10</b> In practice</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="ch-moderation-mediation.html"><a href="ch-moderation-mediation.html"><i class="fa fa-check"></i><b>6</b> Moderation and mediation</a><ul>
+<li class="chapter" data-level="6.1" data-path="ch-moderation-mediation.html"><a href="ch-moderation-mediation.html#moderation"><i class="fa fa-check"></i><b>6.1</b> Moderation</a><ul>
+<li class="chapter" data-level="6.1.1" data-path="ch-moderation-mediation.html"><a href="ch-moderation-mediation.html#physical-attractiveness-and-intelligence-in-speed-dating"><i class="fa fa-check"></i><b>6.1.1</b> Physical attractiveness and intelligence in speed dating</a></li>
+<li class="chapter" data-level="6.1.2" data-path="ch-moderation-mediation.html"><a href="ch-moderation-mediation.html#conditional-slopes"><i class="fa fa-check"></i><b>6.1.2</b> Conditional slopes</a></li>
+<li class="chapter" data-level="6.1.3" data-path="ch-moderation-mediation.html"><a href="ch-moderation-mediation.html#modeling-slopes-with-linear-models"><i class="fa fa-check"></i><b>6.1.3</b> Modeling slopes with linear models</a></li>
+<li class="chapter" data-level="6.1.4" data-path="ch-moderation-mediation.html"><a href="ch-moderation-mediation.html#simple-slopes-and-centering"><i class="fa fa-check"></i><b>6.1.4</b> Simple slopes and centering</a></li>
+<li class="chapter" data-level="6.1.5" data-path="ch-moderation-mediation.html"><a href="ch-moderation-mediation.html#sec:05-dont-forget-about-the-fun"><i class="fa fa-check"></i><b>6.1.5</b> Don’t forget about fun! A model with multiple interactions</a></li>
+</ul></li>
+<li class="chapter" data-level="6.2" data-path="ch-moderation-mediation.html"><a href="ch-moderation-mediation.html#mediation"><i class="fa fa-check"></i><b>6.2</b> Mediation</a><ul>
+<li class="chapter" data-level="6.2.1" data-path="ch-moderation-mediation.html"><a href="ch-moderation-mediation.html#legacy-motives-and-pro-environmental-behaviours"><i class="fa fa-check"></i><b>6.2.1</b> Legacy motives and pro-environmental behaviours</a></li>
+<li class="chapter" data-level="6.2.2" data-path="ch-moderation-mediation.html"><a href="ch-moderation-mediation.html#causal-steps"><i class="fa fa-check"></i><b>6.2.2</b> Causal steps</a></li>
+<li class="chapter" data-level="6.2.3" data-path="ch-moderation-mediation.html"><a href="ch-moderation-mediation.html#estimating-the-mediated-effect"><i class="fa fa-check"></i><b>6.2.3</b> Estimating the mediated effect</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="ch-ANOVA.html"><a href="ch-ANOVA.html"><i class="fa fa-check"></i><b>7</b> A model of means (ANOVA)</a><ul>
+<li class="chapter" data-level="7.1" data-path="ch-ANOVA.html"><a href="ch-ANOVA.html#can-playing-tetris-reduce-intrusive-memories"><i class="fa fa-check"></i><b>7.1</b> Can playing Tetris reduce intrusive memories?</a></li>
+<li class="chapter" data-level="7.2" data-path="ch-ANOVA.html"><a href="ch-ANOVA.html#sec:06-two-groups"><i class="fa fa-check"></i><b>7.2</b> Comparing two groups</a></li>
+<li class="chapter" data-level="7.3" data-path="ch-ANOVA.html"><a href="ch-ANOVA.html#the-anova-model"><i class="fa fa-check"></i><b>7.3</b> The ANOVA model</a></li>
+<li class="chapter" data-level="7.4" data-path="ch-ANOVA.html"><a href="ch-ANOVA.html#contrast-coding"><i class="fa fa-check"></i><b>7.4</b> Contrast coding</a><ul>
+<li class="chapter" data-level="7.4.1" data-path="ch-ANOVA.html"><a href="ch-ANOVA.html#effect-coding"><i class="fa fa-check"></i><b>7.4.1</b> Effect coding</a></li>
+<li class="chapter" data-level="7.4.2" data-path="ch-ANOVA.html"><a href="ch-ANOVA.html#orthogonal-contrast-codes"><i class="fa fa-check"></i><b>7.4.2</b> Orthogonal contrast codes</a></li>
+<li class="chapter" data-level="7.4.3" data-path="ch-ANOVA.html"><a href="ch-ANOVA.html#defining-your-own-orthogonal-contrasts"><i class="fa fa-check"></i><b>7.4.3</b> Defining your own (orthogonal) contrasts</a></li>
+</ul></li>
+<li class="chapter" data-level="7.5" data-path="ch-ANOVA.html"><a href="ch-ANOVA.html#default-orthogonal-coding-schemes"><i class="fa fa-check"></i><b>7.5</b> Default orthogonal coding schemes</a></li>
+<li class="chapter" data-level="7.6" data-path="ch-ANOVA.html"><a href="ch-ANOVA.html#effect-size-in-anova"><i class="fa fa-check"></i><b>7.6</b> Effect-size in ANOVA</a></li>
+<li class="chapter" data-level="7.7" data-path="ch-ANOVA.html"><a href="ch-ANOVA.html#assumptions"><i class="fa fa-check"></i><b>7.7</b> Assumptions</a></li>
+<li class="chapter" data-level="7.8" data-path="ch-ANOVA.html"><a href="ch-ANOVA.html#multiple-testing-and-post-hoc-tests"><i class="fa fa-check"></i><b>7.8</b> Multiple testing and post-hoc tests</a></li>
+<li class="chapter" data-level="7.9" data-path="ch-ANOVA.html"><a href="ch-ANOVA.html#in-practice-2"><i class="fa fa-check"></i><b>7.9</b> In practice</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="ch-factorial-ANOVA.html"><a href="ch-factorial-ANOVA.html"><i class="fa fa-check"></i><b>8</b> Factorial ANOVA</a><ul>
+<li class="chapter" data-level="8.1" data-path="ch-factorial-ANOVA.html"><a href="ch-factorial-ANOVA.html#experimenter-beliefs-and-social-priming"><i class="fa fa-check"></i><b>8.1</b> Experimenter beliefs and social priming</a><ul>
+<li class="chapter" data-level="8.1.1" data-path="ch-factorial-ANOVA.html"><a href="ch-factorial-ANOVA.html#a-oneway-anova"><i class="fa fa-check"></i><b>8.1.1</b> A oneway ANOVA</a></li>
+</ul></li>
+<li class="chapter" data-level="8.2" data-path="ch-factorial-ANOVA.html"><a href="ch-factorial-ANOVA.html#factorial-designs"><i class="fa fa-check"></i><b>8.2</b> Factorial designs</a><ul>
+<li class="chapter" data-level="8.2.1" data-path="ch-factorial-ANOVA.html"><a href="ch-factorial-ANOVA.html#sec:06-main-effects-and-interactions"><i class="fa fa-check"></i><b>8.2.1</b> Main effects and interactions</a></li>
+</ul></li>
+<li class="chapter" data-level="8.3" data-path="ch-factorial-ANOVA.html"><a href="ch-factorial-ANOVA.html#the-factorial-anova-model"><i class="fa fa-check"></i><b>8.3</b> The factorial ANOVA model</a></li>
+<li class="chapter" data-level="8.4" data-path="ch-factorial-ANOVA.html"><a href="ch-factorial-ANOVA.html#a-threeway-factorial-anova"><i class="fa fa-check"></i><b>8.4</b> A threeway factorial ANOVA</a><ul>
+<li class="chapter" data-level="8.4.1" data-path="ch-factorial-ANOVA.html"><a href="ch-factorial-ANOVA.html#interpreting-interactions"><i class="fa fa-check"></i><b>8.4.1</b> Interpreting interactions</a></li>
+</ul></li>
+<li class="chapter" data-level="8.5" data-path="ch-factorial-ANOVA.html"><a href="ch-factorial-ANOVA.html#orthogonal-contrast-codes-and-unequal-sample-sizes"><i class="fa fa-check"></i><b>8.5</b> Orthogonal contrast codes and unequal sample sizes</a><ul>
+<li class="chapter" data-level="8.5.1" data-path="ch-factorial-ANOVA.html"><a href="ch-factorial-ANOVA.html#comparison-schemes-and-ss-types"><i class="fa fa-check"></i><b>8.5.1</b> Comparison schemes and SS types</a></li>
+</ul></li>
+<li class="chapter" data-level="8.6" data-path="ch-factorial-ANOVA.html"><a href="ch-factorial-ANOVA.html#in-practice-3"><i class="fa fa-check"></i><b>8.6</b> In practice</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="ch-ANCOVA.html"><a href="ch-ANCOVA.html"><i class="fa fa-check"></i><b>9</b> Mixing categorical and metric predictors (ANCOVA)</a><ul>
+<li class="chapter" data-level="9.1" data-path="ch-ANCOVA.html"><a href="ch-ANCOVA.html#subjective-feelings-of-power-and-priming"><i class="fa fa-check"></i><b>9.1</b> Subjective feelings of power and priming</a></li>
+<li class="chapter" data-level="9.2" data-path="ch-ANCOVA.html"><a href="ch-ANCOVA.html#acounting-for-pre-existing-differences"><i class="fa fa-check"></i><b>9.2</b> Acounting for pre-existing differences</a></li>
+<li class="chapter" data-level="9.3" data-path="ch-ANCOVA.html"><a href="ch-ANCOVA.html#slopes-of-contrast-coded-predictors-in-ancova-models"><i class="fa fa-check"></i><b>9.3</b> Slopes of contrast-coded predictors in ANCOVA models</a></li>
+<li class="chapter" data-level="9.4" data-path="ch-ANCOVA.html"><a href="ch-ANCOVA.html#homogeneity-of-slopes"><i class="fa fa-check"></i><b>9.4</b> Homogeneity of slopes</a></li>
+<li class="chapter" data-level="9.5" data-path="ch-ANCOVA.html"><a href="ch-ANCOVA.html#sec:ANCOVA-power"><i class="fa fa-check"></i><b>9.5</b> Power considerations in ANCOVA</a></li>
+<li class="chapter" data-level="9.6" data-path="ch-ANCOVA.html"><a href="ch-ANCOVA.html#models-with-multiple-covariates"><i class="fa fa-check"></i><b>9.6</b> Models with multiple covariates</a></li>
+<li class="chapter" data-level="9.7" data-path="ch-ANCOVA.html"><a href="ch-ANCOVA.html#mediation-with-categorical-independent-variables"><i class="fa fa-check"></i><b>9.7</b> Mediation with categorical independent variables</a></li>
+<li class="chapter" data-level="9.8" data-path="ch-ANCOVA.html"><a href="ch-ANCOVA.html#ancova-vs-difference-scores"><i class="fa fa-check"></i><b>9.8</b> ANCOVA vs difference scores</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html"><i class="fa fa-check"></i><b>10</b> Repeated-measures ANOVA</a><ul>
+<li class="chapter" data-level="10.1" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#non-independence-in-linear-models"><i class="fa fa-check"></i><b>10.1</b> Non-independence in linear models</a></li>
+<li class="chapter" data-level="10.2" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#the-cheerleader-effect"><i class="fa fa-check"></i><b>10.2</b> The cheerleader effect</a></li>
+<li class="chapter" data-level="10.3" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#as-a-oneway-anova"><i class="fa fa-check"></i><b>10.3</b> As a oneway ANOVA</a></li>
+<li class="chapter" data-level="10.4" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#oneway-repeated-measures-anova"><i class="fa fa-check"></i><b>10.4</b> Oneway repeated-measures ANOVA</a><ul>
+<li class="chapter" data-level="10.4.1" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#within-subjects-composite-scores"><i class="fa fa-check"></i><b>10.4.1</b> Within-subjects composite scores</a></li>
+<li class="chapter" data-level="10.4.2" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#a-composite-for-between-subjects-effects"><i class="fa fa-check"></i><b>10.4.2</b> A composite for between-subjects effects</a></li>
+<li class="chapter" data-level="10.4.3" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#collecting-all-results-and-omnibus-tests"><i class="fa fa-check"></i><b>10.4.3</b> Collecting all results and omnibus tests</a></li>
+</ul></li>
+<li class="chapter" data-level="10.5" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#partitioning-the-variance"><i class="fa fa-check"></i><b>10.5</b> Partitioning the variance</a></li>
+<li class="chapter" data-level="10.6" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#a-mixed-anova-with-between--and-within-subjects-effects"><i class="fa fa-check"></i><b>10.6</b> A mixed ANOVA with between- and within-subjects effects</a></li>
+<li class="chapter" data-level="10.7" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#assumptions-1"><i class="fa fa-check"></i><b>10.7</b> Assumptions</a><ul>
+<li class="chapter" data-level="10.7.1" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#omnibus-tests-and-sphericity"><i class="fa fa-check"></i><b>10.7.1</b> Omnibus tests and sphericity</a></li>
+<li class="chapter" data-level="10.7.2" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#correcting-for-non-sphericity"><i class="fa fa-check"></i><b>10.7.2</b> Correcting for non-sphericity</a></li>
+</ul></li>
+<li class="chapter" data-level="10.8" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#in-practice-4"><i class="fa fa-check"></i><b>10.8</b> In practice</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="ch-linear-mixed-effects-models.html"><a href="ch-linear-mixed-effects-models.html"><i class="fa fa-check"></i><b>11</b> Linear mixed-effects models</a><ul>
+<li class="chapter" data-level="11.1" data-path="ch-linear-mixed-effects-models.html"><a href="ch-linear-mixed-effects-models.html#non-independence-in-linear-models-1"><i class="fa fa-check"></i><b>11.1</b> Non-independence in linear models</a></li>
+<li class="chapter" data-level="11.2" data-path="ch-linear-mixed-effects-models.html"><a href="ch-linear-mixed-effects-models.html#random-intercept-models"><i class="fa fa-check"></i><b>11.2</b> Random intercept models</a></li>
+<li class="chapter" data-level="11.3" data-path="ch-linear-mixed-effects-models.html"><a href="ch-linear-mixed-effects-models.html#parameter-estimation-1"><i class="fa fa-check"></i><b>11.3</b> Parameter estimation</a></li>
+<li class="chapter" data-level="11.4" data-path="ch-linear-mixed-effects-models.html"><a href="ch-linear-mixed-effects-models.html#parameter-inference"><i class="fa fa-check"></i><b>11.4</b> Parameter inference</a></li>
+<li class="chapter" data-level="11.5" data-path="ch-linear-mixed-effects-models.html"><a href="ch-linear-mixed-effects-models.html#application-of-the-random-intercepts-model"><i class="fa fa-check"></i><b>11.5</b> Application of the random-intercepts model</a></li>
+<li class="chapter" data-level="11.6" data-path="ch-linear-mixed-effects-models.html"><a href="ch-linear-mixed-effects-models.html#models-with-random-intercepts-and-slopes"><i class="fa fa-check"></i><b>11.6</b> Models with random intercepts and slopes</a><ul>
+<li class="chapter" data-level="11.6.1" data-path="ch-linear-mixed-effects-models.html"><a href="ch-linear-mixed-effects-models.html#correlation-between-random-effects"><i class="fa fa-check"></i><b>11.6.1</b> Correlation between random effects</a></li>
+</ul></li>
+<li class="chapter" data-level="11.7" data-path="ch-linear-mixed-effects-models.html"><a href="ch-linear-mixed-effects-models.html#crossed-random-effects-dating-partners-in-the-speed-dating-experiment"><i class="fa fa-check"></i><b>11.7</b> Crossed random effects: dating partners in the speed dating experiment</a></li>
+<li class="chapter" data-level="11.8" data-path="ch-linear-mixed-effects-models.html"><a href="ch-linear-mixed-effects-models.html#choosing-the-random-effects-structure"><i class="fa fa-check"></i><b>11.8</b> Choosing the random effects structure</a></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="ch-generalized-linear-models.html"><a href="ch-generalized-linear-models.html"><i class="fa fa-check"></i><b>12</b> Generalized Linear Models</a></li>
+<li class="chapter" data-level="13" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html"><i class="fa fa-check"></i><b>13</b> Path models (SEM 1)</a></li>
+<li class="chapter" data-level="14" data-path="ch-SEM-latent-variable-models.html"><a href="ch-SEM-latent-variable-models.html"><i class="fa fa-check"></i><b>14</b> Latent variable models (SEM 2)</a></li>
+<li class="chapter" data-level="15" data-path="ch-Bayes-estimation.html"><a href="ch-Bayes-estimation.html"><i class="fa fa-check"></i><b>15</b> Introduction to Bayesian estimation</a><ul>
+<li class="chapter" data-level="15.1" data-path="ch-Bayes-estimation.html"><a href="ch-Bayes-estimation.html#fundamentals-of-bayesian-inference"><i class="fa fa-check"></i><b>15.1</b> Fundamentals of Bayesian inference</a><ul>
+<li class="chapter" data-level="15.1.1" data-path="ch-Bayes-estimation.html"><a href="ch-Bayes-estimation.html#probability-in-times-of-covid"><i class="fa fa-check"></i><b>15.1.1</b> Probability in times of Covid</a></li>
+<li class="chapter" data-level="15.1.2" data-path="ch-Bayes-estimation.html"><a href="ch-Bayes-estimation.html#bayes-rule"><i class="fa fa-check"></i><b>15.1.2</b> Bayes’ rule</a></li>
+<li class="chapter" data-level="15.1.3" data-path="ch-Bayes-estimation.html"><a href="ch-Bayes-estimation.html#we-missed-you-paul"><i class="fa fa-check"></i><b>15.1.3</b> We missed you Paul!</a></li>
+<li class="chapter" data-level="15.1.4" data-path="ch-Bayes-estimation.html"><a href="ch-Bayes-estimation.html#the-marginal-likelihood-and-prior-predictive-distribution"><i class="fa fa-check"></i><b>15.1.4</b> The marginal likelihood and prior predictive distribution</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="16" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html"><i class="fa fa-check"></i><b>16</b> Introduction to Bayesian hypothesis testing</a><ul>
+<li class="chapter" data-level="16.0.1" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#hypothesis-testing-relative-evidence-and-the-bayes-factor"><i class="fa fa-check"></i><b>16.0.1</b> Hypothesis testing, relative evidence, and the Bayes factor</a></li>
+<li class="chapter" data-level="16.0.2" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#parameter-estimates-and-credible-intervals"><i class="fa fa-check"></i><b>16.0.2</b> Parameter estimates and credible intervals</a></li>
+<li class="chapter" data-level="16.1" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#a-bayesian-t-test"><i class="fa fa-check"></i><b>16.1</b> A Bayesian t-test</a></li>
+<li class="chapter" data-level="16.2" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#bayes-factors-for-general-linear-models"><i class="fa fa-check"></i><b>16.2</b> Bayes factors for General Linear Models</a></li>
+<li class="chapter" data-level="16.3" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#some-objections-to-null-hypothesis-significance-testing"><i class="fa fa-check"></i><b>16.3</b> Some objections to null-hypothesis significance testing</a><ul>
+<li class="chapter" data-level="16.3.1" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#the-p-value-is-not-a-proper-measure-of-evidential-support"><i class="fa fa-check"></i><b>16.3.1</b> The <span class="math inline">\(p\)</span>-value is not a proper measure of evidential support</a></li>
+<li class="chapter" data-level="16.3.2" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#the-p-value-depends-on-researcher-intentions"><i class="fa fa-check"></i><b>16.3.2</b> The <span class="math inline">\(p\)</span>-value depends on researcher intentions</a></li>
+<li class="chapter" data-level="16.3.3" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#results-of-a-nhst-are-often-misinterpreted"><i class="fa fa-check"></i><b>16.3.3</b> Results of a NHST are often misinterpreted</a></li>
+</ul></li>
+<li class="chapter" data-level="16.4" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#to-bayes-or-not-to-bayes-a-pragmatic-view"><i class="fa fa-check"></i><b>16.4</b> To Bayes or not to Bayes? A pragmatic view</a></li>
+<li class="chapter" data-level="16.5" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#in-practice-5"><i class="fa fa-check"></i><b>16.5</b> In practice</a></li>
+<li class="chapter" data-level="16.6" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#summary-3"><i class="fa fa-check"></i><b>16.6</b> “Summary”</a></li>
+</ul></li>
+<li class="chapter" data-level="17" data-path="ch-responsible-data-analyst.html"><a href="ch-responsible-data-analyst.html"><i class="fa fa-check"></i><b>17</b> Being a responsible data analyst</a><ul>
+<li class="chapter" data-level="17.1" data-path="ch-responsible-data-analyst.html"><a href="ch-responsible-data-analyst.html#consider-analysis-before-data-collection"><i class="fa fa-check"></i><b>17.1</b> Consider analysis before data collection</a></li>
+<li class="chapter" data-level="17.2" data-path="ch-responsible-data-analyst.html"><a href="ch-responsible-data-analyst.html#explore-the-data"><i class="fa fa-check"></i><b>17.2</b> Explore the data</a></li>
+<li class="chapter" data-level="17.3" data-path="ch-responsible-data-analyst.html"><a href="ch-responsible-data-analyst.html#evaluate-the-assumptions-underlying-your-analyses"><i class="fa fa-check"></i><b>17.3</b> Evaluate the assumptions underlying your analyses</a></li>
+<li class="chapter" data-level="17.4" data-path="ch-responsible-data-analyst.html"><a href="ch-responsible-data-analyst.html#distinguish-between-confirmatory-and-exploratory-analyses"><i class="fa fa-check"></i><b>17.4</b> Distinguish between confirmatory and exploratory analyses</a></li>
+<li class="chapter" data-level="17.5" data-path="ch-responsible-data-analyst.html"><a href="ch-responsible-data-analyst.html#aim-for-openness-and-reproducibility"><i class="fa fa-check"></i><b>17.5</b> Aim for openness and reproducibility</a></li>
+<li class="chapter" data-level="17.6" data-path="ch-responsible-data-analyst.html"><a href="ch-responsible-data-analyst.html#communicate-clearly-and-concisely"><i class="fa fa-check"></i><b>17.6</b> Communicate clearly and concisely</a><ul>
+<li class="chapter" data-level="17.6.1" data-path="ch-responsible-data-analyst.html"><a href="ch-responsible-data-analyst.html#example-of-reporting-a-multiple-regression-analysis"><i class="fa fa-check"></i><b>17.6.1</b> Example of reporting a multiple regression analysis</a></li>
+<li class="chapter" data-level="17.6.2" data-path="ch-responsible-data-analyst.html"><a href="ch-responsible-data-analyst.html#example-of-reporting-a-factorial-anova"><i class="fa fa-check"></i><b>17.6.2</b> Example of reporting a factorial ANOVA</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Statistics: Data analysis and modelling</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="ch-ANCOVA" class="section level1 hasAnchor">
+<h1><span class="header-section-number">Chapter 9</span> Mixing categorical and metric predictors (ANCOVA)<a href="ch-ANCOVA.html#ch-ANCOVA" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>In this chapter, we will consider combining categorical and metric independent variables to predict a dependent variable. Such an analysis is generally called an Analysis of Covariance (ANCOVA). There are a number of reasons why you might want to include metric predictors (or “covariates”) in an ANOVA-type analysis: to statistically control for pre-existing differences between conditions of potential confounders, to reduce prediction error and increase the power of statistical tests, and because they are theoretically interesting as for instance potential mediators of the effect of experimental manipulations. In the course of this chapter, we will see examples of each of these. We will also discuss the interpretation of contrasts in ANCOVA models as reflecting differences between group means which are <em>adjusted</em> for the effect of the covariate.</p>
+<div id="subjective-feelings-of-power-and-priming" class="section level2 hasAnchor">
+<h2><span class="header-section-number">9.1</span> Subjective feelings of power and priming<a href="ch-ANCOVA.html#subjective-feelings-of-power-and-priming" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>To illustrate the models, we will consider the data from <span class="citation">Gilder &amp; Heerey (<a href="#ref-gilder2018role">2018</a>)</span> again. As part of the experiment, the researchers measured participants’ subjective feeling of power, both before and after providing them with the power priming task. In the priming task, participants were presented with randomly scrambled sentences, and they were asked to reorder the words into grammatically correct sentences. In the high-power prime condition, half of the sentences included words associated with high power (e.g., “dominates,” “commands”) and the other half were neutral words, while in the low-power prime condition, half the sentences contained words associated with low power (e.g., “subordinate,” “obeys”). If the priming task had the desired effect, then participants in the high-power condition should report feeling more power after the priming task than participants in the low-power condition. Before the administration of the power priming task, we would expect no difference in subjective feeling of power. Figure <a href="ch-ANCOVA.html#fig:expBelief-power-test-interaction-plots">9.1</a> shows the means of the subjective feeling of power before and after the power priming manipulation. As can be seen there, the task indeed appears to have the desired effect. Before the priming task, differences between the groups are relatively small and there appears to be no real difference between the priming conditions. After the priming task, the averages in the low-power prime conditions are lower and those in the high-power prime conditions higher than before the priming task.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:expBelief-power-test-interaction-plots"></span>
+<img src="09-ANCOVA_files/figure-html/expBelief-power-test-interaction-plots-1.svg" alt="Means and standard errors of subjective feeling of power before (pre-test) and after (post-test) power prime." width="80%" />
+<p class="caption">
+Figure 9.1: Means and standard errors of subjective feeling of power before (pre-test) and after (post-test) power prime.
+</p>
+</div>
+<p>To determine whether the differences between the conditions after the power prime manipulation are significant, we can use the by now hopefully familiar procedure of constructing appropriate contrast codes for priming condition and experimenter belief. To code for prime condition, it makes sense to assign a value of <span class="math inline">\(\tfrac{1}{2}\)</span> to the high-power prime condition and a value of <span class="math inline">\(-\tfrac{1}{2}\)</span> to the lower-power prime condition. As one would expect the high-power prime to increase the subjective feeling of power, one would then expect a positive slope for the associated contrast-coded predictor. Similarly, it makes sense to assign a value of <span class="math inline">\(\tfrac{1}{2}\)</span> to the “experimenter believes high-power” condition, and a value of <span class="math inline">\(-\tfrac{1}{2}\)</span> to the “experimenter believes low-power” condition. If experimenter belief has an effect on feelings of power, one would expect participants’ subjective feeling of power to be higher when the experimenter believes the participant was given a high-power prime. This form of contrast coding turns that into an expectation of a positive slope of the corresponding contrast-coded predictor. The contrast code for the interaction is constructed as usual by multiplying the values of these two contrast codes. So our full set of (orthogonal) contrast codes is:</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="right"><span class="math inline">\(\texttt{P}\)</span></th>
+<th align="right"><span class="math inline">\(\texttt{B}\)</span></th>
+<th align="right"><span class="math inline">\(\texttt{P}\times\texttt{B}\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">PL,EL</td>
+<td align="right"><span class="math inline">\(-\tfrac{1}{2}\)</span></td>
+<td align="right"><span class="math inline">\(-\tfrac{1}{2}\)</span></td>
+<td align="right"><span class="math inline">\(\tfrac{1}{4}\)</span></td>
+</tr>
+<tr class="even">
+<td align="left">PL,EH</td>
+<td align="right"><span class="math inline">\(-\tfrac{1}{2}\)</span></td>
+<td align="right"><span class="math inline">\(\tfrac{1}{2}\)</span></td>
+<td align="right"><span class="math inline">\(-\tfrac{1}{4}\)</span></td>
+</tr>
+<tr class="odd">
+<td align="left">PH,EL</td>
+<td align="right"><span class="math inline">\(\tfrac{1}{2}\)</span></td>
+<td align="right"><span class="math inline">\(-\tfrac{1}{2}\)</span></td>
+<td align="right"><span class="math inline">\(-\tfrac{1}{4}\)</span></td>
+</tr>
+<tr class="even">
+<td align="left">PH,EH</td>
+<td align="right"><span class="math inline">\(\tfrac{1}{2}\)</span></td>
+<td align="right"><span class="math inline">\(\tfrac{1}{2}\)</span></td>
+<td align="right"><span class="math inline">\(\tfrac{1}{4}\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>We can then estimate a linear model predicting <span class="math inline">\(\texttt{post-power}\)</span>, the subjective feeling of power after the priming manipulation, as:
+<span class="math display" id="eq:post-power-ANOVA">\[\begin{equation}
+\texttt{post-power}_i = \beta_0 + \beta_\text{P} \times \texttt{P}_i + \beta_\text{B} \times \texttt{B}_i + \beta_{\text{P}\times \text{B}} \times (\texttt{P} \times \texttt{B})_i + \epsilon_i
+\tag{9.1}
+\end{equation}\]</span>
+The estimates and hypothesis tests of the parameters of this model are given in Table <a href="ch-ANCOVA.html#tab:expBelief-power-post-ANOVA">9.1</a>.</p>
+<table>
+<caption><span id="tab:expBelief-power-post-ANOVA">Table 9.1: </span>Linear model predicting <span class="math inline">\(\texttt{post-power}\)</span> by factorial contrast-coded predictors.</caption>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="right"><span class="math inline">\(\hat{\beta}\)</span></th>
+<th align="right"><span class="math inline">\(\text{SS}\)</span></th>
+<th align="right"><span class="math inline">\(\text{df}\)</span></th>
+<th align="right"><span class="math inline">\(F\)</span></th>
+<th align="right"><span class="math inline">\(p(\geq \lvert F \rvert)\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Intercept</td>
+<td align="right">57.32</td>
+<td align="right">1.31e+06</td>
+<td align="right">1</td>
+<td align="right">5431.58</td>
+<td align="right">0.000</td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline">\(\texttt{P}\)</span></td>
+<td align="right">3.87</td>
+<td align="right">1.50e+03</td>
+<td align="right">1</td>
+<td align="right">6.21</td>
+<td align="right">0.013</td>
+</tr>
+<tr class="odd">
+<td align="left"><span class="math inline">\(\texttt{B}\)</span></td>
+<td align="right">-0.01</td>
+<td align="right">1.00e-02</td>
+<td align="right">1</td>
+<td align="right">0.00</td>
+<td align="right">0.995</td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline">\(\texttt{P} \times \texttt{B}\)</span></td>
+<td align="right">3.80</td>
+<td align="right">3.61e+02</td>
+<td align="right">1</td>
+<td align="right">1.49</td>
+<td align="right">0.222</td>
+</tr>
+<tr class="odd">
+<td align="left">Error</td>
+<td align="right"></td>
+<td align="right">9.58e+04</td>
+<td align="right">396</td>
+<td align="right"></td>
+<td align="right"></td>
+</tr>
+</tbody>
+</table>
+<p>The results show a significant effect of power prime (<span class="math inline">\(\texttt{P}\)</span>). The slope is estimated as <span class="math inline">\(\hat{\beta}_\text{P} = 3.87\)</span>. Remember that the slope of a contrast-coded predictor represents a difference between marginal means; in this case, we are comparing the marginal mean of conditions with a high-power prime to conditions with a low-power prime (averaging over the levels of experimenter Belief):
+<span class="math display">\[
+\begin{aligned}
+\hat{\beta}_\text{P} &amp;= \hat{\mu}_{\text{PH},\cdot} - \hat{\mu}_{\text{PL},\cdot} \\
+&amp;= \frac{\overline{Y}_\text{PH,EL} + \overline{Y}_\text{PH,EH}}{2} - \frac{\overline{Y}_\text{PL,EL} + \overline{Y}_\text{PL,EH}}{2} \\
+&amp;= 3.87
+\end{aligned}
+\]</span>
+Hence, the power prime manipulation appears to result in a difference of 3.87 points in subjective feeling of power. Neither the main effect of experimenter belief, nor the interaction between Power Prime and Experimenter Belief are significant. We may thus conclude that experimenter belief has no effect on participants’ subjective feeling of power, neither directly nor by moderating the effect of power prime.</p>
+<p>While the results are indicative of a successful manipulation of participants’ subjective feeling of power, it could be the case that these differences between the conditions were already present before the priming manipulation. While random assignment of participants to the conditions makes such pre-existing differences unlikely, they cannot be ruled out <em>a priori</em>. As we also have a measure of participants’ feeling of power before the priming task, we can test whether there is evidence for such pre-existing differences. This can be done with a similar model as before, but now using <span class="math inline">\(\texttt{pre-power}\)</span> as the dependent variable. The results are provided in Table <a href="ch-ANCOVA.html#tab:expBelief-power-pre-ANOVA">9.2</a>. As only the intercept is significant (which tells us, rather uninterestingly, that the grand mean of subjectively felt power differs from 0), we have no evidence for pre-existing differences, which strengthens our belief that the power manipulation had indeed a causal effect on feelings of power.</p>
+<table>
+<caption><span id="tab:expBelief-power-pre-ANOVA">Table 9.2: </span>Linear model predicting <span class="math inline">\(\texttt{pre-power}\)</span> by factorial contrast-coded predictors.</caption>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="right"><span class="math inline">\(\hat{\beta}\)</span></th>
+<th align="right"><span class="math inline">\(\text{SS}\)</span></th>
+<th align="right"><span class="math inline">\(\text{df}\)</span></th>
+<th align="right"><span class="math inline">\(F\)</span></th>
+<th align="right"><span class="math inline">\(p(\geq \lvert F \rvert)\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Intercept</td>
+<td align="right">57.287</td>
+<td align="right">1.31e+06</td>
+<td align="right">1</td>
+<td align="right">5742.575</td>
+<td align="right">0.000</td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline">\(\texttt{P}\)</span></td>
+<td align="right">-0.700</td>
+<td align="right">4.90e+01</td>
+<td align="right">1</td>
+<td align="right">0.214</td>
+<td align="right">0.644</td>
+</tr>
+<tr class="odd">
+<td align="left"><span class="math inline">\(\texttt{B}\)</span></td>
+<td align="right">0.095</td>
+<td align="right">9.04e-01</td>
+<td align="right">1</td>
+<td align="right">0.004</td>
+<td align="right">0.950</td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline">\(\texttt{P} \times \texttt{B}\)</span></td>
+<td align="right">3.429</td>
+<td align="right">2.94e+02</td>
+<td align="right">1</td>
+<td align="right">1.286</td>
+<td align="right">0.257</td>
+</tr>
+<tr class="odd">
+<td align="left">Error</td>
+<td align="right"></td>
+<td align="right">9.05e+04</td>
+<td align="right">396</td>
+<td align="right"></td>
+<td align="right"></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="acounting-for-pre-existing-differences" class="section level2 hasAnchor">
+<h2><span class="header-section-number">9.2</span> Acounting for pre-existing differences<a href="ch-ANCOVA.html#acounting-for-pre-existing-differences" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>We have just used two separate analyses to (1) assess differences between the priming conditions in feelings of power after the priming task, and (2) rule out that these were due to pre-existing differences. Relying on patterns of significance over multiple analyses is not ideal, particularly when one of these involves an expectation of a null effect. The problem is that a non-significant test result is not direct evidence for the absence of an effect. Non-significant results can always be due to a lack of power. So again, to help you remember: a non-significant test result is not direct evidence for the absence of an effect, and furthermore a non-significant test result is not direct evidence for the absence of an effect.</p>
+<p>There is a better way to reach both objectives: by including <span class="math inline">\(\texttt{pre-power}\)</span> as a predictor in our model of <span class="math inline">\(\texttt{post-power}\)</span>, we can determine the effect of prime and experimenter belief, whilst <em>controlling</em> for the effect of <span class="math inline">\(\texttt{pre-power}\)</span>. This is the general idea of ANCOVA: to test for group differences whilst controlling for the effect of <strong>covariates</strong> (metric predictors). Because in a linear model, effects (i.e slopes) of predictors represent <em>unique</em> effects, we always control for the effects of the other predictors in the model when assessing the effect of a focal predictor.</p>
+<p>When we add <span class="math inline">\(\texttt{pre-power}\)</span> to the model, the model can be written as:
+<span class="math display" id="eq:post-power-ANCOVA">\[\begin{equation}
+\texttt{post-power}_i = \beta_0 + \beta_\text{P} \times \texttt{P}_i + \beta_\text{B} \times \texttt{B}_i + \beta_{\text{P}\times \text{B}} \times (\texttt{P} \times \texttt{B})_i + \beta_\text{pre} \times \texttt{pre-power}_i + \epsilon_i
+\tag{9.2}
+\end{equation}\]</span>
+Parameter estimates and tests are provided in Table <a href="ch-ANCOVA.html#tab:expBelief-power-post-ANCOVA">9.3</a>. The results show a significant effect of prime (<span class="math inline">\(\texttt{P}\)</span>), as well as the pre-test power score (<span class="math inline">\(\texttt{pre-power}\)</span>). The latter effect is expected, and can be interpreted as usual: the positive slope indicates that participants who scored relatively high in the pre-test also score relatively high in the post-test. Comparing the effect of power prime to that obtained earlier (Table <a href="ch-ANCOVA.html#tab:expBelief-power-post-ANOVA">9.1</a>), we can notice two things: the slope is somewhat higher, and the value of the <span class="math inline">\(F\)</span> statistic is substantially higher. We will consider the interpretation of the slope in the next section, and the reason for the higher <span class="math inline">\(F\)</span> statistic in Section <a href="ch-ANCOVA.html#sec:ANCOVA-power">9.5</a>.</p>
+<table>
+<caption><span id="tab:expBelief-power-post-ANCOVA">Table 9.3: </span>Linear model predicting <span class="math inline">\(\texttt{post-power}\)</span> by <span class="math inline">\(\texttt{pre-power}\)</span> and factorial contrast-coded predictors.</caption>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="right"><span class="math inline">\(\hat{\beta}\)</span></th>
+<th align="right"><span class="math inline">\(\text{SS}\)</span></th>
+<th align="right"><span class="math inline">\(\text{df}\)</span></th>
+<th align="right"><span class="math inline">\(F\)</span></th>
+<th align="right"><span class="math inline">\(p(\geq \lvert F \rvert)\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Intercept</td>
+<td align="right">16.071</td>
+<td align="right">6664</td>
+<td align="right">1</td>
+<td align="right">53.86</td>
+<td align="right">0.000</td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline">\(\texttt{P}\)</span></td>
+<td align="right">4.379</td>
+<td align="right">1916</td>
+<td align="right">1</td>
+<td align="right">15.49</td>
+<td align="right">0.000</td>
+</tr>
+<tr class="odd">
+<td align="left"><span class="math inline">\(\texttt{B}\)</span></td>
+<td align="right">-0.079</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0.00</td>
+<td align="right">0.944</td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline">\(\texttt{pre-power}\)</span></td>
+<td align="right">0.720</td>
+<td align="right">46920</td>
+<td align="right">1</td>
+<td align="right">379.19</td>
+<td align="right">0.000</td>
+</tr>
+<tr class="odd">
+<td align="left"><span class="math inline">\(\texttt{P} \times \texttt{B}\)</span></td>
+<td align="right">1.334</td>
+<td align="right">44</td>
+<td align="right">1</td>
+<td align="right">0.36</td>
+<td align="right">0.550</td>
+</tr>
+<tr class="even">
+<td align="left">Error</td>
+<td align="right"></td>
+<td align="right">48876</td>
+<td align="right">395</td>
+<td align="right"></td>
+<td align="right"></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="slopes-of-contrast-coded-predictors-in-ancova-models" class="section level2 hasAnchor">
+<h2><span class="header-section-number">9.3</span> Slopes of contrast-coded predictors in ANCOVA models<a href="ch-ANCOVA.html#slopes-of-contrast-coded-predictors-in-ancova-models" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Although a metric predictor in an ANCOVA model is really just like any other predictor in the GLM, it is useful for clarity to (momentarily) denote such a <strong>covariate</strong> with a different symbol, e.g. <span class="math inline">\(Z\)</span>, instead of the usual <span class="math inline">\(X\)</span> we used for predictors. We can then write the model of Equation <a href="ch-ANCOVA.html#eq:post-power-ANCOVA">(9.2)</a> more abstractly as:
+<span class="math display" id="eq:ANCOVA-one-covariate">\[\begin{equation}
+Y_i = \beta_0 + \beta_1 \times X_{1,i} + \beta_2 \times X_{2,i} + \beta_3 \times X_{3,i} + \beta_\text{z} \times Z_i + \epsilon_i
+\tag{9.3}
+\end{equation}\]</span>
+Here, the <span class="math inline">\(X\)</span> variables are the contrast-coded predictors (e.g. <span class="math inline">\(\texttt{P}\)</span>, <span class="math inline">\(\texttt{B}\)</span>, and <span class="math inline">\(\texttt{P}\times\texttt{B}\)</span>), and <span class="math inline">\(Z\)</span> is a single covariate (e.g. <span class="math inline">\(\texttt{pre-power}\)</span>).</p>
+<p>As in any General Linear Model, inclusion of additional predictors will likely change the slopes of already included predictors. The slopes of the latter predictors will remain the same only when the additional predictors are <em>completely independent</em> from the already-included predictors. Such complete non-redundancy is in practice extremely unlikely. If there is non-redundancy (i.e. multicollinearity) in a model like that of Equation <a href="ch-ANCOVA.html#eq:ANCOVA-one-covariate">(9.3)</a>, we can no longer use Equation <a href="ch-ANOVA.html#eq:estimate-slope-orthogonal-contrast-codes">(7.3)</a> to compute the estimated slopes of contrast-coded predictors which are based on a set of orthogonal contrast codes. Fortunately, that does not mean those slopes no longer have a useful interpretation. In fact, the estimated slopes can be expressed as an adjusted version of Equation <a href="ch-ANOVA.html#eq:estimate-slope-orthogonal-contrast-codes">(7.3)</a>:
+<span class="math display" id="eq:estimate-slope-orthogonal-contrast-codes-ANCOVA-one-covariate">\[\begin{equation}
+\hat{\beta}_j = \frac{\sum_{k=1}^{g} c_{j,k} \overline{Y}_k}{\sum_{k=1} c_{j,k}^2} - \hat{\beta}_z \frac{\sum_{k=1}^{g} c_{j,k} \overline{Z}_k}{\sum_{k=1} c_{j,k}^2}
+\tag{9.4}
+\end{equation}\]</span>
+where <span class="math inline">\(\hat{\beta}_z\)</span> is the slope of the covariate in the full model (Equation <a href="ch-ANCOVA.html#eq:ANCOVA-one-covariate">(9.3)</a>). You can think of this as follows: An orthogonal contrast code reflects differences between marginal means. In the presence of a covariate, these differences are adjusted for the same difference in the marginal means of the covariate, weighted by its effect on the dependent variable. If there are differences in the covariate between the groups, and the covariate has an effect on the dependent variable, then at least some part of these differences can be explained by differences in the covariate between the groups. The adjustment removes the effect of differences in covariate values between the conditions from the values of the dependent variable. After the adjustment, the slope of the contrast code then reflects differences between the groups that are not explained by the covariate.</p>
+<p>Let’s illustrate how this works. The means of <span class="math inline">\(\texttt{pre-power}\)</span> and <span class="math inline">\(\texttt{post-power}\)</span> are:</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Prime</th>
+<th align="left">Belief</th>
+<th align="right">pre-power</th>
+<th align="right">post-power</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">PL</td>
+<td align="left">EL</td>
+<td align="right">58.5</td>
+<td align="right">56.3</td>
+</tr>
+<tr class="even">
+<td align="left">PL</td>
+<td align="left">EH</td>
+<td align="right">56.8</td>
+<td align="right">54.4</td>
+</tr>
+<tr class="odd">
+<td align="left">PH</td>
+<td align="left">EL</td>
+<td align="right">56.0</td>
+<td align="right">58.3</td>
+</tr>
+<tr class="even">
+<td align="left">PH</td>
+<td align="left">EH</td>
+<td align="right">57.8</td>
+<td align="right">60.2</td>
+</tr>
+</tbody>
+</table>
+<p>The estimated slope of <span class="math inline">\(\texttt{pre-power}\)</span> was <span class="math inline">\(\hat{\beta}_\text{pre} = 0.72\)</span>. Using the contrast code for Prime as we used before (i.e. <span class="math inline">\(-\tfrac{1}{2}\)</span> for the low-power prime conditions and <span class="math inline">\(-\tfrac{1}{2}\)</span> for the high-power prime conditions), we can determine the estimated slope of Prime as on <code>post-power</code></p>
+<p><span class="math display">\[\begin{aligned}
+\hat{\beta}_\texttt{P} &amp;=&amp;&amp; \frac{\tfrac{1}{2} \times 58.31 + \tfrac{1}{2} \times 60.2 - \tfrac{1}{2} \times 56.33 - \tfrac{1}{2} \times 54.42}{ (\tfrac{1}{2})^2 + (\tfrac{1}{2})^2 + (-\tfrac{1}{2})^2 + (-\tfrac{1}{2})^2} - \\
+&amp;&amp;&amp; 0.72 \times \frac{\tfrac{1}{2} \times 56.03 + \tfrac{1}{2} \times 57.84 - \tfrac{1}{2} \times 58.45 - \tfrac{1}{2} \times 56.83}{ (\tfrac{1}{2})^2 + (\tfrac{1}{2})^2 + (-\tfrac{1}{2})^2 + (-\tfrac{1}{2})^2} \\
+&amp; = &amp;&amp; \frac{3.875}{1} - 0.72 \times \frac{-0.7}{1} \\
+&amp; = &amp;&amp; 4.379
+\end{aligned}\]</span></p>
+<p>An alternative way to define the slope of Equation <a href="ch-ANCOVA.html#eq:estimate-slope-orthogonal-contrast-codes-ANCOVA-one-covariate">(9.4)</a> is to first adjust the means of <span class="math inline">\(Y\)</span> (i.e. <code>post-power</code> here) and then enter the adjusted group means in the usual formula for the slope of a contrast-coded predictor. These adjusted means are computed using a <em>centered</em> version of the covariate (i.e. <span class="math inline">\(Z&#39;_i = Z_i - \overline{Z}\)</span>):
+<span class="math display">\[\overline{Y}_k&#39; = \overline{Y}_k - \hat{\beta}_z \times (\overline{Z}_k - \overline{Z})\]</span>
+where <span class="math inline">\(\overline{Z}\)</span> is the average of the covariate over all observations (i.e. it is not an “average of averages”). The slope can then be expressed as a function of these adjusted means:
+<span class="math display">\[\hat{\beta}_j = \frac{\sum_{k=1}^{g} c_{j,k} \overline{Y}_k&#39;}{\sum_{k=1} c_{j,k}^2}\]</span>
+The fact that these two formulations are equivalent again illustrates the main idea of an ANCOVA model, which is to assess group differences that can <em>not</em> be attributed to the covariate.</p>
+</div>
+<div id="homogeneity-of-slopes" class="section level2 hasAnchor">
+<h2><span class="header-section-number">9.4</span> Homogeneity of slopes<a href="ch-ANCOVA.html#homogeneity-of-slopes" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The model of Equation <a href="ch-ANCOVA.html#eq:post-power-ANOVA">(9.1)</a> does not include any interactions between the covariate and the contrast-coding differences. As such, the model assumes the effect of the covariate on the dependent variable is the same in each condition. This assumption is usuallty referred to as the assumption of <strong>homogeneity of regression slopes</strong>. The resulting regression lines for the relation between <span class="math inline">\(\texttt{power-pre}\)</span> and <span class="math inline">\(\texttt{power-post}\)</span> in the different conditions are depicted in Figure <a href="ch-ANCOVA.html#fig:expBelief-modpostpre-regression-lines">9.2</a>. The assumption that the slopes are identical means that the the regression lines are parallel to each other. Note that the height of each regression line reflects the combined effect of power priming and experimenter belief. Within each condition, these effects are a constant, and hence the combined effect of these factors effectively is equal to the intercept of each regression line.</p>
+<p>As discussed above, you can think of an ANCOVA model as statistically correcting the conditions for any differences in the covariate. After this correction, the conditions effectively have the same value on the covariate. In the context of Figure <a href="ch-ANCOVA.html#fig:expBelief-modpostpre-regression-lines">9.2</a>, you can pick any value of the covariate you like, and then think of the contrasts between the conditions as comparisons between the model predictions at that value of the covariate. Because the regression lines for both high-power prime conditions, and for both low-power prime conditions, are almost the same, it is clear that experimenter belief has little effect on feelings of power. The high-power and low-power conditions have more clearly separated regression lines, which is corroborated by the significant effect of power prime in the model.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:expBelief-modpostpre-regression-lines"></span>
+<img src="09-ANCOVA_files/figure-html/expBelief-modpostpre-regression-lines-1.svg" alt="Regression lines reflecting the relation between $  exttt{power-pre}$ and $ exttt{power-post}$ in the four conditions of the experimenter belief and power priming experiment." width="672" />
+<p class="caption">
+Figure 9.2: Regression lines reflecting the relation between $ exttt{power-pre}$ and $ exttt{power-post}$ in the four conditions of the experimenter belief and power priming experiment.
+</p>
+</div>
+<p>While the assumption of parallel regression lines (i.e. homogeneity of regression slopes) allows for a straightforward interpretation of the other effects as reflecting differences in adjusted means, as for any assumption we make, there is always uncertainty about whether it can reasonably be assumed to hold. Due to the symmetry of moderation, not only does the lack of interactions between the covariate and contrast-coded predictors imply that the effect of the covariate on the dependent variable is identical in each condition, it also means that the effect of the conditions is the same regardless of the value on the covariate. There may be good reasons to suspect that the effect of the experimental manipulations differs for people who score differently on the covariate. For instance, you might think that a high-power prime is effective in lifting the subjective feeling of power for those who have a relatively low feeling of power to start off with, while it doesn’t do much for those who feel powerful anyway. In a similar vain, the low-power prime might lower the subjective feeling of power for those who have a relatively low feeling of power to start off with, while those with a relatively high feeling of power might be immune to it. If this were true, than the effects of experimental manipulations are moderated by the the covariate. This indicates we should include interactions between the covariate and the contrast-coded predictors. Allowing for such interactions is straightforward: we just construct new product-predictors and include them in the model.</p>
+<p>Allowing for moderation of the effect of conditions by the covariate in the model of Equation <a href="ch-ANCOVA.html#eq:post-power-ANOVA">(9.1)</a>, we would need add three product predictors: <span class="math inline">\((\texttt{P} \times \texttt{power-pre})_i\)</span>, <span class="math inline">\((\texttt{B} \times \texttt{power-pre})_i\)</span>, and <span class="math inline">\((\texttt{P} \times \texttt{B} \times \texttt{power-pre})_i\)</span>. The results of the expanded model are given in Table <a href="ch-ANCOVA.html#tab:expBelief-power-post-ANCOVA-non-homgeneous">9.4</a>.</p>
+<table>
+<caption><span id="tab:expBelief-power-post-ANCOVA-non-homgeneous">Table 9.4: </span>Linear model predicting <span class="math inline">\(\texttt{post-power}\)</span> by <span class="math inline">\(\texttt{pre-power}\)</span> and factorial contrast-coded predictors, as well as interactions between those.</caption>
+<colgroup>
+<col width="44%" />
+<col width="10%" />
+<col width="9%" />
+<col width="9%" />
+<col width="6%" />
+<col width="20%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="right"><span class="math inline">\(\hat{\beta}\)</span></th>
+<th align="right"><span class="math inline">\(\text{SS}\)</span></th>
+<th align="right"><span class="math inline">\(\text{df}\)</span></th>
+<th align="right"><span class="math inline">\(F\)</span></th>
+<th align="right"><span class="math inline">\(p(\geq \lvert F \rvert)\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Intercept</td>
+<td align="right">15.945</td>
+<td align="right">6519.6</td>
+<td align="right">1</td>
+<td align="right">52.440</td>
+<td align="right">0.000</td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline">\(\texttt{P}\)</span></td>
+<td align="right">6.358</td>
+<td align="right">259.1</td>
+<td align="right">1</td>
+<td align="right">2.084</td>
+<td align="right">0.150</td>
+</tr>
+<tr class="odd">
+<td align="left"><span class="math inline">\(\texttt{B}\)</span></td>
+<td align="right">-2.766</td>
+<td align="right">49.1</td>
+<td align="right">1</td>
+<td align="right">0.395</td>
+<td align="right">0.530</td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline">\(\texttt{pre-power}\)</span></td>
+<td align="right">0.722</td>
+<td align="right">46882.4</td>
+<td align="right">1</td>
+<td align="right">377.091</td>
+<td align="right">0.000</td>
+</tr>
+<tr class="odd">
+<td align="left"><span class="math inline">\(\texttt{P} \times \texttt{B}\)</span></td>
+<td align="right">-4.101</td>
+<td align="right">27.0</td>
+<td align="right">1</td>
+<td align="right">0.217</td>
+<td align="right">0.642</td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline">\(\texttt{P} \times \texttt{pre-power}\)</span></td>
+<td align="right">-0.035</td>
+<td align="right">28.0</td>
+<td align="right">1</td>
+<td align="right">0.225</td>
+<td align="right">0.635</td>
+</tr>
+<tr class="odd">
+<td align="left"><span class="math inline">\(\texttt{B} \times \texttt{pre-power}\)</span></td>
+<td align="right">0.048</td>
+<td align="right">51.3</td>
+<td align="right">1</td>
+<td align="right">0.412</td>
+<td align="right">0.521</td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline">\(\texttt{P} \times \texttt{B} \times \texttt{pre-power}\)</span></td>
+<td align="right">0.095</td>
+<td align="right">51.2</td>
+<td align="right">1</td>
+<td align="right">0.412</td>
+<td align="right">0.521</td>
+</tr>
+<tr class="odd">
+<td align="left">Error</td>
+<td align="right"></td>
+<td align="right">48736.0</td>
+<td align="right">392</td>
+<td align="right"></td>
+<td align="right"></td>
+</tr>
+</tbody>
+</table>
+<p>We can see that none of the interactions between <span class="math inline">\(\texttt{pre-power}\)</span> and the contrast-coded predictors are significant. As such, there is no strong evidence of an interaction between the covariate and the experimental manipulations. Rather than inspecting each interaction separately, it makes sense to perform an omnibus test, comparing the expanded model to the one of Equation <a href="ch-ANCOVA.html#eq:post-power-ANOVA">(9.1)</a>. This comparison tests the hypothesis that <em>all</em> the slopes of the additional product-predictors equal 0. If there is no overly strong reason to suspect a moderation for particular conditions, the omnibus test is a reasonable test that the covariate interacts with any of the experimental manipulations.<a href="#fn22" class="footnote-ref" id="fnref22"><sup>22</sup></a> This omnibus test is a straightforward application of the model comparison approach. We need the Sum of Squared Errors of each model, which are <span class="math inline">\(\text{SSE}(G) = 48736\)</span> and <span class="math inline">\(\text{SSE}(R) = 48876\)</span> for the expanded model and the one of Equation <a href="ch-ANCOVA.html#eq:post-power-ANOVA">(9.1)</a>, respectively. The <span class="math inline">\(F\)</span> statistic is then computed as usual as</p>
+<p><span class="math display">\[\begin{aligned}
+F &amp;= \frac{\frac{\text{SSE}(R) -  \text{SSE}(G)}{\text{npar}(G) - \text{npar}(R)}}{\frac{\text{SSE}(G)}{n-\text{npar}(G)}} \\
+&amp;= \frac{\frac{48876 -  48736}{8 - 5}}{\frac{48736}{400-8}} \\
+&amp;= 0.375
+\end{aligned}\]</span>
+With <span class="math inline">\(\text{df}_1 = 3\)</span> and <span class="math inline">\(\text{df}_2 = 392\)</span>, the critical value is <span class="math inline">\(F_{3,392, .05} = 2.63\)</span>. Hence, the result is non-significant, and we do not reject the null hypothesis that there are no interactions between the covariate and the contrast-coded predictors. In other words, we have no evidence that the assumption of homogeneous regression slopes is violated.</p>
+<p>If the assumption of homogeneous regression slopes is violated, then the model should really include the appropriate interaction terms. In that case, it is important to remember that the “simple slopes” of the contrast-coded predictors then reflect tests of group differences at particular values of the covariate. Group differences at one value of the covariate may be substantial, but absent or even reversed at another. It might make sense to center the covariate, so that you would test for group differences for an average value of the covariate. You could also consider not only centering at the mean, but at a few informative other values. For instance, you could consider testing the slopes at three values of the covariate: the minimum value, mean, and maximum value in the data. You could do this by creating three different “centered” covariates: <span class="math inline">\(Z&#39;_i = Z_i - \overline{Z}\)</span>, <span class="math inline">\(Z&#39;&#39;_i = Z_i - \text{min}(Z)\)</span>, and <span class="math inline">\(Z&#39;&#39;&#39;_i = Z_i - \text{max}(Z)\)</span>, and entering each in a different version of the same model. If the estimates of the group differences have the same direction and the tests significant in each, then you would conclude that there is evidence of group differences in the whole range of the covariate observed in the data. Other strategies are possible, of course. The main thing to realise is that in a model with interactions between the covariate and contrast-codes, group differences depend on the value of the covariate, and statements about group differences should be qualified by for which value of the covariate they hold.</p>
+</div>
+<div id="sec:ANCOVA-power" class="section level2 hasAnchor">
+<h2><span class="header-section-number">9.5</span> Power considerations in ANCOVA<a href="ch-ANCOVA.html#sec:ANCOVA-power" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>A primary reason for including covariates in models with categorical independent variables is to assess group differences in the dependent variable whilst controlling for any possible differences in the covariates. But there is another reason why the inclusion of covariates can be a good idea: it may increase the power of the tests of group differences. We saw evidence of this when we included <span class="math inline">\(\texttt{pre-power}\)</span> in the model for <span class="math inline">\(\texttt{post-power}\)</span>. Comparing the results in Table <a href="ch-ANCOVA.html#tab:expBelief-power-post-ANCOVA">9.3</a> to those in Table <a href="ch-ANCOVA.html#tab:expBelief-power-post-ANOVA">9.1</a>, you can see that the test results for the main effect of priming are stronger after inclusion of the covariate. The reason for this is that the covariate can explain differences in <span class="math inline">\(\texttt{post-power}\)</span> within each condition. Accounting for this within-condition variance reduces the overall error variance of the model, which can subsequently increase the power of the tests. This is particularly the case when the covariate is strongly related to the dependent variable, but independent of the contrast-coded predictors. Such independence implies that the groups do not differ in the average value of the covariate.</p>
+<p>We can illustrate this with the Venn diagrams in Figure <a href="ch-ANCOVA.html#fig:sse-partition-ANCOVA">9.3</a>. Let’s consider first the situation of no redundancy between the covariate <span class="math inline">\(Z\)</span> and the contrast-coded predictors <span class="math inline">\(X\)</span>, which is depicted in the left-hand plot. The SSR associated to the contrast-coded predictors is region <span class="math inline">\(B\)</span>, and the SSR associated to the covariate is region <span class="math inline">\(C\)</span>. The test of group differences (i.e. the test of the contrast-coded predictors) would involve a comparison of the SSR of region <span class="math inline">\(B\)</span> against the unexplained error of region <span class="math inline">\(A\)</span>. In a model without the covariate, the unexplained error would be the sum of region <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span>. As this error is larger, the <span class="math inline">\(F\)</span> statistic will be smaller, even though the SSR term for <span class="math inline">\(X\)</span> is the same. As such, inclusion of the covariate increases the power of the test of <span class="math inline">\(X\)</span>, and the increase in power is larger the stronger the relation between the covariate <span class="math inline">\(Z\)</span> and the dependent variable <span class="math inline">\(Y\)</span> (i.e. the larger region <span class="math inline">\(B\)</span>). The situation is more complicated when there is redundancy between the covariate and the contrast-coded predictors. This is the situation depicted in the right-hand plot. Whilst inclusion of the covariate again reduces the error – which would be the sum <span class="math inline">\(A+B\)</span> for a model without the covariate, but only <span class="math inline">\(A\)</span> for a model with the covariate – it also reduces the unique SSR that can be associated to the contrast-coded predictors. In a model without the covariate, <span class="math inline">\(\text{SSR}(X) = B + D\)</span>, and in a model with the covariate, <span class="math inline">\(\text{SSR}(X) = B\)</span>. The ANCOVA model is now no longer guaranteed to increase the power of the test of <span class="math inline">\(X\)</span>, as this depends on how the reduction in error compares to the reduction of the SSR.</p>
+<p>In conclusion, for purposes of increasing power, the covariate is ideally strongly related to the dependent variable, but unrelated to the other predictors in the model.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:sse-partition-ANCOVA"></span>
+<img src="09-ANCOVA_files/figure-html/sse-partition-ANCOVA-1.svg" alt="Partitioning the variance in an ANCOVA model. the circle labelled as $Y$ represents the variance of the dependent variable, circle $X$ represents a (set of) contrast-coded predictor(s), and circle $Z$ the covariate. Overlapping regions represent shared variability (e.g. covariance) between variables." width="60%" />
+<p class="caption">
+Figure 9.3: Partitioning the variance in an ANCOVA model. the circle labelled as <span class="math inline">\(Y\)</span> represents the variance of the dependent variable, circle <span class="math inline">\(X\)</span> represents a (set of) contrast-coded predictor(s), and circle <span class="math inline">\(Z\)</span> the covariate. Overlapping regions represent shared variability (e.g. covariance) between variables.
+</p>
+</div>
+</div>
+<div id="models-with-multiple-covariates" class="section level2 hasAnchor">
+<h2><span class="header-section-number">9.6</span> Models with multiple covariates<a href="ch-ANCOVA.html#models-with-multiple-covariates" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The analyses reported above indicate that the power priming task had the desired result of changing participants’ subjective feeling of power. The significant effect of prime on <span class="math inline">\(\texttt{post-power}\)</span> reflects differences between the means of the priming conditions. It is likely that within those conditions, there is variability in the subjective feeling of power. According to the social priming hypothesis, we might expect the approach advantage scores to be higher for those participants with a relatively strong subjective feeling of power, and lower for those with a relatively weak subjective feeling of power.</p>
+<p>Given the significant differences in <span class="math inline">\(\texttt{post-power}\)</span> between the priming conditions, but the lack of a significant effect of priming condition on approach advantage scores, a relation between <span class="math inline">\(\texttt{post-power}\)</span> and <span class="math inline">\(\texttt{ApproachAdvantage}\)</span> seems unlikely, but we can include <span class="math inline">\(\texttt{post-power}\)</span> as a predictor of <span class="math inline">\(\texttt{ApproachAdvantage}\)</span> and see. Rather than the final subjective feeling of power, it might also be the case that the approach advantage is related to how much the priming manipulation increased or decreased the feeling of power. To investigate this, we might include the <em>difference</em> <span class="math inline">\(\texttt{post-power} - \texttt{pre-power}\)</span> as a predictor. But actually, we can obtain a similar effect by just including <span class="math inline">\(\texttt{pre-power}\)</span> as a predictor in the model; when the slope of <span class="math inline">\(\texttt{pre-power}\)</span> is negative and the slope of <span class="math inline">\(\texttt{post-power}\)</span> positive, the combined effect on <span class="math inline">\(\texttt{ApproachAdvantage}\)</span> would be similar.
+The model thus becomes:
+<span class="math display">\[\begin{aligned}
+\texttt{ApproachAdvantage}_i =&amp; \beta_0 + \beta_\text{P} \times \texttt{P}_i + \beta_\text{B} \times \texttt{B}_i + \beta_{\text{P}\times \text{B}} \times (\texttt{P} \times \texttt{B})_i + \\ &amp; \beta_\text{pre} \times \texttt{pre-power}_i + \beta_\text{post} \times \texttt{post-power}_i + \epsilon_i
+\end{aligned}\]</span>
+Parameter estimates and tests are provided in Table <a href="ch-ANCOVA.html#tab:expBelief-ApproachAdvantage-ANCOVA">9.5</a>. As in the earlier ANOVA (Table <a href="ch-factorial-ANOVA.html#tab:expBelief-oneway-ANOVA-results">8.1</a>), we obtain a significant effect of experimenter belief. None of the other effects are significant. Neither the subjective feeling of power before or after the priming manipulation appears to affect the approach advantage scores. Interestingly, whilst not significant, the slope of <span class="math inline">\(\texttt{post-power}\)</span> is positive, and the slope of <span class="math inline">\(\texttt{pre-power}\)</span> negative, which is what one would expect when the difference between the two is related to the dependent variable.</p>
+<table>
+<caption><span id="tab:expBelief-ApproachAdvantage-ANCOVA">Table 9.5: </span>Linear model predicting <span class="math inline">\(\texttt{ApproachAdvantage}\)</span> by <span class="math inline">\(\texttt{pre-power}\)</span>, <span class="math inline">\(\texttt{post-power}\)</span>, and factorial contrast-coded predictors.</caption>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="right"><span class="math inline">\(\hat{\beta}\)</span></th>
+<th align="right"><span class="math inline">\(\text{SS}\)</span></th>
+<th align="right"><span class="math inline">\(\text{df}\)</span></th>
+<th align="right"><span class="math inline">\(F\)</span></th>
+<th align="right"><span class="math inline">\(p(\geq \lvert F \rvert)\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Intercept</td>
+<td align="right">28.396</td>
+<td align="right">18309</td>
+<td align="right">1</td>
+<td align="right">0.397</td>
+<td align="right">0.529</td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline">\(\texttt{P}\)</span></td>
+<td align="right">9.823</td>
+<td align="right">9279</td>
+<td align="right">1</td>
+<td align="right">0.201</td>
+<td align="right">0.654</td>
+</tr>
+<tr class="odd">
+<td align="left"><span class="math inline">\(\texttt{B}\)</span></td>
+<td align="right">90.569</td>
+<td align="right">820210</td>
+<td align="right">1</td>
+<td align="right">17.765</td>
+<td align="right">0.000</td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline">\(\texttt{pre-power}\)</span></td>
+<td align="right">-0.573</td>
+<td align="right">15190</td>
+<td align="right">1</td>
+<td align="right">0.329</td>
+<td align="right">0.567</td>
+</tr>
+<tr class="odd">
+<td align="left"><span class="math inline">\(\texttt{post-power}\)</span></td>
+<td align="right">0.452</td>
+<td align="right">9998</td>
+<td align="right">1</td>
+<td align="right">0.217</td>
+<td align="right">0.642</td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline">\(\texttt{P} \times \texttt{B}\)</span></td>
+<td align="right">37.883</td>
+<td align="right">35727</td>
+<td align="right">1</td>
+<td align="right">0.774</td>
+<td align="right">0.380</td>
+</tr>
+<tr class="odd">
+<td align="left">Error</td>
+<td align="right"></td>
+<td align="right">18190490</td>
+<td align="right">394</td>
+<td align="right"></td>
+<td align="right"></td>
+</tr>
+</tbody>
+</table>
+<p>Note that the slopes of the contrast-coded predictors are somewhat different from those in Table <a href="ch-factorial-ANOVA.html#tab:expBelief-oneway-ANOVA-results">8.1</a>. As before, this is because the slopes in the ANCOVA model represent differences between adjusted means. Analogous to Equation <a href="ch-ANCOVA.html#eq:estimate-slope-orthogonal-contrast-codes-ANCOVA-one-covariate">(9.4)</a>, when there are a total of <span class="math inline">\(L\)</span> covariates included in the model, which we can denote as <span class="math inline">\(Z_1, Z_2, \ldots, Z_L\)</span>, the estimate of the slope of the contrast-coded predictors can be written as:
+<span class="math display" id="eq:estimate-slope-orthogonal-contrast-codes-ANCOVA-multiple-covariates">\[\begin{equation}
+\hat{\beta}_j = \frac{\sum_{k=1}^{g} c_{j,k} \overline{Y}_k}{\sum_{k=1} c_{j,k}^2} - \sum_{l=1}^L \hat{\beta}_{z_l} \frac{\sum_{k=1}^{g} c_{j,k} \overline{Z}_{l,k}}{\sum_{k=1} c_{j,k}^2}
+\tag{9.5}
+\end{equation}\]</span>
+i.e. the total adjustment of the slope consists of the sum of adjustments for each covariate.</p>
+</div>
+<div id="mediation-with-categorical-independent-variables" class="section level2 hasAnchor">
+<h2><span class="header-section-number">9.7</span> Mediation with categorical independent variables<a href="ch-ANCOVA.html#mediation-with-categorical-independent-variables" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The finding that experimenter belief has an effect on participants’ approach advantage indicates that experimenter expectations affect participants behaviour, even though the experimenters in the study of <span class="citation">Gilder &amp; Heerey (<a href="#ref-gilder2018role">2018</a>)</span> asserted that their knowledge of the condition had not affected their behaviour towards the participants. The question is then how experimenter belief changed their interaction with the participants to change their approach advantage scores. To attempt to answer this question, we assess whether experimenter belief changed participants’ perception of the experimenters, and whether such changes resulted in the difference in approach advantage. Thus, as another example of mixing categorical and metric independent variables, we can consider assessing whether the effect of experimenter belief on approach advantage is mediated by participants’ perceptions of the experimenters.</p>
+<p>At the end of the experiment, participants rated how attractive, competent, friendly, and trustworthy they found their experimenter. Preliminary analysis (not shown here for brevity) indicates that when experimenters believed participants were assigned to the high-power condition, they were rated as more attractive, friendly, and trustworthy. If the effect of experimenter belief is mediated by these changes in perception, then after including the ratings of attractiveness, friendliness, and trustworthiness, we would expect the effect of experimenter belief to be reduced. However, the results of the analysis (see Table <a href="ch-ANCOVA.html#tab:expBelief-ApproachAdvantage-mediation-ANCOVA">9.6</a>) are only slighly suggestive of this. Controlling for attractiveness, friendliness, and trustworthiness, we still obtain a highly significant effect of experimenter belief, with a slope which is a little lower than in a model without these covariates. But none of the covariates appears to be related to the approach advantage.</p>
+<table>
+<caption><span id="tab:expBelief-ApproachAdvantage-mediation-ANCOVA">Table 9.6: </span>Linear model predicting <span class="math inline">\(\texttt{ApproachAdvantage}\)</span> by <span class="math inline">\(\texttt{pre-power}\)</span>, <span class="math inline">\(\texttt{post-power}\)</span>, and factorial contrast-coded predictors.</caption>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="right"><span class="math inline">\(\hat{\beta}\)</span></th>
+<th align="right"><span class="math inline">\(\text{SS}\)</span></th>
+<th align="right"><span class="math inline">\(\text{df}\)</span></th>
+<th align="right"><span class="math inline">\(F\)</span></th>
+<th align="right"><span class="math inline">\(p(\geq \lvert F \rvert)\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Intercept</td>
+<td align="right">-29.611</td>
+<td align="right">12777</td>
+<td align="right">1</td>
+<td align="right">0.277</td>
+<td align="right">0.599</td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline">\(\texttt{P}\)</span></td>
+<td align="right">10.895</td>
+<td align="right">11704</td>
+<td align="right">1</td>
+<td align="right">0.253</td>
+<td align="right">0.615</td>
+</tr>
+<tr class="odd">
+<td align="left"><span class="math inline">\(\texttt{B}\)</span></td>
+<td align="right">85.603</td>
+<td align="right">698114</td>
+<td align="right">1</td>
+<td align="right">15.120</td>
+<td align="right">0.000</td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline">\(\texttt{attractive}\)</span></td>
+<td align="right">-0.792</td>
+<td align="right">561</td>
+<td align="right">1</td>
+<td align="right">0.012</td>
+<td align="right">0.912</td>
+</tr>
+<tr class="odd">
+<td align="left"><span class="math inline">\(\texttt{friendly}\)</span></td>
+<td align="right">10.378</td>
+<td align="right">39004</td>
+<td align="right">1</td>
+<td align="right">0.845</td>
+<td align="right">0.359</td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline">\(\texttt{trustworthy}\)</span></td>
+<td align="right">-0.889</td>
+<td align="right">253</td>
+<td align="right">1</td>
+<td align="right">0.005</td>
+<td align="right">0.941</td>
+</tr>
+<tr class="odd">
+<td align="left"><span class="math inline">\(\texttt{P} \times \texttt{B}\)</span></td>
+<td align="right">39.049</td>
+<td align="right">37861</td>
+<td align="right">1</td>
+<td align="right">0.820</td>
+<td align="right">0.366</td>
+</tr>
+<tr class="even">
+<td align="left">Error</td>
+<td align="right"></td>
+<td align="right">18144858</td>
+<td align="right">393</td>
+<td align="right"></td>
+<td align="right"></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="ancova-vs-difference-scores" class="section level2 hasAnchor">
+<h2><span class="header-section-number">9.8</span> ANCOVA vs difference scores<a href="ch-ANCOVA.html#ancova-vs-difference-scores" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>To end the chapter, I want to discuss an alternative method to assess whether the power prime manipulation was effective. Note that the main effect of power prime reported in Table <a href="ch-ANCOVA.html#tab:expBelief-power-post-ANOVA">9.1</a> just reflects a difference between high-power and low-power priming conditions. That there is a difference between the conditions does not really tell us exactly what the priming task did to participants’ feeling of power. It could be that unscrambling high-power sentences increases feelings of power, and unscrambling low-power sentences decreases feelings of power. But it could also be that the task increased feelings of power in both conditions, but more so in the high-power conditions. Or it could be that the task decreased feelings of power in both conditions, but less so in the high-power conditions. In all these cases, the mean would be higher in the high-power conditions than in the low-power conditions, but the effect of the priming task is rather different. To more directly assess whether the high-power prime <em>increased</em>, and the low-power prime <em>decreased</em> participants’ subjective feeling of power, we can consider using the difference <span class="math inline">\(\texttt{diff-power}_i = \texttt{post-power} - \texttt{pre-power}\)</span> as dependent variable in the model
+<span class="math display">\[\texttt{diff-power}_i = \beta_0 + \beta_\text{P} \times \texttt{P}_i + \beta_\text{B} \times \texttt{B}_i + \beta_{\text{P}\times \text{B}} \times (\texttt{P} \times \texttt{B})_i + \epsilon_i\]</span>
+The model results are given in Table <a href="ch-ANCOVA.html#tab:expBelief-diff-power-ANOVA">9.7</a>. We again find a significant and positive effect of power prime. We also find that the intercept is close to 0 and non-significant. That indicates that averaged over all conditions, the subjective feeling of power seems to neither increase or decrease. However, the significant positive slope of power prime then shows that the high-power prime increased, and the low-power prime decreased, subjective feeling of power.</p>
+<table>
+<caption><span id="tab:expBelief-diff-power-ANOVA">Table 9.7: </span>Linear model predicting <span class="math inline">\(\texttt{diff-power}\)</span> by factorial contrast-coded predictors.</caption>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="right"><span class="math inline">\(\hat{\beta}\)</span></th>
+<th align="right"><span class="math inline">\(\text{SS}\)</span></th>
+<th align="right"><span class="math inline">\(\text{df}\)</span></th>
+<th align="right"><span class="math inline">\(F\)</span></th>
+<th align="right"><span class="math inline">\(p(\geq \lvert F \rvert)\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Intercept</td>
+<td align="right">0.028</td>
+<td align="right">3.21e-01</td>
+<td align="right">1</td>
+<td align="right">0.002</td>
+<td align="right">0.962</td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline">\(\texttt{P}\)</span></td>
+<td align="right">4.575</td>
+<td align="right">2.09e+03</td>
+<td align="right">1</td>
+<td align="right">14.806</td>
+<td align="right">0.000</td>
+</tr>
+<tr class="odd">
+<td align="left"><span class="math inline">\(\texttt{B}\)</span></td>
+<td align="right">-0.105</td>
+<td align="right">1.11e+00</td>
+<td align="right">1</td>
+<td align="right">0.008</td>
+<td align="right">0.930</td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline">\(\texttt{P} \times \texttt{B}\)</span></td>
+<td align="right">0.373</td>
+<td align="right">3.48e+00</td>
+<td align="right">1</td>
+<td align="right">0.025</td>
+<td align="right">0.875</td>
+</tr>
+<tr class="odd">
+<td align="left">Error</td>
+<td align="right"></td>
+<td align="right">5.60e+04</td>
+<td align="right">396</td>
+<td align="right"></td>
+<td align="right"></td>
+</tr>
+</tbody>
+</table>
+<p>Although a model with a difference score as dependent variable is straightforward to interpret when we are mainly interested in determining group differences (i.e. the effects of the contrast-coded predictors), there are reasons to prefer an ANCOVA model (e.g. Equation <a href="ch-ANCOVA.html#eq:post-power-ANCOVA">(9.2)</a>) to this analysis. If we write out the difference score model as
+<span class="math display">\[\texttt{post-power}_i - \texttt{pre-power}_i = \beta_0 + \beta_\text{P} \times \texttt{P}_i + \beta_\text{B} \times \texttt{B}_i + \beta_{\text{P}\times \text{B}} \times (\texttt{P} \times \texttt{B})_i + \epsilon_i\]</span>
+we can add <span class="math inline">\(\texttt{pre-power}\)</span> to both sides of the equation to obtain
+<span class="math display">\[\texttt{post-power}_i = \beta_0 + \beta_\text{P} \times \texttt{P}_i + \beta_\text{B} \times \texttt{B}_i + \beta_{\text{P}\times \text{B}} \times (\texttt{P} \times \texttt{B})_i +  \texttt{pre-power}_i + \epsilon_i\]</span>
+Note that this model is the same model as in Equation <a href="ch-ANCOVA.html#eq:post-power-ANCOVA">(9.2)</a> if we fix <span class="math inline">\(\beta_\text{pre} = 1\)</span>. In other words, the difference model is a special case of the ANCOVA model, where we assume we know the slope of the covariate equals 1. If this assumption is (approximately) true, then the difference model can be preferred, because it has one parameter less to estimate. If, however, the true slope of the covariate is different from 1, then the difference model is less accurate than the ANCOVA model. If the slope of the covariate is sufficiently different from 1, then the ANCOVA model will provide more powerful tests of the contrasts than the difference model <span class="citation">(Judd et al., <a href="#ref-judd2011data">2011</a>)</span>. In addition, if one is interested in modelling changes within participants, then approaches such as repeated-measures ANOVA and linear mixed-effects models are a better choice.</p>
+
+</div>
+</div>
+<h3>References<a href="references.html#references" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="refs" class="references">
+<div id="ref-gilder2018role">
+<p>Gilder, T. S. E., &amp; Heerey, E. A. (2018). The role of experimenter belief in social priming. <em>Psychological Science</em>, <em>29</em>, 403–417.</p>
+</div>
+<div id="ref-judd2011data">
+<p>Judd, C. M., McClelland, G. H., &amp; Ryan, C. S. (2011). <em>Data analysis: A model comparison approach</em>. Routledge.</p>
+</div>
+</div>
+<div class="footnotes">
+<hr />
+<ol start="22">
+<li id="fn22"><p>Although my reasoning why the power-prime manipulation might have a different effect for those participants with an initial high or low feeling of power might suggest otherwise, this was to illustrate why you <em>might</em> suspect an interaction, it is not a hypothesis I would stand by personally. I’m by no means an expert in the scientific study of social power.<a href="ch-ANCOVA.html#fnref22" class="footnote-back">↩</a></p></li>
+</ol>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="ch-factorial-ANOVA.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="ch-RM-ANOVA.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="book_assets/gitbook-2.6.7/js/app.min.js"></script>
+<script src="book_assets/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="book_assets/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="book_assets/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="book_assets/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="book_assets/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="book_assets/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="book_assets/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "serif",
+"size": 2
+},
+"edit": null,
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+},
+"source": null
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

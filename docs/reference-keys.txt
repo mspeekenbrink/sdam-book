@@ -299,7 +299,7 @@ interpreting-interactions
 orthogonal-contrast-codes-and-unequal-sample-sizes
 comparison-schemes-and-ss-types
 in-practice-3
-mixing-categorical-and-metric-predictors-ancova
+ch-ANCOVA
 subjective-feelings-of-power-and-priming
 acounting-for-pre-existing-differences
 slopes-of-contrast-coded-predictors-in-ancova-models
@@ -332,12 +332,16 @@ models-with-random-intercepts-and-slopes
 correlation-between-random-effects
 crossed-random-effects-dating-partners-in-the-speed-dating-experiment
 choosing-the-random-effects-structure
-ch-Bayes-factors
+ch-generalized-linear-models
+ch-SEM-path-models
+ch-SEM-latent-variable-models
+ch-Bayes-estimation
 fundamentals-of-bayesian-inference
 probability-in-times-of-covid
 bayes-rule
 we-missed-you-paul
 the-marginal-likelihood-and-prior-predictive-distribution
+ch-Bayes-factors
 hypothesis-testing-relative-evidence-and-the-bayes-factor
 parameter-estimates-and-credible-intervals
 a-bayesian-t-test

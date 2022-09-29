@@ -6,11 +6,10 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 8 Factorial ANOVA | Statistics: Data analysis and modelling</title>
   <meta name="description" content="A book about statistics for data analysis, with a main focus on statistical modelling." />
-  <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.29 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 8 Factorial ANOVA | Statistics: Data analysis and modelling" />
   <meta property="og:type" content="book" />
-  
   
   <meta property="og:description" content="A book about statistics for data analysis, with a main focus on statistical modelling." />
   <meta name="github-repo" content="mspeekenbrink/sdam-book" />
@@ -24,7 +23,7 @@
 <meta name="author" content="Maarten Speekenbrink" />
 
 
-<meta name="date" content="2021-12-15" />
+<meta name="date" content="2022-09-29" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -32,8 +31,7 @@
   
   
 <link rel="prev" href="ch-ANOVA.html"/>
-<link rel="next" href="mixing-categorical-and-metric-predictors-ancova.html"/>
-<script src="book_assets/header-attrs-2.11/header-attrs.js"></script>
+<link rel="next" href="ch-ANCOVA.html"/>
 <script src="book_assets/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="book_assets/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -51,67 +49,381 @@
 
 
 
-<link href="book_assets/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
-<script src="book_assets/anchor-sections-1.0.1/anchor-sections.js"></script>
+<link href="book_assets/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="book_assets/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="book_assets/anchor-sections-1.1.0/anchor-sections.js"></script>
 <script src="book_assets/htmlwidgets-1.5.4/htmlwidgets.js"></script>
 <script src="book_assets/viz-1.8.2/viz.js"></script>
 <link href="book_assets/DiagrammeR-styles-0.2/styles.css" rel="stylesheet" />
-<script src="book_assets/grViz-binding-1.0.6.1/grViz.js"></script>
+<script src="book_assets/grViz-binding-1.0.9/grViz.js"></script>
 <script src="book_assets/plotly-binding-4.10.0/plotly.js"></script>
 <script src="book_assets/typedarray-0.1/typedarray.min.js"></script>
 <link href="book_assets/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet" />
 <script src="book_assets/crosstalk-1.2.0/js/crosstalk.min.js"></script>
 <link href="book_assets/plotly-htmlwidgets-css-2.5.1/plotly-htmlwidgets.css" rel="stylesheet" />
 <script src="book_assets/plotly-main-2.5.1/plotly-latest.min.js"></script>
-<link href="book_assets/combineWidgetStyle-0.1/combineWidgets.css" rel="stylesheet" />
-<script src="book_assets/combineWidgets-binding-0.11.1/combineWidgets.js"></script>
-<script src="book_assets/rglWebGL-binding-0.108.3/rglWebGL.js"></script>
-<link href="book_assets/rglwidgetClass-0.108.3/rgl.css" rel="stylesheet" />
-<script src="book_assets/rglwidgetClass-0.108.3/rglClass.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.108.3/utils.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.108.3/buffer.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.108.3/subscenes.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.108.3/shaders.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.108.3/textures.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.108.3/projection.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.108.3/mouse.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.108.3/init.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.108.3/pieces.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.108.3/draw.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.108.3/controls.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.108.3/selection.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.108.3/rglTimer.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.108.3/pretty.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.108.3/axes.src.js"></script>
-<script src="book_assets/CanvasMatrix4-0.108.3/CanvasMatrix.src.js"></script>
-<script src="book_assets/rglPlayer-binding-0.108.3/rglPlayer.js"></script>
+<script src="book_assets/rglPlayer-binding-0.110.2/rglPlayer.js"></script>
+<link href="book_assets/rglwidgetClass-0.110.2/rgl.css" rel="stylesheet" />
+<script src="book_assets/rglwidgetClass-0.110.2/rglClass.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.110.2/utils.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.110.2/buffer.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.110.2/subscenes.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.110.2/shaders.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.110.2/textures.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.110.2/projection.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.110.2/mouse.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.110.2/init.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.110.2/pieces.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.110.2/draw.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.110.2/controls.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.110.2/selection.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.110.2/rglTimer.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.110.2/pretty.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.110.2/axes.src.js"></script>
+<script src="book_assets/rglwidgetClass-0.110.2/animation.src.js"></script>
+<!--html_preserve--><script type = "text/plain" id = "rgl-vertex-shader">
+#line 2 1
+// File 1 is the vertex shader
+#ifdef GL_ES
+#ifdef GL_FRAGMENT_PRECISION_HIGH
+precision highp float;
+#else
+precision mediump float;
+#endif
+#endif
+
+attribute vec3 aPos;
+attribute vec4 aCol;
+uniform mat4 mvMatrix;
+uniform mat4 prMatrix;
+varying vec4 vCol;
+varying vec4 vPosition;
+
+#ifdef NEEDS_VNORMAL
+attribute vec3 aNorm;
+uniform mat4 normMatrix;
+varying vec4 vNormal;
+#endif
+
+#if defined(HAS_TEXTURE) || defined (IS_TEXT)
+attribute vec2 aTexcoord;
+varying vec2 vTexcoord;
+#endif
+
+#ifdef FIXED_SIZE
+uniform vec3 textScale;
+#endif
+
+#ifdef FIXED_QUADS
+attribute vec3 aOfs;
+#endif
+
+#ifdef IS_TWOSIDED
+#ifdef HAS_NORMALS
+varying float normz;
+uniform mat4 invPrMatrix;
+#else
+attribute vec3 aPos1;
+attribute vec3 aPos2;
+varying float normz;
+#endif
+#endif // IS_TWOSIDED
+
+#ifdef FAT_LINES
+attribute vec3 aNext;
+attribute vec2 aPoint;
+varying vec2 vPoint;
+varying float vLength;
+uniform float uAspect;
+uniform float uLwd;
+#endif
+
+
+void main(void) {
+  
+#ifndef IS_BRUSH
+#if defined(NCLIPPLANES) || !defined(FIXED_QUADS) || defined(HAS_FOG)
+  vPosition = mvMatrix * vec4(aPos, 1.);
+#endif
+  
+#ifndef FIXED_QUADS
+  gl_Position = prMatrix * vPosition;
+#endif
+#endif // !IS_BRUSH
+  
+#ifdef IS_POINTS
+  gl_PointSize = POINTSIZE;
+#endif
+  
+  vCol = aCol;
+  
+#ifdef NEEDS_VNORMAL
+  vNormal = normMatrix * vec4(-aNorm, dot(aNorm, aPos));
+#endif
+  
+#ifdef IS_TWOSIDED
+#ifdef HAS_NORMALS
+  /* normz should be calculated *after* projection */
+  normz = (invPrMatrix*vNormal).z;
+#else
+  vec4 pos1 = prMatrix*(mvMatrix*vec4(aPos1, 1.));
+  pos1 = pos1/pos1.w - gl_Position/gl_Position.w;
+  vec4 pos2 = prMatrix*(mvMatrix*vec4(aPos2, 1.));
+  pos2 = pos2/pos2.w - gl_Position/gl_Position.w;
+  normz = pos1.x*pos2.y - pos1.y*pos2.x;
+#endif
+#endif // IS_TWOSIDED
+  
+#ifdef NEEDS_VNORMAL
+  vNormal = vec4(normalize(vNormal.xyz/vNormal.w), 1);
+#endif
+  
+#if defined(HAS_TEXTURE) || defined(IS_TEXT)
+  vTexcoord = aTexcoord;
+#endif
+  
+#if defined(FIXED_SIZE) && !defined(ROTATING)
+  vec4 pos = prMatrix * mvMatrix * vec4(aPos, 1.);
+  pos = pos/pos.w;
+  gl_Position = pos + vec4(aOfs*textScale, 0.);
+#endif
+  
+#if defined(IS_SPRITES) && !defined(FIXED_SIZE)
+  vec4 pos = mvMatrix * vec4(aPos, 1.);
+  pos = pos/pos.w + vec4(aOfs,  0.);
+  gl_Position = prMatrix*pos;
+#endif
+  
+#ifdef FAT_LINES
+  /* This code was inspired by Matt Deslauriers' code in 
+   https://mattdesl.svbtle.com/drawing-lines-is-hard */
+  vec2 aspectVec = vec2(uAspect, 1.0);
+  mat4 projViewModel = prMatrix * mvMatrix;
+  vec4 currentProjected = projViewModel * vec4(aPos, 1.0);
+  currentProjected = currentProjected/currentProjected.w;
+  vec4 nextProjected = projViewModel * vec4(aNext, 1.0);
+  vec2 currentScreen = currentProjected.xy * aspectVec;
+  vec2 nextScreen = (nextProjected.xy / nextProjected.w) * aspectVec;
+  float len = uLwd;
+  vec2 dir = vec2(1.0, 0.0);
+  vPoint = aPoint;
+  vLength = length(nextScreen - currentScreen)/2.0;
+  vLength = vLength/(vLength + len);
+  if (vLength > 0.0) {
+    dir = normalize(nextScreen - currentScreen);
+  }
+  vec2 normal = vec2(-dir.y, dir.x);
+  dir.x /= uAspect;
+  normal.x /= uAspect;
+  vec4 offset = vec4(len*(normal*aPoint.x*aPoint.y - dir), 0.0, 0.0);
+  gl_Position = currentProjected + offset;
+#endif
+  
+#ifdef IS_BRUSH
+  gl_Position = vec4(aPos, 1.);
+#endif
+}
+</script>
+<script type = "text/plain" id = "rgl-fragment-shader">
+#line 2 2
+// File 2 is the fragment shader
+#ifdef GL_ES
+#ifdef GL_FRAGMENT_PRECISION_HIGH
+precision highp float;
+#else
+precision mediump float;
+#endif
+#endif
+varying vec4 vCol; // carries alpha
+varying vec4 vPosition;
+#if defined(HAS_TEXTURE) || defined (IS_TEXT)
+varying vec2 vTexcoord;
+uniform sampler2D uSampler;
+#endif
+
+#ifdef HAS_FOG
+uniform int uFogMode;
+uniform vec3 uFogColor;
+uniform vec4 uFogParms;
+#endif
+
+#if defined(IS_LIT) && !defined(FIXED_QUADS)
+varying vec4 vNormal;
+#endif
+
+#if NCLIPPLANES > 0
+uniform vec4 vClipplane[NCLIPPLANES];
+#endif
+
+#if NLIGHTS > 0
+uniform mat4 mvMatrix;
+#endif
+
+#ifdef IS_LIT
+uniform vec3 emission;
+uniform float shininess;
+#if NLIGHTS > 0
+uniform vec3 ambient[NLIGHTS];
+uniform vec3 specular[NLIGHTS]; // light*material
+uniform vec3 diffuse[NLIGHTS];
+uniform vec3 lightDir[NLIGHTS];
+uniform bool viewpoint[NLIGHTS];
+uniform bool finite[NLIGHTS];
+#endif
+#endif // IS_LIT
+
+#ifdef IS_TWOSIDED
+uniform bool front;
+varying float normz;
+#endif
+
+#ifdef FAT_LINES
+varying vec2 vPoint;
+varying float vLength;
+#endif
+
+void main(void) {
+  vec4 fragColor;
+#ifdef FAT_LINES
+  vec2 point = vPoint;
+  bool neg = point.y < 0.0;
+  point.y = neg ? (point.y + vLength)/(1.0 - vLength) :
+                 -(point.y - vLength)/(1.0 - vLength);
+#if defined(IS_TRANSPARENT) && defined(IS_LINESTRIP)
+  if (neg && length(point) <= 1.0) discard;
+#endif
+  point.y = min(point.y, 0.0);
+  if (length(point) > 1.0) discard;
+#endif // FAT_LINES
+  
+#ifdef ROUND_POINTS
+  vec2 coord = gl_PointCoord - vec2(0.5);
+  if (length(coord) > 0.5) discard;
+#endif
+  
+#if NCLIPPLANES > 0
+  for (int i = 0; i < NCLIPPLANES; i++)
+    if (dot(vPosition, vClipplane[i]) < 0.0) discard;
+#endif
+    
+#ifdef FIXED_QUADS
+    vec3 n = vec3(0., 0., 1.);
+#elif defined(IS_LIT)
+    vec3 n = normalize(vNormal.xyz);
+#endif
+    
+#ifdef IS_TWOSIDED
+    if ((normz <= 0.) != front) discard;
+#endif
+    
+#ifdef IS_LIT
+    vec3 eye = normalize(-vPosition.xyz/vPosition.w);
+    vec3 lightdir;
+    vec4 colDiff;
+    vec3 halfVec;
+    vec4 lighteffect = vec4(emission, 0.);
+    vec3 col;
+    float nDotL;
+#ifdef FIXED_QUADS
+    n = -faceforward(n, n, eye);
+#endif
+    
+#if NLIGHTS > 0
+    for (int i=0;i<NLIGHTS;i++) {
+      colDiff = vec4(vCol.rgb * diffuse[i], vCol.a);
+      lightdir = lightDir[i];
+      if (!viewpoint[i])
+        lightdir = (mvMatrix * vec4(lightdir, 1.)).xyz;
+      if (!finite[i]) {
+        halfVec = normalize(lightdir + eye);
+      } else {
+        lightdir = normalize(lightdir - vPosition.xyz/vPosition.w);
+        halfVec = normalize(lightdir + eye);
+      }
+      col = ambient[i];
+      nDotL = dot(n, lightdir);
+      col = col + max(nDotL, 0.) * colDiff.rgb;
+      col = col + pow(max(dot(halfVec, n), 0.), shininess) * specular[i];
+      lighteffect = lighteffect + vec4(col, colDiff.a);
+    }
+#endif
+    
+#else // not IS_LIT
+    vec4 colDiff = vCol;
+    vec4 lighteffect = colDiff;
+#endif
+    
+#ifdef IS_TEXT
+    vec4 textureColor = lighteffect*texture2D(uSampler, vTexcoord);
+#endif
+    
+#ifdef HAS_TEXTURE
+#ifdef TEXTURE_rgb
+    vec4 textureColor = lighteffect*vec4(texture2D(uSampler, vTexcoord).rgb, 1.);
+#endif
+    
+#ifdef TEXTURE_rgba
+    vec4 textureColor = lighteffect*texture2D(uSampler, vTexcoord);
+#endif
+    
+#ifdef TEXTURE_alpha
+    vec4 textureColor = texture2D(uSampler, vTexcoord);
+    float luminance = dot(vec3(1.,1.,1.), textureColor.rgb)/3.;
+    textureColor =  vec4(lighteffect.rgb, lighteffect.a*luminance);
+#endif
+    
+#ifdef TEXTURE_luminance
+    vec4 textureColor = vec4(lighteffect.rgb*dot(texture2D(uSampler, vTexcoord).rgb, vec3(1.,1.,1.))/3., lighteffect.a);
+#endif
+    
+#ifdef TEXTURE_luminance_alpha
+    vec4 textureColor = texture2D(uSampler, vTexcoord);
+    float luminance = dot(vec3(1.,1.,1.),textureColor.rgb)/3.;
+    textureColor = vec4(lighteffect.rgb*luminance, lighteffect.a*textureColor.a);
+#endif
+    
+    fragColor = textureColor;
+
+#elif defined(IS_TEXT)
+    if (textureColor.a < 0.1)
+      discard;
+    else
+      fragColor = textureColor;
+#else
+    fragColor = lighteffect;
+#endif // HAS_TEXTURE
+    
+#ifdef HAS_FOG
+    // uFogParms elements: x = near, y = far, z = fogscale, w = (1-sin(FOV/2))/(1+sin(FOV/2))
+    // In Exp and Exp2: use density = density/far
+    // fogF will be the proportion of fog
+    // Initialize it to the linear value
+    float fogF;
+    if (uFogMode > 0) {
+      fogF = (uFogParms.y - vPosition.z/vPosition.w)/(uFogParms.y - uFogParms.x);
+      if (uFogMode > 1)
+        fogF = mix(uFogParms.w, 1.0, fogF);
+      fogF = fogF*uFogParms.z;
+      if (uFogMode == 2)
+        fogF = 1.0 - exp(-fogF);
+      // Docs are wrong: use (density*c)^2, not density*c^2
+      // https://gitlab.freedesktop.org/mesa/mesa/-/blob/master/src/mesa/swrast/s_fog.c#L58
+      else if (uFogMode == 3)
+        fogF = 1.0 - exp(-fogF*fogF);
+      fogF = clamp(fogF, 0.0, 1.0);
+      gl_FragColor = vec4(mix(fragColor.rgb, uFogColor, fogF), fragColor.a);
+    } else gl_FragColor = fragColor;
+#else
+    gl_FragColor = fragColor;
+#endif // HAS_FOG
+    
+}
+</script><!--/html_preserve-->
 <script src="book_assets/kePrint-0.0.1/kePrint.js"></script>
 <link href="book_assets/lightable-0.0.1/lightable.css" rel="stylesheet" />
 
 
 
-<style type="text/css">
-/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
-div.csl-bib-body { }
-div.csl-entry {
-  clear: both;
-}
-.hanging div.csl-entry {
-  margin-left:2em;
-  text-indent:-2em;
-}
-div.csl-left-margin {
-  min-width:2em;
-  float:left;
-}
-div.csl-right-inline {
-  margin-left:2em;
-  padding-left:1em;
-}
-div.csl-indent {
-  margin-left: 2em;
-}
-</style>
 
 <link rel="stylesheet" href="style.css" type="text/css" />
 </head>
@@ -126,44 +438,36 @@ div.csl-indent {
       <nav role="navigation">
 
 <ul class="summary">
-<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a>
-<ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a><ul>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#acknowledgements"><i class="fa fa-check"></i>Acknowledgements</a></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#notation"><i class="fa fa-check"></i>Notation</a></li>
 </ul></li>
-<li class="chapter" data-level="1" data-path="ch-intro.html"><a href="ch-intro.html"><i class="fa fa-check"></i><b>1</b> Introduction</a>
-<ul>
+<li class="chapter" data-level="1" data-path="ch-intro.html"><a href="ch-intro.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
 <li class="chapter" data-level="1.1" data-path="ch-intro.html"><a href="ch-intro.html#paul-the-octopus"><i class="fa fa-check"></i><b>1.1</b> Paul the octopus</a></li>
 <li class="chapter" data-level="1.2" data-path="ch-intro.html"><a href="ch-intro.html#experiments-and-observations"><i class="fa fa-check"></i><b>1.2</b> Experiments and observations</a></li>
-<li class="chapter" data-level="1.3" data-path="ch-intro.html"><a href="ch-intro.html#data"><i class="fa fa-check"></i><b>1.3</b> Data</a>
-<ul>
+<li class="chapter" data-level="1.3" data-path="ch-intro.html"><a href="ch-intro.html#data"><i class="fa fa-check"></i><b>1.3</b> Data</a><ul>
 <li class="chapter" data-level="1.3.1" data-path="ch-intro.html"><a href="ch-intro.html#measurement-scales"><i class="fa fa-check"></i><b>1.3.1</b> Measurement scales</a></li>
 <li class="chapter" data-level="1.3.2" data-path="ch-intro.html"><a href="ch-intro.html#the-data-generating-process"><i class="fa fa-check"></i><b>1.3.2</b> The Data Generating Process</a></li>
 </ul></li>
-<li class="chapter" data-level="1.4" data-path="ch-intro.html"><a href="ch-intro.html#exploring-and-describing-data"><i class="fa fa-check"></i><b>1.4</b> Exploring and describing data</a>
-<ul>
+<li class="chapter" data-level="1.4" data-path="ch-intro.html"><a href="ch-intro.html#exploring-and-describing-data"><i class="fa fa-check"></i><b>1.4</b> Exploring and describing data</a><ul>
 <li class="chapter" data-level="1.4.1" data-path="ch-intro.html"><a href="ch-intro.html#summary-statistics"><i class="fa fa-check"></i><b>1.4.1</b> Summary statistics</a></li>
 <li class="chapter" data-level="1.4.2" data-path="ch-intro.html"><a href="ch-intro.html#visual-exploration"><i class="fa fa-check"></i><b>1.4.2</b> Visual exploration</a></li>
 </ul></li>
 <li class="chapter" data-level="1.5" data-path="ch-intro.html"><a href="ch-intro.html#analysis-and-modelling"><i class="fa fa-check"></i><b>1.5</b> Analysis and modelling</a></li>
 <li class="chapter" data-level="1.6" data-path="ch-intro.html"><a href="ch-intro.html#summary"><i class="fa fa-check"></i><b>1.6</b> Summary</a></li>
 </ul></li>
-<li class="chapter" data-level="2" data-path="ch-modeling.html"><a href="ch-modeling.html"><i class="fa fa-check"></i><b>2</b> Statistical modelling</a>
-<ul>
+<li class="chapter" data-level="2" data-path="ch-modeling.html"><a href="ch-modeling.html"><i class="fa fa-check"></i><b>2</b> Statistical modelling</a><ul>
 <li class="chapter" data-level="2.1" data-path="ch-modeling.html"><a href="ch-modeling.html#coin-flipping-defining-a-statistical-model"><i class="fa fa-check"></i><b>2.1</b> Coin flipping: Defining a statistical model</a></li>
-<li class="chapter" data-level="2.2" data-path="ch-modeling.html"><a href="ch-modeling.html#probability"><i class="fa fa-check"></i><b>2.2</b> Probability</a>
-<ul>
+<li class="chapter" data-level="2.2" data-path="ch-modeling.html"><a href="ch-modeling.html#probability"><i class="fa fa-check"></i><b>2.2</b> Probability</a><ul>
 <li class="chapter" data-level="2.2.1" data-path="ch-modeling.html"><a href="ch-modeling.html#sec:02-probability-definition"><i class="fa fa-check"></i><b>2.2.1</b> What is probability?</a></li>
 <li class="chapter" data-level="2.2.2" data-path="ch-modeling.html"><a href="ch-modeling.html#distributions"><i class="fa fa-check"></i><b>2.2.2</b> Distributions</a></li>
 </ul></li>
 <li class="chapter" data-level="2.3" data-path="ch-modeling.html"><a href="ch-modeling.html#sec:02-binomial-model"><i class="fa fa-check"></i><b>2.3</b> Flipping a biased coin: An alternative model</a></li>
-<li class="chapter" data-level="2.4" data-path="ch-modeling.html"><a href="ch-modeling.html#estimation"><i class="fa fa-check"></i><b>2.4</b> Estimation</a>
-<ul>
+<li class="chapter" data-level="2.4" data-path="ch-modeling.html"><a href="ch-modeling.html#estimation"><i class="fa fa-check"></i><b>2.4</b> Estimation</a><ul>
 <li class="chapter" data-level="2.4.1" data-path="ch-modeling.html"><a href="ch-modeling.html#maximum-likelihood-estimation"><i class="fa fa-check"></i><b>2.4.1</b> Maximum likelihood estimation</a></li>
 <li class="chapter" data-level="2.4.2" data-path="ch-modeling.html"><a href="ch-modeling.html#properties-of-good-estimators"><i class="fa fa-check"></i><b>2.4.2</b> Properties of good estimators</a></li>
 </ul></li>
-<li class="chapter" data-level="2.5" data-path="ch-modeling.html"><a href="ch-modeling.html#sec:02-likelihood-ratio"><i class="fa fa-check"></i><b>2.5</b> Comparing models: Null-hypothesis significance testing</a>
-<ul>
+<li class="chapter" data-level="2.5" data-path="ch-modeling.html"><a href="ch-modeling.html#sec:02-likelihood-ratio"><i class="fa fa-check"></i><b>2.5</b> Comparing models: Null-hypothesis significance testing</a><ul>
 <li class="chapter" data-level="2.5.1" data-path="ch-modeling.html"><a href="ch-modeling.html#decisions-and-types-of-error"><i class="fa fa-check"></i><b>2.5.1</b> Decisions and types of error</a></li>
 <li class="chapter" data-level="2.5.2" data-path="ch-modeling.html"><a href="ch-modeling.html#significance-and-power"><i class="fa fa-check"></i><b>2.5.2</b> Significance and power</a></li>
 <li class="chapter" data-level="2.5.3" data-path="ch-modeling.html"><a href="ch-modeling.html#testing-whether-paul-was-guessing"><i class="fa fa-check"></i><b>2.5.3</b> Testing whether Paul was guessing</a></li>
@@ -172,103 +476,84 @@ div.csl-indent {
 <li class="chapter" data-level="2.7" data-path="ch-modeling.html"><a href="ch-modeling.html#summary-1"><i class="fa fa-check"></i><b>2.7</b> Summary</a></li>
 <li class="chapter" data-level="2.8" data-path="ch-modeling.html"><a href="ch-modeling.html#epilogue"><i class="fa fa-check"></i><b>2.8</b> Epilogue</a></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html"><i class="fa fa-check"></i><b>3</b> A model with a mean (one sample t-test)</a>
-<ul>
-<li class="chapter" data-level="3.1" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#numeric-judgement-and-anchoring"><i class="fa fa-check"></i><b>3.1</b> Numeric judgement and anchoring</a>
-<ul>
+<li class="chapter" data-level="3" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html"><i class="fa fa-check"></i><b>3</b> A model with a mean (one sample t-test)</a><ul>
+<li class="chapter" data-level="3.1" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#numeric-judgement-and-anchoring"><i class="fa fa-check"></i><b>3.1</b> Numeric judgement and anchoring</a><ul>
 <li class="chapter" data-level="3.1.1" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#exploring-the-data"><i class="fa fa-check"></i><b>3.1.1</b> Exploring the data</a></li>
 </ul></li>
-<li class="chapter" data-level="3.2" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#a-statistical-model-of-judgements"><i class="fa fa-check"></i><b>3.2</b> A statistical model of judgements</a>
-<ul>
+<li class="chapter" data-level="3.2" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#a-statistical-model-of-judgements"><i class="fa fa-check"></i><b>3.2</b> A statistical model of judgements</a><ul>
 <li class="chapter" data-level="3.2.1" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#the-normal-distribution"><i class="fa fa-check"></i><b>3.2.1</b> The Normal distribution</a></li>
 <li class="chapter" data-level="3.2.2" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#two-useful-properties-of-the-normal-distribution"><i class="fa fa-check"></i><b>3.2.2</b> Two useful properties of the Normal distribution</a></li>
 <li class="chapter" data-level="3.2.3" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#back-to-anchoring"><i class="fa fa-check"></i><b>3.2.3</b> Back to anchoring</a></li>
 </ul></li>
-<li class="chapter" data-level="3.3" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#parameter-estimation"><i class="fa fa-check"></i><b>3.3</b> Parameter estimation</a>
-<ul>
+<li class="chapter" data-level="3.3" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#parameter-estimation"><i class="fa fa-check"></i><b>3.3</b> Parameter estimation</a><ul>
 <li class="chapter" data-level="3.3.1" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#sampling-distribution-of-the-estimated-mean"><i class="fa fa-check"></i><b>3.3.1</b> Sampling distribution of the estimated mean</a></li>
 </ul></li>
-<li class="chapter" data-level="3.4" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#testing-whether-mu-has-an-specific-value"><i class="fa fa-check"></i><b>3.4</b> Testing whether <span class="math inline">\(\mu\)</span> has an specific value</a>
-<ul>
+<li class="chapter" data-level="3.4" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#testing-whether-mu-has-an-specific-value"><i class="fa fa-check"></i><b>3.4</b> Testing whether <span class="math inline">\(\mu\)</span> has an specific value</a><ul>
 <li class="chapter" data-level="3.4.1" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#the-classical-way"><i class="fa fa-check"></i><b>3.4.1</b> The classical way</a></li>
 <li class="chapter" data-level="3.4.2" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#the-model-comparison-way"><i class="fa fa-check"></i><b>3.4.2</b> The model comparison way</a></li>
 </ul></li>
 <li class="chapter" data-level="3.5" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#ch3-confidence-interval"><i class="fa fa-check"></i><b>3.5</b> Confidence intervals</a></li>
 <li class="chapter" data-level="3.6" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#effect-size"><i class="fa fa-check"></i><b>3.6</b> Effect size</a></li>
 <li class="chapter" data-level="3.7" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#sec:02-assumptions"><i class="fa fa-check"></i><b>3.7</b> Assumptions</a></li>
-<li class="chapter" data-level="3.8" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#the-central-limit-theorem"><i class="fa fa-check"></i><b>3.8</b> The Central Limit Theorem</a>
-<ul>
+<li class="chapter" data-level="3.8" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#the-central-limit-theorem"><i class="fa fa-check"></i><b>3.8</b> The Central Limit Theorem</a><ul>
 <li class="chapter" data-level="3.8.1" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#the-central-limit-theorem-in-action"><i class="fa fa-check"></i><b>3.8.1</b> The Central Limit Theorem in action</a></li>
 <li class="chapter" data-level="3.8.2" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#bootstrapping-a-statistic"><i class="fa fa-check"></i><b>3.8.2</b> Bootstrapping a statistic</a></li>
 </ul></li>
 <li class="chapter" data-level="3.9" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#in-practice"><i class="fa fa-check"></i><b>3.9</b> In practice</a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="ch-simple-regression.html"><a href="ch-simple-regression.html"><i class="fa fa-check"></i><b>4</b> Simple linear regression</a>
-<ul>
+<li class="chapter" data-level="4" data-path="ch-simple-regression.html"><a href="ch-simple-regression.html"><i class="fa fa-check"></i><b>4</b> Simple linear regression</a><ul>
 <li class="chapter" data-level="4.1" data-path="ch-simple-regression.html"><a href="ch-simple-regression.html#trump-votes-and-hate-groups"><i class="fa fa-check"></i><b>4.1</b> Trump, votes, and hate groups</a></li>
 <li class="chapter" data-level="4.2" data-path="ch-simple-regression.html"><a href="ch-simple-regression.html#the-model"><i class="fa fa-check"></i><b>4.2</b> The model</a></li>
-<li class="chapter" data-level="4.3" data-path="ch-simple-regression.html"><a href="ch-simple-regression.html#sec:04-estimation"><i class="fa fa-check"></i><b>4.3</b> Estimation</a>
-<ul>
+<li class="chapter" data-level="4.3" data-path="ch-simple-regression.html"><a href="ch-simple-regression.html#sec:04-estimation"><i class="fa fa-check"></i><b>4.3</b> Estimation</a><ul>
 <li class="chapter" data-level="4.3.1" data-path="ch-simple-regression.html"><a href="ch-simple-regression.html#estimating-the-relation-between-trump-votes-and-hate-groups"><i class="fa fa-check"></i><b>4.3.1</b> Estimating the relation between Trump votes and hate groups</a></li>
 </ul></li>
-<li class="chapter" data-level="4.4" data-path="ch-simple-regression.html"><a href="ch-simple-regression.html#hypothesis-testing"><i class="fa fa-check"></i><b>4.4</b> Hypothesis testing</a>
-<ul>
+<li class="chapter" data-level="4.4" data-path="ch-simple-regression.html"><a href="ch-simple-regression.html#hypothesis-testing"><i class="fa fa-check"></i><b>4.4</b> Hypothesis testing</a><ul>
 <li class="chapter" data-level="4.4.1" data-path="ch-simple-regression.html"><a href="ch-simple-regression.html#sampling-distribution-of-estimates"><i class="fa fa-check"></i><b>4.4.1</b> Sampling distribution of estimates</a></li>
 <li class="chapter" data-level="4.4.2" data-path="ch-simple-regression.html"><a href="ch-simple-regression.html#model-comparison"><i class="fa fa-check"></i><b>4.4.2</b> Model comparison</a></li>
 <li class="chapter" data-level="4.4.3" data-path="ch-simple-regression.html"><a href="ch-simple-regression.html#confidence-intervals"><i class="fa fa-check"></i><b>4.4.3</b> Confidence intervals</a></li>
 </ul></li>
 <li class="chapter" data-level="4.5" data-path="ch-simple-regression.html"><a href="ch-simple-regression.html#summary-2"><i class="fa fa-check"></i><b>4.5</b> Summary</a></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html"><i class="fa fa-check"></i><b>5</b> Multiple regression</a>
-<ul>
-<li class="chapter" data-level="5.1" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#trump-votes-and-hate-groups-again"><i class="fa fa-check"></i><b>5.1</b> Trump, votes, and hate groups (again)</a>
-<ul>
+<li class="chapter" data-level="5" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html"><i class="fa fa-check"></i><b>5</b> Multiple regression</a><ul>
+<li class="chapter" data-level="5.1" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#trump-votes-and-hate-groups-again"><i class="fa fa-check"></i><b>5.1</b> Trump, votes, and hate groups (again)</a><ul>
 <li class="chapter" data-level="5.1.1" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#controlling-for-education-level"><i class="fa fa-check"></i><b>5.1.1</b> Controlling for education level</a></li>
 </ul></li>
 <li class="chapter" data-level="5.2" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#the-multiple-regression-model"><i class="fa fa-check"></i><b>5.2</b> The multiple regression model</a></li>
 <li class="chapter" data-level="5.3" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#sec:04b-estimation"><i class="fa fa-check"></i><b>5.3</b> Estimation</a></li>
 <li class="chapter" data-level="5.4" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#sec:04b-inference"><i class="fa fa-check"></i><b>5.4</b> Inference</a></li>
 <li class="chapter" data-level="5.5" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#partitioning-and-explaining-variance"><i class="fa fa-check"></i><b>5.5</b> Partitioning and explaining variance</a></li>
-<li class="chapter" data-level="5.6" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#sec:04b-effect-size"><i class="fa fa-check"></i><b>5.6</b> Effect size and the importance of predictors</a>
-<ul>
+<li class="chapter" data-level="5.6" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#sec:04b-effect-size"><i class="fa fa-check"></i><b>5.6</b> Effect size and the importance of predictors</a><ul>
 <li class="chapter" data-level="5.6.1" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#r2-changes-and-the-coefficient-of-semi-partial-determination"><i class="fa fa-check"></i><b>5.6.1</b> <span class="math inline">\(R^2\)</span> changes and the coefficient of (semi-)partial determination</a></li>
 </ul></li>
-<li class="chapter" data-level="5.7" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#sec:04b-assumptions"><i class="fa fa-check"></i><b>5.7</b> Assumptions</a>
-<ul>
+<li class="chapter" data-level="5.7" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#sec:04b-assumptions"><i class="fa fa-check"></i><b>5.7</b> Assumptions</a><ul>
 <li class="chapter" data-level="5.7.1" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#transforming-variables"><i class="fa fa-check"></i><b>5.7.1</b> Transforming variables</a></li>
 <li class="chapter" data-level="5.7.2" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#polynomial-regression"><i class="fa fa-check"></i><b>5.7.2</b> Polynomial regression</a></li>
 </ul></li>
-<li class="chapter" data-level="5.8" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#multicollinearity-redundancy-between-predictors"><i class="fa fa-check"></i><b>5.8</b> Multicollinearity: Redundancy between predictors</a>
-<ul>
+<li class="chapter" data-level="5.8" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#multicollinearity-redundancy-between-predictors"><i class="fa fa-check"></i><b>5.8</b> Multicollinearity: Redundancy between predictors</a><ul>
 <li class="chapter" data-level="5.8.1" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#detecting-and-dealing-with-multicollinearity"><i class="fa fa-check"></i><b>5.8.1</b> Detecting and dealing with multicollinearity</a></li>
 </ul></li>
 <li class="chapter" data-level="5.9" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#sec:04b-outliers"><i class="fa fa-check"></i><b>5.9</b> Outliers</a></li>
 <li class="chapter" data-level="5.10" data-path="ch-multiple-regression.html"><a href="ch-multiple-regression.html#in-practice-1"><i class="fa fa-check"></i><b>5.10</b> In practice</a></li>
 </ul></li>
-<li class="chapter" data-level="6" data-path="ch-moderation-mediation.html"><a href="ch-moderation-mediation.html"><i class="fa fa-check"></i><b>6</b> Moderation and mediation</a>
-<ul>
-<li class="chapter" data-level="6.1" data-path="ch-moderation-mediation.html"><a href="ch-moderation-mediation.html#moderation"><i class="fa fa-check"></i><b>6.1</b> Moderation</a>
-<ul>
+<li class="chapter" data-level="6" data-path="ch-moderation-mediation.html"><a href="ch-moderation-mediation.html"><i class="fa fa-check"></i><b>6</b> Moderation and mediation</a><ul>
+<li class="chapter" data-level="6.1" data-path="ch-moderation-mediation.html"><a href="ch-moderation-mediation.html#moderation"><i class="fa fa-check"></i><b>6.1</b> Moderation</a><ul>
 <li class="chapter" data-level="6.1.1" data-path="ch-moderation-mediation.html"><a href="ch-moderation-mediation.html#physical-attractiveness-and-intelligence-in-speed-dating"><i class="fa fa-check"></i><b>6.1.1</b> Physical attractiveness and intelligence in speed dating</a></li>
 <li class="chapter" data-level="6.1.2" data-path="ch-moderation-mediation.html"><a href="ch-moderation-mediation.html#conditional-slopes"><i class="fa fa-check"></i><b>6.1.2</b> Conditional slopes</a></li>
 <li class="chapter" data-level="6.1.3" data-path="ch-moderation-mediation.html"><a href="ch-moderation-mediation.html#modeling-slopes-with-linear-models"><i class="fa fa-check"></i><b>6.1.3</b> Modeling slopes with linear models</a></li>
 <li class="chapter" data-level="6.1.4" data-path="ch-moderation-mediation.html"><a href="ch-moderation-mediation.html#simple-slopes-and-centering"><i class="fa fa-check"></i><b>6.1.4</b> Simple slopes and centering</a></li>
 <li class="chapter" data-level="6.1.5" data-path="ch-moderation-mediation.html"><a href="ch-moderation-mediation.html#sec:05-dont-forget-about-the-fun"><i class="fa fa-check"></i><b>6.1.5</b> Don’t forget about fun! A model with multiple interactions</a></li>
 </ul></li>
-<li class="chapter" data-level="6.2" data-path="ch-moderation-mediation.html"><a href="ch-moderation-mediation.html#mediation"><i class="fa fa-check"></i><b>6.2</b> Mediation</a>
-<ul>
+<li class="chapter" data-level="6.2" data-path="ch-moderation-mediation.html"><a href="ch-moderation-mediation.html#mediation"><i class="fa fa-check"></i><b>6.2</b> Mediation</a><ul>
 <li class="chapter" data-level="6.2.1" data-path="ch-moderation-mediation.html"><a href="ch-moderation-mediation.html#legacy-motives-and-pro-environmental-behaviours"><i class="fa fa-check"></i><b>6.2.1</b> Legacy motives and pro-environmental behaviours</a></li>
 <li class="chapter" data-level="6.2.2" data-path="ch-moderation-mediation.html"><a href="ch-moderation-mediation.html#causal-steps"><i class="fa fa-check"></i><b>6.2.2</b> Causal steps</a></li>
 <li class="chapter" data-level="6.2.3" data-path="ch-moderation-mediation.html"><a href="ch-moderation-mediation.html#estimating-the-mediated-effect"><i class="fa fa-check"></i><b>6.2.3</b> Estimating the mediated effect</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="ch-ANOVA.html"><a href="ch-ANOVA.html"><i class="fa fa-check"></i><b>7</b> A model of means (ANOVA)</a>
-<ul>
+<li class="chapter" data-level="7" data-path="ch-ANOVA.html"><a href="ch-ANOVA.html"><i class="fa fa-check"></i><b>7</b> A model of means (ANOVA)</a><ul>
 <li class="chapter" data-level="7.1" data-path="ch-ANOVA.html"><a href="ch-ANOVA.html#can-playing-tetris-reduce-intrusive-memories"><i class="fa fa-check"></i><b>7.1</b> Can playing Tetris reduce intrusive memories?</a></li>
 <li class="chapter" data-level="7.2" data-path="ch-ANOVA.html"><a href="ch-ANOVA.html#sec:06-two-groups"><i class="fa fa-check"></i><b>7.2</b> Comparing two groups</a></li>
 <li class="chapter" data-level="7.3" data-path="ch-ANOVA.html"><a href="ch-ANOVA.html#the-anova-model"><i class="fa fa-check"></i><b>7.3</b> The ANOVA model</a></li>
-<li class="chapter" data-level="7.4" data-path="ch-ANOVA.html"><a href="ch-ANOVA.html#contrast-coding"><i class="fa fa-check"></i><b>7.4</b> Contrast coding</a>
-<ul>
+<li class="chapter" data-level="7.4" data-path="ch-ANOVA.html"><a href="ch-ANOVA.html#contrast-coding"><i class="fa fa-check"></i><b>7.4</b> Contrast coding</a><ul>
 <li class="chapter" data-level="7.4.1" data-path="ch-ANOVA.html"><a href="ch-ANOVA.html#effect-coding"><i class="fa fa-check"></i><b>7.4.1</b> Effect coding</a></li>
 <li class="chapter" data-level="7.4.2" data-path="ch-ANOVA.html"><a href="ch-ANOVA.html#orthogonal-contrast-codes"><i class="fa fa-check"></i><b>7.4.2</b> Orthogonal contrast codes</a></li>
 <li class="chapter" data-level="7.4.3" data-path="ch-ANOVA.html"><a href="ch-ANOVA.html#defining-your-own-orthogonal-contrasts"><i class="fa fa-check"></i><b>7.4.3</b> Defining your own (orthogonal) contrasts</a></li>
@@ -279,106 +564,95 @@ div.csl-indent {
 <li class="chapter" data-level="7.8" data-path="ch-ANOVA.html"><a href="ch-ANOVA.html#multiple-testing-and-post-hoc-tests"><i class="fa fa-check"></i><b>7.8</b> Multiple testing and post-hoc tests</a></li>
 <li class="chapter" data-level="7.9" data-path="ch-ANOVA.html"><a href="ch-ANOVA.html#in-practice-2"><i class="fa fa-check"></i><b>7.9</b> In practice</a></li>
 </ul></li>
-<li class="chapter" data-level="8" data-path="ch-factorial-ANOVA.html"><a href="ch-factorial-ANOVA.html"><i class="fa fa-check"></i><b>8</b> Factorial ANOVA</a>
-<ul>
-<li class="chapter" data-level="8.1" data-path="ch-factorial-ANOVA.html"><a href="ch-factorial-ANOVA.html#experimenter-beliefs-and-social-priming"><i class="fa fa-check"></i><b>8.1</b> Experimenter beliefs and social priming</a>
-<ul>
+<li class="chapter" data-level="8" data-path="ch-factorial-ANOVA.html"><a href="ch-factorial-ANOVA.html"><i class="fa fa-check"></i><b>8</b> Factorial ANOVA</a><ul>
+<li class="chapter" data-level="8.1" data-path="ch-factorial-ANOVA.html"><a href="ch-factorial-ANOVA.html#experimenter-beliefs-and-social-priming"><i class="fa fa-check"></i><b>8.1</b> Experimenter beliefs and social priming</a><ul>
 <li class="chapter" data-level="8.1.1" data-path="ch-factorial-ANOVA.html"><a href="ch-factorial-ANOVA.html#a-oneway-anova"><i class="fa fa-check"></i><b>8.1.1</b> A oneway ANOVA</a></li>
 </ul></li>
-<li class="chapter" data-level="8.2" data-path="ch-factorial-ANOVA.html"><a href="ch-factorial-ANOVA.html#factorial-designs"><i class="fa fa-check"></i><b>8.2</b> Factorial designs</a>
-<ul>
+<li class="chapter" data-level="8.2" data-path="ch-factorial-ANOVA.html"><a href="ch-factorial-ANOVA.html#factorial-designs"><i class="fa fa-check"></i><b>8.2</b> Factorial designs</a><ul>
 <li class="chapter" data-level="8.2.1" data-path="ch-factorial-ANOVA.html"><a href="ch-factorial-ANOVA.html#sec:06-main-effects-and-interactions"><i class="fa fa-check"></i><b>8.2.1</b> Main effects and interactions</a></li>
 </ul></li>
 <li class="chapter" data-level="8.3" data-path="ch-factorial-ANOVA.html"><a href="ch-factorial-ANOVA.html#the-factorial-anova-model"><i class="fa fa-check"></i><b>8.3</b> The factorial ANOVA model</a></li>
-<li class="chapter" data-level="8.4" data-path="ch-factorial-ANOVA.html"><a href="ch-factorial-ANOVA.html#a-threeway-factorial-anova"><i class="fa fa-check"></i><b>8.4</b> A threeway factorial ANOVA</a>
-<ul>
+<li class="chapter" data-level="8.4" data-path="ch-factorial-ANOVA.html"><a href="ch-factorial-ANOVA.html#a-threeway-factorial-anova"><i class="fa fa-check"></i><b>8.4</b> A threeway factorial ANOVA</a><ul>
 <li class="chapter" data-level="8.4.1" data-path="ch-factorial-ANOVA.html"><a href="ch-factorial-ANOVA.html#interpreting-interactions"><i class="fa fa-check"></i><b>8.4.1</b> Interpreting interactions</a></li>
 </ul></li>
-<li class="chapter" data-level="8.5" data-path="ch-factorial-ANOVA.html"><a href="ch-factorial-ANOVA.html#orthogonal-contrast-codes-and-unequal-sample-sizes"><i class="fa fa-check"></i><b>8.5</b> Orthogonal contrast codes and unequal sample sizes</a>
-<ul>
+<li class="chapter" data-level="8.5" data-path="ch-factorial-ANOVA.html"><a href="ch-factorial-ANOVA.html#orthogonal-contrast-codes-and-unequal-sample-sizes"><i class="fa fa-check"></i><b>8.5</b> Orthogonal contrast codes and unequal sample sizes</a><ul>
 <li class="chapter" data-level="8.5.1" data-path="ch-factorial-ANOVA.html"><a href="ch-factorial-ANOVA.html#comparison-schemes-and-ss-types"><i class="fa fa-check"></i><b>8.5.1</b> Comparison schemes and SS types</a></li>
 </ul></li>
 <li class="chapter" data-level="8.6" data-path="ch-factorial-ANOVA.html"><a href="ch-factorial-ANOVA.html#in-practice-3"><i class="fa fa-check"></i><b>8.6</b> In practice</a></li>
 </ul></li>
-<li class="chapter" data-level="9" data-path="mixing-categorical-and-metric-predictors-ancova.html"><a href="mixing-categorical-and-metric-predictors-ancova.html"><i class="fa fa-check"></i><b>9</b> Mixing categorical and metric predictors (ANCOVA)</a>
-<ul>
-<li class="chapter" data-level="9.1" data-path="mixing-categorical-and-metric-predictors-ancova.html"><a href="mixing-categorical-and-metric-predictors-ancova.html#subjective-feelings-of-power-and-priming"><i class="fa fa-check"></i><b>9.1</b> Subjective feelings of power and priming</a></li>
-<li class="chapter" data-level="9.2" data-path="mixing-categorical-and-metric-predictors-ancova.html"><a href="mixing-categorical-and-metric-predictors-ancova.html#acounting-for-pre-existing-differences"><i class="fa fa-check"></i><b>9.2</b> Acounting for pre-existing differences</a></li>
-<li class="chapter" data-level="9.3" data-path="mixing-categorical-and-metric-predictors-ancova.html"><a href="mixing-categorical-and-metric-predictors-ancova.html#slopes-of-contrast-coded-predictors-in-ancova-models"><i class="fa fa-check"></i><b>9.3</b> Slopes of contrast-coded predictors in ANCOVA models</a></li>
-<li class="chapter" data-level="9.4" data-path="mixing-categorical-and-metric-predictors-ancova.html"><a href="mixing-categorical-and-metric-predictors-ancova.html#homogeneity-of-slopes"><i class="fa fa-check"></i><b>9.4</b> Homogeneity of slopes</a></li>
-<li class="chapter" data-level="9.5" data-path="mixing-categorical-and-metric-predictors-ancova.html"><a href="mixing-categorical-and-metric-predictors-ancova.html#sec:ANCOVA-power"><i class="fa fa-check"></i><b>9.5</b> Power considerations in ANCOVA</a></li>
-<li class="chapter" data-level="9.6" data-path="mixing-categorical-and-metric-predictors-ancova.html"><a href="mixing-categorical-and-metric-predictors-ancova.html#models-with-multiple-covariates"><i class="fa fa-check"></i><b>9.6</b> Models with multiple covariates</a></li>
-<li class="chapter" data-level="9.7" data-path="mixing-categorical-and-metric-predictors-ancova.html"><a href="mixing-categorical-and-metric-predictors-ancova.html#mediation-with-categorical-independent-variables"><i class="fa fa-check"></i><b>9.7</b> Mediation with categorical independent variables</a></li>
-<li class="chapter" data-level="9.8" data-path="mixing-categorical-and-metric-predictors-ancova.html"><a href="mixing-categorical-and-metric-predictors-ancova.html#ancova-vs-difference-scores"><i class="fa fa-check"></i><b>9.8</b> ANCOVA vs difference scores</a></li>
+<li class="chapter" data-level="9" data-path="ch-ANCOVA.html"><a href="ch-ANCOVA.html"><i class="fa fa-check"></i><b>9</b> Mixing categorical and metric predictors (ANCOVA)</a><ul>
+<li class="chapter" data-level="9.1" data-path="ch-ANCOVA.html"><a href="ch-ANCOVA.html#subjective-feelings-of-power-and-priming"><i class="fa fa-check"></i><b>9.1</b> Subjective feelings of power and priming</a></li>
+<li class="chapter" data-level="9.2" data-path="ch-ANCOVA.html"><a href="ch-ANCOVA.html#acounting-for-pre-existing-differences"><i class="fa fa-check"></i><b>9.2</b> Acounting for pre-existing differences</a></li>
+<li class="chapter" data-level="9.3" data-path="ch-ANCOVA.html"><a href="ch-ANCOVA.html#slopes-of-contrast-coded-predictors-in-ancova-models"><i class="fa fa-check"></i><b>9.3</b> Slopes of contrast-coded predictors in ANCOVA models</a></li>
+<li class="chapter" data-level="9.4" data-path="ch-ANCOVA.html"><a href="ch-ANCOVA.html#homogeneity-of-slopes"><i class="fa fa-check"></i><b>9.4</b> Homogeneity of slopes</a></li>
+<li class="chapter" data-level="9.5" data-path="ch-ANCOVA.html"><a href="ch-ANCOVA.html#sec:ANCOVA-power"><i class="fa fa-check"></i><b>9.5</b> Power considerations in ANCOVA</a></li>
+<li class="chapter" data-level="9.6" data-path="ch-ANCOVA.html"><a href="ch-ANCOVA.html#models-with-multiple-covariates"><i class="fa fa-check"></i><b>9.6</b> Models with multiple covariates</a></li>
+<li class="chapter" data-level="9.7" data-path="ch-ANCOVA.html"><a href="ch-ANCOVA.html#mediation-with-categorical-independent-variables"><i class="fa fa-check"></i><b>9.7</b> Mediation with categorical independent variables</a></li>
+<li class="chapter" data-level="9.8" data-path="ch-ANCOVA.html"><a href="ch-ANCOVA.html#ancova-vs-difference-scores"><i class="fa fa-check"></i><b>9.8</b> ANCOVA vs difference scores</a></li>
 </ul></li>
-<li class="chapter" data-level="10" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html"><i class="fa fa-check"></i><b>10</b> Repeated-measures ANOVA</a>
-<ul>
+<li class="chapter" data-level="10" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html"><i class="fa fa-check"></i><b>10</b> Repeated-measures ANOVA</a><ul>
 <li class="chapter" data-level="10.1" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#non-independence-in-linear-models"><i class="fa fa-check"></i><b>10.1</b> Non-independence in linear models</a></li>
 <li class="chapter" data-level="10.2" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#the-cheerleader-effect"><i class="fa fa-check"></i><b>10.2</b> The cheerleader effect</a></li>
 <li class="chapter" data-level="10.3" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#as-a-oneway-anova"><i class="fa fa-check"></i><b>10.3</b> As a oneway ANOVA</a></li>
-<li class="chapter" data-level="10.4" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#oneway-repeated-measures-anova"><i class="fa fa-check"></i><b>10.4</b> Oneway repeated-measures ANOVA</a>
-<ul>
+<li class="chapter" data-level="10.4" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#oneway-repeated-measures-anova"><i class="fa fa-check"></i><b>10.4</b> Oneway repeated-measures ANOVA</a><ul>
 <li class="chapter" data-level="10.4.1" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#within-subjects-composite-scores"><i class="fa fa-check"></i><b>10.4.1</b> Within-subjects composite scores</a></li>
 <li class="chapter" data-level="10.4.2" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#a-composite-for-between-subjects-effects"><i class="fa fa-check"></i><b>10.4.2</b> A composite for between-subjects effects</a></li>
 <li class="chapter" data-level="10.4.3" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#collecting-all-results-and-omnibus-tests"><i class="fa fa-check"></i><b>10.4.3</b> Collecting all results and omnibus tests</a></li>
 </ul></li>
 <li class="chapter" data-level="10.5" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#partitioning-the-variance"><i class="fa fa-check"></i><b>10.5</b> Partitioning the variance</a></li>
 <li class="chapter" data-level="10.6" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#a-mixed-anova-with-between--and-within-subjects-effects"><i class="fa fa-check"></i><b>10.6</b> A mixed ANOVA with between- and within-subjects effects</a></li>
-<li class="chapter" data-level="10.7" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#assumptions-1"><i class="fa fa-check"></i><b>10.7</b> Assumptions</a>
-<ul>
+<li class="chapter" data-level="10.7" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#assumptions-1"><i class="fa fa-check"></i><b>10.7</b> Assumptions</a><ul>
 <li class="chapter" data-level="10.7.1" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#omnibus-tests-and-sphericity"><i class="fa fa-check"></i><b>10.7.1</b> Omnibus tests and sphericity</a></li>
 <li class="chapter" data-level="10.7.2" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#correcting-for-non-sphericity"><i class="fa fa-check"></i><b>10.7.2</b> Correcting for non-sphericity</a></li>
 </ul></li>
 <li class="chapter" data-level="10.8" data-path="ch-RM-ANOVA.html"><a href="ch-RM-ANOVA.html#in-practice-4"><i class="fa fa-check"></i><b>10.8</b> In practice</a></li>
 </ul></li>
-<li class="chapter" data-level="11" data-path="ch-linear-mixed-effects-models.html"><a href="ch-linear-mixed-effects-models.html"><i class="fa fa-check"></i><b>11</b> Linear mixed-effects models</a>
-<ul>
+<li class="chapter" data-level="11" data-path="ch-linear-mixed-effects-models.html"><a href="ch-linear-mixed-effects-models.html"><i class="fa fa-check"></i><b>11</b> Linear mixed-effects models</a><ul>
 <li class="chapter" data-level="11.1" data-path="ch-linear-mixed-effects-models.html"><a href="ch-linear-mixed-effects-models.html#non-independence-in-linear-models-1"><i class="fa fa-check"></i><b>11.1</b> Non-independence in linear models</a></li>
 <li class="chapter" data-level="11.2" data-path="ch-linear-mixed-effects-models.html"><a href="ch-linear-mixed-effects-models.html#random-intercept-models"><i class="fa fa-check"></i><b>11.2</b> Random intercept models</a></li>
 <li class="chapter" data-level="11.3" data-path="ch-linear-mixed-effects-models.html"><a href="ch-linear-mixed-effects-models.html#parameter-estimation-1"><i class="fa fa-check"></i><b>11.3</b> Parameter estimation</a></li>
 <li class="chapter" data-level="11.4" data-path="ch-linear-mixed-effects-models.html"><a href="ch-linear-mixed-effects-models.html#parameter-inference"><i class="fa fa-check"></i><b>11.4</b> Parameter inference</a></li>
 <li class="chapter" data-level="11.5" data-path="ch-linear-mixed-effects-models.html"><a href="ch-linear-mixed-effects-models.html#application-of-the-random-intercepts-model"><i class="fa fa-check"></i><b>11.5</b> Application of the random-intercepts model</a></li>
-<li class="chapter" data-level="11.6" data-path="ch-linear-mixed-effects-models.html"><a href="ch-linear-mixed-effects-models.html#models-with-random-intercepts-and-slopes"><i class="fa fa-check"></i><b>11.6</b> Models with random intercepts and slopes</a>
-<ul>
+<li class="chapter" data-level="11.6" data-path="ch-linear-mixed-effects-models.html"><a href="ch-linear-mixed-effects-models.html#models-with-random-intercepts-and-slopes"><i class="fa fa-check"></i><b>11.6</b> Models with random intercepts and slopes</a><ul>
 <li class="chapter" data-level="11.6.1" data-path="ch-linear-mixed-effects-models.html"><a href="ch-linear-mixed-effects-models.html#correlation-between-random-effects"><i class="fa fa-check"></i><b>11.6.1</b> Correlation between random effects</a></li>
 </ul></li>
 <li class="chapter" data-level="11.7" data-path="ch-linear-mixed-effects-models.html"><a href="ch-linear-mixed-effects-models.html#crossed-random-effects-dating-partners-in-the-speed-dating-experiment"><i class="fa fa-check"></i><b>11.7</b> Crossed random effects: dating partners in the speed dating experiment</a></li>
 <li class="chapter" data-level="11.8" data-path="ch-linear-mixed-effects-models.html"><a href="ch-linear-mixed-effects-models.html#choosing-the-random-effects-structure"><i class="fa fa-check"></i><b>11.8</b> Choosing the random effects structure</a></li>
 </ul></li>
-<li class="chapter" data-level="12" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html"><i class="fa fa-check"></i><b>12</b> Introduction to Bayesian hypothesis testing</a>
-<ul>
-<li class="chapter" data-level="12.1" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#fundamentals-of-bayesian-inference"><i class="fa fa-check"></i><b>12.1</b> Fundamentals of Bayesian inference</a>
-<ul>
-<li class="chapter" data-level="12.1.1" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#probability-in-times-of-covid"><i class="fa fa-check"></i><b>12.1.1</b> Probability in times of Covid</a></li>
-<li class="chapter" data-level="12.1.2" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#bayes-rule"><i class="fa fa-check"></i><b>12.1.2</b> Bayes’ rule</a></li>
-<li class="chapter" data-level="12.1.3" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#we-missed-you-paul"><i class="fa fa-check"></i><b>12.1.3</b> We missed you Paul!</a></li>
-<li class="chapter" data-level="12.1.4" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#the-marginal-likelihood-and-prior-predictive-distribution"><i class="fa fa-check"></i><b>12.1.4</b> The marginal likelihood and prior predictive distribution</a></li>
-<li class="chapter" data-level="12.1.5" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#hypothesis-testing-relative-evidence-and-the-bayes-factor"><i class="fa fa-check"></i><b>12.1.5</b> Hypothesis testing, relative evidence, and the Bayes factor</a></li>
-<li class="chapter" data-level="12.1.6" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#parameter-estimates-and-credible-intervals"><i class="fa fa-check"></i><b>12.1.6</b> Parameter estimates and credible intervals</a></li>
+<li class="chapter" data-level="12" data-path="ch-generalized-linear-models.html"><a href="ch-generalized-linear-models.html"><i class="fa fa-check"></i><b>12</b> Generalized Linear Models</a></li>
+<li class="chapter" data-level="13" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html"><i class="fa fa-check"></i><b>13</b> Path models (SEM 1)</a></li>
+<li class="chapter" data-level="14" data-path="ch-SEM-latent-variable-models.html"><a href="ch-SEM-latent-variable-models.html"><i class="fa fa-check"></i><b>14</b> Latent variable models (SEM 2)</a></li>
+<li class="chapter" data-level="15" data-path="ch-Bayes-estimation.html"><a href="ch-Bayes-estimation.html"><i class="fa fa-check"></i><b>15</b> Introduction to Bayesian estimation</a><ul>
+<li class="chapter" data-level="15.1" data-path="ch-Bayes-estimation.html"><a href="ch-Bayes-estimation.html#fundamentals-of-bayesian-inference"><i class="fa fa-check"></i><b>15.1</b> Fundamentals of Bayesian inference</a><ul>
+<li class="chapter" data-level="15.1.1" data-path="ch-Bayes-estimation.html"><a href="ch-Bayes-estimation.html#probability-in-times-of-covid"><i class="fa fa-check"></i><b>15.1.1</b> Probability in times of Covid</a></li>
+<li class="chapter" data-level="15.1.2" data-path="ch-Bayes-estimation.html"><a href="ch-Bayes-estimation.html#bayes-rule"><i class="fa fa-check"></i><b>15.1.2</b> Bayes’ rule</a></li>
+<li class="chapter" data-level="15.1.3" data-path="ch-Bayes-estimation.html"><a href="ch-Bayes-estimation.html#we-missed-you-paul"><i class="fa fa-check"></i><b>15.1.3</b> We missed you Paul!</a></li>
+<li class="chapter" data-level="15.1.4" data-path="ch-Bayes-estimation.html"><a href="ch-Bayes-estimation.html#the-marginal-likelihood-and-prior-predictive-distribution"><i class="fa fa-check"></i><b>15.1.4</b> The marginal likelihood and prior predictive distribution</a></li>
 </ul></li>
-<li class="chapter" data-level="12.2" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#a-bayesian-t-test"><i class="fa fa-check"></i><b>12.2</b> A Bayesian t-test</a></li>
-<li class="chapter" data-level="12.3" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#bayes-factors-for-general-linear-models"><i class="fa fa-check"></i><b>12.3</b> Bayes factors for General Linear Models</a></li>
-<li class="chapter" data-level="12.4" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#some-objections-to-null-hypothesis-significance-testing"><i class="fa fa-check"></i><b>12.4</b> Some objections to null-hypothesis significance testing</a>
-<ul>
-<li class="chapter" data-level="12.4.1" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#the-p-value-is-not-a-proper-measure-of-evidential-support"><i class="fa fa-check"></i><b>12.4.1</b> The <span class="math inline">\(p\)</span>-value is not a proper measure of evidential support</a></li>
-<li class="chapter" data-level="12.4.2" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#the-p-value-depends-on-researcher-intentions"><i class="fa fa-check"></i><b>12.4.2</b> The <span class="math inline">\(p\)</span>-value depends on researcher intentions</a></li>
-<li class="chapter" data-level="12.4.3" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#results-of-a-nhst-are-often-misinterpreted"><i class="fa fa-check"></i><b>12.4.3</b> Results of a NHST are often misinterpreted</a></li>
 </ul></li>
-<li class="chapter" data-level="12.5" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#to-bayes-or-not-to-bayes-a-pragmatic-view"><i class="fa fa-check"></i><b>12.5</b> To Bayes or not to Bayes? A pragmatic view</a></li>
-<li class="chapter" data-level="12.6" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#in-practice-5"><i class="fa fa-check"></i><b>12.6</b> In practice</a></li>
-<li class="chapter" data-level="12.7" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#summary-3"><i class="fa fa-check"></i><b>12.7</b> “Summary”</a></li>
+<li class="chapter" data-level="16" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html"><i class="fa fa-check"></i><b>16</b> Introduction to Bayesian hypothesis testing</a><ul>
+<li class="chapter" data-level="16.0.1" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#hypothesis-testing-relative-evidence-and-the-bayes-factor"><i class="fa fa-check"></i><b>16.0.1</b> Hypothesis testing, relative evidence, and the Bayes factor</a></li>
+<li class="chapter" data-level="16.0.2" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#parameter-estimates-and-credible-intervals"><i class="fa fa-check"></i><b>16.0.2</b> Parameter estimates and credible intervals</a></li>
+<li class="chapter" data-level="16.1" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#a-bayesian-t-test"><i class="fa fa-check"></i><b>16.1</b> A Bayesian t-test</a></li>
+<li class="chapter" data-level="16.2" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#bayes-factors-for-general-linear-models"><i class="fa fa-check"></i><b>16.2</b> Bayes factors for General Linear Models</a></li>
+<li class="chapter" data-level="16.3" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#some-objections-to-null-hypothesis-significance-testing"><i class="fa fa-check"></i><b>16.3</b> Some objections to null-hypothesis significance testing</a><ul>
+<li class="chapter" data-level="16.3.1" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#the-p-value-is-not-a-proper-measure-of-evidential-support"><i class="fa fa-check"></i><b>16.3.1</b> The <span class="math inline">\(p\)</span>-value is not a proper measure of evidential support</a></li>
+<li class="chapter" data-level="16.3.2" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#the-p-value-depends-on-researcher-intentions"><i class="fa fa-check"></i><b>16.3.2</b> The <span class="math inline">\(p\)</span>-value depends on researcher intentions</a></li>
+<li class="chapter" data-level="16.3.3" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#results-of-a-nhst-are-often-misinterpreted"><i class="fa fa-check"></i><b>16.3.3</b> Results of a NHST are often misinterpreted</a></li>
 </ul></li>
-<li class="chapter" data-level="13" data-path="ch-responsible-data-analyst.html"><a href="ch-responsible-data-analyst.html"><i class="fa fa-check"></i><b>13</b> Being a responsible data analyst</a>
-<ul>
-<li class="chapter" data-level="13.1" data-path="ch-responsible-data-analyst.html"><a href="ch-responsible-data-analyst.html#consider-analysis-before-data-collection"><i class="fa fa-check"></i><b>13.1</b> Consider analysis before data collection</a></li>
-<li class="chapter" data-level="13.2" data-path="ch-responsible-data-analyst.html"><a href="ch-responsible-data-analyst.html#explore-the-data"><i class="fa fa-check"></i><b>13.2</b> Explore the data</a></li>
-<li class="chapter" data-level="13.3" data-path="ch-responsible-data-analyst.html"><a href="ch-responsible-data-analyst.html#evaluate-the-assumptions-underlying-your-analyses"><i class="fa fa-check"></i><b>13.3</b> Evaluate the assumptions underlying your analyses</a></li>
-<li class="chapter" data-level="13.4" data-path="ch-responsible-data-analyst.html"><a href="ch-responsible-data-analyst.html#distinguish-between-confirmatory-and-exploratory-analyses"><i class="fa fa-check"></i><b>13.4</b> Distinguish between confirmatory and exploratory analyses</a></li>
-<li class="chapter" data-level="13.5" data-path="ch-responsible-data-analyst.html"><a href="ch-responsible-data-analyst.html#aim-for-openness-and-reproducibility"><i class="fa fa-check"></i><b>13.5</b> Aim for openness and reproducibility</a></li>
-<li class="chapter" data-level="13.6" data-path="ch-responsible-data-analyst.html"><a href="ch-responsible-data-analyst.html#communicate-clearly-and-concisely"><i class="fa fa-check"></i><b>13.6</b> Communicate clearly and concisely</a>
-<ul>
-<li class="chapter" data-level="13.6.1" data-path="ch-responsible-data-analyst.html"><a href="ch-responsible-data-analyst.html#example-of-reporting-a-multiple-regression-analysis"><i class="fa fa-check"></i><b>13.6.1</b> Example of reporting a multiple regression analysis</a></li>
-<li class="chapter" data-level="13.6.2" data-path="ch-responsible-data-analyst.html"><a href="ch-responsible-data-analyst.html#example-of-reporting-a-factorial-anova"><i class="fa fa-check"></i><b>13.6.2</b> Example of reporting a factorial ANOVA</a></li>
+<li class="chapter" data-level="16.4" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#to-bayes-or-not-to-bayes-a-pragmatic-view"><i class="fa fa-check"></i><b>16.4</b> To Bayes or not to Bayes? A pragmatic view</a></li>
+<li class="chapter" data-level="16.5" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#in-practice-5"><i class="fa fa-check"></i><b>16.5</b> In practice</a></li>
+<li class="chapter" data-level="16.6" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#summary-3"><i class="fa fa-check"></i><b>16.6</b> “Summary”</a></li>
+</ul></li>
+<li class="chapter" data-level="17" data-path="ch-responsible-data-analyst.html"><a href="ch-responsible-data-analyst.html"><i class="fa fa-check"></i><b>17</b> Being a responsible data analyst</a><ul>
+<li class="chapter" data-level="17.1" data-path="ch-responsible-data-analyst.html"><a href="ch-responsible-data-analyst.html#consider-analysis-before-data-collection"><i class="fa fa-check"></i><b>17.1</b> Consider analysis before data collection</a></li>
+<li class="chapter" data-level="17.2" data-path="ch-responsible-data-analyst.html"><a href="ch-responsible-data-analyst.html#explore-the-data"><i class="fa fa-check"></i><b>17.2</b> Explore the data</a></li>
+<li class="chapter" data-level="17.3" data-path="ch-responsible-data-analyst.html"><a href="ch-responsible-data-analyst.html#evaluate-the-assumptions-underlying-your-analyses"><i class="fa fa-check"></i><b>17.3</b> Evaluate the assumptions underlying your analyses</a></li>
+<li class="chapter" data-level="17.4" data-path="ch-responsible-data-analyst.html"><a href="ch-responsible-data-analyst.html#distinguish-between-confirmatory-and-exploratory-analyses"><i class="fa fa-check"></i><b>17.4</b> Distinguish between confirmatory and exploratory analyses</a></li>
+<li class="chapter" data-level="17.5" data-path="ch-responsible-data-analyst.html"><a href="ch-responsible-data-analyst.html#aim-for-openness-and-reproducibility"><i class="fa fa-check"></i><b>17.5</b> Aim for openness and reproducibility</a></li>
+<li class="chapter" data-level="17.6" data-path="ch-responsible-data-analyst.html"><a href="ch-responsible-data-analyst.html#communicate-clearly-and-concisely"><i class="fa fa-check"></i><b>17.6</b> Communicate clearly and concisely</a><ul>
+<li class="chapter" data-level="17.6.1" data-path="ch-responsible-data-analyst.html"><a href="ch-responsible-data-analyst.html#example-of-reporting-a-multiple-regression-analysis"><i class="fa fa-check"></i><b>17.6.1</b> Example of reporting a multiple regression analysis</a></li>
+<li class="chapter" data-level="17.6.2" data-path="ch-responsible-data-analyst.html"><a href="ch-responsible-data-analyst.html#example-of-reporting-a-factorial-anova"><i class="fa fa-check"></i><b>17.6.2</b> Example of reporting a factorial ANOVA</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
@@ -399,23 +673,23 @@ div.csl-indent {
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="ch-factorial-ANOVA" class="section level1" number="8">
-<h1><span class="header-section-number">Chapter 8</span> Factorial ANOVA</h1>
+<div id="ch-factorial-ANOVA" class="section level1 hasAnchor">
+<h1><span class="header-section-number">Chapter 8</span> Factorial ANOVA<a href="ch-factorial-ANOVA.html#ch-factorial-ANOVA" class="anchor-section" aria-label="Anchor link to header"></a></h1>
 <p>In this chapter, we will extend our discussion of including nominal predictors in the General Linear Model to the case of multiple nominal predictors, where all the combinations of the levels of each are included in the design of a study. The analysis of such designs, with a factorial combination of all levels, is generally called factorial ANOVA. While the method is, as we will see, not fundamentally different than a oneway ANOVA, treated in the previous chapter, the factorial nature allows one to distinguish between <em>main effects</em> of factors, and their <em>interactions</em>. After discussing how to interpret these effects, we turn to issues that arise when there are an unequal number of observations for the combinations of the levels.</p>
-<div id="experimenter-beliefs-and-social-priming" class="section level2" number="8.1">
-<h2><span class="header-section-number">8.1</span> Experimenter beliefs and social priming</h2>
-<p>Research suggests that stimuli that prime social concepts can fundamentally alter people’s behaviour. For instance, in one experiment people were primed with either a high-power or low-power social status. Not only did people differ in how powerful they felt, they also differed in their cognitive functioning, processing information more quickly when it was consistent with the induced status (low or high power). However, it is also known that experimenter expectations may alter participants’ behaviour. As many studies on social priming have not been conducted as double-blind experiments (where neither experimenters nor participants are aware of the actual experimental conditions), it may be the case that some of the results were due to experimenter expectations. To investigate this, <span class="citation"><a href="#ref-gilder2018role" role="doc-biblioref">Gilder &amp; Heerey</a> (<a href="#ref-gilder2018role" role="doc-biblioref">2018</a>)</span> conducted an experiment in which they systematically primed social status, as well as experimenters’ beliefs about which prime was used for which participant.</p>
-<p>A total of <span class="math inline">\(n = 400\)</span> students participated in their experiment. They first performed a priming task in which they were either assigned a high-power (“boss”) or low-power (“employee”) role. Independent of the actual condition, the experimenter (one of four research assistants) was made to believe that half of the participants in each condition were in the other condition (e.g., that people in the high-power condition were in the low-power condition). After the priming task, participants performed a lexical decision task, in which they as quickly as possible had to indicate whether a presented letter string was a word or non-word. Their response was made by pressing a key to move a stick figure closer (approach) or further away (avoid) from the word. Earlier research found that participants primed with high power were quicker to approach than avoid stimuli, while the reverse was true for those primed with low power. The dependent variable was therefore an “approach advantage,” calculated <span class="math inline">\(\texttt{ApproachAdvantage}_i = \overline{\texttt{RT}}_{\text{avoid},i} - \overline{\texttt{RT}}_{\text{approach},i}\)</span>).</p>
-<p>According to the “social priming hypothesis,” people will be faster to approach than avoid when they feel they have more power (and be faster to avoid than approach when they feel they have low power). If this hypothesis is true, then the <span class="math inline">\(\texttt{ApproachAdvantage}\)</span> measure would be positive on average in the high-power condition, and negative on average in the low-power condition. Alternatively, according to the “experimenter belief hypothesis,” it is the experimenter belief about the condition, and not the actual condition, that drives any effects. If this hypothesis is true, then the <span class="math inline">\(\texttt{ApproachAdvantage}\)</span> measure would be positive whenever the experimenter believes a participant is in the high-power condition, and negative when the experimenter believes a participant is in the low-power condition. Figure <a href="ch-factorial-ANOVA.html#fig:expBelief-raincloud">8.1</a> shows the data for the four conditions (the four possible combinations of prime and experimenter belief). The plot looks like the results are more consistent with the experimenter-belief hypothesis: the averages of <span class="math inline">\(\texttt{ApproachAdvantage}\)</span> in the two “experimenter low” conditions are lower than in the two “experimenter high” conditions.</p>
+<div id="experimenter-beliefs-and-social-priming" class="section level2 hasAnchor">
+<h2><span class="header-section-number">8.1</span> Experimenter beliefs and social priming<a href="ch-factorial-ANOVA.html#experimenter-beliefs-and-social-priming" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Research suggests that stimuli that prime social concepts can fundamentally alter people’s behaviour. For instance, in one experiment people were primed with either a high-power or low-power social status. Not only did people differ in how powerful they felt, they also differed in their cognitive functioning, processing information more quickly when it was consistent with the induced status (low or high power). However, it is also known that experimenter expectations may alter participants’ behaviour. As many studies on social priming have not been conducted as double-blind experiments (where neither experimenters nor participants are aware of the actual experimental conditions), it may be the case that some of the results were due to experimenter expectations. To investigate this, <span class="citation">Gilder &amp; Heerey (<a href="#ref-gilder2018role">2018</a>)</span> conducted an experiment in which they systematically primed social status, as well as experimenters’ beliefs about which prime was used for which participant.</p>
+<p>A total of <span class="math inline">\(n = 400\)</span> students participated in their experiment. They first performed a priming task in which they were either assigned a high-power (“boss”) or low-power (“employee”) role. Independent of the actual condition, the experimenter (one of four research assistants) was made to believe that half of the participants in each condition were in the other condition (e.g., that people in the high-power condition were in the low-power condition). After the priming task, participants performed a lexical decision task, in which they as quickly as possible had to indicate whether a presented letter string was a word or non-word. Their response was made by pressing a key to move a stick figure closer (approach) or further away (avoid) from the word. Earlier research found that participants primed with high power were quicker to approach than avoid stimuli, while the reverse was true for those primed with low power. The dependent variable was therefore an “approach advantage”, calculated <span class="math inline">\(\texttt{ApproachAdvantage}_i = \overline{\texttt{RT}}_{\text{avoid},i} - \overline{\texttt{RT}}_{\text{approach},i}\)</span>).</p>
+<p>According to the “social priming hypothesis”, people will be faster to approach than avoid when they feel they have more power (and be faster to avoid than approach when they feel they have low power). If this hypothesis is true, then the <span class="math inline">\(\texttt{ApproachAdvantage}\)</span> measure would be positive on average in the high-power condition, and negative on average in the low-power condition. Alternatively, according to the “experimenter belief hypothesis”, it is the experimenter belief about the condition, and not the actual condition, that drives any effects. If this hypothesis is true, then the <span class="math inline">\(\texttt{ApproachAdvantage}\)</span> measure would be positive whenever the experimenter believes a participant is in the high-power condition, and negative when the experimenter believes a participant is in the low-power condition. Figure <a href="ch-factorial-ANOVA.html#fig:expBelief-raincloud">8.1</a> shows the data for the four conditions (the four possible combinations of prime and experimenter belief). The plot looks like the results are more consistent with the experimenter-belief hypothesis: the averages of <span class="math inline">\(\texttt{ApproachAdvantage}\)</span> in the two “experimenter low” conditions are lower than in the two “experimenter high” conditions.</p>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:expBelief-raincloud"></span>
-<img src="06b-Factorial-ANOVA_files/figure-html/expBelief-raincloud-1.svg" alt="Approach advantage scores in the four conditions of Experiment 5 of @gilder2018role; PL = Low-power prime, PH = high-power prime, EL = experimenter believes condition was PL, EH = experimenter believes condition was PH" width="672" />
+<img src="08-Factorial-ANOVA_files/figure-html/expBelief-raincloud-1.svg" alt="Approach advantage scores in the four conditions of Experiment 5 of @gilder2018role; PL = Low-power prime, PH = high-power prime, EL = experimenter believes condition was PL, EH = experimenter believes condition was PH" width="672" />
 <p class="caption">
-Figure 8.1: Approach advantage scores in the four conditions of Experiment 5 of <span class="citation"><a href="#ref-gilder2018role" role="doc-biblioref">Gilder &amp; Heerey</a> (<a href="#ref-gilder2018role" role="doc-biblioref">2018</a>)</span>; PL = Low-power prime, PH = high-power prime, EL = experimenter believes condition was PL, EH = experimenter believes condition was PH
+Figure 8.1: Approach advantage scores in the four conditions of Experiment 5 of <span class="citation">Gilder &amp; Heerey (<a href="#ref-gilder2018role">2018</a>)</span>; PL = Low-power prime, PH = high-power prime, EL = experimenter believes condition was PL, EH = experimenter believes condition was PH
 </p>
 </div>
-<div id="a-oneway-anova" class="section level3" number="8.1.1">
-<h3><span class="header-section-number">8.1.1</span> A oneway ANOVA</h3>
-<p>Let’s analyze the data with the tools we already have. There are in total four conditions in the experiment, so we can treat <code>condition</code> as a nominal independent variable with four levels. We then need to use three contrast codes. We are free to choose these in any way we like, as long as the model is able to predict <code>ApproachAdvantage</code> in each condition as the sample average in that condition. What would be the most interesting comparisons to make for this study? Two contrasts of interest follow directly from the two main hypotheses. To test the “social priming hypothesis,” it is of interest to compare the conditions in which participants received a low-power prime to those in which they received a high-power prime. More specifically, if the social-priming hypothesis is false and the power-primes have <em>no effect</em> on the speediness of approach and avoid responses, then the average of the low-power prime conditions would be equal to the average of the high-power prime conditions:
+<div id="a-oneway-anova" class="section level3 hasAnchor">
+<h3><span class="header-section-number">8.1.1</span> A oneway ANOVA<a href="ch-factorial-ANOVA.html#a-oneway-anova" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Let’s analyze the data with the tools we already have. There are in total four conditions in the experiment, so we can treat <code>condition</code> as a nominal independent variable with four levels. We then need to use three contrast codes. We are free to choose these in any way we like, as long as the model is able to predict <code>ApproachAdvantage</code> in each condition as the sample average in that condition. What would be the most interesting comparisons to make for this study? Two contrasts of interest follow directly from the two main hypotheses. To test the “social priming hypothesis”, it is of interest to compare the conditions in which participants received a low-power prime to those in which they received a high-power prime. More specifically, if the social-priming hypothesis is false and the power-primes have <em>no effect</em> on the speediness of approach and avoid responses, then the average of the low-power prime conditions would be equal to the average of the high-power prime conditions:
 <span class="math display">\[\frac{\mu_\text{PL,EL} + \mu_\text{PL,EH}}{2} = \frac{\mu_\text{PH,EL} + \mu_\text{PH,EH}}{2}\]</span>
 If the social-priming hypothesis is true, on the other hand, we would expect the approach advantage scores to be higher in the high-power prime conditions than in the low-power prime conditions, i.e.:
 <span class="math display">\[\frac{\mu_\text{PH,EL} + \mu_\text{PH,EH}}{2} - \frac{\mu_\text{PL,EL} + \mu_\text{PL,EH}}{2} &gt; 0\]</span>
@@ -474,7 +748,7 @@ Our full set of three (orthogonal) contrasts is thus the following:</p>
 <th align="right"><span class="math inline">\(\text{SS}\)</span></th>
 <th align="right"><span class="math inline">\(\text{df}\)</span></th>
 <th align="right"><span class="math inline">\(F\)</span></th>
-<th align="right"><span class="math inline">\(P(\geq \lvert F \rvert)\)</span></th>
+<th align="right"><span class="math inline">\(p(\geq \lvert F \rvert)\)</span></th>
 </tr>
 </thead>
 <tbody>
@@ -531,11 +805,11 @@ Our full set of three (orthogonal) contrasts is thus the following:</p>
 <p>The estimate of the intercept is positive and differs significantly from 0. Remember that in a model with sum-to-zero contrasts, the intercept reflects the grand mean (average of group means). Thus, we can conclude that, on average, participants were quicker in making approach than in making avoid responses. The scale of the dependent variable (<span class="math inline">\(\texttt{ApproachAdvantage}\)</span>) is in milliseconds, so approach responses were on average 21.5 milliseconds faster than avoid responses. The omnibus test of Condition is significant, indicating that the mean of at least one condition differs from that of another. Each individual contrast represents the difference between one combination of two conditions and another combination of two conditions. Only the effect of <span class="math inline">\(X_2\)</span> (the predictor corresponding to contrast <span class="math inline">\(c_2\)</span>) is significant. This indicates that when the experimenter believed a participant was in the high-power condition, the average <code>ApproachAdvantage</code> score was 90.5 milliseconds larger than when the experimenter believed a participant was in the low-power condition. Interestingly, the effect of <span class="math inline">\(X_1\)</span>, the contrast-coded predictor corresponding to <span class="math inline">\(c_1\)</span> is <em>not</em> significant. Hence, we can <em>not</em> reject the null hypothesis that the difference in approach advantage between the high-power and low-power primes is 0. We have thus not found evidence for the social-priming hypothesis. The results are in line however with the experimenter-belief hypothesis.</p>
 </div>
 </div>
-<div id="factorial-designs" class="section level2" number="8.2">
-<h2><span class="header-section-number">8.2</span> Factorial designs</h2>
+<div id="factorial-designs" class="section level2 hasAnchor">
+<h2><span class="header-section-number">8.2</span> Factorial designs<a href="ch-factorial-ANOVA.html#factorial-designs" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>In the above, we have pretty much conducted the analysis that answered the interesting questions for the study. In doing so, we treated the study consisting of four conditions, without any additional structure. But considering the design of the study, you might realise that the conditions consisted of two manipulations: the prime given to participants (a low-power or high-power prime) and the belief given to the experimenters (whether the participants was supposedly given the low-power or high-power prime). The conditions in the experiment consisted of all four (<span class="math inline">\(2 \times 2\)</span>) possible combinations of these two manipulations (PL-EL, PL-EH, PH-EL, and PH-EH). An experimental design with all combinations of different manipulations is called a factorial design.</p>
-<div id="sec:06-main-effects-and-interactions" class="section level3" number="8.2.1">
-<h3><span class="header-section-number">8.2.1</span> Main effects and interactions</h3>
+<div id="sec:06-main-effects-and-interactions" class="section level3 hasAnchor">
+<h3><span class="header-section-number">8.2.1</span> Main effects and interactions<a href="ch-factorial-ANOVA.html#sec:06-main-effects-and-interactions" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>When a study has a factorial design, we can think of the <em>treatment effects</em> in a slightly different manner than when treating the conditions as part of a oneway design. In our oneway contrast coding scheme above, we have actually already done this: in the first contrast (<span class="math inline">\(c_1\)</span>), we chose to group the two “PL” conditions together, and the “PH” conditions together. Similarly, we chose to group the “EL” conditions together, and the “EH” conditions together, in the second contrast (<span class="math inline">\(c_2\)</span>). By doing so, we have considered what are called the <strong>main effects</strong> of the two factors (priming, and experimenter belief). The main effect of the priming manipulation reflects the effect of giving participants a low-power prime compared to a high-power prime, averaging over the levels of experimenter belief. The main effect of experimenter belief reflects the effect of making the experimenter believe participants were given a low-power prime compared to a high-power prime, averaging over the levels of the power prime. These means, where we average over all levels of other factors, are also called <strong>marginal means</strong>. For example, the marginal mean of the low-power prime conditions, which can be denoted as <span class="math inline">\(\mu_{\text{PL},\cdot}\)</span> (the <span class="math inline">\(\cdot\)</span> symbol reflects that we are averaging over the levels of the second factor), is simply <span class="math inline">\(\mu_{\text{PL},\cdot} = \frac{\mu_{\text{PL}, \text{EL}} + \mu_{\text{PL},\text{EH}}}{2}\)</span>. The contrast <span class="math inline">\(c_1\)</span> reflects the <em>difference</em> between these marginal means: <span class="math inline">\(\mu_{\text{PH},\cdot} - \mu_{\text{PL},\cdot}\)</span>. Similarly, the second contrast, which encodes the main effect of Belief, is the difference between the marginal means <span class="math inline">\(\mu_{\cdot,\text{EH}} - \mu_{\cdot,\text{EL}}\)</span>.</p>
 <p>Previously, we defined the remaining contrast code (<span class="math inline">\(c_3\)</span>) as that code which would complete the set of orthogonal contrast codes. When treating the design as a factorial, rather than oneway design, we can take a different approach. The two contrast codes <span class="math inline">\(c_1\)</span> and <span class="math inline">\(c_2\)</span>, and their corresponding predictors (<span class="math inline">\(X_1\)</span> and <span class="math inline">\(X_2\)</span>), reflect independent effects of the power prime and experimenter belief manipulations, respectively. If we had a model with only these two predictors, we would assume the slope of each predictor is the same, no matter the value of the other predictor. That implies that the effect of the power prime is assumed to be the the same, no matter what the belief of the experimenter is. Similarly, the effect of the experimenter belief is assumed the same, no matter which power prime was presented. That is quite a strong assumption. What if the effect of the power prime depends on the belief of the experimenter, and what if the effect of the experimenter belief depends on the power prime? This implies that the effect of power prime is <em>moderated</em> by experimenter belief (and vice versa).</p>
 <p>It is important to realise that, once we have constructed contrast-coding predictors, we can treat the model as any other multiple regression model. Hence, we can investigate whether effects are moderated by adding a product predictor to our model, i.e. <span class="math inline">\((X_1 \times X_2)_i\)</span>, just like we would in a multiple regression model. Such a product predictor is exactly the same as defining a contrast code <span class="math inline">\(c_3&#39; = c_1 \times c_2\)</span>! So, to investigate whether the effect of the power prime is moderated by experimenter belief, we should use a contrast code <span class="math inline">\(c_3&#39; = c_1 \times c_2 = (\tfrac{1}{4},- \tfrac{1}{4}, -\tfrac{1}{4}, \tfrac{1}{4})\)</span>. Note that this is, apart from scaling, the same contrast code as we used before, i.e. <span class="math inline">\(c_3&#39; = \tfrac{1}{2} \times c_{3}\)</span>. And, while scaling affects the value of the slope, it does not change the underlying relation between a predictor and the dependent variable. So the reduction in the Sum of Squared Error and the resulting null-hypothesis test, are exactly the same for a model based on <span class="math inline">\(c_3\)</span> and a model based on <span class="math inline">\(c_3&#39;\)</span>.</p>
@@ -550,7 +824,7 @@ Our full set of three (orthogonal) contrasts is thus the following:</p>
 <th align="right"><span class="math inline">\(\text{SS}\)</span></th>
 <th align="right"><span class="math inline">\(\text{df}\)</span></th>
 <th align="right"><span class="math inline">\(F\)</span></th>
-<th align="right"><span class="math inline">\(P(\geq \lvert F \rvert)\)</span></th>
+<th align="right"><span class="math inline">\(p(\geq \lvert F \rvert)\)</span></th>
 </tr>
 </thead>
 <tbody>
@@ -599,8 +873,8 @@ Our full set of three (orthogonal) contrasts is thus the following:</p>
 <p>At this point, you might wonder what is special about factorial designs and the way they are implemented in linear models. As the previous discussion indicates, in some sense, factorial designs are not special at all. If you have one experimental manipulation <span class="math inline">\(A\)</span> (e.g. power priming) with a total of <span class="math inline">\(g_A\)</span> levels <span class="math inline">\(a_1, \ldots, a_{g_A}\)</span>, and another manipulation <span class="math inline">\(B\)</span> (e.g. experimenter belief) with a total of <span class="math inline">\(g_B\)</span> levels <span class="math inline">\(b_1, \ldots, b_{L_B}\)</span>, and the experiment crosses all these levels as <span class="math inline">\((a_1 \text{ and } b_1), (a_1 \text{ and } b_2), \ldots, (a_2 \text{ and } b_1), \ldots, (a_{g_A} \text{ and } b_{g_B})\)</span>, then in the end, you will end up with an experiment that has a total of <span class="math inline">\(g = g_A \times g_B\)</span> conditions. It is up to you how you treat these conditions. There is nothing inherently wrong with ignoring the factorial nature of a design, and analysing it as a oneway design. Key is to come up with contrasts that test interesting hypotheses. Often, these contrasts will involve comparisons between levels of one manipulation, whilst averaging over the levels of another manipulation. This then naturally results in treating the design as factorial.</p>
 </div>
 </div>
-<div id="the-factorial-anova-model" class="section level2" number="8.3">
-<h2><span class="header-section-number">8.3</span> The factorial ANOVA model</h2>
+<div id="the-factorial-anova-model" class="section level2 hasAnchor">
+<h2><span class="header-section-number">8.3</span> The factorial ANOVA model<a href="ch-factorial-ANOVA.html#the-factorial-anova-model" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>An alternative, more traditional way of specifying a factorial ANOVA is in terms of a grand mean and treatment effects. This is analogous to the oneway ANOVA model of Equation <a href="ch-ANOVA.html#eq:glm-ANOVA-model">(7.2)</a>. Let’s consider a case with two experimental factors, <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span>, and let <span class="math inline">\(Y_{i,j,k}\)</span> denote an observation for person <span class="math inline">\(i\)</span> at level <span class="math inline">\(j\)</span> of the first factor (<span class="math inline">\(A\)</span>) and level <span class="math inline">\(k\)</span> of the second factor (<span class="math inline">\(B\)</span>). We can state the factorial ANOVA model as
 <span class="math display" id="eq:glm-factorial-ANOVA-model">\[\begin{equation}
 Y_{i,j,k} = \mu + \tau^{(A)}_j + \tau^{(B)}_k + \tau^{(A \times B)}_{j,k} + \epsilon_{i,j,k} \quad \quad \epsilon_{j,i} \sim \textbf{Normal}(0, \sigma_\epsilon)
@@ -614,17 +888,17 @@ which is the difference between marginal mean <span class="math inline">\(\mu_{\
 <span class="math display">\[\tau^{(A \times B)}_{j,k} = \mu_{j,k} - (\mu + \tau^{(A)}_j + \tau^{(B)}_k)\]</span>
 i.e. the difference between the true mean <span class="math inline">\(\mu_{j,k}\)</span> at level <span class="math inline">\(j\)</span> of factor <span class="math inline">\(A\)</span> and level <span class="math inline">\(k\)</span> of factor <span class="math inline">\(B\)</span>, and the predicted mean by adding treatment effects <span class="math inline">\(\tau^{(A)}_j\)</span> and <span class="math inline">\(\tau^{(B)}_k\)</span>, which is <span class="math inline">\(\mu + \tau^{(A)}_j + \tau^{(B)}_k\)</span>.</p>
 </div>
-<div id="a-threeway-factorial-anova" class="section level2" number="8.4">
-<h2><span class="header-section-number">8.4</span> A threeway factorial ANOVA</h2>
+<div id="a-threeway-factorial-anova" class="section level2 hasAnchor">
+<h2><span class="header-section-number">8.4</span> A threeway factorial ANOVA<a href="ch-factorial-ANOVA.html#a-threeway-factorial-anova" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>One benefit of treating a factorial design as a factorial design, is that you only need to worry about defining contrast codes for the main effects of the different manipulations. If you choose orthogonal contrasts for these, then the remaining contrasts for the full factorial design are simple to work out. They are interactions and computed as pairwise products of contrasts.</p>
 <p>To see how this works in a more complex situation, let’s investigate whether the identity of the experimenter might also play a role in determining the approach advantage scores. In the study, there were four experimenters (the research assistants). Let’s treat the identity of the experimenter as another factor in the design. A plot of the data, separated by experimenter, is provided in Figure <a href="ch-factorial-ANOVA.html#fig:expBelief-threeway-raincloud">8.2</a>. As you can see there, while the first three experimenters show the same overall pattern as in Figure <a href="ch-factorial-ANOVA.html#fig:expBelief-raincloud">8.1</a>, with higher scores for the “EH” conditions than the “EL” conditions, this is not so obvious for Experimenter 4.</p>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:expBelief-threeway-raincloud"></span>
-<img src="06b-Factorial-ANOVA_files/figure-html/expBelief-threeway-raincloud-1.svg" alt="Approach advantage scores separated by condition and experimenter" width="100%" />
+<img src="08-Factorial-ANOVA_files/figure-html/expBelief-threeway-raincloud-1.svg" alt="Approach advantage scores separated by condition and experimenter" width="100%" />
 <p class="caption">
 Figure 8.2: Approach advantage scores separated by condition and experimenter
 </p>
 </div>
-<p>Treating experimenter as another factor, we now have a 2 (Prime: low power vs high power) by 2 (experimenter Belief: low-power prime vs high-power prime) by 4 (Experimenter: 1, 2, 3, or 4) factorial design, with a total of <span class="math inline">\(2 \times 2 \times 4 = 16\)</span> conditions. We thus need a total of <span class="math inline">\(g-1 = 16 - 1 = 15\)</span> contrast codes. That is a lot! We will start by defining suitable contrast codes for the main effect of each of the three factors (manipulations). We have already done this for the first two factors. For prime-condition, we can assign a value of <span class="math inline">\(-\frac{1}{2}\)</span> to all conditions with a lower-power prime, and a value of <span class="math inline">\(\tfrac{1}{2}\)</span> to all conditions with a high-power prime. Thus, using a more informative label than <span class="math inline">\(c_1\)</span>, the contrast code for Prime condition is <span class="math inline">\(\texttt{P} = (-\tfrac{1}{2},\tfrac{1}{2})\)</span>. Similarly, to code for experimenter belief, we can assign a value of <span class="math inline">\(-\tfrac{1}{2}\)</span> to all conditions where the experimenter believed participants were in the low-power prime condition, and a value of <span class="math inline">\(\tfrac{1}{2}\)</span> for the conditions where the experimenter believed participants were assigned a high-power prime, i.e. <span class="math inline">\(\texttt{B} = (-\tfrac{1}{2},\tfrac{1}{2})\)</span>. Experimenter is a factor with four levels, and hence we need three contrast codes. As I don’t have a particular a priori hypothesis about which experimenters might differ from others, we can use one of the default orthogonal contrast codes. For instance, we can use a Helmert coding scheme, with contrasts <span class="math inline">\(\texttt{E}_1 = (-\tfrac{1}{2}, \tfrac{1}{2}, 0, 0)\)</span>, <span class="math inline">\(\texttt{E}_2 = (-\tfrac{1}{3}, -\tfrac{1}{3}, \tfrac{2}{3}, 0)\)</span>, and <span class="math inline">\(\texttt{E}_3 = (-\tfrac{1}{4}, -\tfrac{1}{4}, -\tfrac{1}{4}, \tfrac{3}{4})\)</span>. We have now defined <span class="math inline">\(1 + 1 + 3 = 5\)</span> contrast codes. The remaining 10 contrasts are easy to determine. First, we will construct codes for the moderation of <span class="math inline">\(\texttt{P}\)</span> by <span class="math inline">\(\texttt{B}\)</span>, by computing a product contrast (multiplying the values of <span class="math inline">\(\texttt{P}\)</span> and <span class="math inline">\(\texttt{B}\)</span> for all 16 conditions). We would do the same for the moderation of the priming effect by experimenter, which consists of the pairwise products between <span class="math inline">\(\texttt{P}\)</span> and <span class="math inline">\(\texttt{E}_1\)</span>, <span class="math inline">\(\texttt{P}\)</span> and <span class="math inline">\(\texttt{E}_2\)</span>, <span class="math inline">\(\texttt{P}\)</span> and <span class="math inline">\(\texttt{E}_3\)</span>. The moderation of the effect of experimenter belief by experimenter consists of the pairwise products of <span class="math inline">\(\texttt{B}\)</span> and <span class="math inline">\(\texttt{E}_1\)</span>, <span class="math inline">\(\texttt{B}\)</span> and <span class="math inline">\(\texttt{E}_2\)</span>, and <span class="math inline">\(\texttt{B}\)</span> and <span class="math inline">\(\texttt{E}_3\)</span>. We now have in total 7 contrast codes, each of which reflects a pairwise interaction. Great! The main effects and pairwise interactions provide us with <span class="math inline">\(5+7 = 12\)</span> of the required 15 contrast codes. The final three can be constructed as <strong>threeway interactions</strong>, i.e. as the products of three contrasts: <span class="math inline">\(\texttt{P} \times \texttt{B} \times \texttt{E}_1\)</span>, <span class="math inline">\(\texttt{P} \times \texttt{B} \times \texttt{E}_2\)</span>, and <span class="math inline">\(\texttt{P} \times \texttt{B} \times \texttt{E}_3\)</span>. You can view these threeway interactions as a form of “moderated moderations.” For example, does the moderation of the effect of power prime by experimenter belief depend on the identity of the experimenter? We will come back to the interpretation of this shortly.</p>
+<p>Treating experimenter as another factor, we now have a 2 (Prime: low power vs high power) by 2 (experimenter Belief: low-power prime vs high-power prime) by 4 (Experimenter: 1, 2, 3, or 4) factorial design, with a total of <span class="math inline">\(2 \times 2 \times 4 = 16\)</span> conditions. We thus need a total of <span class="math inline">\(g-1 = 16 - 1 = 15\)</span> contrast codes. That is a lot! We will start by defining suitable contrast codes for the main effect of each of the three factors (manipulations). We have already done this for the first two factors. For prime-condition, we can assign a value of <span class="math inline">\(-\frac{1}{2}\)</span> to all conditions with a lower-power prime, and a value of <span class="math inline">\(\tfrac{1}{2}\)</span> to all conditions with a high-power prime. Thus, using a more informative label than <span class="math inline">\(c_1\)</span>, the contrast code for Prime condition is <span class="math inline">\(\texttt{P} = (-\tfrac{1}{2},\tfrac{1}{2})\)</span>. Similarly, to code for experimenter belief, we can assign a value of <span class="math inline">\(-\tfrac{1}{2}\)</span> to all conditions where the experimenter believed participants were in the low-power prime condition, and a value of <span class="math inline">\(\tfrac{1}{2}\)</span> for the conditions where the experimenter believed participants were assigned a high-power prime, i.e. <span class="math inline">\(\texttt{B} = (-\tfrac{1}{2},\tfrac{1}{2})\)</span>. Experimenter is a factor with four levels, and hence we need three contrast codes. As I don’t have a particular a priori hypothesis about which experimenters might differ from others, we can use one of the default orthogonal contrast codes. For instance, we can use a Helmert coding scheme, with contrasts <span class="math inline">\(\texttt{E}_1 = (-\tfrac{1}{2}, \tfrac{1}{2}, 0, 0)\)</span>, <span class="math inline">\(\texttt{E}_2 = (-\tfrac{1}{3}, -\tfrac{1}{3}, \tfrac{2}{3}, 0)\)</span>, and <span class="math inline">\(\texttt{E}_3 = (-\tfrac{1}{4}, -\tfrac{1}{4}, -\tfrac{1}{4}, \tfrac{3}{4})\)</span>. We have now defined <span class="math inline">\(1 + 1 + 3 = 5\)</span> contrast codes. The remaining 10 contrasts are easy to determine. First, we will construct codes for the moderation of <span class="math inline">\(\texttt{P}\)</span> by <span class="math inline">\(\texttt{B}\)</span>, by computing a product contrast (multiplying the values of <span class="math inline">\(\texttt{P}\)</span> and <span class="math inline">\(\texttt{B}\)</span> for all 16 conditions). We would do the same for the moderation of the priming effect by experimenter, which consists of the pairwise products between <span class="math inline">\(\texttt{P}\)</span> and <span class="math inline">\(\texttt{E}_1\)</span>, <span class="math inline">\(\texttt{P}\)</span> and <span class="math inline">\(\texttt{E}_2\)</span>, <span class="math inline">\(\texttt{P}\)</span> and <span class="math inline">\(\texttt{E}_3\)</span>. The moderation of the effect of experimenter belief by experimenter consists of the pairwise products of <span class="math inline">\(\texttt{B}\)</span> and <span class="math inline">\(\texttt{E}_1\)</span>, <span class="math inline">\(\texttt{B}\)</span> and <span class="math inline">\(\texttt{E}_2\)</span>, and <span class="math inline">\(\texttt{B}\)</span> and <span class="math inline">\(\texttt{E}_3\)</span>. We now have in total 7 contrast codes, each of which reflects a pairwise interaction. Great! The main effects and pairwise interactions provide us with <span class="math inline">\(5+7 = 12\)</span> of the required 15 contrast codes. The final three can be constructed as <strong>threeway interactions</strong>, i.e. as the products of three contrasts: <span class="math inline">\(\texttt{P} \times \texttt{B} \times \texttt{E}_1\)</span>, <span class="math inline">\(\texttt{P} \times \texttt{B} \times \texttt{E}_2\)</span>, and <span class="math inline">\(\texttt{P} \times \texttt{B} \times \texttt{E}_3\)</span>. You can view these threeway interactions as a form of “moderated moderations”. For example, does the moderation of the effect of power prime by experimenter belief depend on the identity of the experimenter? We will come back to the interpretation of this shortly.</p>
 The full set of 15 contrast codes, with values for all 16 conditions, is given in the (rather large) Table <a href="ch-factorial-ANOVA.html#tab:expBelief-threeway-ANOVA-codes">8.3</a>.
 <div style="border: 0px;overflow-x: scroll; width:100%; ">
 <table class="table" style="margin-left: auto; margin-right: auto;">
@@ -1508,7 +1782,7 @@ PH,EH,E4
 <span class="math inline">\(F\)</span>
 </th>
 <th style="text-align:right;">
-<span class="math inline">\(P(\geq \lvert F \rvert)\)</span>
+<span class="math inline">\(p(\geq \lvert F \rvert)\)</span>
 </th>
 </tr>
 </thead>
@@ -1929,8 +2203,8 @@ Error
 </tbody>
 </table>
 <p>I admit the number of tested effects is large and the results mind-boggling at first. First, note that the main effect of “Experimenter” is entered in the table as an omnibus test, as well as the test for the individual contrasts <span class="math inline">\((\texttt{E}_1\)</span>, <span class="math inline">\(\texttt{E}_2\)</span>, and <span class="math inline">\(\texttt{E}_3)\)</span>. In a conventional ANOVA table, you would only see the omnibus test. But as the individual contrasts are informative, I like to include the tests for each individual contrast as well. The omnibus test listed under “Experimenter” is a test that the slope of <span class="math inline">\(\texttt{E}_1\)</span>, <span class="math inline">\(\texttt{E}_2\)</span>, and <span class="math inline">\(\texttt{E}_3\)</span> are <em>all</em> equal to 0. This is based on a model comparison between a MODEL G which includes all 16 parameters (intercept and the slopes of all 15 predictors) and a MODEL R which fixes the slopes of <span class="math inline">\(\texttt{E}_1\)</span>, <span class="math inline">\(\texttt{E}_2\)</span>, and <span class="math inline">\(\texttt{E}_3\)</span> to 0. Note that this MODEL R still includes the slopes of the various product-predictors such as <span class="math inline">\(\texttt{P} \times \texttt{E}_1\)</span>. The omnibus test is significant, which indicates that, aggregating over the levels of Prime and Belief, at least one of the experimenters differs from one other one. The tests of the individual contrasts show a significant effect of <span class="math inline">\(\texttt{E}_3\)</span>, which compares experimenter 4 to the average of experimenters 1, 2, and 3. The estimated slope is positive, which indicates that the approach advantage scores are generally higher for this experimenter than for the other ones. When you inspect Figure <a href="ch-factorial-ANOVA.html#fig:expBelief-threeway-raincloud">8.2</a>, you can see this: whilst for all other experimenters, average scores in the “EL” conditions are negative and positive in the “EH” conditions, the averages for Experimenter 4 are always positive, regardless of the level of Belief or Prime.</p>
-<div id="interpreting-interactions" class="section level3" number="8.4.1">
-<h3><span class="header-section-number">8.4.1</span> Interpreting interactions</h3>
+<div id="interpreting-interactions" class="section level3 hasAnchor">
+<h3><span class="header-section-number">8.4.1</span> Interpreting interactions<a href="ch-factorial-ANOVA.html#interpreting-interactions" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Aggregating over experimenters (i.e., looking at the main effect of Belief), we still obtain a significant effect of experimenter Belief, as we did before. However, the significant effect of the <span class="math inline">\(\texttt{B} \times \texttt{E}_3\)</span> contrast indicates that the effect of experimenter belief is different for Experimenter 4 compared to the other three experimenters. Let’s consider this more carefully. The slope of <span class="math inline">\(\texttt{B}\)</span> is estimated as <span class="math inline">\(\hat{\beta}_\texttt{B} = 90.4\)</span>. This simple slope represents the difference between the “experimenter believes high prime” and “experimenter believes low prime” conditions, when all other predictors which moderate this effect equal 0. When using orthogonal “sum-to-zero” contrasts, the simple slope can be thought of as reflecting the average effect of belief over all levels of the other factors in the design (prime condition, and experimenter). So, aggregating over all other conditions, the approach advantage score is 90.4 milliseconds larger when the experimenter believed a participant was given a high-power prime compared to when the experimenter believed the participant received a low-power prime.</p>
 <p>As an example of how to interpret an interaction, we will focus on the significant <span class="math inline">\(\texttt{B} \times \texttt{E}_3\)</span> contrast. Using the slope of this interaction, we can work out the predicted slope of <span class="math inline">\(\texttt{B}\)</span> for Experimenter 4 as <span class="math display">\[\hat{\beta}_{\texttt{B}|\text{Experimenter 4}} = 90.4 + \tfrac{3}{4} \times (-117) = 2.79\]</span> As the scale of the dependent variable is in milliseconds, this seems a rather negligible effect. For the other three experimenters, on average, the predicted slope is <span class="math display">\[\hat{\beta}_{\texttt{B}|\text{Experimenter 1, 2, or 3}} = 90.4 + (- \tfrac{1}{4})\times (-117) = 120\]</span> which is more substantial. Apparently, Experimenter 4 was “immune” to the experimenter belief manipulation, whilst the other three experimenters were not.</p>
 <p>Note that the omnibus test of the interaction between Belief and Experimenter is not significant, while the test of the <span class="math inline">\(\texttt{B} \times \texttt{E}_3\)</span> is. It is not uncommon for an individual contrast to be significant while an omnibus test is not. When only a single contrast has a sizeable effect (i.e. it provides a substantial reduction in the Sum of Squared Error), the omnibus test effectively divides the RSS attributable to that contrast over all contrasts that are part of the omnibus test. The omnibus test then has less power than a test of the individual contrast.</p>
@@ -1942,8 +2216,8 @@ Similarly, the effect of belief for Experimenter 4 and participants who received
 <span class="math display">\[\hat{\beta}_{\texttt{B}|\text{Experimenter 4 and low-power prime}} = 90.4 + \tfrac{3}{4} \times (-151) = -22.8\]</span></p>
 </div>
 </div>
-<div id="orthogonal-contrast-codes-and-unequal-sample-sizes" class="section level2" number="8.5">
-<h2><span class="header-section-number">8.5</span> Orthogonal contrast codes and unequal sample sizes</h2>
+<div id="orthogonal-contrast-codes-and-unequal-sample-sizes" class="section level2 hasAnchor">
+<h2><span class="header-section-number">8.5</span> Orthogonal contrast codes and unequal sample sizes<a href="ch-factorial-ANOVA.html#orthogonal-contrast-codes-and-unequal-sample-sizes" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Using orthogonal contrast codes in factorial designs generally leads to interpretable parameters. While interaction effects can be difficult to interpret initially, with practice, you will become better at this. Another benefit is that, if the conditions have equal sample sizes, the contrast-coded predictors will be independent. But when the sample sizes are unequal, this independence between contrast-coded predictors does not hold, even if the contrast codes are orthogonal.</p>
 <p>To keep the following discussion relatively straightforward, let’s go back to the two-way factorial ANOVA where we look at the effect of prime condition (<span class="math inline">\(\texttt{P}\)</span>) and experimenter belief (<span class="math inline">\(\texttt{B}\)</span>). To analyse this, we used a linear model
 <span class="math display">\[\text{MODEL G:} \quad \texttt{ApproachAdvantage}_i = \beta_0 + \beta_\texttt{P} \times \texttt{P}_i + \beta_\texttt{B} \times \texttt{B}_i + \beta_{\texttt{P} \times \texttt{B}} \times (\texttt{P} \times \texttt{B})_i + \epsilon_i\]</span>
@@ -2021,11 +2295,11 @@ Obviously, this is different from the estimate in MODEL G. While the slope still
 &amp;= -2.1
 \end{aligned}\]</span></p>
 <p>Why is this of importance? We’re generally interested in the estimates from MODEL G, and use a restricted MODEL R mainly for the purpose of conducting hypothesis tests. Well, the estimates of MODEL R become important when we consider different ways of conducting model comparisons to perform hypothesis tests.</p>
-<div id="comparison-schemes-and-ss-types" class="section level3" number="8.5.1">
-<h3><span class="header-section-number">8.5.1</span> Comparison schemes and SS types</h3>
+<div id="comparison-schemes-and-ss-types" class="section level3 hasAnchor">
+<h3><span class="header-section-number">8.5.1</span> Comparison schemes and SS types<a href="ch-factorial-ANOVA.html#comparison-schemes-and-ss-types" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>When predictors are dependent, they are partially redundant. Going back to our discussion of <em>multicollinearity</em>, that means that the predictors in a model together can account for more of the variance of the dependent variable than the sum of their unique contributions. In Figure <a href="ch-factorial-ANOVA.html#fig:sse-partition-type-SS">8.3</a>, as a whole, the model can account for a proportion <span class="math inline">\(B + C + D\)</span>, but the sum of the unique contributions is <span class="math inline">\(B + C\)</span>. This can result in a relative lack of power for the tests of main effects and interactions.</p>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:sse-partition-type-SS"></span>
-<img src="06b-Factorial-ANOVA_files/figure-html/sse-partition-type-SS-1.svg" alt="Partitioning the variance in a General Linear Model. Each circle represents the variance of a variable. Overlapping regions represent shared variability (e.g. covariance) between variables. " width="50%" />
+<img src="08-Factorial-ANOVA_files/figure-html/sse-partition-type-SS-1.svg" alt="Partitioning the variance in a General Linear Model. Each circle represents the variance of a variable. Overlapping regions represent shared variability (e.g. covariance) between variables. " width="50%" />
 <p class="caption">
 Figure 8.3: Partitioning the variance in a General Linear Model. Each circle represents the variance of a variable. Overlapping regions represent shared variability (e.g. covariance) between variables.
 </p>
@@ -2038,11 +2312,11 @@ In this computation, all elements are the same as for the usual Type 3 procedure
 <p>If the sample-sizes are reflective of the actual proportions in which you might find the various factor levels in the Data Generating Process, then it might make sense to test such sample-size weighted equality between means. However, unequal sample sizes often do not reflect such meaningful differences in the DGP. In that case, the hypotheses tested with a Type 1 procedure might not be meaningful. Also, the results of a Type 1 SS procedure depend on the <em>order</em> in which you enter the main effects. If you start with the main effect of <span class="math inline">\(\texttt{B}\)</span> rather than <span class="math inline">\(\texttt{P}\)</span>, then the SSR of <span class="math inline">\(\texttt{B}\)</span> would have been <span class="math inline">\(C+D\)</span> rather than just <span class="math inline">\(C\)</span> in Figure <a href="ch-factorial-ANOVA.html#fig:sse-partition-type-SS">8.3</a>. There often isn’t a clear reason to prefer one order over another. Hence, because of these issues, I generally don’t recommend using a Type 1 SS procedure. The reason for mentioning it here is that some statistical software (e.g. base R) use Type 1 SS procedures by default, and it is important to be aware of this.</p>
 <p>The <strong>Type 2 SS</strong> procedure is (even) more complicated, in terms of the hypotheses that are tested. The comparisons involved in computing the SSR terms for the different effects can be described reasonably clearly though. The idea is to determine the SSR associated to an effect whilst controlling for any effects that do not fully contain that effect. For example, let’s consider the threeway Prime by Belief by Experimenter ANOVA we conducted earlier. To compute the SSR of main effect of Prime, you would construct a model with the contrast codes corresponding to the main effects of Prime, Belief, and Experimenter, as well as the Belief <span class="math inline">\(\times\)</span> Experimenter interaction, as the latter does not contain Prime. Because the Prime <span class="math inline">\(\times\)</span> Experimenter and Prime <span class="math inline">\(\times\)</span> Belief <span class="math inline">\(\times\)</span> Experimenter interactions do contain Prime, they would not be included. You would then compute the SSR for the main effect of Prime by computing the difference in the SSE of this model and a model that excludes the Prime main effect. Similarly, to compute the SSR for Belief, you would compare a model with the main effects of Prime, Belief, and Experimenter, and Prime <span class="math inline">\(\times\)</span> Experimenter interaction, to a model which excludes the Belief main effect. To compute the SSR for e.g. the Prime <span class="math inline">\(\times\)</span> Belief interaction, you would compare a model which includes the main effects of Prime, Belief, and Experimenter, and the Prime <span class="math inline">\(\times\)</span> Belief, Prime <span class="math inline">\(\times\)</span> Experimenter, and Belief <span class="math inline">\(\times\)</span> Experimenter interactions. All effects included, apart from the Prime <span class="math inline">\(\times\)</span> Belief interaction itself, do not fully contain this interaction (i.e. do not include both Prime and Belief). The Prime <span class="math inline">\(\times\)</span> Belief <span class="math inline">\(\times\)</span> Experimenter interaction is excluded, because it involves both Prime and Belief. As for the Type 1 procedure, these comparisons are solely used to compute the SSR terms for the main effects and interactions. Once these have been obtained, they are used in the usual formula for the <span class="math inline">\(F\)</span> statistic, where everything else is the same as in the Type 3 procedure.</p>
 <p>As for the Type 1 procedure, the hypotheses tested by the Type 2 procedure reflect a (complex) weighting of means by sample size. But, unlike the Type 1 procedure, the results are not dependent on the order in which you include effects. Some authors argue that a Type 2 procedure is preferable to a Type 3 procedure when you don’t expect interactions, as the tests of the main effects are more powerful. That may be so, but interactions are often difficult to rule out on theoretical grounds. Moreover, because the hypothesis tests are generally more straightforward to interpret in the Type 3 procedure, as they involve comparisons between unweighted population means, I would generally advice the use of Type 3 tests, unless you have a strong conviction that there are no interactions, and a good grasp of the hypotheses tested by the Type 2 procedure.</p>
-<p>The issue of different testing schemes for <em>unbalanced</em> designs (unequal sample sizes) is a complex one, and opinions differ on which scheme is preferred. I mainly want you to be aware of these different approaches, and you can determine your own preference once you have gained enough experience with the General Linear Model to do so. A more comprehensive treatment of the different schemes is given in Chapter 7 of <span class="citation"><a href="#ref-maxwell2017designing" role="doc-biblioref">Maxwell et al.</a> (<a href="#ref-maxwell2017designing" role="doc-biblioref">2017</a>)</span>.</p>
+<p>The issue of different testing schemes for <em>unbalanced</em> designs (unequal sample sizes) is a complex one, and opinions differ on which scheme is preferred. I mainly want you to be aware of these different approaches, and you can determine your own preference once you have gained enough experience with the General Linear Model to do so. A more comprehensive treatment of the different schemes is given in Chapter 7 of <span class="citation">Maxwell et al. (<a href="#ref-maxwell2017designing">2017</a>)</span>.</p>
 </div>
 </div>
-<div id="in-practice-3" class="section level2" number="8.6">
-<h2><span class="header-section-number">8.6</span> In practice</h2>
+<div id="in-practice-3" class="section level2 hasAnchor">
+<h2><span class="header-section-number">8.6</span> In practice<a href="ch-factorial-ANOVA.html#in-practice-3" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>In practice, a factorial ANOVA is not that different from a oneway ANOVA. So the steps are again</p>
 <ol style="list-style-type: decimal">
 <li><p>Explore the data. Check the distribution of the dependent variable in each condition/group (i.e. each combination of experimental manipulations). Are there outlying or otherwise “strange” observations? If so, you may consider removing these from the dataset. Do the distributions look roughly Normal or are the distributions at least similar over the groups? Calculate the sample variances for each group. Is the largest variance no more than 4 times larger than the smallest sample variance? If not, then you may consider an alternative analysis than an ANOVA. If you have doubts about the homogeneity of variance, perform a Levene test. If this test is significant, you may still perform the ANOVA analysis as usual if the largest variance is less than 4 times larger than the smallest sample variance and the sample sizes in the groups are equal.</p></li>
@@ -2051,7 +2325,7 @@ In this computation, all elements are the same as for the usual Type 3 procedure
 <li><p>Report the results. When reporting the results, make sure that you include all relevant statistics. For example, one way to write the results of the analysis of Table <a href="ch-factorial-ANOVA.html#tab:expBelief-factorial-ANOVA-results">8.2</a>, is as follows:</p></li>
 </ol>
 <blockquote>
-<p>For each participant, we calculated an approach advantage score as the average difference in reaction time (in milliseconds) between avoid and appeoach trials. We then asessed the effect of power prime and experimenter belief on approach advantage in a 2 (Prime: high-power, low-power) by 2 (Belief: high-power, low-power) factorial ANOVA. We found no significant effect of Prime, <span class="math inline">\(F(1, 396) = 0.31\)</span>, <span class="math inline">\(p = .577\)</span>, <span class="math inline">\(\hat{\eta}^2_p = .001\)</span>. However, the effect of experimenter Belief was significant, <span class="math inline">\(F(1, 396) = 17.82\)</span>, <span class="math inline">\(p &lt; .001\)</span>, <span class="math inline">\(\hat{\eta}^2_p = .043\)</span>. The approach advantage score was positive when the experimenter believed participants received a high-power prime, <span class="math inline">\(M = 66.72\)</span>, 95% CI <span class="math inline">\([36.99\)</span>, <span class="math inline">\(96.45]\)</span>, and negative when the experimenter believed they received a low-power prime, <span class="math inline">\(M = -23.79\)</span>, 95% CI <span class="math inline">\([-53.67\)</span>, <span class="math inline">\(6.09]\)</span>. The interaction between Prime and Belief was not significant, <span class="math inline">\(F(1, 396) = 0.77\)</span>, <span class="math inline">\(p = .381\)</span>, <span class="math inline">\(\hat{\eta}^2_p = .002\)</span>. As such, we found clear evidence for the experimenter-belief hypothesis: whether the experimenter believes participants were given a high- or low-power prime affected participants’ readiness to avoid or approach targets. The prime participants actually received appeared to have no effect. As such, we found no evidence for the social priming hypothesis.</p>
+<p>For each participant, we calculated an approach advantage score as the average difference in reaction time (in milliseconds) between avoid and appeoach trials. We then asessed the effect of power prime and experimenter belief on approach advantage in a 2 (Prime: high-power, low-power) by 2 (Belief: high-power, low-power) factorial ANOVA. We found no significant effect of Prime, <span class="math inline">\(F(1, 396) = 0.31\)</span>, <span class="math inline">\(p = .577\)</span>, <span class="math inline">\(\hat{\eta}^2_p = .001\)</span>. However, the effect of experimenter Belief was significant, <span class="math inline">\(F(1, 396) = 17.82\)</span>, <span class="math inline">\(p &lt; .001\)</span>, <span class="math inline">\(\hat{\eta}^2_p = .043\)</span>. The approach advantage score was positive when the experimenter believed participants received a high-power prime, <span class="math inline">\(M = 66.72\)</span>, 95% CI <span class="math inline">\([36.99, 96.45]\)</span>, and negative when the experimenter believed they received a low-power prime, <span class="math inline">\(M = -23.79\)</span>, 95% CI <span class="math inline">\([-53.67, 6.09]\)</span>. The interaction between Prime and Belief was not significant, <span class="math inline">\(F(1, 396) = 0.77\)</span>, <span class="math inline">\(p = .381\)</span>, <span class="math inline">\(\hat{\eta}^2_p = .002\)</span>. As such, we found clear evidence for the experimenter-belief hypothesis: whether the experimenter believes participants were given a high- or low-power prime affected participants’ readiness to avoid or approach targets. The prime participants actually received appeared to have no effect. As such, we found no evidence for the social priming hypothesis.</p>
 </blockquote>
 <!--
 some useful online resources:
@@ -2061,20 +2335,20 @@ http://md.psych.bio.uni-goettingen.de/mv/unit/lm_cat/lm_cat_unbal_ss_explained.h
 
 </div>
 </div>
-<h3>References</h3>
-<div id="refs" class="references csl-bib-body hanging-indent" line-spacing="2">
-<div id="ref-gilder2018role" class="csl-entry">
-Gilder, T. S. E., &amp; Heerey, E. A. (2018). The role of experimenter belief in social priming. <em>Psychological Science</em>, <em>29</em>, 403–417.
+<h3>References<a href="references.html#references" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="refs" class="references">
+<div id="ref-gilder2018role">
+<p>Gilder, T. S. E., &amp; Heerey, E. A. (2018). The role of experimenter belief in social priming. <em>Psychological Science</em>, <em>29</em>, 403–417.</p>
 </div>
-<div id="ref-maxwell2017designing" class="csl-entry">
-Maxwell, S. E., Delaney, H. D., &amp; Kelley, K. (2017). <em>Designing experiments and analyzing data: A model comparison perspective</em>. Routledge.
+<div id="ref-maxwell2017designing">
+<p>Maxwell, S. E., Delaney, H. D., &amp; Kelley, K. (2017). <em>Designing experiments and analyzing data: A model comparison perspective</em>. Routledge.</p>
 </div>
 </div>
 <div class="footnotes">
 <hr />
 <ol start="20">
-<li id="fn20"><p><span class="math inline">\(\sum_{k=1}^g c_{1,k} = 0\)</span>, <span class="math inline">\(\sum_{k=1}^g c_{2,k} = 0\)</span>, and <span class="math inline">\(\sum_{k=1}^g c_{1,k} \times c_{2,k} = \tfrac{1}{4} - \tfrac{1}{4} - \tfrac{1}{4} + \tfrac{1}{4} = 0\)</span>.<a href="ch-factorial-ANOVA.html#fnref20" class="footnote-back">↩︎</a></p></li>
-<li id="fn21"><p>Remember that the slope of a predictor reflects the increase in the dependent variable for every one-unit increase in that predictor. Every one-unit increase in <span class="math inline">\(X_3\)</span> corresponds to a half-unit increase in <span class="math inline">\(X_3&#39;\)</span>. That implies that a one-unit increase in <span class="math inline">\(X_3&#39;\)</span> is the same as a two-unit increase in <span class="math inline">\(X_3\)</span>, so <span class="math inline">\(\beta&#39;_{3} = 2 \times \beta_3\)</span>.<a href="ch-factorial-ANOVA.html#fnref21" class="footnote-back">↩︎</a></p></li>
+<li id="fn20"><p><span class="math inline">\(\sum_{k=1}^g c_{1,k} = 0\)</span>, <span class="math inline">\(\sum_{k=1}^g c_{2,k} = 0\)</span>, and <span class="math inline">\(\sum_{k=1}^g c_{1,k} \times c_{2,k} = \tfrac{1}{4} - \tfrac{1}{4} - \tfrac{1}{4} + \tfrac{1}{4} = 0\)</span>.<a href="ch-factorial-ANOVA.html#fnref20" class="footnote-back">↩</a></p></li>
+<li id="fn21"><p>Remember that the slope of a predictor reflects the increase in the dependent variable for every one-unit increase in that predictor. Every one-unit increase in <span class="math inline">\(X_3\)</span> corresponds to a half-unit increase in <span class="math inline">\(X_3&#39;\)</span>. That implies that a one-unit increase in <span class="math inline">\(X_3&#39;\)</span> is the same as a two-unit increase in <span class="math inline">\(X_3\)</span>, so <span class="math inline">\(\beta&#39;_{3} = 2 \times \beta_3\)</span>.<a href="ch-factorial-ANOVA.html#fnref21" class="footnote-back">↩</a></p></li>
 </ol>
 </div>
             </section>
@@ -2083,7 +2357,7 @@ Maxwell, S. E., Delaney, H. D., &amp; Kelley, K. (2017). <em>Designing experimen
         </div>
       </div>
 <a href="ch-ANOVA.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="mixing-categorical-and-metric-predictors-ancova.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="ch-ANCOVA.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="book_assets/gitbook-2.6.7/js/app.min.js"></script>
@@ -2141,7 +2415,7 @@ gitbook.start({
     var script = document.createElement("script");
     script.type = "text/javascript";
     var src = "true";
-    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
     if (location.protocol !== "file:")
       if (/^https?:/.test(src))
         src = src.replace(/^https?:/, '');

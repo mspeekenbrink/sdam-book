@@ -1,0 +1,353 @@
+# Generalized Linear Models {#ch-generalized-linear-models}
+
+<!-- References: McCullagh and Nelder, Dobson, Agresti. -->
+
+Up to now, we have considered models for which the residuals (model errors) could be assumed to follow a Normal distribution. This is equivalent to modelling the conditional distribution of a dependent variable $Y$, given the values of predictor variables $X_j$, as a Normal distribution. Many of the techniques and ideas of such models can be generalised to situations where we can assume that the distribution of a dependent variable $Y$, conditional upon the values of predictor variables $X_j$, follows a different distribution from a class of probability distributions known as the _exponential family_. Such models are known as _generalised linear models_. This name makes for easy confusion with the _general linear model_, so make sure you don't ignore the presence or absence of "-ised"!
+
+The Normal distribution is part of the exponential family of distributions, as are many other distributions. These other distributions include the Binomial, Poisson, and Gamma distributions. Some of these distributions are defined for non-negative integer variables (i.e. variables with values $0, 1, 2, \ldots$), and others for positive continuous variables (i.e. variables with values $>0$), and others for unbounded continuous variables (i.e. variables with values between $\-infty$ and $\infty$). Exponential-family distributions can all be expressed in the same form, but we won't go into the details of that here. For now, what is important is that there are many variables which are *not* continuous and unbounded. It generally does not make sense to assume a Normal distribution for such variables. But because exponential-family distributions share important characteristics with the Normal distribution, assuming a different exponential-family distributions allows you to choose a distribution which is more natural for the variable in question, whilst still being able to formulate useful models for it.
+
+A generalized linear model consists of three components:
+
+1. Random part. This describes the variability in the data by means of an exponential-family probability distribution, with a conditional mean $\mu_{Y|X_1, \ldots, X_m$. Their (conditional) probability distribution belongs to the same family with a mean given by.
+2. Structural part. This is a linear model of the form $\beta_0 + \sum_{j=1}^m \beta_j \times X_j$
+3. Link function. This "links" the structural part to the random part.
+
+## Link functions
+
+```{r}
+data.frame(distribution = c("Normal", "Gamma", "Poisson", "Binomial"),
+           dv = c("Continuous, unbounded","Continuous, positive", "Non-negative integer", "Non-negative integer between 0 and $N$"),
+           link = c("Indentiy", "Negative inverse", "Log", "Logit"))
+
+```
+
+When we previously discussed applying the general linear model to "tricky" data, we have suggested to transform the dependent variable and/or the predictor variables, in order to "force" the data to approximately conform to the assumptions of the GLM. Generalised linear models also use transformations, which are called link functions. However, link functions are not applied the variables themselves, but rather to the predictions of a linear model. 
+
+In the general linear model, we model the conditional mean of a Normal-distributed variable as a linear function of predictor variables:
+$$\mu_{Y|X_1, \ldots, X_K} = \beta_0 + \sum_{j=1}^m \beta_j \times X_j$$
+In a generalised linear model, we model a transformation of the conditional mean of a wider class of distributions as a linear function of predictor variables:
+\begin{equation}
+g(\mu_{Y|X_1, \ldots, X_K}) = \beta_0 + \sum_{j=1}^m \beta_j \times X_j
+(\#eq:glm-link-function)
+\end{equation}
+where $g$ denotes the so-called **link function**. This link function can take many forms. Some common examples are
+
+* Identity: $g(y) = y$
+* Log: $g(y) = \log(y)$
+* Logistic: $g(y) = \log \left(\frac{y}{1-y}\right)$
+
+The key thing is that the right-hand-side of Equation \@ref(eq:glm-link-function) is a *linear function* that can, in principle, take any value between $-\infty$ and $\infty$. For variables that are bounded, such a linear model could provide predictions that are outside these bounds. The link function essentially makes such out-of-bounds predictions impossible. This might be easier to understand when we consider the inverse transformation: 
+\begin{equation}
+\mu_{Y|X_1, \ldots, X_K} = h(\beta_0 + \sum_{j=1}^m \beta_j \times X_j)
+(\#eq:glm-inverse-link-function)
+\end{equation}
+where $h$ denotes the so-called **inverse link function**. 
+
+* Inverse-Identity: $h(x) = x$
+* Inverse-Log: $h(x) = \exp(x)$
+* Inverse-Logistic: $h(x) = \frac{\exp(x)}{1+ \exp (x)}$
+
+Intuitively, you can think of a link function and its inverse as follows. Suppose you have ten British pounds and need to convert this into US dollars. The conversion rate (at the time of writing this) is £1 = \$1.25. So if $g$ is meant to convert pounds ($y$) to dollars ($x$), we would have 
+$$g(y) = 1.25 \times x$$
+If we were to convert our dollars back to pounds, we would need a different function, which is the inverse of our function $g$. Calling this $h$, we would need
+$$h(x) = \frac{1}{1.25} \times y = 0.8 \times y$$
+Such transformations are also called _one-to-one-mappings_: for every amount in pounds, there is an equivalent amount in dollars, and vice versa. If I know the amount in one currency, there is only a single amount in the second currency that this refers to. The link function needs to be such a one-to-one mapping, but otherwise, we are free to choose it. The example is a linear function, but we can also choose a nonlinear function, e.g.
+$$\begin{aligned}
+y &= \exp x \\
+\log y &= x
+\end{aligned}$$
+You can also think of the inverse link function as "undoing" the link function, in the sense that applying the inverse link function to the link function itself, we get the values put into the link function:
+$$h(g(x)) = x$$
+## Estimation
+
+As usual, we will focus on maximum likelihood estimates of the model parameters. Unlike for the parameters of the general linear model, analytical solutions for maximum likelihood parameters of generalized linear models of usually not available. They are obtained by an iterative procedure called *Fisher scoring*.
+
+## Inference in generalised linear models
+
+As usual, we are not just interested in the estimated model parameters, as we know data is noisy and the parameter estimates are likely to differ from the true parameter values in the population. As for the general linear model, there are different ways to test whether a parameter differs from a hypothesised value. 
+
+### Wald test
+
+For large samples, the test statistic
+\begin{equation}
+z = \frac{\hat{\beta_j}}{\text{SE}(\beta_j)}
+\end{equation}
+follows a standard Normal distribution. 
+
+Alternatively, the Wald statistic
+\begin{equation}
+W = \left(\frac{\hat{\beta_j}}{\text{SE}(\beta_j)}\right)^2
+\end{equation}
+follows a Chi-squared distribution with $\text{df} = 1$.
+
+Both tests give entirely equivalent results, although the $z$ statistic can be used to obtain one-sided tests, whilst the Wald statistic can only be used to obtain two-sided tests.  
+
+### Likelihood-ratio test
+
+The Wald test is easy to compute and works well for large-enough samples. A more powerful and reliable test for smaller samples is the likelihood ratio test. To test whether a parameter differs from a hypothesized value, this involves a comparison between a MODEL R where the parameter is fixed to that hypothesised value, and a MODEL G where the parameter is estimated. For linear models, the $t-$ or $F$-statistics could be used to perform such  likelihood ratio tests. This is no longer the case for generalized linear models. Unfortunately, the wider-class of distributions covered by generalized linear models does not allow for these precise tests. Instead, we will need to rely on the the approximate Chi-squared test that we introduced in the context of linear mixed-effects models.
+
+$$\begin{aligned}
+G^2 = -2 \log \left(\text{likelihood-ratio}\right) &= -2 \log p(\text{DATA}|\text{MODEL R}) - (-2 \log p(\text{DATA}|\text{MODEL G}))
+\end{aligned}$$
+with
+$$G^2 \sim \mathbf{chi-squared}(\text{npar}(G) - \text{npar}(R))$$
+
+### Confidence intervals
+
+Another option for inference is to compute confidence intervals. 
+
+Profile likelihood.
+
+## Model fit
+
+## Logistic regression
+
+Logistic regression is used for binary data, such as whether an item in a test is answered correctly ($Y = 1$) or incorrectly ($Y=0$). As a binary dependent variable can take only two values, assuming it follows a Normal distribution is nonsensical. Binary data can be assumed to follow a so-called **Bernoulli distribution**:
+
+\begin{equation}
+p(Y = k) = \theta^k \times (1-\theta)^{1-k}
+(\#eq:Bernoulli-distribution)
+\end{equation}
+with $k=0, 1$. Note that this is a simple case of the Binomial distribution we encountered in the Chapter X.^[As we are only considering a single outcome, $n = 1$ and we do not need to worry about how many possible outcomes could constitute $k = 0, 1, 2, \ldots$ correct ones, which is why we don't need the $\left(\right)$ term.]  
+
+The average of $Y$ is $\theta = \mu_Y$. Modelling this average with predictor variables $X_j$, the conditional mean is:
+$$\mu_{Y|X_1, \ldots, X_K} = p(Y=1|X_1, \ldots, X_K)$$
+As there are only two possible outcomes, the laws of probability prescribe that
+$$\begin{aligned}
+p(Y=0|X_1, \ldots, X_K) &= 1 - p(Y=1|X_1, \ldots, X_K) \\
+&= 1 - \mu_{Y|X_1, \ldots, X_K}
+\end{aligned}$$
+This means that all outcomes are
+The canonical link function for Bernoulli-distributed data is the so-called **logit link** function:
+\begin{equation}
+g(\mu_{Y|X_1, \ldots, X_m = \log \left(\frac{\mu_{Y|X_1, \ldots, X_K}}{1-\mu_{Y|X_1, \ldots, X_K}}\right) = = \beta_0 + \sum \beta_j X_{j}
+(\#eq:glm-logit-link-function)
+\end{equation}
+
+```{r logit-link-plot}
+library(dplyr)
+library(ggplot2)
+x <- seq(-5,5,length=100) 
+rbind(data.frame(b0 = 0, b1 = 1, x=x, p = 1/(1+exp(-x))),
+      data.frame(b0 = 0, b1 = 2, x=x, p = 1/(1+exp(-2*x))),
+      data.frame(b0 = 1, b1=1, x=x, p = 1/(1+exp(-(1 + x))))) %>%
+  mutate(case = paste0("b0 = ", b0, ", b1 = ", b1)) %>%
+  ggplot(aes(x=x,y=p, colour=case)) + geom_line() + ylab("p(Y = 1)")
+```
+
+The inverse link function is called the **inverse logit link** function:
+\begin{equation}
+\mu_{Y|X_1, \ldots, X_K} = \frac{\exp \{ \beta_0 + \sum \beta_j X_{j} \}}{1 + \exp \{ \beta_0 + \sum \beta_j X_{j} \}}
+(\#eq:glm-inverse-logit-link-function)
+\end{equation}
+
+### Example: Metacognition in visual perception
+
+Metacognition refers to the ability ascertain how (un)certain we are in our inferences about the world. The "meta" qualifier indicates that this is a cognitive process that is about (i.e. reflects upon) other cognitive processes. For example, @rausch2016visibility asked participants to judge whether a stimulus (a so-called grating pattern) was directed horizontally to vertically. To make this task difficult for their participants, they presented each stimuli for a brief time (200 ms) and with a variety of relatively low-contrast displays. They also asked participants to indicate their certainty that their judgement was correct. 
+
+
+```{r}
+library(sdamr)
+data("metacognition")
+
+dat <- subset(metacognition, id %in% c(1,2))
+
+dat %>%
+  mutate(confidence = if_else(confidence == 0, .0001, confidence)) %>%
+  mutate(conf_b = cut(confidence, c(0,20,40,60,80,100))) %>%
+  ggplot(aes(x=conf_b, y=correct)) + stat_summary(fun.data = "mean_cl_boot") + ylim(c(0,1)) + xlab("confidence") + ylab("average correct") + facet_wrap(~id)
+```
+
+```{r}
+mod_s1 <- subset(dat, id == 1) %>%
+  mutate(confidence = scale(confidence),
+         contrast = scale(contrast)) %>%
+  glm(correct ~ confidence * contrast, family=binomial(), data=.)
+mod_s2 <- subset(dat, id == 2) %>%
+  mutate(confidence = scale(confidence),
+         contrast = scale(contrast)) %>%
+  glm(correct ~ confidence * contrast, family=binomial(), data=.)
+
+tab <- summary(mod_s1)$coefficients
+rownames(tab) <- c("Intercept","Confidence", "Contrast","Confidence $\\times$ Contrast")
+colnames(tab) <- c("$\\hat{\\beta}$","$\\text{SE}(\\hat{\\beta})$", "$z$", "$P(\\geq \\lvert z \\rvert)$")
+
+knitr::kable(tab, caption = "Null-hypothesis significance tests using the t statistic.", escape = FALSE, booktabs=TRUE, linesep="")
+
+knitr::kable(papaja::apa_print(mod_s1)$table)
+
+summary(mod_s1)
+
+car::Anova(mod_s1, type=3)
+```
+
+### Parameter interpretation
+
+In the general linear model, $\beta_j$, the slope of a predictor variable, reflects the predicted change in the dependent variable for a one-unit increase in the predictor variable $X_j$. Because the model is linear, the predicted change is the same, no matter what base value we choose for $X_j$. That means that $Y$ is predicted to change by $\beta_j$, whether we increase $X_j$ from 0 to 1, or from 100 to 101. This is not the case when we consider the predicted change in $p(Y=1|X_j)$ for different values of $X_j$. For example, for a model with $\beta_0 = 0$ and $\beta_1 = 1$, Figure XXX shows that this probability increases more rapidly when we move from $X_1 = 0$ to $X_1 = 1$ than when we move from $X_1 = 3$ to $X_1 = 4$. 
+
+We can make use of the following properties of exponents:
+$$\begin{aligned}
+a^{(b + c)} &= a^b \times a^c \\
+a^{(b \times c)} &= \left(a^{b}\right)^c = \left(a^{c}\right)^b
+\end{aligned}$$
+(remember that $\exp (a) = e^a$, where $e$ denotes the natural number), to rewrite the odds as
+$$\begin{aligned} \frac{p(Y=1|X_1)}{1-p(Y=1|X_1)} &= \exp\left(\beta_0 + \beta_1 X_1\right) \\ &= \exp(\beta_0) \times \left(\exp(\beta_1) \right)^{X_1} \end{aligned}$$
+In the above, you can see that every one-unit increase in $X_1$ has the effect of multiplying the odds by $\exp(\beta_1)$. So the odds at $X_1 = 1$ is the odds at $X_1 = 0$, multiplied by $\exp(\beta_1)$. Similarly, the odds at $X_1 = 2$ is the odds at $X_1 = 1$ multiplied by $\exp(\beta_1)$.
+
+In the log-odds scale, every one-unit increase in $X$ *adds* $\beta_1$ to the log-odds. In the odds scale, every one-unit increase in $X$ *multiplies* the odds by $\exp(\beta_1)$. In terms of interpreting the effect of $X_1$, you can choose whether you find this easier to do in the scale of log-odds, or in the scale of odds. The most natural scale is probably the scale of the response $p(Y=1|X_1)$ itself. Unfortunately, the non-linear effect of $X_1$ on the response prevents a simple interpretation in this scale.
+
+### Probit regression: Using a different link function
+
+The logit link is the canonical link function for the Bernoulli and Binomial distribution. But you are not restricted to choose the canonical link function. In principle, any (monotone and one-to-one) function $g(Y)$ that transforms the variable $Y$ which is bounded between 0 and 1 to an unbounded scale between $\-infty$ and $\infty$. 
+
+The Probit link function
+
+$$\begin{aligned} p(Y \leq y) && Y \sim \mathbf{Normal}(\mu = 0, \sigma = 1) \end{aligned}$$ 
+
+```{r}
+library(sdamr)
+data("metacognition")
+
+dat <- subset(metacognition, id == 1)
+mod <- glm(correct ~ scale(confidence) * scale(contrast), family=binomial(link = "probit"), data=dat)
+summary(mod)
+
+car::Anova(mod, type=3)
+```
+
+## Poisson regression
+
+<!-- https://online.ucpress.edu/collabra/article/7/1/27242/118591/Poisson-Regressions-A-Little-Fishy -->
+<!-- https://compass.onlinelibrary.wiley.com/doi/10.1111/lnc3.12439 -->
+
+$$p(Y=k) = \frac{\mu^k \exp (-\mu )}{k!}$$
+with $k=0, 1, 2, \ldots$ denoting the number of occurrences, which is a non-negative integer.
+
+The canonical link function for Poisson-distributed data is the *log* function:
+$$\log\left(\mu_{Y|X_1, \ldots, X_K}\right) = \beta_0 + \sum_{j=1}^m \beta_j \times X_{j}$$
+The inverse link function is:
+$$\mu_{Y|X_1, \ldots, X_K} = \exp \left( \beta_0 + \sum_{j=1}^m \beta_j \times X_{j} \right)$$
+
+### Example: Gestures in different social contexts
+
+```{r}
+data("gestures")
+gestures %>%
+  ggplot(aes(x=gestures)) + geom_histogram() + facet_wrap(context~language)
+
+```
+
+```{r}
+contrasts(gestures$context) <- c(1,-1)
+contrasts(gestures$language) <- c(1,-1)
+contrasts(gestures$gender) <- c(1,-1)
+gestures$log_d <- log(gestures$dur)
+pois_mod <- glm(gestures ~ context*language*gender, data=gestures, family=poisson(), offset=log_d)
+
+```
+
+$$\log (\lambda) = \log\left(\frac{\mu}{\tau}\right)$$
+$$\log (\mu) = \log(\tau) + \beta_0 + \sum_{j=1}^m \beta_j X_j$$
+Note that the term $\log(\tau)$ above has no slope. You can think of $\log(\tau)$ as a predictor with a fixed slope of 1. 
+
+### Overdispersion
+
+In a Poisson distribution, the variance is identical to the mean. In real data, the variance is often larger than the mean. When the variance is larger than theoretically expected, this is called **overdispersion**. 
+
+```{r}
+qpois_mod <- glm(gestures ~ context*language*gender, data=gestures, family=quasipoisson(), offset=log_d)
+nbinom_mod <- MASS::glm.nb(gestures ~ offset(log_d) + context*language*gender, data=gestures)
+```
+
+## Log-linear models
+
+Log-linear models are used to analyse relations in multivariate categorical data. Such data can be expressed in the form of *multiway contingency tables* that contain counts for combinations of categorical classifications. For example, the political party someone has last voted for and newspaper they read most often. We can count how often each combination of vote and newspaper occurs in a random sample.
+
+Let $\mu_{i,j}$ denote the expected frequency of combination where $A = i$ and $B = j$. Assuming independence in the observations, the probability that one observation equals this combination is $P(A = i, B = j)$. For a total of $n$ independent observations, the expected frequency is then: 
+$$\mu_{i,j} = n \times P(A = i, B = j)$$
+Log-linear models are similar in spirit to a factorial ANOVA, in the sense that the counts are decomposed into main effects, two-way interactions, three-way interactions, etc. For example, 
+
+$$\log \mu_{i,j} = \lambda + \lambda^{(A)}_i + \lambda^{(B)}_j + \lambda^{(AB)}_{i,j}$$
+Just like a factorial ANOVA model can perfectly fit the sample means, this log-linear model can perfectly fit the counts. This is hence an example of a **saturated model**, where the total number of parameters equals the total number of possible combinations minus 1.^[We need one parameter less as the last remaining cell can be filled in as $n$ minus the frequencies in the other cells.]
+
+For a random sample of people from the general population, we can then count how often people who report voting for the Conservative Party also report reading the Daily Mail, and how many report reading the Guardian, etc (see e.g. https://www.statista.com/chart/9897/general-election-voting-by-newspaper-readership/ and https://yougov.co.uk/topics/politics/articles-reports/2017/06/13/how-britain-voted-2017-general-election for an example of such data).
+
+This is an extension of the Chi-squared test for a two-way contingency table.
+
+### Example: Newspapers and voting
+
+After the 2017 UK general elections, a large survey was conducted where people were asked which party they voted for, and amongst other things, the newspaper they most often read. In the UK, many newspapers have strong links to political parties. We could ask whether such links also exist for their readers. 
+
+```{r}
+data("papervotes")
+tab <- xtabs(n ~ ., data=papervotes, drop.unused.levels = TRUE, exclude = c("Plaid Cymru"))
+knitr::kable(tab)
+```
+
+```{r}
+mod0 <- loglin(tab, margin = list(1, 2))
+mod1 <- loglin(tab, margin = list(c(1, 2)))
+```
+
+### Empty cells
+
+## Multinomial logistic regression
+
+Log-linear models are models for multivariate data. 
+
+A simple, but suboptimal solution would be to treat the data as a set of binary variables. For instance, if we consider four products, we might construct 4 binary variables, where the first one encodes whether product $A$ was chosen ($Y_1 = 1$) or not ($Y_1 = 0$), the second one whether product $B$ was chosen ($Y_2 = 1$) or not ($Y_2 = 0$), etc. For each of these variables, we might construct a logistic regression model with the same set of predictors.
+
+One problem with this approach is that it ignores one fundamental aspect: these variables are not independent! If we know that $Y_1 = 1$, then all the other variables have to be 0.
+
+### Baseline category logit
+
+### Reconstructing probabilities of responses
+
+
+
+
+### Alternative logit models for ordinal categories
+
+When the categories of the dependent variable can be meaningfully ordered, this ordering can be used to construct a different set of logit models. All these formulations work with odds, but these odds are differentially defined. Some common examples are:
+
+* Cumulative logit. $\log \left( \frac{\pi_1}{\pi_2 + \pi_3 + \ldots} \right)$, $\log \left( \frac{\pi + \pi_2}{\pi_3 + \pi_4 + \ldots} \right)$, $\log \left( \frac{\pi_1 + \pi_2 + \pi_3}{\pi_4 + \ldots} \right)$, etc.
+* Adjecent category logit. $\log \left( \frac{\pi_1}{\pi_2} \right)$, $\log \left( \frac{\pi_2}{\pi_3} \right)$, $\log \left( \frac{\pi_3}{\pi_4} \right)$, etc.
+* Continuation ratio logit. $\log \left( \frac{\pi_1}{\pi_2} \right)$, $\log \left( \frac{\pi_1 + \pi_2}{\pi_3} \right)$, $\log \left( \frac{\pi_1 + \pi_2 + \pi_3}{\pi_4} \right)$, etc.
+
+We can choose any set of logits, as long as we don't include too many and it is possible to reconstruct the probability of each outcome from the set. In principle, we could choose to use the same logit formulations for *unordered categories*. The model as a whole would fit the data equally well, no matter what valid set of logits is chosen. Similarly to the approach we took in Repeated-Measures ANOVA, these logits essentially define contrasts on a dependent variable. Any valid contrast will do, but choosing a good set of contrasts will provide a more informative set of parameters.
+
+The main usefulness of alternative logit formulations for ordered categories is when using these in combination with restrictions on the parameters. In particular, assuming that the slope of predictors is identical for each logit. For example, the **Proportional Odds Model** uses the cumulative logit formulation and assumes the effect of a predictor to be identical for each of these cumulative logits:
+
+$$\log \left( \frac{\sum_{k=1}^l \pi_k}{\sum_{k=l+1}^K \pi_k} \right) = \beta_0 + \sum_{j=1}^m \beta_j \times X_j \quad \quad l = 1, \ldots, K$$
+This reduces the number of parameters quite drastically compared to the "standard" multinomial regression model. 
+
+## Generalized linear mixed-effects models
+
+As in the linear model, the generalized linear model can be extended by including random effects. Whilst estimation of such generalized linear mixed-effects models is (a lot) more involved than for linear mixed-effects models, conceptually, the models are the same. Again, we can write each intercept and slope as consisting of a fixed and a random part, and assume that each random effect is drawn from a (multivariate) Normal distribution, with mean 0.
+
+```{r}
+library(sdamr)
+data("metacognition")
+glmer_mod <- metacognition %>%
+  mutate(confidence_c = scale(confidence),
+         contrast_c = scale(contrast)) %>%
+  lme4::glmer(correct ~ confidence_c * contrast_c + (confidence_c + contrast_c||id), family=binomial(), data=.)
+
+car::Anova(glmer_mod, type=3)
+```
+
+### Item response theory
+
+
+## In practice
+
+As you will have noticed, generalised linear models are even more general than the general linear model, and can a useful way to model a wide variety of data. 
+
+1. Choose a sensible distribution (family) for the random part of the model. This can usually be based on the nature of the dependent variable. For binary data, a Bernoulli distribution is generally the right choice. For count (frequency) data, if the maximum frequency is fixed by design, a Binomial distribution makes sense. If the maximum not fixed, a Poisson distribution makes sense.
+
+2. Choose a useful link function. The link function defines how the predictors relate to the mean of the dependent variable. Hence, the choice is important. But 
+
+3. Estimate and assess the model. Overdispersion can be an issue.
+
+4. Report the results
+
