@@ -70,6 +70,9 @@ summary(fmod2)
 
 ### Multivariate Normal distribution
 
-### A bit of matrix algebra
+### A little bit of matrix algebra
+
+<!-- https://bookdown.org/compfinezbook/introFinRbook/Matrix-Algebra-Review.html -->
+<!-- https://bkenkel.com/pdaps/matrix.html -->
 
 ## Errors-in-variable models
