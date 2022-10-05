@@ -4,17 +4,17 @@
 
 Up to now, we have considered models for which the residuals (model errors) could be assumed to follow a Normal distribution. This is equivalent to modelling the conditional distribution of a dependent variable $Y$, given the values of predictor variables $X_j$, as a Normal distribution. Many of the techniques and ideas of such models can be generalised to situations where we can assume that the distribution of a dependent variable $Y$, conditional upon the values of predictor variables $X_j$, follows a different distribution from a class of probability distributions known as the _exponential family_. Such models are known as _generalised linear models_ [@mccullagh2019generalized]. This name makes for easy confusion with the _general linear model_, so make sure you don't ignore the presence or absence of "-ised"!
 
-The Normal distribution is part of the exponential family of distributions, as are many other distributions. These other distributions include the Binomial, Poisson, and Gamma distributions. Some of these distributions are defined for non-negative integer variables (i.e. variables with values $0, 1, 2, \ldots$), and others for positive continuous variables (i.e. variables with values $>0$), and others for unbounded continuous variables (i.e. variables with values between $\-infty$ and $\infty$). Exponential-family distributions can all be expressed in the same form, but we won't go into the details of that here. For now, what is important is that there are many variables which are *not* continuous and unbounded. It generally does not make sense to assume a Normal distribution for such variables. But because exponential-family distributions share important characteristics with the Normal distribution, assuming a different exponential-family distributions allows you to choose a distribution which is more natural for the variable in question, whilst still being able to formulate useful models for it.
+The Normal distribution is part of the exponential family of distributions, as are many other distributions. These other distributions include the Binomial, Poisson, and Gamma distributions. Some of these distributions are defined for non-negative integer variables (i.e. variables with values $0, 1, 2, \ldots$), and others for positive continuous variables (i.e. variables with values $>0$), and others for unbounded continuous variables (i.e. variables with values between $-\infty$ and $\infty$). Exponential-family distributions can all be expressed in the same form, but we won't go into the details of that here. For now, what is important is that there are many variables which are *not* continuous and unbounded. It generally does not make sense to assume a Normal distribution for such variables. But because exponential-family distributions share important characteristics with the Normal distribution, assuming a different exponential-family distributions allows you to choose a distribution which is more natural for the variable in question, whilst still being able to formulate useful models for it.
 
 A generalized linear model consists of three components:
 
-1. A *random* part which describes the variability in the data by means of an exponential-family probability distribution, with a conditional mean $\mu_{Y|X_1, \ldots, X_m$.
+1. A *random* part which describes the variability in the data by means of an exponential-family probability distribution, with a conditional mean $\mu_{Y|X_1, \ldots, X_m}$.
 2. A *structural* part which is a linear model of the form $\beta_0 + \sum_{j=1}^m \beta_j \times X_j$
 3. A *link function* which connects the structural and random part.
 
 ## Link functions
 
-```{r}
+```{r, eval=FALSE}
 data.frame(distribution = c("Normal", "Gamma", "Poisson", "Binomial"),
            dv = c("Continuous, unbounded","Continuous, positive", "Non-negative integer", "Non-negative integer between 0 and $N$"),
            link = c("Indentiy", "Negative inverse", "Log", "Logit"))
@@ -126,19 +126,44 @@ p(Y = 0) &= \theta^0 \times (1-\theta)^{1} = 1 \times (1 - \theta) \\ &= 1 - \th
 \end{aligned}$$
 
 The average of $Y$ is $\theta = \mu_Y$. Modelling this average with predictor variables $X_j$, the conditional mean is:
-$$\mu_{Y|X_1, \ldots, X_m} = p(Y=1|X_1, \ldots, X_m)$$
+$$\begin{aligned}
+\mu_{Y|X_1, \ldots, X_m} &= p(Y=1|X_1, \ldots, X_m) \\
+&= \pi_1
+\end{aligned}$$
 As above, due to the binary nature of $Y$, we also know that
 $$\begin{aligned}
 p(Y=0|X_1, \ldots, X_m) &= 1 - p(Y=1|X_1, \ldots, X_m) \\
-&= 1 - \mu_{Y|X_1, \ldots, X_m}
+&= 1 - \mu_{Y|X_1, \ldots, X_m} \\
+\pi_0 &= 1-\pi_1
 \end{aligned}$$
-This means that the probability distribution for $Y$ is completely determined by $\mu_{Y|X_1, \ldots, X_m}$, and our model can focus on just this.
+This means that the probability distribution for $Y$ is completely determined by $\mu_{Y|X_1, \ldots, X_m} = \pi_1$, and our model can focus on just this.
 
 The canonical link function for Bernoulli-distributed data is the so-called **logit link** function:
 \begin{equation}
-g(\mu_{Y|X_1, \ldots, X_m = \log \left(\frac{\mu_{Y|X_1, \ldots, X_K}}{1-\mu_{Y|X_1, \ldots, X_K}}\right) = = \beta_0 + \sum \beta_j X_{j}
+g(\mu_{Y|X_1, \ldots, X_m}) = \log \left( \frac{\mu_{Y|X_1, \ldots, X_K}}{1-\mu_{Y|X_1, \ldots, X_K}} \right)
+\end{equation}
+This may be easier to understand by replacing $\mu_{Y|X_1, \ldots, X_m}$ with the shorthand $\pi_1$:
+\begin{equation}
+g(\pi_1) = \log \left( \frac{\pi_1}{1-\pi_1} \right)
 (\#eq:glm-logit-link-function)
 \end{equation}
+The logistic regression model is then
+\begin{equation}
+\log \left( \frac{\pi_1}{1-\pi_1} \right) = \beta_0 + \beta_1 \times X_1 + \ldots + \beta_m \times X_m
+(\#eq:glm-logistic-regression-function)
+\end{equation}
+
+The inverse link function is called the **inverse logit link** function:
+\begin{equation}
+h(\beta_0 + \sum_{j=1}^m \beta_j) = \frac{\exp \{ \beta_0 + \sum_{j=1}^m \beta_j X_{j} \}}{1 + \exp \{ \beta_0 + \sum_{j=1}^m \beta_j X_{j} \}}
+(\#eq:glm-inverse-logit-link-function)
+\end{equation}
+So
+\begin{equation}
+\mu_{Y|X_1,\ldots,X_m} = \pi_1 = \frac{\exp \{ \beta_0 + \sum_{j=1}^m \beta_j X_{j} \}}{1 + \exp \{ \beta_0 + \sum_{j=1}^m \beta_j X_{j} \}}
+\end{equation}
+
+Some examples for $m=1$ predictor and different values of $\beta_0$ and $\beta_1$ are shown in Figure \@ref(fig:logit-link-plot).
 
 ```{r logit-link-plot}
 library(dplyr)
@@ -146,23 +171,20 @@ library(ggplot2)
 x <- seq(-5,5,length=100) 
 rbind(data.frame(b0 = 0, b1 = 1, x=x, p = 1/(1+exp(-x))),
       data.frame(b0 = 0, b1 = 2, x=x, p = 1/(1+exp(-2*x))),
-      data.frame(b0 = 1, b1=1, x=x, p = 1/(1+exp(-(1 + x))))) %>%
+      data.frame(b0 = 1, b1=1, x=x, p = 1/(1+exp(-(1 + x)))),
+      data.frame(b0 = 1, b1=-1, x=x, p = 1/(1+exp(-(1 -x))))) %>%
   mutate(case = paste0("b0 = ", b0, ", b1 = ", b1)) %>%
   ggplot(aes(x=x,y=p, colour=case)) + geom_line() + ylab("p(Y = 1)")
 ```
 
-The inverse link function is called the **inverse logit link** function:
-\begin{equation}
-\mu_{Y|X_1, \ldots, X_K} = \frac{\exp \{ \beta_0 + \sum \beta_j X_{j} \}}{1 + \exp \{ \beta_0 + \sum \beta_j X_{j} \}}
-(\#eq:glm-inverse-logit-link-function)
-\end{equation}
+For this 1-predictor model, the intercept $\beta_0$ reflects the point at which $\pi_1 = 0.5$. The slope $\beta_1$ reflects the steepness of the curve.
 
 ### Example: Metacognition in visual perception
 
 Metacognition refers to the ability ascertain how (un)certain we are in our inferences about the world. The "meta" qualifier indicates that this is a cognitive process that is about (i.e. reflects upon) other cognitive processes. For example, @rausch2016visibility asked participants to judge whether a stimulus (a so-called grating pattern) was directed horizontally to vertically. To make this task difficult for their participants, they presented each stimuli for a brief time (200 ms) and with a variety of relatively low-contrast displays. They also asked participants to indicate their certainty that their judgement was correct. 
 
 
-```{r metacognition-confidence-correct-plot, fig.caption="Confidence and proportion correct for two participants in the study by @rausch2016visibility on metacognition."}
+```{r metacognition-confidence-correct-plot, fig.caption="Confidence and proportion correct for two participants in the study by @rausch2016visibility on metacognition.", fig.width = 8, fig.height=4}
 library(sdamr)
 data("metacognition")
 
@@ -188,14 +210,15 @@ mod_s2 <- subset(dat, id == 2) %>%
 tab <- summary(mod_s1)$coefficients
 rownames(tab) <- c("Intercept","Confidence", "Contrast","Confidence $\\times$ Contrast")
 colnames(tab) <- c("$\\hat{\\beta}$","$\\text{SE}(\\hat{\\beta})$", "$z$", "$P(\\geq \\lvert z \\rvert)$")
+tab[,4] <- sapply(tab[,4], format_p)
 
 knitr::kable(tab, caption = "Null-hypothesis significance tests for a logistic regression model using the z statistic.", escape = FALSE, booktabs=TRUE, linesep="")
 
-knitr::kable(papaja::apa_print(mod_s1)$table)
+#knitr::kable(papaja::apa_print(mod_s1)$table)
 
-summary(mod_s1)
+#summary(mod_s1)
 
-car::Anova(mod_s1, type=3)
+#car::Anova(mod_s1, type=3)
 ```
 
 ### Parameter interpretation
@@ -237,13 +260,22 @@ car::Anova(mod, type=3)
 <!-- https://online.ucpress.edu/collabra/article/7/1/27242/118591/Poisson-Regressions-A-Little-Fishy -->
 <!-- https://compass.onlinelibrary.wiley.com/doi/10.1111/lnc3.12439 -->
 
-$$p(Y=k) = \frac{\mu^k \exp (-\mu )}{k!}$$
+Poisson regression is useful when the total number of possible occurrences of an event in not given. For example, suppose you let a participant solve as many algebra problems as they can within 1 hour. Some participants may be able to solve a problem every minute, whilst others may need longer (e.g. 5 minutes per problem, on average). 
+
+The **Poisson distribution** is stated as:
+\begin{equation}
+p(Y=k) = \frac{\mu^k \exp (-\mu )}{k!}
+(\#eq:Poisson-distribution)
+\end{equation}
 with $k=0, 1, 2, \ldots$ denoting the number of occurrences, which is a non-negative integer.
 
-The canonical link function for Poisson-distributed data is the *log* function:
+The canonical link function for Poisson-distributed data is the *log* link function:
+$$g(\mu_{Y|X_1, \ldots, X_K}) = \log\left(\mu_{Y|X_1, \ldots, X_K}\right)$$
+And the Poisson regression model is thus
 $$\log\left(\mu_{Y|X_1, \ldots, X_K}\right) = \beta_0 + \sum_{j=1}^m \beta_j \times X_{j}$$
-The inverse link function is:
-$$\mu_{Y|X_1, \ldots, X_K} = \exp \left( \beta_0 + \sum_{j=1}^m \beta_j \times X_{j} \right)$$
+
+The inverse link function is the *exponential* function:
+$$h\left(\beta_0 + \sum_{j=1}^m \beta_j \times X_{j}\right) = \exp \left( \beta_0 + \sum_{j=1}^m \beta_j \times X_{j} \right)$$
 
 ### Example: Gestures in different social contexts
 
@@ -280,16 +312,18 @@ nbinom_mod <- MASS::glm.nb(gestures ~ offset(log_d) + context*language*gender, d
 
 Log-linear models are used to analyse relations in multivariate categorical data. Such data can be expressed in the form of *multiway contingency tables* that contain counts for combinations of categorical classifications. For example, the political party someone has last voted for and newspaper they read most often. We can count how often each combination of vote and newspaper occurs in a random sample.
 
-Let $\mu_{i,j}$ denote the expected frequency of combination where $A = i$ and $B = j$. Assuming independence in the observations, the probability that one observation equals this combination is $P(A = i, B = j)$. For a total of $n$ independent observations, the expected frequency is then: 
-$$\mu_{i,j} = n \times P(A = i, B = j)$$
+Let $\mu_{i,j}$ denote the expected frequency of combination where $A = i$ and $B = j$. Assuming independence in the observations, the probability that one observation equals this combination is $\pi_{i,j} = P(A = i, B = j)$. For a total of $n$ independent observations, the expected frequency is then: 
+$$\mu_{i,j} = n \times \pi_{i,j}$$
 Log-linear models are similar in spirit to a factorial ANOVA, in the sense that the counts are decomposed into main effects, two-way interactions, three-way interactions, etc. For example, 
 
 $$\log \mu_{i,j} = \lambda + \lambda^{(A)}_i + \lambda^{(B)}_j + \lambda^{(AB)}_{i,j}$$
-Just like a factorial ANOVA model can perfectly fit the sample means, this log-linear model can perfectly fit the counts. This is hence an example of a **saturated model**, where the total number of parameters equals the total number of possible combinations minus 1.^[We need one parameter less as the last remaining cell can be filled in as $n$ minus the frequencies in the other cells.]
+Just like a factorial ANOVA model can perfectly fit the sample means, this log-linear model can perfectly fit the sample counts. This is hence an example of a **saturated model**, where the total number of parameters equals the total number of possible combinations minus 1.^[We need one parameter less as the last remaining cell can be filled in as $n$ minus the frequencies in the other cells.]
 
 For a random sample of people from the general population, we can then count how often people who report voting for the Conservative Party also report reading the Daily Mail, and how many report reading the Guardian, etc (see e.g. https://www.statista.com/chart/9897/general-election-voting-by-newspaper-readership/ and https://yougov.co.uk/topics/politics/articles-reports/2017/06/13/how-britain-voted-2017-general-election for an example of such data).
 
 This is an extension of the Chi-squared test for a two-way contingency table.
+
+
 
 ### Example: Newspapers and voting
 
@@ -314,6 +348,52 @@ mod0 <- loglin(tab, margin = list(1, 2))
 mod1 <- loglin(tab, margin = list(c(1, 2)))
 ```
 
+### A three-way table: Rock-Paper-Scissors
+
+@guennouni2022transfer let participants repeatedly play the well-known game of Rock-Paper-Scissors against artificial (AI) opponents, who were endowed with different human-like strategies. The "level-1" AI player would assume the human player to repeat their last chosen action, and then would pick the action to beat this. For example, if the human player had previously chosen "Rock", then they would expect the human player to play "Rock" again, therefore choosing "Paper" as this is the action that beats "Rock". The "level-2" AI player would expect the human player to adopt a "level-1" strategy, choosing actions to beat this. For example, if the AI player had previously chosen "Rock", the human would be expected to next play "Paper", as this beats "Rock". The AI player would therefore play "Scissors", as this beats "Paper" (the expected action of the human player). Results showed that people could pick-up on the strategy of the AI player, using this to their advantage. Moreover, they could transfer this learned strategy to other games.
+
+If we focus on the "level-1" AI player, we can say that their actions depend completely on the previous action of the human player.^[In the experiment, some noise was added to the actions of the AI player, who would choose a completely random action on 10% of the rounds.] If the human player is sensitive to the AI player's strategy, then their own strategy should also completely depend on their previous actions. For example, they should choose to play "Scissors" after playing "Rock", as they should expect the AI player to play "Paper". If this is the case, then we might expect the current action of the human player to be independent of the previous action of the AI player. We can test this hypothesis with log-linear models.
+
+Table \@ref(tab:rps-table) shows the actions chosen by the human player (in the last half of the game) as a function of the previous actions of the AI and human player. 
+
+```{r rps-table}
+data("rps")
+library(dplyr)
+dat <- rps %>%
+  group_by(id) %>%
+  mutate(previous_human = lag(human_action),
+         previous_ai = lag(ai_action)) %>%
+  filter(round > 25, ai_strategy == "Level1") %>%
+  mutate(previous_human = factor(previous_human, levels=c("rock", "paper", "scissors")),
+         previous_ai = factor(previous_ai, levels=c("rock", "paper", "scissors")),
+         human_action = factor(human_action, levels=c("rock", "paper", "scissors")))
+tab <- table(dat[,c("previous_human", "previous_ai","human_action")])
+data.frame(ftable(tab)) %>%
+  tidyr::pivot_wider(names_from = human_action, values_from= Freq) %>%
+  arrange(previous_human) %>%
+  knitr::kable(caption = "Action chosen by human players in Rock-Paper-Scissors by previous actions chosen by both human and AI player.")
+```
+
+Table \@ref(tab:rps-loglm-results)
+
+```{r rps-loglm-results}
+mod_1_2_3 <- MASS::loglm(~ 1 + 2 + 3, data=tab)
+mod_12_3 <- MASS::loglm(~ 1*2 + 3, data=tab)
+mod_13_2 <- MASS::loglm(~ 1*3 + 2, data=tab)
+mod_23_1 <- MASS::loglm(~ 2*3 + 1, data=tab)
+mod_12_23 <- MASS::loglm(~ 1*2 + 2*3, data=tab)
+mod_12_13 <- MASS::loglm(~ 1*2 + 1*3, data=tab)
+mod_13_23 <- MASS::loglm(~ 1*3 + 2*3, data=tab)
+mod_12_13_23 <- MASS::loglm(~ 1*2 + 1*3 + 2*3, data=tab)
+mod_123 <- MASS::loglm(~ 1*2*3, data=tab)
+
+mod_comp <- as.data.frame(matrix(unlist(lapply(list(mod_1_2_3, mod_12_3, mod_13_2, mod_23_1, mod_12_23, mod_12_13, mod_13_23, mod_12_13_23, mod_123), function(x) c(x$df, x$lrt, 1-pchisq(x$lrt, x$df), x$pearson, 1-pchisq(x$pearson, x$df)))), ncol=5, byrow = TRUE))
+mod_comp[,3] <- sapply(mod_comp[,3], format_p)
+mod_comp[,5] <- sapply(mod_comp[,5], format_p)
+rownames(mod_comp) <- c("$(H_p, A_p, H_c)$", "$(H_p \\cdot A_p, H_c)$", "$(A_p, H_p \\cdot H_c)$", "$(H_p, A_p \\cdot H_c)$", "$(H_p \\cdot A_p, A_p \\cdot H_c)$", "$(H_p \\cdot A_p, H_p \\cdot H_c)$", "$(H_p \\cdot H_c, A_p \\cdot H_c)$", "$(H_p \\cdot A_p, H_p \\cdot H_c, A_p \\cdot H_c)$", "$(H_p \\cdot A_p \\cdot H_c)$")
+rownames(mod_comp) <- c("$(H, A, C)$", "$(HA, C)$", "$(HC,A)$", "$(AC, H)$", "$(HA, AC)$", "$(HA, HC)$", "$(HC, AC)$", "$(HA, HC, AC)$", "$(HAC)$")
+knitr::kable(mod_comp, row.names = TRUE, col.names = c("df", "$G^2$", "$p(\\gt G^2)$", "$X^2$", "$p(\\gt X^2)$"), caption="Results from all possible log-linear models for the Rock-Paper-Scissors data of Table \\@ref(tab:rps-table)")
+```
 
 ### Sparse data and empty cells
 
@@ -325,6 +405,8 @@ For saturated models, @agresti2018introduction recommends to add a value of $\tf
 
 ## Multinomial logistic regression
 
+<!-- https://www.bookdown.org/chua/ber642_advanced_regression/multinomial-logistic-regression.html -->
+
 Logistic regression concerns modelling a dichotomous or binary dependent variable. There are many situations in which we would like to model a polytomous (i.e. non-binary) categorical dependent variable. For instance, in a marketing application, we might be interested in determining the factors that underlie consumers' product choice.  
 
 A simple, but suboptimal solution would be to treat the data as a set of binary variables. For instance, if we consider four products, we might construct 4 binary variables, where the first one encodes whether product $A$ was chosen ($Y_{1,i} = 1$) or not ($Y_{1,i} = 0$), the second one whether product $B$ was chosen ($Y_{2,i} = 1$) or not ($Y_{2,i} = 0$), etc. For each of these variables, we might construct a logistic regression model with the same set of predictors.
@@ -335,9 +417,77 @@ In multinomial logistic regression, a set of binary logistic regression models i
 
 ### Baseline category logit
 
-The most common multinomial logistic regression model uses a so-called *baseline category logit* link function. 
+The most common multinomial logistic regression model uses a so-called *baseline category logit* link function. This approach takes one of the categories (or levels) of the dependent variable as a baseline, and compares all other levels to that baseline category. 
+
+$$\log \left( \frac{\pi_j}{\pi_k} \right) = \beta_{j,0} + \beta_{j,1} \times X_1 + \ldots + \beta_{j,m} \times X_m \quad \quad \text{for all } j \neq k$$
+We could also parametrise the comparison of the baseline category against itself, i.e. $\log \left( \frac{\pi_k}{\pi_k} \right)$, but as this will always equal 0, we can just treat these parameters as fixed, i.e $\beta_{k,0} = \beta_{k,1} = \ldots = \beta_{k,m} = 0$.
+
+### Example: Rock-Paper-Scissors
+
+As an example, we reanalyse the Rock-Paper-Scissors data, focusing on a model of the human player's current action, as a function of the previous actions of the human and AI player. We choose "paper" as the baseline category. We use effect coding for the two predictors (human and AI previous action). As each predictor has three possible values, we need two contrast codes for each. We will estimate effects for previous actions "rock" and "scissors" (again, treating "paper" as a baseline). Our two logits are then
+
+$$\begin{aligned}
+\log \left(\frac{p(\text{rock})}{p(\text{paper})} \right) &= \beta_{R, 0} + \beta_{R, HR} \times C_{H: R} +  \beta_{R, HS} \times C_{H: S} + \beta_{R, AR} \times C_{A: R} +  \beta_{R, AS} \times C_{A: S} \\ 
+\log \left(\frac{p(\text{scissors})}{p(\text{paper})} \right) &= \beta_{S, 0} + \beta_{S, HR} \times C_{H: R} +  \beta_{S, HS} \times C_{H: S} + \beta_{S, AR} \times C_{A: R} +  \beta_{S, AS} \times C_{A: S} \end{aligned}$$
+Parameter estimates and (approximate) $Z$-tests are provided in Table \@ref(tab:rps-multinomial-logit).
+```{r rps-multinomial-logit, warning=FALSE, message=FALSE}
+data("rps")
+dat <- rps %>%
+  group_by(id) %>%
+  mutate(previous_human = lag(human_action),
+         previous_ai = lag(ai_action)) %>%
+  filter(round > 1, ai_strategy == "Level1")
+contrasts(dat$previous_ai) <- contrasts(dat$previous_human) <- cbind(c(-1,1,0),c(-1,0,1))
+rps_mod_multinom <- nnet::multinom(human_action ~ previous_human + previous_ai, data=dat, model = TRUE, trace = FALSE)
+
+tab <- data.frame(coef = as.numeric(t(summary(rps_mod_multinom)$coefficients)), sd = as.numeric(t(summary(rps_mod_multinom)$standard.errors)))
+tab$Z <- tab[,1]/tab[,2]
+tab$p <- sapply(2*(1-pnorm(abs(tab$Z))), format_p)
+tab <- cbind(tab[1:5,], tab[6:10,]) 
+rownames(tab) <- c("Intercept", "H: rock", "H: scissors", "A: rock", "A: scissors")
+tab %>%
+  knitr::kable(digits=3, col.names = rep(c("$\\hat{\\beta}$","$\\text{SE}(\\hat{\\beta})$", "$z$", "$P(\\geq \\lvert z \\rvert)$"),2), align="r", caption="Results of a baseline category multinomial logistic regression model for human current actions as a function of human and AI previous actions.") %>%
+  kableExtra::add_header_above(c(" "=1, "C: rock" = 4, "C: scissors" = 4))
+
+rps_multinom_test <- MASS::dropterm(rps_mod_multinom, test="Chisq", trace = FALSE)
+
+coef <- round(coefficients(rps_mod_multinom),3)
+#rps_multinom_confint <- confint(rps_mod_multinom)
+```
+
+Instead of the Z-test for the individual coefficients in Table , we may wonder whether a predictor has "any effect" on the dependent variable. For example, if the AI's previous action has no effect on the human's current action, then that would mean that the null-hypothesis $$H_0: \beta_{R, AR} = \beta_{R, AS} = \beta_{S, AR} = \beta_{S, AS} = 0$$ is true. We can test this hypotheses by a model comparison, comparing the full model to one where we fix these parameters to 0 (effectively removing the AI previous action predictor from the model).
+This model comparison provides the following test results:
+$-2 \log(\text{likelihood-ratio}) = `r rps_multinom_test$LRT[2]`$, $\text{df} = 4$, $p < .001$. Hence, we can conclude that the human players' current actions do depend on the AI's previous actions.
 
 ### Reconstructing probabilities of responses
+
+
+$$\hat{\pi_j} = \frac{\exp \left( \beta_{j,0} + \beta_{j,1} \times X_1 + \ldots + \beta_{j,m} \times X_m \right)}{\sum_{l=1}^K \exp \left(\beta_{l,0} + \beta_{l,1} \times X_1 + \ldots + \beta_{l,m} \times X_m \right)}$$
+Note that we also sum over the baseline category $k$ in the denominator, setting the parameters here to 0.
+
+For example, if the human player previously played "Rock" ($C_{H: R} = 1$, $C_{H: S} = 0$) and the AI previously player "Paper" ($C_{A: R} = -1$, $C_{A: S} = -1$), we can work out the probability of each possible current action is by computing the following quantities:
+
+```{r}
+d_coef <- function(x) {
+  if(x < 0) return(paste0("(",x,")")) else return(x)
+}
+tab <- data.frame(
+  action = c("C: R", "C: P", "C: S"),
+  linear = c(paste0("$", d_coef(coef[1,1])," + ",d_coef(coef[1,2])," \\times 1 + ",d_coef(coef[1,3])," \\times 0 + ",d_coef(coef[1,4]),"\\times -1 + ", d_coef(coef[1,5]),"\\times -1$"), "0", paste0("$",d_coef(coef[2,1])," + ",d_coef(coef[2,2]), " \\times 1 + ",d_coef(coef[2,3]), " \\times 0 + ",d_coef(coef[2,4]), " \\times -1 + ",d_coef(coef[2,5])," \\times -1$")),
+  value = c(sum(coefficients(rps_mod_multinom)[1,]*c(1,1,0,-1,-1)),
+    0,
+    sum(coefficients(rps_mod_multinom)[2,]*c(1,1,0,-1,-1)))
+)
+tab$exp <- exp(tab$value)
+tab$p <- tab$exp/sum(tab$exp)
+tab %>%
+  knitr::kable(digits=3, col.names = c("action","linear equation","value","exp","prob"))
+```
+
+For each action, we start with computing the value of the linear equation. These values are then transformed by taking the natural exponent. Finally, we can divide each of these exponentiated values by the sum of all exponentiated values to arrive a the calculated probability. For example, the probability that the action is "Rock" is computed as
+$$\begin{aligned} p(\text{rock}) &= \frac{\exp(`r round(tab$value[1],3)`)}{\exp(`r round(tab$value[1],3)`) + \exp(0) + \exp(`r round(tab$value[3],3)`)} \\ 
+&= $$
+
 
 ### Alternative logit models for ordinal categories
 
