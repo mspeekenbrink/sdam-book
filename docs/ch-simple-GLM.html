@@ -23,7 +23,7 @@
 <meta name="author" content="Maarten Speekenbrink" />
 
 
-<meta name="date" content="2022-10-02" />
+<meta name="date" content="2022-10-09" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -488,7 +488,7 @@ void main(void) {
 <li class="chapter" data-level="3.3" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#parameter-estimation"><i class="fa fa-check"></i><b>3.3</b> Parameter estimation</a><ul>
 <li class="chapter" data-level="3.3.1" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#sampling-distribution-of-the-estimated-mean"><i class="fa fa-check"></i><b>3.3.1</b> Sampling distribution of the estimated mean</a></li>
 </ul></li>
-<li class="chapter" data-level="3.4" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#testing-whether-mu-has-an-specific-value"><i class="fa fa-check"></i><b>3.4</b> Testing whether <span class="math inline">\(\mu\)</span> has an specific value</a><ul>
+<li class="chapter" data-level="3.4" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#testing-whether-mu-has-a-specific-value"><i class="fa fa-check"></i><b>3.4</b> Testing whether <span class="math inline">\(\mu\)</span> has a specific value</a><ul>
 <li class="chapter" data-level="3.4.1" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#the-classical-way"><i class="fa fa-check"></i><b>3.4.1</b> The classical way</a></li>
 <li class="chapter" data-level="3.4.2" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#the-model-comparison-way"><i class="fa fa-check"></i><b>3.4.2</b> The model comparison way</a></li>
 </ul></li>
@@ -722,7 +722,7 @@ Figure 3.3: Normal distribution and the probability of a value falling in one of
 </p>
 </div>
 <p>Because the Normal distribution is symmetric, with a single peak in the middle at <span class="math inline">\(\mu\)</span>, the parameter <span class="math inline">\(\mu\)</span> not only equals the mean, but also the median (50% of all values are lower than <span class="math inline">\(\mu\)</span>, and 50% are higher), and the mode.</p>
-<p>The Normal distribution is rather popular in statistical modelling. One important reason we’ll mention later (the Central Limit Theorem). Here, we’ll focus on two properties that make the Normal distribution quite convenient to work with. Before we continue, let’s introduce some new notation. As before, we will use <span class="math inline">\(Y\)</span> to denote the dependent variable (i.e. people’s judgements of the height of Mount Everest), and <span class="math inline">\(Y_i\)</span> to denote the <span class="math inline">\(i\)</span>-th value of the dependent variable (i.e. the judgement by participant <span class="math inline">\(i\)</span>), where <span class="math inline">\(i=1,\ldots,n\)</span>. We will state the assumption that <span class="math inline">\(Y\)</span> follows a Normal distribution as
+<p>The Normal distribution is rather popular in statistical modelling. One important reason we’ll mention later (which is the Central Limit Theorem). Here, we’ll focus on two properties that make the Normal distribution quite convenient to work with. Before we continue, let’s introduce some new notation. As before, we will use <span class="math inline">\(Y\)</span> to denote the dependent variable (i.e. people’s judgements of the height of Mount Everest), and <span class="math inline">\(Y_i\)</span> to denote the <span class="math inline">\(i\)</span>-th value of the dependent variable (i.e. the judgement by participant <span class="math inline">\(i\)</span>), where <span class="math inline">\(i=1,\ldots,n\)</span>. We will state the assumption that <span class="math inline">\(Y\)</span> follows a Normal distribution as
 <span class="math display">\[Y_i \sim \mathbf{Normal}(\mu,\sigma)\]</span>
 You can read this as “<span class="math inline">\(Y_i\)</span> is sampled from a Normal distribution with mean <span class="math inline">\(\mu\)</span> and standard deviation <span class="math inline">\(\sigma\)</span>”. So the tilde (<span class="math inline">\(\sim\)</span>) stands for “sampled from”. When we denote distributions, such as the Normal distribution, we will use a bold font for the name of the distribution, and between the parentheses that follow we will indicate the parameters of the distribution.</p>
 </div>
@@ -809,8 +809,8 @@ Figure 3.5: (Understandardized) Student t-distribution which is the true samplin
 <p>You can see a comparison of the t-distribution and the Normal distribution in Figure <a href="ch-simple-GLM.html#fig:comparing-normal-and-t-simple">3.5</a>. The main thing to notice is that the t-distribution is also bell-shaped and symmetric, but it is wider (has fatter tails) than the Normal distribution. The difference between the t-distribution and Normal distribution depends on the value of <span class="math inline">\(n-1\)</span>. When <span class="math inline">\(n&gt;30\)</span>, the difference is, for most practical purposes, negligible.</p>
 </div>
 </div>
-<div id="testing-whether-mu-has-an-specific-value" class="section level2 hasAnchor">
-<h2><span class="header-section-number">3.4</span> Testing whether <span class="math inline">\(\mu\)</span> has an specific value<a href="ch-simple-GLM.html#testing-whether-mu-has-an-specific-value" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="testing-whether-mu-has-a-specific-value" class="section level2 hasAnchor">
+<h2><span class="header-section-number">3.4</span> Testing whether <span class="math inline">\(\mu\)</span> has a specific value<a href="ch-simple-GLM.html#testing-whether-mu-has-a-specific-value" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Our main interest here is to assess whether it is reasonable to assume that, in the Data Generating Process, the average judgement equals the true height of Mount Everest. More bluntly, we simply want to know whether <span class="math inline">\(\mu = 8848\)</span>.</p>
 <div id="the-classical-way" class="section level3 hasAnchor">
 <h3><span class="header-section-number">3.4.1</span> The classical way<a href="ch-simple-GLM.html#the-classical-way" class="anchor-section" aria-label="Anchor link to header"></a></h3>
@@ -919,8 +919,6 @@ For our anchoring example, Cohen’s <span class="math inline">\(d\)</span> is
 Figure 3.8: Small, medium, and large values of Cohen’s <span class="math inline">\(d\)</span> in context of the data distribution.
 </p>
 </div>
-<p>For our anchoring example, Cohen’s <span class="math inline">\(d\)</span> is
-<span class="math display">\[d = \frac{6312.193 - 8848}{3135.738} = -0.809\]</span></p>
 <p>Comparing Equation <a href="ch-simple-GLM.html#eq:cohen-d-one-sample-t-test">(3.7)</a> to <a href="ch-simple-GLM.html#eq:definition-one-sample-t">(3.5)</a>, we can see that these look almost the same. The only difference is that the <span class="math inline">\(t\)</span> statistic divides the estimated standard deviation by <span class="math inline">\(\sqrt{n}\)</span>, as this provides the standard error of the mean. For a one-sample t-test, Cohen’s <span class="math inline">\(d\)</span> can then also be computed as <span class="math inline">\(t/\sqrt{n}\)</span>. This shows that, to an extent, Cohen’s <span class="math inline">\(d\)</span> removes the effect of <span class="math inline">\(n\)</span> from the <span class="math inline">\(t\)</span> statistic, and is not “inflated” as sample size increases. In addition to providing test results, it is generally a good idea to also provide the effect size as additional information.</p>
 </div>
 <div id="sec:02-assumptions" class="section level2 hasAnchor">
@@ -953,7 +951,7 @@ Figure 3.10: A bimodal distribution, arising when there are two groups of partic
 <p>This is quite an amazing theorem. Although you might wonder why you should care about sums of an infinite number of random variables, there are two things to note. Firstly, the rate at which the distribution “approaches” the normal distribution can be rather fast. Secondly, as we showed when we discussed two useful properties of the Normal distribution, the sample mean can be viewed as a normalized sum of <span class="math inline">\(n\)</span> variables: <span class="math inline">\(\overline{Y} = \frac{1}{n} \sum_{i=1}^n Y_i\)</span>. So the Central Limit Theorem applies also to the sample mean, and implies that as long as the size of the samples is large enough, the sample mean will follow a Normal distribution.</p>
 <div id="the-central-limit-theorem-in-action" class="section level3 hasAnchor">
 <h3><span class="header-section-number">3.8.1</span> The Central Limit Theorem in action<a href="ch-simple-GLM.html#the-central-limit-theorem-in-action" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>To see the central limit theorem in action, let’s pick an arbitrary probability distribution over 5 values, as shown in Figure <a href="ch-simple-GLM.html#fig:weird-prob-dist">3.11</a>. This will be the true distribution (i.e. the Data Generating Process) from which we can draw of simulate values.</p>
+<p>To see the central limit theorem in action, let’s pick an arbitrary probability distribution over 5 values, as shown in Figure <a href="ch-simple-GLM.html#fig:weird-prob-dist">3.11</a>. This will be the true distribution (i.e. the Data Generating Process) from which we can draw or simulate values.</p>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:weird-prob-dist"></span>
 <img src="03-GLM-simple_files/figure-html/weird-prob-dist-1.svg" alt="An aribitrary probability distribution over 5 values, clearly not a Normal distribution!" width="50%" />
 <p class="caption">

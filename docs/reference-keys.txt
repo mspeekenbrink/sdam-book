@@ -227,7 +227,7 @@ two-useful-properties-of-the-normal-distribution
 back-to-anchoring
 parameter-estimation
 sampling-distribution-of-the-estimated-mean
-testing-whether-mu-has-an-specific-value
+testing-whether-mu-has-a-specific-value
 the-classical-way
 the-model-comparison-way
 ch3-confidence-interval

@@ -23,7 +23,7 @@
 <meta name="author" content="Maarten Speekenbrink" />
 
 
-<meta name="date" content="2022-10-02" />
+<meta name="date" content="2022-10-09" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -488,7 +488,7 @@ void main(void) {
 <li class="chapter" data-level="3.3" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#parameter-estimation"><i class="fa fa-check"></i><b>3.3</b> Parameter estimation</a><ul>
 <li class="chapter" data-level="3.3.1" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#sampling-distribution-of-the-estimated-mean"><i class="fa fa-check"></i><b>3.3.1</b> Sampling distribution of the estimated mean</a></li>
 </ul></li>
-<li class="chapter" data-level="3.4" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#testing-whether-mu-has-an-specific-value"><i class="fa fa-check"></i><b>3.4</b> Testing whether <span class="math inline">\(\mu\)</span> has an specific value</a><ul>
+<li class="chapter" data-level="3.4" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#testing-whether-mu-has-a-specific-value"><i class="fa fa-check"></i><b>3.4</b> Testing whether <span class="math inline">\(\mu\)</span> has a specific value</a><ul>
 <li class="chapter" data-level="3.4.1" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#the-classical-way"><i class="fa fa-check"></i><b>3.4.1</b> The classical way</a></li>
 <li class="chapter" data-level="3.4.2" data-path="ch-simple-GLM.html"><a href="ch-simple-GLM.html#the-model-comparison-way"><i class="fa fa-check"></i><b>3.4.2</b> The model comparison way</a></li>
 </ul></li>
@@ -722,8 +722,8 @@ So just under 3 out of all 4 people that test positive in this scenario would ac
 <span class="math display">\[P(\text{Covid-19}|\text{positive test}) = \frac{903}{903 + 316} = .74\]</span>
 which is equal to the value computed earlier (up to rounding error resulting from converting probabilities to whole people).</p>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:covid-19-test-tree"></span>
-<div id="htmlwidget-ddb1e7658cbbf84306ea" style="width:672px;height:480px;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-ddb1e7658cbbf84306ea">{"x":{"diagram":"\n  digraph cvid_tree_plot {\n\n    graph [layout = dot,\n           rankdir = LR]\n\n    node [shape = box] \n    S [label = \"100,000 people\"]\n    \n    node [shape = oval, style = filled]\n    H [label = \"Covid-19\", fillcolor = \"#cc0000\"]\n    T [label = \"no Covid-19\", fillcolor = \"#00cc00\"]\n    HH [label = \"positive test\", fillcolor = \"#ff0000\" ]\n    HT [label = \"negative test\", fillcolor = \"#990000\"]\n    TH [label = \"positive-test\", fillcolor =  \"#00ff00\"]\n    TT [label = \"negative-test\", fillcolor = \"#009900\"]\n    \n    edge [label = \"1,176\"]\n    S -> {H}\n    \n    edge [label = \"98,824\", labelloc=b]\n    S -> {T}\n    \n    edge [label = \"903\"]\n    H -> {HH}\n    \n    edge [label = \"273\", labelloc=b]\n    H -> {HT}\n    \n    edge [label = \"316\" ]\n    T -> {TH}\n    \n    edge [label = \"98,508\", labelloc=b]\n    T -> {TT}\n}\n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-6d6db03ea8139e06c96b" style="width:672px;height:480px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-6d6db03ea8139e06c96b">{"x":{"diagram":"\n  digraph cvid_tree_plot {\n\n    graph [layout = dot,\n           rankdir = LR]\n\n    node [shape = box] \n    S [label = \"100,000 people\"]\n    \n    node [shape = oval, style = filled]\n    H [label = \"Covid-19\", fillcolor = \"#cc0000\"]\n    T [label = \"no Covid-19\", fillcolor = \"#00cc00\"]\n    HH [label = \"positive test\", fillcolor = \"#ff0000\" ]\n    HT [label = \"negative test\", fillcolor = \"#990000\"]\n    TH [label = \"positive-test\", fillcolor =  \"#00ff00\"]\n    TT [label = \"negative-test\", fillcolor = \"#009900\"]\n    \n    edge [label = \"1,176\"]\n    S -> {H}\n    \n    edge [label = \"98,824\", labelloc=b]\n    S -> {T}\n    \n    edge [label = \"903\"]\n    H -> {HH}\n    \n    edge [label = \"273\", labelloc=b]\n    H -> {HT}\n    \n    edge [label = \"316\" ]\n    T -> {TH}\n    \n    edge [label = \"98,508\", labelloc=b]\n    T -> {TT}\n}\n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 <p class="caption">
 Figure 15.1: Outcome tree representing mass testing for Covid-19.
 </p>

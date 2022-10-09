@@ -72,7 +72,7 @@ rbind(data.frame(interval=1,x=c(-3,seq(-3,3,length=100),1),y=c(0,dnorm(seq(-3,3,
 
 Because the Normal distribution is symmetric, with a single peak in the middle at $\mu$, the parameter $\mu$ not only equals the mean, but also the median (50% of all values are lower than $\mu$, and 50% are higher), and the mode.
 
-The Normal distribution is rather popular in statistical modelling. One important reason we'll mention later (the Central Limit Theorem). Here, we'll focus on two properties that make the Normal distribution quite convenient to work with. Before we continue, let's introduce some new notation. As before, we will use $Y$ to denote the dependent variable (i.e. people's judgements of the height of Mount Everest), and $Y_i$ to denote the $i$-th value of the dependent variable (i.e. the judgement by participant $i$), where $i=1,\ldots,n$. We will state the assumption that $Y$ follows a Normal distribution as
+The Normal distribution is rather popular in statistical modelling. One important reason we'll mention later (which is the Central Limit Theorem). Here, we'll focus on two properties that make the Normal distribution quite convenient to work with. Before we continue, let's introduce some new notation. As before, we will use $Y$ to denote the dependent variable (i.e. people's judgements of the height of Mount Everest), and $Y_i$ to denote the $i$-th value of the dependent variable (i.e. the judgement by participant $i$), where $i=1,\ldots,n$. We will state the assumption that $Y$ follows a Normal distribution as
 $$Y_i \sim \mathbf{Normal}(\mu,\sigma)$$
 You can read this as "$Y_i$ is sampled from a Normal distribution with mean $\mu$ and standard deviation $\sigma$". So the tilde ($\sim$) stands for "sampled from". When we denote distributions, such as the Normal distribution, we will use a bold font for the name of the distribution, and between the parentheses that follow we will indicate the parameters of the distribution.
 
@@ -182,7 +182,7 @@ ggplot(data.frame(x=c(mu - 2*sigma,mu + 2*sigma),y=c(0,dnorm(mu,mean=mu,sd=sigma
 
 You can see a comparison of the t-distribution and the Normal distribution in Figure \@ref(fig:comparing-normal-and-t-simple). The main thing to notice is that the t-distribution is also bell-shaped and symmetric, but it is wider (has fatter tails) than the Normal distribution. The difference between the t-distribution and Normal distribution depends on the value of $n-1$. When $n>30$, the difference is, for most practical purposes, negligible.
 
-## Testing whether $\mu$ has an specific value
+## Testing whether $\mu$ has a specific value
 
 Our main interest here is to assess whether it is reasonable to assume that, in the Data Generating Process, the average judgement equals the true height of Mount Everest. More bluntly, we simply want to know whether $\mu = 8848$.
 
@@ -318,9 +318,6 @@ Cohen's $d$ quantifies an effect in units of the standard deviation in the sampl
 data.frame(d = c(.2,-.2,.5,-.5,.8,-.8), effect = rep(c("small","medium","large"),each=2)) %>% ggplot() + stat_function(fun=function(x) dnorm(x,mean=0,sd=1)) + xlim(-4,4) + ylab("p(y)") + xlab("y") + geom_vline(aes(xintercept=d, colour=effect))
 ```
 
-For our anchoring example, Cohen's $d$ is
-$$d = \frac{`r mean(dat$everest_meters)` - 8848}{`r sd(dat$everest_meters)`} = `r  (mean(dat$everest_meters) - 8848)/(sd(dat$everest_meters))`$$
-
 Comparing Equation \@ref(eq:cohen-d-one-sample-t-test) to \@ref(eq:definition-one-sample-t), we can see that these look almost the same. The only difference is that the $t$ statistic divides the estimated standard deviation by $\sqrt{n}$, as this provides the standard error of the mean. For a one-sample t-test, Cohen's $d$ can then also be computed as $t/\sqrt{n}$. This shows that, to an extent, Cohen's $d$ removes the effect of $n$ from the $t$ statistic, and is not "inflated" as sample size increases. In addition to providing test results, it is generally a good idea to also provide the effect size as additional information. 
 
 ## Assumptions {#sec:02-assumptions}
@@ -363,7 +360,7 @@ This is quite an amazing theorem. Although you might wonder why you should care 
 
 ### The Central Limit Theorem in action
 
-To see the central limit theorem in action, let's pick an arbitrary probability distribution over 5 values, as shown in Figure \@ref(fig:weird-prob-dist). This will be the true distribution (i.e. the Data Generating Process) from which we can draw of simulate values.   
+To see the central limit theorem in action, let's pick an arbitrary probability distribution over 5 values, as shown in Figure \@ref(fig:weird-prob-dist). This will be the true distribution (i.e. the Data Generating Process) from which we can draw or simulate values.   
 
 ```{r weird-prob-dist,fig.cap="An aribitrary probability distribution over 5 values, clearly not a Normal distribution!",fig.width=4,fig.height=3,out.width="50%"}
 library(dplyr)

@@ -11,4 +11,4 @@ new_session: yes
 #edit: https://github.com/mspeekenbrink/sdam-book/edit/master/%s
 #output_dir: "book-output"
 clean: ["sdam.bbl", "R-packages.bib"]
-rmd_files: ["index.Rmd", "01-intro.Rmd", "02-modeling.Rmd", "03-GLM-simple.Rmd", "04-GLM-regression.Rmd", "05-GLM-multiple-regression.Rmd", "06-GLM-moderation.Rmd", "07-ANOVA.Rmd", "08-Factorial-ANOVA.Rmd", "09-ANCOVA.Rmd", "10-RM-ANOVA.Rmd", "11-LMER.Rmd", "12-GenLM.Rmd", "13-SEM-dummy.Rmd", "14-SEM-2-dummy.Rmd", "15-Bayes-estimation.Rmd", "16-Bayes-testing.Rmd", "17-responsible.Rmd", "999-references.Rmd"]
+rmd_files: ["index.Rmd", "01-intro.Rmd", "02-modeling.Rmd", "03-GLM-simple.Rmd", "04-GLM-regression.Rmd", "05-GLM-multiple-regression.Rmd", "06-GLM-moderation.Rmd", "07-ANOVA.Rmd", "08-Factorial-ANOVA.Rmd", "09-ANCOVA.Rmd", "10-RM-ANOVA.Rmd", "11-LMER.Rmd", "12-GenLM-dummy.Rmd", "13-SEM-dummy.Rmd", "14-SEM-2-dummy.Rmd", "15-Bayes-estimation.Rmd", "16-Bayes-testing.Rmd", "17-responsible.Rmd", "999-references.Rmd"]
