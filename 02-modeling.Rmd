@@ -1,3 +1,7 @@
+```{r, echo=FALSE}
+set.seed(20221010)
+```
+
 # Statistical modelling {#ch-modeling}
 
 Was Paul truly psychic, an oracle of some kind? Or was Paul -- or his keeper, as what does fame really mean to an octopus? -- just really lucky? How do we know? And what really are the chances of predicting the winner of 8 matches correct? These are questions we will focus on now.
@@ -440,7 +444,7 @@ ggplot(data.frame(k=sim,LR=LR),aes(x=LR)) + stat_count(width=.01) + xlab("likeli
 
 A first thing to notice is that there are only 5 unique values of the likelihood ratio in all 100,000 simulations. This is not a strange coincidence. While there are 9 possible values of $k$ for datasets with $n=8$, some of these will provide exactly the same likelihood ratio. For example, the likelihood ratio is identical for $k=3$ and $k=5$:
 $$\frac{p(Y = 3 | n = 8, \theta = 0.5)}{p(Y = 3 | n = 8, \theta = \frac{3}{8})} = \frac{p(Y = 5 | n = 8, \theta = 0.5)}{p(Y = 5 | n = 8, \theta = \frac{5}{8})} = `r dbinom(5,8,.5)/dbinom(5,8,5/8)`$$
-Similarly, the value of the likelihood ratio is identical for $k=2$ and $k=6$, for $k=1$ and $k=7$, and for $k=0$ and $k=8$. With that out of the way, let's look at how often each of these 5 possible values occurred. As MODEL R was the true model (we used it as the Data Generating Process for our simulations), you might expect that a likelihood ratio of 1 would be the most frequent value, as that would imply that MODEL R and (estimated) MODEL G provide an equally good description of a data set. But while this value occurs relatively frequently (`r LRvals[5]`%), the most common value is actually `r dbinom(5,8,.5)/dbinom(5,8,3/8)` (`r LRvals[4]`%). Only the value of `r format(dbinom(0,8,.5)/dbinom(0,8,0/8),scientific=FALSE)` is rather unlikely (`r LRvals[1]`%). In all our simulations, less than 1% had a value of the likelihood ratio as low as the one we found for the real data. Thus, if MODEL R is true, we would not expect an estimated MODEL G to perform as well very often. But is that reasonable grounds to conclude MODEL G provides a better description than the random-guessing MODEL R?
+Similarly, the value of the likelihood ratio is identical for $k=2$ and $k=6$, for $k=1$ and $k=7$, and for $k=0$ and $k=8$. With that out of the way, let's look at how often each of these 5 possible values occurred. As MODEL R was the true model (we used it as the Data Generating Process for our simulations), you might expect that a likelihood ratio of 1 would be the most frequent value, as that would imply that MODEL R and (estimated) MODEL G provide an equally good description of a data set. But while this value occurs relatively frequently (`r LRvals[5]`%), the most common value is actually `r dbinom(5,8,.5)/dbinom(5,8,5/8)` (`r LRvals[4]`%). Only the value of `r format(dbinom(0,8,.5)/dbinom(0,8,0/8),scientific=FALSE)` is rather unlikely (`r LRvals[1]`%). In all our simulations, less than 1% had a value of the likelihood ratio as low as the one we found for the real data. Thus, if MODEL R is true, we would not expect an estimated MODEL G to perform as well very often. But is that reasonable grounds to conclude MODEL G provides a better description than the random-guessing MODEL R?
 
 Before we go into this, let me point out that I used the idea of simulating data sets mainly for educational purposes. Although simulation is useful, it is imprecise. Even if we simulate 100,000 data sets, this is still a limited number, and hence any results will differ (even if only slightly) when we simulate another 100,000 data sets. In this case, it is actually quite straightforward to avoid simulation completely. Using the Binomial distribution, it is -- with a little thinking -- quite easy to work out the distribution of the likelihood ratio comparing MODEL R to estimated versions of MODEL G. Recall that for $n=8$, there are 9 possible values of $k$. If MODEL R is true, we know the probability of each of these values from the Binomial distribution. Moreover, each of these values will lead to a different estimate of $\theta$ in MODEL G, which in turn, paired with the corresponding value of $k$, each provide a value of the likelihood ratio. Let's collect all these things in a table:
 
@@ -458,8 +462,8 @@ knitr::kable(tab, escape=FALSE, digits = 6, caption = "Possible outcomes and the
 
 The column $p(k|\theta = .5)$ contains the probability of each possible value of $k$ according to MODEL R. As this is for the moment the true model, it is both the actual probability of $k$, and the "model assigned" value which goes into the likelihood ratio. In the table, we see that $k=0$ and $k=8$ both give the same value of the likelihood ratio. Because MODEL R generated the data, we know the probability of each value of $k$ is $p(k|\theta = .5)$, and therefore we can work out that the probability of obtaining this value of the likelihood is simply the sum of the probabilities of $k=0$ and $k=8$:
 $$\begin{aligned}
-p(\text{likelihood ratio} &= p(k=0) + p(k=8) \\
-&= `r format(tab[1,5], digits=3)`) = `r format(tab[1,2], digits=3)` + `r format(tab[9,2], digits=3)` = `r format(tab[1,2] + tab[9,2], digits=3)`
+p(\text{likelihood ratio} = `r format(tab[1,5], digits=3)`) &= p(k=0) + p(k=8) \\
+& = `r format(tab[1,2], digits=3)` + `r format(tab[9,2], digits=3)` = `r format(tab[1,2] + tab[9,2], digits=3)`
 \end{aligned}$$
 Similarly, for the other possible values of the likelihood, we can work out the probabilities as:
 $$\begin{aligned}

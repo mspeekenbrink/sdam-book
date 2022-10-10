@@ -1,3 +1,7 @@
+```{r, echo=FALSE}
+set.seed(20221010)
+```
+
 # Moderation and mediation {#ch-moderation-mediation}
 
 In this chapter, we will focus on two ways in which one predictor variable may affect the relation between another predictor variable and the dependent variable. Moderation means the strength of the relation (in terms of the slope) of a predictor variable is determined by the value of another predictor variable. For instance, while physical attractiveness is generally positively related to mating success, for very rich people, physical attractiveness may not be so important. This is also called an interaction between the two predictor variables. Mediation is a different way in which two predictors affect a dependent variable. It is best thought of as a __causal chain__, where one predictor variable determines the value of another predictor variable, which then in turn determines the value of the dependent variable. the difference between moderation and mediation is illustrated in Figure \@ref(fig:moderation-mediation-difference-graph).

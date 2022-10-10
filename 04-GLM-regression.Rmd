@@ -1,3 +1,7 @@
+```{r, echo=FALSE}
+set.seed(20221010)
+```
+
 # Simple linear regression {#ch-simple-regression}
 
 In this chapter, we continue our journey into the General Linear Model by extending the very simple model of the previous chapter to include a predictor. The resulting model assumes there is a linear relation between the dependent variable and the predictor, and is also known as a simple linear regression model. We will look at the parameters of the model in detail, and discuss their estimation, as well as testing whether their values are equal to a priori ones of interest.

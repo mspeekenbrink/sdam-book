@@ -1,3 +1,7 @@
+```{r, echo=FALSE}
+set.seed(20221010)
+```
+
 # A model of means (ANOVA) {#ch-ANOVA}
 
 In this chapter, we will discuss how _nominal variables_, which often reflect different manipulations within an experiment, can be included in the General Linear Model. This is done by constructing so-called _contrast codes_, which provide a means to construct metric predictors which encode differences between the levels of the nominal variable (e.g. differences between conditions in an experiment). When a study concerns only a single nominal variable, the interest is generally in determining whether there are differences in the average of the dependent variable between the levels (groups). Traditionally, ANOVA has focused on so-called _omnibus tests_, which test whether the mean of at least one group mean is different to that of another. Contrast codes allow you to test more informative hypotheses, and we will discuss different ways of constructing these contrast codes, including so-called _orthogonal contrast codes_. Within the context of a single model, you can only include a limited number of contrast codes, and we end the chapter with considering how you can test more hypotheses, whether these were conceived beforehand (_planned comparisons_) or afterwards (_post-hoc tests_).  

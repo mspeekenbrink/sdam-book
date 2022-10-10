@@ -1,3 +1,7 @@
+```{r, echo=FALSE}
+set.seed(20221010)
+```
+
 # Mixing categorical and metric predictors (ANCOVA) {#ch-ANCOVA}
 
 In this chapter, we will consider combining categorical and metric independent variables to predict a dependent variable. Such an analysis is generally called an Analysis of Covariance (ANCOVA). There are a number of reasons why you might want to include metric predictors (or "covariates") in an ANOVA-type analysis: to statistically control for pre-existing differences between conditions of potential confounders, to reduce prediction error and increase the power of statistical tests, and because they are theoretically interesting as for instance potential mediators of the effect of experimental manipulations. In the course of this chapter, we will see examples of each of these. We will also discuss the interpretation of contrasts in ANCOVA models as reflecting differences between group means which are _adjusted_ for the effect of the covariate.

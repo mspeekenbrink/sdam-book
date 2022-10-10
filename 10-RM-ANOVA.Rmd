@@ -1,3 +1,7 @@
+```{r, echo=FALSE}
+set.seed(20221010)
+```
+
 # Repeated-measures ANOVA {#ch-RM-ANOVA}
 
 In this chapter, we will discuss how to deal with the non-independence of errors that can result from repeated measures of the same individual or from other groupings in the data, within the context of ANOVA-type analyses (i.e. a GLM with only categorical predictors). The resulting class of models is known as repeated-measures ANOVA. We will consider one way to construct this class of models, by constructing new dependent variables by applying orthogonal contrasts to create difference scores between the observed dependent variables. For each of these new dependent variables, we can use a GLM as usual. The main conceptual leap will be in interpreting these new dependent variables, which we'll call _within-subjects composite scores_. The alternative approach is to apply contrast codes to the different "units of observation" (e.g. participants), and then treat this as a factorial design involving a mix of fixed and random experimental factors. As random and fixed effects are more straightforwardly dealt with in mixed-effects regression models -- the topic of the next chapter -- we will leave such considerations until later. The way we'll will discuss repeated-measures ANOVA is close to how most modern computational approaches actually conduct these analyses.

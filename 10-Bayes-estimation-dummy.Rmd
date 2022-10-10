@@ -1,1 +1,5 @@
+```{r, echo=FALSE}
+set.seed(20221010)
+```
+
 # Introduction to Bayesian estimation {#ch-Bayes-estimation}

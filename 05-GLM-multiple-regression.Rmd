@@ -1,3 +1,7 @@
+```{r, echo=FALSE}
+set.seed(20221010)
+```
+
 # Multiple regression {#ch-multiple-regression}
 
 In this chapter, we extend the simple regression model to include multiple predictor variables. The slopes of the predictors in the resulting multiple regression model reflect the unique effect of each predictor on the dependent variable, after removing the effect of all other predictors from both the dependent and predictor variable. We will look at what that means in some detail. We then go on to discuss parameter estimation and testing. 
@@ -246,7 +250,7 @@ $$
 $$  
 which is estimated as 
 $$`r modr <- lm(percent_Trump_votes ~ hate_groups_per_million + percent_bachelors_degree_or_higher - 1, data=dat); write_GLM_equation(modr,dv_name = "trump_votes", iv_names = c("hate_groups","education"), digits=4)`$$ 
-with $\text{SSE}(R) = `r sum(coefficients(modr)^2)`$. The $F$ statistic is computed in the same way as before:
+with $\text{SSE}(R) = `r sum(residuals(modr)^2)`$. The $F$ statistic is computed in the same way as before:
 \begin{align}
 F &= \frac{\frac{`r sum(residuals(modr)^2)` -  `r sum(residuals(modg)^2)`}{`r length(coef(modg))` - `r length(coef(modr))`}}{\frac{`r sum(residuals(modg)^2)`}{`r nrow(dat)` - `r length(coef(modg))`}} \\
 &= \frac{`r  (sum(residuals(modr)^2) -  sum(residuals(modg)^2))/(length(coef(modg)) - length(coef(modr)))`}{`r sum(residuals(modg)^2)/(nrow(dat) - length(coef(modg)))`} \\

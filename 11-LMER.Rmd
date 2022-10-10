@@ -1,3 +1,7 @@
+```{r, echo=FALSE}
+set.seed(20221010)
+```
+
 # Linear mixed-effects models {#ch-linear-mixed-effects-models}
 
 In this chapter, we will discuss an alternative approach to dealing with the non-independence of errors that can result from repeated-measures of the same individual, or otherwise multiple observations which come from different groupings in the data. Traditionally, such data has been analysed with repeated-measures ANOVA models. Linear mixed-effects models offer an alternative to repeated-measures ANOVA with certain benefits, particularly in dealing with missing values. Once you get your head around the idea of random effects, linear mixed-effects models are a natural extension of the General Linear Model, which can then make them easier to understand than repeated-measures ANOVA models, which rely on complicated model comparison schemes and strong assumptions. Linear mixed-effects models offer a more flexible univariate modelling technique. This flexibility does mean, as we will see, that sometimes difficult choices need to be made regarding the random-effects structure of the model. As always, there are no set rules in defining statistical models, and this should be led by substantive concerns, in addition to issues of reliability and maintaining appropriate error rates. With practice and experience, you should become more confident in making such decisions. 

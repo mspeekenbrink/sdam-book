@@ -1,5 +1,9 @@
 # Introduction {#ch-intro}
 
+```{r, echo=FALSE}
+set.seed(20221010)
+```
+
 ```{r setup2, echo=FALSE}
 knitr::opts_chunk$set(echo = FALSE,
                       fig.align = "center")

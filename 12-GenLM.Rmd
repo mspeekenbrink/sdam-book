@@ -1,3 +1,7 @@
+```{r, echo=FALSE}
+set.seed(20221010)
+```
+
 # Generalized Linear Models {#ch-generalized-linear-models}
 
 <!-- References: McCullagh and Nelder, Dobson, Agresti. -->

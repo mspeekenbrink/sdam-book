@@ -1,3 +1,7 @@
+```{r, echo=FALSE}
+set.seed(20221010)
+```
+
 # Introduction to Bayesian estimation {#ch-Bayes-estimation}
 
 In this chapter, we will introduce an alternative to maximum likelihood estimation of statistical models: Bayesian estimation. This concerns revising beliefs in light of observed data.
