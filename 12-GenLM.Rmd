@@ -25,11 +25,11 @@ data.frame(distribution = c("Normal", "Gamma", "Poisson", "Binomial"),
 
 ```
 
-When we previously discussed applying the general linear model to "tricky" data, we have suggested to transform the dependent variable and/or the predictor variables, in order to "force" the data to approximately conform to the assumptions of the GLM. Generalised linear models also use transformations, which are called link functions. However, link functions are not applied the variables themselves, but rather to the predictions of a linear model. 
+When we previously discussed applying the general linear model to "tricky" data, we have suggested to transform the dependent variable and/or the predictor variables, in order to "force" the data to approximately conform to the assumptions of the GLM. Generalized linear models also use transformations, which are called link functions. However, in generalized linear models, these link functions are not applied the variables themselves, but rather to the predictions of a linear model. 
 
 In the general linear model, we model the conditional mean of a Normal-distributed variable as a linear function of predictor variables:
 $$\mu_{Y|X_1, \ldots, X_m} = \beta_0 + \sum_{j=1}^m \beta_j \times X_j$$
-In a generalised linear model, we model a transformation of the conditional mean of a wider class of distributions as a linear function of predictor variables:
+In a generalized linear model, we model a transformation of the conditional mean of a wider class of distributions as a linear function of predictor variables:
 \begin{equation}
 g(\mu_{Y|X_1, \ldots, X_K}) = \beta_0 + \sum_{j=1}^m \beta_j \times X_j
 (\#eq:glm-link-function)
