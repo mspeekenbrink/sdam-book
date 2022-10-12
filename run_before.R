@@ -167,11 +167,25 @@ write_anova_results <- function(mod) {
 # Formatting formula
 format_p <- function(p, precision = 0.001) {
   digits <- -log(precision, base = 10)
+  if(is.na(p)) return(p)
   p <- formatC(p, format = 'f', digits = digits)
   if (p < .001) {
     p = paste0('< ', precision)}
   if (p >= .001) {
     # p = paste0('= ', p)    
+  }
+  sub("0", "", p)
+}
+
+# Formatting formula
+format_p_text <- function(p, precision = 0.001) {
+  digits <- -log(precision, base = 10)
+  if(is.na(p)) return(p)
+  p <- formatC(p, format = 'f', digits = digits)
+  if (p < .001) {
+    p = paste0('< ', precision)}
+  if (p >= .001) {
+    p = paste0('= ', p)    
   }
   sub("0", "", p)
 }

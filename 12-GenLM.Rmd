@@ -6,7 +6,7 @@ set.seed(20221010)
 
 <!-- References: McCullagh and Nelder, Dobson, Agresti. -->
 
-Up to now, we have considered models for which the residuals (model errors) could be assumed to follow a Normal distribution. This is equivalent to modelling the conditional distribution of a dependent variable $Y$, given the values of predictor variables $X_j$, as a Normal distribution. Many of the techniques and ideas of such models can be generalised to situations where we can assume that the distribution of a dependent variable $Y$, conditional upon the values of predictor variables $X_j$, follows a different distribution from a class of probability distributions known as the _exponential family_. Such models are known as _generalised linear models_ [@mccullagh2019generalized]. This name makes for easy confusion with the _general linear model_, so make sure you don't ignore the presence or absence of "-ised"!
+Up to now, we have considered models for which the residuals (model errors) could be assumed to follow a Normal distribution. This is equivalent to modelling the conditional distribution of a dependent variable $Y$, given the values of predictor variables $X_j$, as a Normal distribution. Many of the techniques and ideas of such models can be generalised to situations where we can assume that the distribution of a dependent variable $Y$, conditional upon the values of predictor variables $X_j$, follows a different distribution from a class of probability distributions known as the _exponential family_. Such models are known as _generalized_ linear models [@mccullagh2019generalized]. This name makes for easy confusion with the _general_ linear model, so make sure you don't ignore the presence or absence of "-ized"!
 
 The Normal distribution is part of the exponential family of distributions, as are many other distributions. These other distributions include the Binomial, Poisson, and Gamma distributions. Some of these distributions are defined for non-negative integer variables (i.e. variables with values $0, 1, 2, \ldots$), and others for positive continuous variables (i.e. variables with values $>0$), and others for unbounded continuous variables (i.e. variables with values between $-\infty$ and $\infty$). Exponential-family distributions can all be expressed in the same form, but we won't go into the details of that here. For now, what is important is that there are many variables which are *not* continuous and unbounded. It generally does not make sense to assume a Normal distribution for such variables. But because exponential-family distributions share important characteristics with the Normal distribution, assuming a different exponential-family distributions allows you to choose a distribution which is more natural for the variable in question, whilst still being able to formulate useful models for it.
 
@@ -38,7 +38,7 @@ where $g$ denotes the so-called **link function**. This link function can take m
 
 * Identity: $g(y) = y$
 * Log: $g(y) = \log(y)$
-* Logistic: $g(y) = \log \left(\frac{y}{1-y}\right)$
+* Logit $g(y) = \log \left(\frac{y}{1-y}\right)$
 
 The key thing is that the right-hand-side of Equation \@ref(eq:glm-link-function) is a *linear function* that can, in principle, take any value between $-\infty$ and $\infty$. For variables that are bounded, such a linear model could provide predictions that are outside these bounds. The link function essentially makes such out-of-bounds predictions impossible. This might be easier to understand when we consider the inverse transformation: 
 \begin{equation}
@@ -48,27 +48,29 @@ The key thing is that the right-hand-side of Equation \@ref(eq:glm-link-function
 where $h$ denotes the so-called **inverse link function**. The inverse link-functions corresponding to the list of common link functions above are:
 
 * Inverse-Identity: $h(x) = x$
-* Inverse-Log: $h(x) = \exp(x)$
-* Inverse-Logistic: $h(x) = \frac{\exp(x)}{1+ \exp (x)}$
+* Inverse-Log (or Exponential): $h(x) = \exp(x)$
+* Inverse-Logit (or Logistic): $h(x) = \frac{\exp(x)}{1+ \exp (x)}$
 
-Intuitively, you can think of a link function and its inverse as follows: Suppose you have ten British pounds and need to convert this into US dollars. The conversion rate (at the time of writing this) is £1 = \$1.08. So if $g$ is meant to convert pounds ($y$) to dollars ($x$), we would have 
-$$g(y) = 1.08 \times x$$
-If we were to convert our dollars back to pounds, we would need a different function, which is the inverse of our function $g$. Calling this $h$, we would need
-$$h(x) = \frac{1}{1.08} \times y \approx 0.926 \times y$$
-Such transformations are also called _one-to-one-mappings_: for every amount in pounds, there is an equivalent amount in dollars, and vice versa. If I know the amount in one currency, there is only a single amount in the second currency that this refers to. The link function needs to be such a one-to-one mapping, but otherwise, we are free to choose it. The example is a linear function, but we can also choose a nonlinear function, e.g.
+Take for example the inverse-log (or exponential) function above. No matter what the value of $x$, the value of $\exp(x)$ will never be below 0. It will approach 0 (from above) when $x$ approaches $-\infty$. So this inverse-link allows one to transform the unbounded predictions from a linear model into bounded predictions suitable for a non-negative continuous variable.  
+
+Intuitively, you can think of a link function and its inverse as follows: Suppose you have ten British pounds and need to convert this into US dollars. The conversion rate (at the time of writing this) is £1 = \$1.08.^[The UK financial market was in turmoil on 29 September 2022.] So if $g$ is meant to convert pounds ($x$) to dollars ($y$), we would have 
+$$y = g(x) = 1.08 \times x$$
+If we were to convert our dollars back to pounds, we would need a different function, which is the inverse (it "reverses" the effect) of our function $g$. Calling this $h$, we would need
+$$x = h(y) = \frac{1}{1.08} \times y \approx 0.926 \times y$$
+Such transformations are also called _one-to-one-mappings_: for every amount in pounds, there is an corresponding amount in dollars, and vice versa. If I know the amount in one currency, there is only a single amount in the second currency that this refers to. The link function needs to be such a one-to-one mapping, but otherwise, we are free to choose it. The example is a linear function, but we can also choose a nonlinear function, e.g.
 $$\begin{aligned}
-y &= \exp x \\
-\log y &= x
+y &= g(x) = \exp x \\
+x &= h(y) = \log y 
 \end{aligned}$$
 You can also think of the inverse link function as "undoing" the link function, in the sense that applying the inverse link function to the link function itself, we get the values put into the link function:
 $$h(g(x)) = x$$
-Whilst the choice of a link function is essentially up to the analyst, it is common to use a **canonical link function**. All distributions from the exponential family can be expressed by a single common formula. stated in 
+Whilst the choice of a link function is essentially up to the analyst, it is common to use a **canonical link function**. Canonical link functions are, roughly put, link functions that are the most natural way to express $\mu_{Y|X_1,\ldots,X_m}$ with a linear function.<!-- TODO --> 
 
 ## Estimation
 
 As usual, we will focus on maximum likelihood estimates of the model parameters. Unlike for the parameters of the general linear model, analytical solutions for maximum likelihood parameters of generalized linear models of usually not available. They are obtained by an iterative procedure called *Iteratively Weighted Least Squares*. You don't need to understand the details of this. For present purposes, it is enough to know that this method starts with a "guess" of the parameter estimates, and then updates this guess repeatedly to increase the likelihood of the estimated model, until no further improvement is obtained, at which point the algorithm is said to converge. Whilst modern statistical software generally has robust implementations of this procedure, estimation difficulties may arise in cases. This may be due to the model being a poor representation of the data, but potentially also because of a poor initial guess for the parameter values. 
 
-## Inference in generalised linear models
+## Inference in generalized linear models
 
 As usual, we are not just interested in the estimated model parameters, as we know data is noisy and the parameter estimates are likely to differ from the true parameter values of the Data Generating Process. As for the general linear model, there are different ways to test whether a parameter differs from a hypothesised value. We can focus on the sampling distribution of the parameter estimates, or compare a MODEL R where we restrict a parameter to take a particular value to a MODEL G where we estimate the parameter. 
 
@@ -76,77 +78,98 @@ As usual, we are not just interested in the estimated model parameters, as we kn
 
 For large samples, the test statistic
 \begin{equation}
-Z = \frac{\hat{\beta_j}}{\text{SE}(\beta_j)}
+z = \frac{\hat{\beta_j}}{\text{SE}(\beta_j)}
 \end{equation}
-approximately follows a standard Normal distribution. Note that this $Z$ statistic is similar to the $t$-statistic for the General Linear Model. What is missing however are the degrees of freedom. For large samples, as the number of observations $n$ approaches infinity, the $t$-distribution converges to the standard Normal distribution.
+approximately follows a standard Normal distribution. Note that this $z$ statistic is similar to the $t$-statistic for the General Linear Model. What is missing however are the degrees of freedom. For large samples, as the number of observations $n$ approaches infinity, the $t$-distribution converges to the standard Normal distribution. For large-enough $n$, the difference between the $t$-distribution and the Normal distribution so small that there is little difference when using one or the other to compute things like $p$-values (but technically, the use of a Normal distribution is only truly correct when the number of observations is infinite).
 
-As an alternative to the $Z$ statistic, the Wald statistic:
+Sometimes, the Wald test is presented in an alternative form:
 \begin{equation}
-W = \left(\frac{\hat{\beta_j}}{\text{SE}(\beta_j)}\right)^2
+z^2 = \left(\frac{\hat{\beta_j}}{\text{SE}(\beta_j)}\right)^2
 \end{equation}
-approximately follows (again for large samples) a Chi-squared distribution with $\text{df} = 1$.
+which approximately follows (again for large samples) a Chi-squared distribution with $\text{df} = 1$. This is due to a mathematical fact that if a variable $z$ follows a standard Normal distribution, then $z^2$ follows a Chi-squared distribution with $\text{df}=1$ degrees of freedom. 
 
-Both tests are approximate and only exact for an infinite sample size. They give entirely equivalent results, although the $Z$ statistic can be used to obtain one-sided tests, whilst the Wald statistic can only be used to obtain two-sided tests.  
+Both statistics are approximate and only exact for an infinite sample size. They give entirely equivalent results, although the $z$-statistic can be used to obtain one-sided tests, whilst the $z^2$ can only be used to obtain two-sided tests. Given the additional flexibility of the $z$-statistics, this is what we will use for our Wald tests.
 
 ### Likelihood-ratio test
 
 The Wald test is easy to compute and works well for large-enough samples. A more powerful and reliable test for smaller samples is the likelihood ratio test. To test whether a parameter differs from a hypothesized value, this involves a comparison between a MODEL R where the parameter is fixed to that hypothesised value, and a MODEL G where the parameter is estimated. For linear models, the $t-$ or $F$-statistics could be used to perform such likelihood ratio tests. Unfortunately, the wider-class of distributions covered by generalized linear models does not allow for these precise tests. Instead, we will need to rely on the the approximate Chi-squared test that we introduced in the context of linear mixed-effects models.
 
-The (log) likelihood-ratio test statistic is commonly denoted by $G^2$, and is defined as:
+The test statistic used for a likelihood-ratio test is, as in Chapter XXX, equal to minus two times the log likelihood ratio:
 $$\begin{aligned}
-G^2 = -2 \log \left(\text{likelihood-ratio}\right) &= -2 \log p(\text{DATA}|\text{MODEL R}) - (-2 \log p(\text{DATA}|\text{MODEL G}))
+-2 \log \left(\text{likelihood-ratio}\right) &= -2 \log p(\text{DATA}|\text{MODEL R}) - (-2 \log p(\text{DATA}|\text{MODEL G}))
 \end{aligned}$$
 For large-enough samples, the sampling distribution of this statistic is approximately equal to a Chi-squared distribution:
-$$G^2 \sim \mathbf{chi-squared}(\text{npar}(G) - \text{npar}(R))$$
-with degrees-of-freedom equal to the difference in the number of estimated parameters between the models.
+$$-2 \log \left(\text{likelihood-ratio}\right) \sim \mathbf{chi-squared}(\text{npar}(G) - \text{npar}(R))$$
+with degrees-of-freedom equal to the difference in the number of estimated parameters ($\text{npar}(G) - \text{npar}(R)$) between the models.
 
 ### Confidence intervals
 
-Another option for inference is to compute confidence intervals. As straightforward way to compute (approximate) confidence intervals is to rely on the asymptotically Normal distribution of parameter estimates (as in the $Z$-statistic for testing parameter values). 
+Another option for inference is to compute confidence intervals. As straightforward way to compute (approximate) confidence intervals is to rely on the asymptotically Normal distribution of parameter estimates (as in the $Z$-statistic for testing parameter values). The confidence interval is computed by adding or subtracting a multiple of the standard error of the estimate from the estimate:
+\begin{equation}
+\hat{\beta}_j \pm z_{1-\tfrac{1}{2}\alpha} \times \text{SE}(\hat{\beta}_j)
+(\#eq:glm-confidence-interval-normal-approximation)
+\end{equation}
+Here, $z_{1-\tfrac{1}{2}\alpha}$ is the $1 - \tfrac{1}{2}\alpha$ quantile of the standard Normal distribution (e.g., the value $z$ such that $p(Z \leq z) = 1 - \tfrac{1}{2}\alpha$). For example, for a 95% confidence interval, we use $\alpha = .05$ and the computation would be 
+$$\hat{\beta}_j \pm z_{.975} \times \text{SE}(\hat{\beta}_j) \approx \hat{\beta}_j \pm 1.96 \times \text{SE}(\hat{\beta}_j)$$
+More accurate (although still approximate) confidence intervals for small samples can be computed through the **profile likelihood** [@venzon1988method].^[Roughly, this method computes a confidence interval for one parameter, e.g. $\beta_j$, by constructing a profile log-likelihood function
+$$l_p(\beta_j) = \log p(\text{DATA}|\beta_j, \hat{\theta}_{\neg j|\beta_j})$$
+where $\beta_j$ is free to vary, and the remaining parameters of the model, denoted as $\hat{\theta}_{\neg j|\beta_j}$, are replaced by their maximum likelihood estimates given $\beta_j$. We can alternatively write this as 
+$$l_p(\beta_j) = \max_{\theta_{\neg j}} \left(\log p(\text{DATA}|\beta_j, \theta_{\neg j})\right)$$
 
-More accurate confidence intervals can be computed through the **profile likelihood**. Roughly, this method ascertains what happens to the likelihood when the maximum likelihood estimates are subject to small changes. If these changes are relatively small, that would lead to relatively large confidence intervals. Conversely, if the changes are relatively large, this would lead to relatively small confidence intervals.  
+This profile log likelihood function can then be used to compute possible likelihood ratio tests, comparing MODEL G where all parameters are estimated by maximum likelihood, to a model where the parameter of interest $\beta_j$ is fixed to some value:
+$$\begin{aligned} -2 \log (\text{profile-likelihood-ratio}) &= -2 \log l_p(\beta_j) - (-2 \log l(\hat{\theta})) \\
+&= 2 \left(l(\hat{\theta}) - l_p(\beta_j) \right) \end{aligned}$$
+where $l(\hat{\theta}) = \log p(\text{DATA}|\hat{\theta})$ denotes the maximum of the log likelihood over all parameters (including $\beta_j$). As the likelihood-ratio statistic is approximately Chi-squared distributed, we can use the Chi-square distribution (with $\text{df} = 1$ degree of freedom) to determine a critical value, e.g. $\chi^2_{1; 1 - \alpha}$. We can then finally find the left and right bounds of the confidence interval by finding values $\beta_\text{left}$ and $\beta_\text{right}$ such that
+$$2 \left(l(\hat{\theta}) - l_p(\beta_\text{left}) \right) = 2 \left(l(\hat{\theta}) - l_p(\beta_\text{right}) \right) = \chi^2_{1; 1 - \alpha}$$
+] In contrast to the confidence interval based on the Normal approximation (Equation \@ref(eq:glm-confidence-interval-normal-approximation)), confidence intervals based on the profile-likelihood can be non-symmetrical (i.e. the left- and right-bound don't necessarily have the same distance from the estimate). For non-linear models such as generalized linear models, confidence intervals will often no be symmetrical, unless the number of observations in large.
 
 ## Assessing model fit
 
-For the General Linear Model, the $R^2$ statistic reflects the "proportion of variance explained" and provides a useful way to assess the fit of the model to the data. For generalized linear models, a straightforward measure of variance explained is not available.^[Pseudo-$R^2$ measures have been suggested for generalized linear models, such as McFadden's, Cox and Snell's, and Nagelkerke's. These measures are based on the log likelihood of the fitted model and a null model with only an intercept. Whilst the aim of these measures is to have a statistic with a similar scale as the traditional $R^2$ for linear models, they don't generally succeed in this. You can find more information on these measures [here](https://stats.oarc.ucla.edu/other/mult-pkg/faq/general/faq-what-are-pseudo-r-squareds/).]
+For the General Linear Model, the $R^2$ statistic reflects the "proportion of variance explained" and provides a useful way to assess the fit of the model to the data. For generalized linear models, a straightforward measure of "proportion of variance explained" is not available.^[Pseudo-$R^2$ measures have been suggested for generalized linear models, such as McFadden's, Cox and Snell's, and Nagelkerke's. These measures are based on the log likelihood ratio comparing the the fitted model and a null model with only an intercept. Whilst the aim of these measures is to have a statistic with a similar scale as the traditional $R^2$ for linear models, they don't generally succeed in this. Hence, I don't recommend their use. If you are interested, you can find more information on these measures [here](https://stats.oarc.ucla.edu/other/mult-pkg/faq/general/faq-what-are-pseudo-r-squareds/).]
 
-A common test for overall model fit for generalized linear models is to compare the estimated MODEL R to a *saturated* MODEL G. A **saturated model** fits the data perfectly. It has as many parameters as there are unique patterns in predictor values.
+For generalized linear models, instead of computing something like an $R^2$ measure, it is more common to test overall model fit. This is done by comparing an estimated MODEL R to a *saturated* MODEL G. A **saturated model**, which we will denote as MODEL S, has as many parameters as unique patterns in the data, and therefore fits the data perfectly. Whilst a model that always fits the data perfectly is not very interesting from a modelling point-of-view, it provides a reasonably standard to compare less complex models to. The question asked in this comparison can be stated as "how well does my model do compared to how well it could have done, had I included all 
 
-Hosmer-Lemeshow
+The "minus-2-log-likelihood-ratio" comparing an estimated model to the saturated model is called the **deviance**:
+\begin{equation}
+D_R = -2 \log \frac{p(\text{DATA}|\text{MODEL R})}{p(\text{DATA}|\text{MODEL S})}
+(\#eq:glm-deviance-definition)
+\end{equation}
+The deviance is to generalized linear models what the sum-squares-error (SSE) is to general linear models. <!-- TODO Hosmer-Lemeshow? -->
 
 ## Logistic regression
 
-Logistic regression is used for *dichotomous* or *binary* dependent variables, such as whether a question in a test is answered correctly ($Y = 1$) or incorrectly ($Y=0$). As a binary dependent variable can take only two values, assuming it follows a Normal distribution is nonsensical. This also applies to the model errors or residuals. 
+Logistic regression is used for *dichotomous* or *binary* dependent variables. Such variables can take one of two possible values. An example is whether a question in a test is answered correctly ($Y = 1$) or incorrectly ($Y=0$). As a binary dependent variable can take only two values, assuming it follows a Normal distribution is nonsensical. This also applies to the model errors or residuals. 
 
 Binary data can be assumed to follow a so-called **Bernoulli distribution**:
 \begin{equation}
 p(Y = k) = \theta^k \times (1-\theta)^{1-k}
 (\#eq:Bernoulli-distribution)
 \end{equation}
-with $k=0, 1$. Note that this is a simple case of the Binomial distribution we encountered in the Chapter X.^[As we are only considering a single outcome, $n = 1$ and we do not need to worry about how many possible outcomes could constitute $k = 0, 1, 2, \ldots$ correct ones, which is why we don't need the $\left(\right)$ term.] Also note that as $x^0 = 1$, and as $k$ can only be 0 or 1, this distribution simplt states that 
+with $k=0, 1$. Note that this is a simple case of the Binomial distribution we encountered in the Chapter X.^[As we are only considering a single outcome, $n = 1$ and we do not need to worry about how many possible outcomes could constitute $k = 0, 1, 2, \ldots$ correct ones, which is why we don't need the $\left(\right)$ term.] Also note that as $x^0 = 1$, and as $k$ can only be 0 or 1, this distribution simply states that 
 $$\begin{aligned}
 p(Y = 1) &= \theta^1 \times (1-\theta)^{0} = \theta \times 1 \\ &= \theta \\
 p(Y = 0) &= \theta^0 \times (1-\theta)^{1} = 1 \times (1 - \theta) \\ &= 1 - \theta
 \end{aligned}$$
 
-The average of $Y$ is $\theta = \mu_Y$. Modelling this average with predictor variables $X_j$, the conditional mean is:
+The mean of a Bernoulli-distributed variable $Y$ is $\mu_Y = \theta = p(Y=1)$. The variance is $\sigma^2_Y = \theta \times (1-\theta)$. Note that, in contrast to the Normal distribution, where the mean and variance are determined by separate parameters ($\mu$ and $\sigma$, respectively), the Bernoulli distribution is determined by a single parameter ($\theta$), and there is a direct relation between the mean ($\theta$) and the variance ($\theta \times (1-\theta)$). In many generalized linear models, there is a relation between the mean and the variance. That implies there is no homogeneity of variance. However, as long as the variance depends on the same parameter as the mean, this is no problem, as the heteroscedastic variance is determined by the mean, and hence known when the mean is known.
+
+Modelling the mean with predictor variables $X_j$, the conditional mean of a Bernoulli-distributed variable can be written as:
 $$\begin{aligned}
-\mu_{Y|X_1, \ldots, X_m} &= p(Y=1|X_1, \ldots, X_m) \\
-&= \pi_1
+\mu_{Y|X_1, \ldots, X_m} &= p(Y=1|X_1, \ldots, X_m)
 \end{aligned}$$
-As above, due to the binary nature of $Y$, we also know that
+<!--As above, due to the binary nature of $Y$, we also know that
 $$\begin{aligned}
 p(Y=0|X_1, \ldots, X_m) &= 1 - p(Y=1|X_1, \ldots, X_m) \\
 &= 1 - \mu_{Y|X_1, \ldots, X_m} \\
 \pi_0 &= 1-\pi_1
 \end{aligned}$$
-This means that the probability distribution for $Y$ is completely determined by $\mu_{Y|X_1, \ldots, X_m} = \pi_1$, and our model can focus on just this.
+This means that the probability distribution for $Y$ is completely determined by $\mu_{Y|X_1, \ldots, X_m} = \pi_1$, and our model can focus on just this.-->
 
 The canonical link function for Bernoulli-distributed data is the so-called **logit link** function:
 \begin{equation}
 g(\mu_{Y|X_1, \ldots, X_m}) = \log \left( \frac{\mu_{Y|X_1, \ldots, X_K}}{1-\mu_{Y|X_1, \ldots, X_K}} \right)
 \end{equation}
-This may be easier to understand by replacing $\mu_{Y|X_1, \ldots, X_m}$ with the shorthand $\pi_1$:
+This may be easier to understand by replacing $\mu_{Y|X_1, \ldots, X_m} = = p(Y=1|X_1, \ldots, X_m)$ with the shorthand $\pi_1$:
 \begin{equation}
 g(\pi_1) = \log \left( \frac{\pi_1}{1-\pi_1} \right)
 (\#eq:glm-logit-link-function)
@@ -181,14 +204,15 @@ rbind(data.frame(b0 = 0, b1 = 1, x=x, p = 1/(1+exp(-x))),
   ggplot(aes(x=x,y=p, colour=case)) + geom_line() + ylab("p(Y = 1)")
 ```
 
-For this 1-predictor model, the intercept $\beta_0$ reflects the point at which $\pi_1 = 0.5$. The slope $\beta_1$ reflects the steepness of the curve.
+For this 1-predictor model, the intercept $\beta_0$ reflects the point at which $\pi_1 = 0.5$. The slope $\beta_1$ reflects the steepness of the curve.<!-- TODO -->
 
 ### Example: Metacognition in visual perception
 
-Metacognition refers to the ability ascertain how (un)certain we are in our inferences about the world. The "meta" qualifier indicates that this is a cognitive process that is about (i.e. reflects upon) other cognitive processes. For example, @rausch2016visibility asked participants to judge whether a stimulus (a so-called grating pattern) was directed horizontally to vertically. To make this task difficult for their participants, they presented each stimuli for a brief time (200 ms) and with a variety of relatively low-contrast displays. They also asked participants to indicate their certainty that their judgement was correct. 
+Metacognition refers to the ability ascertain how (un)certain we are in our inferences about the world. The "meta" qualifier indicates that this is a cognitive process that is about (i.e. reflects upon) other cognitive processes. For example, @rausch2016visibility asked participants to judge whether stimuli (so-called grating patterns) were directed horizontally to vertically. To make this task difficult for their participants, they presented each stimulus for a brief time (200 ms) and on a variety of relatively low-contrast displays. They also asked participants to indicate their confidence (on a scale from 0 to 100) that their judgement was correct. Participants each completed a total of 378 trials. 
 
+Figure \@ref(fig:metacognition-confidence-correct-plot) shows the proportion of correct responses as a function of the stated confidence, for two participants in the experiment. For Participant 1, there appears to be quite a good correspondence between confidence and correctness. For Participant 2, the relation does not look so neat, with average correctness higher in the lowest range of confidence, and then decreasing in the next two ranges, before rapidly increasing to almost 100% for the highest two confidence ranges. However, as is evident from the width of the confidence bands, this participant gave relatively little confidence ratings between 20 and 60.  
 
-```{r metacognition-confidence-correct-plot, fig.caption="Confidence and proportion correct for two participants in the study by @rausch2016visibility on metacognition.", fig.width = 8, fig.height=4}
+```{r metacognition-confidence-correct-plot, fig.cap="Confidence and proportion correct for two participants in the study by @rausch2016visibility on metacognition.", fig.width = 8, fig.height=4}
 library(sdamr)
 data("metacognition")
 
@@ -197,11 +221,17 @@ dat <- subset(metacognition, id %in% c(1,2))
 dat %>%
   mutate(confidence = if_else(confidence == 0, .0001, confidence)) %>%
   mutate(conf_b = cut(confidence, c(0,20,40,60,80,100))) %>%
-  mutate(id = paste("ID =", id)) %>%
+  mutate(id = paste("Participant", id)) %>%
   ggplot(aes(x=conf_b, y=correct)) + stat_summary(fun.data = "mean_cl_boot") + ylim(c(0,1)) + xlab("confidence") + ylab("proportion correct") + facet_wrap(~id)
 ```
 
-```{r}
+As the relation between confidence and correctness likely differs between participants (e.g. participants might interpret the confidence scale differently), estimating a single logistic regression model for both participants seems inappropriate. Hence, we will estimate separate logistic regression models for the participants. In our model, we will allow the effect of confidence to be moderated by contrast. For easier interpretation, we first center both variables, and then estimate the following logistic regression model:
+
+$$\log \left( \frac{p(Y_i = \text{correct})}{p(Y_i = \text{incorrect})} \right) = \beta_0 + \beta_\texttt{conf} \times \texttt{conf}_i + \beta_\text{contr} \times \texttt{contr}_i + \beta_{\texttt{cc}} \times (\texttt{conf} \times \texttt{contr})_i$$
+
+Table \@ref(tab:metacognition-logistic-regression-results-z-participant-1) shows the results for Participant 1. Each participant completed 378 trials, so the number of observations in this subset of data equals $n=378$. For didactic purposes, we present results from both the $z$ and likelihood-ratio tests (you would usually just provide one of these). 
+
+```{r metacognition-logistic-regression-results-z-participant-1}
 mod_s1 <- subset(dat, id == 1) %>%
   mutate(confidence = scale(confidence),
          contrast = scale(contrast)) %>%
@@ -212,11 +242,15 @@ mod_s2 <- subset(dat, id == 2) %>%
   glm(correct ~ confidence * contrast, family=binomial(), data=.)
 
 tab <- summary(mod_s1)$coefficients
+tab <- as.data.frame(tab)
+tab <- cbind(tab, rbind(c(NA,NA,NA),car::Anova(mod_s1, type=3)))
 rownames(tab) <- c("Intercept","Confidence", "Contrast","Confidence $\\times$ Contrast")
-colnames(tab) <- c("$\\hat{\\beta}$","$\\text{SE}(\\hat{\\beta})$", "$z$", "$P(\\geq \\lvert z \\rvert)$")
+colnames(tab) <- c("$\\hat{\\beta}$","$\\text{SE}(\\hat{\\beta})$", "$z$", "$p(\\geq \\lvert z \\rvert)$", "$X^2$", "$\\text{df}$", "$p(\\geq \\lvert X^2 \\rvert)$")
 tab[,4] <- sapply(tab[,4], format_p)
+tab[,7] <- sapply(tab[,7], format_p)
 
-knitr::kable(tab, caption = "Null-hypothesis significance tests for a logistic regression model using the z statistic.", escape = FALSE, booktabs=TRUE, linesep="")
+options(knitr.kable.NA = '')
+knitr::kable(tab, caption = "Results of a logistic regression model of correct identification by confidence for Participant 1.", escape = FALSE, booktabs=TRUE, linesep="", digits=3, align="r")
 
 #knitr::kable(papaja::apa_print(mod_s1)$table)
 
@@ -225,18 +259,44 @@ knitr::kable(tab, caption = "Null-hypothesis significance tests for a logistic r
 #car::Anova(mod_s1, type=3)
 ```
 
+As the results show, regardless of whether we rely on the Wald or likelihood-ratio test, we find evidence for a positive interaction between confidence and contrast. We also find evidence of positive "simple effects" for confidence and contrast. As we centered the predictors, the simple effects of confidence reflects the effect of confidence for an average value of contrast. And vice versa, the simple effect of contrast reflects the effect of contrast for an average level of confidence. Taking these results together, we can conclude that -- at average levels of confidence -- higher levels of contrast result in more accurate responses. We also see that -- ate average levels of contrast -- higher levels of confidence are related more accurate responses. This is evidence for meta-cognition. The interaction indicates that meta-cognition might be more pronounced for higher levels of contrast (i.e., the relation between confidence and accuracy is higher for higher values of contrast). Finally, the intercept is also significant. This indicates that, for average values of confidence and contrast (such that centered $\texttt{conf}$ and $\texttt{contr}$ are both equal to 0), the predicted probability of a correct response is equal to:
+$$\begin{aligned}
+p(Y_i = \text{correct}) &= \frac{\exp (`r coef(mod_s1)[1]`)}{1 + \exp (`r coef(mod_s1)[1]`)} \\
+&= `r exp(coef(mod_s1)[1])/(1+exp(coef(mod_s1)[1]))`\end{aligned}$$
+The deviance of the model is $D_R = `r deviance(mod_s1)`$. To assess the overall model fit, we can test this by assuming the deviance (approximately) follows a Chi-Squared distribution with $n-\text{npar}(R)$ degrees of freedom (the saturated model may be taken to have a total of $n$ parameters). Hence, the test of overall model fit is $X^2(`r summary(mod_s1)$df.residual`) = `r deviance(mod_s1)`$, $p `r format_p_text(1-pchisq(deviance(mod_s1),summary(mod_s1)$df.residual))`$. As this is not significant, the model can be said to fit the data well.
+
+Table \@ref(tab:metacognition-logistic-regression-results-z-participant-2) shows results from the same model applied to the data from Participant 2. Whilst the data seemed less neat than the data of Participant 1, we get quite similar results, with significant and positive simple effects of confidence and contrast, as well as a positive interaction between them.
+
+```{r metacognition-logistic-regression-results-z-participant-2}
+tab <- summary(mod_s2)$coefficients
+tab <- as.data.frame(tab)
+tab <- cbind(tab, rbind(c(NA,NA,NA),car::Anova(mod_s2, type=3)))
+rownames(tab) <- c("Intercept","Confidence", "Contrast","Confidence $\\times$ Contrast")
+colnames(tab) <- c("$\\hat{\\beta}$","$\\text{SE}(\\hat{\\beta})$", "$z$", "$p(\\geq \\lvert z \\rvert)$", "$X^2$", "$\\text{df}$", "$p(\\geq \\lvert X^2 \\rvert)$")
+tab[,4] <- sapply(tab[,4], format_p)
+tab[,7] <- sapply(tab[,7], format_p)
+
+knitr::kable(tab, caption = "Results of a logistic regression model of correct identification by confidence for Participant 2.", escape = FALSE, booktabs=TRUE, linesep="", digits=3, align = "r")
+```
+
+The test of the deviance of the model for Participant 2 is $X^2(`r summary(mod_s2)$df.residual`) = `r deviance(mod_s2)`$, $p `r format_p_text(1-pchisq(deviance(mod_s2),summary(mod_s2)$df.residual))`$. As this is again not significant, the model can be said to fit the data well.
+
 ### Parameter interpretation
 
 In the general linear model, $\beta_j$, the slope of a predictor variable, reflects the predicted change in the dependent variable for a one-unit increase in the predictor variable $X_j$. Because the model is linear, the predicted change is the same, no matter what base value we choose for $X_j$. That means that $Y$ is predicted to change by $\beta_j$, whether we increase $X_j$ from 0 to 1, or from 100 to 101. This is not the case when we consider the predicted change in $p(Y=1|X_j)$ for different values of $X_j$. For example, for a model with $\beta_0 = 0$ and $\beta_1 = 1$, Figure XXX shows that this probability increases more rapidly when we move from $X_1 = 0$ to $X_1 = 1$ than when we move from $X_1 = 3$ to $X_1 = 4$. 
 
-We can make use of the following properties of exponents:
+A slope $\beta_j$ in a logistic regression model does not reflect the same effect for different values of the corresponding predictor $X_j$. But an exponential transformation of this slope does. To realise this, we can make use of the following properties of exponents:
 $$\begin{aligned}
 a^{(b + c)} &= a^b \times a^c \\
-a^{(b \times c)} &= \left(a^{b}\right)^c = \left(a^{c}\right)^b
+a^{(b \times c)} &= \left(a^{b}\right)^c = \left(a^{c}\right)^b .
 \end{aligned}$$
-(remember that $\exp (a) = e^a$, where $e$ denotes the natural number), to rewrite the odds as
-$$\begin{aligned} \frac{p(Y=1|X_1)}{1-p(Y=1|X_1)} &= \exp\left(\beta_0 + \beta_1 X_1\right) \\ &= \exp(\beta_0) \times \left(\exp(\beta_1) \right)^{X_1} \end{aligned}$$
-In the above, you can see that every one-unit increase in $X_1$ has the effect of multiplying the odds by $\exp(\beta_1)$. So the odds at $X_1 = 1$ is the odds at $X_1 = 0$, multiplied by $\exp(\beta_1)$. Similarly, the odds at $X_1 = 2$ is the odds at $X_1 = 1$ multiplied by $\exp(\beta_1)$.
+We also need to remember that $\exp (a) = e^a$, where $e$ denotes the natural number, and $\log \left(\exp(a)\right) = a$. Using these properties, we can rewrite the odds as
+$$\begin{aligned} \log\left(\frac{p(Y=1|X_1)}{1-p(Y=1|X_1)}\right) &= \beta_0 + \beta_1 X_1 \\ 
+\exp \left( \log\left(\frac{p(Y=1|X_1)}{1-p(Y=1|X_1)}\right)\right) &= \exp\left(\beta_0 + \beta_1 X_1\right) \\ 
+\frac{p(Y=1|X_1)}{1-p(Y=1|X_1)} &= \exp\left(\beta_0 + \beta_1 X_1\right) \\
+&= \exp(\beta_0) \times \exp\left(\beta_1 \times X_1\right) \\
+&= \exp(\beta_0) \times \left(\exp(\beta_1) \right)^{X_1} \end{aligned}$$
+In the final line of the above derivation, you can see that every one-unit increase in $X_1$ has the effect of multiplying the odds by $\exp(\beta_1)$. So the odds at $X_1 = 1$ is the odds at $X_1 = 0$, multiplied by $\exp(\beta_1)$. Similarly, the odds at $X_1 = 2$ is the odds at $X_1 = 1$ multiplied by $\exp(\beta_1)$.
 
 In the log-odds scale, every one-unit increase in $X$ *adds* $\beta_1$ to the log-odds. In the odds scale, every one-unit increase in $X$ *multiplies* the odds by $\exp(\beta_1)$. In terms of interpreting the effect of $X_1$, you can choose whether you find this easier to do in the scale of log-odds, or in the scale of odds. The most natural scale is probably the scale of the response $p(Y=1|X_1)$ itself. Unfortunately, the non-linear effect of $X_1$ on the response prevents a simple interpretation in this scale.
 
