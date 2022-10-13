@@ -123,10 +123,14 @@ $$
 $$
 the data can be represented in a three-dimensional space. In this space, the conditional means $\mu_{Y | X_{1,i}, X_{2,i}}$ can be represented as a __regression plane__. A visual representation is given below.
 
-```{r 3d-regression-plane, fig.cap="Three-dimensional representation of a regression model predicting Trump votes from hate groups and education level. By clicking on the image and moving your mouse, you should be able to rotate the image to explore it further. You can also click on the 'Play' button for an animation of such a rotation.", fig.align='center', cache=TRUE}
+```{r rgl-setup, include=FALSE}
 library(rgl)
+if(!require("manipulateWidget")) install.packages("manipulateWidget")
 #library(rglwidget)
-plot3d(x=dat$hate_groups_per_million, y=dat$percent_bachelors_degree_or_higher, z=dat$percent_Trump_votes, xlab="Hate groups", ylab="% bachelors degree or higher", zlab="% Trump votes", type = "s", col = "purple", size = 1)
+options(rgl.printRglwidget = FALSE)
+knitr::knit_hooks$set(webgl = hook_webgl)
+
+#plot3d(x=dat$hate_groups_per_million, y=dat$percent_bachelors_degree_or_higher, z=dat$percent_Trump_votes, xlab="Hate groups", ylab="% bachelors degree or higher", zlab="% Trump votes", type = "s", col = "purple", size = 1)
 coefs <- coef(mod)
 a <- coefs["hate_groups_per_million"]
 b <- coefs["percent_bachelors_degree_or_higher"]
@@ -139,11 +143,15 @@ rgl.viewpoint(userMatrix = userMat)
 fn <- rgl::par3dinterp(time = (0:3)*0.75, userMatrix = list(userMat,
                                       rotate3d(userMat, pi/2, 0, 0, -1),
                                       rotate3d(userMat, pi/2, 0, 0, 1),
-                                      rotate3d(userMat, pi/2, 1, 0, 0))) 
-widget <- rglwidget(elementId = "interactive-3dplot-multiple-regression") %>%
+                                      rotate3d(userMat, pi/2, 1, 0, 0)))
+widget <- invisible(rglwidget(elementId = "interactive-3dplot-multiple-regression")) %>%
   playwidget(par3dinterpControl(fn, 0, 2*3*.75, steps=30),
        step = 0.01, loop = TRUE, rate = 0.5)
-widget
+```
+
+```{r 3d-regression-plane, fig.cap="Three-dimensional representation of a regression model predicting Trump votes from hate groups and education level. By clicking on the image and moving your mouse, you should be able to rotate the image to explore it further. You can also click on the 'Play' button for an animation of such a rotation.", fig.align='center', cache=TRUE, webgl=TRUE}
+
+print(widget)
 
 ```
 
@@ -153,7 +161,7 @@ $$\begin{aligned}
 &= (\beta_0 + \beta_2 \times `r min(dat$percent_bachelors_degree_or_higher)`) + \beta_1 \times \texttt{hate_groups}_i + \epsilon_i \\
 &= \beta_0' + \beta_1 \times \texttt{hate_groups}_i + \epsilon_i
 \end{aligned}$$
-which is a simple regression model with a new intercept $\beta_0' = \beta_0 + \beta_2 \times `r min(dat$percent_bachelors_degree_or_higher)`$ composed as the sum of the original intercept and `r min(dat$percent_bachelors_degree_or_higher)` times the slope of $\texttt{education\_level}$, and the same slope $\beta_1$ for $\texttt{hate_groups}$. You can see these simple regression lines, for three different values of education level, in Figure \@ref(fig:trump-multiple-regression-scatter-with-multiple-regression-lines). Notice that the regression lines for different education levels are parallel, because they have the same slope. However, the regression lines are at different heights, because they have a different intercept.
+which is a simple regression model with a new intercept $\beta_0' = \beta_0 + \beta_2 \times `r min(dat$percent_bachelors_degree_or_higher)`$ composed as the sum of the original intercept and `r min(dat$percent_bachelors_degree_or_higher)` times the slope of $\texttt{education_level}$, and the same slope $\beta_1$ for $\texttt{hate_groups}$. You can see these simple regression lines, for three different values of education level, in Figure \@ref(fig:trump-multiple-regression-scatter-with-multiple-regression-lines). Notice that the regression lines for different education levels are parallel, because they have the same slope. However, the regression lines are at different heights, because they have a different intercept.
 
 ```{r trump-multiple-regression-scatter-with-multiple-regression-lines, fig.cap="Percentage of votes for Trump in the 2016 elections for 50 US states and the number of hate groups per 1 million citizens, with regression lines for three different values of education level. The colour of each data point and regression line reflects the value of education level.", fig.width=5, fig.height=5, out.width='60%'}
 ggplot(dat,aes(x=hate_groups_per_million, y=percent_Trump_votes, colour=percent_bachelors_degree_or_higher)) + geom_point() + geom_abline(intercept = coefs[1] + min(dat$percent_bachelors_degree_or_higher)*coefs[3], slope = coefs[2], colour=viridis::viridis_pal()(3)[1]) + geom_abline(intercept = coefs[1] + (min(dat$percent_bachelors_degree_or_higher) + (max(dat$percent_bachelors_degree_or_higher) - min(dat$percent_bachelors_degree_or_higher))/2) *coefs[3], slope = coefs[2], colour=viridis::viridis_pal()(3)[2]) + geom_abline(intercept = coefs[1] + max(dat$percent_bachelors_degree_or_higher)*coefs[3], slope = coefs[2], colour = viridis::viridis_pal()(3)[3]) + theme(legend.position = "bottom") + labs(colour = "% bachelors degree or higher") + xlab("Hate groups per million citizens") + ylab("% votes for Trump")
@@ -189,7 +197,7 @@ $$\texttt{trump_votes}_i = \hat{\beta}_0 + \hat{\beta}_1 \times \texttt{hate_gro
 and the residual education from 
 $$\texttt{education}_i = \hat{\beta}_0 + \hat{\beta}_1 \times \texttt{hate_groups}_i + \hat{\epsilon}_{\text{education},i}$$
 and then determining the slope of the residual $\texttt{education}$ in the model
-$$\hat{\epsilon}_{\text{vote},i} + \beta_0 + \beta_1 \times \hat{\epsilon}_{\text{education},i} + \epsilon_i$$
+$$\hat{\epsilon}_{\text{vote},i} = \beta_0 + \beta_1 \times \hat{\epsilon}_{\text{education},i} + \epsilon_i$$
 
 ## Inference {#sec:04b-inference}
 
@@ -539,7 +547,7 @@ knitr::kable(summary(mod)$coefficients, digits=c(3,3,3,3), booktabs=TRUE, linese
 
 ## Multicollinearity: Redundancy between predictors
 
-Multicollinearity is a rather fancy word for interdependence between predictors in a linear model. Interdependence means that the values of a predictor are related to the values of other predictors, such that you can predict one from the others. In Figure \@ref(fig:sse-partition), this is represented by the partial overlap of the circles representing $X_1$ and $X_2$. A high covariation between predictors indicates __redundancy__ between them, in the sense that variation in one predictor can be accounted for by another. If this shared variation is also shared with the dependent variable (e.g. region $D$ in Figure \@ref(fig:sse-partition), than this can _not_ be attributed uniquely to any of those covarying predictors. While the model as a whole may be able to account for a large proportion in the variation of the dependent variable, the unique variance "explained" by individual predictors could be very small so that the hypothesis tests are not significant for any predictor, even though the "whole model test" (i.e. the comparison between the full model and an intercept-only model) is highly significant. This makes parameter inference tricky, to say the least.
+Multicollinearity is a rather fancy word for interdependence between predictors in a linear model. Interdependence means that the values of a predictor are related to the values of other predictors, such that you can predict one from the others. In Figure \@ref(fig:sse-partition), this is represented by the partial overlap of the circles representing $X_1$ and $X_2$. A high covariation between predictors indicates __redundancy__ between them, in the sense that variation in one predictor can be accounted for by another. If this shared variation is also shared with the dependent variable (e.g. region $D$ in Figure \@ref(fig:sse-partition)), then this can _not_ be attributed uniquely to any of those covarying predictors. While the model as a whole may be able to account for a large proportion in the variation of the dependent variable, the unique variance "explained" by individual predictors could be very small so that the hypothesis tests are not significant for any predictor, even though the "whole model test" (i.e. the comparison between the full model and an intercept-only model) is highly significant. This makes parameter inference tricky, to say the least.
 
 Figure \@ref(fig:sse-partition-multicollinearity) illustrates the difference between a model without redundancy between between predictors and with (substantial) redundancy between predictors. In the case of no redundancy, each predictor uniquely accounts for a substantial proportion (regions labelled as $B$ and $C$) of the variance of the dependent variable. In the case of redundancy between the predictors, while the overlapping region between each predictor and the dependent variable is the same size as before (region $B + D$ for $X_1$, and region $C + D$ for $X_2$), because a large part of this (region $D$) is shared between $X_1$ and $X_2$, the unique parts ($B$ and $C$ respectively) are substantially smaller. In the most extreme case, the circles representing $X_1$ and $X_2$ would be completely overlapping, meaning that neither accounts for a unique proportion of the variation in $Y$. __Multicollinearity__ is an extension of this concept, referring to dependency between more than two predictors.
 
@@ -630,7 +638,7 @@ Multicollinearity is not a major issue if you are mainly concerned with predicti
 
 ## Outliers {#sec:04b-outliers}
 
-When we analysed the data regarding Trump votes and hate groups up to now, we excluded the data from the District of Columbia (Washington D.C.), because, while it is not part of any US state, it is itself not a state either. If we had included the data from this district, the results would have been quite different. Figure \@ref(fig:scatterplot-trump-votes-hate-groups-all-data) shows the Trump votes and hate groups with the Distric of Columbia included. You can see that the data point for the District of Columnbia is far removed from all other data points. The District of Columbia has both a very high number of hate groups (`r trump2016[trump2016$state == "District of Columbia","hate_groups_per_million"]` per million citizens), and a low percentage of votes for Trump (`r trump2016[trump2016$state == "District of Columbia","percent_Trump_votes"]`%). This makes the data District of Columbia rather unusual when compared to the 50 states. The plot also shows the estimated regression line of a simple regression model (with hate groups as a single predictor) for all the data, and the data excluding the District of Columbia. After inclusion of the District of Columbia, the estimated relation goes from positive to negative!
+When we analysed the data regarding Trump votes and hate groups up to now, we excluded the data from the District of Columbia (Washington D.C.), because, while it is not part of any US state, it is itself not a state either. If we had included the data from this district, the results would have been quite different. Figure \@ref(fig:scatterplot-trump-votes-hate-groups-all-data) shows the Trump votes and hate groups with the Distric of Columbia included. You can see that the data point for the District of Columbia is far removed from all other data points. The District of Columbia has both a very high number of hate groups (`r trump2016[trump2016$state == "District of Columbia","hate_groups_per_million"]` per million citizens), and a low percentage of votes for Trump (`r trump2016[trump2016$state == "District of Columbia","percent_Trump_votes"]`%). This makes the data District of Columbia rather unusual when compared to the 50 states. The plot also shows the estimated regression line of a simple regression model (with hate groups as a single predictor) for all the data, and the data excluding the District of Columbia. After inclusion of the District of Columbia, the estimated relation goes from positive to negative!
 
 ```{r scatterplot-trump-votes-hate-groups-all-data,fig.cap="Percentage of votes for Trump in the 2016 elections for 50 US states and the District of Columbia, as a function of the number of hate groups per 1 million citizens. The solid line is the estimated regression line for all data, and the dotted line the estimated regression line excluding the District of Columbia.", fig.align="center"}
 dat <- trump2016

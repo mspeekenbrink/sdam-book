@@ -1,6 +1,6 @@
 # book_filename: "sdam-book.Rmd"
 delete_merged_file: false
-keep_md: true
+keep_md: false
 language:
   ui:
     chapter_name: "Chapter "
