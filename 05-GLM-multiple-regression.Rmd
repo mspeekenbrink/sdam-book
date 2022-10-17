@@ -124,13 +124,26 @@ $$
 the data can be represented in a three-dimensional space. In this space, the conditional means $\mu_{Y | X_{1,i}, X_{2,i}}$ can be represented as a __regression plane__. A visual representation is given below.
 
 ```{r rgl-setup, include=FALSE}
-library(rgl)
-if(!require("manipulateWidget")) install.packages("manipulateWidget")
-#library(rglwidget)
-options(rgl.printRglwidget = FALSE)
-knitr::knit_hooks$set(webgl = hook_webgl)
 
-#plot3d(x=dat$hate_groups_per_million, y=dat$percent_bachelors_degree_or_higher, z=dat$percent_Trump_votes, xlab="Hate groups", ylab="% bachelors degree or higher", zlab="% Trump votes", type = "s", col = "purple", size = 1)
+#widget <- rglwidget(elementId = "interactive-3dplot-multiple-regression", controllers = "interactive-3dplot-multiple-regression-controller") %>%
+#  playwidget(par3dinterpControl(fn, 0, 2*3*.75, steps=30),
+#       step = 0.01, loop = TRUE, rate = 0.5)
+
+#options(rgl.printRglwidget = TRUE)
+library(rgl)
+knitr::knit_hooks$set(webgl = hook_webgl)
+if(!require("manipulateWidget")) install.packages("manipulateWidget")
+rgl::setupKnitr(autoprint = TRUE)
+```
+
+```{r 3d-regression-plane, fig.cap="Three-dimensional representation of a regression model predicting Trump votes from hate groups and education level. By clicking on the image and moving your mouse, you should be able to rotate the image to explore it further. You can also click on the 'Play' button for an animation of such a rotation.", fig.align='center', cache=TRUE}
+
+
+#library(rglwidget)
+#options(rgl.printRglwidget = TRUE)
+
+
+plot3d(x=dat$hate_groups_per_million, y=dat$percent_bachelors_degree_or_higher, z=dat$percent_Trump_votes, xlab="Hate groups", ylab="% bachelors degree or higher", zlab="% Trump votes", type = "s", col = "purple", size = 1)
 coefs <- coef(mod)
 a <- coefs["hate_groups_per_million"]
 b <- coefs["percent_bachelors_degree_or_higher"]
@@ -144,14 +157,17 @@ fn <- rgl::par3dinterp(time = (0:3)*0.75, userMatrix = list(userMat,
                                       rotate3d(userMat, pi/2, 0, 0, -1),
                                       rotate3d(userMat, pi/2, 0, 0, 1),
                                       rotate3d(userMat, pi/2, 1, 0, 0)))
-widget <- invisible(rglwidget(elementId = "interactive-3dplot-multiple-regression")) %>%
+
+#rglwidget(elementId = "interactive-3dplot-multiple-regression", controllers = "interactive-3dplot-multiple-regression-controller") %>%
+rglwidget() %>%
   playwidget(par3dinterpControl(fn, 0, 2*3*.75, steps=30),
        step = 0.01, loop = TRUE, rate = 0.5)
-```
 
-```{r 3d-regression-plane, fig.cap="Three-dimensional representation of a regression model predicting Trump votes from hate groups and education level. By clicking on the image and moving your mouse, you should be able to rotate the image to explore it further. You can also click on the 'Play' button for an animation of such a rotation.", fig.align='center', cache=TRUE, webgl=TRUE}
+#rglwidget(elementId = "interactive-3dplot-multiple-regression", controllers = "interactive-3dplot-multiple-regression-controller")
+#playwidget(sceneId = "interactive-3dplot-multiple-regression", controls=par3dinterpControl(fn, 0, 2*3*.75, steps=30),
+#       step = 0.01, loop = TRUE, rate = 0.5, elementId = "interactive-3dplot-multiple-regression-controller")
 
-print(widget)
+# widget
 
 ```
 
@@ -347,7 +363,7 @@ Because $0 \leq \text{SSE}(G) \leq \text{SSE}(R)$, the value of $\hat{\eta}_p^2$
 \end{tikzpicture}	
 ```
 
-In this Figure, the variance of $Y$ is represented by the circle labelled $Y$, and the variance of the predictors is represented by the circles labelled $X_1$ and $X_2$ respectively. Overlap between the circles represents shared variance (e.g. covariance) between the variables. First, let's consider a simple regression model where $X_1$ is the sole predictor of $Y$. The proportion of variance of $Y$ that this model accounts for is the total shared area between $X_1$ and $Y$, which is the sum of the regions labelled as $B$ and $D$. Similarly, if we'd consider a simple regression model where $X_2$ is the sole predictor of $Y$, the proportion of variance of $Y$ that this model accounts for is the total shared area between $X_2$ and $Y$, which is the sum of the regions labelled as $C$ and $D$. If we consider a multiple regression model with both $X_1$ and $X_2$ as predictors of $Y$, the proportion of variance of $Y$ that this model accounts for is the total shared area between $X_1$, $X_2$ and $Y$, which is the sum of the regions labelled as $B$, $C$, and $D$. The area labelled as $A$ is variance of $Y$ that cannot be accounted for by $X_1$ or $X_2$, and is the SSE (the random, unexplainable part) of a multiple regression model which includes both $X_1$ and $X_2$ as predictors. When MODEL R is an intercept-only model (i.e. a model without any predictors) and MODEL G a model with predictors, the estimate of the variance accounted for is often denoted by $R^2$. In this case, $R^2$ reflects the proportion of the variance of the dependent variable $Y$ accounted for, or "explained", by the model as a whole. <!-- The $\eta^2$ is generally reserved to denote the proportion of variance explained by a single predictor. -->
+In this Figure, the variance of $Y$ is represented by the circle labelled $Y$, and the variance of the predictors is represented by the circles labelled $X_1$ and $X_2$ respectively. Overlap between the circles represents shared variance (e.g. covariance) between the variables. First, let's consider a simple regression model where $X_1$ is the sole predictor of $Y$. The proportion of variance of $Y$ that this model accounts for is the total shared area between $X_1$ and $Y$, which is the sum of the regions labelled as $B$ and $D$. Similarly, if we'd consider a simple regression model where $X_2$ is the sole predictor of $Y$, the proportion of variance of $Y$ that this model accounts for is the total shared area between $X_2$ and $Y$, which is the sum of the regions labelled as $C$ and $D$. If we consider a multiple regression model with both $X_1$ and $X_2$ as predictors of $Y$, the proportion of variance of $Y$ that this model accounts for is the total shared area between $X_1$, $X_2$ and $Y$, which is the sum of the regions labelled as $B$, $C$, and $D$. The area labelled as $A$ is variance of $Y$ that cannot be accounted for by $X_1$ or $X_2$, and is the SSE (the random, unexplainable part) of a multiple regression model which includes both $X_1$ and $X_2$ as predictors. When MODEL R is an intercept-only model (i.e. a model without any predictors) and MODEL G a model with predictors, the estimate of the proportion of variance accounted for is often denoted by $R^2$. In this case, $R^2$ reflects the proportion of the variance of the dependent variable $Y$ accounted for, or "explained", by the model as a whole. <!-- The $\eta^2$ is generally reserved to denote the proportion of variance explained by a single predictor. -->
 
 
 Note that the area labelled as $D$ is "explained" by both $X_1$ and $X_2$ when each is used as a sole predictor of $Y$. In a multiple regression model however, the effects of predictors are _unique_ effects, meaning that we consider only that part of the variance of $Y$ which is solely explained by each predictor. For $X_1$, this unique proportion of the variance is the area labelled as $B$, and for $X_2$ it is the area labelled as $C$. The area labelled as $D$ is not uniquely attributable to either $X_1$ or $X_2$. Although it is not purely random variability of $Y$ -- in principle, it could be explained by _either_ $X_1$ or $X_2$ -- because it cannot be uniquely attributed to either $X_1$ or $X_2$, it will not contribute to a hypothesis test of the effect of $X_1$ or $X_2$. We will discuss this more when we consider the practical problem of _multicollinearity_ later on. 
