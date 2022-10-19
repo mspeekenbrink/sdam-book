@@ -6,15 +6,17 @@ set.seed(20221010)
 
 <!-- References: McCullagh and Nelder, Dobson, Agresti. -->
 
-Up to now, we have considered models for which the residuals (model errors) could be assumed to follow a Normal distribution. This is equivalent to modelling the conditional distribution of a dependent variable $Y$, given the values of predictor variables $X_j$, as a Normal distribution. Many of the techniques and ideas of such models can be generalised to situations where we can assume that the distribution of a dependent variable $Y$, conditional upon the values of predictor variables $X_j$, follows a different distribution from a class of probability distributions known as the _exponential family_. Such models are known as _generalized_ linear models [@mccullagh2019generalized]. This name makes for easy confusion with the _general_ linear model, so make sure you don't ignore the presence or absence of "-ized"!
+Up to now, we have considered models for which the residuals (model errors) could be assumed to follow a Normal distribution. This is equivalent to modelling the conditional distribution of a dependent variable $Y$, given the values of predictor variables $X_j$, as a Normal distribution. Many of the techniques and ideas of such models can be generalised to situations where we can assume that the distribution of a dependent variable, conditional upon the values of predictor variables, follows a different distribution from a class of probability distributions known as the _exponential family_. Such models are known as _generalized_ linear models [@mccullagh2019generalized]. This name makes for easy confusion with the _general_ linear model, so make sure you don't ignore the presence or absence of "-ized"!
 
-The Normal distribution is part of the exponential family of distributions, as are many other distributions. These other distributions include the Binomial, Poisson, and Gamma distributions. Some of these distributions are defined for non-negative integer variables (i.e. variables with values $0, 1, 2, \ldots$), and others for positive continuous variables (i.e. variables with values $>0$), and others for unbounded continuous variables (i.e. variables with values between $-\infty$ and $\infty$). Exponential-family distributions can all be expressed in the same form, but we won't go into the details of that here. For now, what is important is that there are many variables which are *not* continuous and unbounded. It generally does not make sense to assume a Normal distribution for such variables. But because exponential-family distributions share important characteristics with the Normal distribution, assuming a different exponential-family distributions allows you to choose a distribution which is more natural for the variable in question, whilst still being able to formulate useful models for it.
+The Normal distribution is part of the exponential family of distributions, as are many other distributions. These other distributions include the Binomial, Poisson, and Gamma distributions. Some of these distributions are defined for non-negative integer variables (i.e. variables with values $0, 1, 2, \ldots$), and others for positive continuous variables (i.e. variables with values $>0$), and others for unbounded continuous variables (i.e. variables with values between $-\infty$ and $\infty$). Exponential-family distributions can all be expressed in the same form, but we won't go into the details of that here.^[If you really want to know, the probability density function of exponential family models can be written as $$p(y|\theta, \phi) = \exp \left( \frac{y \theta - b(\theta)}{a(\phi)} + c(y, \phi) \right)$$, where $\theta$ and $\phi$ are parameters, and $a$, $b$, and $c$ are known functions. The parameter $\theta$ is called the *canonical parameter*, and $\phi > 0$ the *dispersion parameter*.] For now, what is important is that there are many variables which are *not* continuous and unbounded. It generally does not make sense to assume a Normal distribution for such variables. But because exponential-family distributions share important characteristics with the Normal distribution, assuming a different exponential-family distributions allows you to choose a distribution which is more natural for the variable in question, whilst still being able to formulate useful models for it.
 
 A generalized linear model consists of three components:
 
-1. A *random* part which describes the variability in the data by means of an exponential-family probability distribution, with a conditional mean $\mu_{Y|X_1, \ldots, X_m}$.
-2. A *structural* part which is a linear model of the form $\beta_0 + \sum_{j=1}^m \beta_j \times X_j$
-3. A *link function* which connects the structural and random part.
+1. A *random* part, which describes the variability in the data by means of an exponential-family probability distribution, with a conditional mean $\mu_{Y|X_1, \ldots, X_m}$.
+2. A *structural* part, which is a linear model of the form $\beta_0 + \sum_{j=1}^m \beta_j \times X_j$
+3. A *link function*, which connects the structural and random part.
+
+The general linear model also consists of a random and structural part. What is new here is the link function.
 
 ## Link functions
 
@@ -68,7 +70,7 @@ Whilst the choice of a link function is essentially up to the analyst, it is com
 
 ## Estimation
 
-As usual, we will focus on maximum likelihood estimates of the model parameters. Unlike for the parameters of the general linear model, analytical solutions for maximum likelihood parameters of generalized linear models of usually not available. They are obtained by an iterative procedure called *Iteratively Weighted Least Squares*. You don't need to understand the details of this. For present purposes, it is enough to know that this method starts with a "guess" of the parameter estimates, and then updates this guess repeatedly to increase the likelihood of the estimated model, until no further improvement is obtained, at which point the algorithm is said to converge. Whilst modern statistical software generally has robust implementations of this procedure, estimation difficulties may arise in cases. This may be due to the model being a poor representation of the data, but potentially also because of a poor initial guess for the parameter values. 
+As usual, we will focus on maximum likelihood estimates of the model parameters. Unlike for the parameters of the general linear model, analytical solutions for maximum likelihood parameters of generalized linear models of usually not available. They can be obtained by an iterative numerical procedure called *Iteratively Reweighted Least Squares* (IRLS). You don't need to understand the details of this. For present purposes, it is enough to know that this method starts with a "guess" of the parameter estimates, and then updates this guess repeatedly to increase the likelihood of the estimated model, until no further improvement is obtained, at which point the algorithm is said to have *converged*. Whilst modern statistical software generally has robust implementations of this procedure, estimation difficulties may arise in cases (e.g. when using non-standard link functions). This may be due to the model being a poor representation of the data, but potentially also because of a poor initial guess for the parameter values. 
 
 ## Inference in generalized linear models
 
@@ -96,10 +98,10 @@ The Wald test is easy to compute and works well for large-enough samples. A more
 
 The test statistic used for a likelihood-ratio test is, as in Chapter XXX, equal to minus two times the log likelihood ratio:
 $$\begin{aligned}
--2 \log \left(\text{likelihood-ratio}\right) &= -2 \log p(\text{DATA}|\text{MODEL R}) - (-2 \log p(\text{DATA}|\text{MODEL G}))
+G^2 = -2 \log \left(\text{likelihood-ratio}\right) &= -2 \log \left( \frac{p(\text{DATA}|\text{MODEL R})}{p(\text{DATA}|\text{MODEL G})} \right) \\ &= -2 \log p(\text{DATA}|\text{MODEL R}) - (-2 \log p(\text{DATA}|\text{MODEL G}))
 \end{aligned}$$
-For large-enough samples, the sampling distribution of this statistic is approximately equal to a Chi-squared distribution:
-$$-2 \log \left(\text{likelihood-ratio}\right) \sim \mathbf{chi-squared}(\text{npar}(G) - \text{npar}(R))$$
+Note that we denote the "minus 2 log-likelihood ratio" with the symbol $G^2$, as this is the common symbol in the literature. The letter $G$ in this notation does *not* stand for our MODEL G. For large-enough samples, the sampling distribution of this statistic is approximately equal to a Chi-squared distribution:
+$$G^2 \sim \mathbf{chi-squared}(\text{npar}(G) - \text{npar}(R))$$
 with degrees-of-freedom equal to the difference in the number of estimated parameters ($\text{npar}(G) - \text{npar}(R)$) between the models.
 
 ### Confidence intervals
@@ -127,14 +129,34 @@ $$2 \left(l(\hat{\theta}) - l_p(\beta_\text{left}) \right) = 2 \left(l(\hat{\the
 
 For the General Linear Model, the $R^2$ statistic reflects the "proportion of variance explained" and provides a useful way to assess the fit of the model to the data. For generalized linear models, a straightforward measure of "proportion of variance explained" is not available.^[Pseudo-$R^2$ measures have been suggested for generalized linear models, such as McFadden's, Cox and Snell's, and Nagelkerke's. These measures are based on the log likelihood ratio comparing the the fitted model and a null model with only an intercept. Whilst the aim of these measures is to have a statistic with a similar scale as the traditional $R^2$ for linear models, they don't generally succeed in this. Hence, I don't recommend their use. If you are interested, you can find more information on these measures [here](https://stats.oarc.ucla.edu/other/mult-pkg/faq/general/faq-what-are-pseudo-r-squareds/).]
 
-For generalized linear models, instead of computing something like an $R^2$ measure, it is more common to test overall model fit. This is done by comparing an estimated MODEL R to a *saturated* MODEL G. A **saturated model**, which we will denote as MODEL S, has as many parameters as unique patterns in the data, and therefore fits the data perfectly. Whilst a model that always fits the data perfectly is not very interesting from a modelling point-of-view, it provides a reasonably standard to compare less complex models to. The question asked in this comparison can be stated as "how well does my model do compared to how well it could have done, had I included all 
+For generalized linear models, instead of computing something like an $R^2$ measure, it is more common to test overall model fit. This is done by comparing an estimated MODEL R to a *saturated* MODEL G. A **saturated model**, which we will denote as MODEL S, has as many parameters as unique patterns in the data, and therefore fits the data perfectly. Whilst a model that always fits the data perfectly is not very interesting from a modelling point-of-view, it provides a reasonably standard to compare less complex models to. The question asked in this comparison can be stated as: "how well does my model perform compared to a perfect model of the Data Generating Process?"
 
-The "minus-2-log-likelihood-ratio" comparing an estimated model to the saturated model is called the **deviance**:
+The "minus-2-log-likelihood-ratio" comparing an estimated model to the saturated model is called the **residual deviance** of MODEL R:
 \begin{equation}
 D_R = -2 \log \frac{p(\text{DATA}|\text{MODEL R})}{p(\text{DATA}|\text{MODEL S})}
 (\#eq:glm-deviance-definition)
 \end{equation}
-The deviance is to generalized linear models what the sum-squares-error (SSE) is to general linear models. <!-- TODO Hosmer-Lemeshow? -->
+You can think of the residual deviance similarly to the Sum of Squared Errors (SSE) of a model: the higher the deviance, the lesser the fit of a model to the data. And just like the SSE, the residual deviance can also be written as a sum of the deviance for individual data points. That is because, under the assumption of conditional independence of the observations:
+$$\begin{aligned} \frac{p(Y_1, \ldots, Y_n|\text{MODEL R})}{p(Y_1, \ldots, Y_n|\text{MODEL S})} &= \frac{\prod_{i=1}^n p(Y_i|\text{MODEL R})}{\prod_{i=1}^n p(Y_i|\text{MODEL S})} \\
+&= \prod_{i=1}^n \frac{p(Y_i|\text{MODEL R})}{p(Y_i|\text{MODEL S})}\\
+\log\left(\frac{p(Y_1, \ldots, Y_n|\text{MODEL R})}{p(Y_1, \ldots, Y_n|\text{MODEL S})}\right) &= \sum_{i=1}^n \log \left( \frac{p(Y_i|\text{MODEL R})}{p(Y_i|\text{MODEL S})} \right) \\ 
+&= \sum_{i=1}^n D_{R,i} \end{aligned}$$
+Whilst the residual deviance values for individual observations can be used to indicate potential outliers, there are other forms of residuals more useful for this purpose. One of the most widely-used residuals for generalized linear models are so-called __standardized Pearson residuals__.^[Standardized Pearson residuals are defined as \begin{equation}
+R^\text{Pearson}_i = \frac{Y_i - \hat{\mu}_i}{\sqrt{\hat{V}(Y_i|X_{1,i}, \ldots, X_{m,i})(1-h_i)}}
+\end{equation}
+where $\hat{V}(Y_i|X_{1,i}, \ldots, X_{m,i})$ denotes the (estimated) variance of $Y_i$ for cases with predictor values $X_{1,i}, \ldots, X_{m,i}$, and $h_i$ is the *leverage* value.]
+
+All in all, the residual deviance is to generalized linear models what the SSE is to general linear models. We can actually rewrite the likelihood-ratio test statistics to compare MODEL R to MODEL G in terms of the residual deviance of both models:
+$$G^2 = D_R - D_G$$
+Why? Well, because we can divide both the numerator and denominator in the likelihood ratio by the same term ($p(\text{DATA}|\text{MODEL S})$) without changing its value:
+$$\begin{aligned}
+G^2 &= -2 \log \left( \frac{p(\text{DATA}|\text{MODEL R})}{p(\text{DATA}|\text{MODEL G})} \right) \\
+&= -2 \log \left( \frac{p(\text{DATA}|\text{MODEL R})/p(\text{DATA}|\text{MODEL S})}{p(\text{DATA}|\text{MODEL G})/p(\text{DATA}|\text{MODEL S})} \right) \\
+&= -2 \log \left(p(\text{DATA}|\text{MODEL R})/p(\text{DATA}|\text{MODEL S})\right) - (-2 \log \left( p(\text{DATA}|\text{MODEL G})/p(\text{DATA}|\text{MODEL S})) \right) \\
+&= D_R - D_G
+\end{aligned}$$
+
+<!-- TODO Hosmer-Lemeshow? -->
 
 ## Logistic regression
 
@@ -155,7 +177,7 @@ The mean of a Bernoulli-distributed variable $Y$ is $\mu_Y = \theta = p(Y=1)$. T
 
 Modelling the mean with predictor variables $X_j$, the conditional mean of a Bernoulli-distributed variable can be written as:
 $$\begin{aligned}
-\mu_{Y|X_1, \ldots, X_m} &= p(Y=1|X_1, \ldots, X_m)
+\mu_{Y|X_1, \ldots, X_m} &= p(Y=1|X_1, \ldots, X_m) = \pi_1
 \end{aligned}$$
 <!--As above, due to the binary nature of $Y$, we also know that
 $$\begin{aligned}
@@ -164,12 +186,13 @@ p(Y=0|X_1, \ldots, X_m) &= 1 - p(Y=1|X_1, \ldots, X_m) \\
 \pi_0 &= 1-\pi_1
 \end{aligned}$$
 This means that the probability distribution for $Y$ is completely determined by $\mu_{Y|X_1, \ldots, X_m} = \pi_1$, and our model can focus on just this.-->
+Note that we introduced the shorthand $\pi_1$ to denote the (conditional) probability that $Y=1$.
 
 The canonical link function for Bernoulli-distributed data is the so-called **logit link** function:
 \begin{equation}
 g(\mu_{Y|X_1, \ldots, X_m}) = \log \left( \frac{\mu_{Y|X_1, \ldots, X_K}}{1-\mu_{Y|X_1, \ldots, X_K}} \right)
 \end{equation}
-This may be easier to understand by replacing $\mu_{Y|X_1, \ldots, X_m} = = p(Y=1|X_1, \ldots, X_m)$ with the shorthand $\pi_1$:
+This may be easier to understand by using our shorthand notation $\pi_1 = \mu_{Y|X_1, \ldots, X_m}$:
 \begin{equation}
 g(\pi_1) = \log \left( \frac{\pi_1}{1-\pi_1} \right)
 (\#eq:glm-logit-link-function)
@@ -182,17 +205,17 @@ The logistic regression model is then
 
 The inverse link function is called the **inverse logit link** function:
 \begin{equation}
-h(\beta_0 + \sum_{j=1}^m \beta_j) = \frac{\exp \{ \beta_0 + \sum_{j=1}^m \beta_j X_{j} \}}{1 + \exp \{ \beta_0 + \sum_{j=1}^m \beta_j X_{j} \}}
+h(\beta_0 + \sum_{j=1}^m \beta_j) = \frac{\exp \{ \beta_0 + \sum_{j=1}^m \beta_j X_{j} \}}{1 + \exp \left( \beta_0 + \sum_{j=1}^m \beta_j X_{j} \right)}
 (\#eq:glm-inverse-logit-link-function)
 \end{equation}
 So
 \begin{equation}
-\mu_{Y|X_1,\ldots,X_m} = \pi_1 = \frac{\exp \{ \beta_0 + \sum_{j=1}^m \beta_j X_{j} \}}{1 + \exp \{ \beta_0 + \sum_{j=1}^m \beta_j X_{j} \}}
+\mu_{Y|X_1,\ldots,X_m} = \pi_1 = \frac{\exp \{ \beta_0 + \sum_{j=1}^m \beta_j X_{j} \}}{1 + \exp \left( \beta_0 + \sum_{j=1}^m \beta_j X_{j} \right)}
 \end{equation}
 
 Some examples for $m=1$ predictor and different values of $\beta_0$ and $\beta_1$ are shown in Figure \@ref(fig:logit-link-plot).
 
-```{r logit-link-plot}
+```{r logit-link-plot, fig.cap="Examples of the logistic link function for a logistic regression model with a single predictor, and different values for $\\beta_0$ and $\\beta_1$"}
 library(dplyr)
 library(ggplot2)
 x <- seq(-5,5,length=100) 
@@ -204,82 +227,7 @@ rbind(data.frame(b0 = 0, b1 = 1, x=x, p = 1/(1+exp(-x))),
   ggplot(aes(x=x,y=p, colour=case)) + geom_line() + ylab("p(Y = 1)")
 ```
 
-For this 1-predictor model, the intercept $\beta_0$ reflects the point at which $\pi_1 = 0.5$. The slope $\beta_1$ reflects the steepness of the curve.<!-- TODO -->
-
-### Example: Metacognition in visual perception
-
-Metacognition refers to the ability ascertain how (un)certain we are in our inferences about the world. The "meta" qualifier indicates that this is a cognitive process that is about (i.e. reflects upon) other cognitive processes. For example, @rausch2016visibility asked participants to judge whether stimuli (so-called grating patterns) were directed horizontally to vertically. To make this task difficult for their participants, they presented each stimulus for a brief time (200 ms) and on a variety of relatively low-contrast displays. They also asked participants to indicate their confidence (on a scale from 0 to 100) that their judgement was correct. Participants each completed a total of 378 trials. 
-
-Figure \@ref(fig:metacognition-confidence-correct-plot) shows the proportion of correct responses as a function of the stated confidence, for two participants in the experiment. For Participant 1, there appears to be quite a good correspondence between confidence and correctness. For Participant 2, the relation does not look so neat, with average correctness higher in the lowest range of confidence, and then decreasing in the next two ranges, before rapidly increasing to almost 100% for the highest two confidence ranges. However, as is evident from the width of the confidence bands, this participant gave relatively little confidence ratings between 20 and 60.  
-
-```{r metacognition-confidence-correct-plot, fig.cap="Confidence and proportion correct for two participants in the study by @rausch2016visibility on metacognition.", fig.width = 8, fig.height=4}
-library(sdamr)
-data("metacognition")
-
-dat <- subset(metacognition, id %in% c(1,2))
-
-dat %>%
-  mutate(confidence = if_else(confidence == 0, .0001, confidence)) %>%
-  mutate(conf_b = cut(confidence, c(0,20,40,60,80,100))) %>%
-  mutate(id = paste("Participant", id)) %>%
-  ggplot(aes(x=conf_b, y=correct)) + stat_summary(fun.data = "mean_cl_boot") + ylim(c(0,1)) + xlab("confidence") + ylab("proportion correct") + facet_wrap(~id)
-```
-
-As the relation between confidence and correctness likely differs between participants (e.g. participants might interpret the confidence scale differently), estimating a single logistic regression model for both participants seems inappropriate. Hence, we will estimate separate logistic regression models for the participants. In our model, we will allow the effect of confidence to be moderated by contrast. For easier interpretation, we first center both variables, and then estimate the following logistic regression model:
-
-$$\log \left( \frac{p(Y_i = \text{correct})}{p(Y_i = \text{incorrect})} \right) = \beta_0 + \beta_\texttt{conf} \times \texttt{conf}_i + \beta_\text{contr} \times \texttt{contr}_i + \beta_{\texttt{cc}} \times (\texttt{conf} \times \texttt{contr})_i$$
-
-Table \@ref(tab:metacognition-logistic-regression-results-z-participant-1) shows the results for Participant 1. Each participant completed 378 trials, so the number of observations in this subset of data equals $n=378$. For didactic purposes, we present results from both the $z$ and likelihood-ratio tests (you would usually just provide one of these). 
-
-```{r metacognition-logistic-regression-results-z-participant-1}
-mod_s1 <- subset(dat, id == 1) %>%
-  mutate(confidence = scale(confidence),
-         contrast = scale(contrast)) %>%
-  glm(correct ~ confidence * contrast, family=binomial(), data=.)
-mod_s2 <- subset(dat, id == 2) %>%
-  mutate(confidence = scale(confidence),
-         contrast = scale(contrast)) %>%
-  glm(correct ~ confidence * contrast, family=binomial(), data=.)
-
-tab <- summary(mod_s1)$coefficients
-tab <- as.data.frame(tab)
-tab <- cbind(tab, rbind(c(NA,NA,NA),car::Anova(mod_s1, type=3)))
-rownames(tab) <- c("Intercept","Confidence", "Contrast","Confidence $\\times$ Contrast")
-colnames(tab) <- c("$\\hat{\\beta}$","$\\text{SE}(\\hat{\\beta})$", "$z$", "$p(\\geq \\lvert z \\rvert)$", "$X^2$", "$\\text{df}$", "$p(\\geq \\lvert X^2 \\rvert)$")
-tab[,4] <- sapply(tab[,4], format_p)
-tab[,7] <- sapply(tab[,7], format_p)
-
-options(knitr.kable.NA = '')
-knitr::kable(tab, caption = "Results of a logistic regression model of correct identification by confidence for Participant 1.", escape = FALSE, booktabs=TRUE, linesep="", digits=3, align="r")
-
-#knitr::kable(papaja::apa_print(mod_s1)$table)
-
-#summary(mod_s1)
-
-#car::Anova(mod_s1, type=3)
-```
-
-As the results show, regardless of whether we rely on the Wald or likelihood-ratio test, we find evidence for a positive interaction between confidence and contrast. We also find evidence of positive "simple effects" for confidence and contrast. As we centered the predictors, the simple effects of confidence reflects the effect of confidence for an average value of contrast. And vice versa, the simple effect of contrast reflects the effect of contrast for an average level of confidence. Taking these results together, we can conclude that -- at average levels of confidence -- higher levels of contrast result in more accurate responses. We also see that -- ate average levels of contrast -- higher levels of confidence are related more accurate responses. This is evidence for meta-cognition. The interaction indicates that meta-cognition might be more pronounced for higher levels of contrast (i.e., the relation between confidence and accuracy is higher for higher values of contrast). Finally, the intercept is also significant. This indicates that, for average values of confidence and contrast (such that centered $\texttt{conf}$ and $\texttt{contr}$ are both equal to 0), the predicted probability of a correct response is equal to:
-$$\begin{aligned}
-p(Y_i = \text{correct}) &= \frac{\exp (`r coef(mod_s1)[1]`)}{1 + \exp (`r coef(mod_s1)[1]`)} \\
-&= `r exp(coef(mod_s1)[1])/(1+exp(coef(mod_s1)[1]))`\end{aligned}$$
-The deviance of the model is $D_R = `r deviance(mod_s1)`$. To assess the overall model fit, we can test this by assuming the deviance (approximately) follows a Chi-Squared distribution with $n-\text{npar}(R)$ degrees of freedom (the saturated model may be taken to have a total of $n$ parameters). Hence, the test of overall model fit is $X^2(`r summary(mod_s1)$df.residual`) = `r deviance(mod_s1)`$, $p `r format_p_text(1-pchisq(deviance(mod_s1),summary(mod_s1)$df.residual))`$. As this is not significant, the model can be said to fit the data well.
-
-Table \@ref(tab:metacognition-logistic-regression-results-z-participant-2) shows results from the same model applied to the data from Participant 2. Whilst the data seemed less neat than the data of Participant 1, we get quite similar results, with significant and positive simple effects of confidence and contrast, as well as a positive interaction between them.
-
-```{r metacognition-logistic-regression-results-z-participant-2}
-tab <- summary(mod_s2)$coefficients
-tab <- as.data.frame(tab)
-tab <- cbind(tab, rbind(c(NA,NA,NA),car::Anova(mod_s2, type=3)))
-rownames(tab) <- c("Intercept","Confidence", "Contrast","Confidence $\\times$ Contrast")
-colnames(tab) <- c("$\\hat{\\beta}$","$\\text{SE}(\\hat{\\beta})$", "$z$", "$p(\\geq \\lvert z \\rvert)$", "$X^2$", "$\\text{df}$", "$p(\\geq \\lvert X^2 \\rvert)$")
-tab[,4] <- sapply(tab[,4], format_p)
-tab[,7] <- sapply(tab[,7], format_p)
-
-knitr::kable(tab, caption = "Results of a logistic regression model of correct identification by confidence for Participant 2.", escape = FALSE, booktabs=TRUE, linesep="", digits=3, align = "r")
-```
-
-The test of the deviance of the model for Participant 2 is $X^2(`r summary(mod_s2)$df.residual`) = `r deviance(mod_s2)`$, $p `r format_p_text(1-pchisq(deviance(mod_s2),summary(mod_s2)$df.residual))`$. As this is again not significant, the model can be said to fit the data well.
+As usual, the intercept $\beta_0$ reflects the model prediction when all predictors have the value $X_j = 0$. It is important to keep in mind that generalized linear models make predictions not on the scale of the dependent variable $Y$, but on the scale of the link function $g(Y)$. We can use the inverse link-function to assess the predicted value on the scale of the dependent variable. In the case of logistic regression, this is $\frac{\exp(\beta_0)}{1+\exp(\beta_0)}$. For a single-predictor model, the value $-\frac{\beta_0}{\beta_1}$ is equal to point at which $\pi_1 = 0.5$. This is the point at which the logistic curve is the steepest. The slope $\beta_1$ reflects the maximum steepness of the curve, as well as its direction. Positive values of $\beta_1$ indicate that the probability $\pi_1$ increases with the value of $x$, whilst negative values of $\beta_1$ indicate it decreases. The higher the absolute value of $\beta_1$, the more quickly the probability increases or decreases (i.e. the steeper the logistic curve).
 
 ### Parameter interpretation
 
@@ -300,14 +248,109 @@ In the final line of the above derivation, you can see that every one-unit incre
 
 In the log-odds scale, every one-unit increase in $X$ *adds* $\beta_1$ to the log-odds. In the odds scale, every one-unit increase in $X$ *multiplies* the odds by $\exp(\beta_1)$. In terms of interpreting the effect of $X_1$, you can choose whether you find this easier to do in the scale of log-odds, or in the scale of odds. The most natural scale is probably the scale of the response $p(Y=1|X_1)$ itself. Unfortunately, the non-linear effect of $X_1$ on the response prevents a simple interpretation in this scale.
 
+### Example: Metacognition in visual perception
+
+Metacognition refers to the ability ascertain how (un)certain we are in our inferences about the world. The "meta" qualifier indicates that this is a cognitive process that is about (i.e. reflects upon) other cognitive processes. For example, @rausch2016visibility asked participants to judge whether stimuli (so-called grating patterns) were directed horizontally to vertically. To make this task difficult for their participants, they presented each stimulus only briefly (200 ms), and on a variety of relatively low-contrast displays. They also asked participants to indicate their confidence (on a scale from 0 to 100) that their judgement was correct. Participants each completed a total of 378 trials. If metacognition is accurate, then participants should be more confident when they made more accurate responses.
+
+Figure \@ref(fig:metacognition-confidence-correct-plot) shows the proportion of correct responses as a function of the stated confidence, for two participants in the experiment. For Participant 1, there appears to be quite a good correspondence between confidence and correctness. For Participant 2, the relation does not look so neat, with average correctness higher in the lowest range of confidence, and then decreasing in the next two ranges, before rapidly increasing to almost 100% for the highest two confidence ranges. However, as is evident from the width of the confidence bands, this participant gave relatively little confidence ratings between 20 and 60.  
+
+```{r metacognition-confidence-correct-plot, fig.cap="Confidence and proportion correct for two participants in the study by @rausch2016visibility on metacognition.", fig.width = 8, fig.height=4}
+library(sdamr)
+data("metacognition")
+
+dat <- subset(metacognition, id %in% c(1,2))
+
+dat %>%
+  mutate(confidence = if_else(confidence == 0, .0001, confidence)) %>%
+  mutate(conf_b = cut(confidence, c(0,20,40,60,80,100))) %>%
+  mutate(id = paste("Participant", id)) %>%
+  ggplot(aes(x=conf_b, y=correct)) + stat_summary(fun.data = "mean_cl_boot") + ylim(c(0,1)) + xlab("confidence") + ylab("proportion correct") + facet_wrap(~id)
+```
+
+As the relation between confidence and correctness likely differs between participants (e.g. participants might interpret the confidence scale differently), estimating a single logistic regression model for both participants seems inappropriate. Hence, we will estimate separate logistic regression models for the two participants. In our model, we will allow the effect of confidence to be moderated by contrast (i.e., we allow metacognition to be affected by contrast). For easier interpretation, we first center both variables, and then estimate the following logistic regression model:
+
+$$\log \left( \frac{p(Y_i = \text{correct})}{p(Y_i = \text{incorrect})} \right) = \beta_0 + \beta_\texttt{conf} \times \texttt{conf}_i + \beta_\text{contr} \times \texttt{contr}_i + \beta_{\texttt{cc}} \times (\texttt{conf} \times \texttt{contr})_i$$
+
+Table \@ref(tab:metacognition-logistic-regression-results-z-participant-1) shows the results for Participant 1. Each participant completed 378 trials, so the number of observations in this subset of data equals $n=378$. For didactic purposes, we present results from both the Wald ($z$) and likelihood-ratio ($G^2$) tests. You would usually just provide one of these. 
+
+```{r metacognition-logistic-regression-results-z-participant-1}
+mod_s1 <- subset(dat, id == 1) %>%
+  mutate(confidence = center(confidence),
+         contrast = center(contrast)) %>%
+  glm(correct ~ confidence * contrast, family=binomial(), data=.)
+mod_s2 <- subset(dat, id == 2) %>%
+  mutate(confidence = center(confidence),
+         contrast = center(contrast)) %>%
+  glm(correct ~ confidence * contrast, family=binomial(), data=.)
+
+tab <- summary(mod_s1)$coefficients
+tab <- as.data.frame(tab)
+tab <- cbind(tab, rbind(c(NA,NA,NA),car::Anova(mod_s1, type=3)))
+rownames(tab) <- c("Intercept","Confidence", "Contrast","Confidence $\\times$ Contrast")
+colnames(tab) <- c("$\\hat{\\beta}$","$\\text{SE}(\\hat{\\beta})$", "$z$", "$p(\\geq \\lvert z \\rvert)$", "$G^2$", "$\\text{df}$", "$p(\\geq \\lvert G^2 \\rvert)$")
+tab[,4] <- sapply(tab[,4], format_p)
+tab[,7] <- sapply(tab[,7], format_p)
+
+options(knitr.kable.NA = '')
+knitr::kable(tab, caption = "Results of a logistic regression model of correct identification by confidence for Participant 1.", escape = FALSE, booktabs=TRUE, linesep="", digits=3, align="r")
+
+#knitr::kable(papaja::apa_print(mod_s1)$table)
+
+#summary(mod_s1)
+
+#car::Anova(mod_s1, type=3)
+```
+
+As the results show, regardless of whether we rely on the Wald or likelihood-ratio test, we find evidence for a positive interaction between confidence and contrast. We also find evidence of positive "simple effects" for confidence and contrast. As we centered the predictors, the simple effects of confidence reflects the effect of confidence for an average value of contrast. And vice versa, the simple effect of contrast reflects the effect of contrast for an average level of confidence. Taking these results together, we can conclude that -- at average levels of confidence -- higher levels of contrast result in more accurate responses. We also see that -- at average levels of contrast -- higher levels of confidence result in more accurate responses. This is thus evidence for accurate metacognition. The interaction indicates that meta-cognition might be more pronounced for higher levels of contrast (i.e., the relation between confidence and accuracy is higher for higher values of contrast). Finally, the intercept is also significant. This indicates that, for average values of confidence and contrast (such that centered $\texttt{conf}$ and $\texttt{contr}$ are both equal to 0), the predicted probability of a correct response is equal to:
+$$\begin{aligned}
+p(Y_i = \text{correct}) &= \frac{\exp (`r coef(mod_s1)[1]`)}{1 + \exp (`r coef(mod_s1)[1]`)} \\
+&= `r exp(coef(mod_s1)[1])/(1+exp(coef(mod_s1)[1]))`\end{aligned}$$
+The deviance of the model is $D_R = `r deviance(mod_s1)`$. To assess the overall model fit, we can test this by assuming the deviance (approximately) follows a Chi-Squared distribution with $n-\text{npar}(R)$ degrees of freedom (the saturated model may be taken to have a total of $n$ parameters). Hence, the test of overall model fit is $X^2(`r summary(mod_s1)$df.residual`) = `r deviance(mod_s1)`$, $p `r format_p_text(1-pchisq(deviance(mod_s1),summary(mod_s1)$df.residual))`$. As this is not significant, the model can be said to fit the data well.
+
+Table \@ref(tab:metacognition-logistic-regression-results-z-participant-2) shows results from the same model applied to the data from Participant 2. Whilst the data seemed less neat than the data of Participant 1, we get quite similar results, with significant and positive simple effects of confidence and contrast, as well as a positive interaction between them.
+
+```{r metacognition-logistic-regression-results-z-participant-2}
+tab <- summary(mod_s2)$coefficients
+tab <- as.data.frame(tab)
+tab <- cbind(tab, rbind(c(NA,NA,NA),car::Anova(mod_s2, type=3)))
+rownames(tab) <- c("Intercept","Confidence", "Contrast","Confidence $\\times$ Contrast")
+colnames(tab) <- c("$\\hat{\\beta}$","$\\text{SE}(\\hat{\\beta})$", "$z$", "$p(\\geq \\lvert z \\rvert)$", "$G^2$", "$\\text{df}$", "$p(\\geq \\lvert G^2 \\rvert)$")
+tab[,4] <- sapply(tab[,4], format_p)
+tab[,7] <- sapply(tab[,7], format_p)
+
+knitr::kable(tab, caption = "Results of a logistic regression model of correct identification by confidence for Participant 2.", escape = FALSE, booktabs=TRUE, linesep="", digits=3, align = "r")
+```
+
+The test of the deviance of the model for Participant 2 is $X^2(`r summary(mod_s2)$df.residual`) = `r deviance(mod_s2)`$, $p `r format_p_text(1-pchisq(deviance(mod_s2),summary(mod_s2)$df.residual))`$. As this is again not significant, the model can be said to fit the data well.
+
+Figure \@ref(fig:metacognition-data-and-logistic-fit-plot) depicts the data and model predictions.
+```{r metacognition-data-and-logistic-fit-plot, fig.cap="Observed and model-predicted correctness of responses as a function of confidence and contrast, for two participants in the study by @rausch2016visibility on metacognition.", fig.width = 8, fig.height=3}
+tdat <- expand.grid(id=c(1,2), contrast = unique(dat$contrast), confidence=0:100)
+coef <- coefficients(mod_s1)
+tdat$predict[tdat$id == 1] <- coef[1] + coef[2]*(tdat$confidence[tdat$id == 1] - mean(tdat$confidence[tdat$id == 1])) + coef[3]*(tdat$contrast[tdat$id == 1] - mean(tdat$contrast[tdat$id == 1])) + coef[4]*(tdat$confidence[tdat$id == 1]*tdat$contrast[tdat$id == 1])
+coef <- coefficients(mod_s2)
+tdat$predict[tdat$id == 2] <- coef[1] + coef[2]*(tdat$confidence[tdat$id == 2] - mean(tdat$confidence[tdat$id == 2])) + coef[3]*(tdat$contrast[tdat$id == 2] - mean(tdat$contrast[tdat$id == 2])) + coef[4]*(tdat$confidence[tdat$id == 2]*tdat$contrast[tdat$id == 2])
+tdat$predict <- 1/(1+exp(-tdat$predict))
+tdat <- mutate(tdat, id = paste("Participant", id))
+dat %>%
+  mutate(id = paste("Participant", id)) %>%
+  ggplot(aes(x=confidence, y=correct)) + geom_point(alpha=.2) + ylim(c(0,1)) + xlab("confidence") + ylab("(probability) correct") + geom_line(data=tdat, mapping=aes(x=confidence, y=predict)) + facet_grid(id ~ contrast)
+```
+
+
+
 ### Probit regression: Using a different link function
 
-The logit link is the canonical link function for the Bernoulli and Binomial distribution. But you are not restricted to choose the canonical link function. In principle, any (monotone and one-to-one) function $g(Y)$ that transforms the variable $Y$ which is bounded between 0 and 1 to an unbounded scale between $\-infty$ and $\infty$. 
+The logit link is the canonical link function for the Bernoulli and Binomial distribution. But you are not restricted to always choose the canonical link function. In principle, you can pick any (monotone and one-to-one) function $g(Y)$ that transforms variable $Y$ which is bounded between 0 and 1 to an unbounded variable with possible values between $-\infty$ and $\infty$. 
 
-An alternative to the logit link is the **Probit link function**:
+For example, a common alternative to the logit link is the so-called **Probit link function**:
 
-$$\begin{aligned} p(Y \leq y) && Y \sim \mathbf{Normal}(\mu = 0, \sigma = 1) \end{aligned}$$ 
+$$g(y) = \text{standard-Normal-quantile}(y)$$ 
+So, the Probit link function returns the $y$-th quantile of the standard Normal distribution. The inverse-link function can be written as
+$$\begin{aligned} h(x) = p(Z \leq x) && Z \sim \mathbf{Normal}(\mu = 0, \sigma = 1) \end{aligned}$$ 
+i.e., the inverse link function is, for a value $x$, the probability that a standard Normal variable has a value equal or less than it.
 
+The Probit link function has a shape that is quite similar to the logistic link function. It is of theoretical interest however, as it may have a more natural interpretation than the logistic function. For example, suppose someone has to detect
 ```{r}
 library(sdamr)
 data("metacognition")
@@ -324,7 +367,7 @@ car::Anova(mod, type=3)
 <!-- https://online.ucpress.edu/collabra/article/7/1/27242/118591/Poisson-Regressions-A-Little-Fishy -->
 <!-- https://compass.onlinelibrary.wiley.com/doi/10.1111/lnc3.12439 -->
 
-Poisson regression is useful when the total number of possible occurrences of an event in not given. For example, suppose you let a participant solve as many algebra problems as they can within 1 hour. Some participants may be able to solve a problem every minute, whilst others may need longer (e.g. 5 minutes per problem, on average). 
+Poisson regression is useful when the total number of possible occurrences of an event in not given. For example, suppose you give participants one hour solve as many algebra problems as they. Some participants may be able to (on average) solve a problem every minute, whilst others may need longer (e.g. 5 minutes per problem, on average). And some participants may even solve problems in less than a minute. 
 
 The **Poisson distribution** is stated as:
 \begin{equation}
