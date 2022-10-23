@@ -369,7 +369,7 @@ car::Anova(mod, type=3)
 
 Poisson regression is useful when the total number of possible occurrences of an event in not given. For example, suppose you give participants one hour solve as many algebra problems as they. Some participants may be able to (on average) solve a problem every minute, whilst others may need longer (e.g. 5 minutes per problem, on average). And some participants may even solve problems in less than a minute. 
 
-The **Poisson distribution** is stated as:
+The **Poisson distribution** is defined as:
 \begin{equation}
 p(Y=k) = \frac{\mu^k \exp (-\mu )}{k!}
 (\#eq:Poisson-distribution)

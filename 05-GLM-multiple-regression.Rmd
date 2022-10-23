@@ -453,13 +453,13 @@ The coefficient of partial determination is (in the context of ANOVA models, whi
 ## Assumptions {#sec:04b-assumptions}
 
 The assumptions of the multiple regression model, and with that any of the versions of the General Linear Model we discuss, are all really about the errors, which are assumed to be independently and identically distributed:
-$$\epsilon_i \sim \mathbf{Normal}(0, \sigma)$$
+$$\epsilon_i \sim \mathbf{Normal}(0, \sigma_\epsilon)$$
 
 In other words, this implies the following assumptions for a multiple regression and/or GLM:
 
 1. __Normality__: the errors $\epsilon_i$ are Normal-distributed
-2. __Unbiasedness__: the mean of $\epsilon_i$ is 0. This means that the conditional means are indeed a linear function of the predictors, and that the model predictions are unbiased.
-3. __Homoscedasticity__: the errors $\epsilon_i$ have a constant variance $\sigma^2$ and thus also a constant standard deviation $\sigma$.
+2. __Unbiasedness__: the mean of $\epsilon_i$ is 0. This implies that the conditional means $\mu_{Y|X_1,\ldots,X_m}$ are indeed a linear function of the predictors, and that the model predictions are unbiased.
+3. __Homoscedasticity__: the errors $\epsilon_i$ have a constant variance $\sigma_\epsilon^2$ and thus also a constant standard deviation $\sigma_\epsilon$.
 4. __Independence__: any error term $\epsilon_i$ is independent of any other $\epsilon_j$ (for all $i \text{ and } j \neq i$). Independence here means that $p(\epsilon_j|\epsilon_i) = p(\epsilon_j)$ for all $i \text{ and } j \neq i$
 
 It is important to realise that the assumption of Normal-distributed errors does not necessarily translate in assuming that the dependent variable $Y$ is itself Normal-distributed. This will often not be the case. Nor does the model require the predictors to be Normal-distributed. No assumption is made at all about the distribution of the predictors. 
