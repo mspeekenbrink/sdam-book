@@ -562,7 +562,7 @@ coef <- round(coefficients(rps_mod_multinom),3)
 #rps_multinom_confint <- confint(rps_mod_multinom)
 ```
 
-Instead of the Z-test for the individual coefficients in Table , we may wonder whether a predictor has "any effect" on the dependent variable. For example, if the AI's previous action has no effect on the human's current action, then that would mean that the null-hypothesis $$H_0: \beta_{R, AR} = \beta_{R, AS} = \beta_{S, AR} = \beta_{S, AS} = 0$$ is true. We can test this hypotheses by a model comparison, comparing the full model to one where we fix these parameters to 0 (effectively removing the AI previous action predictor from the model).
+Instead of the Z-test for the individual coefficients in Table , we may wonder whether a predictor has "any effect" on the dependent variable. For example, if the AI's previous action has no effect on the human's current action, then that would mean that the null-hypothesis $$H_0: \beta_{R, AR} = \beta_{R, AS} = \beta_{S, AR} = \beta_{S, AS} = 0$$ is true. We can test this hypothesis by a model comparison, comparing the full model to one where we fix these parameters to 0 (effectively removing the AI previous action predictor from the model).
 This model comparison provides the following test results:
 $-2 \log(\text{likelihood-ratio}) = `r rps_multinom_test$LRT[2]`$, $\text{df} = 4$, $p < .001$. Hence, we can conclude that the human players' current actions do depend on the AI's previous actions.
 
