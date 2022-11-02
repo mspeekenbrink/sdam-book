@@ -8,7 +8,7 @@ set.seed(20221010)
 
 Up to now, we have considered models for which the residuals (model errors) could be assumed to follow a Normal distribution. This is equivalent to modelling the conditional distribution of a dependent variable $Y$, given the values of predictor variables $X_j$, as a Normal distribution. Many of the techniques and ideas of such models can be generalised to situations where we can assume that the distribution of a dependent variable, conditional upon the values of predictor variables, follows a different distribution from a class of probability distributions known as the _exponential family_. Such models are known as _generalized_ linear models [@mccullagh2019generalized]. This name makes for easy confusion with the _general_ linear model, so make sure you don't ignore the presence or absence of "-ized"!
 
-The Normal distribution is part of the exponential family of distributions, as are many other distributions. These other distributions include the Binomial, Poisson, and Gamma distributions. Some of these distributions are defined for non-negative integer variables (i.e. variables with values $0, 1, 2, \ldots$), and others for positive continuous variables (i.e. variables with values $>0$), and others for unbounded continuous variables (i.e. variables with values between $-\infty$ and $\infty$). Exponential-family distributions can all be expressed in the same form, but we won't go into the details of that here.^[If you really want to know, the probability density function of exponential family models can be written as $$p(y|\theta, \phi) = \exp \left( \frac{y \theta - b(\theta)}{a(\phi)} + c(y, \phi) \right)$$, where $\theta$ and $\phi$ are parameters, and $a$, $b$, and $c$ are known functions. The parameter $\theta$ is called the *canonical parameter*, and $\phi > 0$ the *dispersion parameter*.] For now, what is important is that there are many variables which are *not* continuous and unbounded. It generally does not make sense to assume a Normal distribution for such variables. But because exponential-family distributions share important characteristics with the Normal distribution, assuming a different exponential-family distributions allows you to choose a distribution which is more natural for the variable in question, whilst still being able to formulate useful models for it.
+The Normal distribution is part of the exponential family of distributions, as are many other distributions. These other distributions include the Binomial, Poisson, and Gamma distributions. Some of these distributions are defined for non-negative integer variables (i.e. variables with values $0, 1, 2, \ldots$), and others for positive continuous variables (i.e. variables with values $>0$), and others for unbounded continuous variables (i.e. variables with values between $-\infty$ and $\infty$). Exponential-family distributions can all be expressed in the same form, but we won't go into the details of that here.^[If you really want to know, the probability density function of exponential family models can be written as $$p(y|\theta, \phi) = \exp \left( \frac{y \theta - b(\theta)}{a(\phi)} + c(y, \phi) \right)$$, where $\theta$ and $\phi$ are parameters, and $a$, $b$, and $c$ are known functions. The parameter $\theta$ is called the *canonical parameter*, and can be written as a function of the mean of $Y$: $\theta = g(\mu)$. The function $g$ is called the *canonical link function*. The parameter $\phi > 0$ is the *dispersion parameter*.] For now, what is important is that there are many variables which are *not* continuous and unbounded. It generally does not make sense to assume a Normal distribution for such variables. But because exponential-family distributions share important characteristics with the Normal distribution, assuming a different exponential-family distributions allows you to choose a distribution which is more natural for the variable in question, whilst still being able to formulate useful models for it.
 
 A generalized linear model consists of three components:
 
@@ -16,7 +16,7 @@ A generalized linear model consists of three components:
 2. A *structural* part, which is a linear model of the form $\beta_0 + \sum_{j=1}^m \beta_j \times X_j$
 3. A *link function*, which connects the structural and random part.
 
-The general linear model also consists of a random and structural part. What is new here is the link function.
+The general linear model also consists of a random and structural part. What is new for generalized linear models is the link function.
 
 ## Link functions
 
@@ -66,7 +66,7 @@ x &= h(y) = \log y
 \end{aligned}$$
 You can also think of the inverse link function as "undoing" the link function, in the sense that applying the inverse link function to the link function itself, we get the values put into the link function:
 $$h(g(x)) = x$$
-Whilst the choice of a link function is essentially up to the analyst, it is common to use a **canonical link function**. Canonical link functions are, roughly put, link functions that are the most natural way to express $\mu_{Y|X_1,\ldots,X_m}$ with a linear function.<!-- TODO --> 
+Whilst the choice of a link function is essentially up to the analyst, it is common to use a **canonical link function**. Canonical link functions are, roughly put, link functions $h$ that are the most direct way to express $h(\mu_{Y|X_1,\ldots,X_m})$ for the particular distribution in question.^[As mentioned in a previous footnote, the canonical link function is the function that relates the canonical parameter of the exponential family distribution in question to the mean, $\theta = g(\mu)$.]
 
 ## Estimation
 
@@ -82,7 +82,7 @@ For large samples, the test statistic
 \begin{equation}
 z = \frac{\hat{\beta_j}}{\text{SE}(\beta_j)}
 \end{equation}
-approximately follows a standard Normal distribution. Note that this $z$ statistic is similar to the $t$-statistic for the General Linear Model. What is missing however are the degrees of freedom. For large samples, as the number of observations $n$ approaches infinity, the $t$-distribution converges to the standard Normal distribution. For large-enough $n$, the difference between the $t$-distribution and the Normal distribution so small that there is little difference when using one or the other to compute things like $p$-values (but technically, the use of a Normal distribution is only truly correct when the number of observations is infinite).
+approximately follows a standard Normal distribution (i.e. a Normal distribution with mean $\mu=0$ and standard deviation $\sigma=1$). Note that this $z$ statistic is similar to the $t$-statistic for the General Linear Model. What is missing however are the degrees of freedom. For large samples, as the number of observations $n$ approaches infinity, the $t$-distribution converges to the standard Normal distribution. For large-enough $n$, the difference between the $t$-distribution and the Normal distribution so small that there is little difference when using one or the other to compute things like $p$-values (but technically, the use of a Normal distribution is only truly correct when the number of observations is infinite).
 
 Sometimes, the Wald test is presented in an alternative form:
 \begin{equation}
@@ -96,7 +96,7 @@ Both statistics are approximate and only exact for an infinite sample size. They
 
 The Wald test is easy to compute and works well for large-enough samples. A more powerful and reliable test for smaller samples is the likelihood ratio test. To test whether a parameter differs from a hypothesized value, this involves a comparison between a MODEL R where the parameter is fixed to that hypothesised value, and a MODEL G where the parameter is estimated. For linear models, the $t-$ or $F$-statistics could be used to perform such likelihood ratio tests. Unfortunately, the wider-class of distributions covered by generalized linear models does not allow for these precise tests. Instead, we will need to rely on the the approximate Chi-squared test that we introduced in the context of linear mixed-effects models.
 
-The test statistic used for a likelihood-ratio test is, as in Chapter XXX, equal to minus two times the log likelihood ratio:
+The test statistic used for a likelihood-ratio test is, as in Chapter \@ref(ch-linear-mixed-effects-models), equal to minus two times the log likelihood ratio:
 $$\begin{aligned}
 G^2 = -2 \log \left(\text{likelihood-ratio}\right) &= -2 \log \left( \frac{p(\text{DATA}|\text{MODEL R})}{p(\text{DATA}|\text{MODEL G})} \right) \\ &= -2 \log p(\text{DATA}|\text{MODEL R}) - (-2 \log p(\text{DATA}|\text{MODEL G}))
 \end{aligned}$$
@@ -144,15 +144,16 @@ $$\begin{aligned} \frac{p(Y_1, \ldots, Y_n|\text{MODEL R})}{p(Y_1, \ldots, Y_n|\
 Whilst the residual deviance values for individual observations can be used to indicate potential outliers, there are other forms of residuals more useful for this purpose. One of the most widely-used residuals for generalized linear models are so-called __standardized Pearson residuals__.^[Standardized Pearson residuals are defined as \begin{equation}
 R^\text{Pearson}_i = \frac{Y_i - \hat{\mu}_i}{\sqrt{\hat{V}(Y_i|X_{1,i}, \ldots, X_{m,i})(1-h_i)}}
 \end{equation}
-where $\hat{V}(Y_i|X_{1,i}, \ldots, X_{m,i})$ denotes the (estimated) variance of $Y_i$ for cases with predictor values $X_{1,i}, \ldots, X_{m,i}$, and $h_i$ is the *leverage* value.]
+where $\hat{V}(Y_i|X_{1,i}, \ldots, X_{m,i})$ denotes the (estimated) variance of $Y_i$ for cases with predictor values $X_{1,i}, \ldots, X_{m,i}$, and $h_i$ is the *leverage* value.] If the model fits the data well, then the standardized Pearson residuals are approximately standard-Normal-distributed. As such, a standardized Pearson residual with an absolute value larger than 2 may indicate a potential outlier or otherwise problematic data point.
 
 All in all, the residual deviance is to generalized linear models what the SSE is to general linear models. We can actually rewrite the likelihood-ratio test statistics to compare MODEL R to MODEL G in terms of the residual deviance of both models:
 $$G^2 = D_R - D_G$$
 Why? Well, because we can divide both the numerator and denominator in the likelihood ratio by the same term ($p(\text{DATA}|\text{MODEL S})$) without changing its value:
 $$\begin{aligned}
-G^2 &= -2 \log \left( \frac{p(\text{DATA}|\text{MODEL R})}{p(\text{DATA}|\text{MODEL G})} \right) \\
+G^2 &=-2 \log \left( \frac{p(\text{DATA}|\text{MODEL R})}{p(\text{DATA}|\text{MODEL G})} \right) \\
 &= -2 \log \left( \frac{p(\text{DATA}|\text{MODEL R})/p(\text{DATA}|\text{MODEL S})}{p(\text{DATA}|\text{MODEL G})/p(\text{DATA}|\text{MODEL S})} \right) \\
-&= -2 \log \left(p(\text{DATA}|\text{MODEL R})/p(\text{DATA}|\text{MODEL S})\right) - (-2 \log \left( p(\text{DATA}|\text{MODEL G})/p(\text{DATA}|\text{MODEL S})) \right) \\
+&= -2 \log \left(p(\text{DATA}|\text{MODEL R})/p(\text{DATA}|\text{MODEL S})\right) \\ 
+&\quad - (-2 \log \left( p(\text{DATA}|\text{MODEL G})/p(\text{DATA}|\text{MODEL S})) \right) \\
 &= D_R - D_G
 \end{aligned}$$
 
@@ -231,7 +232,7 @@ As usual, the intercept $\beta_0$ reflects the model prediction when all predict
 
 ### Parameter interpretation
 
-In the general linear model, $\beta_j$, the slope of a predictor variable, reflects the predicted change in the dependent variable for a one-unit increase in the predictor variable $X_j$. Because the model is linear, the predicted change is the same, no matter what base value we choose for $X_j$. That means that $Y$ is predicted to change by $\beta_j$, whether we increase $X_j$ from 0 to 1, or from 100 to 101. This is not the case when we consider the predicted change in $p(Y=1|X_j)$ for different values of $X_j$. For example, for a model with $\beta_0 = 0$ and $\beta_1 = 1$, Figure XXX shows that this probability increases more rapidly when we move from $X_1 = 0$ to $X_1 = 1$ than when we move from $X_1 = 3$ to $X_1 = 4$. 
+In the general linear model, $\beta_j$, the slope of a predictor variable, reflects the predicted change in the dependent variable for a one-unit increase in the predictor variable $X_j$. Because the model is linear, the predicted change is the same, no matter what base value we choose for $X_j$. That means that $Y$ is predicted to change by $\beta_j$, whether we increase $X_j$ from 0 to 1, or from 100 to 101. This is not the case when we consider the predicted change in $p(Y=1|X_j)$ for different values of $X_j$. For example, for a model with $\beta_0 = 0$ and $\beta_1 = 1$, Figure \@ref(fig:logit-link-plot) shows that this probability increases more rapidly when we move from $X_1 = 0$ to $X_1 = 1$ than when we move from $X_1 = 3$ to $X_1 = 4$. 
 
 A slope $\beta_j$ in a logistic regression model does not reflect the same effect for different values of the corresponding predictor $X_j$. But an exponential transformation of this slope does. To realise this, we can make use of the following properties of exponents:
 $$\begin{aligned}
@@ -271,9 +272,9 @@ As the relation between confidence and correctness likely differs between partic
 
 $$\log \left( \frac{p(Y_i = \text{correct})}{p(Y_i = \text{incorrect})} \right) = \beta_0 + \beta_\texttt{conf} \times \texttt{conf}_i + \beta_\text{contr} \times \texttt{contr}_i + \beta_{\texttt{cc}} \times (\texttt{conf} \times \texttt{contr})_i$$
 
-Table \@ref(tab:metacognition-logistic-regression-results-z-participant-1) shows the results for Participant 1. Each participant completed 378 trials, so the number of observations in this subset of data equals $n=378$. For didactic purposes, we present results from both the Wald ($z$) and likelihood-ratio ($G^2$) tests. You would usually just provide one of these. 
+Table \@ref(tab:metacognition-logistic-regression-results-z-and-LR-participant-1) shows the results for Participant 1. Each participant completed 378 trials, so the number of observations in this subset of data equals $n=378$. For didactic purposes, we present results from both the Wald ($z$) and likelihood-ratio ($G^2$) tests. You would usually just provide one of these. 
 
-```{r metacognition-logistic-regression-results-z-participant-1}
+```{r metacognition-logistic-regression-results-z-and-LR-participant-1}
 mod_s1 <- subset(dat, id == 1) %>%
   mutate(confidence = center(confidence),
          contrast = center(contrast)) %>%
@@ -307,9 +308,9 @@ p(Y_i = \text{correct}) &= \frac{\exp (`r coef(mod_s1)[1]`)}{1 + \exp (`r coef(m
 &= `r exp(coef(mod_s1)[1])/(1+exp(coef(mod_s1)[1]))`\end{aligned}$$
 The deviance of the model is $D_R = `r deviance(mod_s1)`$. To assess the overall model fit, we can test this by assuming the deviance (approximately) follows a Chi-Squared distribution with $n-\text{npar}(R)$ degrees of freedom (the saturated model may be taken to have a total of $n$ parameters). Hence, the test of overall model fit is $X^2(`r summary(mod_s1)$df.residual`) = `r deviance(mod_s1)`$, $p `r format_p_text(1-pchisq(deviance(mod_s1),summary(mod_s1)$df.residual))`$. As this is not significant, the model can be said to fit the data well.
 
-Table \@ref(tab:metacognition-logistic-regression-results-z-participant-2) shows results from the same model applied to the data from Participant 2. Whilst the data seemed less neat than the data of Participant 1, we get quite similar results, with significant and positive simple effects of confidence and contrast, as well as a positive interaction between them.
+Table \@ref(tab:metacognition-logistic-regression-results-z-and-LR-participant-2) shows results from the same model applied to the data from Participant 2. Whilst the data seemed less neat than the data of Participant 1, we get quite similar results, with significant and positive simple effects of confidence and contrast, as well as a positive interaction between them.
 
-```{r metacognition-logistic-regression-results-z-participant-2}
+```{r metacognition-logistic-regression-results-z-and-LR-participant-2}
 tab <- summary(mod_s2)$coefficients
 tab <- as.data.frame(tab)
 tab <- cbind(tab, rbind(c(NA,NA,NA),car::Anova(mod_s2, type=3)))
@@ -323,7 +324,8 @@ knitr::kable(tab, caption = "Results of a logistic regression model of correct i
 
 The test of the deviance of the model for Participant 2 is $X^2(`r summary(mod_s2)$df.residual`) = `r deviance(mod_s2)`$, $p `r format_p_text(1-pchisq(deviance(mod_s2),summary(mod_s2)$df.residual))`$. As this is again not significant, the model can be said to fit the data well.
 
-Figure \@ref(fig:metacognition-data-and-logistic-fit-plot) depicts the data and model predictions.
+Figure \@ref(fig:metacognition-data-and-logistic-fit-plot) depicts the data and model predictions for the logistic regression models of Table \@ref(tab:metacognition-logistic-regression-results-z-and-LR-participant-1) and \@ref(tab:metacognition-logistic-regression-results-z-and-LR-participant-2) for the different levels of contrast used in the study. Note that the data is (correctly) depicted as binary values of either 0 or 1. The model predictions however are probabilities of a correct ($Y=1$) response as a function of confidence. Both the data and model predictions indicate more  correct responses for higher levels of contrast. For lower levels of contrast, we can see that low confidence is generally related to a low probability of a correct response, whilst high confidence is related to a higher probability of a correct response. This patterns seems more pronounced for Participant 1. Participant 2 tends to indicate low confidence for low contrast displays, and high confidence for high contrast displays. For this participant, contrast appears a much stronger predictor of correctness. Nevertheless, confidence still has a significant unique effect on the probability of a correct response. This indicates that this participant appears still able to recognize when they made an incorrect response.
+
 ```{r metacognition-data-and-logistic-fit-plot, fig.cap="Observed and model-predicted correctness of responses as a function of confidence and contrast, for two participants in the study by @rausch2016visibility on metacognition.", fig.width = 8, fig.height=3}
 tdat <- expand.grid(id=c(1,2), contrast = unique(dat$contrast), confidence=0:100)
 coef <- coefficients(mod_s1)
@@ -337,29 +339,54 @@ dat %>%
   ggplot(aes(x=confidence, y=correct)) + geom_point(alpha=.2) + ylim(c(0,1)) + xlab("confidence") + ylab("(probability) correct") + geom_line(data=tdat, mapping=aes(x=confidence, y=predict)) + facet_grid(id ~ contrast)
 ```
 
-
-
-### Probit regression: Using a different link function
+### Using a different link function: Probit regression
 
 The logit link is the canonical link function for the Bernoulli and Binomial distribution. But you are not restricted to always choose the canonical link function. In principle, you can pick any (monotone and one-to-one) function $g(Y)$ that transforms variable $Y$ which is bounded between 0 and 1 to an unbounded variable with possible values between $-\infty$ and $\infty$. 
 
 For example, a common alternative to the logit link is the so-called **Probit link function**:
-
 $$g(y) = \text{standard-Normal-quantile}(y)$$ 
-So, the Probit link function returns the $y$-th quantile of the standard Normal distribution. The inverse-link function can be written as
+The Probit link function returns the $y$-th quantile of the standard Normal distribution. The inverse-link function can be written as
 $$\begin{aligned} h(x) = p(Z \leq x) && Z \sim \mathbf{Normal}(\mu = 0, \sigma = 1) \end{aligned}$$ 
 i.e., the inverse link function is, for a value $x$, the probability that a standard Normal variable has a value equal or less than it.
 
-The Probit link function has a shape that is quite similar to the logistic link function. It is of theoretical interest however, as it may have a more natural interpretation than the logistic function. For example, suppose someone has to detect
-```{r}
+The Probit link function is an S-shaped function that looks rather similar to the logistic link function. Figure \@ref(fig:probit-link-plot) shows best matching Probit link function to logistic ones. As this Figure shows, the functions are very similar, although the Probit function converges a little more quickly to probabilities of 0 and 1. The best match between the functions is obtained when the parameters for the Probit and logistic models are related as 
+$$\beta_j^{(\text{Probit})} \approx 0.588 \times \beta_j^{(\text{logistic})}$$
+
+It's use may have a more natural justification than the logistic function, however. For example, suppose someone has to detect whether a visually presented line is longer than a reference. <!-- TODO -->
+
+```{r probit-link-plot, fig.cap="A comparison of logistic and Probit link functions for a model with a single predictor, and best matching values for $\\beta_0$ and $\\beta_1$", fig.width=6, fig.height=3}
+library(dplyr)
+library(ggplot2)
+x <- seq(-5,5,length=100) 
+rbind(data.frame(link="logit", b0 = 0, b1 = 1, x=x, p = 1/(1+exp(-x))),
+      data.frame(link="probit", b0 = 0, b1 = 0.588, x=x, p = pnorm((1/1.7)*x)),
+      data.frame(link="logit", b0 = 1, b1=-1, x=x, p = 1/(1+exp(-(1 -x)))),
+      data.frame(link="probit", b0 = 0.588, b1=-0.588, x=x, p = pnorm(1/(1.7) - (1/1.7)*x))) %>%
+  mutate(case = paste0(link, " ; b0 = ", b0, ", b1 = ", b1)) %>%
+  ggplot(aes(x=x,y=p, colour=case)) + geom_line() + ylab("p(Y = 1)")
+```
+
+```{r metacognition-probit-regression-estimation-participant-1}
 library(sdamr)
 data("metacognition")
 
 dat <- subset(metacognition, id == 1)
-mod <- glm(correct ~ scale(confidence) * scale(contrast), family=binomial(link = "probit"), data=dat)
-summary(mod)
+pmod_s1 <- glm(correct ~ center(confidence) * center(contrast), family=binomial(link = "probit"), data=dat)
+```
 
-car::Anova(mod, type=3)
+Table \@ref(tab:metacognition-probit-regression-results-z-and-LR-participant-1) shows the results of applying a Probit regression to the data of Participant 1. The estimated parameters are around 0.588 times those of the logistic regression model, and while the test results are not identical to those in Table \@ref(tab:metacognition-logistic-regression-results-z-and-LR-participant-1), they are mostly similar. The test of the deviance of this model is $X^2(`r summary(pmod_s1)$df.residual`) = `r deviance(pmod_s1)`$, $p `r format_p_text(1-pchisq(deviance(pmod_s1),summary(pmod_s1)$df.residual))`$, indicating a good fit of the model.
+```{r metacognition-probit-regression-results-z-and-LR-participant-1}
+tab <- summary(pmod_s1)$coefficients
+tab <- as.data.frame(tab)
+tab <- cbind(tab, rbind(c(NA,NA,NA),car::Anova(pmod_s1, type=3)))
+rownames(tab) <- c("Intercept","Confidence", "Contrast","Confidence $\\times$ Contrast")
+colnames(tab) <- c("$\\hat{\\beta}$","$\\text{SE}(\\hat{\\beta})$", "$z$", "$p(\\geq \\lvert z \\rvert)$", "$G^2$", "$\\text{df}$", "$p(\\geq \\lvert G^2 \\rvert)$")
+tab[,4] <- sapply(tab[,4], format_p)
+tab[,7] <- sapply(tab[,7], format_p)
+
+options(knitr.kable.NA = '')
+knitr::kable(tab, caption = "Results of a Probit regression model of correct identification by confidence for Participant 1.", escape = FALSE, booktabs=TRUE, linesep="", digits=3, align="r")
+
 ```
 
 ## Poisson regression
@@ -367,69 +394,105 @@ car::Anova(mod, type=3)
 <!-- https://online.ucpress.edu/collabra/article/7/1/27242/118591/Poisson-Regressions-A-Little-Fishy -->
 <!-- https://compass.onlinelibrary.wiley.com/doi/10.1111/lnc3.12439 -->
 
-Poisson regression is useful when the total number of possible occurrences of an event in not given. For example, suppose you give participants one hour solve as many algebra problems as they. Some participants may be able to (on average) solve a problem every minute, whilst others may need longer (e.g. 5 minutes per problem, on average). And some participants may even solve problems in less than a minute. 
+Poisson regression is useful for count data where the total number of possible occurrences of an event in not given. For example, suppose you give participants one hour solve as many algebra problems as they can. Some participants may be able to (on average) solve a problem correctly every minute, whilst others may need longer (e.g. 5 minutes per problem, on average), or shorter. In this case, the total number of correctly solved algebra problems depends on the (average) rate at which a person can solve algebra problems. If the rate is unknown and can, in principle, take any possible value, then the there is no theoretical maximum to the number of algebra problems that can be solved in an hour. Only the minimum is known (which is 0). This is a rather different situation than those to which the Binomial distribution applies, which counts the number of correct responses $k$ out of a known maximum $n$. 
 
 The **Poisson distribution** is defined as:
 \begin{equation}
-p(Y=k) = \frac{\mu^k \exp (-\mu )}{k!}
+p(Y=k) = \frac{\lambda^k \exp (-\lambda)}{k!}
 (\#eq:Poisson-distribution)
 \end{equation}
-with $k=0, 1, 2, \ldots$ denoting the number of occurrences, which is a non-negative integer.
+with $k=0, 1, 2, \ldots$ denoting the number of occurrences, which is a non-negative integer, and ! denoting the factorial function (i.e. $x! = x \times (x-1) \times \ldots \times 1$). The parameter $\lambda$ is equal to the mean of $Y$, so $\lambda = \mu$. The variance of this distribution increases with the mean, and is actually equal to the mean, so $\text{Var}(Y) = \lambda$.
 
 The canonical link function for Poisson-distributed data is the *log* link function:
 $$g(\mu_{Y|X_1, \ldots, X_K}) = \log\left(\mu_{Y|X_1, \ldots, X_K}\right)$$
 And the Poisson regression model is thus
 $$\log\left(\mu_{Y|X_1, \ldots, X_K}\right) = \beta_0 + \sum_{j=1}^m \beta_j \times X_{j}$$
-
 The inverse link function is the *exponential* function:
 $$h\left(\beta_0 + \sum_{j=1}^m \beta_j \times X_{j}\right) = \exp \left( \beta_0 + \sum_{j=1}^m \beta_j \times X_{j} \right)$$
 
 ### Example: Gestures in different social contexts
 
-```{r}
+As an example of Poisson regression, we will consider data also analysed by @winter2021poisson. The data is from a study on the use of hand gestures by 27 participants (Catalan or Korean speakers) each conversing with either a friend (equal status person) or a professor (higher-status person). The duration of the conversation was not experimentally controlled, and the number of gestures was counted. Figure \@ref(fig:gestures-histogram) shows the numbers of gestures.
+
+```{r gestures-histogram, fig.cap="Counts of the number of hand gestures during conversations with a friend or professor for 14 Catalan and 13 Korean speakers."}
 data("gestures")
 gestures %>%
-  ggplot(aes(x=gestures)) + geom_histogram() + facet_wrap(context~language)
-
+  ggplot(aes(x=gestures)) + geom_histogram(bins=10, colour="black") + facet_wrap(language~context)
 ```
 
-```{r}
+To analyse the data with a Poisson regression model, we need to take into account that the conversations had a different duration. If for example, conversations with friends last longer than conversations with professors, then we could expect less hand gestures in total when speaking with professors. But that could then be entirely due to the length of the conversations, and not people's tendency to use hand gestures. What we are interested in is the rate of the hand gestures (e.g. the number of gestures per minute). If we let $r$ denote the average number of gestures per minute, and $t_i$ the duration (in minutes) of a conversation $i$, then the expected number of gestures in conversation $i$ would be $\mu_i = r \times t_i$. A Poisson regression model predicts $\log(\mu)$, which we can write in terms of the rate $r$ and duration $t_i$ as:
+$$\begin{aligned} \mu &= r \times t_i \\ 
+\log (\mu_i) &= \log\left(r \times t_i\right) \\
+&= \log(r) + \log(t_i)
+\end{aligned}$$
+In the study, we are interested in how social context and language affect the rate of hand gestures. So ideally we would like to model the (log) rate $\log(r)$, and not the expected number of gestures $\log(\mu_i)$. We can do this by replacing $\log(r)$ above with the linear model predictions. We then have the following model for the expected counts: 
+$$\log (\mu_i) = \log(t_i) + \beta_0 + \sum_{j=1}^m \beta_j X_{j,i}$$
+Note that the term $\log(t_i)$ above has no slope. You can think of $\log(t_i)$ as a predictor with a fixed slope of 1. Such a term added to a model (without needing to estimate a corresponding parameter) is also called an **offset**.
+
+Table \@ref(tab:gestures-pois-glm-results) shows the results of a Poisson regression, using effect coded predictors for Context (friend = 1, professor = $-1$), Language (Catalan = 1, Korean = $-1$), and Gender (Female = 1, Male = $-1$). It should be noted that this analysis does not account for the fact that each participant contributes two data points (one for each Context). Later in this chapter we will provide results from a generalized linear mixed-effects model, which does so.
+```{r gestures-pois-glm-results}
 contrasts(gestures$context) <- c(1,-1)
 contrasts(gestures$language) <- c(1,-1)
 contrasts(gestures$gender) <- c(1,-1)
 gestures$log_d <- log(gestures$dur)
 pois_mod <- glm(gestures ~ context*language*gender, data=gestures, family=poisson(), offset=log_d)
+tab <- summary(pois_mod)$coefficients
+tab <- as.data.frame(tab)
+tab <- cbind(tab, rbind(c(NA,NA,NA),car::Anova(pois_mod, type=3)))
+rownames(tab) <- c("Intercept","Context", "Language", "Gender","Context $\\times$ Language", "Context $\\times$ Gender", "Language $\\times$ Gender", "Context $\\times$ Language $\\times$ Gender")
+colnames(tab) <- c("$\\hat{\\beta}$","$\\text{SE}(\\hat{\\beta})$", "$z$", "$p(\\geq \\lvert z \\rvert)$", "$G^2$", "$\\text{df}$", "$p(\\geq \\lvert G^2 \\rvert)$")
+tab[,4] <- sapply(tab[,4], format_p)
+tab[,7] <- sapply(tab[,7], format_p)
 
+options(knitr.kable.NA = '')
+knitr::kable(tab, caption = "Results of a Poisson regression model for the number of gestures in conversations.", escape = FALSE, booktabs=TRUE, linesep="", digits=3, align="r")
 ```
-
-$$\log (\lambda) = \log\left(\frac{\mu}{\tau}\right)$$
-$$\log (\mu) = \log(\tau) + \beta_0 + \sum_{j=1}^m \beta_j X_j$$
-Note that the term $\log(\tau)$ above has no slope. You can think of $\log(\tau)$ as a predictor with a fixed slope of 1. 
+As before, we provide results for both the Wald and likelihood-ratio tests, whilst you would normally just report one of these. Whilst the results are very similar, given the relatively small size of the dataset, the likelihood ratio test is recommended. The results indicate a significant and positive effect of Context, indicating more gestures in conversations with friends. There is also a significant and positive effect of Gender, indicating more gestures by females compared to males. Finally, there is a significant and negative interaction between Language and Gender. This indicates that the difference between females and males is reduced for Catalan speakers as compared to Korean speakers.
 
 ### Overdispersion
 
-In a Poisson distribution, the variance is identical to the mean. In real data, the variance is often larger than the mean. When the variance is larger than theoretically expected, this is called **overdispersion**. 
-
-```{r}
+```{r gestures-quasi-poisson-model-estimation}
 qpois_mod <- glm(gestures ~ context*language*gender, data=gestures, family=quasipoisson(), offset=log_d)
-nbinom_mod <- MASS::glm.nb(gestures ~ offset(log_d) + context*language*gender, data=gestures)
+```
+
+In a Poisson distribution, the variance is identical to the mean. In real data, the variance is often larger than the mean. When the variance is larger than theoretically expected, this is called **overdispersion**. Underdispersion is also possible, but much less common. Overdispersion does not bias the estimated parameters $\hat{\beta}$, however, the standard errors of these estimates are higher than 
+
+There are ways to account for overdispersion in generalized linear models. In quasi-Poisson regression, it is assumed that the variance is not equal to the mean $\mu$, but scaled by a dispersion parameter $\phi$, such that $\text{Var}(Y) = \phi \times \mu$. If $\phi = 1$, then there is no overdispersion. If $\phi > 1$, there is overdispersion. By estimating the dispersion parameter, quasi-Poisson regression allows to account for overdispersion and can compute more accurate standard errors. For the gestures data, the estimated dispersion parameter is $\hat{\phi} = `r summary(qpois_mod)$dispersion`$, which is clearly much larger than 1. Results of the quasi-Poisson regression are provided in Table \@ref(tab:gestures-quasi-poisson-model-results). Note that this Table contains Wald and $F$-tests. The use of $F$-tests when the dispersion is estimated is recommended by @dunn2018generalized.
+
+```{r gestures-quasi-poisson-model-results}
+tab <- summary(qpois_mod)$coefficients
+tab <- as.data.frame(tab)
+tab <- cbind(tab, rbind(c(NA,NA,NA),car::Anova(qpois_mod, type=3, test.statistic="F", error.estimate="dispersion")[-8,c(3,2,4)]))
+rownames(tab) <- c("Intercept","Context", "Language", "Gender","Context $\\times$ Language", "Context $\\times$ Gender", "Language $\\times$ Gender", "Context $\\times$ Language $\\times$ Gender")
+colnames(tab) <- c("$\\hat{\\beta}$","$\\text{SE}(\\hat{\\beta})$", "$z$", "$p(\\geq \\lvert z \\rvert)$", "$F$", "$\\text{df}$", "$p(\\geq \\lvert F \\rvert)$")
+tab[,4] <- sapply(tab[,4], format_p)
+tab[,7] <- sapply(tab[,7], format_p)
+
+options(knitr.kable.NA = '')
+knitr::kable(tab, caption = "Results of a quasi-Poisson regression model for the number of gestures in conversations.", escape = FALSE, booktabs=TRUE, linesep="", digits=3, align="r")
+#nbinom_mod <- MASS::glm.nb(gestures ~ offset(log_d) + context*language*gender, data=gestures)
 ```
 
 ## Log-linear models
 
-Log-linear models are used to analyse relations in multivariate categorical data. Such data can be expressed in the form of *multiway contingency tables* that contain counts for combinations of categorical classifications. For example, the political party someone has last voted for and newspaper they read most often. We can count how often each combination of vote and newspaper occurs in a random sample.
+Log-linear models are used to analyse dependency relations in multivariate categorical data. Such data can be expressed in the form of *multiway contingency tables* that contain counts for combinations of categorical classifications. For example, we might be interested in whether there is a relation between the newspaper people read and the political party they vote for. To investigate this, we can count how often each combination of newspaper and political party occurs in a random sample of surveyed people.
 
-Let $\mu_{i,j}$ denote the expected frequency of combination where $A = i$ and $B = j$. Assuming independence in the observations, the probability that one observation equals this combination is $\pi_{i,j} = P(A = i, B = j)$. For a total of $n$ independent observations, the expected frequency is then: 
+Let $\mu_{i,j}$ denote the expected frequency of combination where the first categorical variable has value $A = i$ and the second the value $B = j$. The probability that one randomly drawn observation has the values equal to this combination is $\pi_{i,j} = P(A = i, B = j)$. For a total of $n$ independent observations, the expected frequency is then: 
 $$\mu_{i,j} = n \times \pi_{i,j}$$
-Log-linear models are similar in spirit to a factorial ANOVA, in the sense that the counts are decomposed into main effects, two-way interactions, three-way interactions, etc. For example, 
-
+If the two categorical variables are independent, then
+$$\pi_{i,j} = P(A = i, B = j) = P(A = i) \times P(B=j) = \pi_{i,\cdot} \times \pi_{\cdot,j}$$
+and we can write logarithm of the expected counts as:
+$$\begin{aligned} \log \mu_{ij} &= \log(n) + \log(\pi_{i,\cdot}) + \log(\pi_{\cdot,j}) \\ &= \lambda + \lambda_i^{(A)} + \lambda_j^{(B)} \end{aligned}$$
+If independence does not hold, then the above equation is incorrect, and we would need an additional term to correct for this. In that case, we can write
+$$\begin{aligned} \log \mu_{ij} &= \log(n) + \log(\pi_{i,j}) \\ &= \log(n) + \log(\pi_{i,\cdot}) + \log(\pi_{\cdot,j}) + \left( \log(\pi_{i,j} - \log(\pi_{i,\cdot}) - \log(\pi_{\cdot,j})\right) \\ &= \lambda + \lambda_i^{(A)} + \lambda_j^{(B)} + \lambda_{i,j}^{(A,B)}\end{aligned}$$
+Log-linear models use such constructions to test for independence, in which case the "correction terms" above would all be $\lambda_{i,j}^{(A,B)} = 0$. Log-linear models are similar in spirit to a factorial ANOVA, in the sense that the counts are decomposed into main effects, two-way interactions, three-way interactions, etc. For a two-way contingency table, the counts $\mu_{i,j}$ can always be decomposed exactly as
 $$\log \mu_{i,j} = \lambda + \lambda^{(A)}_i + \lambda^{(B)}_j + \lambda^{(AB)}_{i,j}$$
-Just like a factorial ANOVA model can perfectly fit the sample means, this log-linear model can perfectly fit the sample counts. This is hence an example of a **saturated model**, where the total number of parameters equals the total number of possible combinations minus 1.^[We need one parameter less as the last remaining cell can be filled in as $n$ minus the frequencies in the other cells.]
-
+where $\lambda$ acts as an intercept, $\lambda^{(A)}_i$ as a "main effect" for factor $A$, $\lambda^{(B)}_j$ as a "main effect" for factor $B$, and $\lambda^{(AB)}_{i,j}$ as an "interaction effect" between factors $A$ and $B$. Just like a factorial ANOVA model can perfectly fit the sample means, this log-linear model can perfectly fit the sample counts. This is hence an example of a **saturated model**, where the total number of parameters equals the total number of possible combinations minus 1.^[We need one parameter less as the last remaining cell can be filled in as $n$ minus the frequencies in the other cells.]
+<!--
 For a random sample of people from the general population, we can then count how often people who report voting for the Conservative Party also report reading the Daily Mail, and how many report reading the Guardian, etc (see e.g. https://www.statista.com/chart/9897/general-election-voting-by-newspaper-readership/ and https://yougov.co.uk/topics/politics/articles-reports/2017/06/13/how-britain-voted-2017-general-election for an example of such data).
 
 This is an extension of the Chi-squared test for a two-way contingency table.
-
+-->
 
 
 ### Example: Newspapers and voting
@@ -437,29 +500,35 @@ This is an extension of the Chi-squared test for a two-way contingency table.
 After the 2017 UK general elections, a large survey was conducted where people were asked which party they voted for, and amongst other things, the newspaper they most often read. Table \@ref(tab:papervotes-table) shows the results. In the UK, many newspapers have strong links to political parties. We could ask whether such links also exist for their readers. 
 
 ```{r papervotes-table}
+library(kableExtra)
 data("papervotes")
 tab <- xtabs(n ~ ., data=papervotes, drop.unused.levels = TRUE, exclude = c("Plaid Cymru"))
-knitr::kable(tab, caption = "Party voted for and most-read newspapers for the 2017 UK general election.")
+knitr::kable(tab, caption = "Party voted for and most-read newspapers for the 2017 UK general election.", booktabs=TRUE, longtable = TRUE, linesep="") %>% kable_styling() %>%
+  scroll_box(width = "100%", box_css = "border: 0px;")
 ```
 
-For each combination of political party $i = 1, \ldots, 8$ and newspaper $j = 1, \ldots, 10$, Table \@ref(tab:papervotes-table) shows the corresponding count $n_{i,j}$. The total number is $n = \sum_i \sum_j n_{i,j}$, reflecting the sample size of the survey. The loglinear model concerns the expected counts for each combination, $\mu_{i,j} = n \times P(\text{party} = i, \text{newspaper} = j)$. These expected counts can be estimated by the observed counts $\hat{\mu}_{ij} = n_{i,j}$.
+For each combination of political party $i = 1, \ldots, 8$ (where we include no vote as a special party) and newspaper $j = 1, \ldots, 10$, Table \@ref(tab:papervotes-table) shows the corresponding count $n_{i,j}$. The total number is $n = \sum_i \sum_j n_{i,j} = `r sum(tab)`$, reflecting the sample size of the survey. The loglinear model concerns the expected counts for each combination, $\mu_{i,j} = n \times P(\text{party} = i, \text{newspaper} = j)$. These expected counts can be estimated by the observed counts $\hat{\mu}_{ij} = n_{i,j}$.
 
 The full model 
 $$\log \mu_{i,j} = \lambda + \lambda^{(\text{party})}_i + \lambda^{(\text{newspaper})}_j + \lambda^{(\text{party} \times \text{newspaper})}_{i,j}$$
-has $8-1 = 7$ parameters $\lambda^{(\text{party})}_i$ for the "main effect" of party, $10-1 = 9$ parameters $\lambda^{(\text{newspaper})}_i$ for the "main effect" of newspaper, and $7 times 9 = 63$ parameters $\lambda^{(\text{party} \times \text{newspaper})}_{i,j}$ for the "interaction" between party and newspaper. Including the intercept $\lambda$, the total number of parameters is thus $1 + 7 + 9 + 63 = 80$, which equals the number of observed counts (i.e. combinations of party and newspaper). This saturated model therefore will fit the observed counts perfectly. Its main purpose is to serve as a comparison for simpler models. For this example, the comparison model of interest is a model in which political party voted-for is independent of the newspaper read:
+has $8-1 = 7$ parameters $\lambda^{(\text{party})}_i$ for the "main effect" of party, $10-1 = 9$ parameters $\lambda^{(\text{newspaper})}_i$ for the "main effect" of newspaper, and $7 \times 9 = 63$ parameters $\lambda^{(\text{party} \times \text{newspaper})}_{i,j}$ for the "interaction" between party and newspaper. Including the intercept $\lambda$, the total number of parameters is thus $1 + 7 + 9 + 63 = 80$, which equals the number of observed counts (i.e. combinations of party and newspaper). This saturated model therefore will fit the observed counts perfectly. Its main purpose is to serve as a comparison for simpler models. For this example, the comparison model of interest is a model in which political party voted-for is independent of the newspaper read:
 
 $$\log \mu_{i,j} = \lambda + \lambda^{(\text{party})}_i + \lambda^{(\text{newspaper})}_j$$
 
-```{r}
+```{r, include=FALSE}
+mod0 <- MASS::loglm(~ 1 + 2, data=tab)
+mod1 <- MASS::loglm(~ 1 * 2, data=tab)
 mod0 <- loglin(tab, margin = list(1, 2))
 mod1 <- loglin(tab, margin = list(c(1, 2)))
 ```
 
-### A three-way table: Rock-Paper-Scissors
+The test for independence consists of a model comparison between the saturated and independence model. The result of the likelihood ratio test is $G^2 = `r mod0$lrt`$, $\text{df} = `r mod0$df`$, $p `r format_p_text(1-pchisq(mod0$lrt, mod0$df))`$. This is significant, and hence we reject the null hypothesis that the party voted for is independent of the newspaper most read.
+
+### A three-way table example: Rock-Paper-Scissors
 
 @guennouni2022transfer let participants repeatedly play the well-known game of Rock-Paper-Scissors against artificial (AI) opponents, who were endowed with different human-like strategies. The "level-1" AI player would assume the human player to repeat their last chosen action, and then would pick the action to beat this. For example, if the human player had previously chosen "Rock", then they would expect the human player to play "Rock" again, therefore choosing "Paper" as this is the action that beats "Rock". The "level-2" AI player would expect the human player to adopt a "level-1" strategy, choosing actions to beat this. For example, if the AI player had previously chosen "Rock", the human would be expected to next play "Paper", as this beats "Rock". The AI player would therefore play "Scissors", as this beats "Paper" (the expected action of the human player). Results showed that people could pick-up on the strategy of the AI player, using this to their advantage. Moreover, they could transfer this learned strategy to other games.
 
-If we focus on the "level-1" AI player, we can say that their actions depend completely on the previous action of the human player.^[In the experiment, some noise was added to the actions of the AI player, who would choose a completely random action on 10% of the rounds.] If the human player is sensitive to the AI player's strategy, then their own strategy should also completely depend on their previous actions. For example, they should choose to play "Scissors" after playing "Rock", as they should expect the AI player to play "Paper". If this is the case, then we might expect the current action of the human player to be independent of the previous action of the AI player. We can test this hypothesis with log-linear models.
+If we focus on the "level-1" AI player, we can say that their actions depend completely on the previous action of the human player.^[In the experiment, some noise was added to the actions of the AI player, who would choose a completely random action on 10% of the rounds.] If the human player is sensitive to the AI player's strategy and able to exploit the weaknesses of the AI player, then the humans' strategy should also completely depend on their previous actions. For example, they should choose to play "Scissors" after playing "Rock", as they should expect the AI player to play "Paper". If this is the case, then we might expect the current action of the human player to be independent of the previous action of the AI player. We can test this hypothesis with log-linear models.
 
 Table \@ref(tab:rps-table) shows the actions chosen by the human player (in the last half of the game) as a function of the previous actions of the AI and human player. 
 
@@ -478,11 +547,15 @@ tab <- table(dat[,c("previous_human", "previous_ai","human_action")])
 data.frame(ftable(tab)) %>%
   tidyr::pivot_wider(names_from = human_action, values_from= Freq) %>%
   arrange(previous_human) %>%
-  knitr::kable(caption = "Action chosen by human players in Rock-Paper-Scissors by previous actions chosen by both human and AI player.")
+  knitr::kable(caption = "Action chosen by human players in Rock-Paper-Scissors by previous actions chosen by both human and AI player.", col.names = c("Previous human","Previous AI","Rock","Paper","Scissors")) %>%
+  add_header_above(header=c(" " = 2, "Current human action" = 3))
 ```
 
-Table \@ref(tab:rps-loglm-results)
-
+There are 9 possible models that can be used for this three-way contingency table. One possible model i includes only main effects for the previous human action (H), the previous AI action (A) and the current human action (C). Such a model can be denoted as $(H, A, C)$, where elements separated by a comma are assumed independent:
+$$\begin{aligned}(H,A,C)&& \log(\mu_{i,j,k}) = \lambda + \lambda_i^{(H)} + \lambda_j^{(A)} + \lambda_k^{(C)}\end{aligned}$$
+If humans played the optimal strategy, then we would expect a dependency between the previous human action and the current human action, but these to be independent from the previous AI action. This corresponds to a model with main effects for $H$, $A$, and $C$, and a two way interaction between $H$ and $C$. This model can be denoted as $(HC,A)$, to indicate dependence between $H$ and $C$, and independence of $A$:
+$$\begin{aligned}(HC,A) && \log(\mu_{ijk}) = \lambda + \lambda_i^{(H)} + \lambda_j^{(A)} + \lambda_k^{(C)} + \lambda_{i,k}^{(H,C)}\end{aligned}$$
+Table \@ref(tab:rps-loglm-results) lists the results of all possible loglinear models for this data.
 ```{r rps-loglm-results}
 mod_1_2_3 <- MASS::loglm(~ 1 + 2 + 3, data=tab)
 mod_12_3 <- MASS::loglm(~ 1*2 + 3, data=tab)
@@ -499,7 +572,7 @@ mod_comp[,3] <- sapply(mod_comp[,3], format_p)
 mod_comp[,5] <- sapply(mod_comp[,5], format_p)
 rownames(mod_comp) <- c("$(H_p, A_p, H_c)$", "$(H_p \\cdot A_p, H_c)$", "$(A_p, H_p \\cdot H_c)$", "$(H_p, A_p \\cdot H_c)$", "$(H_p \\cdot A_p, A_p \\cdot H_c)$", "$(H_p \\cdot A_p, H_p \\cdot H_c)$", "$(H_p \\cdot H_c, A_p \\cdot H_c)$", "$(H_p \\cdot A_p, H_p \\cdot H_c, A_p \\cdot H_c)$", "$(H_p \\cdot A_p \\cdot H_c)$")
 rownames(mod_comp) <- c("$(H, A, C)$", "$(HA, C)$", "$(HC,A)$", "$(AC, H)$", "$(HA, AC)$", "$(HA, HC)$", "$(HC, AC)$", "$(HA, HC, AC)$", "$(HAC)$")
-knitr::kable(mod_comp, row.names = TRUE, col.names = c("df", "$G^2$", "$p(\\gt G^2)$", "$X^2$", "$p(\\gt X^2)$"), caption="Results from all possible log-linear models for the Rock-Paper-Scissors data of Table \\@ref(tab:rps-table)")
+knitr::kable(mod_comp, row.names = TRUE, col.names = c("$\\text{df}$", "$G^2$", "$p(\\gt G^2)$", "$X^2$", "$p(\\gt X^2)$"), caption="Results from all possible log-linear models for the Rock-Paper-Scissors data of Table \\@ref(tab:rps-table)")
 ```
 
 ### Sparse data and empty cells
@@ -519,7 +592,6 @@ Logistic regression concerns modelling a dichotomous or binary dependent variabl
 A simple, but suboptimal solution would be to treat the data as a set of binary variables. For instance, if we consider four products, we might construct 4 binary variables, where the first one encodes whether product $A$ was chosen ($Y_{1,i} = 1$) or not ($Y_{1,i} = 0$), the second one whether product $B$ was chosen ($Y_{2,i} = 1$) or not ($Y_{2,i} = 0$), etc. For each of these variables, we might construct a logistic regression model with the same set of predictors.
 
 One problem with this approach is that it ignores one fundamental aspect: these variables are not independent! If we know that $Y_{1,i} = 1$, then all the other variables ($Y_{2,i}, Y_{3,i}, \ldots$) have to be 0.
-
 In multinomial logistic regression, a set of binary logistic regression models is estimated simultaneously, and the dependencies between these models are taken into account appropriately. 
 
 ### Baseline category logit
@@ -564,11 +636,11 @@ coef <- round(coefficients(rps_mod_multinom),3)
 
 Instead of the Z-test for the individual coefficients in Table , we may wonder whether a predictor has "any effect" on the dependent variable. For example, if the AI's previous action has no effect on the human's current action, then that would mean that the null-hypothesis $$H_0: \beta_{R, AR} = \beta_{R, AS} = \beta_{S, AR} = \beta_{S, AS} = 0$$ is true. We can test this hypothesis by a model comparison, comparing the full model to one where we fix these parameters to 0 (effectively removing the AI previous action predictor from the model).
 This model comparison provides the following test results:
-$-2 \log(\text{likelihood-ratio}) = `r rps_multinom_test$LRT[2]`$, $\text{df} = 4$, $p < .001$. Hence, we can conclude that the human players' current actions do depend on the AI's previous actions.
+$-2 \log(\text{likelihood-ratio}) = `r rps_multinom_test$LRT[2]`$, $\text{df} = 4$, $p < .001$. Hence, we can conclude that the human players' current actions do depend on the AI's previous actions. This confirms the results of the log-linear models used earlier.
 
 ### Reconstructing probabilities of responses
 
-
+After estimating a multinomial logistic regression model, we are often interested in the predicted probabilities of each category. These can be derived through the inverse link function:
 $$\hat{\pi_j} = \frac{\exp \left( \beta_{j,0} + \beta_{j,1} \times X_1 + \ldots + \beta_{j,m} \times X_m \right)}{\sum_{l=1}^K \exp \left(\beta_{l,0} + \beta_{l,1} \times X_1 + \ldots + \beta_{l,m} \times X_m \right)}$$
 Note that we also sum over the baseline category $k$ in the denominator, setting the parameters here to 0.
 
@@ -593,8 +665,7 @@ tab %>%
 
 For each action, we start with computing the value of the linear equation. These values are then transformed by taking the natural exponent. Finally, we can divide each of these exponentiated values by the sum of all exponentiated values to arrive a the calculated probability. For example, the probability that the action is "Rock" is computed as
 $$\begin{aligned} p(\text{rock}) &= \frac{\exp(`r round(tab$value[1],3)`)}{\exp(`r round(tab$value[1],3)`) + \exp(0) + \exp(`r round(tab$value[3],3)`)} \\ 
-&= $$
-
+&= `r tab$p[1]` \end{aligned}$$
 
 ### Alternative logit models for ordinal categories
 
@@ -615,17 +686,50 @@ This reduces the number of parameters quite drastically compared to an unconstra
 
 As in the linear model, the generalized linear model can be extended by including random effects. Whilst estimation of such generalized linear mixed-effects models is (a lot) more involved than for linear mixed-effects models, conceptually, the models are very similar. Again, we can write each intercept and slope as consisting of a fixed and a random part, and assume that each random effect is drawn from a (multivariate) Normal distribution, with mean 0.
 
+Table \@ref(tab:metacognition-glmer) shows the results for a logistic mixed-effects regression model, using data from all participants of the metacognition experiment. In addition to the fixed effects of Confidence, Contrast, and their interaction, the model includes participant-wise random intercepts and slopes for Confidence and Contrast. Random effects are assumed independent, and to aid estimation, Confidence and Contrast were scaled by a $Z$-transformation. Scaling predictors can be crucial when estimating generalized linear mixed-effects models.
+
 ```{r metacognition-glmer, cache=TRUE}
 library(sdamr)
 data("metacognition")
+#glmer_mod <- metacognition %>%
+#  mutate(confidence_c = scale(confidence),
+#         contrast_c = scale(contrast)) %>%
+#  lme4::glmer(correct ~ confidence_c * contrast_c + (confidence_c + contrast_c||id), family=binomial(), data=.)
+
 glmer_mod <- metacognition %>%
   mutate(confidence_c = scale(confidence),
          contrast_c = scale(contrast)) %>%
-  lme4::glmer(correct ~ confidence_c * contrast_c + (confidence_c + contrast_c||id), family=binomial(), data=.)
+  afex::mixed(correct ~ confidence_c * contrast_c + (confidence_c + contrast_c||id), family=binomial(), data=., method="LRT", test_intercept = TRUE)
 
-car::Anova(glmer_mod, type=3)
+#car::Anova(glmer_mod, type=3)
+
+tab_fix <- cbind(summary(glmer_mod$full_model)$coefficients[,1],glmer_mod$anova_table[,c(3,2,4)])
+tab_fix[,4] <- sapply(tab_fix[,4], format_p)
+rownames(tab_fix) <- c("Intercept","Confidence", "Contrast", "Confidence$\\times$Contrast")
+knitr::kable(tab_fix, col.names = c("$\\hat{\\beta}$", "$\\text{df}", "$G^2$", "$p(\\geq G^2)$"), booktabs=TRUE, digits=c(3,0,2,2,3), caption="Estimates and tests for the fixed-effects of a logistic mixed-effects model with random intercepts and slopes for Confidence and Contrast. Note: Confidence and Contrast are scaled by a Z-transformation.")
 ```
 
+The results show significant and positive effects of Confidence and Contrast, as well as their interaction. This confirms the results obtained for models fitted to the data of the individual participants (see Table \@ref(metacognition-logistic-regression-results-z-and-LR-participant-1) and \@ref(metacognition-logistic-regression-results-z-and-LR-participant-2)).
+
+Table \@ref(tab:gestures-glmer) shows the results for a Poisson mixed-effects model for the gestures data. Accounting for the dependence in the data by including random intercepts for each participant, we now only find a significant effect of Context. The effects of Gender and the Gender by Language interaction are no longer significant in this model.
+
+```{r gestures-glmer, cache=TRUE}
+library(sdamr)
+data("gestures")
+contrasts(gestures$context) <- c(1,-1)
+contrasts(gestures$language) <- c(1,-1)
+contrasts(gestures$gender) <- c(1,-1)
+gestures$log_d <- log(gestures$dur)
+dat <- gestures
+pois_glmer <- afex::mixed(gestures ~ context*language*gender + (1|ID), data=dat, family=poisson(), offset=dat$log_d, method="LRT", test_intercept = TRUE)
+
+tab_fix <- cbind(summary(pois_glmer$full_model)$coefficients[,1],pois_glmer$anova_table[,c(3,2,4)])
+tab_fix[,4] <- sapply(tab_fix[,4], format_p)
+rownames(tab_fix) <-  c("Intercept","Context", "Language", "Gender","Context $\\times$ Language", "Context $\\times$ Gender", "Language $\\times$ Gender", "Context $\\times$ Language $\\times$ Gender")
+knitr::kable(tab_fix, col.names = c("$\\hat{\\beta}$", "$\\text{df}", "$G^2$", "$p(\\geq G^2)$"), booktabs=TRUE, digits=c(3,0,2,2,3), caption="Estimates and tests for the fixed-effects of a Poisson mixed-effects model with random intercepts for participants.")
+
+```
+<!--
 ### Item response theory
 
 Item-response theory concerns the measurement of *latent variables* through a set of items that differ in difficulty. Whole books have been written on this topic, and we will only provide a relatively straightforward example here.
@@ -637,7 +741,7 @@ $$\begin{aligned}
 \end{aligned}$$
 where $p(Y_{i,j} = 1)$ is the probability that person $i$ answers item $j$ correct, $\beta_j$ is a (fixed) effect for item $j$, and $\gamma_i$ a (random) effect for person $i$. 
 
-```{r rasch-model, cache=TRUE}
+```{r rasch-model, cache=TRUE, eval=FALSE, include=FALSE}
 #data("VerbAgg", package="lme4")
 data("LSAT7", package="mirt")
 rasch_mod <- mirt::expand.table(LSAT7) %>%
@@ -646,16 +750,22 @@ rasch_mod <- mirt::expand.table(LSAT7) %>%
   lme4::glmer(response ~ -1 + item + (1|id), family=binomial(), data=.)
 #rasch_mod <- lme4::glmer(r2 ~ -1 + item + (1|id), family=binomial(), data=dat)
 ```
+-->
 
 ## In practice
 
 As you will have noticed, generalised linear models are even more general than the general linear model, and can a useful way to model a wide variety of data. 
 
-1. Choose a sensible distribution (family) for the random part of the model. This can usually be based on the nature of the dependent variable. For binary data, a Bernoulli distribution is generally the right choice. For count (frequency) data, if the maximum frequency is fixed by design, a Binomial distribution makes sense. If the maximum not fixed, a Poisson distribution makes sense.
+1. Choose a sensible distribution (family) for the random part of the model. This can usually be based on the nature of the dependent variable. For binary data, a Bernoulli distribution is generally the right choice. For count (frequency) data, if the maximum possible count is fixed by design, a Binomial distribution makes sense. If the maximum possible count is not fixed, a Poisson distribution makes sense.
 
 2. Choose a useful link function. The link function defines how the predictors relate to the mean of the dependent variable. Hence, the choice is important. But 
 
-3. Estimate and assess the model. Overdispersion can be an issue.
+3. If there are repeated measures or other dependencies between data points, consider adding random effects to account for this.
 
-4. Report the results
+4. Estimate and assess the fit of the model. Overdispersion can be an issue.
 
+5. Report the results.
+
+## Further reading
+
+This chapter can only provide an introduction to generalized linear models. Whole books have been written on the topic. If you want to read more about generalized linear models, @agresti2018introduction provides a good and relatively readable introduction. @dobson2018introduction provides a more succinct and technical text. @hosmer2013applied offer a readable and practical book on logistic regression. @wickens2014multiway provides a very extensive book on loglinear models.
