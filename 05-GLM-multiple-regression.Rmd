@@ -494,7 +494,7 @@ tmod <- lm(I(y/x) ~ x, data=tdat)
 ```
 
 
-### Transforming variables
+### Transforming variables {#sec:04b-transformations}
 
 In certain cases where the assumptions of unbiasedness and/or homoscedasticity do not hold, it may be possible to transform the dependent variables and/or predictors and obtain a model with these transformed parameters where the assumptions do hold. 
 
