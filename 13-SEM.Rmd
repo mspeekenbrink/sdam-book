@@ -24,7 +24,7 @@ In **Directed graphs** with directed edges (arrows), nodes (variables) can have 
 
 Graphical representations of structural equation models are often slightly more detailed than general probabilistic graphical models. In particular, different symbols are used to distinguish between observed variables, latent (unobserved) variables, constants (e.g. intercepts). 
 
-## Exogenous and endogenous variables
+### Exogenous and endogenous variables
 
 **Exogeneous variables** are variables that are not "accounted for" by other variables in the model. In terms of a graphical model, these variables have no parents (i.e. incoming arrows from other variables). **Endogeneous variables** are accounted for by other variables in the model; they do have parents (e.g. incoming arrows from other variables in the model).
 
@@ -69,6 +69,10 @@ fmod2 <- lavaan::sem(mod2, data=legacy2015)
 summary(fmod2)
 
 ```
+
+## A more complex path model
+
+## How to build a path model
 
 ## Looking ahead
 
