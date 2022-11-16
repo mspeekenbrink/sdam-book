@@ -4,83 +4,434 @@ set.seed(20221010)
 
 # Path models (SEM 1) {#ch-SEM-path-models}
 
+<!-- https://www.joophox.net/publist/semfamre.pdf -->
 <!-- https://stats.oarc.ucla.edu/r/seminars/rsem/ -->
 
-Up to now, we have considered models with a single dependent variable, allowing the value of this to depend on multiple predictors or independent variables. Whilst flexible, this can be restrictive. There are many situations where we would like to model how a set of variables relate to each other. We saw an example of this when we considered *mediation*, where we were interested in how an independent variable affects a mediator variable, and how this mediator variable subsequently affects the dependent variable. Applying the causal steps approach, we needed to estimate a number of separate models, with inference being based on a comparison of estimated parameters between three models.
+Up to now, we have mostly considered models with a single dependent variable, allowing the value of this to depend on multiple predictors or independent variables. Although flexible, this can still be restrictive. There are situations where we would like to model more complex interrelations within a set of variables. We saw an example of this when we considered *mediation* (see Chapter \@ref(ch-moderation-mediation)), where we were interested in how an independent variable affects a mediator variable, and how this mediator variable subsequently affects the dependent variable. Such a causal chain can not be directly modelled in a single General Linear Model. Applying the causal steps approach, we needed to estimate three separate models, with inference being based on a comparison of estimated parameters between three models.
 
-In the next few chapters, we will consider ways in which to account for relations between many variables within a single model. The general term for such a model is a **Structural Equation Model** (SEM). As we will see, this term encapsulates a wide variety of models, including many of those we have discussed before. These models even allow us to incorporate **latent variables**, which are variables that are not directly observed, but whose values can be inferred (or measured) from their relations with observed variables. We will consider such latent variable models in the next chapter. Here, we will focus on models which contain only observed variables. 
+In this chapter and the next, we will consider ways in which to account for relations between many variables. We will focus on a class of models called **Structural Equation Models** (SEM). As we will see, this class incorporates wide variety of models, including many of those we have discussed before. Structural Equation Models also allow us to incorporate **latent variables**, which are variables that are not directly observed, but whose values can be inferred (or measured) from their relations with observed variables. We will consider such latent variable models in Chapter \@ref(ch-SEM-latent-variable-models). Here, we will focus on models which contain only observed variables. These models are commonly referred to as **path models**.
+
+Path models were introduced by @wright1920relative, who used regression equations to define direct and indirect effects of observed variables in population genetics, and applied causal interpretations to these effects. Figure \@ref(fig:wright-path-model-image) shows one of the first illustrations of a path model by Sewell Wright, to depict genetic relations between guinea pigs.
+
+```{r wright-path-model-image, fig.cap="Graphical representation of a path model by Sewell Wright. Source: [OpenMx ](https://openmx.ssri.psu.edu/sites/default/files/Wright20aFigure5_1.jpg)"}
+if(knitr::is_html_output()) {
+  knitr::include_graphics("https://openmx.ssri.psu.edu/sites/default/files/Wright20aFigure5_1.jpg")
+} else {
+  download.file("https://openmx.ssri.psu.edu/sites/default/files/Wright20aFigure5_1.jpg", "Wright20aFigure5_1.jpg", mode = 'wb')
+  knitr::include_graphics("Wright20aFigure5_1.jpg")
+}
+```
+
+<!--
+However, we will let go of the clear distinction between predictor variables and dependent variables. We will simply denote each observed variable as $Y_j$. 
+
+Structural Equation Models are, at their heart, *linear* models. The conditional mean $\mu_{Y_j|Y_1, \ldots, Y_{j-1}, Y_{j+1}, \ldots, Y_m}$ of each variable $Y_j$ is assumed to be expressible as a linear function of the other variables $Y_1,\ldots, Y_{j-1}, Y_{j+1}, \ldots, Y_m$ in the model. It is possible to include link functions, as in Chapter \@ref(ch-generalized-linear-models), to allow for a wide variety in the conditional distributions of the variables $Y_j$. But we will stick to the simpler case, where these conditional distributions are Normal.
+-->
 
 ## Graphical models
 
-A graphical model -- or more precisely a **probabilistic graphical model** -- in statistics refers to an abstract way to represent dependencies and independences in a set of random variables. ... In mathematics, a graph consists of a set of nodes, and edges between them. For example, in social network graphs, the nodes represent people, and edges represent whether they are friends, or communicate with each other. So **nodes** are the objects, and **edges** are the relations between these objects we focus on. For our purposes, the nodes represent variables and the edges the statistical relations between these.
+Structural Equation Models are often expressed in a graphical form, where **nodes** represent variables, and **edges** (arrows) represent represent relations between the variables. Conventions in these graphical representations of SEM are:
 
-Probabilistic graphical models take many guises. For one thing, edges can be directed, or undirected. A directed edge means that the relation goes one way. For instance, the value of one variable can cause the value of another. An undirected relation means that two variables covary, but a causal relation is not assumed. This can be also represented by a dual-directed edge (indicating that both variables influence each other).
+* Squares or rectangles represent observed variables
+* Circles or ovals represent latent variables (e.g. factors or errors)
+* Triangles represent (known) constants
+* One-directional (single-headed) arrows represent a causal relation between two variables. The arrow starts from the cause (independent variable), and ends on its effect (dependent variable).
+* Bi-directional (double-headed) arrows represent non-causal relations (e.g. covariance or correlation). A bi-directional arrow from one variable onto itself represents the variance of a variable (which technically is equal to to covariance of a variable with itself) 
+
+<!--
+
+Graph theory is a branch of mathematics, which provides an abstract way to analyse relations between objects. A graph in this context consists of a set of **nodes** (the objects), and a set of **edges** between them (the relations). A well-known example is a social network. Here, the nodes represent people, and the edges represent friendship relations, or lines of communication. The edges can be bidirectional, when both people connected call each other friends or communicate with each other, or uni-directional, when only one person calls the other a friend or communicates with them, but not vice versa. Such networks can be represented as a matrix, with rows and columns representing people, and the entries in the matrix representing e.g. whether a row-person states they are a friend of a column-person.
+
+### Probabilistic graphical models
+
+In the context of statistical models, **nodes** are (random) variables, and **edges** indicate  conditional dependencies between these variables.
+
+**Probabilistic graphical models** refer to an abstract way to represent dependencies and independences in a set of random variables. ...  
+
+Probabilistic graphical models take many guises. For one thing, edges can be directed, or undirected. A directed edge means that the relation goes one way. For instance, the value of one variable can cause the value of another. SO a directed edge represents a **causal relation**. An undirected relation means that two variables covary, but a causal relation is not assumed. This can be also represented by a dual-directed edge (indicating that both variables influence each other).
 
 A nice aspect of graphical models is that they visualise often complex multiple relations in a large set of variables. This can aid our understanding of a model. Graphs are, in a sense, a visual language to express models. The model itself doesn't need the graph, but our understanding of them often does.
 
-In **Directed graphs** with directed edges (arrows), nodes (variables) can have parents (edges coming in from other nodes) and children (edges going out to other nodes). Relations between parents and children can be viewed as lines of communication. Parents can send messages to their children, but in a directed graph, not the other way round.
+In **directed graphs** with directed edges (arrows), nodes (variables) can have parents (edges coming in from other nodes) and children (edges going out to other nodes). Relations between parents and children can be viewed as lines of communication. Parents can send messages to their children, but in a directed graph, not the other way round.
 
 ### Conventions in graphical representations of structural equation models
 
-Graphical representations of structural equation models are often slightly more detailed than general probabilistic graphical models. In particular, different symbols are used to distinguish between observed variables, latent (unobserved) variables, constants (e.g. intercepts). 
+Graphical representations of structural equation models are often slightly more detailed than general probabilistic graphical models. In particular, different symbols are used to distinguish between observed variables, latent (unobserved) variables, constants (e.g. intercepts).
+
+* Squares or rectangles: observed variables
+* Circles or ovals: errors, factors, latent variables
+* Triangles: constants
+* One-directional (single-headed) arrows: linear relationship between two variables. Starts from an independent variable and ends on a dependent variable.
+* Bi-directional (double-headed) arrows: variance of a variable or covariance between two variables
+
+-->
 
 ### Exogenous and endogenous variables
 
-**Exogeneous variables** are variables that are not "accounted for" by other variables in the model. In terms of a graphical model, these variables have no parents (i.e. incoming arrows from other variables). **Endogeneous variables** are accounted for by other variables in the model; they do have parents (e.g. incoming arrows from other variables in the model).
+**Exogenous variables** are variables that are not caused by other variables in the model. In terms of a graphical model, these variables have no parents (i.e. incoming one-directional arrows from other variables). **Endogenous variables** are cause by other variables in the model; they do have parents (e.g. incoming one-directional arrows from other variables in the model).
 
-## Multiple regression model
+## Regression models
 
-Multiple regression is perhaps the simplest example of a path model. It has multiple exonegenous variables $X_j$, and a single endogenous variable $Y$.
-
-```{r}
+```{r SEM-simple-regression-structural-plot, fig.cap="Graphical representation of a simple regression model", fig.width=4, fig.height=2}
 library(sdamr)
 library(lavaan)
+library(semPlot)
 data("trump2016")
 dat <- subset(trump2016,state != "District of Columbia")
-
-regmod <-   '
+dat$X1 <- dat$hate_groups_per_million
+dat$X2 <- dat$percent_bachelors_degree_or_higher
+dat$Y1 <- dat$percent_Trump_votes
+sregmod <-   '
   # regressions
-    percent_Trump_votes ~ 1 + hate_groups_per_million + percent_bachelors_degree_or_higher
+    Y1 ~ 1 + X1
 '
-fregmod <- lavaan::sem(regmod, data=trump2016)
-summary(fmod1)
+fsregmod <- lavaan::sem(sregmod, data=dat)
+spmmod <- semPlotModel(fsregmod)
+#spmmod@Pars <- spmmod@Pars[-5,]
+semPaths(spmmod, layout="tree2", sizeMan=7, sizeInt = 4, style="mx", residuals=TRUE, normalize=FALSE, width=4, height=2, rotation=2)
 ```
 
-## A mediation model
 
-```{r}
+A simple regression model is probably the simplest example of a path model. Figure \@ref(fig:SEM-simple-regression-structural-plot) depicts a simple regression model in graphical form. The model has two observed variables, $X_1$ and $Y_1$, indicated by rectangles. The model has two constant terms, indicated by triangles. Variable $X_1$ is an exogenous variable. It has an incoming one-directional arrow only from a constant. The path from the constant term to $X_1$ is an intercept term to represent the mean of this variable. The bi-directional arrow from $X_1$ to itself represents the residual variance of this variable around its mean. The implied model for $X_1$ can be written as
+$$X_1 = \beta_{0,x} \times 1 + \epsilon_{x_1} \quad \quad \epsilon_{x_1} \sim \mathbf{Normal}(0, \sigma_{\epsilon_{x_1}}) $$
+Variable $Y_1$ is an endogenous variable. It has two incoming uni-directional arrows. One from another constant term, indicated by a triangle, and one from variable $X_1$. In addition, the bi-directional arrow from $Y_1$ to itself allows for residual variation. The implied model for $Y$ can be stated as
+$$Y_1 = \beta_{0,y} \times 1 + \beta_{1,y} \times X_{1} + \epsilon_{y_1} \quad \quad \epsilon_{y_1} \sim \mathbf{Normal}(0, \sigma_{\epsilon_{y_1}}) $$
+Although exogenous variable $X_1$ can be assigned a model with an intercept ($\beta_{0,x}$) and residual variation term ($\sigma_{\epsilon_{x_1}}$), in practice, these parameters are not estimated. This is indicated by the broken lines in the arrows, which represent non-estimated (i.e. fixed) parameters.
+
+A multiple regression model has multiple exogenous variables $X_j$, and a single endogenous variable $Y_1$. Figure \@ref(fig:SEM-multiple-regression-speeddate-plot) shows a graphical depiction of a multiple regression model, predicting whether a participants in the speed dating experiment (see Chapter XXX) like ($\texttt{like}$) their partner as a function of how attractive ($\texttt{attr}$), sincere ($\texttt{sinc}$), intelligent ($\texttt{intel}$), fun ($\texttt{fun}$), and ambitious ($\texttt{amb}$) they rate them. The predictors $\texttt{attr}$, $\texttt{sinc}$, $\texttt{intel}$, $\texttt{fun}$, and $\texttt{amb}$, are all exogenous variables. They are allowed to covary, which is indicated by the bi-directional arrows linking them. They also have variances, which are indicated by the self-pointing bi-directional arrows. And their means are indicated through the constant terms (triangles). All the arrows are labelled by the values of the corresponding parameters. Note that as before, the parameters for the means and variances of the exogenous variables are treated as fixed. This is indicated by the broken lines of the arrows. Variable $\texttt{like}$  is an endogenous variable. It has incoming uni-directional arrows from all the predictors. In addition, the endogenous variable has an intercept (shown as the arrow from the triangle), and residual variance (shown as the bi-directional arrow from $\texttt{like}$ onto itself).
+
+```{r SEM-multiple-regression-speeddate-plot, fig.cap="Graphical representation of a multiple regression model", fig.width=8, fig.height=4}
+library(dplyr)
+data("speeddate")
+dat <- speeddate %>%
+  mutate(like=other_like,
+         attr = other_attr,
+         sinc = other_sinc,
+         intel = other_intel,
+         fun = other_fun,
+         amb=other_amb)
+regmod <-   '
+  # regressions
+    like ~ 1 + attr + sinc + intel + fun + amb
+'
+fregmod <- lavaan::sem(regmod, data=dat)
+spmmod <- semPlotModel(fregmod)
+#spmmod@Pars
+semPaths(spmmod, layout="tree", sizeMan=7, sizeInt = 4, style="ram", residuals=TRUE, rotation=1, intAtSide = FALSE, whatLabels = "est", nCharNodes = 0, curvature=3) #, whatLabels="est", nodeLabels=list("y",expression(x[1]),expression(x[2])))
+```
+
+Graphical depictions of SEM models contain a wealth of information. However, sometimes we need more precise information, which can be provided in a table such as Table \@ref(tab:sem-table-multiple-regression-speeddate). This table lists all the parameters of the path model in order (regression slopes, intercepts, residual variances, residual covariances). For estimated parameters, the table also shows the standard error of the estimate, and the results of Wald tests. For fixed parameters, only the value of the parameter is shown. The final part of the table contains fit indices. We will discuss these later.
+
+```{r, results="asis"}
+if(knitr::is_html_output()) {
+  cat("<table><caption>(\\#tab:sem-table-multiple-regression-speeddate) Results of a SEM analysis of a multiple regression model.</caption>")
+  semTable::semTable(fregmod, type="html")
+  cat("</table>")
+} else {
+  semTable::semTable(fregmod, type="latex", table.float = TRUE, caption = "(\\#tab:sem-table-multiple-regression-speeddate) Results of a SEM analysis of a multiple regression model.")
+}
+```
+
+## Mediation
+
+Mediation involves a causal chain from an exogenous variable $(X)$ to an mediating endogenous variable $(M)$, which in turn is causally related to a final exogenous variable $(Y)$. For example, @zaval_how_2015 considered whether the motive to leave a positive legacy in the world would result in an intention to behave in a pro-environmental manner, which in turn would result in actual pro-environmental behaviours. In Chapter \@ref(ch-moderation-mediation) we discussed using three different regression models to assess whether there is evidence that the relation between legacy motive and behaviour is mediated by intention. Here, we will use a path model to analyse model this causal chain in a single model.
+
+The full mediation path model has one exogenous variable $(\texttt{motiv})$. This exogenous variable has a causal link to the first endogenous variable $(\texttt{intent})$, which is the mediator variable. This mediator variable is causally linked to the second endogenous variable $(\texttt{behav})$.  
+
+```{r path-full-mediation-legacy-motive, fig.cap="A full mediation model", fig.width=.8*6, fig.height=.8*4}
 
 data("legacy2015")
+dat <- legacy2015 %>%
+  mutate(intent = intention,
+         motiv = legacy,
+         behav = donation)
 
 mod1 <-   '
   # regressions
-    intention ~ 1 + legacy
-    donation ~ 1 + intention
+    intent ~ 1 + motiv
+    behav ~ 1 + intent
 '
-fmod1 <- lavaan::sem(mod1, data=legacy2015)
-summary(fmod1)
+fmod1 <- lavaan::sem(mod1, data=dat)
+spmmod <- semPlotModel(fmod1)
+semPaths(spmmod, layout="tree", sizeMan=7, sizeInt = 4, style="ram", residuals=TRUE, rotation=2, intAtSide = FALSE, whatLabels = "est", nCharNodes = 0, normalize = FALSE)
+```
+
+Whilst a path model allows us to estimate a causal chain, and other patterns of relations between exogenous and endogenous variables in a single model, we do not know whether the estimated model provides a good description of the data. Other path models are possible for this data. For example, we could also allow motivation to have a direct effect on behaviour, in addition to its indirect effect via intention. This model is depicted in Figure \@ref(fig:path-partial-mediation-legacy-motive).
+
+```{r path-partial-mediation-legacy-motive, fig.cap="A partial mediation model", fig.width=.8*6, fig.height=.8*4}
+#summary(fmod1)
 
 mod2 <-   '
   # regressions
-    intention ~ 1 + legacy
-    donation ~ 1 + intention + legacy
+    intent ~ 1 + motiv
+    behav ~ 1 + intent + motiv
 '
-fmod2 <- lavaan::sem(mod2, data=legacy2015)
-summary(fmod2)
+fmod2 <- lavaan::sem(mod2, data=dat)
+
+spmmod <- semPlotModel(fmod2)
+semPaths(spmmod, layout="tree", sizeMan=7, sizeInt = 5, style="ram", residuals=TRUE, rotation=2, intAtSide = FALSE, whatLabels = "est", nCharNodes = 0, normalize=FALSE)
+
+#summary(fmod2)
 
 ```
 
-## A more complex path model
+Alternatively, we might assume that motivation affects both intention and behaviour, but that intention and behaviour are conditionally independent. This is also called a **common cause model**. This is depicted in Figure \@ref(fig:path-common-cause-legacy-motive).
 
-## How to build a path model
+```{r path-common-cause-legacy-motive, fig.cap="A common cause model", fig.width=.8*6, fig.height=.8*4}
+#summary(fmod1)
 
-## Looking ahead
+mod3 <-   '
+  # regressions
+    intent ~ 1 + motiv
+    behav ~ 1 + motiv
+    behav ~~ 0*intent
+'
+fmod3 <- lavaan::sem(mod3, data=dat)
+
+spmmod <- semPlotModel(fmod3)
+semPaths(spmmod, layout="tree", sizeMan=7, sizeInt = 5, style="ram", residuals=TRUE, rotation=2, intAtSide = FALSE, whatLabels = "est", nCharNodes = 0, normalize=FALSE)
+
+#summary(fmod2)
+
+```
+
+## Assumptions and estimation
+
+Before we consider whether a SEM fits the data, we should consider the assumptions underlying the model. Traditionally, a SEM assumes all variables in the model follow a multivariate Normal distribution.  
 
 ### Multivariate Normal distribution
 
-### A little bit of matrix algebra
+We have introduced the multivariate Normal distribution in Chapter \@ref(ch-linear-mixed-effects-models). A multivariate Normal distribution is a distribution over _vectors_ of values. An example for a vector of two variables, e.g. $[X_1,Y_1]$, is shown in Figure \@ref(fig:bivariate-normal-distribution-interactive-plot).
+
+```{r rgl-setup-sem, include=FALSE}
+
+#widget <- rglwidget(elementId = "interactive-3dplot-multiple-regression", controllers = "interactive-3dplot-multiple-regression-controller") %>%
+#  playwidget(par3dinterpControl(fn, 0, 2*3*.75, steps=30),
+#       step = 0.01, loop = TRUE, rate = 0.5)
+
+#options(rgl.printRglwidget = TRUE)
+library(rgl)
+knitr::knit_hooks$set(webgl = hook_webgl)
+if(!require("manipulateWidget")) install.packages("manipulateWidget")
+rgl::setupKnitr(autoprint = TRUE)
+```
+
+```{r bivariate-normal-distribution-interactive-plot, fig.cap="A multivariate Normal distribution for two variables. You can rotate the plot with a mouse by clicking and moving the mouse.", fig.align='center', cache=TRUE}
+
+# parameters:
+n<-50; ngrid<-40
+
+# generate samples:
+set.seed(31415)
+x<-rnorm(n); y<-rnorm(n)
+
+# estimate non-parameteric density surface via kernel smoothing
+denobj <- MASS::kde2d(x, y, n=ngrid)
+den.z <-denobj$z
+
+# generate parametric density surface of a bivariate normal distribution
+xgrid <- denobj$x
+ygrid <- denobj$y
+bi.z <- dnorm(xgrid)%*%t(dnorm(ygrid, sd = .8))
+
+# visualize:
+zscale<-20
+
+# New window
+#open3d()
+
+# clear scene:
+#clear3d("all")
+
+# setup env:
+bg3d(color="#887777")
+light3d()
+
+# Draws the simulated data as spheres on the baseline
+#spheres3d(x,y,rep(0,n),radius=0.1,color="#CCCCFF")
+spheres3d(0,0,rep(0,1),radius=0.1,color="#CCCCFF")
+
+# Draws non-parametric density
+#surface3d(xgrid,ygrid,den.z*zscale,color="#FF2222",alpha=0.5)
+
+# Draws parametric density
+surface3d(xgrid,ygrid,bi.z*zscale,color="#CCCCFF",front="lines")
+
+
+
+#library(rglwidget)
+#options(rgl.printRglwidget = TRUE)
+
+
+
+# coefs <- coef(mod)
+# a <- coefs["hate_groups_per_million"]
+# b <- coefs["percent_bachelors_degree_or_higher"]
+# c <- -1
+# d <- coefs["(Intercept)"]
+# plt <- plot3d(x=dat$hate_groups_per_million, y=dat$percent_bachelors_degree_or_higher, z=dat$percent_Trump_votes, xlab="Hate groups", ylab="% bachelors degree or higher", zlab="% Trump votes", type = "s", col = "purple", size = 1) + planes3d(a, b, c, d, alpha = 0.5)
+# userMat <- matrix(c(0.04618797,-0.998904467,-0.005153618,0,0.02906432,-0.003813314,0.999554276,0,-0.99849236,-0.046314929,0.028857738,0,0.00000000,0.000000000,0.000000000,1), ncol=4, byrow = TRUE)
+# rgl.viewpoint(userMatrix = userMat)
+# 
+# fn <- rgl::par3dinterp(time = (0:3)*0.75, userMatrix = list(userMat,
+#                                       rotate3d(userMat, pi/2, 0, 0, -1),
+#                                       rotate3d(userMat, pi/2, 0, 0, 1),
+#                                       rotate3d(userMat, pi/2, 1, 0, 0)))
+# 
+# #rglwidget(elementId = "interactive-3dplot-multiple-regression", controllers = "interactive-3dplot-multiple-regression-controller") %>%
+# rglwidget(scene3d(plt)) %>%
+#   playwidget(par3dinterpControl(fn, 0, 2*3*.75, steps=30),
+#        step = 0.01, loop = TRUE, rate = 0.5)
+
+#rglwidget(elementId = "interactive-3dplot-multiple-regression", controllers = "interactive-3dplot-multiple-regression-controller")
+#playwidget(sceneId = "interactive-3dplot-multiple-regression", controls=par3dinterpControl(fn, 0, 2*3*.75, steps=30),
+#       step = 0.01, loop = TRUE, rate = 0.5, elementId = "interactive-3dplot-multiple-regression-controller")
+
+# widget
+
+```
+
+A multivariate Normal distribution is parametrized by a **mean vector** $\boldsymbol{{\mu}}$ and a **variance-covariance matrix** $\boldsymbol{{\Sigma}}$.
+
+The mean vector contains the means for all variables in the model
+
+$$\boldsymbol{{\mu}} = \left[ \begin{matrix} \mu_1 \\ \mu_2 \\ \vdots \\ \mu_m \end{matrix} \right]$$
+In a path model, the means are determined by the intercepts and regressions from parents of variables.
+
+The variance-covariance matrix contains the variances $\sigma_j^2$ of each variable in the model, as well as the covariances $\sigma_{j,k}$ between all pairs of variables in the model:
+$$\boldsymbol{{\Sigma}} = \left[ \begin{matrix} \sigma^2_1 & \sigma_{1,2} & \ldots & \sigma_{1,m} \\ \sigma_{2,1} & \sigma_{2}^2 & \ldots & \sigma_{2,m} \\ \vdots & \vdots & & \vdots \\ \sigma_{m,1} & \sigma_{m,2} & \ldots & \sigma_{m}^2 \end{matrix} \right]$$
+The theoretical variances and covariances, as implied by a SEM model, are determined by regression relations and (residual) variances. For example, in a simple regression model
+$$Y = \beta_0 + \beta_x \times X + \epsilon \quad \quad \epsilon \sim \mathbf{Normal}(0, \sigma_\epsilon)$$
+the implied theoretical variance of $Y$, denoted as $\sigma^2_y$, is a function of the regression coefficient $\beta_x$, the variance of $X$ $(\sigma_x^2)$, and the residual variance $\sigma_\epsilon^2$:
+$$\sigma_y^2 = \beta^2_x \times \sigma_x^2 + \sigma^2_\epsilon$$
+The covariance between $X$ and $Y$ is a function of the regression coefficient and the variance of $X$:
+$$\sigma_{x,y} = \beta_x \times \sigma_x^2$$
+As $X$ is an exogenous variable, its variance is not implied by the model, and is just equal to $\sigma_x^2$.
+
+A multivariate Normal distribution is completely determined by the mean vector and variance-covariance matrix. The basis for estimating the parameters of a SEM model is to minimize the discrepancy between the sample means and (co)-variances, and the model-implied theoretical means and (co)-variances. There are a number of ways in which to do this. The most common way is by maximum likelihood. Other methods are Generalized Least Squares (GLS), which is also based on the assumption of multivariate Normality, and Weighted Least Squares (WLS; also called asymptotically distribution free or ADF), which does not require the assumption of multivariate Normality.<!-- ^[Let $\mathbf{S}$ denote the sample covariance matrix, and $\boldsymbol{\Sigma}(\theta)$ denote the model implied covariance matrix. Maximum likelihood finds parameters ]
+<!-- see https://web.pdx.edu/~newsomj/semclass/ho_estimate.pdf for estimation methods -->
+
+#### Variance-Covariance algebra
+
+The elements in the variance-covariance matrix can be determined using the following rules for variances and covariances (where $X$, $Y$, and $Z$ are variables, and $c$ a constant):
+
+$$
+\begin{aligned}
+\text{Var}(X + Y) &= \text{Var}(X) + \text{Var}(Y) + 2 \times \text{Cov}(X,Y) \\
+\text{Var}(X - Y) &= \text{Var}(X) + \text{Var}(Y) - 2 \times \text{Cov}(X,Y) \\
+\text{Var}(c + Y) &= \text{Var}(Y) \\
+\text{Var}(c \times Y) &= c^2 \times \text{Var}(Y) \\
+\text{Cov}(c, Y) &= 0 \\
+\text{Cov}(c\times X, Y) &= c \times \text{Cov}(X,Y) \\
+\text{Cov}(X+Y, Z) &= \text{Cov}(X,Z) + \text{Cov}(Y,Z)
+\end{aligned}
+$$
+In principle, these rules can be used recursively to work out the implied variance-covariance matrix for a given model. This can become rather tedious, however. Matrix algebra provides a much more principled way to determine the predicted mean vector and variance-covariance matrix. An introduction to matrix algebra is beyond the scope of this book.
+
+### Assumptions: Exogenous vs endogenous variables
+
+The assumption that the set of *all* variables in the model follows a multivariate Normal distribution is different from the assumptions of the General Linear Model. In the GLM, the assumptions solely concern the residuals of the dependent variable. No assumptions have to be made about the distributions of the predictors.
+
+So what do we do if some of our variables are not Normal-distributed? Well, it depends. If these variables are *exogenous* variables, there is no need to worry. The target of ML estimation for SEMs is the sample mean vector and variance-covariance matrix. By including the prerequisite parameters, we can fit the mean and variance of these exogenous variables perfectly. As such, deviations from Normality for exogenous variables don't affect the fit of the model; it also does not affect the parameter estimates. 
+
+For *endogenous* variables, however, we do need a similar assumption as in the GLM, namely that the conditional distribution follows a Normal distribution, with a constant variance. In practice, this implies that the residuals of the endogenous variables should follow a multivariate Normal distribution.
+
+## Model fit
+
+A first consideration for any SEM model is whether it describes the observed data well. As in any statistical model, describing the data well means that the implied distribution of the data is more-or-less equal to the empirical distribution of the data.
+
+A test of overall model fit is similar to that used for generalized linear models, which is based on likelihood-ratio test comparing the model under consideration (MODEL R) to a saturated MODEL S:
+$$\begin{aligned}
+X^2 &= -2 \log \frac{p(\text{DATA}|\text{MODEL R})}{p(\text{DATA}|\text{MODEL S})} \end{aligned}$$
+Note that we use the symbol $X^2$ here, rather than the residual deviance $D_R$ used in the context of generalized linear models, as the former is more common in the SEM literature. As usual, this statistic approximately follows a Chi-squared distribution with degrees of freedom equal to $\text{df} = \text{npar}(S) - \text{npar}(R)$. The saturated MODEL S uses the sample means, variances, and covariances as estimates of these values. For a model with a total of $m$ observed variables, the saturated MODEL S therefore uses a total of $$\text{npar}(S) = m \times (m + 1)/2 + m$$ parameters. The covariance matrix contains $m \times (m + 1)/2$ unique terms ($m$ variances, and $\frac{m \times m}{2}$ covariances). The mean vector contains $m$ unique parameters (a mean for each variable). Adding these up provides the specification above. If the model under consideration uses less parameters, then the test result can provide a meaningful assessment of the overall model fit. 
+There are some issues however. Particularly, the number of observations $n$ should be sufficient (e.g. $n > 200$), and the data should follow a multivariate Normal distribution. If the number of observations is very large, the test becomes very powerful, and will very often be significant, even when the model provides a good (but not perfect) account of the data. Due to these issues (and others), a wide variety of practical fit indices have been proposed
+
+### Fit indices
+
+Fit indices can be grouped into those that concern comparative fit to a baseline model and  measures based on errors of approximation [@kaplan2001sem]. We will discuss common examples of each in turn.
+
+### Comparative fit to a baseline
+
+The idea behind measures that compare the fit of a MODEL M to that of a baseline model is that a baseline model can already fit the data well, and so we should be interested in how much better a model does compared to this baseline. The baseline MODEL B is usually one which specifies complete independence between the observed variables (i.e. all the covariances are equal to 0). 
+
+The **normed fit index** (NFI)
+
+$$\text{NFI} = \frac{X^2_B - X^2_M}{X^2_B}$$
+The NFI ranges between 0 (same fit as baseline model) and 1 (perfect fit), and values larger than .95 are generally considered to indicate a good fit of the model.
+
+### Errors of approximation
+
+Standardized Root Mean Residual
+
+$$\text{SRMR} = $$
+
+Root Mean Square Error of Approximation
+
+$$\text{RMSEA} = \sqrt{\frac{\max(0, X^2_M - \text{df}_M)}{\text{df}_M (n-1)}}$$
+where $\text{df}_M = \text{npar}(S) - \text{npar}(M)$ are the degrees of freedom of the overall model test.
+
+### Modification indices
+
+Modification indices
+
+## Model comparison
+
+AIC, BIC
+
+## Evaluation and selection of the mediation path models
+
+We will now apply the methods to the three models we proposed in the context of mediation analysis. These were the full mediation, partial mediation, and the common cause model. The fit tests and measures of these models are provided in Table \@ref(tab:sem-medation-fit-measures).
+
+```{r sem-medation-fit-measures}
+options(knitr.kable.NA = '')
+myFitTab <- function(mod) {
+  fm <- fitmeasures(mod)
+  tab <- data.frame(c("$X^2$","baseline $X^2$", "CFI", "RMSEA", "AIC", "BIC"),
+        fm[c("chisq", "baseline.chisq", "cfi", "rmsea", "aic", "bic")],
+        fm[c("df","baseline.df", NA, NA, NA, NA)],
+        fm[c("pvalue","baseline.pvalue", NA, NA, NA, NA)],
+        fm[c(NA, NA, NA, "rmsea.ci.lower", NA, NA)],
+        fm[c(NA, NA, NA, "rmsea.ci.upper", NA, NA)]
+        )
+  rownames(tab) <- NULL
+  colnames(tab) <- c("measure", "value", "df", "$p$","90% lower", "90% upper")
+  return(tab)
+}
+tab <- rbind(myFitTab(fmod1), myFitTab(fmod2), myFitTab(fmod3))
+tab[,3] <- sapply(tab[,4], format_p)
+knitr::kable(tab, digits=c(0,3,1,0,3,3), align="r", caption = "Fit tests and measures for three candidate path models.") %>%
+  kableExtra::pack_rows("Full Mediation",1,6) %>%
+  kableExtra::pack_rows("Partial Mediation",7,12) %>%
+  kableExtra::pack_rows("Common Cause",13,18)
+```
+
+The full mediation model is rejected by the overall model fit test. The comparative fit to baseline test is significant, indicating that the model does fit better than the baseline model. The CFI is below .95, and the RMSEA above .08, indicating relatively poor fit. The partial mediation model is a saturated model. As such, it fits the data perfectly according to all measures. The common cause models performs worse than the full mediation model. The full mediation and common cause model are both nested under the partial mediation model (each sets one of the regression parameters to 0). As the partial mediation model is a saturated model, the $X^2$ overall model fit tests for the full mediation and common cause model are equal to a model comparison with the partial mediation model. Hence, both can be said to fit significantly worse than the partial mediation model. As the full mediation model and the common cause model are not nested, they cannot be compared with a likelihood ratio test. For comparison of non-nested models, the AIC and BIC can be used. Both the AIC and the BIC are lowest for the partial mediation model. However, the difference in this measure between the full and partial mediation models is very small. 
+
+## A more complex path model
+
+
+## Principles in constructing path models
+
+Theory!
+
+
+
+## Correlation vs causation
+<!-- https://journals.sagepub.com/doi/full/10.1177/2515245917745629 -->
+
+<!--
+
+### Multivariate Normal distribution
+
+### Covariation and correlation matrices
+
+-->
+
+
+
+<!-- ### A little bit of matrix algebra -->
 
 <!-- https://bookdown.org/compfinezbook/introFinRbook/Matrix-Algebra-Review.html -->
 <!-- https://bkenkel.com/pdaps/matrix.html -->
 
-## Errors-in-variable models
+<!-- ## Errors-in-variable models -->

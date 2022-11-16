@@ -4,16 +4,18 @@ set.seed(20221010)
 
 # Latent variable models (SEM 2) {#ch-SEM-latent-variable-models}
 
-The previous chapter concerned a multivariate model to describe relations between observed variables.  
+The previous chapter concerned a multivariate model to describe relations between observed variables. In this Chapter, we  will extend this idea by adding **latent variables**.  
 
 ## Factor analysis
 
 ### Exploratory vs confirmatory factor analysis
 
+### Principal components analysis
+
 ## General SEMs
 
-### Evaluating model fit: A tale of too many fit indices
+<!-- use PoliticalDemocracy data from lavaan. Code from https://www.lavaan.ugent.be/tutorial/sem.html -->
 
-## Multi-group SEM
+<!-- ## Multi-group SEM -->
 
 ## In practice
