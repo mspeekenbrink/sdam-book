@@ -260,7 +260,7 @@ options(opts)
 ```
 
 
-## Mediation
+## Mediation {#sec-glm-mediation}
 
 ```{r}
 data("legacy2015")
