@@ -374,7 +374,7 @@ $$\begin{aligned}
 \end{aligned}$$
 Note that we use the symbol $\hat{\chi}^2$ here, rather than the residual deviance $D_R$ used in the context of generalized linear models, as the former is more common in the SEM literature. As usual, this statistic approximately follows a Chi-squared distribution with degrees of freedom equal to $\text{df} = \text{npar}(S) - \text{npar}(M)$. The saturated MODEL S sets $\boldsymbol{\Sigma}(\theta) = \mathbf{S}$ and $\boldsymbol{\mu}(\theta) = \overline{C}$. In words, for the saturated model, the model-implied means and (co-)variances are set to their sample values. For a model with a total of $P = m+k$ observed variables, the saturated MODEL S therefore uses a total of 
 \begin{equation}
-\text{npar}(S) = \frac{P \times (P - 1)}{2} + 2 \times P = P \times P
+\text{npar}(S) = \frac{P \times (P - 1)}{2} + 2 \times P
 (\#eq:npar-saturated-sem-model)
 \end{equation}
 parameters. The covariance matrix contains $\frac{P \times (P - 1)}{2} + P$ unique terms ($P$ variances, and $\frac{P \times (P-1)}{2}$ unique covariances^[A covariance $\sigma_{1,2}$ above the diagonal is equal to the covariance $\sigma_{2,1}$ below the diagonal.]). The mean vector contains $P$ unique parameters (a mean for each variable). Adding these up provides the specification above. 

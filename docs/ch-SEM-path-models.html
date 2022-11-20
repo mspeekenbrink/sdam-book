@@ -23,7 +23,7 @@
 <meta name="author" content="Maarten Speekenbrink" />
 
 
-<meta name="date" content="2022-11-19" />
+<meta name="date" content="2022-11-20" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -1514,7 +1514,7 @@ For *endogenous* variables, however, we do need a similar assumption as in the G
 \end{aligned}\]</span>
 Note that we use the symbol <span class="math inline">\(\hat{\chi}^2\)</span> here, rather than the residual deviance <span class="math inline">\(D_R\)</span> used in the context of generalized linear models, as the former is more common in the SEM literature. As usual, this statistic approximately follows a Chi-squared distribution with degrees of freedom equal to <span class="math inline">\(\text{df} = \text{npar}(S) - \text{npar}(M)\)</span>. The saturated MODEL S sets <span class="math inline">\(\boldsymbol{\Sigma}(\theta) = \mathbf{S}\)</span> and <span class="math inline">\(\boldsymbol{\mu}(\theta) = \overline{C}\)</span>. In words, for the saturated model, the model-implied means and (co-)variances are set to their sample values. For a model with a total of <span class="math inline">\(P = m+k\)</span> observed variables, the saturated MODEL S therefore uses a total of
 <span class="math display" id="eq:npar-saturated-sem-model">\[\begin{equation}
-\text{npar}(S) = \frac{P \times (P - 1)}{2} + 2 \times P = P \times P
+\text{npar}(S) = \frac{P \times (P - 1)}{2} + 2 \times P
 \tag{13.1}
 \end{equation}\]</span>
 parameters. The covariance matrix contains <span class="math inline">\(\frac{P \times (P - 1)}{2} + P\)</span> unique terms (<span class="math inline">\(P\)</span> variances, and <span class="math inline">\(\frac{P \times (P-1)}{2}\)</span> unique covariances<a href="#fn42" class="footnote-ref" id="fnref42"><sup>42</sup></a>). The mean vector contains <span class="math inline">\(P\)</span> unique parameters (a mean for each variable). Adding these up provides the specification above.</p>
