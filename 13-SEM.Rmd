@@ -388,9 +388,15 @@ Fit indices can be grouped into those that concern comparative fit to a baseline
 
 ### Comparative fit to a baseline
 
-The idea behind measures that compare the fit of a MODEL M to that of a baseline MODEL B is that a simple baseline model may already fit the data well. We should therefore be interested in how much the added complexity of MODEL M contributes. The baseline MODEL B is usually one which specifies complete independence between the observed variables (i.e. all the covariances are equal to 0). 
+The idea behind measures that compare the fit of a MODEL M to that of a baseline MODEL B is that a simple baseline model may already fit the data well. We should therefore be interested in how much the added complexity of MODEL M contributes. The baseline MODEL B is usually one which specifies complete independence between the observed variables (i.e. all the covariances are equal to 0).
 
-The **normed fit index** (NFI) is computed from the overall fit tests of MODEL M and MODEL B as a ratio similar to that of the $R^2$ measure for the GLM:
+Comparing a MODEL M to a baseline MODEL B via a likelihood-ratio test is a first option. This leads to the baseline Chi-squared test:
+$$\begin{aligned}
+\text{baseline } \hat{\chi}^2_M &= -2 \log \frac{p(\text{DATA}|\text{MODEL B})}{p(\text{DATA}|\text{MODEL M})} 
+\end{aligned}$$
+with $\text{df} = \text{npar}(B) - \text{npar}(M)$. This statistic can be used to test the null-hypothesis that the baseline MODEL B describes the data equally well as the more complex MODEL M. One would generally like to reject this null-hypothesis (so a significant test result is good).
+
+The **normed fit index** (NFI) is computed from the overall model fit tests of MODEL M and MODEL B as a ratio similar to that of the $R^2$ measure for the GLM:
 \begin{equation}
 \text{NFI} = \frac{\hat{\chi}^2_B - \hat{\chi}^2_M}{\hat{\chi}^2_B}
 (\#eq:sem-NFI-definition)
@@ -408,7 +414,7 @@ The TLI is often interpreted as a measure between 0 (bad) and 1 (good), although
 
 The **Standardized Root Mean Residual** (SRMR) is an absolute measure of fit. It is a standardized measure of the discrepancy between the sample (co-)variances $s_{ij}$ and the model-implied (co-)variances $\sigma_{ij}(\theta)$. This measure can be computed as [cf. @hu1999cutoff]:
 \begin{equation}
-\text{SRMR} = \sqrt{\frac{2 \sum_{i=2}^T \sum_{j=1}^i \left(\frac{s_{ij} - \sigma_{ij}(\theta)}{s_{ii} \times s_{jj}}\right)^2}{T \times (T+1)}}
+\text{SRMR} = \sqrt{\frac{2 \sum_{i=2}^T \sum_{j=1}^i \left(\frac{s_{ij} - \sigma_{ij}(\theta)}{s_{ii} \times s_{jj}}\right)^2}{P \times (P+1)}}
 (\#eq:sem-SRMR-definition)
 \end{equation}
 If the model matches the sample (co-)variances perfectly, then the value would be 0. Smaller values indicate better fit, and a value of $\text{SRMR} \leq .08$ is considered satisfactory [@hu1999cutoff].
@@ -428,12 +434,12 @@ Modification indices -->
 
 Nested models can, as usual, be compared via a likelihood-ratio test.^[Technically, this assumes that the simpler MODEL R does not fix some free parameters of the more complex MODEL G at the bounds of their admissible values. For instance, if MODEL R can **not** fix a variance term of MODEL G to 0, as variances cannot be smaller than 0, this is exactly on the bound of the permissible values.] However, in SEM, we often want to compare non-nested models. In that case, we can revert to model selection criteria such as the Akaike Information Criterion [@Akaike1973] or Bayesian Information Criterion [@Schwarz1978]. Both criteria are derived in order to select the best model from a set. And both measures can be viewed as correcting the "minus 2 log-likelihood" measure for model complexity. The **Akaike Information Criterion**^[@Akaike1973 actually called it "An Information Criterion", but as the first letter of his last name matches that of "An", and Akaike Information Criterion seems more specific, the latter is what it is now known as.] (AIC) is defined as 
 \begin{equation}
-\text{AIC} = -2 \log p(\text{DATA}|\text{MODEL}) + 2 \times \text{npar}(M)
+\text{AIC} = -2 \log p(\text{DATA}|\text{MODEL M}) + 2 \times \text{npar}(M)
 (\#eq:AIC-definition)
 \end{equation}
 where $\text{npar}(M)$ denotes the number of freely estimated parameters in MODEL M. The AIC can be viewed as a measure of how well the model will generalize to new data sets. The **Bayesian Information Criterion** (BIC) is defined as
 \begin{equation}
-\text{BIC} = -2 \log p(\text{DATA}|\text{MODEL}) + \text{npar}(M) \times \log (n)
+\text{BIC} = -2 \log p(\text{DATA}|\text{MODEL M}) + \text{npar}(M) \times \log (n)
 (\#eq:BIC-definition)
 \end{equation}
 where $n$ is the number of (multivariate) observations. The BIC can be viewed as an approximation to the Bayesian "marginal likelihood". We will consider what this means in a later chapter.
