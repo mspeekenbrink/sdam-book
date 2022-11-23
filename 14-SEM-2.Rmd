@@ -26,7 +26,24 @@ summary(bfi_pca)
 
 Although not really a part of Structural Equation Models, it is instructive to also briefly discuss **data reduction** techniques such as principal components analysis and exploratory factor analysis. These methods aim to describe a $P \times P$ covariance (or correlation) matrix by means of relatively small set of variables. Essentially, both methods rely on saturated models which can replicate the sample covariance matrix perfectly.
 
-The differences between principal component analysis and exploratory factor analysis are somewhat subtle. **Principal components analysis** (PCA) can be seen as applying a **formative model**, where observed variables "cause" the latent variable (called a principal component, in this context). By contrast, **exploratory factor analysis** (PCA) concerns a **reflective model**, where the latent variable "causes" the observed variables.
+The differences between principal component analysis and exploratory factor analysis are somewhat subtle. **Principal components analysis** (PCA) can be seen as applying a **formative model**, where observed variables "cause" the latent variables (called a principal components in this context). **Principal components** (which we will denote as $\text{PC}_j$) are simply linear functions of the variables:
+$$\begin{aligned}
+\text{PC}_1 &= w_{1,1} \times X_{1} + w_{1,2} \times X_{2} + w_{1,m} \times \ldots X_{m} \\
+\text{PC}_2 &= w_{2,1} \times X_{1} + w_{2,2} \times X_{2} + w_{2,m} \times \ldots X_{m} \\
+& \vdots \\
+\text{PC}_m &= w_{m,1} \times X_{1} + w_{m,2} \times X_{2} + w_{m,m} \times \ldots X_{m}
+\end{aligned}$$
+Note that the principal components $\text{PC}_j$ have no error terms. They don't need to be estimated, but rather are *computed* from the variables $X_j$. Also note that we use a total of $m$ principal components to model a total of $m$ variables. 
+
+By contrast, **exploratory factor analysis** (PCA) concerns a **reflective model**, where the latent variable "causes" the observed variables. A EFA model can be written as:
+$$\begin{aligned}
+Y_1 &= \lambda_{1,1} \times F_{1} + \lambda_{1,2} \times F_{2} + \ldots + \lambda_{1,q} \times  F_{q} + \epsilon_{1} && \epsilon_{1} \sim \mathbf{Normal}(0, \sigma_{\epsilon_1}) \\
+Y_2 &= \lambda_{2,1} \times F_{1} + \lambda_{2,2} \times F_{2} + \ldots + \lambda_{2,q} \times F_{q} + \epsilon_{2} && \epsilon_{2} \sim \mathbf{Normal}(0, \sigma_{\epsilon_1}) \\
+& \vdots \\
+Y_m &= \lambda_{m,1} \times F_{1} + \lambda_{m,2} \times F_{2} + \ldots + \lambda_{m,q} \times F_{q} + \epsilon_{m} && \epsilon_{m} \sim \mathbf{Normal}(0, \sigma_{\epsilon_m}) 
+\end{aligned}
+(\#eq:sem-2-efa-definition)$$
+with the number of factors $q < m$. In a EFA, the observed variables $Y_j$ are considered conditionally independent, given the factors $F_k$. This is evident from the (independently distributed) error terms $\epsilon_j$. 
 
 ```{r}
 library(lavaan)
@@ -64,11 +81,19 @@ library(lavaan)
 ### PCA vs EFA
 ```
 
-In a EFA, the items are considered conditionally independent, given the factor. This is not the case in PCA.
+
+
 
 ```{r}
 ### Venn diagram for PCA/EFA
 ```
+
+
+#### Determining the number of factors
+
+#### Factor rotation
+
+There are two main types of factor rotation: in **orthogonal rotation**, the factors are constrained to be independent of each other (i.e. there is no residual covariation between the factors). In **oblique rotation**, factors are allowed to have residual covariation. 
 
 ### Confirmatory factor analysis
 
@@ -97,7 +122,9 @@ Modification indices
 library(sdamr)
 data(speeddate)
 speed_cor <- cor(speeddate[,c("other_attr", "other_sinc", "other_intel", "other_fun", "other_amb")], use="pairwise.complete.obs")
+#psych::fa(speed_cor, nfactors = 5, n.obs=nrow(speeddate), rotate="none")
 
+psych::fa(speeddate[,c("other_attr", "other_sinc", "other_intel", "other_fun", "other_amb")], nfactors = 4, rotate="none")
 ```
 
 ### Measurement model
@@ -105,7 +132,7 @@ speed_cor <- cor(speeddate[,c("other_attr", "other_sinc", "other_intel", "other_
 The relations between a latent variable and the observed variables are called a **measurement model**.
 
 ```{r}
-co
+
 ```
 
 ### Structural (path) model
