@@ -4,15 +4,43 @@ set.seed(20221010)
 
 # Latent variable models (SEM 2) {#ch-SEM-latent-variable-models}
 
-The previous chapter concerned a multivariate model to describe relations between observed variables. In this Chapter, we  will extend this idea by adding **latent variables**.  
+The previous chapter concerned a multivariate model to describe relations between *observed* variables. In this Chapter, we will extend this idea by adding **latent variables**. Latent variables are variables which can not be directly observed, but they can be measured or inferred via their relation with observed variables. A classic example is a personality trait such as extraversion. People's tendency to be outwards facing is not directly observable. However, there are many indicators (e.g., someone actively seeking out busy social situations, liking to be the centre of attention, etc.) which together may allow one to determine the relative extraversion of person. Most commonly, extraversion is measured via questionnaires such as the .... Factor analysis is applied to 
 
 ## Factor analysis
 
-### Exploratory vs confirmatory factor analysis
+```{r}
+library(psychTools)
+data(bfi)
+bfi_cor <- cor(bfi[,-c(26:28)], use="pairwise.complete.obs")
+bfi_pca <- prcomp(bfi_cor)
+summary(bfi_pca)
+```
 
-### Principal components analysis
+### Exploratory factor analysis and principal components analysis
+
+**Principal components analysis** (PCA) is 
+
+PCA is a formative model (items construct a principal component)
+
+**Exploratory factor analysis** (PCA)
+
+EFA is a reflective model (item scores are caused by the factor)
+
+### Confirmatory factor analysis
+
+Confirmatory factor analysis (CFA) adopts the reflective model, where a factor causes the item responses. But unlike EFA, CFA 
+
+## Modification indices
 
 ## General SEMs
+
+### Measurement model
+
+### Structural (path) model
+
+## Conclusion
+
+
 
 <!-- use PoliticalDemocracy data from lavaan. Code from https://www.lavaan.ugent.be/tutorial/sem.html -->
 
