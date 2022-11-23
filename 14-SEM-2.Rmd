@@ -11,32 +11,108 @@ The previous chapter concerned a multivariate model to describe relations betwee
 ```{r}
 library(psychTools)
 data(bfi)
-bfi_cor <- cor(bfi[,-c(26:28)], use="pairwise.complete.obs")
-bfi_pca <- prcomp(bfi_cor)
-summary(bfi_pca)
 ```
 
 ### Exploratory factor analysis and principal components analysis
 
-**Principal components analysis** (PCA) is 
+```{r}
+bfi_cor <- cor(bfi[,-c(26:28)], use="pairwise.complete.obs")
+bfi_pca <- prcomp(bfi_cor)
+summary(bfi_pca)
 
-PCA is a formative model (items construct a principal component)
+bfi_pca <- psych::principal(bfi_cor)
+summary(bfi_pca)
+```
 
-**Exploratory factor analysis** (PCA)
+Although not really a part of Structural Equation Models, it is instructive to also briefly discuss **data reduction** techniques such as principal components analysis and exploratory factor analysis. These methods aim to describe a $P \times P$ covariance (or correlation) matrix by means of relatively small set of variables. Essentially, both methods rely on saturated models which can replicate the sample covariance matrix perfectly.
 
-EFA is a reflective model (item scores are caused by the factor)
+The differences between principal component analysis and exploratory factor analysis are somewhat subtle. **Principal components analysis** (PCA) can be seen as applying a **formative model**, where observed variables "cause" the latent variable (called a principal component, in this context). By contrast, **exploratory factor analysis** (PCA) concerns a **reflective model**, where the latent variable "causes" the observed variables.
+
+```{r}
+library(lavaan)
+# mod_spec <- '
+# pc <- 1*E1 + 1*E2 + 1*E3 + 1*E4 + 1*E5
+# E1 ~ 1
+# E2 ~ 1
+# E3 ~ 1
+# E4 ~ 1
+# E5 ~ 1
+# #E1 ~~ E2 + E3 + E4 + E5
+# #E2 ~~ E3 + E4 + E5
+# #E3 ~~ E4 + E5
+# #E4 ~~ E5
+# '
+# pca_lmod <- lavaan::sem(mod_spec, data=bfi)
+# 
+# ### PCA vs EFA
+# 
+# mod_spec <- '
+# efa("block1")f1 =~ E1 + E2 + E3 + E4 + E5
+# efa("block2")f2 =~ E1 + E2 + E3 + E4 + E5
+# #E1 ~ 1
+# #E2 ~ 1
+# #E3 ~ 1
+# #E4 ~ 1
+# #E5 ~ 1
+# #E1 ~~ E2 + E3 + E4 + E5
+# #E2 ~~ E3 + E4 + E5
+# #E3 ~~ E4 + E5
+# #E4 ~~ E5
+# '
+# pca_lmod <- lavaan::sem(mod_spec, data=bfi)
+
+### PCA vs EFA
+```
+
+In a EFA, the items are considered conditionally independent, given the factor. This is not the case in PCA.
+
+```{r}
+### Venn diagram for PCA/EFA
+```
 
 ### Confirmatory factor analysis
 
-Confirmatory factor analysis (CFA) adopts the reflective model, where a factor causes the item responses. But unlike EFA, CFA 
+Like EFA, confirmatory factor analysis (CFA) concerns a reflective model, where a factor causes the item values. But unlike PCA and EFA, CFA does not generally employ a saturated model. Items generally have paths from only a small set of the total number of factors. Th
+
+```{r}
+### bfi CFA
+mod_spec <- '
+Fa =~ A1 + A2 + A3 + A4 + A5 
+Fc =~ C1 + C2 + C3 + C4 + C5
+Fe =~ E1 + E2 + E3 + E4 + E5
+Fn =~ N1 + N2 + N3 + N4 + N5
+Fo =~ O1 + O2 + O3 + O4 + O5
+'
+
+bfi_cfa <- lavaan::cfa(mod_spec, data=bfi)
+```
 
 ## Modification indices
 
+Modification indices 
+
 ## General SEMs
+
+```{r}
+library(sdamr)
+data(speeddate)
+speed_cor <- cor(speeddate[,c("other_attr", "other_sinc", "other_intel", "other_fun", "other_amb")], use="pairwise.complete.obs")
+
+```
 
 ### Measurement model
 
+The relations between a latent variable and the observed variables are called a **measurement model**.
+
+```{r}
+co
+```
+
 ### Structural (path) model
+
+### Indentification
+
+Hayward case
 
 ## Conclusion
 
