@@ -225,6 +225,10 @@ eq:bayes-rule
 fig:prior-distributions-Paul
 eq:posterior-parameter-specification
 fig:prior-predictive-samples-binomial-bayesian-models
+fig:brms-multiple-regression-model-prior-samples
+fig:brms-multiple-regression-model-posterior-samples
+tab:brms-multiple-regression-model-summary
+tab:brms-multiple-regression-model-2-summary
 eq:Bayesfactor-definition
 tab:Bayes-Factor-values-interpretation
 fig:posterior-distribution-Paul
@@ -436,6 +440,12 @@ probability-in-times-of-covid
 bayes-rule
 we-missed-you-paul
 the-marginal-likelihood-and-prior-predictive-distribution
+markov-chain-monte-carlo-mcmc
+convergence
+autocorrelation
+effective-sample-size
+concerning-prior-distributions
+multiple-regression-example
 ch-Bayes-factors
 hypothesis-testing-relative-evidence-and-the-bayes-factor
 parameter-estimates-and-credible-intervals

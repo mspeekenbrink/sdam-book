@@ -234,7 +234,7 @@ It is not possible to provide clear guidelines on choosing prior distributions f
 
 In all cases, it is a good idea to check the sensibilty of the prior distribution by inspecting the *prior predictive distribution*. The prior predictive distribution can be used to check the reasonableness of a prior for a given situation before observing sample data. Do the simulated samples seem consistent with what you might expect of the data based on your background knowledge of the situation? If not, another prior might be more reasonable.
 
-## Example
+## Multiple regression example
 
 As a final example of a Bayesian analysis, we will revisit the data analysed in Chapter \@ref(ch-multiple-regression), predicting votes for Trump as a function of the number of hate groups and education level.
 
@@ -246,11 +246,13 @@ $$\begin{aligned} \beta_0 &\sim \mathbf{Normal}(0, 100) \\
 \beta_2  &\sim \mathbf{Normal}(0, 5) \\
 \sigma_\epsilon  &\sim \mathbf{half-Normal}(0, 10) \\
 \end{aligned}$$
+Note that a half-Normal distribution is used for the standard deviation of the model errors, truncated below at 0. This is because a standard deviation can not be negative.
 
 The model was estimated by running four Hamiltonian MCMC chains in parallel, each for 2000 iterations, discarding the first 1000 samples as burn-in. The final 1000 samples of each chain was then left as an estimate of the posterior distribution (so 4000 samples in total).
 
-```{r brms-multiple-regression-model, cache=TRUE}
+```{r brms-multiple-regression-model, cache=TRUE, include=FALSE, results='hide'}
 library(sdamr)
+library(brms)
 data("trump2016")
 dat <- subset(trump2016,state != "District of Columbia")
 
@@ -260,29 +262,57 @@ mod <- brms::brm(formula = percent_Trump_votes ~ hate_groups_per_million + perce
                 prior(normal(0, 10), class = sigma)))
 ```
 
-Table \@ref(tab:brms-multiple-regression-model) contains a summary measures of the posterior distribution of the main parameters of interest. The $\hat{R}$ values are close to 1, and the effective sample size (ESS) is close to 4000 (the actual number of samples) for all parameters. This indicates a reasonably successful MCMC estimate. Note that unlike maximum likelihood estimation, Bayesian estimation provides a posterior distribution, not a single parameter estimates. But it is common to use the posterior mean as the parameter estimate, insofar asa single number is needed. The standard deviation of the posterior distribution can indicate the extent to which the data has restricted the plausible parameter values. The Highest Density Interval is used in a similar way to a confidence interval. For all parameters, the HDI excludes 0, which indicates that the predictors have an effect on the dependent variable. Comparing the results to those in Table \@ref(tab:t-test-results-multiple-regression-table) shows that the posterior means are close, but not identical, to the maximum likelihood parameter estimates.
+Figure \@ref(fig:brms-multiple-regression-model-prior-samples) shows sampled values of the four parameters from the prior distributions. Figure \@ref(fig:brms-multiple-regression-model-posterior-samples) shows corresponding plots, but now sampling from the posterior distribution. Note that the scales on the x-axis is very different in Figure \@ref(fig:brms-multiple-regression-model-posterior-samples) compared to Figure \@ref(fig:brms-multiple-regression-model-prior-samples) The range of parameter values in the approximate posterior distributions is much smaller, which shows how the data constrains the posterior distribution as compared to the prior distributions. 
+
+```{r brms-multiple-regression-model-prior-samples, fig.cap="Samples from the prior distributions of the parameters of the multiple regression model predicting votes for Trump in 2016 by the number of hate groups and level of education in US states."}
+library(ggplot2)
+tmp <- brms::as_draws_df(mod)
+tmp <- tidyr::pivot_longer(tmp, !starts_with("."), names_to = "parameter", values_to = "value")
+tmp %>%
+  filter(parameter %in% c("prior_Intercept", "prior_b_hate_groups_per_million", "prior_b_percent_bachelors_degree_or_higher", "prior_sigma")) %>%
+  mutate(parameter = factor(parameter)) %>%
+  mutate(parameter = forcats::fct_recode(parameter, "intercept" = "prior_Intercept", "hate_groups" = "prior_b_hate_groups_per_million", "education" = "prior_b_percent_bachelors_degree_or_higher", "sigma_epsilon" = "prior_sigma")) %>%
+  mutate(parameter = forcats::fct_inorder(parameter)) %>%
+  ggplot(aes(x=value)) + geom_histogram(bins=100) + facet_wrap(~parameter, scales = "free_x")
+```
+
+```{r brms-multiple-regression-model-posterior-samples, fig.cap="Samples from the posterior distributions of the parameters of the multiple regression model predicting votes for Trump in 2016 by the number of hate groups and level of education in US states."}
+library(ggplot2)
+tmp <- brms::as_draws_df(mod)
+tmp <- tidyr::pivot_longer(tmp, !starts_with("."), names_to = "parameter", values_to = "value")
+tmp %>%
+  filter(parameter %in% c("b_Intercept", "b_hate_groups_per_million", "b_percent_bachelors_degree_or_higher", "sigma")) %>%
+  mutate(parameter = factor(parameter)) %>%
+  mutate(parameter = forcats::fct_recode(parameter, "intercept" = "b_Intercept", "hate_groups" = "b_hate_groups_per_million", "education" = "b_percent_bachelors_degree_or_higher", "sigma_epsilon" = "sigma")) %>%
+  mutate(parameter = forcats::fct_inorder(parameter)) %>%
+  ggplot(aes(x=value)) + geom_histogram(bins=100) + facet_wrap(~parameter, scales = "free_x")
+```
+
+Table \@ref(tab:brms-multiple-regression-model-summary) contains a summary measures of the posterior distribution of the main parameters of interest. The $\hat{R}$ values are close to 1, and the effective sample size (ESS) is close to 4000 (the actual number of samples) for all parameters. This indicates a reasonably successful MCMC estimate. Note that unlike maximum likelihood estimation, Bayesian estimation provides a posterior distribution, not a single parameter estimates. But it is common to use the posterior mean as the parameter estimate, insofar as a single number is needed. The standard deviation of the posterior distribution can indicate the extent to which the data has restricted the plausible parameter values. The Highest Density Interval is used in a similar way to a confidence interval. For all parameters, the HDI excludes 0, which indicates that the predictors have an effect on the dependent variable. Comparing the results to those in Table \@ref(tab:t-test-results-multiple-regression-table) shows that the posterior means are close, but not identical, to the maximum likelihood parameter estimates.
 
 ```{r brms-multiple-regression-model-summary}
 tmp <- summary(mod)$fixed[,-7]
 rownames(tmp) <- c("Intercept", "Hate_groups", "Education")
 tmp %>%
-  knitr::kable(col.names=c("mean", "SD", "lower 95% HDI", "upper 95% HDI", "$\\hat{R}$", "ESS"), escape=FALSE, digits=3)
+  knitr::kable(col.names=c("mean", "SD", "lower 95% HDI", "upper 95% HDI", "$\\hat{R}$", "ESS"), escape=FALSE, digits=c(2,2,2,2,5,2), caption="Results from a Hamiltonian MCMC estimation of the multiple regression model predicting votes for Trump in 2016 by the number of hate groups and level of education in US states.")
 ```
 
-```{r brms-multiple-regression-model-2, cache=TRUE}
+```{r brms-multiple-regression-model-2, cache=TRUE, include=FALSE, results='hide'}
 mod2 <- brms::brm(formula = percent_Trump_votes ~ hate_groups_per_million + percent_bachelors_degree_or_higher,data=dat, seed=101, sample_prior = TRUE, prior = c(prior(normal(0, 1), class = Intercept),
                 prior(normal(0, 1), class = b, coef = "hate_groups_per_million"),
                 prior(normal(0, 1), class = b, coef = "percent_bachelors_degree_or_higher"),
                 prior(normal(0, 1), class = sigma)))
 ```
 
-To get an idea of how much the parameter estimates are affected, we aso present results from a model where we use the following prior distributions:
+To get an idea of how much the parameter estimates are affected, we also present results from a model where we use the following prior distributions:
 
-$$\begin{aligned} \beta_0 &\sim \mathbf{Normal}(0, 100) \\
-\beta_1  &\sim \mathbf{Normal}(0, 2) \\
-\beta_2  &\sim \mathbf{Normal}(0, 2) \\
-\sigma_\epsilon  &\sim \mathbf{half-Normal}(0, 10) \\
+$$\begin{aligned} \beta_0 &\sim \mathbf{Normal}(0, 1) \\
+\beta_1  &\sim \mathbf{Normal}(0, 1) \\
+\beta_2  &\sim \mathbf{Normal}(0, 1) \\
+\sigma_\epsilon  &\sim \mathbf{half-Normal}(0, 1) \\
 \end{aligned}$$
+
+Note that the standard deviations are much smaller than before. These prior distributions will constrain the parameters to be closer to 0, as very large values are very unlikely in these distributions.
 
 Table \@ref(tab:brms-multiple-regression-model-2-summary) shows the results are rather different. In this case, the prior distributions were too restrictive, putting too much prior constraint on the parameters. This is particularly evident for the intercept. A normal distribution with a mean of 0 and a standard deviation of 1 makes a value such as 82 very unlikely. 
 
@@ -290,6 +320,6 @@ Table \@ref(tab:brms-multiple-regression-model-2-summary) shows the results are 
 tmp <- summary(mod2)$fixed[,-7]
 rownames(tmp) <- c("Intercept", "Hate_groups", "Education")
 tmp %>%
-  knitr::kable(col.names=c("mean", "SD", "lower 95% HDI", "upper 95% HDI", "$\\hat{R}$", "ESS"), escape=FALSE, digits=3)
+  knitr::kable(col.names=c("mean", "SD", "lower 95% HDI", "upper 95% HDI", "$\\hat{R}$", "ESS"), escape=FALSE, digits=c(2,2,2,2,5,2), caption="Results from a Hamiltonian MCMC estimation of the multiple regression model predicting votes for Trump in 2016 by the number of hate groups and level of education in US states, using Normal priors with smaller standard deviation.")
 ```
 
