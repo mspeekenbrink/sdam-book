@@ -4,7 +4,19 @@ set.seed(20221010)
 
 # Latent variable models (SEM 2) {#ch-SEM-latent-variable-models}
 
-The previous chapter concerned a multivariate model to describe relations between *observed* variables. In this Chapter, we will extend this idea by adding **latent variables**. Latent variables are variables which can not be directly observed, but they can be measured or inferred via their relation with observed variables. A classic example is a personality trait such as extraversion. People's tendency to be outwards facing is not directly observable. However, there are many indicators (e.g., someone actively seeking out busy social situations, liking to be the centre of attention, etc.) which together may allow one to determine the relative extraversion of person. Most commonly, extraversion is measured via questionnaires such as the .... Factor analysis is applied to 
+The previous chapter concerned a multivariate model to describe relations between *observed* variables. In this Chapter, we will extend this idea by adding **latent variables**. Latent variables are variables which can not be directly observed, but they can be measured or inferred via their relation with observed variables. A classic example is a personality trait such as extraversion. People's tendency to be outwards facing is not directly observable. However, there are many indicators (e.g., someone actively seeking out busy social situations, liking to be the centre of attention, etc.) which together may allow one to determine the relative extraversion of a person compared to others. "Big Five" personality traits such as extraversion are commonly measured via questionnaires such as the Big Five Inventory [@john1991big]. In this questionnaire, participants are asked to rate their agreement with 44 statements on a 5-point scale ranging "disagree strongly" to "agree strongly".
+
+## Measurement of latent variables
+
+Let's start with a simple example: measuring temperature. Temperature is a physical quantity that reflects the kinetic energy of atoms in a substance or the air. This kinetic energy is not directly observable, but can be measured with a thermometer. A classic mercury thermometer has a bulb filled with mercury attached to a narrow tube of glass. An increase in heat expands the volume of the mercury so that the level of mercury in the narrow tube rises. In other words, the temperature is the *cause* of the state of the measurement device. Markers along the narrow tube can be placed such that the level of mercury in the tube corresponds to a standard scale, such as the Fahrenheit or Celcius scale. In the latter, the scale is calibrated such that $0^\circ \textrm{C}$ represents the freezing point of water, and $100^\circ \textrm{C}$ represents the boiling point of water. In the less widely-used Fahrenheit scale, the freezing point of water corresponds to $32^\circ \textrm{F}$, and the boiling point to $212^\circ \textrm{F}$. 
+
+Thermometers are relatively accurate measurement devices, but not devoid of **measurement error**. That means that the measurement device can show different levels for exactly the same true temperature. Such measurement error may be due to factors affecting the measurement device (e.g. the volume of mercury not being deterministically related to the temperature) as well as factors affecting the observer (e.g. the person reading the value of the thermometer not being able to see very small changes on the thermometer).
+
+As a statistical model, we might assume that
+
+$$\texttt{measurement} = \beta_0 + \beta_1 \times \textrm{temperature} + \epsilon \quad \quad \epsilon \sim \mathbf{Normal}(0, \sigma_\epsilon)$$
+where the error term $\epsilon$ is the combination of all factors that lead to measurement error, and the constants $\beta_0$ and $\beta_1$ define the scale used (e.g. Celcius, or Fahrenheit). As the scale is -- to some extent -- arbitrary, we could assume a scale where $\beta_0 = 0$ and $\beta_1 = 1$, leading to the model
+$$\textrm{temperature}  =  \frac{\texttt{measurement} - \beta_0 - \epsilon}{\beta_1} \quad \quad \epsilon \sim \mathbf{Normal}(0, \sigma_\epsilon)$$
 
 ## Factor analysis
 
@@ -35,7 +47,7 @@ $$\begin{aligned}
 \end{aligned}$$
 Note that the principal components $\text{PC}_j$ have no error terms. They don't need to be estimated, but rather are *computed* from the variables $X_j$. Also note that we use a total of $m$ principal components to model a total of $m$ variables. 
 
-By contrast, **exploratory factor analysis** (PCA) concerns a **reflective model**, where the latent variable "causes" the observed variables. A EFA model can be written as:
+By contrast, **exploratory factor analysis** (PCA) concerns a **reflective model**, where the latent variables "cause" the observed variables. A EFA model can be written as:
 $$\begin{aligned}
 Y_1 &= \lambda_{1,1} \times F_{1} + \lambda_{1,2} \times F_{2} + \ldots + \lambda_{1,q} \times  F_{q} + \epsilon_{1} && \epsilon_{1} \sim \mathbf{Normal}(0, \sigma_{\epsilon_1}) \\
 Y_2 &= \lambda_{2,1} \times F_{1} + \lambda_{2,2} \times F_{2} + \ldots + \lambda_{2,q} \times F_{q} + \epsilon_{2} && \epsilon_{2} \sim \mathbf{Normal}(0, \sigma_{\epsilon_1}) \\

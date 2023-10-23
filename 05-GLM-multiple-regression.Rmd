@@ -705,6 +705,11 @@ At this point, I don't want to go into the mathematical details of these outlier
 
 ## In practice
 
+```{r}
+dat <- subset(trump2016,state != "District of Columbia")
+mod <- lm(percent_Trump_votes ~ hate_groups_per_million + percent_bachelors_degree_or_higher, data=dat)
+```
+
 Linear regression is the "bread and butter" of data analysis. Whilst the name is generally reserved for models with only metric predictors, we we will see later on, the model we have discussed here is the foundation of the General Linear Model. 
 
 1. __Explore the data__. Check the distribution of the dependent variable and each (potential) predictor. Are there outlying or otherwise "strange" observations? Also explore pairwise relations between the (potential) predictors and the dependent variable, as well as between the predictors themselves. This may point to potential issues with the assumption of linearity (although pairwise linearity or nonlinearity is not necessarily reflective of linearity in a multiple regression model). 
