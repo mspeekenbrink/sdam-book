@@ -4,15 +4,115 @@ set.seed(20221010)
 
 # Latent variable models (SEM 2) {#ch-SEM-latent-variable-models}
 
-The previous chapter concerned a multivariate model to describe relations between *observed* variables. In this Chapter, we will extend this idea by adding **latent variables**. Latent variables are variables which can not be directly observed, but they can be measured or inferred via their relation with observed variables. A classic example is a personality trait such as extraversion. People's tendency to be outwards facing is not directly observable. However, there are many indicators (e.g., someone actively seeking out busy social situations, liking to be the centre of attention, etc.) which together may allow one to determine the relative extraversion of a person compared to others. "Big Five" personality traits such as extraversion are commonly measured via questionnaires such as the Big Five Inventory [@john1991big]. In this questionnaire, participants are asked to rate their agreement with 44 statements on a 5-point scale ranging "disagree strongly" to "agree strongly".
+The previous chapter concerned a multivariate model to describe relations between *observed* variables. In this Chapter, we will extend this idea by adding **latent variables**. Latent variables are variables which can not be directly observed. Instead, they can be measured or inferred via their relation with observed variables. A classic example in psychology is intelligence.
+
+Another example is a personality trait such as extraversion. People's tendency to be outwards facing is not directly observable. However, there are indicators (e.g., someone actively seeking out busy social situations, liking to be the centre of attention, etc.) which together may allow one to determine a person's level of extraversion. 
+
+The measurement of psychological constructs is the focus of **psychometrics**, a field with a long history and its own societies and journals. 
+
 
 ## Measurement of latent variables
 
 Let's start with a simple example: measuring temperature. Temperature is a physical quantity that reflects the kinetic energy of atoms in a substance or the air. This kinetic energy is not directly observable, but can be measured with a thermometer. A classic mercury thermometer has a bulb filled with mercury attached to a narrow tube of glass. An increase in heat expands the volume of the mercury so that the level of mercury in the narrow tube rises. In other words, the temperature is the *cause* of the state of the measurement device. Markers along the narrow tube can be placed such that the level of mercury in the tube corresponds to a standard scale, such as the Fahrenheit or Celcius scale. In the latter, the scale is calibrated such that $0^\circ \textrm{C}$ represents the freezing point of water, and $100^\circ \textrm{C}$ represents the boiling point of water. In the less widely-used Fahrenheit scale, the freezing point of water corresponds to $32^\circ \textrm{F}$, and the boiling point to $212^\circ \textrm{F}$. 
 
-Thermometers are relatively accurate measurement devices, but not devoid of **measurement error**. That means that the measurement device can show different levels for exactly the same true temperature. Such measurement error may be due to factors affecting the measurement device (e.g. the volume of mercury not being deterministically related to the temperature) as well as factors affecting the observer (e.g. the person reading the value of the thermometer not being able to see very small changes on the thermometer).
+Thermometers are relatively accurate measurement devices, but not devoid of **measurement error**. That means that the measurement device can provide different readings for exactly the same true temperature. Such measurement error may be due to factors affecting the measurement device (e.g. the volume of mercury not being deterministically related to the temperature) as well as factors affecting the observer (e.g. the person reading the value of the thermometer not being able to see very small changes on the thermometer).
 
-As a statistical model, we might assume that
+As a statistical model, we might propose something like the following linear model:
+$$\texttt{measurement}_i = \beta_0 + \beta_1 \times \textrm{temperature}_i + \epsilon_i \quad \quad \epsilon_i \sim \mathbf{Normal}(0, \sigma_\epsilon)$$
+If temperature was a measured variable, this is just a simple regression model and we would be able to estimate all parameters ($\beta_0$, $\beta_1$, $\sigma_\epsilon$) using e.g. maximum likelihood.
+
+```{r}
+library(lavaan)
+library(semPlot)
+dat <- data.frame(x = rnorm(100)) |>
+  dplyr::mutate(measurement = 30 + 10*x)
+mod_spec <- '
+temperature =~ measurement
+'
+mod <- lavaan::cfa(mod_spec, data=dat)
+spmod <- semPlotModel(mod)
+#spmmod@Pars <- spmmod@Pars[-5,]
+semPaths(spmod, sizeMan=7, sizeInt = 4, style="mx", residuals=TRUE, normalize=FALSE, width=4, height=2, rotation=2, nCharNodes = 0)
+```
+
+
+### Scaling and identification
+
+As we start working towards general SEM models with latent variables, let's write down our model for temperature measurements in more abstract terms as:
+$$\begin{aligned}
+Y_{i} &= \alpha + \lambda \times \eta_{i} + \epsilon_{i} \\
+\eta_i &\sim \mathbf{Normal}(\mu_\eta, \sigma_\eta)\\
+\epsilon_i &\sim \mathbf{Normal}(0, \sigma_\epsilon)
+\end{aligned}$$
+Note that in addition to relabelling the intercept as $\alpha$, the slope as $\lambda$, and the latent variable as $\eta$, we have also added an assumption about the values of the latent variable, namely that these are Normal-distributed. 
+
+This implies that $Y$ is Normal-distributed with
+$$\begin{aligned}
+\mu_Y &= \alpha + \lambda \times \mu_\eta \\
+\sigma^2_Y &= \lambda^2 \times \sigma^2_\eta + \sigma^2_\epsilon
+\end{aligned}
+$$
+From observations of $Y$, we can get estimates of the mean $\hat{\mu}_Y$ and variance $\hat{\sigma}^2_\Y$. But our latent variable model has 5 parameters. 
+
+There are two common choices to scale latent variables. The first is to set $\mu_\eta = 0$ and $\lambda = 1$. The second is to set $\mu_\eta = 0$ and $\sigma^2_\eta = 1$. 
+
+Now, suppose we have readings of *two* thermometers,
+
+$$\begin{aligned}
+Y_{1,i} &= \alpha_1 + \lambda_1 \times \eta_{i} + \epsilon_{1,i} \\
+Y_{2,i} &= \alpha_2 + \lambda_2 \times \eta_{i} + \epsilon_{2,i} \\
+\eta_i &\sim \mathbf{Normal}(0, \sigma_\eta)\\
+\epsilon_{1,i} &\sim \mathbf{Normal}(0, \sigma_{\epsilon_1}) \\
+\epsilon_{2,i} &\sim \mathbf{Normal}(0, \sigma_{\epsilon_2})
+\end{aligned}$$
+
+\begin{equation}
+\begin{aligned}
+\left( \begin{matrix} Y_{1,i} \\ Y_{2,i} \end{matrix} \right)
+&\sim \mathbf{Normal}\left(\boldsymbol{\mu}_Y, \boldsymbol{\Sigma}_Y \right) \\
+&\sim \mathbf{Normal}\left( \left[ \begin{matrix} \alpha_1 \\ \alpha_2 \end{matrix} \right] , \left[ \begin{matrix} \lambda_1^2 \times \sigma_{\eta}^2 + \sigma_{\epsilon_1}^2 & \lambda_1 \times \lambda_2 \times \sigma^2_\eta  \\  \lambda_1 \times \lambda_2 \times \sigma^2_\eta & \lambda_2^2 \times \sigma_{\eta}^2 + \sigma_{\epsilon_2}^2 \end{matrix} \right] \right)
+\end{aligned}
+\end{equation}
+
+But if we have readings from *three* thermometers, we finally get somewhere.
+
+$$\begin{aligned}
+Y_{1,i} &= \alpha_1 + \lambda_1 \times \eta_{i} + \epsilon_{1,i} \\
+Y_{2,i} &= \alpha_2 + \lambda_2 \times \eta_{i} + \epsilon_{2,i} \\
+Y_{3,i} &= \alpha_3 + \lambda_3 \times \eta_{i} + \epsilon_{3,i} \\
+\eta_i &\sim \mathbf{Normal}(0, \sigma_\eta)\\
+\epsilon_{1,i} &\sim \mathbf{Normal}(0, \sigma_{\epsilon_1}) \\
+\epsilon_{2,i} &\sim \mathbf{Normal}(0, \sigma_{\epsilon_2}) \\
+\epsilon_{3,i} &\sim \mathbf{Normal}(0, \sigma_{\epsilon_3})
+\end{aligned}$$
+Which implies
+\begin{equation}
+\begin{aligned}
+\left( \begin{matrix} Y_{1,i} \\ Y_{2,i} \\ Y_{3,i} \end{matrix} \right)
+&\sim \mathbf{Normal}\left( \left[ \begin{matrix} \alpha_1 \\ \alpha_2 \\ \alpha_3 \end{matrix} \right] , \left[ \begin{matrix} \lambda_1^2 \times \sigma_{\eta}^2 + \sigma_{\epsilon_1}^2 & \lambda_1 \times \lambda_2 \times \sigma^2_\eta & \lambda_1 \times \lambda_3 \times \sigma^2_\eta \\  \lambda_1 \times \lambda_2 \times \sigma^2_\eta & \lambda_2^2 \times \sigma_{\eta}^2 + \sigma_{\epsilon_2}^2 & \lambda_2 \times \lambda_3 \times \sigma^2_\eta \\ \lambda_1 \times \lambda_3 \times \sigma^2_\eta & \lambda_2 \times \lambda_3 \times \sigma^2_\eta & \lambda_3^2 \times \sigma_{\eta}^2 + \sigma_{\epsilon_3}^2 \end{matrix} \right] \right)
+\end{aligned}
+\end{equation}
+
+## Confirmatory factor analysis
+
+"Big Five" personality traits such as extraversion are One commonly used questionnaire to measure the Big Five Inventory [BFI; @john1991big]. In the BFI-2 [@@soto2017next], participants are asked to rate their agreement with 60 statements on a 5-point scale ranging "disagree strongly" to "agree strongly".
+
+In this example, we focus on data collected with a Czech translation of the BFI-2 [@hvrebivckova2020big], with a total of $n=1733$ respondents. 
+
+```{r}
+data(BFI2, package = "ShinyItemAnalysis")
+dat <- BFI2
+library(lavaan)
+mod_spec <- '
+E =~ i1 + i16 + i31 + i46 + i6 + i21 + i36 + i51 + i11 + i26 + i41 + i56
+A =~ i2 + i17 + i32 + i47 + i7 + i22 + i37 + i52 + i12 + i27 + i42 + i57
+C =~ i3 + i18 + i33 + i48 + i8 + i23 + i38 + i53 + i13 + i28 + i43 + i58
+N =~ i4 + i19 + i34 + i49 + i9 + i24 + i39 + i54 + i14 + i29 + i44 + i59
+O =~ i10 + i25 + i40 + i55 + i5 + i20 + i35 + i50 + i15 + i30 + i45 + i60
+'
+BFI2_cfa <- lavaan::cfa(mod_spec, data=dat, orthogonal=TRUE)
+BFI2_cfa_dep <- lavaan::cfa(mod_spec, data=dat)
+```
 
 $$\texttt{measurement} = \beta_0 + \beta_1 \times \textrm{temperature} + \epsilon \quad \quad \epsilon \sim \mathbf{Normal}(0, \sigma_\epsilon)$$
 where the error term $\epsilon$ is the combination of all factors that lead to measurement error, and the constants $\beta_0$ and $\beta_1$ define the scale used (e.g. Celcius, or Fahrenheit). As the scale is -- to some extent -- arbitrary, we could assume a scale where $\beta_0 = 0$ and $\beta_1 = 1$, leading to the model
@@ -25,9 +125,77 @@ library(psychTools)
 data(bfi)
 ```
 
-### Exploratory factor analysis and principal components analysis
+
+## Modification indices
+
+Modification indices 
+
+## General SEMs with latent variables
+
+The BFI2 was designed with a hierarchical structure in mind. Indeed, each of the "big five" factors was assumed to be further broken down into three facets: extraversion into sociability, assertiveness and energ level, Agreeableness into compassion, respectfulness, and trust, conscientiousness into organization, productiveness, and responsibility, neuroticism into anxiety, depression, and emotional volatility, and openness into intellectual curiosity, aesthetic sensitivity, and creative imagination. 
+
 
 ```{r}
+mod_spec <- '
+E =~ E1 + E2 + E3
+E1 =~ i1 + i16 + i31 + i46 
+E2 =~ i6 + i21 + i36 + i51 
+E3 =~ i11 + i26 + i41 + i56
+
+A =~ A1 + A2 + A3
+A1 =~ i2 + i17 + i32 + i47
+A2 =~ i7 + i22 + i37 + i52
+A3 =~ i12 + i27 + i42 + i57
+
+C =~ C1 + C2 + C3
+C1 =~ i3 + i18 + i33 + i48
+C2 =~ i8 + i23 + i38 + i53
+C3 =~ i13 + i28 + i43 + i58
+
+N =~ N1 + N2 + N3
+N1 =~ i4 + i19 + i34 + i49
+N2 =~ i9 + i24 + i39 + i54 
+N3 =~ i14 + i29 + i44 + i59
+
+O =~ O1 + O2 + O3
+O1 =~ i10 + i25 + i40 + i55
+O2 =~ i5 + i20 + i35 + i50 
+O3 =~ i15 + i30 + i45 + i60
+'
+BFI2_cfa_hier <- lavaan::cfa(mod_spec, data=dat, orthogonal=TRUE)
+```
+
+```{r}
+library(sdamr)
+data(speeddate)
+speed_cor <- cor(speeddate[,c("other_attr", "other_sinc", "other_intel", "other_fun", "other_amb")], use="pairwise.complete.obs")
+#psych::fa(speed_cor, nfactors = 5, n.obs=nrow(speeddate), rotate="none")
+
+psych::fa(speeddate[,c("other_attr", "other_sinc", "other_intel", "other_fun", "other_amb")], nfactors = 4, rotate="none")
+```
+
+### Measurement model
+
+The relations between a latent variable and the observed variables are called a **measurement model**.
+
+```{r}
+
+```
+
+### Structural (path) model
+
+### Indentification
+
+Hayward case (negative errors)
+
+## Multiple groups and measurement invariance
+
+## Exploratory factor and principal components analysis
+
+```{r}
+library(psychTools)
+data(bfi)
+
 bfi_cor <- cor(bfi[,-c(26:28)], use="pairwise.complete.obs")
 bfi_pca <- prcomp(bfi_cor)
 summary(bfi_pca)
@@ -101,9 +269,9 @@ library(lavaan)
 ```
 
 
-#### Determining the number of factors
+### Determining the number of factors
 
-#### Factor rotation
+### Factor rotation
 
 There are two main types of factor rotation: in **orthogonal rotation**, the factors are constrained to be independent of each other (i.e. there is no residual covariation between the factors). In **oblique rotation**, factors are allowed to have residual covariation. 
 
@@ -124,34 +292,7 @@ Fo =~ O1 + O2 + O3 + O4 + O5
 bfi_cfa <- lavaan::cfa(mod_spec, data=bfi)
 ```
 
-## Modification indices
-
-Modification indices 
-
-## General SEMs
-
-```{r}
-library(sdamr)
-data(speeddate)
-speed_cor <- cor(speeddate[,c("other_attr", "other_sinc", "other_intel", "other_fun", "other_amb")], use="pairwise.complete.obs")
-#psych::fa(speed_cor, nfactors = 5, n.obs=nrow(speeddate), rotate="none")
-
-psych::fa(speeddate[,c("other_attr", "other_sinc", "other_intel", "other_fun", "other_amb")], nfactors = 4, rotate="none")
-```
-
-### Measurement model
-
-The relations between a latent variable and the observed variables are called a **measurement model**.
-
-```{r}
-
-```
-
-### Structural (path) model
-
-### Indentification
-
-Hayward case
+## Ordinal variables
 
 ## Conclusion
 

@@ -430,7 +430,7 @@ knitr::kable(tab, caption = "Results of a Probit regression model of correct ide
 ### Welcome back Paul!
 
 ```{r paul-glm-logistic-results}
-dat <- data.frame(y=c(rep(1,14),rep(0,2)))
+dat <- data.frame(y=c(rep(1,12),rep(0,2)))
 mod1 <- glm(y ~ 1, data=dat, family=binomial())
 mod0 <- glm(y ~ 0, data=dat, family=binomial())
 intest <- anova(mod0, mod1, test="LRT") 

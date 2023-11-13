@@ -446,6 +446,8 @@ where $n$ is the number of (multivariate) observations. The BIC can be viewed as
 
 For both measures, lower values are better. The measures are not test statistics in the sense that their sampling distribution can be used to compute $p$-values. And the absolute value of each measure is not obvious. Their application is straightforward however: Pick the model with the lowest AIC or BIC. Both criteria add an additional penalty to the "minus two log likelihood" measure of misfit. The penalty of the AIC ($2 \times \text{npar}(M)$) is only based on the number of freely estimated parameters in MODEL M. For the BIC, the penalty ($\text{npar}(M) \times \log (n)$) is also based on the number of observations. The larger the dataset, the larger the relative penalty for additional parameters.
 
+## Modification indices
+
 ## Evaluation and selection of the mediation path models
 
 With these technical details behind us, we can finally assess the fit of the three models proposed in Section \@ref(sec-sem-path-model-mediation). These were the full mediation, partial mediation, and the common cause model. The overall fit tests and fit measures of these models are provided in Table \@ref(tab:sem-medation-fit-measures).
