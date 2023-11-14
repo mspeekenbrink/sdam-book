@@ -13,13 +13,13 @@ The measurement of psychological constructs is the focus of **psychometrics**, a
 
 ## Measurement of latent variables
 
-Let's start with a simple example: measuring temperature. Temperature is a physical quantity that reflects the kinetic energy of atoms in a substance or the air. This kinetic energy is not directly observable, but can be measured with a thermometer. A classic mercury thermometer has a bulb filled with mercury attached to a narrow tube of glass. An increase in heat expands the volume of the mercury so that the level of mercury in the narrow tube rises. In other words, the temperature is the *cause* of the state of the measurement device. Markers along the narrow tube can be placed such that the level of mercury in the tube corresponds to a standard scale, such as the Fahrenheit or Celcius scale. In the latter, the scale is calibrated such that $0^\circ \textrm{C}$ represents the freezing point of water, and $100^\circ \textrm{C}$ represents the boiling point of water. In the less widely-used Fahrenheit scale, the freezing point of water corresponds to $32^\circ \textrm{F}$, and the boiling point to $212^\circ \textrm{F}$. 
+Let's start with a simple example: measuring temperature. Temperature is a physical quantity that reflects the kinetic energy of atoms in a substance or the air. This kinetic energy is not directly observable, but can be measured with a thermometer. A classic mercury thermometer has a bulb filled with mercury attached to a narrow tube of glass. An increase in heat expands the volume of the mercury so that the level of mercury in the narrow tube rises. In other words, the temperature is the *cause* of the state of the measurement device. Markers along the narrow tube can be placed such that the level of mercury in the tube corresponds to a standard scale, such as the Fahrenheit or Celcius scale. In the latter, the scale is calibrated such that $0^\circ \textrm{C}$ represents the freezing point of water, and $100^\circ \textrm{C}$ represents the boiling point of water. In the Fahrenheit scale, the freezing point of water corresponds to $32^\circ \textrm{F}$, and the boiling point to $212^\circ \textrm{F}$. 
 
 Thermometers are relatively accurate measurement devices, but not devoid of **measurement error**. That means that the measurement device can provide different readings for exactly the same true temperature. Such measurement error may be due to factors affecting the measurement device (e.g. the volume of mercury not being deterministically related to the temperature) as well as factors affecting the observer (e.g. the person reading the value of the thermometer not being able to see very small changes on the thermometer).
 
 As a statistical model, we might propose something like the following linear model:
 $$\texttt{measurement}_i = \beta_0 + \beta_1 \times \textrm{temperature}_i + \epsilon_i \quad \quad \epsilon_i \sim \mathbf{Normal}(0, \sigma_\epsilon)$$
-If temperature was a measured variable, this is just a simple regression model and we would be able to estimate all parameters ($\beta_0$, $\beta_1$, $\sigma_\epsilon$) using e.g. maximum likelihood.
+If temperature was a directly observed variable, this is just a simple regression model and we would be able to estimate all parameters ($\beta_0$, $\beta_1$, $\sigma_\epsilon$) using e.g. maximum likelihood. However, temperature is a latent variable and we can only observe the measurement. 
 
 ```{r}
 library(lavaan)
@@ -44,15 +44,15 @@ Y_{i} &= \alpha + \lambda \times \eta_{i} + \epsilon_{i} \\
 \eta_i &\sim \mathbf{Normal}(\mu_\eta, \sigma_\eta)\\
 \epsilon_i &\sim \mathbf{Normal}(0, \sigma_\epsilon)
 \end{aligned}$$
-Note that in addition to relabelling the intercept as $\alpha$, the slope as $\lambda$, and the latent variable as $\eta$, we have also added an assumption about the values of the latent variable, namely that these are Normal-distributed. 
+Note that in addition to relabelling the intercept as $\alpha$, the slope as $\lambda$, and the latent variable as $\eta$, we have also added an assumption about the values of the latent variable, namely that these are Normal-distributed. We need to make such an assumption about the distribution of the latent variable because without it, we cannot infer properties of the latent variable from measurements $Y$. 
 
-This implies that $Y$ is Normal-distributed with
+The model above implies that $Y$ is Normal-distributed with
 $$\begin{aligned}
 \mu_Y &= \alpha + \lambda \times \mu_\eta \\
 \sigma^2_Y &= \lambda^2 \times \sigma^2_\eta + \sigma^2_\epsilon
 \end{aligned}
 $$
-From observations of $Y$, we can get estimates of the mean $\hat{\mu}_Y$ and variance $\hat{\sigma}^2_\Y$. But our latent variable model has 5 parameters. 
+From observations of $Y$, we can estimate the mean and variance of $Y$ in the usual manner as $\hat{\mu}_Y = \overline{Y}$ and $\hat{\sigma}^2_Y = \frac{\sum_{i=1}^n (Y_i - \overline{Y})^2}{n-1}$. But our latent variable model has 5 parameters. We cannot estimate 5 parameters from what are effectively two properties of the data. 
 
 There are two common choices to scale latent variables. The first is to set $\mu_\eta = 0$ and $\lambda = 1$. The second is to set $\mu_\eta = 0$ and $\sigma^2_\eta = 1$. 
 
@@ -95,11 +95,103 @@ Which implies
 
 ## Confirmatory factor analysis
 
-"Big Five" personality traits such as extraversion are One commonly used questionnaire to measure the Big Five Inventory [BFI; @john1991big]. In the BFI-2 [@@soto2017next], participants are asked to rate their agreement with 60 statements on a 5-point scale ranging "disagree strongly" to "agree strongly".
+"Big Five" personality traits such as extraversion are generally assessed with self-report questionnaires. One commonly used questionnaire is the Big Five Inventory [BFI; @john1991big]. In the BFI-2 [@@soto2017next], participants are asked to rate their agreement with 60 statements on a 5-point scale ranging "disagree strongly" to "agree strongly". There are 12 statements relating to each of the following main personality dimensions: Extraversion, Agreeableness, Conscientiousness, Negative Emotionality (traditionally called "neuroticism"), and Open-Mindedness (tranditionally called "openness to experience"). Example statements are related to extraversion are _"I am someone who is outgoing, sociable"_ and _"I am am someone who is sometimes shy, introverted"_. Note that agreement with the first statement should be *positively* related to extraversion, whilst agreement with the second statement should be *negatively* related to extraversion. Mixing such positively and negatively stated items is common practice in the design of psychological measurement questionnaires. 
 
-In this example, we focus on data collected with a Czech translation of the BFI-2 [@hvrebivckova2020big], with a total of $n=1733$ respondents. 
+In the following, we will consider data collected with a Czech translation of the BFI-2 [@hvrebivckova2020big], with a total of $n=1733$ respondents.
 
-```{r}
+```{r SEM-estimate-BFI2-extraversion-models}
+library(tidyverse)
+data(BFI2, package = "ShinyItemAnalysis")
+dat <- BFI2
+colnames(dat)[1:60] <- c(
+  "iEscb01", "iAcmp02", "iCorg03r", "iNanx04r", "iOaes05r", "iEasr06",
+  "iArsp07", "iCprd08r", "iNdep09r", "iOint10", "iEenl11r", "iAtrs12r", "iCrsp13", "iNemt14",
+  "iOcrt15", "iEscb16r", "iAcmp17r", "iCorg18", "iNanx19", "iOaes20", "iEasr21", "iArsp22r",
+  "iCprd23r", "iNdep24r", "iOint25r", "iEenl26r", "iAtrs27", "iCrsp28r", "iNemt29r",
+  "iOcrt30r", "iEscb31r", "iAcmp32", "iCorg33", "iNanx34", "iOaes35", "iEasr36r", "iArsp37r",
+  "iCprd38", "iNdep39", "iOint40", "iEenl41", "iAtrs42r", "iCrsp43", "iNemt44r", "iOcrt45r",
+  "iEscb46", "iAcmp47r", "iCorg48r", "iNanx49r", "iOaes50r", "iEasr51r", "iArsp52", "iCprd53",
+  "iNdep54", "iOint55r", "iEenl56", "iAtrs57", "iCrsp58r", "iNemt59", "iOcrt60"
+)
+dat <- dat %>%
+  mutate(across(ends_with("n"), ~ 6 - .x))
+colnames(dat)[1:60] <- paste0("i",1:60)
+
+library(lavaan)
+mod_spec <- '
+E =~ i1 + i16 + i31 + i46 + i6 + i21 + i36 + i51 + i11 + i26 + i41 + i56
+'
+BFI2_extr_1 <- lavaan::cfa(mod_spec, data=dat, orthogonal=TRUE)
+mod_spec <- '
+E =~ i1 + i16 + i31 + i46 + i6 + i21 + i36 + i51 + i11 + i26 + i41 + i56
+A =~ 1*i1 + 1*i16 + 1*i31 + 1*i46 + 1*i6 + 1*i21 + 1*i36 + 1*i51 + 1*i11 + 1*i26 + 1*i41 + 1*i56
+'
+BFI2_extr_1acq <- lavaan::cfa(mod_spec, data=dat, orthogonal=TRUE)
+mod_spec <- '
+E =~ E1 + E2 + E3
+E1 =~ 1*i1 + i16 + i31 + i46 
+E2 =~ 1*i6 + i21 + i36 + i51 
+E3 =~ i11 + i26 + 1*i41 + i56
+E ~~ 1*E
+'
+BFI2_extr_31 <- lavaan::lavaan(mod_spec, data=dat, int.ov.free = TRUE, int.lv.free = FALSE, auto.fix.first = FALSE, auto.fix.single = TRUE, auto.var = TRUE, auto.cov.lv.x = TRUE, auto.efa = TRUE, auto.th = TRUE, auto.delta = TRUE, auto.cov.y = TRUE)
+mod_spec <- '
+E =~ E1 + E2 + E3
+E1 =~ 1*i1 + i16 + i31 + i46 
+E2 =~ 1*i6 + i21 + i36 + i51 
+E3 =~ i11 + i26 + 1*i41 + i56
+A =~ 1*i1 + 1*i16 + 1*i31 + 1*i46 + 1*i6 + 1*i21 + 1*i36 + 1*i51 + 1*i11 + 1*i26 + 1*i41 + 1*i56
+E ~~ 0*A
+E ~~ 1*E
+'
+BFI2_extr_31acq <- lavaan::lavaan(mod_spec, data=dat, int.ov.free = TRUE, int.lv.free = FALSE, auto.fix.first = FALSE, auto.fix.single = TRUE, auto.var = TRUE, auto.cov.lv.x = TRUE, auto.efa = TRUE, auto.th = TRUE, auto.delta = TRUE, auto.cov.y = TRUE)
+```
+
+### A single factor model
+
+The BFI2 contains 12 items which relate to extraversion. As these items pertain to the same psychological dimension, we would expect answers to them to be correlated. A confirmatory factor model aims to account for these correlations by assuming that all answers are "caused" by a single underlying latent factor. 
+
+```{r BFI2-extr-1-plot, fig.cap="Graphical representation of a single factor model for Extraversion. Items i1, i16, i31, and i46 relate to the Sociability facet of Extraversion, with items i16 and i31 stated in the negative direction. Items i6, i21, i36, and i51 relate to the Assertiveness facet of Extraversion, with items i36 and i51 stated in the negative direction. Items 11, 26, 41, 56 relate to the Energy Level facet of Extraversion, with items i11 and i26 stated in the negative direction.", fig.width=8, fig.height=3.5, out.width="100%"}
+semPlot::semPaths(BFI2_extr_1, whatLabels = "est")
+# 3, 4, 5, 8, 9, 11, 12, 16, 17, 22, 23, 24, 25, 26, 28, 29, 30, 31, 36, 37, 42, 44, 45, 47, 48, 49, 50, 51, 55, and 58
+```
+
+Figure \@ref(fig:BFI2-extr-1-plot2) shows the estimated parameters of a single factor model for the 12 items in the BFI-2 related to extraversion. The factor loading of the first item was fixed to 1 in order to scale the latent factor. Note that all estimated factor loadings are positive, whilst 6 of the 12 items were stated in a negative direction (i.e. higher scores should indicate *less* extraversion). If all items relate to extraversion in the intended manner, we should expect a mix of positive and negative factor loadings. Table \@ref(tab:BFI2-extr-1-results) shows the parameter estimates and test results, as well as the model fit indices. As can be seen there, the single factor model is rejected by the overall model $\chi^2$ test, and the CFI and RMSEA both indicate relatively poor model fit.
+
+```{r, results="asis"}
+if(knitr::is_html_output()) {
+  cat("<table><caption>(\\#tab:BFI2-extr-1-results) Results of a single factor model for extraversion.</caption>")
+  semTable::semTable(BFI2_extr_1, type="html", fits = c("chisq", "cfi", "srmr", "rmsea", "rmsea.ci.lower", "rmsea.ci.upper"), fitLabels = c(rmsea.ci.lower = "RMSEA (lower bound)", rmsea.ci.upper = "RMSEA (upper bound)"))
+  cat("</table>")
+} else {
+  semTable::semTable(fmod_complex2, type="latex", table.float = TRUE, fits = c("chisq", "cfi", "srmr", "rmsea", "rmsea.ci.lower", "rmsea.ci.upper"), caption = "(\\#ttab:tab:sem_path_mod_complex_results2) Results of a second full path model for the legacy motive data.")
+}
+```
+
+@soto2017next suggest that participants' responses to the BFI-2 might be affected by their "acquiescent response style". This refers to the tendency of an individual to
+consistently agree or consistently disagree with questionnaire items, regardless of their content. This would distort the factor loadings. They suggest to account for Acquiescence by including a second factor in the model, with fixed factor loadings on all items. By setting the factor loadings as identical for all items, this factor can account for a general tendency to provide low or high scores on all items. 
+
+```{r BFI2-extr-1acq-plot, fig.cap="Graphical representation of a single factor model for Extraversion with an additional Acquiescence factor.", fig.width=8, fig.height=3.5, out.width="100%"}
+semPlot::semPaths(BFI2_extr_1acq, whatLabels = "est", layout="tree2")
+# 3, 4, 5, 8, 9, 11, 12, 16, 17, 22, 23, 24, 25, 26, 28, 29, 30, 31, 36, 37, 42, 44, 45, 47, 48, 49, 50, 51, 55, and 58
+```
+
+By fixing all the factor loadings, this additional factor only requires a single additional parameter which reflects the variance of the latent Acquiescence factor. The resulting model is depicted in Figure \@ref(fig:BFI2-extr-1acq-plot) and the resulting estimates and fit measures are provided in Table \@ref(tab:BFI2-extr-1acq-results). Whilst there are now a few negative factor loadings and the fit is somewhat improved, the model is still not adequate. 
+
+```{r, results="asis"}
+if(knitr::is_html_output()) {
+  cat("<table><caption>(\\#tab:BFI2-extr-1acq-results) Results of a single factor model for Extraversion with an additional Acquiescence factor.</caption>")
+  semTable::semTable(BFI2_extr_1acq, type="html", fits = c("chisq", "cfi", "srmr", "rmsea", "rmsea.ci.lower", "rmsea.ci.upper"), fitLabels = c(rmsea.ci.lower = "RMSEA (lower bound)", rmsea.ci.upper = "RMSEA (upper bound)"))
+  cat("</table>")
+} else {
+  semTable::semTable(fmod_complex2, type="latex", table.float = TRUE, fits = c("chisq", "cfi", "srmr", "rmsea", "rmsea.ci.lower", "rmsea.ci.upper"), caption = "(\\#ttab:tab:sem_path_mod_complex_results2) Results of a second full path model for the legacy motive data.")
+}
+```
+
+
+### CFA with multiple latent 
+
+```{r SEM-estimate-BFI2-full-factor-models}
 data(BFI2, package = "ShinyItemAnalysis")
 dat <- BFI2
 library(lavaan)
@@ -113,6 +205,8 @@ O =~ i10 + i25 + i40 + i55 + i5 + i20 + i35 + i50 + i15 + i30 + i45 + i60
 BFI2_cfa <- lavaan::cfa(mod_spec, data=dat, orthogonal=TRUE)
 BFI2_cfa_dep <- lavaan::cfa(mod_spec, data=dat)
 ```
+
+
 
 $$\texttt{measurement} = \beta_0 + \beta_1 \times \textrm{temperature} + \epsilon \quad \quad \epsilon \sim \mathbf{Normal}(0, \sigma_\epsilon)$$
 where the error term $\epsilon$ is the combination of all factors that lead to measurement error, and the constants $\beta_0$ and $\beta_1$ define the scale used (e.g. Celcius, or Fahrenheit). As the scale is -- to some extent -- arbitrary, we could assume a scale where $\beta_0 = 0$ and $\beta_1 = 1$, leading to the model

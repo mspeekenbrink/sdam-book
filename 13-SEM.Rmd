@@ -129,7 +129,7 @@ Graphical depictions of SEM models, such as Figure \@ref(fig:SEM-multiple-regres
 ```{r, results="asis"}
 if(knitr::is_html_output()) {
   cat("<table><caption>(\\#tab:sem-table-multiple-regression-speeddate) Results of a SEM analysis of a multiple regression model.</caption>")
-  semTable::semTable(fregmod, type="html", fits = c("chisq", "nfi", "tli", "srmr", "rmsea"))
+  semTable::semTable(fregmod, type="html", fits = c("chisq", "cfi", "srmr", "rmsea"))
   cat("</table>")
 } else {
   semTable::semTable(fregmod, type="latex", table.float = TRUE, caption = "(\\#tab:sem-table-multiple-regression-speeddate) Results of a SEM analysis of a multiple regression model.", fits = c("chisq", "nfi", "tli", "srmr", "rmsea"))
@@ -366,7 +366,9 @@ For *endogenous* variables, however, we do need a similar assumption as in the G
 
 ## Model fit
 
-A first consideration for any SEM model is whether it describes the observed data well. As in any statistical model, describing the data well means that the implied distribution of the data is more-or-less equal to the empirical distribution of the data. 
+A first consideration for any SEM model is whether it describes the observed data well. As in any statistical model, describing the data well means that the implied distribution of the data is more-or-less equal to the empirical distribution of the data.
+
+### Test of overall model fit
 
 A test of overall model fit is similar to that used for generalized linear models (see Section \@ref(sec-generalized-linear-models-overall-model-fit)), which is based on likelihood-ratio test comparing the model under consideration (MODEL M) to a saturated MODEL S:
 $$\begin{aligned}
@@ -380,13 +382,13 @@ Note that we use the symbol $\hat{\chi}^2$ here, rather than the residual devian
 parameters. The covariance matrix contains $\frac{P \times (P - 1)}{2} + P$ unique terms ($P$ variances, and $\frac{P \times (P-1)}{2}$ unique covariances^[A covariance $\sigma_{1,2}$ above the diagonal is equal to the covariance $\sigma_{2,1}$ below the diagonal.]). The mean vector contains $P$ unique parameters (a mean for each variable). Adding these up provides the specification above. 
 
 If the model under consideration uses less parameters, then the test result can provide a meaningful assessment of the overall model fit. 
-There are some issues however. Particularly, the number of observations $n$ should be sufficient (e.g. $n > 200$), and the data should follow a multivariate Normal distribution. But if the number of observations $n$ is very large, the test becomes very powerful. The test will then often be significant, even when the model provides a good (but not perfect) account of the data. Due to these issues (and others), a wide variety of practical fit indices have been proposed.
+There are some issues however. Particularly, the number of observations $n$ should be sufficient (e.g. $n > 200$), and the data should follow a multivariate Normal distribution. But if the number of observations $n$ is very large, the test becomes very powerful. The test will then often be significant, even when the model provides a good (but not perfect) account of the data. Due to these issues (and others), a wide variety of approximate fit indices have been proposed.
 
-### Fit indices
+### Approximate fit indices
 
 Fit indices can be grouped into those that concern comparative fit to a baseline model and  measures based on errors of approximation [@kaplan2001sem]. We will discuss commonly used measures in each group in turn.
 
-### Comparative fit to a baseline
+#### Comparative fit to a baseline
 
 The idea behind measures that compare the fit of a MODEL M to that of a baseline MODEL B is that a simple baseline model may already fit the data well. We should therefore be interested in how much the added complexity of MODEL M contributes. The baseline MODEL B is usually one which specifies complete independence between the observed variables (i.e. all the covariances are equal to 0).
 
@@ -403,14 +405,21 @@ The **normed fit index** (NFI) is computed from the overall model fit tests of M
 \end{equation}
 Note that as the baseline MODEL B is simpler than MODEL M, it can never perform better, so $\hat{\chi}^2_B \geq \hat{\chi}^2_M$. The NFI therefore ranges between 0 (same fit as baseline model) and 1 (perfect fit compared to the baseline model). Values of the NFI larger than .95 are considered to indicate a good fit of the model.
 
-The **Tucker-Lewis index** (TLI) is another common fit index comparing a model to a baseline. Like the NFI, it uses the overall model fit statistics $\hat{\chi}^2_M$ and $\hat{\chi}^2_B$, but considers how these deviate from their expected values (under the null-hypothesis that each model is equal to MODEL S). For a Chi-squared distribution, the expected value (the mean) is equal to the degrees of freedom. Hence, the expected values are $\text{df}_M = \text{npar}(S) - \text{npar}(M)$ and $\text{df}_B = \text{npar}(S) - \text{npar}(B)$ respectively. The TLI (also called the non-normed fit index, NNFI) is computed as:
+The **comparative fit index** (CFI) is another common fit index comparing a model to a baseline. Like the NFI, it uses the overall model fit statistics $\hat{\chi}^2_M$ and $\hat{\chi}^2_B$, but considers how these deviate from their expected values (under the null-hypothesis that each model is equal to MODEL S). For a Chi-squared distribution, the expected value (the mean) is equal to the degrees of freedom. Hence, the expected values are $\text{df}_M = \text{npar}(S) - \text{npar}(M)$ and $\text{df}_B = \text{npar}(S) - \text{npar}(B)$ respectively. The CFI is computed as
 \begin{equation}
-\text{TLI} = 1 - \frac{(\hat{\chi}^2_M - \text{df}_M)/(\hat{\chi}^2_B - \text{df}_B)}{\text{df}_M/\text{df}_B}
+\text{CFI} = \frac{\max(\hat{\chi}^2_B - \text{df}_B, 0) - \max(\hat{\chi}^2_M - \text{df}_M, 0)}{\max(\hat{\chi}^2_B - \text{df}_B, 0)}
+(\#eq:sem-CFI-definition)
+\end{equation}
+The values of the CFI range between 0 (bad) and 1 (good), and a value larger than .95 can be considered satisfactory [@hu1999cutoff].
+
+The **Tucker-Lewis index** (TLI) has a similar aim to the CFI. The TLI (also called the non-normed fit index, NNFI) is computed as:
+\begin{equation}
+\text{TLI} = \frac{\hat{\chi}^2_B/\text{df}_B - \hat{\chi}^2_M/\text{df}_M}{\hat{\chi}^2_B/\text{df}_B - 1}
 (\#eq:sem-TLI-definition)
 \end{equation}
-The TLI is often interpreted as a measure between 0 (bad) and 1 (good), although it technically can have values below 0 or above 1. In any case, a value larger than .95 can be considered satisfactory [@hu1999cutoff]. 
+The TLI is often interpreted as a measure between 0 (bad) and 1 (good), although it technically can have values below 0 or above 1. In any case, a value larger than .95 can be considered satisfactory [@hu1999cutoff].
 
-### Errors of approximation
+#### Errors of approximation
 
 The **Standardized Root Mean Residual** (SRMR) is an absolute measure of fit. It is a standardized measure of the discrepancy between the sample (co-)variances $s_{ij}$ and the model-implied (co-)variances $\sigma_{ij}(\theta)$. This measure can be computed as [cf. @hu1999cutoff]:
 \begin{equation}
@@ -426,9 +435,19 @@ Like the SRMR, the **Root Mean Square Error of Approximation** (RMSEA) is a an a
 \end{equation}
 where $\text{max}(0,\hat{\chi}^2_M - \text{df}_M)$ returns either $0$ or $\hat{\chi}^2_M - \text{df}_M$ (whichever is larger), and $n$ denotes the number of observations in the data. As confidence intervals can be computed for this measure, it is common to report these. Values of $\text{RMSEA} \leq .06$ are considered satisfactory [@hu1999cutoff].
 
+@kline2015principles proposes to, when possible, report the following "minimal set" of fit measures:
+
+1. Model chi-square $\hat{\chi}^2_M$ with its degrees of freedom and $p$ value.
+2. Root Mean Square Error of Approximation (RMSEA) and its 90% confidence interval.
+3. Bentler Comparative Fit Index (CFI).
+4. Standardized Root Mean Square Residual (SRMR).
+
+
 <!-- ### Modification indices
 
 Modification indices -->
+
+
 
 ## Model comparison
 
@@ -509,7 +528,7 @@ To my surprise, apart from the effect of age on legacy and income, all the paths
 ```{r, results="asis"}
 if(knitr::is_html_output()) {
   cat("<table><caption>(\\#tab:sem-path-mod-complex-results)Results of an initial full path model for the legacy motive data. Only results for regression parameters and selected model fit indices are included.</caption>")
-  semTable::semTable(fmod_complex, type="html", paramSets = c("slopes","fits"), fits = c("chisq", "nfi", "tli", "srmr", "rmsea"))
+  semTable::semTable(fmod_complex, type="html", paramSets = c("slopes","fits"), fits = c("chisq", "cfi", "tli", "srmr", "rmsea"))
   cat("</table>")
 } else {
   semTable::semTable(fmod_complex, type="latex", table.float = TRUE, fits = c("chisq", "nfi", "tli", "srmr", "rmsea"), caption = "(\\#ttab:tab:sem_path_mod_complex_results) Results of an initial full path model for the legacy motive data.")
