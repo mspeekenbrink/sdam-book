@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 3 A model with a mean (one sample t-test) | Statistics: Data analysis and modelling</title>
   <meta name="description" content="A book about statistics for data analysis, with a main focus on statistical modelling." />
-  <meta name="generator" content="bookdown 0.29 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.36 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 3 A model with a mean (one sample t-test) | Statistics: Data analysis and modelling" />
   <meta property="og:type" content="book" />
@@ -23,7 +23,7 @@
 <meta name="author" content="Maarten Speekenbrink" />
 
 
-<meta name="date" content="2022-12-11" />
+<meta name="date" content="2023-11-19" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -52,382 +52,49 @@
 <link href="book_assets/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
 <link href="book_assets/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
 <script src="book_assets/anchor-sections-1.1.0/anchor-sections.js"></script>
-<script src="book_assets/htmlwidgets-1.5.4/htmlwidgets.js"></script>
+<script src="book_assets/htmlwidgets-1.6.2/htmlwidgets.js"></script>
 <script src="book_assets/viz-1.8.2/viz.js"></script>
 <link href="book_assets/DiagrammeR-styles-0.2/styles.css" rel="stylesheet" />
-<script src="book_assets/grViz-binding-1.0.9/grViz.js"></script>
-<script src="book_assets/plotly-binding-4.10.0/plotly.js"></script>
+<script src="book_assets/grViz-binding-1.0.10/grViz.js"></script>
+<script src="book_assets/plotly-binding-4.10.3/plotly.js"></script>
 <script src="book_assets/typedarray-0.1/typedarray.min.js"></script>
 <link href="book_assets/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet" />
 <script src="book_assets/crosstalk-1.2.0/js/crosstalk.min.js"></script>
-<link href="book_assets/plotly-htmlwidgets-css-2.5.1/plotly-htmlwidgets.css" rel="stylesheet" />
-<script src="book_assets/plotly-main-2.5.1/plotly-latest.min.js"></script>
+<link href="book_assets/plotly-htmlwidgets-css-2.11.1/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="book_assets/plotly-main-2.11.1/plotly-latest.min.js"></script>
 <link href="book_assets/combineWidgetStyle-0.1/combineWidgets.css" rel="stylesheet" />
 <script src="book_assets/combineWidgets-binding-0.11.1/combineWidgets.js"></script>
-<script src="book_assets/rglWebGL-binding-0.110.2/rglWebGL.js"></script>
-<link href="book_assets/rglwidgetClass-0.110.2/rgl.css" rel="stylesheet" />
-<script src="book_assets/rglwidgetClass-0.110.2/rglClass.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.110.2/utils.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.110.2/buffer.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.110.2/subscenes.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.110.2/shaders.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.110.2/textures.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.110.2/projection.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.110.2/mouse.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.110.2/init.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.110.2/pieces.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.110.2/draw.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.110.2/controls.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.110.2/selection.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.110.2/rglTimer.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.110.2/pretty.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.110.2/axes.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.110.2/animation.src.js"></script>
-<!--html_preserve--><script type = "text/plain" id = "rgl-vertex-shader">
-#line 2 1
-// File 1 is the vertex shader
-#ifdef GL_ES
-#ifdef GL_FRAGMENT_PRECISION_HIGH
-precision highp float;
-#else
-precision mediump float;
-#endif
-#endif
-
-attribute vec3 aPos;
-attribute vec4 aCol;
-uniform mat4 mvMatrix;
-uniform mat4 prMatrix;
-varying vec4 vCol;
-varying vec4 vPosition;
-
-#ifdef NEEDS_VNORMAL
-attribute vec3 aNorm;
-uniform mat4 normMatrix;
-varying vec4 vNormal;
-#endif
-
-#if defined(HAS_TEXTURE) || defined (IS_TEXT)
-attribute vec2 aTexcoord;
-varying vec2 vTexcoord;
-#endif
-
-#ifdef FIXED_SIZE
-uniform vec3 textScale;
-#endif
-
-#ifdef FIXED_QUADS
-attribute vec3 aOfs;
-#endif
-
-#ifdef IS_TWOSIDED
-#ifdef HAS_NORMALS
-varying float normz;
-uniform mat4 invPrMatrix;
-#else
-attribute vec3 aPos1;
-attribute vec3 aPos2;
-varying float normz;
-#endif
-#endif // IS_TWOSIDED
-
-#ifdef FAT_LINES
-attribute vec3 aNext;
-attribute vec2 aPoint;
-varying vec2 vPoint;
-varying float vLength;
-uniform float uAspect;
-uniform float uLwd;
-#endif
-
-
-void main(void) {
-  
-#ifndef IS_BRUSH
-#if defined(NCLIPPLANES) || !defined(FIXED_QUADS) || defined(HAS_FOG)
-  vPosition = mvMatrix * vec4(aPos, 1.);
-#endif
-  
-#ifndef FIXED_QUADS
-  gl_Position = prMatrix * vPosition;
-#endif
-#endif // !IS_BRUSH
-  
-#ifdef IS_POINTS
-  gl_PointSize = POINTSIZE;
-#endif
-  
-  vCol = aCol;
-  
-#ifdef NEEDS_VNORMAL
-  vNormal = normMatrix * vec4(-aNorm, dot(aNorm, aPos));
-#endif
-  
-#ifdef IS_TWOSIDED
-#ifdef HAS_NORMALS
-  /* normz should be calculated *after* projection */
-  normz = (invPrMatrix*vNormal).z;
-#else
-  vec4 pos1 = prMatrix*(mvMatrix*vec4(aPos1, 1.));
-  pos1 = pos1/pos1.w - gl_Position/gl_Position.w;
-  vec4 pos2 = prMatrix*(mvMatrix*vec4(aPos2, 1.));
-  pos2 = pos2/pos2.w - gl_Position/gl_Position.w;
-  normz = pos1.x*pos2.y - pos1.y*pos2.x;
-#endif
-#endif // IS_TWOSIDED
-  
-#ifdef NEEDS_VNORMAL
-  vNormal = vec4(normalize(vNormal.xyz/vNormal.w), 1);
-#endif
-  
-#if defined(HAS_TEXTURE) || defined(IS_TEXT)
-  vTexcoord = aTexcoord;
-#endif
-  
-#if defined(FIXED_SIZE) && !defined(ROTATING)
-  vec4 pos = prMatrix * mvMatrix * vec4(aPos, 1.);
-  pos = pos/pos.w;
-  gl_Position = pos + vec4(aOfs*textScale, 0.);
-#endif
-  
-#if defined(IS_SPRITES) && !defined(FIXED_SIZE)
-  vec4 pos = mvMatrix * vec4(aPos, 1.);
-  pos = pos/pos.w + vec4(aOfs,  0.);
-  gl_Position = prMatrix*pos;
-#endif
-  
-#ifdef FAT_LINES
-  /* This code was inspired by Matt Deslauriers' code in 
-   https://mattdesl.svbtle.com/drawing-lines-is-hard */
-  vec2 aspectVec = vec2(uAspect, 1.0);
-  mat4 projViewModel = prMatrix * mvMatrix;
-  vec4 currentProjected = projViewModel * vec4(aPos, 1.0);
-  currentProjected = currentProjected/currentProjected.w;
-  vec4 nextProjected = projViewModel * vec4(aNext, 1.0);
-  vec2 currentScreen = currentProjected.xy * aspectVec;
-  vec2 nextScreen = (nextProjected.xy / nextProjected.w) * aspectVec;
-  float len = uLwd;
-  vec2 dir = vec2(1.0, 0.0);
-  vPoint = aPoint;
-  vLength = length(nextScreen - currentScreen)/2.0;
-  vLength = vLength/(vLength + len);
-  if (vLength > 0.0) {
-    dir = normalize(nextScreen - currentScreen);
-  }
-  vec2 normal = vec2(-dir.y, dir.x);
-  dir.x /= uAspect;
-  normal.x /= uAspect;
-  vec4 offset = vec4(len*(normal*aPoint.x*aPoint.y - dir), 0.0, 0.0);
-  gl_Position = currentProjected + offset;
-#endif
-  
-#ifdef IS_BRUSH
-  gl_Position = vec4(aPos, 1.);
-#endif
-}
-</script>
-<script type = "text/plain" id = "rgl-fragment-shader">
-#line 2 2
-// File 2 is the fragment shader
-#ifdef GL_ES
-#ifdef GL_FRAGMENT_PRECISION_HIGH
-precision highp float;
-#else
-precision mediump float;
-#endif
-#endif
-varying vec4 vCol; // carries alpha
-varying vec4 vPosition;
-#if defined(HAS_TEXTURE) || defined (IS_TEXT)
-varying vec2 vTexcoord;
-uniform sampler2D uSampler;
-#endif
-
-#ifdef HAS_FOG
-uniform int uFogMode;
-uniform vec3 uFogColor;
-uniform vec4 uFogParms;
-#endif
-
-#if defined(IS_LIT) && !defined(FIXED_QUADS)
-varying vec4 vNormal;
-#endif
-
-#if NCLIPPLANES > 0
-uniform vec4 vClipplane[NCLIPPLANES];
-#endif
-
-#if NLIGHTS > 0
-uniform mat4 mvMatrix;
-#endif
-
-#ifdef IS_LIT
-uniform vec3 emission;
-uniform float shininess;
-#if NLIGHTS > 0
-uniform vec3 ambient[NLIGHTS];
-uniform vec3 specular[NLIGHTS]; // light*material
-uniform vec3 diffuse[NLIGHTS];
-uniform vec3 lightDir[NLIGHTS];
-uniform bool viewpoint[NLIGHTS];
-uniform bool finite[NLIGHTS];
-#endif
-#endif // IS_LIT
-
-#ifdef IS_TWOSIDED
-uniform bool front;
-varying float normz;
-#endif
-
-#ifdef FAT_LINES
-varying vec2 vPoint;
-varying float vLength;
-#endif
-
-void main(void) {
-  vec4 fragColor;
-#ifdef FAT_LINES
-  vec2 point = vPoint;
-  bool neg = point.y < 0.0;
-  point.y = neg ? (point.y + vLength)/(1.0 - vLength) :
-                 -(point.y - vLength)/(1.0 - vLength);
-#if defined(IS_TRANSPARENT) && defined(IS_LINESTRIP)
-  if (neg && length(point) <= 1.0) discard;
-#endif
-  point.y = min(point.y, 0.0);
-  if (length(point) > 1.0) discard;
-#endif // FAT_LINES
-  
-#ifdef ROUND_POINTS
-  vec2 coord = gl_PointCoord - vec2(0.5);
-  if (length(coord) > 0.5) discard;
-#endif
-  
-#if NCLIPPLANES > 0
-  for (int i = 0; i < NCLIPPLANES; i++)
-    if (dot(vPosition, vClipplane[i]) < 0.0) discard;
-#endif
-    
-#ifdef FIXED_QUADS
-    vec3 n = vec3(0., 0., 1.);
-#elif defined(IS_LIT)
-    vec3 n = normalize(vNormal.xyz);
-#endif
-    
-#ifdef IS_TWOSIDED
-    if ((normz <= 0.) != front) discard;
-#endif
-    
-#ifdef IS_LIT
-    vec3 eye = normalize(-vPosition.xyz/vPosition.w);
-    vec3 lightdir;
-    vec4 colDiff;
-    vec3 halfVec;
-    vec4 lighteffect = vec4(emission, 0.);
-    vec3 col;
-    float nDotL;
-#ifdef FIXED_QUADS
-    n = -faceforward(n, n, eye);
-#endif
-    
-#if NLIGHTS > 0
-    for (int i=0;i<NLIGHTS;i++) {
-      colDiff = vec4(vCol.rgb * diffuse[i], vCol.a);
-      lightdir = lightDir[i];
-      if (!viewpoint[i])
-        lightdir = (mvMatrix * vec4(lightdir, 1.)).xyz;
-      if (!finite[i]) {
-        halfVec = normalize(lightdir + eye);
-      } else {
-        lightdir = normalize(lightdir - vPosition.xyz/vPosition.w);
-        halfVec = normalize(lightdir + eye);
-      }
-      col = ambient[i];
-      nDotL = dot(n, lightdir);
-      col = col + max(nDotL, 0.) * colDiff.rgb;
-      col = col + pow(max(dot(halfVec, n), 0.), shininess) * specular[i];
-      lighteffect = lighteffect + vec4(col, colDiff.a);
-    }
-#endif
-    
-#else // not IS_LIT
-    vec4 colDiff = vCol;
-    vec4 lighteffect = colDiff;
-#endif
-    
-#ifdef IS_TEXT
-    vec4 textureColor = lighteffect*texture2D(uSampler, vTexcoord);
-#endif
-    
-#ifdef HAS_TEXTURE
-#ifdef TEXTURE_rgb
-    vec4 textureColor = lighteffect*vec4(texture2D(uSampler, vTexcoord).rgb, 1.);
-#endif
-    
-#ifdef TEXTURE_rgba
-    vec4 textureColor = lighteffect*texture2D(uSampler, vTexcoord);
-#endif
-    
-#ifdef TEXTURE_alpha
-    vec4 textureColor = texture2D(uSampler, vTexcoord);
-    float luminance = dot(vec3(1.,1.,1.), textureColor.rgb)/3.;
-    textureColor =  vec4(lighteffect.rgb, lighteffect.a*luminance);
-#endif
-    
-#ifdef TEXTURE_luminance
-    vec4 textureColor = vec4(lighteffect.rgb*dot(texture2D(uSampler, vTexcoord).rgb, vec3(1.,1.,1.))/3., lighteffect.a);
-#endif
-    
-#ifdef TEXTURE_luminance_alpha
-    vec4 textureColor = texture2D(uSampler, vTexcoord);
-    float luminance = dot(vec3(1.,1.,1.),textureColor.rgb)/3.;
-    textureColor = vec4(lighteffect.rgb*luminance, lighteffect.a*textureColor.a);
-#endif
-    
-    fragColor = textureColor;
-
-#elif defined(IS_TEXT)
-    if (textureColor.a < 0.1)
-      discard;
-    else
-      fragColor = textureColor;
-#else
-    fragColor = lighteffect;
-#endif // HAS_TEXTURE
-    
-#ifdef HAS_FOG
-    // uFogParms elements: x = near, y = far, z = fogscale, w = (1-sin(FOV/2))/(1+sin(FOV/2))
-    // In Exp and Exp2: use density = density/far
-    // fogF will be the proportion of fog
-    // Initialize it to the linear value
-    float fogF;
-    if (uFogMode > 0) {
-      fogF = (uFogParms.y - vPosition.z/vPosition.w)/(uFogParms.y - uFogParms.x);
-      if (uFogMode > 1)
-        fogF = mix(uFogParms.w, 1.0, fogF);
-      fogF = fogF*uFogParms.z;
-      if (uFogMode == 2)
-        fogF = 1.0 - exp(-fogF);
-      // Docs are wrong: use (density*c)^2, not density*c^2
-      // https://gitlab.freedesktop.org/mesa/mesa/-/blob/master/src/mesa/swrast/s_fog.c#L58
-      else if (uFogMode == 3)
-        fogF = 1.0 - exp(-fogF*fogF);
-      fogF = clamp(fogF, 0.0, 1.0);
-      gl_FragColor = vec4(mix(fragColor.rgb, uFogColor, fogF), fragColor.a);
-    } else gl_FragColor = fragColor;
-#else
-    gl_FragColor = fragColor;
-#endif // HAS_FOG
-    
-}
-</script><!--/html_preserve-->
-<script src="book_assets/CanvasMatrix4-0.110.2/CanvasMatrix.src.js"></script>
-<script src="book_assets/rglPlayer-binding-0.110.2/rglPlayer.js"></script>
+<script src="book_assets/rglWebGL-binding-1.2.1/rglWebGL.js"></script>
+<link href="book_assets/rglwidgetClass-1.2.1/rgl.css" rel="stylesheet" />
+<script src="book_assets/rglwidgetClass-1.2.1/rglClass.src.js"></script>
+<script src="book_assets/rglwidgetClass-1.2.1/utils.src.js"></script>
+<script src="book_assets/rglwidgetClass-1.2.1/buffer.src.js"></script>
+<script src="book_assets/rglwidgetClass-1.2.1/subscenes.src.js"></script>
+<script src="book_assets/rglwidgetClass-1.2.1/shaders.src.js"></script>
+<script src="book_assets/rglwidgetClass-1.2.1/shadersrc.src.js"></script>
+<script src="book_assets/rglwidgetClass-1.2.1/textures.src.js"></script>
+<script src="book_assets/rglwidgetClass-1.2.1/projection.src.js"></script>
+<script src="book_assets/rglwidgetClass-1.2.1/mouse.src.js"></script>
+<script src="book_assets/rglwidgetClass-1.2.1/init.src.js"></script>
+<script src="book_assets/rglwidgetClass-1.2.1/pieces.src.js"></script>
+<script src="book_assets/rglwidgetClass-1.2.1/draw.src.js"></script>
+<script src="book_assets/rglwidgetClass-1.2.1/controls.src.js"></script>
+<script src="book_assets/rglwidgetClass-1.2.1/selection.src.js"></script>
+<script src="book_assets/rglwidgetClass-1.2.1/rglTimer.src.js"></script>
+<script src="book_assets/rglwidgetClass-1.2.1/pretty.src.js"></script>
+<script src="book_assets/rglwidgetClass-1.2.1/axes.src.js"></script>
+<script src="book_assets/rglwidgetClass-1.2.1/animation.src.js"></script>
+<script src="book_assets/CanvasMatrix4-1.2.1/CanvasMatrix.src.js"></script>
+<script src="book_assets/rglPlayer-binding-1.2.1/rglPlayer.js"></script>
 <script src="book_assets/kePrint-0.0.1/kePrint.js"></script>
 <link href="book_assets/lightable-0.0.1/lightable.css" rel="stylesheet" />
 
 
 
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
 <style type="text/css">
 /* Used with Pandoc 2.11+ new --citeproc when CSL is used */
 div.csl-bib-body { }
@@ -738,21 +405,43 @@ div.csl-indent {
 </ul></li>
 <li class="chapter" data-level="13.5" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#model-fit"><i class="fa fa-check"></i><b>13.5</b> Model fit</a>
 <ul>
-<li class="chapter" data-level="13.5.1" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#fit-indices"><i class="fa fa-check"></i><b>13.5.1</b> Fit indices</a></li>
-<li class="chapter" data-level="13.5.2" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#comparative-fit-to-a-baseline"><i class="fa fa-check"></i><b>13.5.2</b> Comparative fit to a baseline</a></li>
-<li class="chapter" data-level="13.5.3" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#errors-of-approximation"><i class="fa fa-check"></i><b>13.5.3</b> Errors of approximation</a></li>
+<li class="chapter" data-level="13.5.1" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#test-of-overall-model-fit"><i class="fa fa-check"></i><b>13.5.1</b> Test of overall model fit</a></li>
+<li class="chapter" data-level="13.5.2" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#approximate-fit-indices"><i class="fa fa-check"></i><b>13.5.2</b> Approximate fit indices</a></li>
 </ul></li>
-<li class="chapter" data-level="13.6" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#model-comparison-1"><i class="fa fa-check"></i><b>13.6</b> Model comparison</a></li>
-<li class="chapter" data-level="13.7" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#evaluation-and-selection-of-the-mediation-path-models"><i class="fa fa-check"></i><b>13.7</b> Evaluation and selection of the mediation path models</a></li>
-<li class="chapter" data-level="13.8" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#a-more-complex-path-model"><i class="fa fa-check"></i><b>13.8</b> A more complex path model</a></li>
-<li class="chapter" data-level="13.9" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#principles-in-constructing-path-models"><i class="fa fa-check"></i><b>13.9</b> Principles in constructing path models</a>
+<li class="chapter" data-level="13.6" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#modification-indices"><i class="fa fa-check"></i><b>13.6</b> Modification indices</a></li>
+<li class="chapter" data-level="13.7" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#model-comparison-1"><i class="fa fa-check"></i><b>13.7</b> Model comparison</a></li>
+<li class="chapter" data-level="13.8" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#evaluation-and-selection-of-the-mediation-path-models"><i class="fa fa-check"></i><b>13.8</b> Evaluation and selection of the mediation path models</a></li>
+<li class="chapter" data-level="13.9" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#a-more-complex-path-model"><i class="fa fa-check"></i><b>13.9</b> A more complex path model</a></li>
+<li class="chapter" data-level="13.10" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#principles-in-constructing-path-models"><i class="fa fa-check"></i><b>13.10</b> Principles in constructing path models</a>
 <ul>
-<li class="chapter" data-level="13.9.1" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#identifiability"><i class="fa fa-check"></i><b>13.9.1</b> Identifiability</a></li>
+<li class="chapter" data-level="13.10.1" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#identifiability"><i class="fa fa-check"></i><b>13.10.1</b> Identifiability</a></li>
 </ul></li>
-<li class="chapter" data-level="13.10" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#model-equivalence"><i class="fa fa-check"></i><b>13.10</b> Model equivalence</a></li>
-<li class="chapter" data-level="13.11" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#correlation-vs-causation"><i class="fa fa-check"></i><b>13.11</b> Correlation vs causation</a></li>
+<li class="chapter" data-level="13.11" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#model-equivalence"><i class="fa fa-check"></i><b>13.11</b> Model equivalence</a></li>
+<li class="chapter" data-level="13.12" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#correlation-vs-causation"><i class="fa fa-check"></i><b>13.12</b> Correlation vs causation</a></li>
 </ul></li>
-<li class="chapter" data-level="14" data-path="ch-SEM-latent-variable-models.html"><a href="ch-SEM-latent-variable-models.html"><i class="fa fa-check"></i><b>14</b> Latent variable models (SEM 2)</a></li>
+<li class="chapter" data-level="14" data-path="ch-SEM-latent-variable-models.html"><a href="ch-SEM-latent-variable-models.html"><i class="fa fa-check"></i><b>14</b> Latent variable models (SEM 2)</a>
+<ul>
+<li class="chapter" data-level="14.1" data-path="ch-SEM-latent-variable-models.html"><a href="ch-SEM-latent-variable-models.html#measurement-of-latent-variables"><i class="fa fa-check"></i><b>14.1</b> Measurement of latent variables</a>
+<ul>
+<li class="chapter" data-level="14.1.1" data-path="ch-SEM-latent-variable-models.html"><a href="ch-SEM-latent-variable-models.html#scaling-and-identification"><i class="fa fa-check"></i><b>14.1.1</b> Scaling and identification</a></li>
+</ul></li>
+<li class="chapter" data-level="14.2" data-path="ch-SEM-latent-variable-models.html"><a href="ch-SEM-latent-variable-models.html#confirmatory-factor-analysis"><i class="fa fa-check"></i><b>14.2</b> Confirmatory factor analysis</a>
+<ul>
+<li class="chapter" data-level="14.2.1" data-path="ch-SEM-latent-variable-models.html"><a href="ch-SEM-latent-variable-models.html#a-single-factor-model"><i class="fa fa-check"></i><b>14.2.1</b> A single factor model</a></li>
+</ul></li>
+<li class="chapter" data-level="14.3" data-path="ch-SEM-latent-variable-models.html"><a href="ch-SEM-latent-variable-models.html#full-hierarchical-factor-model-for-the-bfi-2"><i class="fa fa-check"></i><b>14.3</b> Full hierarchical factor model for the BFI-2</a>
+<ul>
+<li class="chapter" data-level="14.3.1" data-path="ch-SEM-latent-variable-models.html"><a href="ch-SEM-latent-variable-models.html#indentification"><i class="fa fa-check"></i><b>14.3.1</b> Indentification</a></li>
+</ul></li>
+<li class="chapter" data-level="14.4" data-path="ch-SEM-latent-variable-models.html"><a href="ch-SEM-latent-variable-models.html#multiple-groups-and-measurement-invariance"><i class="fa fa-check"></i><b>14.4</b> Multiple groups and measurement invariance</a></li>
+<li class="chapter" data-level="14.5" data-path="ch-SEM-latent-variable-models.html"><a href="ch-SEM-latent-variable-models.html#exploratory-factor-and-principal-components-analysis"><i class="fa fa-check"></i><b>14.5</b> Exploratory factor and principal components analysis</a>
+<ul>
+<li class="chapter" data-level="14.5.1" data-path="ch-SEM-latent-variable-models.html"><a href="ch-SEM-latent-variable-models.html#determining-the-number-of-factors"><i class="fa fa-check"></i><b>14.5.1</b> Determining the number of factors</a></li>
+<li class="chapter" data-level="14.5.2" data-path="ch-SEM-latent-variable-models.html"><a href="ch-SEM-latent-variable-models.html#factor-rotation"><i class="fa fa-check"></i><b>14.5.2</b> Factor rotation</a></li>
+</ul></li>
+<li class="chapter" data-level="14.6" data-path="ch-SEM-latent-variable-models.html"><a href="ch-SEM-latent-variable-models.html#conclusion"><i class="fa fa-check"></i><b>14.6</b> Conclusion</a></li>
+<li class="chapter" data-level="14.7" data-path="ch-SEM-latent-variable-models.html"><a href="ch-SEM-latent-variable-models.html#in-practice-6"><i class="fa fa-check"></i><b>14.7</b> In practice</a></li>
+</ul></li>
 <li class="chapter" data-level="15" data-path="ch-Bayes-estimation.html"><a href="ch-Bayes-estimation.html"><i class="fa fa-check"></i><b>15</b> Introduction to Bayesian estimation</a>
 <ul>
 <li class="chapter" data-level="15.1" data-path="ch-Bayes-estimation.html"><a href="ch-Bayes-estimation.html#fundamentals-of-bayesian-inference"><i class="fa fa-check"></i><b>15.1</b> Fundamentals of Bayesian inference</a>
@@ -784,7 +473,7 @@ div.csl-indent {
 <li class="chapter" data-level="16.5.3" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#results-of-a-nhst-are-often-misinterpreted"><i class="fa fa-check"></i><b>16.5.3</b> Results of a NHST are often misinterpreted</a></li>
 </ul></li>
 <li class="chapter" data-level="16.6" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#to-bayes-or-not-to-bayes-a-pragmatic-view"><i class="fa fa-check"></i><b>16.6</b> To Bayes or not to Bayes? A pragmatic view</a></li>
-<li class="chapter" data-level="16.7" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#in-practice-6"><i class="fa fa-check"></i><b>16.7</b> In practice</a></li>
+<li class="chapter" data-level="16.7" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#in-practice-7"><i class="fa fa-check"></i><b>16.7</b> In practice</a></li>
 <li class="chapter" data-level="16.8" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#summary-3"><i class="fa fa-check"></i><b>16.8</b> “Summary”</a></li>
 </ul></li>
 <li class="chapter" data-level="17" data-path="ch-responsible-data-analyst.html"><a href="ch-responsible-data-analyst.html"><i class="fa fa-check"></i><b>17</b> Being a responsible data analyst</a>
@@ -823,13 +512,13 @@ div.csl-indent {
 <p>In this chapter, we will start our journey into the General Linear Model with the most basic example within the GLM: a model concerning a single Normal distribution, where we are interested in statements about the mean of that distribution. The resulting test is also known as the one-sample t-test. We will look at the Normal distribution in detail, and cover estimation of its parameters, before focusing on testing hypotheses about the mean. We will also introduce confidence intervals as an alternative, but mostly equivalent means to make inferences about parameters. We end the chapter by looking at the assumptions of the model, and what happens to the testing procedure if those assumptions are false. <!-- with a look ahead towards the other chapters, by providing a brief overview of the General Linear Model. --></p>
 <div id="numeric-judgement-and-anchoring" class="section level2 hasAnchor" number="3.1">
 <h2><span class="header-section-number">3.1</span> Numeric judgement and anchoring<a href="ch-simple-GLM.html#numeric-judgement-and-anchoring" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>In 1906, Sir Francis Galton attended The West of England Fat Stock and Poultry Exhibition in Plymouth. One of the attractions at the fair was a contest to guess the weight of a “dressed” ox on display. The nearest guess to the actual weight of the ox would win a prize, and a total of 800 attendees participated for a small fee. Not only was Francis Galton a eugenicist<a href="#fn5" class="footnote-ref" id="fnref5"><sup>5</sup></a> – and rightly condemned for this in more modern times – he was also a statistician, and bought the used tickets off the stall holder. Back home he analysed the 787 usable tickets and later published his findings <span class="citation">(<a href="#ref-galton1907vox" role="doc-biblioref">Galton, 1907</a>)</span>. What surprised Galton was that while the individual guesses were often far from the true weight of the ox, the average guess of the group as a whole was highly accurate. Such findings are now often referred to as the “Wisdom of the crowds”.</p>
+<p>In 1906, Sir Francis Galton attended The West of England Fat Stock and Poultry Exhibition in Plymouth. One of the attractions at the fair was a contest to guess the weight of a “dressed” ox on display. The nearest guess to the actual weight of the ox would win a prize, and a total of 800 attendees participated for a small fee. Not only was Francis Galton a eugenicist<a href="#fn5" class="footnote-ref" id="fnref5"><sup>5</sup></a> – and rightly condemned for this in more modern times – he was also a statistician, and bought the used tickets off the stall holder. Back home he analysed the 787 usable tickets and later published his findings <span class="citation">(<a href="#ref-galton1907vox">Galton, 1907</a>)</span>. What surprised Galton was that while the individual guesses were often far from the true weight of the ox, the average guess of the group as a whole was highly accurate. Such findings are now often referred to as the “Wisdom of the crowds”.</p>
 <p>Although the wisdom of the crowds has been demonstrated in various domains, from decades of research, we also know that human judgement is subject to a long list of biases. One such bias is called “anchoring”, and it pertains to the influence of prior exposure to a more or less arbitrary numerical value on the subsequent numerical judgement. For instance, if I ask you “How tall do you think Mount Everest is?”, but first state that Mount Everest is taller than 2000 feet, you are likely to give a smaller number than if I first state that Mount Everest is shorter than 45,500 feet.</p>
-<p>In this example, we will focus on data obtained from a large scale replication study, covering the above described anchoring manipulation, as well as many other experiments <span class="citation">(<a href="#ref-klein2014investigating" role="doc-biblioref">Klein et al., 2014</a>)</span>. This “Many Labs” study contained data collected by a large number of labs from different countries, and here we will use data collected by Konrad Bocian and Natalia Frankowska from the University of Social Sciences
+<p>In this example, we will focus on data obtained from a large scale replication study, covering the above described anchoring manipulation, as well as many other experiments <span class="citation">(<a href="#ref-klein2014investigating">Klein et al., 2014</a>)</span>. This “Many Labs” study contained data collected by a large number of labs from different countries, and here we will use data collected by Konrad Bocian and Natalia Frankowska from the University of Social Sciences
 and Humanities Campus in Sopot, Poland. In particular, we will focus on the judged height of Mount Everest (in meters, as their participants were Polish) after a low anchor (610 meters<a href="#fn6" class="footnote-ref" id="fnref6"><sup>6</sup></a>). From the wisdom of the crowds idea, we might expect the average judgement to be identical (or at least very close) to the true height of Mount Everest, which is 8848 meters above sea level. On the other hand, if the low anchor biased the judgements, we might expect the average judgement to deviate from the true height.</p>
 <div id="exploring-the-data" class="section level3 hasAnchor" number="3.1.1">
 <h3><span class="header-section-number">3.1.1</span> Exploring the data<a href="ch-simple-GLM.html#exploring-the-data" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>Before diving into statistical modelling, as discussed, it is always good to explore the data. There were judgements by <span class="math inline">\(n=109\)</span> people in this dataset. A graphical overview in the form of a histogram and raincloud plot is given in Figure <a href="ch-simple-GLM.html#fig:anchoring-eda-plots">3.1</a>. The minimum was judged height was 650 meters (so quite close to the anchor), and the maximum was 12,459 meters. The median judgement was 8000 and the mean 6312.193. The sample variance of the judgements was 9,742,645 and the sample standard deviation 3121.321.</p>
+<p>Before diving into statistical modelling, as discussed, it is always good to explore the data. There were judgements by <span class="math inline">\(n=109\)</span> people in this dataset. A graphical overview in the form of a histogram and raincloud plot is given in Figure <a href="ch-simple-GLM.html#fig:anchoring-eda-plots">3.1</a>. The minimum judged height was 650 meters (so quite close to the anchor), and the maximum was 12,459 meters. The median judgement was 8000 and the mean 6312.193. The sample variance of the judgements was 9,742,645 and the sample standard deviation 3121.321.</p>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:anchoring-eda-plots"></span>
 <img src="03-GLM-simple_files/figure-html/anchoring-eda-plots-1.svg" alt="Histogram and boxplot of participants' judgments" width="48%" /><img src="03-GLM-simple_files/figure-html/anchoring-eda-plots-2.svg" alt="Histogram and boxplot of participants' judgments" width="48%" />
 <p class="caption">
@@ -917,7 +606,7 @@ i.e. a Normal distribution with mean equal to the sum of the mean of <span clas
 \tag{3.4}
 \end{equation}\]</span>
 The difference is to divide the sum of squared deviations by <span class="math inline">\(n-1\)</span>, rather than by <span class="math inline">\(n\)</span>. Intuitively, you can think of the reason for this as follows: When we use the sample mean <span class="math inline">\(\overline{Y}\)</span> rather than the true mean <span class="math inline">\(\mu\)</span> in computing the variance, we don’t take into account that the sample mean is a noisy estimate of the true mean <span class="math inline">\(\mu\)</span>. Compared to <span class="math inline">\(\overline{Y}\)</span>, the true mean could be somewhat higher or lower, and therefore the sample variance is likely to be an <em>underestimate</em> of the true variance. In other words, it is biased. By dividing by <span class="math inline">\(n-1\)</span> instead of <span class="math inline">\(n\)</span>, the resulting estimate is a little higher. It so happens this completely removes the bias. When <span class="math inline">\(n\)</span> is large (i.e. there are a large number of observations), there will be little difference between the unbiased estimate and the sample variance, but for small <span class="math inline">\(n\)</span> the difference will be more marked.</p>
-<p>Note that the estimator above is for the variance <span class="math inline">\(\sigma^2\)</span> (sigma squared, i.e. sigma raised to the power of 2), not for teh standard deviation <span class="math inline">\(\sigma\)</span>. If we want an estimator of the standard deviation, we can simply take the square-root to get the following estimator of <span class="math inline">\(\sigma\)</span>:</p>
+<p>Note that the estimator above is for the variance <span class="math inline">\(\sigma^2\)</span> (sigma squared, i.e. sigma raised to the power of 2), not for the standard deviation <span class="math inline">\(\sigma\)</span>. If we want an estimator of the standard deviation, we can simply take the square-root to get the following estimator of <span class="math inline">\(\sigma\)</span>:</p>
 <p><span class="math display">\[\hat{\sigma} = \sqrt{\hat{\sigma}^2}\]</span></p>
 <p>If the mean is known to equal a particular value, <span class="math inline">\(\mu = \underline{\mu}\)</span>, as in MODEL R, then we should use that value <span class="math inline">\(\underline{\mu}\)</span> instead of <span class="math inline">\(\overline{Y}\)</span> to estimate the variance and standard deviation. The unbiased estimate of the standard deviation for MODEL R is
 <span class="math display">\[\hat{\sigma}_R = \sqrt{\frac{\sum_{i=1}^n (Y_i - \underline{\mu})^2}{n}}\]</span>
@@ -944,7 +633,7 @@ Hence, the sampling distribution of the estimated means is a Normal distribution
 \end{equation}
 --></p>
 <p>To simulate judgements, we had to pick an arbitrary value of <span class="math inline">\(\sigma\)</span>. But how can we simulate the data when <span class="math inline">\(\sigma\)</span> is unknown? We could of course use the unbiased estimate <span class="math inline">\(\hat{\sigma}\)</span>. For MODEL R and the present data, that would be <span class="math inline">\(\hat{\sigma} = 4021.562\)</span>, which is obviously substantially larger than the value of 2000 we used before. If we’d use this value to simulate data sets and look at the distribution of the sample mean, we’d get a similar plot to the one of Figure <a href="ch-simple-GLM.html#fig:histogram-sampling-mean-simple">3.4</a>, but with a larger standard deviation.</p>
-<p>Suppose that MODEL R is true, that the Data Generating Process indeed results in a Normal distribution of people’s judgements with a mean <span class="math inline">\(\mu = 8848\)</span> and a standard deviation <span class="math inline">\(\sigma\)</span>. If we knew the value of <span class="math inline">\(\sigma\)</span>, then we’d know everything there is to know about the distribution of the DGP. And knowing this, we’d know everything there is to know about the distribution of the sample means. But we don’t know <span class="math inline">\(\sigma\)</span>. While it makes sense to use an estimate of <span class="math inline">\(\sigma\)</span>, this estimate will be noisy. We shouldn’t just pretend that our estimate <span class="math inline">\(\hat{\sigma}\)</span> is identical to the true <span class="math inline">\(\sigma\)</span>. The problem is that different values of <span class="math inline">\(\sigma\)</span> lead to different sampling distributions of the mean. Key to working out the sampling distribution of the mean when <span class="math inline">\(\sigma\)</span> is unknown is to also take into account the sampling distribution of the estimates of <span class="math inline">\(\sigma\)</span>. Roughly, the idea is that, for a given data set, we can work out how likely different values of <span class="math inline">\(\sigma\)</span> are, and we can then derive the average of all the Normal distributions that follow from each possible value of <span class="math inline">\(\sigma\)</span>. The resulting distribution is not a Normal distribution. It was derived by William Sealy Gosset (1876–1937) in 1904. Gosset worked as Head Experimental Brewer for Guinness in Dublin, and the company had a rule forbidding their chemists to publish their findings <span class="citation">(<a href="#ref-zabell2008student" role="doc-biblioref">Zabell, 2008</a>)</span>. Gosset was able to convince his boss that his mathematical work was of no practical use to competing brewers, and was allowed to publish them in <span class="citation">Student (<a href="#ref-student1908probable" role="doc-biblioref">1908</a>)</span>, but under a pseudonym to avoid his colleagues getting similar ideas. “Student” was the pseudonym chosen by the managing director of Guinness, and hence the distribution is now known as Student’s t-distribution.</p>
+<p>Suppose that MODEL R is true, that the Data Generating Process indeed results in a Normal distribution of people’s judgements with a mean <span class="math inline">\(\mu = 8848\)</span> and a standard deviation <span class="math inline">\(\sigma\)</span>. If we knew the value of <span class="math inline">\(\sigma\)</span>, then we’d know everything there is to know about the distribution of the DGP. And knowing this, we’d know everything there is to know about the distribution of the sample means. But we don’t know <span class="math inline">\(\sigma\)</span>. While it makes sense to use an estimate of <span class="math inline">\(\sigma\)</span>, this estimate will be noisy. We shouldn’t just pretend that our estimate <span class="math inline">\(\hat{\sigma}\)</span> is identical to the true <span class="math inline">\(\sigma\)</span>. The problem is that different values of <span class="math inline">\(\sigma\)</span> lead to different sampling distributions of the mean. Key to working out the sampling distribution of the mean when <span class="math inline">\(\sigma\)</span> is unknown is to also take into account the sampling distribution of the estimates of <span class="math inline">\(\sigma\)</span>. Roughly, the idea is that, for a given data set, we can work out how likely different values of <span class="math inline">\(\sigma\)</span> are, and we can then derive the average of all the Normal distributions that follow from each possible value of <span class="math inline">\(\sigma\)</span>. The resulting distribution is not a Normal distribution. It was derived by William Sealy Gosset (1876–1937) in 1904. Gosset worked as Head Experimental Brewer for Guinness in Dublin, and the company had a rule forbidding their chemists to publish their findings <span class="citation">(<a href="#ref-zabell2008student">Zabell, 2008</a>)</span>. Gosset was able to convince his boss that his mathematical work was of no practical use to competing brewers, and was allowed to publish them in <span class="citation">Student (<a href="#ref-student1908probable">1908</a>)</span>, but under a pseudonym to avoid his colleagues getting similar ideas. “Student” was the pseudonym chosen by the managing director of Guinness, and hence the distribution is now known as Student’s t-distribution.</p>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:comparing-normal-and-t-simple"></span>
 <img src="03-GLM-simple_files/figure-html/comparing-normal-and-t-simple-1.svg" alt="(Understandardized) Student t-distribution which is the true sampling distribution of the mean under MODEL R with unknown $\sigma$ (solid line) and the Normal distribution that would be the sampling distribution if it were known that $\sigma = \hat{\sigma}$ (broken line). Note that these curves are drawn for the case of $n=10$ observations, to make the differences between the distributions more marked. For $n=109$, the t-distribution is almost identical to the Normal distribution." width="80%" />
 <p class="caption">
@@ -1044,7 +733,7 @@ Figure 3.7: <span class="math inline">\(\text{95%}\)</span> confidence intervals
 \end{aligned}
 \]</span></p>
 <p>Confidence intervals can be used to perform null hypothesis significance tests. In fact, a confidence interval contains all values of <span class="math inline">\(\underline{\mu}\)</span> for which MODEL R would not be rejected with the current data. In other words, if the confidence interval includes the value of <span class="math inline">\(\underline{\mu}\)</span> of interest (i.e. <span class="math inline">\(\underline{\mu} = 8848\)</span> in our example), that means that the null hypothesis would <em>not</em> be rejected. In addition, we can also determine a whole range of other values of <span class="math inline">\(\underline{\mu}\)</span> which, if purported as a null hypothesis, would also not be rejected. In that sense, a confidence interval provides more information than a simple “reject” or “not reject” decision of a null hypothesis significance test. If a confidence interval is very wide, that implies the significance test has low power. Of course, what “very wide” is, depends on the scale of the data, and a subjective evaluation by the researcher.</p>
-<p>There have been calls to abandon hypothesis tests in favour of estimation and reporting confidence intervals <span class="citation">(e.g. <a href="#ref-cumming2014new" role="doc-biblioref">Cumming, 2014</a>)</span>. Given the tricky interpretation of confidence intervals <span class="citation">(<a href="#ref-morey2016fallacy" role="doc-biblioref">Richard D. Morey, Hoekstra, Rouder, Lee, &amp; Wagenmakers, 2016</a>)</span>, and their rather close ties to significance tests, such ideas seem to promise more than they can deliver. There is no need to abandon either significance tests or confidence intervals, provided you know how to interpret them.</p>
+<p>There have been calls to abandon hypothesis tests in favour of estimation and reporting confidence intervals <span class="citation">(e.g. <a href="#ref-cumming2014new">Cumming, 2014</a>)</span>. Given the tricky interpretation of confidence intervals <span class="citation">(<a href="#ref-morey2016fallacy">Richard D. Morey, Hoekstra, Rouder, Lee, &amp; Wagenmakers, 2016</a>)</span>, and their rather close ties to significance tests, such ideas seem to promise more than they can deliver. There is no need to abandon either significance tests or confidence intervals, provided you know how to interpret them.</p>
 </div>
 <div id="effect-size" class="section level2 hasAnchor" number="3.6">
 <h2><span class="header-section-number">3.6</span> Effect size<a href="ch-simple-GLM.html#effect-size" class="anchor-section" aria-label="Anchor link to header"></a></h2>
@@ -1055,7 +744,7 @@ Figure 3.7: <span class="math inline">\(\text{95%}\)</span> confidence intervals
 \end{equation}\]</span>
 For our anchoring example, Cohen’s <span class="math inline">\(d\)</span> is
 <span class="math display">\[d = \frac{6312.193 - 8848}{3135.738} = -0.809\]</span></p>
-<p>Cohen’s <span class="math inline">\(d\)</span> quantifies an effect in units of the standard deviation in the sample data. As a rule of thumb, an absolute value of <span class="math inline">\(|d| = 0.2\)</span> is considered a small effect, an absolute value of <span class="math inline">\(|d| = 0.5\)</span> a medium effect, and an absolute value of <span class="math inline">\(|d| = 0.8\)</span> a large effect <span class="citation">(<a href="#ref-cohen1988statistical" role="doc-biblioref">Cohen, 1988</a>)</span>. Thus, the effect-size we found can be classified as large. These rule-of-thumb values, relative to the Normal distribution, are depicted in Figure <a href="ch-simple-GLM.html#fig:one-sample-cohen-d-plot">3.8</a>. As you can see, even “large” effect sizes are still quite close to the center of the distribution. For example, 21.19% of observations from the Data Generating Process would exceed the deviation specified as a large positive effect size. But you should keep in mind that the objective of an effect size here is to quantify the deviation between a sample mean and an assumed mean, not between observations and that assumed mean.</p>
+<p>Cohen’s <span class="math inline">\(d\)</span> quantifies an effect in units of the standard deviation in the sample data. As a rule of thumb, an absolute value of <span class="math inline">\(|d| = 0.2\)</span> is considered a small effect, an absolute value of <span class="math inline">\(|d| = 0.5\)</span> a medium effect, and an absolute value of <span class="math inline">\(|d| = 0.8\)</span> a large effect <span class="citation">(<a href="#ref-cohen1988statistical">Cohen, 1988</a>)</span>. Thus, the effect-size we found can be classified as large. These rule-of-thumb values, relative to the Normal distribution, are depicted in Figure <a href="ch-simple-GLM.html#fig:one-sample-cohen-d-plot">3.8</a>. As you can see, even “large” effect sizes are still quite close to the center of the distribution. For example, 21.19% of observations from the Data Generating Process would exceed the deviation specified as a large positive effect size. But you should keep in mind that the objective of an effect size here is to quantify the deviation between a sample mean and an assumed mean, not between observations and that assumed mean.</p>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:one-sample-cohen-d-plot"></span>
 <img src="03-GLM-simple_files/figure-html/one-sample-cohen-d-plot-1.svg" alt="Small, medium, and large values of Cohen's $d$ in context of the data distribution." width="80%" />
 <p class="caption">
@@ -1115,13 +804,13 @@ Figure 3.12: The distribution of the mean of 5 observations by simulating 200 da
 <p class="caption">(\#fig:clt-animation-2)The distribution of the mean of 20 samples from the distribution in Figure XX</p>
 </div>
 -->
-<p>From the Central Limit Theorem, we can conclude that if we focus on the mean of a sufficiently large number of independent observations, we can reasonably assume that the sampling distribution of the mean will be a Normal distribution, even when the distribution from which the actual values were drawn is far from Normal. We can also use this to argue that the <span class="math inline">\(t\)</span>-statistic is a valid means to test our hypothesis even when the data is not Normal-distributed. Indeed, simulations show that hypothesis tests with the <span class="math inline">\(t\)</span>-statistic are valid for sufficiently large data sets even when the distribution of the observations is far from Normal <span class="citation">(e.g. <a href="#ref-lumley2002importance" role="doc-biblioref">Lumley, Diehr, Emerson, &amp; Chen, 2002</a>)</span>.</p>
+<p>From the Central Limit Theorem, we can conclude that if we focus on the mean of a sufficiently large number of independent observations, we can reasonably assume that the sampling distribution of the mean will be a Normal distribution, even when the distribution from which the actual values were drawn is far from Normal. We can also use this to argue that the <span class="math inline">\(t\)</span>-statistic is a valid means to test our hypothesis even when the data is not Normal-distributed. Indeed, simulations show that hypothesis tests with the <span class="math inline">\(t\)</span>-statistic are valid for sufficiently large data sets even when the distribution of the observations is far from Normal <span class="citation">(e.g. <a href="#ref-lumley2002importance">Lumley, Diehr, Emerson, &amp; Chen, 2002</a>)</span>.</p>
 <p>Finally, the Central Limit Theorem may also be applied to justify the assumption of a Normal distribution, at least for certain variables. For instance, in (cognitive) psychology, we might imagine that processes such as perception and judgement rely on processing and transforming information, and that various processing and transformation steps are subject to many independent sources of noise (e.g., things we might call visual, neural, and memory noise). If these sources of noise combine additively, we could argue that the resulting percept or judgement will follow a Normal distribution.</p>
 </div>
 <div id="bootstrapping-a-statistic" class="section level3 hasAnchor" number="3.8.2">
 <h3><span class="header-section-number">3.8.2</span> Bootstrapping a statistic<a href="ch-simple-GLM.html#bootstrapping-a-statistic" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>The crucial thing to realise is that the assumption that the data is Normal-distributed is used to derive the sampling distribution of the test statistic. The sampling distribution of the test statistic allows us to calculate a <span class="math inline">\(p\)</span>-value, and if the true sampling distribution of the statistic is different from what is assumed, then the <span class="math inline">\(p\)</span>-value will be wrong. If the data is Normal-distributed, then we are guaranteed that the sampling distribution of the <span class="math inline">\(t\)</span> statistic follows a t-distribution. If the data is not Normal-distributed, the sampling distribution of the <span class="math inline">\(t\)</span> statistic may still be indistinguishable from a t distribution. In that case, the <span class="math inline">\(p\)</span>-value would still be highly accurate, and we would not need to worry that the data is not Normal-distributed. In short, what we really want to know is whether the assumed distribution of a test statistic is approximately correct.</p>
-<p>This is not something we can know for sure. All we have is a sample from the Data Generating Process; we do not know the true distribution of the data. But we can use this sample to do something similar as I did above to show the Central Limit Theorem in action: we can repeatedly draw samples and check the resulting distribution. In this case, we will treat the sample as what can be termed an <em>empirical distribution</em>. We can draw, with replacement, a large number of samples of size <span class="math inline">\(n\)</span> from the data, and then check the distribution of the sample mean, or even better, the distribution of the <span class="math inline">\(t\)</span> statistic. We need to draw samples with replacement (which means that the same observation can occur multiple times in our generated samples) to ensure that we obtain different generated samples. This procedure is also called a <strong>nonparametric bootstrap</strong> <span class="citation">(<a href="#ref-davison1997bootstrap" role="doc-biblioref">Davison &amp; Hinkley, 1997</a>)</span>. It can be useful for a variety of purposes, including the computation of robust confidence intervals and hypothesis testing. Here, we use it to assess whether the assumed distribution by a parametric test such as the <span class="math inline">\(t\)</span>-test seems reasonable.</p>
+<p>This is not something we can know for sure. All we have is a sample from the Data Generating Process; we do not know the true distribution of the data. But we can use this sample to do something similar as I did above to show the Central Limit Theorem in action: we can repeatedly draw samples and check the resulting distribution. In this case, we will treat the sample as what can be termed an <em>empirical distribution</em>. We can draw, with replacement, a large number of samples of size <span class="math inline">\(n\)</span> from the data, and then check the distribution of the sample mean, or even better, the distribution of the <span class="math inline">\(t\)</span> statistic. We need to draw samples with replacement (which means that the same observation can occur multiple times in our generated samples) to ensure that we obtain different generated samples. This procedure is also called a <strong>nonparametric bootstrap</strong> <span class="citation">(<a href="#ref-davison1997bootstrap">Davison &amp; Hinkley, 1997</a>)</span>. It can be useful for a variety of purposes, including the computation of robust confidence intervals and hypothesis testing. Here, we use it to assess whether the assumed distribution by a parametric test such as the <span class="math inline">\(t\)</span>-test seems reasonable.</p>
 <p>Figure <a href="ch-simple-GLM.html#fig:bootstrap-sample-mean-and-t">3.13</a> shows the distribution of the sample mean and the <span class="math inline">\(t\)</span>-statistic for a total of 100,0000 bootstrap samples, drawn with replacement from the empirical distribution of the data (Figure <a href="ch-simple-GLM.html#fig:anchoring-eda-plots">3.1</a>). As these plots indicate, whilst the empirical distribution looks far from Normal, the sampling distribution of the mean does not appear to deviate too far from a Normal distribution. Whilst not perfect, both the histogram and Q-Q plot show that the distribution is approximately Normal. The sampling distribution of the <span class="math inline">\(t\)</span> statistic matches the assumed t distribution somewhat less well, with signs of left-skew. As such, the results of the <span class="math inline">\(t\)</span>-test may be somewhat biased. This would be of particular concern when the observed effect was small and the test result close to the border of significance. Given the large magnitude of the <span class="math inline">\(t\)</span>-statistic we computed for the actual data, and the very low <span class="math inline">\(p\)</span>-value, it doesn’t seem likely that these are due to wrongly assuming a t distribution.</p>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:bootstrap-sample-mean-and-t"></span>
 <img src="03-GLM-simple_files/figure-html/bootstrap-sample-mean-and-t-1.png" alt="Boostrapped sample means and $t$ statistics, using 100,000 bootstrap samples from the empirical distribution. For both the sample mean and $t$ statistic, we show a histogram with the assumed theoretical distribution overlaid, and a Q-Q plot." width="672" />

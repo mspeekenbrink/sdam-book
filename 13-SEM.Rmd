@@ -329,7 +329,7 @@ A multivariate Normal distribution is completely determined by the mean vector a
 The assumption of multivariate Normality is necessary to derive maximum likelihood estimators, and corresponding standard errors of the estimates and sampling distributions for test statistics. Estimation and tests are however reasonably robust against (mild) deviation from multivariate Normality, e.g. as long as the distribution is not overly skewed [@bollen2011structural]. Alternatives to maximum likelihood are Generalized Least Squares (GLS), which is also based on the assumption of multivariate Normality, and Weighted Least Squares (WLS; also called asymptotically distribution free or ADF), which does not require the assumption of multivariate Normality.
 <!-- see https://web.pdx.edu/~newsomj/semclass/ho_estimate.pdf for estimation methods -->
 
-#### Variance-Covariance algebra
+#### Variance-Covariance algebra {#sec-SEM-path-models-variance-covariance-algebra}
 
 The elements of the model-implied variance-covariance matrix can be determined using the following rules for variances and covariances (where $X$, $Y$, and $Z$ are variables, and $c$ a constant):
 
@@ -447,7 +447,13 @@ where $\text{max}(0,\hat{\chi}^2_M - \text{df}_M)$ returns either $0$ or $\hat{\
 
 Modification indices -->
 
+## Modification indices
 
+When a SEM does not fit the data adequately, it *may* be reasonable to change it by allowing some parameters which were fixed to 0 to be estimated. When doing so, the main guide should be theory: Does the model still make sense after adding the new parameters? Is the model still identifiable? Modification indices can provide another guide. The **modification index** for a fixed-to-zero parameter is an estimate of the improvement in the model chi-square $\hat{\chi}^2_M$ that would result from allowing the parameter to be freely estimated. As such, a fixed-to-zero parameter with a large modification index might be a good candidate for improving model fit.
+
+Allowing fixed-to-zero parameters to be freely estimated increases the complexity of the model, and should therefore be done with caution. Blindly following modification indices to respecify a model is not advised. A main concern is that a model specification search via modification indices is data-driven. Data is noisy. A parameter that appears a cause of misspecification in one sample might not pose a problem in another. In other words, by changing a model to fit one sample, we may arrive at a model that fits less well to new data. This is also referred to as *capitalization on chance*, and @maccallum1992model show its detrimental effects rather clearly. Used sparingly, modification indices can provide a useful guide for model improvement, but whether freeing a parameter makes theoretical sense is more important.
+
+Differences in the observed correlations between variables, and the "predicted" correlations in the estimated model, provide another guide for model improvement. These differences in correlations are also called **residual correlations**. For example, when the observed correlation between two variables is much larger than predicted, it may make sense to add a direct path between these variables.
 
 ## Model comparison
 
@@ -464,8 +470,6 @@ where $\text{npar}(M)$ denotes the number of freely estimated parameters in MODE
 where $n$ is the number of (multivariate) observations. The BIC can be viewed as an approximation to the Bayesian "marginal likelihood". We will consider what this means in a later chapter.
 
 For both measures, lower values are better. The measures are not test statistics in the sense that their sampling distribution can be used to compute $p$-values. And the absolute value of each measure is not obvious. Their application is straightforward however: Pick the model with the lowest AIC or BIC. Both criteria add an additional penalty to the "minus two log likelihood" measure of misfit. The penalty of the AIC ($2 \times \text{npar}(M)$) is only based on the number of freely estimated parameters in MODEL M. For the BIC, the penalty ($\text{npar}(M) \times \log (n)$) is also based on the number of observations. The larger the dataset, the larger the relative penalty for additional parameters.
-
-## Modification indices
 
 ## Evaluation and selection of the mediation path models
 
@@ -503,7 +507,7 @@ As the Full Mediation model and Common Cause model are not nested, they cannot b
 
 ## A more complex path model
 
-There are a number of additional variables in the dataset from the study on legacy beliefs in pro-environmental behaviour [@zaval_how_2015]. These are participants' age and income, as well as their belief in climate change. Without conducting any additional research, I hypothesized that education would be causally related to belief and income, and age to legacy motive (older people being more concerned with their legacy) and income (due to e.g. superannuation). I further hypothesized that belief would be causally related to intention. I also thought income might be related to intention, reasoning that richer people having less intention to behave pro-environmentally as that might hurt their investments and bank balance.^[This reasoning is not entirely independent from the current political developments in the United Kingdom at the time of writing this  (17 November 2022).] I also thought income might be causally related to donation (richer people being able to donate more). This rather haphazard "theory" led to the path model depicted in Figure \@ref(fig:complex-path-legacy-motive-1) (for clarity, the constant terms are hidden in this plot). Age and education are exogenous variables in this model, and allowed to covariate. The remaining variables are endogenous, and apart from residual variances, are assumed to be fully explained by the other variables in the model. 
+There are a number of additional variables in the dataset from the study on legacy beliefs in pro-environmental behaviour [@zaval_how_2015]. These are participants' age and income, as well as their belief in climate change. Relying solely on intuition, I hypothesized that education would be causally related to belief and income, and age to legacy motive (older people being more concerned with their legacy) and income (due to e.g. superannuation). I further hypothesized that belief would be causally related to intention. I also thought income might be related to intention, reasoning that richer people having less intention to behave pro-environmentally as that might hurt their investments and bank balance.^[This reasoning is not entirely independent from the current political developments in the United Kingdom at the time of writing this  (17 November 2022).] I also thought income might be causally related to donation (richer people being able to donate more). This rather haphazard "theory" led to the path model depicted in Figure \@ref(fig:complex-path-legacy-motive-1) (for clarity, the constant terms are hidden in this plot). Age and education are exogenous variables in this model, and allowed to covariate. The remaining variables are endogenous, and apart from residual variances, are assumed to be fully explained by the other variables in the model. 
 
 ```{r complex-path-legacy-motive-1, fig.cap="A more complex path model.", fig.width=.9*6, fig.height=.9*4, out.width="100%"}
 mod_complex <-   '
@@ -523,19 +527,30 @@ semPaths(spmmod, layout="tree2", sizeMan=7, sizeInt = 5, style="ram", intercepts
 
 ```
 
-To my surprise, apart from the effect of age on legacy and income, all the paths in the model were significant. Table \@ref(tab:sem-path-mod-complex-results) shows the results in more detail. Unfortunately, the model fit indices indicate that this model does not provide a satisfactory account of all the relations in the data. 
+Perhaps surprisingly, apart from the effect of age on legacy and income, all the paths in the model were significant. Table \@ref(tab:sem-path-mod-complex-results) shows the results in more detail. Unfortunately, the model fit indices indicate that this model does not provide a satisfactory account of all the relations in the data. 
 
 ```{r, results="asis"}
 if(knitr::is_html_output()) {
   cat("<table><caption>(\\#tab:sem-path-mod-complex-results)Results of an initial full path model for the legacy motive data. Only results for regression parameters and selected model fit indices are included.</caption>")
-  semTable::semTable(fmod_complex, type="html", paramSets = c("slopes","fits"), fits = c("chisq", "cfi", "tli", "srmr", "rmsea"))
+  semTable::semTable(fmod_complex, type="html", paramSets = c("slopes","fits"), fits = c("chisq", "cfi", "srmr", "rmsea","aic", "bic"))
   cat("</table>")
 } else {
-  semTable::semTable(fmod_complex, type="latex", table.float = TRUE, fits = c("chisq", "nfi", "tli", "srmr", "rmsea"), caption = "(\\#ttab:tab:sem_path_mod_complex_results) Results of an initial full path model for the legacy motive data.")
+  semTable::semTable(fmod_complex, type="latex", table.float = TRUE, fits = c("chisq", "cfi", "srmr", "rmsea","aic", "bic"), caption = "(\\#ttab:tab:sem_path_mod_complex_results) Results of an initial full path model for the legacy motive data.")
 }
 ```
 
-Given that age appears unrelated to income and legacy motive, and with a little help from so-called *modification indices* (which we will discuss in more detail in the next chapter), I reasoned that age was perhaps better placed as an exogenous influence on intention. I also reasoned that legacy might cause belief in climate change, as someone who is concerned with leaving a legacy in the world might be interested in knowing whether the world will continue to exist to sustain this legacy. Figure \@ref(fig:complex-path-legacy-motive-2) depicts the estimated relations in this revised path model. This model assumes that in addition to age and education, legacy motive is also an exogenous variable. The remaining variables are endogenous.
+Table \@ref(tab:complex-path-legacy-motive-mi) shows the modification indices for fixed-to-zero parameters in this model, ordered by magnitude and ignoring parameters for which the modification index is smaller than 2. 
+
+
+```{r complex-path-legacy-motive-mi}
+fmod_complex_mi <- lavaan::modificationindices(fmod_complex, sort=TRUE, standardized = FALSE, minimum.value = 2)
+fmod_complex_mi |>
+  mutate(parameter = if_else(op == "~", paste0("$\\texttt{",rhs,"} \\rightarrow \\texttt{",lhs,"}$"), paste0("$\\texttt{",rhs,"} \\leftrightarrow \\texttt{",lhs,"}$"))) |>
+  select(parameter, mi, epc) |>
+  knitr::kable(align=c("l","r","r"), caption = "Modification indices and expected change in parameter values for fixed-to-zero parameters.", col.names=c("Parameter","Modification index", "Expected change"), escape = FALSE, row.names = FALSE, digits=3)
+```
+
+The parameter with the largest modification index is the direct path from belief to legacy motive. Whilst one might be tempted to therefore add a direct path from belief to legacy motive, I do not find it immediately plausible that belief in climate change would cause motivation to leave a positive legacy in the world. I also did not think it plausible that intention to act in a pro-environmental manner would cause a legacy motive (this effect having the second largest modification index). Instead, given that age appears unrelated to income and legacy motive, I reasoned that age was perhaps better placed as an exogenous influence on intention. I also reasoned that legacy motive might cause belief in climate change, as someone who is concerned with leaving a legacy in the world might be interested in knowing whether the world will continue to exist to sustain this legacy. Figure \@ref(fig:complex-path-legacy-motive-2) depicts the estimated relations in this revised path model. This model assumes that in addition to age and education, legacy motive is also an exogenous variable. The remaining variables are endogenous.
 
 ```{r complex-path-legacy-motive-2, fig.cap="A more complex path model.", fig.width=.9*6, fig.height=.9*4, out.width="100%"}
 mod_complex2 <-   '
@@ -551,17 +566,17 @@ spmmod <- semPlotModel(fmod_complex2)
 semPaths(spmmod, layout="tree2", sizeMan=7, sizeInt = 5, style="ram", intercepts=FALSE, residuals=TRUE, rotation=2, intAtSide = FALSE, whatLabels = "est", nCharNodes = 0, normalize=FALSE)
 ```
 
-Clearly, the model in Figure \@ref(fig:complex-path-legacy-motive-2) is based on post-hoc inferences, and so we are in the territory of *exploratory* data analysis. But my original model was not completely based on strong theory anyway, and the key idea of mediation of legacy motive and belief by intention is kept in the new model. That said, you should keep in mind that changing and refining a path model based on the results of a prior analysis is an exploratory exercise. A model arrived with a procedure like this should be taken with a grain of salt and ideally be tested properly with a new data set. 
+Clearly, the model in Figure \@ref(fig:complex-path-legacy-motive-2) is based on post-hoc inferences, and so we are in the territory of *exploratory* data analysis. But my original model was not based on strong theory anyway, and the key idea of mediation of legacy motive and belief by intention is kept in the new model. That said, you should keep in mind that changing and refining a path model based on the results of a prior analysis is an exploratory exercise. A model arrived with a procedure like this should be taken with a grain of salt and ideally be tested properly with a new data set. 
 
-Table \@ref(tab:sem-path-mod-complex-results2) provides more detailed results. These results show that all regression coefficients of the paths included in the model are significant. Moreover, the overall model test is not significant, indicating good fit. This conclusion is also supported by satisfactory values for the SRMR and RSMEA, and *almost* satisfactory values of the NFI and TLI.
+Table \@ref(tab:sem-path-mod-complex-results2) provides more detailed results. These results show that all regression coefficients of the paths included in the model are significant. Moreover, the overall model test is not significant, indicating good fit. This conclusion is also supported by satisfactory values for the SRMR and RSMEA, and CFI.
 
 ```{r, results="asis"}
 if(knitr::is_html_output()) {
   cat("<table><caption>(\\#tab:sem-path-mod-complex-results2) Results of a second full path model for the legacy motive data. Only results for regression parameters and selected model fit indices are included.</caption>")
-  semTable::semTable(fmod_complex2, type="html", paramSets = c("slopes","fits"), fits = c("chisq", "nfi", "tli", "srmr", "rmsea"))
+  semTable::semTable(fmod_complex2, type="html", paramSets = c("slopes","fits"), fits = c("chisq", "cfi", "srmr", "rmsea","aic", "bic"))
   cat("</table>")
 } else {
-  semTable::semTable(fmod_complex2, type="latex", table.float = TRUE, fits = c("chisq", "nfi", "tli", "srmr", "rmsea"), caption = "(\\#ttab:tab:sem_path_mod_complex_results2) Results of a second full path model for the legacy motive data.")
+  semTable::semTable(fmod_complex2, type="latex", table.float = TRUE, fits = c("chisq", "cfi", "srmr", "rmsea","aic", "bic"), caption = "(\\#ttab:tab:sem_path_mod_complex_results2) Results of a second full path model for the legacy motive data.")
 }
 ```
 

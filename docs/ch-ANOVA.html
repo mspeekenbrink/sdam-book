@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 7 A model of means (ANOVA) | Statistics: Data analysis and modelling</title>
   <meta name="description" content="A book about statistics for data analysis, with a main focus on statistical modelling." />
-  <meta name="generator" content="bookdown 0.29 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.36 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 7 A model of means (ANOVA) | Statistics: Data analysis and modelling" />
   <meta property="og:type" content="book" />
@@ -23,7 +23,7 @@
 <meta name="author" content="Maarten Speekenbrink" />
 
 
-<meta name="date" content="2022-12-11" />
+<meta name="date" content="2023-11-19" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -52,382 +52,49 @@
 <link href="book_assets/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
 <link href="book_assets/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
 <script src="book_assets/anchor-sections-1.1.0/anchor-sections.js"></script>
-<script src="book_assets/htmlwidgets-1.5.4/htmlwidgets.js"></script>
+<script src="book_assets/htmlwidgets-1.6.2/htmlwidgets.js"></script>
 <script src="book_assets/viz-1.8.2/viz.js"></script>
 <link href="book_assets/DiagrammeR-styles-0.2/styles.css" rel="stylesheet" />
-<script src="book_assets/grViz-binding-1.0.9/grViz.js"></script>
-<script src="book_assets/plotly-binding-4.10.0/plotly.js"></script>
+<script src="book_assets/grViz-binding-1.0.10/grViz.js"></script>
+<script src="book_assets/plotly-binding-4.10.3/plotly.js"></script>
 <script src="book_assets/typedarray-0.1/typedarray.min.js"></script>
 <link href="book_assets/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet" />
 <script src="book_assets/crosstalk-1.2.0/js/crosstalk.min.js"></script>
-<link href="book_assets/plotly-htmlwidgets-css-2.5.1/plotly-htmlwidgets.css" rel="stylesheet" />
-<script src="book_assets/plotly-main-2.5.1/plotly-latest.min.js"></script>
+<link href="book_assets/plotly-htmlwidgets-css-2.11.1/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="book_assets/plotly-main-2.11.1/plotly-latest.min.js"></script>
 <link href="book_assets/combineWidgetStyle-0.1/combineWidgets.css" rel="stylesheet" />
 <script src="book_assets/combineWidgets-binding-0.11.1/combineWidgets.js"></script>
-<script src="book_assets/rglWebGL-binding-0.110.2/rglWebGL.js"></script>
-<link href="book_assets/rglwidgetClass-0.110.2/rgl.css" rel="stylesheet" />
-<script src="book_assets/rglwidgetClass-0.110.2/rglClass.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.110.2/utils.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.110.2/buffer.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.110.2/subscenes.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.110.2/shaders.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.110.2/textures.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.110.2/projection.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.110.2/mouse.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.110.2/init.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.110.2/pieces.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.110.2/draw.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.110.2/controls.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.110.2/selection.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.110.2/rglTimer.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.110.2/pretty.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.110.2/axes.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.110.2/animation.src.js"></script>
-<!--html_preserve--><script type = "text/plain" id = "rgl-vertex-shader">
-#line 2 1
-// File 1 is the vertex shader
-#ifdef GL_ES
-#ifdef GL_FRAGMENT_PRECISION_HIGH
-precision highp float;
-#else
-precision mediump float;
-#endif
-#endif
-
-attribute vec3 aPos;
-attribute vec4 aCol;
-uniform mat4 mvMatrix;
-uniform mat4 prMatrix;
-varying vec4 vCol;
-varying vec4 vPosition;
-
-#ifdef NEEDS_VNORMAL
-attribute vec3 aNorm;
-uniform mat4 normMatrix;
-varying vec4 vNormal;
-#endif
-
-#if defined(HAS_TEXTURE) || defined (IS_TEXT)
-attribute vec2 aTexcoord;
-varying vec2 vTexcoord;
-#endif
-
-#ifdef FIXED_SIZE
-uniform vec3 textScale;
-#endif
-
-#ifdef FIXED_QUADS
-attribute vec3 aOfs;
-#endif
-
-#ifdef IS_TWOSIDED
-#ifdef HAS_NORMALS
-varying float normz;
-uniform mat4 invPrMatrix;
-#else
-attribute vec3 aPos1;
-attribute vec3 aPos2;
-varying float normz;
-#endif
-#endif // IS_TWOSIDED
-
-#ifdef FAT_LINES
-attribute vec3 aNext;
-attribute vec2 aPoint;
-varying vec2 vPoint;
-varying float vLength;
-uniform float uAspect;
-uniform float uLwd;
-#endif
-
-
-void main(void) {
-  
-#ifndef IS_BRUSH
-#if defined(NCLIPPLANES) || !defined(FIXED_QUADS) || defined(HAS_FOG)
-  vPosition = mvMatrix * vec4(aPos, 1.);
-#endif
-  
-#ifndef FIXED_QUADS
-  gl_Position = prMatrix * vPosition;
-#endif
-#endif // !IS_BRUSH
-  
-#ifdef IS_POINTS
-  gl_PointSize = POINTSIZE;
-#endif
-  
-  vCol = aCol;
-  
-#ifdef NEEDS_VNORMAL
-  vNormal = normMatrix * vec4(-aNorm, dot(aNorm, aPos));
-#endif
-  
-#ifdef IS_TWOSIDED
-#ifdef HAS_NORMALS
-  /* normz should be calculated *after* projection */
-  normz = (invPrMatrix*vNormal).z;
-#else
-  vec4 pos1 = prMatrix*(mvMatrix*vec4(aPos1, 1.));
-  pos1 = pos1/pos1.w - gl_Position/gl_Position.w;
-  vec4 pos2 = prMatrix*(mvMatrix*vec4(aPos2, 1.));
-  pos2 = pos2/pos2.w - gl_Position/gl_Position.w;
-  normz = pos1.x*pos2.y - pos1.y*pos2.x;
-#endif
-#endif // IS_TWOSIDED
-  
-#ifdef NEEDS_VNORMAL
-  vNormal = vec4(normalize(vNormal.xyz/vNormal.w), 1);
-#endif
-  
-#if defined(HAS_TEXTURE) || defined(IS_TEXT)
-  vTexcoord = aTexcoord;
-#endif
-  
-#if defined(FIXED_SIZE) && !defined(ROTATING)
-  vec4 pos = prMatrix * mvMatrix * vec4(aPos, 1.);
-  pos = pos/pos.w;
-  gl_Position = pos + vec4(aOfs*textScale, 0.);
-#endif
-  
-#if defined(IS_SPRITES) && !defined(FIXED_SIZE)
-  vec4 pos = mvMatrix * vec4(aPos, 1.);
-  pos = pos/pos.w + vec4(aOfs,  0.);
-  gl_Position = prMatrix*pos;
-#endif
-  
-#ifdef FAT_LINES
-  /* This code was inspired by Matt Deslauriers' code in 
-   https://mattdesl.svbtle.com/drawing-lines-is-hard */
-  vec2 aspectVec = vec2(uAspect, 1.0);
-  mat4 projViewModel = prMatrix * mvMatrix;
-  vec4 currentProjected = projViewModel * vec4(aPos, 1.0);
-  currentProjected = currentProjected/currentProjected.w;
-  vec4 nextProjected = projViewModel * vec4(aNext, 1.0);
-  vec2 currentScreen = currentProjected.xy * aspectVec;
-  vec2 nextScreen = (nextProjected.xy / nextProjected.w) * aspectVec;
-  float len = uLwd;
-  vec2 dir = vec2(1.0, 0.0);
-  vPoint = aPoint;
-  vLength = length(nextScreen - currentScreen)/2.0;
-  vLength = vLength/(vLength + len);
-  if (vLength > 0.0) {
-    dir = normalize(nextScreen - currentScreen);
-  }
-  vec2 normal = vec2(-dir.y, dir.x);
-  dir.x /= uAspect;
-  normal.x /= uAspect;
-  vec4 offset = vec4(len*(normal*aPoint.x*aPoint.y - dir), 0.0, 0.0);
-  gl_Position = currentProjected + offset;
-#endif
-  
-#ifdef IS_BRUSH
-  gl_Position = vec4(aPos, 1.);
-#endif
-}
-</script>
-<script type = "text/plain" id = "rgl-fragment-shader">
-#line 2 2
-// File 2 is the fragment shader
-#ifdef GL_ES
-#ifdef GL_FRAGMENT_PRECISION_HIGH
-precision highp float;
-#else
-precision mediump float;
-#endif
-#endif
-varying vec4 vCol; // carries alpha
-varying vec4 vPosition;
-#if defined(HAS_TEXTURE) || defined (IS_TEXT)
-varying vec2 vTexcoord;
-uniform sampler2D uSampler;
-#endif
-
-#ifdef HAS_FOG
-uniform int uFogMode;
-uniform vec3 uFogColor;
-uniform vec4 uFogParms;
-#endif
-
-#if defined(IS_LIT) && !defined(FIXED_QUADS)
-varying vec4 vNormal;
-#endif
-
-#if NCLIPPLANES > 0
-uniform vec4 vClipplane[NCLIPPLANES];
-#endif
-
-#if NLIGHTS > 0
-uniform mat4 mvMatrix;
-#endif
-
-#ifdef IS_LIT
-uniform vec3 emission;
-uniform float shininess;
-#if NLIGHTS > 0
-uniform vec3 ambient[NLIGHTS];
-uniform vec3 specular[NLIGHTS]; // light*material
-uniform vec3 diffuse[NLIGHTS];
-uniform vec3 lightDir[NLIGHTS];
-uniform bool viewpoint[NLIGHTS];
-uniform bool finite[NLIGHTS];
-#endif
-#endif // IS_LIT
-
-#ifdef IS_TWOSIDED
-uniform bool front;
-varying float normz;
-#endif
-
-#ifdef FAT_LINES
-varying vec2 vPoint;
-varying float vLength;
-#endif
-
-void main(void) {
-  vec4 fragColor;
-#ifdef FAT_LINES
-  vec2 point = vPoint;
-  bool neg = point.y < 0.0;
-  point.y = neg ? (point.y + vLength)/(1.0 - vLength) :
-                 -(point.y - vLength)/(1.0 - vLength);
-#if defined(IS_TRANSPARENT) && defined(IS_LINESTRIP)
-  if (neg && length(point) <= 1.0) discard;
-#endif
-  point.y = min(point.y, 0.0);
-  if (length(point) > 1.0) discard;
-#endif // FAT_LINES
-  
-#ifdef ROUND_POINTS
-  vec2 coord = gl_PointCoord - vec2(0.5);
-  if (length(coord) > 0.5) discard;
-#endif
-  
-#if NCLIPPLANES > 0
-  for (int i = 0; i < NCLIPPLANES; i++)
-    if (dot(vPosition, vClipplane[i]) < 0.0) discard;
-#endif
-    
-#ifdef FIXED_QUADS
-    vec3 n = vec3(0., 0., 1.);
-#elif defined(IS_LIT)
-    vec3 n = normalize(vNormal.xyz);
-#endif
-    
-#ifdef IS_TWOSIDED
-    if ((normz <= 0.) != front) discard;
-#endif
-    
-#ifdef IS_LIT
-    vec3 eye = normalize(-vPosition.xyz/vPosition.w);
-    vec3 lightdir;
-    vec4 colDiff;
-    vec3 halfVec;
-    vec4 lighteffect = vec4(emission, 0.);
-    vec3 col;
-    float nDotL;
-#ifdef FIXED_QUADS
-    n = -faceforward(n, n, eye);
-#endif
-    
-#if NLIGHTS > 0
-    for (int i=0;i<NLIGHTS;i++) {
-      colDiff = vec4(vCol.rgb * diffuse[i], vCol.a);
-      lightdir = lightDir[i];
-      if (!viewpoint[i])
-        lightdir = (mvMatrix * vec4(lightdir, 1.)).xyz;
-      if (!finite[i]) {
-        halfVec = normalize(lightdir + eye);
-      } else {
-        lightdir = normalize(lightdir - vPosition.xyz/vPosition.w);
-        halfVec = normalize(lightdir + eye);
-      }
-      col = ambient[i];
-      nDotL = dot(n, lightdir);
-      col = col + max(nDotL, 0.) * colDiff.rgb;
-      col = col + pow(max(dot(halfVec, n), 0.), shininess) * specular[i];
-      lighteffect = lighteffect + vec4(col, colDiff.a);
-    }
-#endif
-    
-#else // not IS_LIT
-    vec4 colDiff = vCol;
-    vec4 lighteffect = colDiff;
-#endif
-    
-#ifdef IS_TEXT
-    vec4 textureColor = lighteffect*texture2D(uSampler, vTexcoord);
-#endif
-    
-#ifdef HAS_TEXTURE
-#ifdef TEXTURE_rgb
-    vec4 textureColor = lighteffect*vec4(texture2D(uSampler, vTexcoord).rgb, 1.);
-#endif
-    
-#ifdef TEXTURE_rgba
-    vec4 textureColor = lighteffect*texture2D(uSampler, vTexcoord);
-#endif
-    
-#ifdef TEXTURE_alpha
-    vec4 textureColor = texture2D(uSampler, vTexcoord);
-    float luminance = dot(vec3(1.,1.,1.), textureColor.rgb)/3.;
-    textureColor =  vec4(lighteffect.rgb, lighteffect.a*luminance);
-#endif
-    
-#ifdef TEXTURE_luminance
-    vec4 textureColor = vec4(lighteffect.rgb*dot(texture2D(uSampler, vTexcoord).rgb, vec3(1.,1.,1.))/3., lighteffect.a);
-#endif
-    
-#ifdef TEXTURE_luminance_alpha
-    vec4 textureColor = texture2D(uSampler, vTexcoord);
-    float luminance = dot(vec3(1.,1.,1.),textureColor.rgb)/3.;
-    textureColor = vec4(lighteffect.rgb*luminance, lighteffect.a*textureColor.a);
-#endif
-    
-    fragColor = textureColor;
-
-#elif defined(IS_TEXT)
-    if (textureColor.a < 0.1)
-      discard;
-    else
-      fragColor = textureColor;
-#else
-    fragColor = lighteffect;
-#endif // HAS_TEXTURE
-    
-#ifdef HAS_FOG
-    // uFogParms elements: x = near, y = far, z = fogscale, w = (1-sin(FOV/2))/(1+sin(FOV/2))
-    // In Exp and Exp2: use density = density/far
-    // fogF will be the proportion of fog
-    // Initialize it to the linear value
-    float fogF;
-    if (uFogMode > 0) {
-      fogF = (uFogParms.y - vPosition.z/vPosition.w)/(uFogParms.y - uFogParms.x);
-      if (uFogMode > 1)
-        fogF = mix(uFogParms.w, 1.0, fogF);
-      fogF = fogF*uFogParms.z;
-      if (uFogMode == 2)
-        fogF = 1.0 - exp(-fogF);
-      // Docs are wrong: use (density*c)^2, not density*c^2
-      // https://gitlab.freedesktop.org/mesa/mesa/-/blob/master/src/mesa/swrast/s_fog.c#L58
-      else if (uFogMode == 3)
-        fogF = 1.0 - exp(-fogF*fogF);
-      fogF = clamp(fogF, 0.0, 1.0);
-      gl_FragColor = vec4(mix(fragColor.rgb, uFogColor, fogF), fragColor.a);
-    } else gl_FragColor = fragColor;
-#else
-    gl_FragColor = fragColor;
-#endif // HAS_FOG
-    
-}
-</script><!--/html_preserve-->
-<script src="book_assets/CanvasMatrix4-0.110.2/CanvasMatrix.src.js"></script>
-<script src="book_assets/rglPlayer-binding-0.110.2/rglPlayer.js"></script>
+<script src="book_assets/rglWebGL-binding-1.2.1/rglWebGL.js"></script>
+<link href="book_assets/rglwidgetClass-1.2.1/rgl.css" rel="stylesheet" />
+<script src="book_assets/rglwidgetClass-1.2.1/rglClass.src.js"></script>
+<script src="book_assets/rglwidgetClass-1.2.1/utils.src.js"></script>
+<script src="book_assets/rglwidgetClass-1.2.1/buffer.src.js"></script>
+<script src="book_assets/rglwidgetClass-1.2.1/subscenes.src.js"></script>
+<script src="book_assets/rglwidgetClass-1.2.1/shaders.src.js"></script>
+<script src="book_assets/rglwidgetClass-1.2.1/shadersrc.src.js"></script>
+<script src="book_assets/rglwidgetClass-1.2.1/textures.src.js"></script>
+<script src="book_assets/rglwidgetClass-1.2.1/projection.src.js"></script>
+<script src="book_assets/rglwidgetClass-1.2.1/mouse.src.js"></script>
+<script src="book_assets/rglwidgetClass-1.2.1/init.src.js"></script>
+<script src="book_assets/rglwidgetClass-1.2.1/pieces.src.js"></script>
+<script src="book_assets/rglwidgetClass-1.2.1/draw.src.js"></script>
+<script src="book_assets/rglwidgetClass-1.2.1/controls.src.js"></script>
+<script src="book_assets/rglwidgetClass-1.2.1/selection.src.js"></script>
+<script src="book_assets/rglwidgetClass-1.2.1/rglTimer.src.js"></script>
+<script src="book_assets/rglwidgetClass-1.2.1/pretty.src.js"></script>
+<script src="book_assets/rglwidgetClass-1.2.1/axes.src.js"></script>
+<script src="book_assets/rglwidgetClass-1.2.1/animation.src.js"></script>
+<script src="book_assets/CanvasMatrix4-1.2.1/CanvasMatrix.src.js"></script>
+<script src="book_assets/rglPlayer-binding-1.2.1/rglPlayer.js"></script>
 <script src="book_assets/kePrint-0.0.1/kePrint.js"></script>
 <link href="book_assets/lightable-0.0.1/lightable.css" rel="stylesheet" />
 
 
 
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
 <style type="text/css">
 /* Used with Pandoc 2.11+ new --citeproc when CSL is used */
 div.csl-bib-body { }
@@ -738,21 +405,43 @@ div.csl-indent {
 </ul></li>
 <li class="chapter" data-level="13.5" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#model-fit"><i class="fa fa-check"></i><b>13.5</b> Model fit</a>
 <ul>
-<li class="chapter" data-level="13.5.1" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#fit-indices"><i class="fa fa-check"></i><b>13.5.1</b> Fit indices</a></li>
-<li class="chapter" data-level="13.5.2" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#comparative-fit-to-a-baseline"><i class="fa fa-check"></i><b>13.5.2</b> Comparative fit to a baseline</a></li>
-<li class="chapter" data-level="13.5.3" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#errors-of-approximation"><i class="fa fa-check"></i><b>13.5.3</b> Errors of approximation</a></li>
+<li class="chapter" data-level="13.5.1" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#test-of-overall-model-fit"><i class="fa fa-check"></i><b>13.5.1</b> Test of overall model fit</a></li>
+<li class="chapter" data-level="13.5.2" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#approximate-fit-indices"><i class="fa fa-check"></i><b>13.5.2</b> Approximate fit indices</a></li>
 </ul></li>
-<li class="chapter" data-level="13.6" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#model-comparison-1"><i class="fa fa-check"></i><b>13.6</b> Model comparison</a></li>
-<li class="chapter" data-level="13.7" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#evaluation-and-selection-of-the-mediation-path-models"><i class="fa fa-check"></i><b>13.7</b> Evaluation and selection of the mediation path models</a></li>
-<li class="chapter" data-level="13.8" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#a-more-complex-path-model"><i class="fa fa-check"></i><b>13.8</b> A more complex path model</a></li>
-<li class="chapter" data-level="13.9" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#principles-in-constructing-path-models"><i class="fa fa-check"></i><b>13.9</b> Principles in constructing path models</a>
+<li class="chapter" data-level="13.6" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#modification-indices"><i class="fa fa-check"></i><b>13.6</b> Modification indices</a></li>
+<li class="chapter" data-level="13.7" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#model-comparison-1"><i class="fa fa-check"></i><b>13.7</b> Model comparison</a></li>
+<li class="chapter" data-level="13.8" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#evaluation-and-selection-of-the-mediation-path-models"><i class="fa fa-check"></i><b>13.8</b> Evaluation and selection of the mediation path models</a></li>
+<li class="chapter" data-level="13.9" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#a-more-complex-path-model"><i class="fa fa-check"></i><b>13.9</b> A more complex path model</a></li>
+<li class="chapter" data-level="13.10" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#principles-in-constructing-path-models"><i class="fa fa-check"></i><b>13.10</b> Principles in constructing path models</a>
 <ul>
-<li class="chapter" data-level="13.9.1" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#identifiability"><i class="fa fa-check"></i><b>13.9.1</b> Identifiability</a></li>
+<li class="chapter" data-level="13.10.1" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#identifiability"><i class="fa fa-check"></i><b>13.10.1</b> Identifiability</a></li>
 </ul></li>
-<li class="chapter" data-level="13.10" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#model-equivalence"><i class="fa fa-check"></i><b>13.10</b> Model equivalence</a></li>
-<li class="chapter" data-level="13.11" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#correlation-vs-causation"><i class="fa fa-check"></i><b>13.11</b> Correlation vs causation</a></li>
+<li class="chapter" data-level="13.11" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#model-equivalence"><i class="fa fa-check"></i><b>13.11</b> Model equivalence</a></li>
+<li class="chapter" data-level="13.12" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#correlation-vs-causation"><i class="fa fa-check"></i><b>13.12</b> Correlation vs causation</a></li>
 </ul></li>
-<li class="chapter" data-level="14" data-path="ch-SEM-latent-variable-models.html"><a href="ch-SEM-latent-variable-models.html"><i class="fa fa-check"></i><b>14</b> Latent variable models (SEM 2)</a></li>
+<li class="chapter" data-level="14" data-path="ch-SEM-latent-variable-models.html"><a href="ch-SEM-latent-variable-models.html"><i class="fa fa-check"></i><b>14</b> Latent variable models (SEM 2)</a>
+<ul>
+<li class="chapter" data-level="14.1" data-path="ch-SEM-latent-variable-models.html"><a href="ch-SEM-latent-variable-models.html#measurement-of-latent-variables"><i class="fa fa-check"></i><b>14.1</b> Measurement of latent variables</a>
+<ul>
+<li class="chapter" data-level="14.1.1" data-path="ch-SEM-latent-variable-models.html"><a href="ch-SEM-latent-variable-models.html#scaling-and-identification"><i class="fa fa-check"></i><b>14.1.1</b> Scaling and identification</a></li>
+</ul></li>
+<li class="chapter" data-level="14.2" data-path="ch-SEM-latent-variable-models.html"><a href="ch-SEM-latent-variable-models.html#confirmatory-factor-analysis"><i class="fa fa-check"></i><b>14.2</b> Confirmatory factor analysis</a>
+<ul>
+<li class="chapter" data-level="14.2.1" data-path="ch-SEM-latent-variable-models.html"><a href="ch-SEM-latent-variable-models.html#a-single-factor-model"><i class="fa fa-check"></i><b>14.2.1</b> A single factor model</a></li>
+</ul></li>
+<li class="chapter" data-level="14.3" data-path="ch-SEM-latent-variable-models.html"><a href="ch-SEM-latent-variable-models.html#full-hierarchical-factor-model-for-the-bfi-2"><i class="fa fa-check"></i><b>14.3</b> Full hierarchical factor model for the BFI-2</a>
+<ul>
+<li class="chapter" data-level="14.3.1" data-path="ch-SEM-latent-variable-models.html"><a href="ch-SEM-latent-variable-models.html#indentification"><i class="fa fa-check"></i><b>14.3.1</b> Indentification</a></li>
+</ul></li>
+<li class="chapter" data-level="14.4" data-path="ch-SEM-latent-variable-models.html"><a href="ch-SEM-latent-variable-models.html#multiple-groups-and-measurement-invariance"><i class="fa fa-check"></i><b>14.4</b> Multiple groups and measurement invariance</a></li>
+<li class="chapter" data-level="14.5" data-path="ch-SEM-latent-variable-models.html"><a href="ch-SEM-latent-variable-models.html#exploratory-factor-and-principal-components-analysis"><i class="fa fa-check"></i><b>14.5</b> Exploratory factor and principal components analysis</a>
+<ul>
+<li class="chapter" data-level="14.5.1" data-path="ch-SEM-latent-variable-models.html"><a href="ch-SEM-latent-variable-models.html#determining-the-number-of-factors"><i class="fa fa-check"></i><b>14.5.1</b> Determining the number of factors</a></li>
+<li class="chapter" data-level="14.5.2" data-path="ch-SEM-latent-variable-models.html"><a href="ch-SEM-latent-variable-models.html#factor-rotation"><i class="fa fa-check"></i><b>14.5.2</b> Factor rotation</a></li>
+</ul></li>
+<li class="chapter" data-level="14.6" data-path="ch-SEM-latent-variable-models.html"><a href="ch-SEM-latent-variable-models.html#conclusion"><i class="fa fa-check"></i><b>14.6</b> Conclusion</a></li>
+<li class="chapter" data-level="14.7" data-path="ch-SEM-latent-variable-models.html"><a href="ch-SEM-latent-variable-models.html#in-practice-6"><i class="fa fa-check"></i><b>14.7</b> In practice</a></li>
+</ul></li>
 <li class="chapter" data-level="15" data-path="ch-Bayes-estimation.html"><a href="ch-Bayes-estimation.html"><i class="fa fa-check"></i><b>15</b> Introduction to Bayesian estimation</a>
 <ul>
 <li class="chapter" data-level="15.1" data-path="ch-Bayes-estimation.html"><a href="ch-Bayes-estimation.html#fundamentals-of-bayesian-inference"><i class="fa fa-check"></i><b>15.1</b> Fundamentals of Bayesian inference</a>
@@ -784,7 +473,7 @@ div.csl-indent {
 <li class="chapter" data-level="16.5.3" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#results-of-a-nhst-are-often-misinterpreted"><i class="fa fa-check"></i><b>16.5.3</b> Results of a NHST are often misinterpreted</a></li>
 </ul></li>
 <li class="chapter" data-level="16.6" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#to-bayes-or-not-to-bayes-a-pragmatic-view"><i class="fa fa-check"></i><b>16.6</b> To Bayes or not to Bayes? A pragmatic view</a></li>
-<li class="chapter" data-level="16.7" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#in-practice-6"><i class="fa fa-check"></i><b>16.7</b> In practice</a></li>
+<li class="chapter" data-level="16.7" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#in-practice-7"><i class="fa fa-check"></i><b>16.7</b> In practice</a></li>
 <li class="chapter" data-level="16.8" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#summary-3"><i class="fa fa-check"></i><b>16.8</b> “Summary”</a></li>
 </ul></li>
 <li class="chapter" data-level="17" data-path="ch-responsible-data-analyst.html"><a href="ch-responsible-data-analyst.html"><i class="fa fa-check"></i><b>17</b> Being a responsible data analyst</a>
@@ -824,7 +513,7 @@ div.csl-indent {
 <div id="can-playing-tetris-reduce-intrusive-memories" class="section level2 hasAnchor" number="7.1">
 <h2><span class="header-section-number">7.1</span> Can playing Tetris reduce intrusive memories?<a href="ch-ANOVA.html#can-playing-tetris-reduce-intrusive-memories" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>After a traumatic experience, some people experience flashbacks, which are intrusive and involuntary memories that involve vivid imagery related to the traumatic event. These intrusive memories can be highly distressing and are a hallmark of acute stress disorder and posttraumatic stress disorder (PTSD). It has been suggested that recalling traumatic memories under certain conditions can reduce their negative impact. Memory consolidation refers to a collection of neural processes which stabilize a memory trace after it is acquired. According to reconsolidation theory, when a consolidated memory trace is reactivated (remembered), it again becomes malleable and will require restabilization for it to persist. Disruption of this reconsolidation after recall may then be a way to reduce the strength of traumatic memories, or even allow them to be forgotten.</p>
-<p><span class="citation">James et al. (<a href="#ref-james_computer_2015" role="doc-biblioref">2015</a>)</span> conducted a study to investigate this idea. They reasoned that because intrusive memories of trauma are often visual in nature, performing a demanding visuospatial task (e.g. playing the computer game Tetris) after recall could interfere with the reconsolidation process and reduce subsequent intrusions of the traumatic memory. In their Experiment 2, they first created traumatic memories by showing their participants a 12-minute film with graphic scenes depicting death and serious injury (e.g. a van hitting a teenage boy while he was using his mobile phone crossing the road). Participants then went home and recorded the number of intrusive memories of the film during the subsequent 24-hour period (Day 0). The next day, they returned to the lab and were randomly assigned to one of four conditions:</p>
+<p><span class="citation">James et al. (<a href="#ref-james_computer_2015">2015</a>)</span> conducted a study to investigate this idea. They reasoned that because intrusive memories of trauma are often visual in nature, performing a demanding visuospatial task (e.g. playing the computer game Tetris) after recall could interfere with the reconsolidation process and reduce subsequent intrusions of the traumatic memory. In their Experiment 2, they first created traumatic memories by showing their participants a 12-minute film with graphic scenes depicting death and serious injury (e.g. a van hitting a teenage boy while he was using his mobile phone crossing the road). Participants then went home and recorded the number of intrusive memories of the film during the subsequent 24-hour period (Day 0). The next day, they returned to the lab and were randomly assigned to one of four conditions:</p>
 <ol style="list-style-type: decimal">
 <li>No-task control: participants in this condition (<span class="math inline">\(n=18\)</span>) completed a 10-minute music filler task, rating excerpts of classical music for pleasantness.</li>
 <li>Tetris+Reactivation: participants in this condition (<span class="math inline">\(n=18\)</span>) were shown a series of images from the scenes in the trauma film to reactivate the memories of the scenes. After this reactivation task, they completed the 10-minute music filler task, and then played the video game Tetris for 12 minutes.</li>
@@ -965,7 +654,7 @@ The results of the hypothesis tests that the true intercept and slope equal 0 ar
 </tbody>
 </table>
 <p>A test comparing the means of two Normal-distributed variables is also known as an <strong>independent samples t-test</strong>. It involves an extension of the one-sample <span class="math inline">\(t\)</span> test discussed in Chapter <a href="ch-simple-GLM.html#ch-simple-GLM">3</a> and is based on the sampling distribution of the difference between two sample means. As with any <span class="math inline">\(\text{df}_1 = 1\)</span> <span class="math inline">\(f\)</span>-test, if you’d take the square-root of the <span class="math inline">\(F\)</span> statistic for this test, you obtain the value of the <span class="math inline">\(t\)</span> statistic of the independent samples t-test. As the mathematical details of the two-sample <span class="math inline">\(t\)</span>-test don’t provide any new insights, we omit them here. A main thing to realise is that this test will provide identical results to our test of the slope of <span class="math inline">\(\texttt{dummy}\)</span>. By constructing a model where the slope of <span class="math inline">\(\texttt{dummy}\)</span> is identical to the difference between the means between the Tetris+Reactivation and Reactivation-Only conditions, we have made it possible to test this hypothesis in the context of a linear regression model. Whilst this model is basically a regression model, including new predictors for nominal variables makes the model flexible enough to encompass most of the commonly encountered analyses, which perhaps is why it was rebranded as the General Linear Model.</p>
-<p>The dummy coding procedure above can be generalized to the situation in which you want to compare more than two groups. In the Tetris study, there were four conditions. To allow a linear model to represent the means in all four conditions, you need to use more than one dummy-coding predictor. In fact, you would need 3 dummy-coding predictors. In such a dummy-coded model, the intercept represents the mean of one condition, which we can call the reference group. The slope of each predictor represents the difference between the mean of the remaining groups and the reference group. Whilst dummy coding is simple and provides interpretable parameters, there are alternative coding schemes that may provide more interesting tests.</p>
+<p>The dummy coding procedure above can be generalized to the situation in which you want to compare more than two groups. In the Tetris study, there were four conditions. To allow a linear model to represent the means in all four conditions, you need to use more than one dummy-coding predictor. In fact, you would need 3 dummy-coding predictors. In such a dummy-coded model, the intercept represents the mean of one condition, which we can call the reference group. The slope of each predictor represents the difference between the mean of one of the corresponding other group and the mean of the reference group. Whilst dummy coding is simple and provides interpretable parameters, there are alternative coding schemes that may provide more interesting tests.</p>
 <!-- 
 $$t = \frac{\overline{Y}_1 - \overline{Y}_2}{\hat{\sigma}_p \sqrt{\frac{1}{n_1} + \frac{1}{n_2}}}$$
 
@@ -1170,7 +859,7 @@ i.e., it is a “whole model test”. The result of this so-called <strong>omnib
 which is also equivalent to the test that the means of all conditions are equal to each other:
 <span class="math display">\[H_0\!: \mu_\text{contr} = \mu_\text{t+r} = \mu_\text{tetr} = \mu_\text{react} \]</span></p>
 <p>The result of the omnibus test indicates that there is at least one treatment effect which is different from 0. Omnibus tests for all slopes reflecting treatment effects are what is traditionally focused on in an ANOVA. But these omnibus tests are not always that informative. We’d generally like to know more than “there is at least one treatment that is likely to have an effect”. It seems inherently more interesting to know <em>which</em> conditions are associated with a treatment effect. This is where the tests of the individual slopes come in handy. Assessing the effect of the three effect-coding predictors, we can conclude that only the treatment effect of the Tetris+Reactivation condition is significant. As such, we only have sufficient evidence that a combination of memory reactivation and playing Tetris changes the number of subsequent memory intrusions.</p>
-<p>At this point, I’d like to make some important remarks. Firstly, the absence of sufficient evidence that any of the other treatment effects differs from 0 should <em>not</em> be taken as direct evidence that the true treatment effects equal 0. A non-significant result indicates a lack of evidence <em>against</em> the null-hypothesis, but not an abundance of evidence <em>for</em> the null hypothesis. You can think of this as follows: that a suspect in a murder trial is not able to provide evidence that she is innocent, is in itself not sufficient evidence that she is guilty. You might also think of black swans. While the empirical statement “All swans are white” is impossible to prove conclusively without checking the colour of all swans that have and will ever grace this world, finding a single black swan disproves that statement immediately <span class="citation">(<a href="#ref-popper1959logic" role="doc-biblioref">Popper, 1959</a>)</span>. Although significance testing does not provide <em>conclusive evidence</em> for or against the null-hypothesis,<a href="#fn18" class="footnote-ref" id="fnref18"><sup>18</sup></a> the analogy can be described as follows: a significant test is like spotting a swan that is “off-white” enough for you to decide it is not exactly white. But not having spotted such a swan could either mean that such a swan does not exist (the null hypothesis is true), or that you have not searched hard enough (the null hypothesis is false, but your test lacked power).</p>
+<p>At this point, I’d like to make some important remarks. Firstly, the absence of sufficient evidence that any of the other treatment effects differs from 0 should <em>not</em> be taken as direct evidence that the true treatment effects equal 0. A non-significant result indicates a lack of evidence <em>against</em> the null-hypothesis, but not an abundance of evidence <em>for</em> the null hypothesis. You can think of this as follows: that a suspect in a murder trial is not able to provide evidence that she is innocent, is in itself not sufficient evidence that she is guilty. You might also think of black swans. While the empirical statement “All swans are white” is impossible to prove conclusively without checking the colour of all swans that have and will ever grace this world, finding a single black swan disproves that statement immediately <span class="citation">(<a href="#ref-popper1959logic">Popper, 1959</a>)</span>. Although significance testing does not provide <em>conclusive evidence</em> for or against the null-hypothesis,<a href="#fn18" class="footnote-ref" id="fnref18"><sup>18</sup></a> the analogy can be described as follows: a significant test is like spotting a swan that is “off-white” enough for you to decide it is not exactly white. But not having spotted such a swan could either mean that such a swan does not exist (the null hypothesis is true), or that you have not searched hard enough (the null hypothesis is false, but your test lacked power).</p>
 <p>Secondly, the effect-coding predictors only reflect three out of a total of four treatment effects. The treatment effect of the reactivation-Only condition follows directly as minus the sum of these three treatment effects. As such, it is redundant. But we don’t have a hypothesis test for this redundant treatment effect. If we had chosen a slightly different coding scheme, where we would have estimated the treatment effects of the Control, Tetris-Only, and Reactivation-Only condition, such that the treatment effect of the Tetris+Reactivation condition is redundant, then none of the significance tests of the slopes of this different model would have been significant. However, the omnibus test would give exactly the same results, thus indicating that at least one treatment effect does not equal 0. With the three treatment effects estimated in this different model, we couldn’t have easily spotted which treatment effect(s) these were. Whilst the estimates and slopes of contrast-coded predictors are often more specific and informative than an omnibus test, because we can only use <span class="math inline">\(g-1\)</span> of such predictors (one less than the number of groups), we can’t test for <em>all</em> treatment effects in a single model, nor test all hypotheses that we might be interested in. We will come back to this when we discuss “multiple testing” approaches. For now, a main thing to realise is that a significant omnibus test indicates that at least two groups differ in their means. If none of the tests of the slopes of the contrast-coded predictors in a linear model are significant, but you have obtained a significant omnibus test, that indicates that none of the predictors encoded this particular difference between groups.</p>
 <p>Whilst some authors bemoan the use of omnibus tests, they have a role to play in the inference process, for instance in spotting whether you have missed a potentially important effect. Other authors put too much emphasis on omnibus tests, for instance requiring a significant omnibus tests before you might consider tests of the individual slopes that comprise this omnibus test. It is perfectly possible for an omnibus test to be non-significant, whilst a slope for one (or more) contrast-coded predictors is significant. For instance, if you’d conduct an experiment with 10 conditions, and only one has an actual treatment effect, the omnibus test might be non-significant because it effectively assigns that one treatment effect to nine parameters (slopes for nine contrast-coded predictors). Let’s take an extreme example, where only <span class="math inline">\(X_1\)</span> (the first contrast-coded predictor) reduces the SSE with <span class="math inline">\(\text{SSR}(X_1) &gt; 0\)</span>, whilst the other predictors provide no reduction in the SSE whatsoever (i.e. <span class="math inline">\(\text{SSR}(X_j) = 0\)</span> for <span class="math inline">\(j=2, \ldots, 9\)</span>). Then the <span class="math inline">\(F\)</span> statistic of the omnibus test might be
 <span class="math display">\[\begin{aligned}
@@ -1183,7 +872,7 @@ F &amp;= \frac{\frac{\text{SSE}(R) - \text{SSE}(G)}{\text{npar}(G) - \text{npar}
 &amp;= \frac{\text{SSR}(X_1)/1}{\text{SSE}(G)/(n-10)}
 \end{aligned}\]</span>
 which, with a higher value and smaller <span class="math inline">\(\text{df}_1\)</span>, would be more likely to be significant.</p>
-<p>Thirdly, when you look at the value of <span class="math inline">\(\text{SSR}(\text{Condition}) = 115\)</span> in Table <a href="ch-ANOVA.html#tab:tetris-effect-coding-ANOVA">7.2</a>, you can see that it is smaller than the sum of the SSR terms corresponding to the three predictors. This indicates that there is redundancy between the predictors <span class="math inline">\(X_1\)</span>, <span class="math inline">\(X_2\)</span>, and <span class="math inline">\(X_3\)</span> (i.e., some form of multicollinearity). Although Venn diagrams such as Figure <a href="ch-multiple-regression.html#fig:sse-partition-multicollinearity">5.10</a> imply that the SSR of the full model would be larger than the sum of the unique SSR terms attributable to each predictor, the opposite can also be true! This situation is commonly referred to as <strong>suppression</strong> and is rather difficult to explain here without a lengthy and detailed detour. For now, we will therefore leave it to the interested reader to consult other sources on this <span class="citation">(e.g. <a href="#ref-mackinnon2000equivalence" role="doc-biblioref">MacKinnon, Krull, &amp; Lockwood, 2000</a>)</span>, and simply note that if the sum of the SSR terms of the predictors does not equal the “whole model” SSR, this indicates redundancy between the predictors.</p>
+<p>Thirdly, when you look at the value of <span class="math inline">\(\text{SSR}(\text{Condition}) = 115\)</span> in Table <a href="ch-ANOVA.html#tab:tetris-effect-coding-ANOVA">7.2</a>, you can see that it is smaller than the sum of the SSR terms corresponding to the three predictors. This indicates that there is redundancy between the predictors <span class="math inline">\(X_1\)</span>, <span class="math inline">\(X_2\)</span>, and <span class="math inline">\(X_3\)</span> (i.e., some form of multicollinearity). Although Venn diagrams such as Figure <a href="ch-multiple-regression.html#fig:sse-partition-multicollinearity">5.10</a> imply that the SSR of the full model would be larger than the sum of the unique SSR terms attributable to each predictor, the opposite can also be true! This situation is commonly referred to as <strong>suppression</strong> and is rather difficult to explain here without a lengthy and detailed detour. For now, we will therefore leave it to the interested reader to consult other sources on this <span class="citation">(e.g. <a href="#ref-mackinnon2000equivalence">MacKinnon, Krull, &amp; Lockwood, 2000</a>)</span>, and simply note that if the sum of the SSR terms of the predictors does not equal the “whole model” SSR, this indicates redundancy between the predictors.</p>
 </div>
 <div id="orthogonal-contrast-codes" class="section level3 hasAnchor" number="7.4.2">
 <h3><span class="header-section-number">7.4.2</span> Orthogonal contrast codes<a href="ch-ANOVA.html#orthogonal-contrast-codes" class="anchor-section" aria-label="Anchor link to header"></a></h3>
@@ -1927,12 +1616,12 @@ and
 Figure 7.6: An ANOVA model assumes that the variance within each condition or group is identical. The means of the conditions or groups can differ.
 </p>
 </div>
-<p>We can use similar techniques to assess the assumptions as for multiple regression, such as QQ-plots and histograms of the errors. A predicted-vs-residual plot is less informative here, as there are only as many unique predictions as the number of conditions or groups. Because we have multiple observations within each group, we can test the homoscedasticity assumption. This assumption is also called the homogeneity of variance assumption. A widely-used test is known as <strong>Levene’s test</strong> <span class="citation">(<a href="#ref-levene1960robust" role="doc-biblioref">Levene, 1960</a>)</span>. This is a test of the null-hypothesis <span class="math inline">\(H_0: \sigma^2_1 = \sigma^2_2 = \ldots = \sigma^2_g\)</span>, where <span class="math inline">\(\sigma^2_j\)</span> is the variance of <span class="math inline">\(Y\)</span> in a group <span class="math inline">\(j\)</span>. The test effectively uses absolute deviations between observed values of <span class="math inline">\(Y\)</span> and the group average <span class="math inline">\(\overline{Y}_g\)</span> as the dependent variable in an ANOVA model. If one group has a larger variance, then the absolute deviations will also be larger, on average, than those in another group. A significant Levene test indicates that the null-hypothesis of equal variances is likely false.</p>
-<p>As usual, the assumptions of the model allow us to derive the sampling distribution of the test statistic under the null-hypothesis. If the assumptions hold, then we are assured the distribution of the <span class="math inline">\(F\)</span>-statistic follows an <span class="math inline">\(F\)</span>-distribution with the given degrees of freedom. Even if the errors are not strictly Normal-distributed, or there are some small differences in the variance between the groups, the <span class="math inline">\(F\)</span>-statistic may still approximately follow the assumed <span class="math inline">\(F\)</span>-distribution. The general consensus is that ANOVAs are reasonably robust against deviations from Normal-distributed errors, as long as the error distributions are approximately symmetric, or have the same shape in each group <span class="citation">(<a href="#ref-howell2012statistical" role="doc-biblioref">Howell, 2012</a>)</span>. When sample sizes are equal for each group, ANOVAs are also robust to violations of homoscedasticity <span class="citation">(<a href="#ref-howell2012statistical" role="doc-biblioref">Howell, 2012</a>; see <a href="#ref-lix1996consequences" role="doc-biblioref">Lix, Keselman, &amp; Keselman, 1996</a>; <a href="#ref-maxwell2017designing" role="doc-biblioref">Maxwell, Delaney, &amp; Kelley, 2017</a>)</span>. So even if the Levene test is significant, you may still be able to use an ANOVA model.</p>
-<p>Regarding potential heteroscedasticity, <span class="citation">Maxwell et al. (<a href="#ref-maxwell2017designing" role="doc-biblioref">2017</a>)</span> offer the following practical advice: in a one-way ANOVA model with equal sample sizes, you may stick to the standard <span class="math inline">\(F\)</span> test if the ratio of the largest sample variance <span class="math inline">\(S^2_\text{max}\)</span> to the smallest sample variance <span class="math inline">\(S^2_\text{min}\)</span> is smaller than 4, i.e. <span class="math inline">\(\frac{S^2_\text{max}}{S^2_\text{min}} &lt; 4\)</span>. When sample sizes are unequal, things become a little more complicated. The suggestion is to also take the ratio of the sample size in the largest group, <span class="math inline">\(n_\text{max}\)</span> to the sample size of the smallest group, <span class="math inline">\(n_\text{min}\)</span> into account, and stick to the standard <span class="math inline">\(F\)</span> test whenever
+<p>We can use similar techniques to assess the assumptions as for multiple regression, such as QQ-plots and histograms of the errors. A predicted-vs-residual plot is less informative here, as there are only as many unique predictions as the number of conditions or groups. Because we have multiple observations within each group, we can test the homoscedasticity assumption. This assumption is also called the homogeneity of variance assumption. A widely-used test is known as <strong>Levene’s test</strong> <span class="citation">(<a href="#ref-levene1960robust">Levene, 1960</a>)</span>. This is a test of the null-hypothesis <span class="math inline">\(H_0: \sigma^2_1 = \sigma^2_2 = \ldots = \sigma^2_g\)</span>, where <span class="math inline">\(\sigma^2_j\)</span> is the variance of <span class="math inline">\(Y\)</span> in a group <span class="math inline">\(j\)</span>. The test effectively uses absolute deviations between observed values of <span class="math inline">\(Y\)</span> and the group average <span class="math inline">\(\overline{Y}_g\)</span> as the dependent variable in an ANOVA model. If one group has a larger variance, then the absolute deviations will also be larger, on average, than those in another group. A significant Levene test indicates that the null-hypothesis of equal variances is likely false.</p>
+<p>As usual, the assumptions of the model allow us to derive the sampling distribution of the test statistic under the null-hypothesis. If the assumptions hold, then we are assured the distribution of the <span class="math inline">\(F\)</span>-statistic follows an <span class="math inline">\(F\)</span>-distribution with the given degrees of freedom. Even if the errors are not strictly Normal-distributed, or there are some small differences in the variance between the groups, the <span class="math inline">\(F\)</span>-statistic may still approximately follow the assumed <span class="math inline">\(F\)</span>-distribution. The general consensus is that ANOVAs are reasonably robust against deviations from Normal-distributed errors, as long as the error distributions are approximately symmetric, or have the same shape in each group <span class="citation">(<a href="#ref-howell2012statistical">Howell, 2012</a>)</span>. When sample sizes are equal for each group, ANOVAs are also robust to violations of homoscedasticity <span class="citation">(<a href="#ref-howell2012statistical">Howell, 2012</a>; see <a href="#ref-lix1996consequences">Lix, Keselman, &amp; Keselman, 1996</a>; <a href="#ref-maxwell2017designing">Maxwell, Delaney, &amp; Kelley, 2017</a>)</span>. So even if the Levene test is significant, you may still be able to use an ANOVA model.</p>
+<p>Regarding potential heteroscedasticity, <span class="citation">Maxwell et al. (<a href="#ref-maxwell2017designing">2017</a>)</span> offer the following practical advice: in a one-way ANOVA model with equal sample sizes, you may stick to the standard <span class="math inline">\(F\)</span> test if the ratio of the largest sample variance <span class="math inline">\(S^2_\text{max}\)</span> to the smallest sample variance <span class="math inline">\(S^2_\text{min}\)</span> is smaller than 4, i.e. <span class="math inline">\(\frac{S^2_\text{max}}{S^2_\text{min}} &lt; 4\)</span>. When sample sizes are unequal, things become a little more complicated. The suggestion is to also take the ratio of the sample size in the largest group, <span class="math inline">\(n_\text{max}\)</span> to the sample size of the smallest group, <span class="math inline">\(n_\text{min}\)</span> into account, and stick to the standard <span class="math inline">\(F\)</span> test whenever
 <span class="math display">\[\frac{n_\text{max}}{n_\text{min}} \times \frac{S^2_\text{max}}{S^2_\text{min}} &lt; 4\]</span>
-When the ratio is larger than 4, you could decide to use an alternative test, such as the Brown-Forsythe or the Welch test <span class="citation">(see e.g. <a href="#ref-tomarken1986comparison" role="doc-biblioref">Tomarken &amp; Serlin, 1986</a>)</span>. When the variance of a dependent variable increases with the mean, it may also be possible to transform the dependent variable using e.g. a logarithmic or square-root transformation.</p>
-<p><span class="citation">G. E. Box (<a href="#ref-box1954some" role="doc-biblioref">1954</a>)</span> showed that in the case of heteroscedasticity (unequal variances), when there are equal sample sizes, the correct critical value for the <span class="math inline">\(F\)</span>-test is somewhere between the critical value of the <span class="math inline">\(F\)</span>-statistic with the usual degrees of freedom (i.e. <span class="math inline">\(\text{df}_1 = \text{npar}(G) - \text{npar}(R)\)</span> and <span class="math inline">\(\text{df}_2 = n - \text{npar}(G)\)</span>), and a critical value of the <span class="math inline">\(F\)</span>-statistic with smaller degrees of freedom: <span class="math inline">\(\text{df}_1 = 1\)</span> and <span class="math inline">\(\text{df}_2 = \frac{n - \text{npar}(G)}{g}\)</span>. In the case of unequal variances, you may then also perform a conservative test, using the critical value for these smaller degrees of freedom. If this provides a significant result, that implies there are differences in group means regardless of whether the variances are equal or not.</p>
+When the ratio is larger than 4, you could decide to use an alternative test, such as the Brown-Forsythe or the Welch test <span class="citation">(see e.g. <a href="#ref-tomarken1986comparison">Tomarken &amp; Serlin, 1986</a>)</span>. When the variance of a dependent variable increases with the mean, it may also be possible to transform the dependent variable using e.g. a logarithmic or square-root transformation.</p>
+<p><span class="citation">G. E. Box (<a href="#ref-box1954some">1954</a>)</span> showed that in the case of heteroscedasticity (unequal variances), when there are equal sample sizes, the correct critical value for the <span class="math inline">\(F\)</span>-test is somewhere between the critical value of the <span class="math inline">\(F\)</span>-statistic with the usual degrees of freedom (i.e. <span class="math inline">\(\text{df}_1 = \text{npar}(G) - \text{npar}(R)\)</span> and <span class="math inline">\(\text{df}_2 = n - \text{npar}(G)\)</span>), and a critical value of the <span class="math inline">\(F\)</span>-statistic with smaller degrees of freedom: <span class="math inline">\(\text{df}_1 = 1\)</span> and <span class="math inline">\(\text{df}_2 = \frac{n - \text{npar}(G)}{g}\)</span>. In the case of unequal variances, you may then also perform a conservative test, using the critical value for these smaller degrees of freedom. If this provides a significant result, that implies there are differences in group means regardless of whether the variances are equal or not.</p>
 </div>
 <div id="multiple-testing-and-post-hoc-tests" class="section level2 hasAnchor" number="7.8">
 <h2><span class="header-section-number">7.8</span> Multiple testing and post-hoc tests<a href="ch-ANOVA.html#multiple-testing-and-post-hoc-tests" class="anchor-section" aria-label="Anchor link to header"></a></h2>
@@ -1961,7 +1650,7 @@ where <span class="math inline">\(F_{g-1,n-\text{npar}(G);\alpha_\text{FW}}\)</s
 <div id="in-practice-2" class="section level2 hasAnchor" number="7.9">
 <h2><span class="header-section-number">7.9</span> In practice<a href="ch-ANOVA.html#in-practice-2" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <ol style="list-style-type: decimal">
-<li><p>Explore the data. Check the distribution of the dependent variable in each condition/group. Are there outlying or otherwise “strange” observations? If so, you may consider removing these from the dataset. Do the distributions look roughly Normal or are the distributions at least similar over the groups? Calculate the sample variances for each group. Is the largest variance no more than 4 times larger than the smallest sample variance? If not, then you may consider an alternative analysis than an ANOVA. If you have doubts about the homogeneity of variance, perform a Levene test. If this test is significant, you may still perform the ANOVA analysis as usual if the largest variance is less than 4 times larger than the smallest sample variance and the sample sizes in the groups are equal.</p></li>
+<li><p>Explore the data. Check the distribution of the dependent variable in each condition/group. Are there outlying or otherwise “strange” observations? If so, you may consider removing these from the dataset. Do the distributions look roughly Normal or are the distributions at least similar over the groups? Calculate the sample variances for each group. Is the largest variance more than 4 times the smallest sample variance? If so, then you may consider an alternative analysis to ANOVA. If you have doubts about the homogeneity of variance, you can perform a Levene test. If this test is significant, you may still perform the ANOVA analysis as usual if the largest variance is less than 4 times larger than the smallest sample variance and the sample sizes in the groups are equal.</p></li>
 <li><p>Define a useful set of contrast codes for your study. Aim for these codes to represent the most important comparisons between the groups. Estimate the ANOVA model. Then check again for potential issues in the assumptions with e.g. histograms for the residuals and QQ-plots. If there are clear outliers in the data, remove these, and then re-estimate the model.</p></li>
 <li><p>Consider both the results of the omnibus test (are there any differences between the groups?) and the tests of the individual contrasts (are there specific differences between the groups of interest?). If there are more comparisons of interest than those encoded in the contrast-coded predictors, perform additional follow-up tests. If there are many of these tests, consider correcting for this by using e.g. a Scheffe-adjusted critical value.</p></li>
 <li><p>Report the results. When reporting the results, make sure that you include all relevant statistics. For example, one way to write the results of the analysis with the contrast codes of Table <a href="ch-ANOVA.html#tab:tetris-orthogonal-contrast-codes">7.3</a>, is as follows:</p></li>

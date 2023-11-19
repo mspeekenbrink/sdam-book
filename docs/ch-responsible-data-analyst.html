@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 17 Being a responsible data analyst | Statistics: Data analysis and modelling</title>
   <meta name="description" content="A book about statistics for data analysis, with a main focus on statistical modelling." />
-  <meta name="generator" content="bookdown 0.29 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.36 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 17 Being a responsible data analyst | Statistics: Data analysis and modelling" />
   <meta property="og:type" content="book" />
@@ -23,7 +23,7 @@
 <meta name="author" content="Maarten Speekenbrink" />
 
 
-<meta name="date" content="2022-12-11" />
+<meta name="date" content="2023-11-19" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -52,382 +52,49 @@
 <link href="book_assets/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
 <link href="book_assets/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
 <script src="book_assets/anchor-sections-1.1.0/anchor-sections.js"></script>
-<script src="book_assets/htmlwidgets-1.5.4/htmlwidgets.js"></script>
+<script src="book_assets/htmlwidgets-1.6.2/htmlwidgets.js"></script>
 <script src="book_assets/viz-1.8.2/viz.js"></script>
 <link href="book_assets/DiagrammeR-styles-0.2/styles.css" rel="stylesheet" />
-<script src="book_assets/grViz-binding-1.0.9/grViz.js"></script>
-<script src="book_assets/plotly-binding-4.10.0/plotly.js"></script>
+<script src="book_assets/grViz-binding-1.0.10/grViz.js"></script>
+<script src="book_assets/plotly-binding-4.10.3/plotly.js"></script>
 <script src="book_assets/typedarray-0.1/typedarray.min.js"></script>
 <link href="book_assets/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet" />
 <script src="book_assets/crosstalk-1.2.0/js/crosstalk.min.js"></script>
-<link href="book_assets/plotly-htmlwidgets-css-2.5.1/plotly-htmlwidgets.css" rel="stylesheet" />
-<script src="book_assets/plotly-main-2.5.1/plotly-latest.min.js"></script>
+<link href="book_assets/plotly-htmlwidgets-css-2.11.1/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="book_assets/plotly-main-2.11.1/plotly-latest.min.js"></script>
 <link href="book_assets/combineWidgetStyle-0.1/combineWidgets.css" rel="stylesheet" />
 <script src="book_assets/combineWidgets-binding-0.11.1/combineWidgets.js"></script>
-<script src="book_assets/rglWebGL-binding-0.110.2/rglWebGL.js"></script>
-<link href="book_assets/rglwidgetClass-0.110.2/rgl.css" rel="stylesheet" />
-<script src="book_assets/rglwidgetClass-0.110.2/rglClass.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.110.2/utils.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.110.2/buffer.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.110.2/subscenes.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.110.2/shaders.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.110.2/textures.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.110.2/projection.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.110.2/mouse.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.110.2/init.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.110.2/pieces.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.110.2/draw.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.110.2/controls.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.110.2/selection.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.110.2/rglTimer.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.110.2/pretty.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.110.2/axes.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.110.2/animation.src.js"></script>
-<!--html_preserve--><script type = "text/plain" id = "rgl-vertex-shader">
-#line 2 1
-// File 1 is the vertex shader
-#ifdef GL_ES
-#ifdef GL_FRAGMENT_PRECISION_HIGH
-precision highp float;
-#else
-precision mediump float;
-#endif
-#endif
-
-attribute vec3 aPos;
-attribute vec4 aCol;
-uniform mat4 mvMatrix;
-uniform mat4 prMatrix;
-varying vec4 vCol;
-varying vec4 vPosition;
-
-#ifdef NEEDS_VNORMAL
-attribute vec3 aNorm;
-uniform mat4 normMatrix;
-varying vec4 vNormal;
-#endif
-
-#if defined(HAS_TEXTURE) || defined (IS_TEXT)
-attribute vec2 aTexcoord;
-varying vec2 vTexcoord;
-#endif
-
-#ifdef FIXED_SIZE
-uniform vec3 textScale;
-#endif
-
-#ifdef FIXED_QUADS
-attribute vec3 aOfs;
-#endif
-
-#ifdef IS_TWOSIDED
-#ifdef HAS_NORMALS
-varying float normz;
-uniform mat4 invPrMatrix;
-#else
-attribute vec3 aPos1;
-attribute vec3 aPos2;
-varying float normz;
-#endif
-#endif // IS_TWOSIDED
-
-#ifdef FAT_LINES
-attribute vec3 aNext;
-attribute vec2 aPoint;
-varying vec2 vPoint;
-varying float vLength;
-uniform float uAspect;
-uniform float uLwd;
-#endif
-
-
-void main(void) {
-  
-#ifndef IS_BRUSH
-#if defined(NCLIPPLANES) || !defined(FIXED_QUADS) || defined(HAS_FOG)
-  vPosition = mvMatrix * vec4(aPos, 1.);
-#endif
-  
-#ifndef FIXED_QUADS
-  gl_Position = prMatrix * vPosition;
-#endif
-#endif // !IS_BRUSH
-  
-#ifdef IS_POINTS
-  gl_PointSize = POINTSIZE;
-#endif
-  
-  vCol = aCol;
-  
-#ifdef NEEDS_VNORMAL
-  vNormal = normMatrix * vec4(-aNorm, dot(aNorm, aPos));
-#endif
-  
-#ifdef IS_TWOSIDED
-#ifdef HAS_NORMALS
-  /* normz should be calculated *after* projection */
-  normz = (invPrMatrix*vNormal).z;
-#else
-  vec4 pos1 = prMatrix*(mvMatrix*vec4(aPos1, 1.));
-  pos1 = pos1/pos1.w - gl_Position/gl_Position.w;
-  vec4 pos2 = prMatrix*(mvMatrix*vec4(aPos2, 1.));
-  pos2 = pos2/pos2.w - gl_Position/gl_Position.w;
-  normz = pos1.x*pos2.y - pos1.y*pos2.x;
-#endif
-#endif // IS_TWOSIDED
-  
-#ifdef NEEDS_VNORMAL
-  vNormal = vec4(normalize(vNormal.xyz/vNormal.w), 1);
-#endif
-  
-#if defined(HAS_TEXTURE) || defined(IS_TEXT)
-  vTexcoord = aTexcoord;
-#endif
-  
-#if defined(FIXED_SIZE) && !defined(ROTATING)
-  vec4 pos = prMatrix * mvMatrix * vec4(aPos, 1.);
-  pos = pos/pos.w;
-  gl_Position = pos + vec4(aOfs*textScale, 0.);
-#endif
-  
-#if defined(IS_SPRITES) && !defined(FIXED_SIZE)
-  vec4 pos = mvMatrix * vec4(aPos, 1.);
-  pos = pos/pos.w + vec4(aOfs,  0.);
-  gl_Position = prMatrix*pos;
-#endif
-  
-#ifdef FAT_LINES
-  /* This code was inspired by Matt Deslauriers' code in 
-   https://mattdesl.svbtle.com/drawing-lines-is-hard */
-  vec2 aspectVec = vec2(uAspect, 1.0);
-  mat4 projViewModel = prMatrix * mvMatrix;
-  vec4 currentProjected = projViewModel * vec4(aPos, 1.0);
-  currentProjected = currentProjected/currentProjected.w;
-  vec4 nextProjected = projViewModel * vec4(aNext, 1.0);
-  vec2 currentScreen = currentProjected.xy * aspectVec;
-  vec2 nextScreen = (nextProjected.xy / nextProjected.w) * aspectVec;
-  float len = uLwd;
-  vec2 dir = vec2(1.0, 0.0);
-  vPoint = aPoint;
-  vLength = length(nextScreen - currentScreen)/2.0;
-  vLength = vLength/(vLength + len);
-  if (vLength > 0.0) {
-    dir = normalize(nextScreen - currentScreen);
-  }
-  vec2 normal = vec2(-dir.y, dir.x);
-  dir.x /= uAspect;
-  normal.x /= uAspect;
-  vec4 offset = vec4(len*(normal*aPoint.x*aPoint.y - dir), 0.0, 0.0);
-  gl_Position = currentProjected + offset;
-#endif
-  
-#ifdef IS_BRUSH
-  gl_Position = vec4(aPos, 1.);
-#endif
-}
-</script>
-<script type = "text/plain" id = "rgl-fragment-shader">
-#line 2 2
-// File 2 is the fragment shader
-#ifdef GL_ES
-#ifdef GL_FRAGMENT_PRECISION_HIGH
-precision highp float;
-#else
-precision mediump float;
-#endif
-#endif
-varying vec4 vCol; // carries alpha
-varying vec4 vPosition;
-#if defined(HAS_TEXTURE) || defined (IS_TEXT)
-varying vec2 vTexcoord;
-uniform sampler2D uSampler;
-#endif
-
-#ifdef HAS_FOG
-uniform int uFogMode;
-uniform vec3 uFogColor;
-uniform vec4 uFogParms;
-#endif
-
-#if defined(IS_LIT) && !defined(FIXED_QUADS)
-varying vec4 vNormal;
-#endif
-
-#if NCLIPPLANES > 0
-uniform vec4 vClipplane[NCLIPPLANES];
-#endif
-
-#if NLIGHTS > 0
-uniform mat4 mvMatrix;
-#endif
-
-#ifdef IS_LIT
-uniform vec3 emission;
-uniform float shininess;
-#if NLIGHTS > 0
-uniform vec3 ambient[NLIGHTS];
-uniform vec3 specular[NLIGHTS]; // light*material
-uniform vec3 diffuse[NLIGHTS];
-uniform vec3 lightDir[NLIGHTS];
-uniform bool viewpoint[NLIGHTS];
-uniform bool finite[NLIGHTS];
-#endif
-#endif // IS_LIT
-
-#ifdef IS_TWOSIDED
-uniform bool front;
-varying float normz;
-#endif
-
-#ifdef FAT_LINES
-varying vec2 vPoint;
-varying float vLength;
-#endif
-
-void main(void) {
-  vec4 fragColor;
-#ifdef FAT_LINES
-  vec2 point = vPoint;
-  bool neg = point.y < 0.0;
-  point.y = neg ? (point.y + vLength)/(1.0 - vLength) :
-                 -(point.y - vLength)/(1.0 - vLength);
-#if defined(IS_TRANSPARENT) && defined(IS_LINESTRIP)
-  if (neg && length(point) <= 1.0) discard;
-#endif
-  point.y = min(point.y, 0.0);
-  if (length(point) > 1.0) discard;
-#endif // FAT_LINES
-  
-#ifdef ROUND_POINTS
-  vec2 coord = gl_PointCoord - vec2(0.5);
-  if (length(coord) > 0.5) discard;
-#endif
-  
-#if NCLIPPLANES > 0
-  for (int i = 0; i < NCLIPPLANES; i++)
-    if (dot(vPosition, vClipplane[i]) < 0.0) discard;
-#endif
-    
-#ifdef FIXED_QUADS
-    vec3 n = vec3(0., 0., 1.);
-#elif defined(IS_LIT)
-    vec3 n = normalize(vNormal.xyz);
-#endif
-    
-#ifdef IS_TWOSIDED
-    if ((normz <= 0.) != front) discard;
-#endif
-    
-#ifdef IS_LIT
-    vec3 eye = normalize(-vPosition.xyz/vPosition.w);
-    vec3 lightdir;
-    vec4 colDiff;
-    vec3 halfVec;
-    vec4 lighteffect = vec4(emission, 0.);
-    vec3 col;
-    float nDotL;
-#ifdef FIXED_QUADS
-    n = -faceforward(n, n, eye);
-#endif
-    
-#if NLIGHTS > 0
-    for (int i=0;i<NLIGHTS;i++) {
-      colDiff = vec4(vCol.rgb * diffuse[i], vCol.a);
-      lightdir = lightDir[i];
-      if (!viewpoint[i])
-        lightdir = (mvMatrix * vec4(lightdir, 1.)).xyz;
-      if (!finite[i]) {
-        halfVec = normalize(lightdir + eye);
-      } else {
-        lightdir = normalize(lightdir - vPosition.xyz/vPosition.w);
-        halfVec = normalize(lightdir + eye);
-      }
-      col = ambient[i];
-      nDotL = dot(n, lightdir);
-      col = col + max(nDotL, 0.) * colDiff.rgb;
-      col = col + pow(max(dot(halfVec, n), 0.), shininess) * specular[i];
-      lighteffect = lighteffect + vec4(col, colDiff.a);
-    }
-#endif
-    
-#else // not IS_LIT
-    vec4 colDiff = vCol;
-    vec4 lighteffect = colDiff;
-#endif
-    
-#ifdef IS_TEXT
-    vec4 textureColor = lighteffect*texture2D(uSampler, vTexcoord);
-#endif
-    
-#ifdef HAS_TEXTURE
-#ifdef TEXTURE_rgb
-    vec4 textureColor = lighteffect*vec4(texture2D(uSampler, vTexcoord).rgb, 1.);
-#endif
-    
-#ifdef TEXTURE_rgba
-    vec4 textureColor = lighteffect*texture2D(uSampler, vTexcoord);
-#endif
-    
-#ifdef TEXTURE_alpha
-    vec4 textureColor = texture2D(uSampler, vTexcoord);
-    float luminance = dot(vec3(1.,1.,1.), textureColor.rgb)/3.;
-    textureColor =  vec4(lighteffect.rgb, lighteffect.a*luminance);
-#endif
-    
-#ifdef TEXTURE_luminance
-    vec4 textureColor = vec4(lighteffect.rgb*dot(texture2D(uSampler, vTexcoord).rgb, vec3(1.,1.,1.))/3., lighteffect.a);
-#endif
-    
-#ifdef TEXTURE_luminance_alpha
-    vec4 textureColor = texture2D(uSampler, vTexcoord);
-    float luminance = dot(vec3(1.,1.,1.),textureColor.rgb)/3.;
-    textureColor = vec4(lighteffect.rgb*luminance, lighteffect.a*textureColor.a);
-#endif
-    
-    fragColor = textureColor;
-
-#elif defined(IS_TEXT)
-    if (textureColor.a < 0.1)
-      discard;
-    else
-      fragColor = textureColor;
-#else
-    fragColor = lighteffect;
-#endif // HAS_TEXTURE
-    
-#ifdef HAS_FOG
-    // uFogParms elements: x = near, y = far, z = fogscale, w = (1-sin(FOV/2))/(1+sin(FOV/2))
-    // In Exp and Exp2: use density = density/far
-    // fogF will be the proportion of fog
-    // Initialize it to the linear value
-    float fogF;
-    if (uFogMode > 0) {
-      fogF = (uFogParms.y - vPosition.z/vPosition.w)/(uFogParms.y - uFogParms.x);
-      if (uFogMode > 1)
-        fogF = mix(uFogParms.w, 1.0, fogF);
-      fogF = fogF*uFogParms.z;
-      if (uFogMode == 2)
-        fogF = 1.0 - exp(-fogF);
-      // Docs are wrong: use (density*c)^2, not density*c^2
-      // https://gitlab.freedesktop.org/mesa/mesa/-/blob/master/src/mesa/swrast/s_fog.c#L58
-      else if (uFogMode == 3)
-        fogF = 1.0 - exp(-fogF*fogF);
-      fogF = clamp(fogF, 0.0, 1.0);
-      gl_FragColor = vec4(mix(fragColor.rgb, uFogColor, fogF), fragColor.a);
-    } else gl_FragColor = fragColor;
-#else
-    gl_FragColor = fragColor;
-#endif // HAS_FOG
-    
-}
-</script><!--/html_preserve-->
-<script src="book_assets/CanvasMatrix4-0.110.2/CanvasMatrix.src.js"></script>
-<script src="book_assets/rglPlayer-binding-0.110.2/rglPlayer.js"></script>
+<script src="book_assets/rglWebGL-binding-1.2.1/rglWebGL.js"></script>
+<link href="book_assets/rglwidgetClass-1.2.1/rgl.css" rel="stylesheet" />
+<script src="book_assets/rglwidgetClass-1.2.1/rglClass.src.js"></script>
+<script src="book_assets/rglwidgetClass-1.2.1/utils.src.js"></script>
+<script src="book_assets/rglwidgetClass-1.2.1/buffer.src.js"></script>
+<script src="book_assets/rglwidgetClass-1.2.1/subscenes.src.js"></script>
+<script src="book_assets/rglwidgetClass-1.2.1/shaders.src.js"></script>
+<script src="book_assets/rglwidgetClass-1.2.1/shadersrc.src.js"></script>
+<script src="book_assets/rglwidgetClass-1.2.1/textures.src.js"></script>
+<script src="book_assets/rglwidgetClass-1.2.1/projection.src.js"></script>
+<script src="book_assets/rglwidgetClass-1.2.1/mouse.src.js"></script>
+<script src="book_assets/rglwidgetClass-1.2.1/init.src.js"></script>
+<script src="book_assets/rglwidgetClass-1.2.1/pieces.src.js"></script>
+<script src="book_assets/rglwidgetClass-1.2.1/draw.src.js"></script>
+<script src="book_assets/rglwidgetClass-1.2.1/controls.src.js"></script>
+<script src="book_assets/rglwidgetClass-1.2.1/selection.src.js"></script>
+<script src="book_assets/rglwidgetClass-1.2.1/rglTimer.src.js"></script>
+<script src="book_assets/rglwidgetClass-1.2.1/pretty.src.js"></script>
+<script src="book_assets/rglwidgetClass-1.2.1/axes.src.js"></script>
+<script src="book_assets/rglwidgetClass-1.2.1/animation.src.js"></script>
+<script src="book_assets/CanvasMatrix4-1.2.1/CanvasMatrix.src.js"></script>
+<script src="book_assets/rglPlayer-binding-1.2.1/rglPlayer.js"></script>
 <script src="book_assets/kePrint-0.0.1/kePrint.js"></script>
 <link href="book_assets/lightable-0.0.1/lightable.css" rel="stylesheet" />
 
 
 
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
 <style type="text/css">
 /* Used with Pandoc 2.11+ new --citeproc when CSL is used */
 div.csl-bib-body { }
@@ -738,21 +405,43 @@ div.csl-indent {
 </ul></li>
 <li class="chapter" data-level="13.5" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#model-fit"><i class="fa fa-check"></i><b>13.5</b> Model fit</a>
 <ul>
-<li class="chapter" data-level="13.5.1" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#fit-indices"><i class="fa fa-check"></i><b>13.5.1</b> Fit indices</a></li>
-<li class="chapter" data-level="13.5.2" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#comparative-fit-to-a-baseline"><i class="fa fa-check"></i><b>13.5.2</b> Comparative fit to a baseline</a></li>
-<li class="chapter" data-level="13.5.3" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#errors-of-approximation"><i class="fa fa-check"></i><b>13.5.3</b> Errors of approximation</a></li>
+<li class="chapter" data-level="13.5.1" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#test-of-overall-model-fit"><i class="fa fa-check"></i><b>13.5.1</b> Test of overall model fit</a></li>
+<li class="chapter" data-level="13.5.2" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#approximate-fit-indices"><i class="fa fa-check"></i><b>13.5.2</b> Approximate fit indices</a></li>
 </ul></li>
-<li class="chapter" data-level="13.6" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#model-comparison-1"><i class="fa fa-check"></i><b>13.6</b> Model comparison</a></li>
-<li class="chapter" data-level="13.7" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#evaluation-and-selection-of-the-mediation-path-models"><i class="fa fa-check"></i><b>13.7</b> Evaluation and selection of the mediation path models</a></li>
-<li class="chapter" data-level="13.8" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#a-more-complex-path-model"><i class="fa fa-check"></i><b>13.8</b> A more complex path model</a></li>
-<li class="chapter" data-level="13.9" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#principles-in-constructing-path-models"><i class="fa fa-check"></i><b>13.9</b> Principles in constructing path models</a>
+<li class="chapter" data-level="13.6" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#modification-indices"><i class="fa fa-check"></i><b>13.6</b> Modification indices</a></li>
+<li class="chapter" data-level="13.7" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#model-comparison-1"><i class="fa fa-check"></i><b>13.7</b> Model comparison</a></li>
+<li class="chapter" data-level="13.8" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#evaluation-and-selection-of-the-mediation-path-models"><i class="fa fa-check"></i><b>13.8</b> Evaluation and selection of the mediation path models</a></li>
+<li class="chapter" data-level="13.9" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#a-more-complex-path-model"><i class="fa fa-check"></i><b>13.9</b> A more complex path model</a></li>
+<li class="chapter" data-level="13.10" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#principles-in-constructing-path-models"><i class="fa fa-check"></i><b>13.10</b> Principles in constructing path models</a>
 <ul>
-<li class="chapter" data-level="13.9.1" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#identifiability"><i class="fa fa-check"></i><b>13.9.1</b> Identifiability</a></li>
+<li class="chapter" data-level="13.10.1" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#identifiability"><i class="fa fa-check"></i><b>13.10.1</b> Identifiability</a></li>
 </ul></li>
-<li class="chapter" data-level="13.10" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#model-equivalence"><i class="fa fa-check"></i><b>13.10</b> Model equivalence</a></li>
-<li class="chapter" data-level="13.11" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#correlation-vs-causation"><i class="fa fa-check"></i><b>13.11</b> Correlation vs causation</a></li>
+<li class="chapter" data-level="13.11" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#model-equivalence"><i class="fa fa-check"></i><b>13.11</b> Model equivalence</a></li>
+<li class="chapter" data-level="13.12" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#correlation-vs-causation"><i class="fa fa-check"></i><b>13.12</b> Correlation vs causation</a></li>
 </ul></li>
-<li class="chapter" data-level="14" data-path="ch-SEM-latent-variable-models.html"><a href="ch-SEM-latent-variable-models.html"><i class="fa fa-check"></i><b>14</b> Latent variable models (SEM 2)</a></li>
+<li class="chapter" data-level="14" data-path="ch-SEM-latent-variable-models.html"><a href="ch-SEM-latent-variable-models.html"><i class="fa fa-check"></i><b>14</b> Latent variable models (SEM 2)</a>
+<ul>
+<li class="chapter" data-level="14.1" data-path="ch-SEM-latent-variable-models.html"><a href="ch-SEM-latent-variable-models.html#measurement-of-latent-variables"><i class="fa fa-check"></i><b>14.1</b> Measurement of latent variables</a>
+<ul>
+<li class="chapter" data-level="14.1.1" data-path="ch-SEM-latent-variable-models.html"><a href="ch-SEM-latent-variable-models.html#scaling-and-identification"><i class="fa fa-check"></i><b>14.1.1</b> Scaling and identification</a></li>
+</ul></li>
+<li class="chapter" data-level="14.2" data-path="ch-SEM-latent-variable-models.html"><a href="ch-SEM-latent-variable-models.html#confirmatory-factor-analysis"><i class="fa fa-check"></i><b>14.2</b> Confirmatory factor analysis</a>
+<ul>
+<li class="chapter" data-level="14.2.1" data-path="ch-SEM-latent-variable-models.html"><a href="ch-SEM-latent-variable-models.html#a-single-factor-model"><i class="fa fa-check"></i><b>14.2.1</b> A single factor model</a></li>
+</ul></li>
+<li class="chapter" data-level="14.3" data-path="ch-SEM-latent-variable-models.html"><a href="ch-SEM-latent-variable-models.html#full-hierarchical-factor-model-for-the-bfi-2"><i class="fa fa-check"></i><b>14.3</b> Full hierarchical factor model for the BFI-2</a>
+<ul>
+<li class="chapter" data-level="14.3.1" data-path="ch-SEM-latent-variable-models.html"><a href="ch-SEM-latent-variable-models.html#indentification"><i class="fa fa-check"></i><b>14.3.1</b> Indentification</a></li>
+</ul></li>
+<li class="chapter" data-level="14.4" data-path="ch-SEM-latent-variable-models.html"><a href="ch-SEM-latent-variable-models.html#multiple-groups-and-measurement-invariance"><i class="fa fa-check"></i><b>14.4</b> Multiple groups and measurement invariance</a></li>
+<li class="chapter" data-level="14.5" data-path="ch-SEM-latent-variable-models.html"><a href="ch-SEM-latent-variable-models.html#exploratory-factor-and-principal-components-analysis"><i class="fa fa-check"></i><b>14.5</b> Exploratory factor and principal components analysis</a>
+<ul>
+<li class="chapter" data-level="14.5.1" data-path="ch-SEM-latent-variable-models.html"><a href="ch-SEM-latent-variable-models.html#determining-the-number-of-factors"><i class="fa fa-check"></i><b>14.5.1</b> Determining the number of factors</a></li>
+<li class="chapter" data-level="14.5.2" data-path="ch-SEM-latent-variable-models.html"><a href="ch-SEM-latent-variable-models.html#factor-rotation"><i class="fa fa-check"></i><b>14.5.2</b> Factor rotation</a></li>
+</ul></li>
+<li class="chapter" data-level="14.6" data-path="ch-SEM-latent-variable-models.html"><a href="ch-SEM-latent-variable-models.html#conclusion"><i class="fa fa-check"></i><b>14.6</b> Conclusion</a></li>
+<li class="chapter" data-level="14.7" data-path="ch-SEM-latent-variable-models.html"><a href="ch-SEM-latent-variable-models.html#in-practice-6"><i class="fa fa-check"></i><b>14.7</b> In practice</a></li>
+</ul></li>
 <li class="chapter" data-level="15" data-path="ch-Bayes-estimation.html"><a href="ch-Bayes-estimation.html"><i class="fa fa-check"></i><b>15</b> Introduction to Bayesian estimation</a>
 <ul>
 <li class="chapter" data-level="15.1" data-path="ch-Bayes-estimation.html"><a href="ch-Bayes-estimation.html#fundamentals-of-bayesian-inference"><i class="fa fa-check"></i><b>15.1</b> Fundamentals of Bayesian inference</a>
@@ -784,7 +473,7 @@ div.csl-indent {
 <li class="chapter" data-level="16.5.3" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#results-of-a-nhst-are-often-misinterpreted"><i class="fa fa-check"></i><b>16.5.3</b> Results of a NHST are often misinterpreted</a></li>
 </ul></li>
 <li class="chapter" data-level="16.6" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#to-bayes-or-not-to-bayes-a-pragmatic-view"><i class="fa fa-check"></i><b>16.6</b> To Bayes or not to Bayes? A pragmatic view</a></li>
-<li class="chapter" data-level="16.7" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#in-practice-6"><i class="fa fa-check"></i><b>16.7</b> In practice</a></li>
+<li class="chapter" data-level="16.7" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#in-practice-7"><i class="fa fa-check"></i><b>16.7</b> In practice</a></li>
 <li class="chapter" data-level="16.8" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#summary-3"><i class="fa fa-check"></i><b>16.8</b> “Summary”</a></li>
 </ul></li>
 <li class="chapter" data-level="17" data-path="ch-responsible-data-analyst.html"><a href="ch-responsible-data-analyst.html"><i class="fa fa-check"></i><b>17</b> Being a responsible data analyst</a>
@@ -834,7 +523,7 @@ div.csl-indent {
 </div>
 <div id="evaluate-the-assumptions-underlying-your-analyses" class="section level2 hasAnchor" number="17.3">
 <h2><span class="header-section-number">17.3</span> Evaluate the assumptions underlying your analyses<a href="ch-responsible-data-analyst.html#evaluate-the-assumptions-underlying-your-analyses" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>In most of the analyses covered here, which were (extensions of) the General Linear Model, we assumed the residuals were independent and Normal-distributed with a mean of 0 and a constant standard deviation <span class="math inline">\(\sigma_\epsilon\)</span>. A Normal distribution concerns continuous variables, and in reality, we do not have infinite precision in measurement. Hence, the assumption of continuity is strictly false. That doesn’t necessarily mean that the General Linear Model is invalid. As long as the assumptions are approximately true, we can quite safely use the GLM without worrying that the assumed Type 1 error (if staying within a Frequentist viewpoint) is far from the actual Type 1 error rate. “Approximately true” is obviously a vague statement. The general consensus is that ANOVAs are reasonably robust against deviations from Normal-distributed errors, and when sample sizes are equal, also to violations of homoscedasticity <span class="citation">(see <a href="#ref-lix1996consequences" role="doc-biblioref">Lix et al., 1996</a>; <a href="#ref-maxwell2017designing" role="doc-biblioref">Maxwell et al., 2017</a>)</span>. As indicated in the earlier chapters of this book, when the largest variance in a group is less than four times the smallest variance of another group, you may not have to worry too much about violating the homoscedasticity assumption. In cases where the variance of a dependent variable increases with the mean (such as is often the case with analysing reaction times), it may be fruitful to transform the dependent variable with for instance a logarithmic transformation. One issue with transforming the dependent variable is that it will change the relation between predictors and the dependent variable. If a relation is linear between a predictor and the dependent variable, the relation between the predictor and the transformed dependent variable will be nonlinear. This is not a concern in pure ANOVA type models, but may prove a thorny issue in linear regression models. Transformation of variables is therefore something that should be considered carefully. And you should always remember that the results reflect effects on a transformed variable. <!-- Determining the correct base of the logarithm to achieve the desired result of homogenising the  variance can also be tricky. <!-- Regarding potential heteroscedasticity, @maxwell2017designing offer the following advice: in a one-way ANOVA model with equal sample sizes, you may stick to the standard $F$ test if the ratio of the largest sample variance $S^2_\text{max}$ to the smallest sample variance $S^2_\text{min}$ is smaller than 4, i.e. $\frac{S^2_\text{max}}{S^2_\text{min}} < 4$. When sample sizes are unequal, things become a little more complicated. The suggestion is to also take the ratio of the sample size in the largest group, $n_\text{max}$ to the sample size of the smallest group, $n_\text{min}$ into account, and stick to the standard $F$ test whenever
+<p>In most of the analyses covered here, which were (extensions of) the General Linear Model, we assumed the residuals were independent and Normal-distributed with a mean of 0 and a constant standard deviation <span class="math inline">\(\sigma_\epsilon\)</span>. A Normal distribution concerns continuous variables, and in reality, we do not have infinite precision in measurement. Hence, the assumption of continuity is strictly false. That doesn’t necessarily mean that the General Linear Model is invalid. As long as the assumptions are approximately true, we can quite safely use the GLM without worrying that the assumed Type 1 error (if staying within a Frequentist viewpoint) is far from the actual Type 1 error rate. “Approximately true” is obviously a vague statement. The general consensus is that ANOVAs are reasonably robust against deviations from Normal-distributed errors, and when sample sizes are equal, also to violations of homoscedasticity <span class="citation">(see <a href="#ref-lix1996consequences">Lix et al., 1996</a>; <a href="#ref-maxwell2017designing">Maxwell et al., 2017</a>)</span>. As indicated in the earlier chapters of this book, when the largest variance in a group is less than four times the smallest variance of another group, you may not have to worry too much about violating the homoscedasticity assumption. In cases where the variance of a dependent variable increases with the mean (such as is often the case with analysing reaction times), it may be fruitful to transform the dependent variable with for instance a logarithmic transformation. One issue with transforming the dependent variable is that it will change the relation between predictors and the dependent variable. If a relation is linear between a predictor and the dependent variable, the relation between the predictor and the transformed dependent variable will be nonlinear. This is not a concern in pure ANOVA type models, but may prove a thorny issue in linear regression models. Transformation of variables is therefore something that should be considered carefully. And you should always remember that the results reflect effects on a transformed variable. <!-- Determining the correct base of the logarithm to achieve the desired result of homogenising the  variance can also be tricky. <!-- Regarding potential heteroscedasticity, @maxwell2017designing offer the following advice: in a one-way ANOVA model with equal sample sizes, you may stick to the standard $F$ test if the ratio of the largest sample variance $S^2_\text{max}$ to the smallest sample variance $S^2_\text{min}$ is smaller than 4, i.e. $\frac{S^2_\text{max}}{S^2_\text{min}} < 4$. When sample sizes are unequal, things become a little more complicated. The suggestion is to also take the ratio of the sample size in the largest group, $n_\text{max}$ to the sample size of the smallest group, $n_\text{min}$ into account, and stick to the standard $F$ test whenever
 $$\frac{n_\text{max}}{n_\text{min}} \times \frac{S^2_\text{max}}{S^2_\text{min}} < 4$$
 When the ratio is larger than 4, you could decide to use an alternative test, such as the Brown-Forsythe or the Welch test [see e.g. @tomarken1986comparison]. When the variance of a dependent variable increases with the mean, it may also be possible to transform the dependent variable using e.g. a logarithmic or square-root transformation. Such a relation between the mean value and the variance is often found for response times. Tasks which require relatively little time tend to show less variation between people or between occasions than tasks that require more time to complete. It is quite standard to analyse $\log(\text{RT})$ rather than "raw" RTs. But a transformation is not always necessary. One issue with transforming the dependent variable is that it will change the relation between predictors and the DV. If a relation is linear between a predictor and the dependent variable, the relation between the predictor and the transformed dependent variable will be nonlinear. This is not a concern in pure ANOVA type models, but may prove a thorny issue in linear regression models. Transformation of variables is therefore something that should be considered carefully. Determining the correct base of the logarithm to achieve the desired result of homogenising the  variance can also be tricky. Some common transformations are provided in Table \@ref(tab:common-data-transformations). A general technique which aims to help you determine the appropriate transformation function is the so-called Box-Cox transformation [see e.g. @sakia1992box].  
 
@@ -852,12 +541,12 @@ $\log_{10}{(Y)}$ | base 10 logarithm | useful for highly positively skewed data,
 </div>
 <div id="distinguish-between-confirmatory-and-exploratory-analyses" class="section level2 hasAnchor" number="17.4">
 <h2><span class="header-section-number">17.4</span> Distinguish between confirmatory and exploratory analyses<a href="ch-responsible-data-analyst.html#distinguish-between-confirmatory-and-exploratory-analyses" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>When embarking on a data analysis journey, you will often take a planned route, but also take some unplanned paths. It is important to distinguish between these, as unplanned routes may have been guided by random noise or other idiosyncrasies in the dataset collected. Andrew Gelman quite nicely describes the various choices made during an analysis as a “garden of forking paths” <span class="citation">(<a href="#ref-gelman2013garden" role="doc-biblioref">Gelman &amp; Loken, 2013</a>)</span>. Other authors talk of “researcher degrees of freedom” <span class="citation">(<a href="#ref-simmons2011false" role="doc-biblioref">Simmons et al., 2011</a>)</span>. Consider the following hypothetical example:</p>
+<p>When embarking on a data analysis journey, you will often take a planned route, but also take some unplanned paths. It is important to distinguish between these, as unplanned routes may have been guided by random noise or other idiosyncrasies in the dataset collected. Andrew Gelman quite nicely describes the various choices made during an analysis as a “garden of forking paths” <span class="citation">(<a href="#ref-gelman2013garden">Gelman &amp; Loken, 2013</a>)</span>. Other authors talk of “researcher degrees of freedom” <span class="citation">(<a href="#ref-simmons2011false">Simmons et al., 2011</a>)</span>. Consider the following hypothetical example:</p>
 <blockquote>
 <p>A researcher is interested in differences between Democrats and Republicans in how they perform in a short mathematics test when it is expressed in two different contexts, either involving health care or the military. The research hypothesis is that context matters, and one would expect Democrats to do better in the health-care context and Republicans in the military context. Party identification measured on a standard 7-point scale and various demographic information also available. At this point there is a huge number of possible comparisons that can be performed–all consistent with the data. For example, the pattern could be found (with statistical significance) among men and not among women–explicable under the theory that men are more ideological than women. Or the pattern could be found among women but not among men–explicable under the theory that women are more sensitive to context, compared to men. Or the pattern could be statistically significant for neither group, but the difference could be significant (still fitting the theory, as described above). Or the effect might only appear among men who are being asked the questions by female interviewers. We might see a difference between sexes in the health-care context but not the military context; this would make sense given that health care is currently a highly politically salient issue and the military is not. There are degrees of freedom in the classification of respondents into Democrats and Republicans from a 7-point scale. And how are independents and nonpartisans handled? They could be excluded entirely. Or perhaps the key pattern is between partisans and nonpartisans? And so on.<br />
-<span class="citation">(<a href="#ref-gelman2013garden" role="doc-biblioref">Gelman &amp; Loken, 2013, p. 3</a>)</span></p>
+<span class="citation">(<a href="#ref-gelman2013garden">Gelman &amp; Loken, 2013, p. 3</a>)</span></p>
 </blockquote>
-<p>As this example illustrates, there are many potential ways to show evidence for a seemingly straightforward hypothesis regarding an interaction between political affiliation and context, which all can be justified by theory. An unscrupulous analyst hunting for a significant result might perform all of these analyses, and choose to report just the comparison with the strongest test result. This is also called “p-hacking” <span class="citation">(<a href="#ref-simmons2011false" role="doc-biblioref">Simmons et al., 2011</a>)</span>, and will result in a proliferation of Type 1 errors in the scientific literature. So don’t be tempted to hack a <span class="math inline">\(p\)</span>-value. But even highly conscientious analysts can be led astray when allowing hypothesis tests to be inspired by patterns in the data. Therefore, the results of unplanned analyses inspired by the results of other analyses should be treated with caution. Data is inherently noisy, and patterns which may seem obvious and easy to provide a post-hoc explanation for are noisy too. Whilst Bayesian hypothesis testing is sometimes portrayed as being immune to researcher intentions, this is really only the case for confirmatory analyses where the priors are determined before data collection. Bayesian analyses, like Frequentist ones, can be “hacked” too <span class="citation">(<a href="#ref-simonsohn2014posterior" role="doc-biblioref">Simonsohn, 2014</a>)</span>.</p>
+<p>As this example illustrates, there are many potential ways to show evidence for a seemingly straightforward hypothesis regarding an interaction between political affiliation and context, which all can be justified by theory. An unscrupulous analyst hunting for a significant result might perform all of these analyses, and choose to report just the comparison with the strongest test result. This is also called “p-hacking” <span class="citation">(<a href="#ref-simmons2011false">Simmons et al., 2011</a>)</span>, and will result in a proliferation of Type 1 errors in the scientific literature. So don’t be tempted to hack a <span class="math inline">\(p\)</span>-value. But even highly conscientious analysts can be led astray when allowing hypothesis tests to be inspired by patterns in the data. Therefore, the results of unplanned analyses inspired by the results of other analyses should be treated with caution. Data is inherently noisy, and patterns which may seem obvious and easy to provide a post-hoc explanation for are noisy too. Whilst Bayesian hypothesis testing is sometimes portrayed as being immune to researcher intentions, this is really only the case for confirmatory analyses where the priors are determined before data collection. Bayesian analyses, like Frequentist ones, can be “hacked” too <span class="citation">(<a href="#ref-simonsohn2014posterior">Simonsohn, 2014</a>)</span>.</p>
 <p>To diminish the likelihood of being led astray, it is important to clearly distinguish between confirmatory and exploratory analyses. Confirmatory analyses are those that are planned before seeing the data. To be truly confirmatory, you should not only decide exactly which particular model to use, and which parameters to test, but also what exclusion criteria (if any) to apply to data points (e.g., what are considered to be outliers). If all is decided before seeing the data, these confirmatory analyses can be preregistered. Such <strong>preregistration</strong> is useful because by committing to a particular analysis, you avoid the temptation to deviate from your initial plans in seemingly innocuous ways, which nevertheless will increase the chance of Type 1 errors. Preregistration of analyses does not preclude further exploratory analyses. But these can then be clearly identified as such, and their results treated with the additional caution they deserve. When you don’t have pilot data, preregistration is difficult however, as there are often unforeseen issues in the data (e.g., heteroscedasticity which may require a transformation of the data, or unforeseen outliers). In responding to such unforeseen issues, it may be necessary to change the planned analyses, which in principle would render them “exploratory”. I don’t think it is always necessary to be this strict. But it will be up to the analyst to provide a strong justification for the deviation from the analysis plan. Simply providing such a justification is already a substantial advance over not clearly identifying data-driven choices which may have affected the results.</p>
 </div>
 <div id="aim-for-openness-and-reproducibility" class="section level2 hasAnchor" number="17.5">
@@ -866,7 +555,7 @@ $\log_{10}{(Y)}$ | base 10 logarithm | useful for highly positively skewed data,
 </div>
 <div id="communicate-clearly-and-concisely" class="section level2 hasAnchor" number="17.6">
 <h2><span class="header-section-number">17.6</span> Communicate clearly and concisely<a href="ch-responsible-data-analyst.html#communicate-clearly-and-concisely" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>When writing up the results of statistical analyses, you should aim for clarity and conciseness. Foremost, that means providing all the relevant details of statistical analyses. The American Psychological Association (APA) provides extensive guidelines for reporting results of psychological studies in the APA publication manual <span class="citation">(<a href="#ref-apa2020publication" role="doc-biblioref">American Psychological Association, 2020</a>)</span>. Some of the APA rules can be a little tedious, but they are meant to provide standards for effective scientific communication. A useful summary of the main APA style guide can be found <a href="https://owl.purdue.edu/owl/research_and_citation/apa_style/apa_formatting_and_style_guide/apa_sample_paper.html">here</a> and brief guidelines on reporting numbers and statistics can be found <a href="https://apastyle.apa.org/instructional-aids/numbers-statistics-guide.pdf">here</a>. Andy Fields has also written a useful <a href="https://www.discoveringstatistics.com/docs/writinglabreports.pdf">guide to writing research reports</a>.</p>
+<p>When writing up the results of statistical analyses, you should aim for clarity and conciseness. Foremost, that means providing all the relevant details of statistical analyses. The American Psychological Association (APA) provides extensive guidelines for reporting results of psychological studies in the APA publication manual <span class="citation">(<a href="#ref-apa2020publication">American Psychological Association, 2020</a>)</span>. Some of the APA rules can be a little tedious, but they are meant to provide standards for effective scientific communication. A useful summary of the main APA style guide can be found <a href="https://owl.purdue.edu/owl/research_and_citation/apa_style/apa_formatting_and_style_guide/apa_sample_paper.html">here</a> and brief guidelines on reporting numbers and statistics can be found <a href="https://apastyle.apa.org/instructional-aids/numbers-statistics-guide.pdf">here</a>. Andy Fields has also written a useful <a href="https://www.discoveringstatistics.com/docs/writinglabreports.pdf">guide to writing research reports</a>.</p>
 <p>Here are some of my recommendations for describing analyses in the results section of a paper. They are mostly consistent with the APA guidelines, although I must admit the last version of the APA publication manual I read was the 5th edition from 2001.</p>
 <p>I will start by listing some general guidelines, and then provide two example write-ups with appropriate figures, one for the multiple regression analysis that we focused on in Chapter <a href="ch-multiple-regression.html#ch-multiple-regression">5</a>, and another for the factorial ANOVA that we focused on in Chapter <a href="ch-factorial-ANOVA.html#ch-factorial-ANOVA">8</a>.</p>
 <ol style="list-style-type: decimal">

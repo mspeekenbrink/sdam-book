@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 1 Introduction | Statistics: Data analysis and modelling</title>
   <meta name="description" content="A book about statistics for data analysis, with a main focus on statistical modelling." />
-  <meta name="generator" content="bookdown 0.29 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.36 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 1 Introduction | Statistics: Data analysis and modelling" />
   <meta property="og:type" content="book" />
@@ -23,7 +23,7 @@
 <meta name="author" content="Maarten Speekenbrink" />
 
 
-<meta name="date" content="2022-12-11" />
+<meta name="date" content="2023-11-19" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -52,382 +52,49 @@
 <link href="book_assets/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
 <link href="book_assets/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
 <script src="book_assets/anchor-sections-1.1.0/anchor-sections.js"></script>
-<script src="book_assets/htmlwidgets-1.5.4/htmlwidgets.js"></script>
+<script src="book_assets/htmlwidgets-1.6.2/htmlwidgets.js"></script>
 <script src="book_assets/viz-1.8.2/viz.js"></script>
 <link href="book_assets/DiagrammeR-styles-0.2/styles.css" rel="stylesheet" />
-<script src="book_assets/grViz-binding-1.0.9/grViz.js"></script>
-<script src="book_assets/plotly-binding-4.10.0/plotly.js"></script>
+<script src="book_assets/grViz-binding-1.0.10/grViz.js"></script>
+<script src="book_assets/plotly-binding-4.10.3/plotly.js"></script>
 <script src="book_assets/typedarray-0.1/typedarray.min.js"></script>
 <link href="book_assets/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet" />
 <script src="book_assets/crosstalk-1.2.0/js/crosstalk.min.js"></script>
-<link href="book_assets/plotly-htmlwidgets-css-2.5.1/plotly-htmlwidgets.css" rel="stylesheet" />
-<script src="book_assets/plotly-main-2.5.1/plotly-latest.min.js"></script>
+<link href="book_assets/plotly-htmlwidgets-css-2.11.1/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="book_assets/plotly-main-2.11.1/plotly-latest.min.js"></script>
 <link href="book_assets/combineWidgetStyle-0.1/combineWidgets.css" rel="stylesheet" />
 <script src="book_assets/combineWidgets-binding-0.11.1/combineWidgets.js"></script>
-<script src="book_assets/rglWebGL-binding-0.110.2/rglWebGL.js"></script>
-<link href="book_assets/rglwidgetClass-0.110.2/rgl.css" rel="stylesheet" />
-<script src="book_assets/rglwidgetClass-0.110.2/rglClass.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.110.2/utils.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.110.2/buffer.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.110.2/subscenes.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.110.2/shaders.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.110.2/textures.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.110.2/projection.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.110.2/mouse.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.110.2/init.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.110.2/pieces.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.110.2/draw.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.110.2/controls.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.110.2/selection.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.110.2/rglTimer.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.110.2/pretty.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.110.2/axes.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.110.2/animation.src.js"></script>
-<!--html_preserve--><script type = "text/plain" id = "rgl-vertex-shader">
-#line 2 1
-// File 1 is the vertex shader
-#ifdef GL_ES
-#ifdef GL_FRAGMENT_PRECISION_HIGH
-precision highp float;
-#else
-precision mediump float;
-#endif
-#endif
-
-attribute vec3 aPos;
-attribute vec4 aCol;
-uniform mat4 mvMatrix;
-uniform mat4 prMatrix;
-varying vec4 vCol;
-varying vec4 vPosition;
-
-#ifdef NEEDS_VNORMAL
-attribute vec3 aNorm;
-uniform mat4 normMatrix;
-varying vec4 vNormal;
-#endif
-
-#if defined(HAS_TEXTURE) || defined (IS_TEXT)
-attribute vec2 aTexcoord;
-varying vec2 vTexcoord;
-#endif
-
-#ifdef FIXED_SIZE
-uniform vec3 textScale;
-#endif
-
-#ifdef FIXED_QUADS
-attribute vec3 aOfs;
-#endif
-
-#ifdef IS_TWOSIDED
-#ifdef HAS_NORMALS
-varying float normz;
-uniform mat4 invPrMatrix;
-#else
-attribute vec3 aPos1;
-attribute vec3 aPos2;
-varying float normz;
-#endif
-#endif // IS_TWOSIDED
-
-#ifdef FAT_LINES
-attribute vec3 aNext;
-attribute vec2 aPoint;
-varying vec2 vPoint;
-varying float vLength;
-uniform float uAspect;
-uniform float uLwd;
-#endif
-
-
-void main(void) {
-  
-#ifndef IS_BRUSH
-#if defined(NCLIPPLANES) || !defined(FIXED_QUADS) || defined(HAS_FOG)
-  vPosition = mvMatrix * vec4(aPos, 1.);
-#endif
-  
-#ifndef FIXED_QUADS
-  gl_Position = prMatrix * vPosition;
-#endif
-#endif // !IS_BRUSH
-  
-#ifdef IS_POINTS
-  gl_PointSize = POINTSIZE;
-#endif
-  
-  vCol = aCol;
-  
-#ifdef NEEDS_VNORMAL
-  vNormal = normMatrix * vec4(-aNorm, dot(aNorm, aPos));
-#endif
-  
-#ifdef IS_TWOSIDED
-#ifdef HAS_NORMALS
-  /* normz should be calculated *after* projection */
-  normz = (invPrMatrix*vNormal).z;
-#else
-  vec4 pos1 = prMatrix*(mvMatrix*vec4(aPos1, 1.));
-  pos1 = pos1/pos1.w - gl_Position/gl_Position.w;
-  vec4 pos2 = prMatrix*(mvMatrix*vec4(aPos2, 1.));
-  pos2 = pos2/pos2.w - gl_Position/gl_Position.w;
-  normz = pos1.x*pos2.y - pos1.y*pos2.x;
-#endif
-#endif // IS_TWOSIDED
-  
-#ifdef NEEDS_VNORMAL
-  vNormal = vec4(normalize(vNormal.xyz/vNormal.w), 1);
-#endif
-  
-#if defined(HAS_TEXTURE) || defined(IS_TEXT)
-  vTexcoord = aTexcoord;
-#endif
-  
-#if defined(FIXED_SIZE) && !defined(ROTATING)
-  vec4 pos = prMatrix * mvMatrix * vec4(aPos, 1.);
-  pos = pos/pos.w;
-  gl_Position = pos + vec4(aOfs*textScale, 0.);
-#endif
-  
-#if defined(IS_SPRITES) && !defined(FIXED_SIZE)
-  vec4 pos = mvMatrix * vec4(aPos, 1.);
-  pos = pos/pos.w + vec4(aOfs,  0.);
-  gl_Position = prMatrix*pos;
-#endif
-  
-#ifdef FAT_LINES
-  /* This code was inspired by Matt Deslauriers' code in 
-   https://mattdesl.svbtle.com/drawing-lines-is-hard */
-  vec2 aspectVec = vec2(uAspect, 1.0);
-  mat4 projViewModel = prMatrix * mvMatrix;
-  vec4 currentProjected = projViewModel * vec4(aPos, 1.0);
-  currentProjected = currentProjected/currentProjected.w;
-  vec4 nextProjected = projViewModel * vec4(aNext, 1.0);
-  vec2 currentScreen = currentProjected.xy * aspectVec;
-  vec2 nextScreen = (nextProjected.xy / nextProjected.w) * aspectVec;
-  float len = uLwd;
-  vec2 dir = vec2(1.0, 0.0);
-  vPoint = aPoint;
-  vLength = length(nextScreen - currentScreen)/2.0;
-  vLength = vLength/(vLength + len);
-  if (vLength > 0.0) {
-    dir = normalize(nextScreen - currentScreen);
-  }
-  vec2 normal = vec2(-dir.y, dir.x);
-  dir.x /= uAspect;
-  normal.x /= uAspect;
-  vec4 offset = vec4(len*(normal*aPoint.x*aPoint.y - dir), 0.0, 0.0);
-  gl_Position = currentProjected + offset;
-#endif
-  
-#ifdef IS_BRUSH
-  gl_Position = vec4(aPos, 1.);
-#endif
-}
-</script>
-<script type = "text/plain" id = "rgl-fragment-shader">
-#line 2 2
-// File 2 is the fragment shader
-#ifdef GL_ES
-#ifdef GL_FRAGMENT_PRECISION_HIGH
-precision highp float;
-#else
-precision mediump float;
-#endif
-#endif
-varying vec4 vCol; // carries alpha
-varying vec4 vPosition;
-#if defined(HAS_TEXTURE) || defined (IS_TEXT)
-varying vec2 vTexcoord;
-uniform sampler2D uSampler;
-#endif
-
-#ifdef HAS_FOG
-uniform int uFogMode;
-uniform vec3 uFogColor;
-uniform vec4 uFogParms;
-#endif
-
-#if defined(IS_LIT) && !defined(FIXED_QUADS)
-varying vec4 vNormal;
-#endif
-
-#if NCLIPPLANES > 0
-uniform vec4 vClipplane[NCLIPPLANES];
-#endif
-
-#if NLIGHTS > 0
-uniform mat4 mvMatrix;
-#endif
-
-#ifdef IS_LIT
-uniform vec3 emission;
-uniform float shininess;
-#if NLIGHTS > 0
-uniform vec3 ambient[NLIGHTS];
-uniform vec3 specular[NLIGHTS]; // light*material
-uniform vec3 diffuse[NLIGHTS];
-uniform vec3 lightDir[NLIGHTS];
-uniform bool viewpoint[NLIGHTS];
-uniform bool finite[NLIGHTS];
-#endif
-#endif // IS_LIT
-
-#ifdef IS_TWOSIDED
-uniform bool front;
-varying float normz;
-#endif
-
-#ifdef FAT_LINES
-varying vec2 vPoint;
-varying float vLength;
-#endif
-
-void main(void) {
-  vec4 fragColor;
-#ifdef FAT_LINES
-  vec2 point = vPoint;
-  bool neg = point.y < 0.0;
-  point.y = neg ? (point.y + vLength)/(1.0 - vLength) :
-                 -(point.y - vLength)/(1.0 - vLength);
-#if defined(IS_TRANSPARENT) && defined(IS_LINESTRIP)
-  if (neg && length(point) <= 1.0) discard;
-#endif
-  point.y = min(point.y, 0.0);
-  if (length(point) > 1.0) discard;
-#endif // FAT_LINES
-  
-#ifdef ROUND_POINTS
-  vec2 coord = gl_PointCoord - vec2(0.5);
-  if (length(coord) > 0.5) discard;
-#endif
-  
-#if NCLIPPLANES > 0
-  for (int i = 0; i < NCLIPPLANES; i++)
-    if (dot(vPosition, vClipplane[i]) < 0.0) discard;
-#endif
-    
-#ifdef FIXED_QUADS
-    vec3 n = vec3(0., 0., 1.);
-#elif defined(IS_LIT)
-    vec3 n = normalize(vNormal.xyz);
-#endif
-    
-#ifdef IS_TWOSIDED
-    if ((normz <= 0.) != front) discard;
-#endif
-    
-#ifdef IS_LIT
-    vec3 eye = normalize(-vPosition.xyz/vPosition.w);
-    vec3 lightdir;
-    vec4 colDiff;
-    vec3 halfVec;
-    vec4 lighteffect = vec4(emission, 0.);
-    vec3 col;
-    float nDotL;
-#ifdef FIXED_QUADS
-    n = -faceforward(n, n, eye);
-#endif
-    
-#if NLIGHTS > 0
-    for (int i=0;i<NLIGHTS;i++) {
-      colDiff = vec4(vCol.rgb * diffuse[i], vCol.a);
-      lightdir = lightDir[i];
-      if (!viewpoint[i])
-        lightdir = (mvMatrix * vec4(lightdir, 1.)).xyz;
-      if (!finite[i]) {
-        halfVec = normalize(lightdir + eye);
-      } else {
-        lightdir = normalize(lightdir - vPosition.xyz/vPosition.w);
-        halfVec = normalize(lightdir + eye);
-      }
-      col = ambient[i];
-      nDotL = dot(n, lightdir);
-      col = col + max(nDotL, 0.) * colDiff.rgb;
-      col = col + pow(max(dot(halfVec, n), 0.), shininess) * specular[i];
-      lighteffect = lighteffect + vec4(col, colDiff.a);
-    }
-#endif
-    
-#else // not IS_LIT
-    vec4 colDiff = vCol;
-    vec4 lighteffect = colDiff;
-#endif
-    
-#ifdef IS_TEXT
-    vec4 textureColor = lighteffect*texture2D(uSampler, vTexcoord);
-#endif
-    
-#ifdef HAS_TEXTURE
-#ifdef TEXTURE_rgb
-    vec4 textureColor = lighteffect*vec4(texture2D(uSampler, vTexcoord).rgb, 1.);
-#endif
-    
-#ifdef TEXTURE_rgba
-    vec4 textureColor = lighteffect*texture2D(uSampler, vTexcoord);
-#endif
-    
-#ifdef TEXTURE_alpha
-    vec4 textureColor = texture2D(uSampler, vTexcoord);
-    float luminance = dot(vec3(1.,1.,1.), textureColor.rgb)/3.;
-    textureColor =  vec4(lighteffect.rgb, lighteffect.a*luminance);
-#endif
-    
-#ifdef TEXTURE_luminance
-    vec4 textureColor = vec4(lighteffect.rgb*dot(texture2D(uSampler, vTexcoord).rgb, vec3(1.,1.,1.))/3., lighteffect.a);
-#endif
-    
-#ifdef TEXTURE_luminance_alpha
-    vec4 textureColor = texture2D(uSampler, vTexcoord);
-    float luminance = dot(vec3(1.,1.,1.),textureColor.rgb)/3.;
-    textureColor = vec4(lighteffect.rgb*luminance, lighteffect.a*textureColor.a);
-#endif
-    
-    fragColor = textureColor;
-
-#elif defined(IS_TEXT)
-    if (textureColor.a < 0.1)
-      discard;
-    else
-      fragColor = textureColor;
-#else
-    fragColor = lighteffect;
-#endif // HAS_TEXTURE
-    
-#ifdef HAS_FOG
-    // uFogParms elements: x = near, y = far, z = fogscale, w = (1-sin(FOV/2))/(1+sin(FOV/2))
-    // In Exp and Exp2: use density = density/far
-    // fogF will be the proportion of fog
-    // Initialize it to the linear value
-    float fogF;
-    if (uFogMode > 0) {
-      fogF = (uFogParms.y - vPosition.z/vPosition.w)/(uFogParms.y - uFogParms.x);
-      if (uFogMode > 1)
-        fogF = mix(uFogParms.w, 1.0, fogF);
-      fogF = fogF*uFogParms.z;
-      if (uFogMode == 2)
-        fogF = 1.0 - exp(-fogF);
-      // Docs are wrong: use (density*c)^2, not density*c^2
-      // https://gitlab.freedesktop.org/mesa/mesa/-/blob/master/src/mesa/swrast/s_fog.c#L58
-      else if (uFogMode == 3)
-        fogF = 1.0 - exp(-fogF*fogF);
-      fogF = clamp(fogF, 0.0, 1.0);
-      gl_FragColor = vec4(mix(fragColor.rgb, uFogColor, fogF), fragColor.a);
-    } else gl_FragColor = fragColor;
-#else
-    gl_FragColor = fragColor;
-#endif // HAS_FOG
-    
-}
-</script><!--/html_preserve-->
-<script src="book_assets/CanvasMatrix4-0.110.2/CanvasMatrix.src.js"></script>
-<script src="book_assets/rglPlayer-binding-0.110.2/rglPlayer.js"></script>
+<script src="book_assets/rglWebGL-binding-1.2.1/rglWebGL.js"></script>
+<link href="book_assets/rglwidgetClass-1.2.1/rgl.css" rel="stylesheet" />
+<script src="book_assets/rglwidgetClass-1.2.1/rglClass.src.js"></script>
+<script src="book_assets/rglwidgetClass-1.2.1/utils.src.js"></script>
+<script src="book_assets/rglwidgetClass-1.2.1/buffer.src.js"></script>
+<script src="book_assets/rglwidgetClass-1.2.1/subscenes.src.js"></script>
+<script src="book_assets/rglwidgetClass-1.2.1/shaders.src.js"></script>
+<script src="book_assets/rglwidgetClass-1.2.1/shadersrc.src.js"></script>
+<script src="book_assets/rglwidgetClass-1.2.1/textures.src.js"></script>
+<script src="book_assets/rglwidgetClass-1.2.1/projection.src.js"></script>
+<script src="book_assets/rglwidgetClass-1.2.1/mouse.src.js"></script>
+<script src="book_assets/rglwidgetClass-1.2.1/init.src.js"></script>
+<script src="book_assets/rglwidgetClass-1.2.1/pieces.src.js"></script>
+<script src="book_assets/rglwidgetClass-1.2.1/draw.src.js"></script>
+<script src="book_assets/rglwidgetClass-1.2.1/controls.src.js"></script>
+<script src="book_assets/rglwidgetClass-1.2.1/selection.src.js"></script>
+<script src="book_assets/rglwidgetClass-1.2.1/rglTimer.src.js"></script>
+<script src="book_assets/rglwidgetClass-1.2.1/pretty.src.js"></script>
+<script src="book_assets/rglwidgetClass-1.2.1/axes.src.js"></script>
+<script src="book_assets/rglwidgetClass-1.2.1/animation.src.js"></script>
+<script src="book_assets/CanvasMatrix4-1.2.1/CanvasMatrix.src.js"></script>
+<script src="book_assets/rglPlayer-binding-1.2.1/rglPlayer.js"></script>
 <script src="book_assets/kePrint-0.0.1/kePrint.js"></script>
 <link href="book_assets/lightable-0.0.1/lightable.css" rel="stylesheet" />
 
 
 
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
 <style type="text/css">
 /* Used with Pandoc 2.11+ new --citeproc when CSL is used */
 div.csl-bib-body { }
@@ -738,21 +405,43 @@ div.csl-indent {
 </ul></li>
 <li class="chapter" data-level="13.5" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#model-fit"><i class="fa fa-check"></i><b>13.5</b> Model fit</a>
 <ul>
-<li class="chapter" data-level="13.5.1" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#fit-indices"><i class="fa fa-check"></i><b>13.5.1</b> Fit indices</a></li>
-<li class="chapter" data-level="13.5.2" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#comparative-fit-to-a-baseline"><i class="fa fa-check"></i><b>13.5.2</b> Comparative fit to a baseline</a></li>
-<li class="chapter" data-level="13.5.3" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#errors-of-approximation"><i class="fa fa-check"></i><b>13.5.3</b> Errors of approximation</a></li>
+<li class="chapter" data-level="13.5.1" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#test-of-overall-model-fit"><i class="fa fa-check"></i><b>13.5.1</b> Test of overall model fit</a></li>
+<li class="chapter" data-level="13.5.2" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#approximate-fit-indices"><i class="fa fa-check"></i><b>13.5.2</b> Approximate fit indices</a></li>
 </ul></li>
-<li class="chapter" data-level="13.6" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#model-comparison-1"><i class="fa fa-check"></i><b>13.6</b> Model comparison</a></li>
-<li class="chapter" data-level="13.7" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#evaluation-and-selection-of-the-mediation-path-models"><i class="fa fa-check"></i><b>13.7</b> Evaluation and selection of the mediation path models</a></li>
-<li class="chapter" data-level="13.8" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#a-more-complex-path-model"><i class="fa fa-check"></i><b>13.8</b> A more complex path model</a></li>
-<li class="chapter" data-level="13.9" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#principles-in-constructing-path-models"><i class="fa fa-check"></i><b>13.9</b> Principles in constructing path models</a>
+<li class="chapter" data-level="13.6" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#modification-indices"><i class="fa fa-check"></i><b>13.6</b> Modification indices</a></li>
+<li class="chapter" data-level="13.7" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#model-comparison-1"><i class="fa fa-check"></i><b>13.7</b> Model comparison</a></li>
+<li class="chapter" data-level="13.8" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#evaluation-and-selection-of-the-mediation-path-models"><i class="fa fa-check"></i><b>13.8</b> Evaluation and selection of the mediation path models</a></li>
+<li class="chapter" data-level="13.9" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#a-more-complex-path-model"><i class="fa fa-check"></i><b>13.9</b> A more complex path model</a></li>
+<li class="chapter" data-level="13.10" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#principles-in-constructing-path-models"><i class="fa fa-check"></i><b>13.10</b> Principles in constructing path models</a>
 <ul>
-<li class="chapter" data-level="13.9.1" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#identifiability"><i class="fa fa-check"></i><b>13.9.1</b> Identifiability</a></li>
+<li class="chapter" data-level="13.10.1" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#identifiability"><i class="fa fa-check"></i><b>13.10.1</b> Identifiability</a></li>
 </ul></li>
-<li class="chapter" data-level="13.10" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#model-equivalence"><i class="fa fa-check"></i><b>13.10</b> Model equivalence</a></li>
-<li class="chapter" data-level="13.11" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#correlation-vs-causation"><i class="fa fa-check"></i><b>13.11</b> Correlation vs causation</a></li>
+<li class="chapter" data-level="13.11" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#model-equivalence"><i class="fa fa-check"></i><b>13.11</b> Model equivalence</a></li>
+<li class="chapter" data-level="13.12" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#correlation-vs-causation"><i class="fa fa-check"></i><b>13.12</b> Correlation vs causation</a></li>
 </ul></li>
-<li class="chapter" data-level="14" data-path="ch-SEM-latent-variable-models.html"><a href="ch-SEM-latent-variable-models.html"><i class="fa fa-check"></i><b>14</b> Latent variable models (SEM 2)</a></li>
+<li class="chapter" data-level="14" data-path="ch-SEM-latent-variable-models.html"><a href="ch-SEM-latent-variable-models.html"><i class="fa fa-check"></i><b>14</b> Latent variable models (SEM 2)</a>
+<ul>
+<li class="chapter" data-level="14.1" data-path="ch-SEM-latent-variable-models.html"><a href="ch-SEM-latent-variable-models.html#measurement-of-latent-variables"><i class="fa fa-check"></i><b>14.1</b> Measurement of latent variables</a>
+<ul>
+<li class="chapter" data-level="14.1.1" data-path="ch-SEM-latent-variable-models.html"><a href="ch-SEM-latent-variable-models.html#scaling-and-identification"><i class="fa fa-check"></i><b>14.1.1</b> Scaling and identification</a></li>
+</ul></li>
+<li class="chapter" data-level="14.2" data-path="ch-SEM-latent-variable-models.html"><a href="ch-SEM-latent-variable-models.html#confirmatory-factor-analysis"><i class="fa fa-check"></i><b>14.2</b> Confirmatory factor analysis</a>
+<ul>
+<li class="chapter" data-level="14.2.1" data-path="ch-SEM-latent-variable-models.html"><a href="ch-SEM-latent-variable-models.html#a-single-factor-model"><i class="fa fa-check"></i><b>14.2.1</b> A single factor model</a></li>
+</ul></li>
+<li class="chapter" data-level="14.3" data-path="ch-SEM-latent-variable-models.html"><a href="ch-SEM-latent-variable-models.html#full-hierarchical-factor-model-for-the-bfi-2"><i class="fa fa-check"></i><b>14.3</b> Full hierarchical factor model for the BFI-2</a>
+<ul>
+<li class="chapter" data-level="14.3.1" data-path="ch-SEM-latent-variable-models.html"><a href="ch-SEM-latent-variable-models.html#indentification"><i class="fa fa-check"></i><b>14.3.1</b> Indentification</a></li>
+</ul></li>
+<li class="chapter" data-level="14.4" data-path="ch-SEM-latent-variable-models.html"><a href="ch-SEM-latent-variable-models.html#multiple-groups-and-measurement-invariance"><i class="fa fa-check"></i><b>14.4</b> Multiple groups and measurement invariance</a></li>
+<li class="chapter" data-level="14.5" data-path="ch-SEM-latent-variable-models.html"><a href="ch-SEM-latent-variable-models.html#exploratory-factor-and-principal-components-analysis"><i class="fa fa-check"></i><b>14.5</b> Exploratory factor and principal components analysis</a>
+<ul>
+<li class="chapter" data-level="14.5.1" data-path="ch-SEM-latent-variable-models.html"><a href="ch-SEM-latent-variable-models.html#determining-the-number-of-factors"><i class="fa fa-check"></i><b>14.5.1</b> Determining the number of factors</a></li>
+<li class="chapter" data-level="14.5.2" data-path="ch-SEM-latent-variable-models.html"><a href="ch-SEM-latent-variable-models.html#factor-rotation"><i class="fa fa-check"></i><b>14.5.2</b> Factor rotation</a></li>
+</ul></li>
+<li class="chapter" data-level="14.6" data-path="ch-SEM-latent-variable-models.html"><a href="ch-SEM-latent-variable-models.html#conclusion"><i class="fa fa-check"></i><b>14.6</b> Conclusion</a></li>
+<li class="chapter" data-level="14.7" data-path="ch-SEM-latent-variable-models.html"><a href="ch-SEM-latent-variable-models.html#in-practice-6"><i class="fa fa-check"></i><b>14.7</b> In practice</a></li>
+</ul></li>
 <li class="chapter" data-level="15" data-path="ch-Bayes-estimation.html"><a href="ch-Bayes-estimation.html"><i class="fa fa-check"></i><b>15</b> Introduction to Bayesian estimation</a>
 <ul>
 <li class="chapter" data-level="15.1" data-path="ch-Bayes-estimation.html"><a href="ch-Bayes-estimation.html#fundamentals-of-bayesian-inference"><i class="fa fa-check"></i><b>15.1</b> Fundamentals of Bayesian inference</a>
@@ -784,7 +473,7 @@ div.csl-indent {
 <li class="chapter" data-level="16.5.3" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#results-of-a-nhst-are-often-misinterpreted"><i class="fa fa-check"></i><b>16.5.3</b> Results of a NHST are often misinterpreted</a></li>
 </ul></li>
 <li class="chapter" data-level="16.6" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#to-bayes-or-not-to-bayes-a-pragmatic-view"><i class="fa fa-check"></i><b>16.6</b> To Bayes or not to Bayes? A pragmatic view</a></li>
-<li class="chapter" data-level="16.7" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#in-practice-6"><i class="fa fa-check"></i><b>16.7</b> In practice</a></li>
+<li class="chapter" data-level="16.7" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#in-practice-7"><i class="fa fa-check"></i><b>16.7</b> In practice</a></li>
 <li class="chapter" data-level="16.8" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#summary-3"><i class="fa fa-check"></i><b>16.8</b> “Summary”</a></li>
 </ul></li>
 <li class="chapter" data-level="17" data-path="ch-responsible-data-analyst.html"><a href="ch-responsible-data-analyst.html"><i class="fa fa-check"></i><b>17</b> Being a responsible data analyst</a>
@@ -983,7 +672,7 @@ Figure 1.1: Paul the octopus predicts Spain to win the final of the 2010 FIFA Wo
 </div>
 <div id="exploring-and-describing-data" class="section level2 hasAnchor" number="1.4">
 <h2><span class="header-section-number">1.4</span> Exploring and describing data<a href="ch-intro.html#exploring-and-describing-data" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Once you have collected data, you may feel the urge to immediately apply some statistical model or test to it. But really, a first step should be to explore the data. Statistical tests are designed to confirm or reject hypotheses, and part of <strong>confirmatory data analysis</strong>. They are a very important part of scientific research, but they always rely on assumptions about the data generating process. Before conducting these analyses, it is crucial to assess whether these assumptions are reasonable, and this is where <strong>exploratory data analysis</strong> can help. <span class="citation">Tukey (<a href="#ref-Tukey1977EDA" role="doc-biblioref">1977</a>)</span>, a major proponent of exploratory data analysis, points out that exploratory data analysis can also suggest new hypotheses about the causes of observed phenomena, and with that provide a basis for further experimentation and data collection.</p>
+<p>Once you have collected data, you may feel the urge to immediately apply some statistical model or test to it. But really, a first step should be to explore the data. Statistical tests are designed to confirm or reject hypotheses, and part of <strong>confirmatory data analysis</strong>. They are a very important part of scientific research, but they always rely on assumptions about the data generating process. Before conducting these analyses, it is crucial to assess whether these assumptions are reasonable, and this is where <strong>exploratory data analysis</strong> can help. <span class="citation">Tukey (<a href="#ref-Tukey1977EDA">1977</a>)</span>, a major proponent of exploratory data analysis, points out that exploratory data analysis can also suggest new hypotheses about the causes of observed phenomena, and with that provide a basis for further experimentation and data collection.</p>
 <p>As the distribution of Paul’s predictions is not so interesting to look into exploration of data, we will focus on other data. We will stay in the context of the 2010 FIFA World Cup, and consider team statistics such as the number of goals scored and the number of games played.</p>
 <table>
 <caption><span id="tab:fifa2010teams-table">Table 1.3: </span>Team statistics in the 2010 FIFA World cup</caption>
@@ -1341,7 +1030,7 @@ A <strong>scatterplot</strong> is useful to see the relation between the values 
 Figure 1.3: A scatter plot of total goals scored by total matches played
 </p>
 </div>
-<p>As all the plots above can tell us something meaningful about the data, and they often highlight different aspects of the data, it can be useful to combine them. One form of such a combination plot has been called a <strong>raincloud plot</strong> <span class="citation">(<a href="#ref-allen2019raincloud" role="doc-biblioref">Allen, Poggiali, Whitaker, Marshall, &amp; Kievit, 2019</a>)</span>. A raincloud plot combines a boxplot with a scatterplot of the observed values and a type of continuous histogram called a nonparametric density plot. In my version of such plots (<a href="ch-intro.html#fig:example-raincloud-plot">1.4</a>), a boxplot is placed in the middle, with an additional point representing the sample mean. On the left are the observed values, where the points are “jittered” (randomly displaced on the x-axis) to try to avoid overlapping points. On the right of the boxplot is the nonparametric density plot. This part aims to depict the distribution in a smooth, continuous way.</p>
+<p>As all the plots above can tell us something meaningful about the data, and they often highlight different aspects of the data, it can be useful to combine them. One form of such a combination plot has been called a <strong>raincloud plot</strong> <span class="citation">(<a href="#ref-allen2019raincloud">Allen, Poggiali, Whitaker, Marshall, &amp; Kievit, 2019</a>)</span>. A raincloud plot combines a boxplot with a scatterplot of the observed values and a type of continuous histogram called a nonparametric density plot. In my version of such plots (<a href="ch-intro.html#fig:example-raincloud-plot">1.4</a>), a boxplot is placed in the middle, with an additional point representing the sample mean. On the left are the observed values, where the points are “jittered” (randomly displaced on the x-axis) to try to avoid overlapping points. On the right of the boxplot is the nonparametric density plot. This part aims to depict the distribution in a smooth, continuous way.</p>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:example-raincloud-plot"></span>
 <img src="01-intro_files/figure-html/example-raincloud-plot-1.svg" alt="A raincloud plot of the average goals scored per match" width="50%" />
 <p class="caption">
@@ -1354,7 +1043,7 @@ Figure 1.4: A raincloud plot of the average goals scored per match
 <h2><span class="header-section-number">1.5</span> Analysis and modelling<a href="ch-intro.html#analysis-and-modelling" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Analysing data can mean lots of things. According to <a href="https://en.wikipedia.org/wiki/Data_analysis">WikiPedia</a> “Data analysis is a process of inspecting, cleansing, transforming and modelling data with the goal of discovering useful information, informing conclusions and supporting decision-making.” That is a reasonably accurate, but also a quite lengthy and boring definition. An alternative to this I quite like is that data analysis is <em>identifying a signal within noise</em>.</p>
 <p>Data is noisy for many reasons. For one thing, the data that we have access to is generally limited, in the sense that we could have obtained other and/or more data. Other sources of noise include measurement error. Such sources of noise imply that the data set we have only gives a limited, incomplete, and corrupted view on the process that generated it (the Data Generating Process). We are not interested solely in describing the data set we have, we generally want to infer something about the Data Generating Process. We don’t just want to state that Paul made 8 out of 8 accurate predictions in the 2010 FIFA World Cup, we want to use this data to assess whether Paul had psychic abilities. Whether, had Paul’s keeper allowed Paul to make predictions for other matches, he would have also been correct. Such inferences go beyond the data that we have. Perhaps Paul was just lucky in those 8 predictions, and his 100% hit rate is not a good reflection of his hit rate in general.</p>
-<p>Statistical modelling can be viewed as describing the Data Generating Process in the language of mathematics. At its core, a statistical model defines the distribution of possible values of variables. In an ideal world, this model distribution is identical to the true distribution that follows from the Data Generating Process. In general, though, there will be some mismatch between the model distribution and the DGP distribution. Models are simplifications and idealizations. As statistician George Box famously noted “all models are wrong, but some are useful” <span class="citation">(<a href="#ref-Box1987" role="doc-biblioref">G. E. P. Box &amp; Draper, 1987</a>)</span>. What do we mean by this? Consider the famous London tube map (Figure <a href="ch-intro.html#fig:london-tube-map">1.5</a>). This map is “wrong” because as any map, it is a simplification of reality. It does not provide a completely accurate representation of the world. But what is special about the tube map is that, unlike standard maps, it does not even attempt to reflect the geographical location of the different underground (or “tube”) lines and stations. Its initial designer, Harry Beck, realised that because the lines run mostly underground, the exact physical locations of the stations were largely irrelevant to the traveller wanting to know how to get from one station to another. What matters to them is the relation between the stations, and which lines connect them. Hence, he designed the map as a schematic diagram which clearly shows the lines connecting stations. If you used the map to determine the walking distance between stations, you’d be very disappointed. But to determine your underground journey, the map is very useful.</p>
+<p>Statistical modelling can be viewed as describing the Data Generating Process in the language of mathematics. At its core, a statistical model defines the distribution of possible values of variables. In an ideal world, this model distribution is identical to the true distribution that follows from the Data Generating Process. In general, though, there will be some mismatch between the model distribution and the DGP distribution. Models are simplifications and idealizations. As statistician George Box famously noted “all models are wrong, but some are useful” <span class="citation">(<a href="#ref-Box1987">G. E. P. Box &amp; Draper, 1987</a>)</span>. What do we mean by this? Consider the famous London tube map (Figure <a href="ch-intro.html#fig:london-tube-map">1.5</a>). This map is “wrong” because as any map, it is a simplification of reality. It does not provide a completely accurate representation of the world. But what is special about the tube map is that, unlike standard maps, it does not even attempt to reflect the geographical location of the different underground (or “tube”) lines and stations. Its initial designer, Harry Beck, realised that because the lines run mostly underground, the exact physical locations of the stations were largely irrelevant to the traveller wanting to know how to get from one station to another. What matters to them is the relation between the stations, and which lines connect them. Hence, he designed the map as a schematic diagram which clearly shows the lines connecting stations. If you used the map to determine the walking distance between stations, you’d be very disappointed. But to determine your underground journey, the map is very useful.</p>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:london-tube-map"></span>
 <img src="https://tfl.gov.uk/cdn/static/cms/images/tube-map.gif" alt="London tube map. Source: [TfL](https://tfl.gov.uk/maps/track/tube)"  />
 <p class="caption">
@@ -1384,7 +1073,7 @@ Tukey, J. W. (1977). <em>Exploratory data analysis</em>. Reading, MA: Addison-We
 <div class="footnotes">
 <hr />
 <ol start="2">
-<li id="fn2"><p>Actually, while a variable which can only have a finite number of possible values is necessarily discrete, it is not true that a variable with an infinite number of possible values is necessarily continuous. Both discrete and continuous variables can have an infinite number of values. For instance, a variable which can have as values any of the natural numbers <span class="math inline">\(0, 1, 2, \ldots\)</span> is discrete because it cannot take a value between say 1 and 2. But there are <em>countably infinite</em> natural numbers, so this variable will have an infinite number of possible values. The difference with a continuous variable is however that it is possible to count, or read aloud, the number of possible values in order of magnitude without ever skipping a possible value. This is not possible for continuous variables. For instance, if you would count <span class="math inline">\(0.0001, 0.0002, ...\)</span>, you would miss <span class="math inline">\(0.00011\)</span>, and <span class="math inline">\(0.00012\)</span>, and many other possible values.<a href="ch-intro.html#fnref2" class="footnote-back">↩︎</a></p></li>
+<li id="fn2"><p>Actually, while a variable which can only have a finite number of possible values is necessarily discrete, it is not true that a variable with an infinite number of possible values is necessarily continuous. Both discrete and continuous variables can have an infinite number of values. For instance, a variable which can have as values any of the natural numbers <span class="math inline">\(0, 1, 2, \ldots\)</span> is discrete because it cannot take a value between say 1 and 2. But there are <em>countably infinite</em> natural numbers, so this variable will have an infinite number of possible values. A notable property of a discrete variable, however, is that it is possible to count, or read aloud, the number of its possible values (in order of magnitude) without ever skipping a possible value. This is not possible for continuous variables. For instance, if you would count <span class="math inline">\(0.0001, 0.0002, ...\)</span>, you would miss <span class="math inline">\(0.00011\)</span>, and <span class="math inline">\(0.00012\)</span>, and many other possible values.<a href="ch-intro.html#fnref2" class="footnote-back">↩︎</a></p></li>
 </ol>
 </div>
             </section>

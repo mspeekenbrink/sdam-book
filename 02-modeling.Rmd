@@ -77,9 +77,9 @@ knitr::kable(tab, caption = "Relative frequency of heads for 1 to 15 flips. The 
 
 Figure \@ref(fig:coin-flip-relative-frequency) shows the relative frequency (i.e. the proportion) of heads after each coin flip, when flipping a coin for `r n_flip` times.  As you can see, the relative frequency fluctuates quite a bit, but becomes more stable with more flips. But even after `r n_flip` flips, it is not equal to 0.5. 
 
-```{r coin-flip-relative-frequency, dev='png', echo=FALSE, fig.cap=paste("Relative frequency of heads when flipping a coin for",n_flip,"times"), cache=TRUE}
+```{r coin-flip-relative-frequency, dev="png", echo=FALSE, fig.cap=paste("Relative frequency of heads when flipping a coin for",n_flip,"times"), cache=TRUE}
+library(gganimate)
 if(knitr::is_html_output()) {
-  library(gganimate)
   ggplot(dat,aes(x=flip,y=y)) + geom_line() + ylim(c(0,1)) + ylab("relative frequency of heads") + transition_reveal(flip)
 } else {
   ggplot(dat,aes(x=flip,y=y)) + geom_line() + ylim(c(0,1)) + ylab("relative frequency of heads")

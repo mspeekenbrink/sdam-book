@@ -4,9 +4,7 @@ set.seed(20221010)
 
 # Latent variable models (SEM 2) {#ch-SEM-latent-variable-models}
 
-The previous chapter concerned a multivariate model to describe relations between *observed* variables. In this Chapter, we will extend this idea by adding **latent variables**. Latent variables are variables which can not be directly observed. Instead, they can be measured or inferred via their relation with observed variables. A classic example in psychology is intelligence.
-
-Another example is a personality trait such as extraversion. People's tendency to be outwards facing is not directly observable. However, there are indicators (e.g., someone actively seeking out busy social situations, liking to be the centre of attention, etc.) which together may allow one to determine a person's level of extraversion. 
+The previous chapter concerned a multivariate model to describe relations between *observed* variables. In this Chapter, we will extend this idea by adding **latent variables**. Latent variables are variables which can not be directly observed. Instead, they can be measured or inferred via their relation with observed variables. A classic example in psychology is intelligence. Another example are personality traits such as extraversion. People's tendency to be outwards facing is not directly observable. However, there are indicators (e.g., someone actively seeking out busy social situations, liking to be the centre of attention, etc.) which together may allow one to determine a person's level of extraversion. 
 
 The measurement of psychological constructs is the focus of **psychometrics**, a field with a long history and its own societies and journals. 
 
@@ -19,9 +17,9 @@ Thermometers are relatively accurate measurement devices, but not devoid of **me
 
 As a statistical model, we might propose something like the following linear model:
 $$\texttt{measurement}_i = \beta_0 + \beta_1 \times \textrm{temperature}_i + \epsilon_i \quad \quad \epsilon_i \sim \mathbf{Normal}(0, \sigma_\epsilon)$$
-If temperature was a directly observed variable, this is just a simple regression model and we would be able to estimate all parameters ($\beta_0$, $\beta_1$, $\sigma_\epsilon$) using e.g. maximum likelihood. However, temperature is a latent variable and we can only observe the measurement. 
+This model is depicted graphically in Figure \@ref(fig:temperature-measurement-model). If temperature were a directly observed variable, this is just a simple regression model and we would be able to estimate all parameters ($\beta_0$, $\beta_1$, $\sigma_\epsilon$) using e.g. maximum likelihood. However, temperature is a latent variable and we can only observe the measurement. 
 
-```{r}
+```{r temperature-measurement-model, fig.cap="Measurement model for temperature.", fig.width=1.2*4, fig.height=1.2*1, out.width="80%"}
 library(lavaan)
 library(semPlot)
 dat <- data.frame(x = rnorm(100)) |>
@@ -32,7 +30,7 @@ temperature =~ measurement
 mod <- lavaan::cfa(mod_spec, data=dat)
 spmod <- semPlotModel(mod)
 #spmmod@Pars <- spmmod@Pars[-5,]
-semPaths(spmod, sizeMan=7, sizeInt = 4, style="mx", residuals=TRUE, normalize=FALSE, width=4, height=2, rotation=2, nCharNodes = 0)
+semPaths(spmod, sizeMan=7, sizeInt = 4, style="mx", residuals=TRUE, normalize=FALSE, width=3, height=2, rotation=2, nCharNodes = 0, fixedStyle = 1)
 ```
 
 
@@ -46,18 +44,24 @@ Y_{i} &= \alpha + \lambda \times \eta_{i} + \epsilon_{i} \\
 \end{aligned}$$
 Note that in addition to relabelling the intercept as $\alpha$, the slope as $\lambda$, and the latent variable as $\eta$, we have also added an assumption about the values of the latent variable, namely that these are Normal-distributed. We need to make such an assumption about the distribution of the latent variable because without it, we cannot infer properties of the latent variable from measurements $Y$. 
 
-The model above implies that $Y$ is Normal-distributed with
+The model above implies that $Y$ is Normal-distributed with mean and variance
 $$\begin{aligned}
 \mu_Y &= \alpha + \lambda \times \mu_\eta \\
 \sigma^2_Y &= \lambda^2 \times \sigma^2_\eta + \sigma^2_\epsilon
 \end{aligned}
 $$
-From observations of $Y$, we can estimate the mean and variance of $Y$ in the usual manner as $\hat{\mu}_Y = \overline{Y}$ and $\hat{\sigma}^2_Y = \frac{\sum_{i=1}^n (Y_i - \overline{Y})^2}{n-1}$. But our latent variable model has 5 parameters. We cannot estimate 5 parameters from what are effectively two properties of the data. 
+From observations of $Y$, we can estimate the mean and variance of $Y$ in the usual manner as $\hat{\mu}_Y = \overline{Y}$ and $\hat{\sigma}^2_Y = \frac{\sum_{i=1}^n (Y_i - \overline{Y})^2}{n-1}$. We then have two "observed" values, whilst our latent variable model has 5 parameters. We cannot estimate 5 parameters from what are effectively two properties of the data. For example, consider
+$$\hat{\mu}_Y = \alpha + \lambda \times \mu_\eta$$
 
-There are two common choices to scale latent variables. The first is to set $\mu_\eta = 0$ and $\lambda = 1$. The second is to set $\mu_\eta = 0$ and $\sigma^2_\eta = 1$. 
+We could set $\alpha = \hat{\mu}_Y$ and $\lambda = 0$. This would provide a perfect fit, but $\mu_\eta$ could then be anything. We could also set $\alpha = 0$, $\lambda = 1$, and $\mu_\eta = \hat{\mu}_Y$. This would again provide a perfect fit, but so would setting $\alpha = 0$, $\lambda = 2$, and $\mu_\eta = \tfrac{1}{2} \hat{\mu}_Y$.
 
-Now, suppose we have readings of *two* thermometers,
+There are two issues here. The first is the number of parameters relative to the number of observed properties of the data. The second is that latent variables don't have an inherent numerical scale. Temperature can be measured in degrees Celcius or Fahrenheit. Both are valid ways to provide a number to temperature. But temperature itself does not has an inherent number beyond such measurements. The numeric scale of a latent variable is therefore arbitrary. What matters is the relation between a latent variable and its measurements: an increase in the latent variable results in an increase in the measurements. Beyond that, we can choose the scale of the latent variable as we like. This is similar to regression, where centering or changing the scale of the predictor affects the intercept and slopes, but does not change the model fit itself.
 
+As the scale of the latent variable is arbitrary, we can choose how the numerical values of the latent variable corresponds to numerical values of the measurements. There are two common choices to scale latent variables. In both, we set $\mu_\eta = 0$. The first is to then set $\lambda = 1$. This implies that a one-unit increase in the latent variable is equal to a one-unit increase in the measurement. The second way is to set $\sigma^2_\eta = 1$. This implies that the latent variable follows a standard Normal distribution. A one-unit increase in the latent variable would then result in a one standard deviation increase in the measurement (i.e. an increase of $\sigma_y$). As the correlation between the latent variable and the measurement is the same for both these choices, they are both valid ways to scale the latent variable. The first is more common nowadays, and has the benefit that the scale of the latent variable may be more easily interpretable, as it relates directly to the scale of the measurement.
+
+Let's focus on the first choice of scaling. Setting $\mu_\eta=0$ and $\lambda = 1$ reduces the number of free parameters to 3. This is still more than the two observed properties of the data. Hence, there is still no way to uniquely determine the remaining parameters.
+
+Now, suppose we have readings from *two* thermometers, $Y_1$ and $Y_2$. Suppose also that we don't know the scale of each (they could measure degrees Celcius, Fahrenheit, or something else, and each could have a different scale), and that each thermometer can have a different measurement error. All we know is that readings on both are caused by the true temperature $\eta$. Setting $\mu_\eta = 0$, we can express the model for simultaneous readings of both thermometers as:
 $$\begin{aligned}
 Y_{1,i} &= \alpha_1 + \lambda_1 \times \eta_{i} + \epsilon_{1,i} \\
 Y_{2,i} &= \alpha_2 + \lambda_2 \times \eta_{i} + \epsilon_{2,i} \\
@@ -65,7 +69,7 @@ Y_{2,i} &= \alpha_2 + \lambda_2 \times \eta_{i} + \epsilon_{2,i} \\
 \epsilon_{1,i} &\sim \mathbf{Normal}(0, \sigma_{\epsilon_1}) \\
 \epsilon_{2,i} &\sim \mathbf{Normal}(0, \sigma_{\epsilon_2})
 \end{aligned}$$
-
+Using variance-covariance algebra (Section \@ref(sec-SEM-path-models-variance-covariance-algebra)), this implies that
 \begin{equation}
 \begin{aligned}
 \left( \begin{matrix} Y_{1,i} \\ Y_{2,i} \end{matrix} \right)
@@ -73,31 +77,30 @@ Y_{2,i} &= \alpha_2 + \lambda_2 \times \eta_{i} + \epsilon_{2,i} \\
 &\sim \mathbf{Normal}\left( \left[ \begin{matrix} \alpha_1 \\ \alpha_2 \end{matrix} \right] , \left[ \begin{matrix} \lambda_1^2 \times \sigma_{\eta}^2 + \sigma_{\epsilon_1}^2 & \lambda_1 \times \lambda_2 \times \sigma^2_\eta  \\  \lambda_1 \times \lambda_2 \times \sigma^2_\eta & \lambda_2^2 \times \sigma_{\eta}^2 + \sigma_{\epsilon_2}^2 \end{matrix} \right] \right)
 \end{aligned}
 \end{equation}
+We have two parameters ($\alpha_1$ and $\alpha_2$) for two means ($\mu_{Y_1}$ and $\mu_{Y_2}$), which is fine. However, the implied covariance matrix $\boldsymbol{\Sigma}_Y$ contains five parameters: $\lambda_1$, $\lambda_2$, $\sigma_\eta$, $\sigma_{\epsilon_1}$, $\sigma_{\epsilon_2}$. But the observed covariance matrix has three unique values: $\hat{\sigma}^2_{Y_1}$, $\hat{\sigma}^2_{Y_2}$, and $\hat{\sigma}_{Y_1,Y_2}$. To scale the latent variable, we can set one of the $\lambda$'s to 1, e.g. $\lambda_1 = 1$. But we cannot set both $\lambda$'s to 1, as the thermometers may have a different scale. We could alternatively set $\sigma_\epsilon = 1$. Both choices would reduce the number of parameters to four. We therefore still have too many parameters relative to the properties of the data. 
 
-But if we have readings from *three* thermometers, we finally get somewhere.
-
+When we have readings from *three* thermometers, we finally get to an estimable model. The model for simultaneous readings of thermometers $Y_{j}$ can be expressed as:
 $$\begin{aligned}
-Y_{1,i} &= \alpha_1 + \lambda_1 \times \eta_{i} + \epsilon_{1,i} \\
-Y_{2,i} &= \alpha_2 + \lambda_2 \times \eta_{i} + \epsilon_{2,i} \\
-Y_{3,i} &= \alpha_3 + \lambda_3 \times \eta_{i} + \epsilon_{3,i} \\
+Y_{j,i} &= \alpha_1 + \lambda_j \times \eta_{i} + \epsilon_{j,i} && j = 1, \ldots, 3\\
 \eta_i &\sim \mathbf{Normal}(0, \sigma_\eta)\\
-\epsilon_{1,i} &\sim \mathbf{Normal}(0, \sigma_{\epsilon_1}) \\
-\epsilon_{2,i} &\sim \mathbf{Normal}(0, \sigma_{\epsilon_2}) \\
-\epsilon_{3,i} &\sim \mathbf{Normal}(0, \sigma_{\epsilon_3})
+\epsilon_{j,i} &\sim \mathbf{Normal}(0, \sigma_{\epsilon_1}) && j = 1, \ldots, 3
 \end{aligned}$$
-Which implies
+which implies
 \begin{equation}
 \begin{aligned}
 \left( \begin{matrix} Y_{1,i} \\ Y_{2,i} \\ Y_{3,i} \end{matrix} \right)
 &\sim \mathbf{Normal}\left( \left[ \begin{matrix} \alpha_1 \\ \alpha_2 \\ \alpha_3 \end{matrix} \right] , \left[ \begin{matrix} \lambda_1^2 \times \sigma_{\eta}^2 + \sigma_{\epsilon_1}^2 & \lambda_1 \times \lambda_2 \times \sigma^2_\eta & \lambda_1 \times \lambda_3 \times \sigma^2_\eta \\  \lambda_1 \times \lambda_2 \times \sigma^2_\eta & \lambda_2^2 \times \sigma_{\eta}^2 + \sigma_{\epsilon_2}^2 & \lambda_2 \times \lambda_3 \times \sigma^2_\eta \\ \lambda_1 \times \lambda_3 \times \sigma^2_\eta & \lambda_2 \times \lambda_3 \times \sigma^2_\eta & \lambda_3^2 \times \sigma_{\eta}^2 + \sigma_{\epsilon_3}^2 \end{matrix} \right] \right)
 \end{aligned}
 \end{equation}
+The implied covariance matrix has seven parameters, whilst the observed covariance matrix has six unique values. Setting e.g. $\lambda_1 = 1$ to scale the latent variable, we are left with six parameters for six observed (co-)variances. Hence, although saturated, the model is estimable. 
+
+To measure a latent variable, we thus need at least three measured variables. Such measured variables are also called indicators. 
 
 ## Confirmatory factor analysis
 
-"Big Five" personality traits such as extraversion are generally assessed with self-report questionnaires. One commonly used questionnaire is the Big Five Inventory [BFI; @john1991big]. In the BFI-2 [@@soto2017next], participants are asked to rate their agreement with 60 statements on a 5-point scale ranging "disagree strongly" to "agree strongly". There are 12 statements relating to each of the following main personality dimensions: Extraversion, Agreeableness, Conscientiousness, Negative Emotionality (traditionally called "neuroticism"), and Open-Mindedness (tranditionally called "openness to experience"). Example statements are related to extraversion are _"I am someone who is outgoing, sociable"_ and _"I am am someone who is sometimes shy, introverted"_. Note that agreement with the first statement should be *positively* related to extraversion, whilst agreement with the second statement should be *negatively* related to extraversion. Mixing such positively and negatively stated items is common practice in the design of psychological measurement questionnaires. 
+Factor analysis is a technique for the measurement of latent variables when the indicators or measured variables are assumed to follow a (multivariate) Normal distribution. A distinction can be made between *confirmatory* and *exploratory* factor analysis. The latter, as the name suggests, is part of exploratory data analysis. Exploratory factor analysis aims to describe relations between observed variables via a smaller set of latent variables or factors, and was first proposed by @spearman1904general. Exploratory factor analysis is essentially based on saturated models. Confirmatory factor analysis, on the other hand, poses more restrictions. A main goal of confirmatory factor analysis is to assess the viability of an assumed measurement model.
 
-In the following, we will consider data collected with a Czech translation of the BFI-2 [@hvrebivckova2020big], with a total of $n=1733$ respondents.
+In the following, we will introduce confirmatory factor analysis with an example of personality measurement. "Big Five" personality traits such as extraversion are generally assessed with self-report questionnaires. One commonly used questionnaire is the Big Five Inventory [BFI; @john1991big]. In the BFI-2 [@soto2017next], participants are asked to rate their agreement with 60 statements on a 5-point scale ranging "disagree strongly" to "agree strongly". There are 12 statements relating to each of the following main personality dimensions: Extraversion, Agreeableness, Conscientiousness, Negative Emotionality (traditionally called "neuroticism"), and Open-Mindedness (tranditionally called "openness to experience"). Example statements are related to extraversion are _"I am someone who is outgoing, sociable"_ and _"I am am someone who is sometimes shy, introverted"_. Note that agreement with the first statement should be *positively* related to extraversion, whilst agreement with the second statement should be *negatively* related to extraversion. Mixing such positively and negatively stated items is common practice in the design of psychological measurement questionnaires. Here, we will consider data collected with a Czech translation of the BFI-2 [@hvrebivckova2020big], with a total of $n=1733$ respondents.
 
 ```{r SEM-estimate-BFI2-extraversion-models}
 library(tidyverse)
@@ -128,18 +131,18 @@ A =~ 1*i1 + 1*i16 + 1*i31 + 1*i46 + 1*i6 + 1*i21 + 1*i36 + 1*i51 + 1*i11 + 1*i26
 '
 BFI2_extr_1acq <- lavaan::cfa(mod_spec, data=dat, orthogonal=TRUE)
 mod_spec <- '
-E =~ E1 + E2 + E3
-E1 =~ 1*i1 + i16 + i31 + i46 
-E2 =~ 1*i6 + i21 + i36 + i51 
-E3 =~ i11 + i26 + 1*i41 + i56
+E =~ Es + Ea + Ee
+Es =~ 1*i1 + i16 + i31 + i46 
+Ea =~ 1*i6 + i21 + i36 + i51 
+Ee =~ i11 + i26 + 1*i41 + i56
 E ~~ 1*E
 '
 BFI2_extr_31 <- lavaan::lavaan(mod_spec, data=dat, int.ov.free = TRUE, int.lv.free = FALSE, auto.fix.first = FALSE, auto.fix.single = TRUE, auto.var = TRUE, auto.cov.lv.x = TRUE, auto.efa = TRUE, auto.th = TRUE, auto.delta = TRUE, auto.cov.y = TRUE)
 mod_spec <- '
-E =~ E1 + E2 + E3
-E1 =~ 1*i1 + i16 + i31 + i46 
-E2 =~ 1*i6 + i21 + i36 + i51 
-E3 =~ i11 + i26 + 1*i41 + i56
+E =~ Es + Ea + Ee
+Es =~ 1*i1 + i16 + i31 + i46 
+Ea =~ 1*i6 + i21 + i36 + i51 
+Ee =~ i11 + i26 + 1*i41 + i56
 A =~ 1*i1 + 1*i16 + 1*i31 + 1*i46 + 1*i6 + 1*i21 + 1*i36 + 1*i51 + 1*i11 + 1*i26 + 1*i41 + 1*i56
 E ~~ 0*A
 E ~~ 1*E
@@ -149,52 +152,72 @@ BFI2_extr_31acq <- lavaan::lavaan(mod_spec, data=dat, int.ov.free = TRUE, int.lv
 
 ### A single factor model
 
-The BFI2 contains 12 items which relate to extraversion. As these items pertain to the same psychological dimension, we would expect answers to them to be correlated. A confirmatory factor model aims to account for these correlations by assuming that all answers are "caused" by a single underlying latent factor. 
+The BFI-2 contains $k=12$ items which relate to extraversion. As these items pertain to the same psychological dimension, we would expect answers to them to be correlated. A confirmatory factor model aims to account for these correlations by assuming that all answers are "caused" by a single underlying latent variable (factor). The single factor model can be expressed as
+$$\begin{aligned}
+Y_{j,i} &= \alpha_j + \lambda_j \times \eta_{i} + \epsilon_{j,i} && j=1,\ldots,k\\
+\eta_i &\sim \mathbf{Normal}(0, \sigma_\eta)\\
+\epsilon_{j,i} &\sim \mathbf{Normal}(0, \sigma_{\epsilon_j}) && j=1,\ldots,k
+\end{aligned}$$
+In the context of factor analysis, the latent variable $\eta$ is referred to as a factor, and the parameters $\lambda_j$ which relate the factor to measured variables $Y_j$ as **factor loadings**. 
 
 ```{r BFI2-extr-1-plot, fig.cap="Graphical representation of a single factor model for Extraversion. Items i1, i16, i31, and i46 relate to the Sociability facet of Extraversion, with items i16 and i31 stated in the negative direction. Items i6, i21, i36, and i51 relate to the Assertiveness facet of Extraversion, with items i36 and i51 stated in the negative direction. Items 11, 26, 41, 56 relate to the Energy Level facet of Extraversion, with items i11 and i26 stated in the negative direction.", fig.width=8, fig.height=3.5, out.width="100%"}
 semPlot::semPaths(BFI2_extr_1, whatLabels = "est")
 # 3, 4, 5, 8, 9, 11, 12, 16, 17, 22, 23, 24, 25, 26, 28, 29, 30, 31, 36, 37, 42, 44, 45, 47, 48, 49, 50, 51, 55, and 58
 ```
 
-Figure \@ref(fig:BFI2-extr-1-plot2) shows the estimated parameters of a single factor model for the 12 items in the BFI-2 related to extraversion. The factor loading of the first item was fixed to 1 in order to scale the latent factor. Note that all estimated factor loadings are positive, whilst 6 of the 12 items were stated in a negative direction (i.e. higher scores should indicate *less* extraversion). If all items relate to extraversion in the intended manner, we should expect a mix of positive and negative factor loadings. Table \@ref(tab:BFI2-extr-1-results) shows the parameter estimates and test results, as well as the model fit indices. As can be seen there, the single factor model is rejected by the overall model $\chi^2$ test, and the CFI and RMSEA both indicate relatively poor model fit.
+Figure \@ref(fig:BFI2-extr-1-plot) shows the estimated parameters of a single factor model for the 12 items related to extraversion in the BFI-2. The factor loading of the first item was fixed to 1 in order to scale the latent factor. Note that all estimated factor loadings are positive, whilst 6 of the 12 items were stated in a negative direction (i.e. higher scores should indicate *less* extraversion). If all items relate to extraversion in the intended manner, we should expect a mix of positive and negative factor loadings. Table \@ref(tab:BFI2-extr-1-results) shows the parameter estimates and test results, as well as the model fit indices. As can be seen there, the single factor model is rejected by the overall model $\chi^2$ test, and the CFI, SRMR and RMSEA indicate relatively poor model fit.
 
 ```{r, results="asis"}
 if(knitr::is_html_output()) {
   cat("<table><caption>(\\#tab:BFI2-extr-1-results) Results of a single factor model for extraversion.</caption>")
-  semTable::semTable(BFI2_extr_1, type="html", fits = c("chisq", "cfi", "srmr", "rmsea", "rmsea.ci.lower", "rmsea.ci.upper"), fitLabels = c(rmsea.ci.lower = "RMSEA (lower bound)", rmsea.ci.upper = "RMSEA (upper bound)"))
+  semTable::semTable(BFI2_extr_1, type="html", fits = c("chisq", "cfi", "srmr", "rmsea", "rmsea.ci.lower", "rmsea.ci.upper","aic", "bic"), fitLabels = c(rmsea.ci.lower = "RMSEA (lower bound)", rmsea.ci.upper = "RMSEA (upper bound)"))
   cat("</table>")
 } else {
-  semTable::semTable(fmod_complex2, type="latex", table.float = TRUE, fits = c("chisq", "cfi", "srmr", "rmsea", "rmsea.ci.lower", "rmsea.ci.upper"), caption = "(\\#ttab:tab:sem_path_mod_complex_results2) Results of a second full path model for the legacy motive data.")
+  semTable::semTable(fmod_complex2, type="latex", table.float = TRUE, fits = c("chisq", "cfi", "srmr", "rmsea", "rmsea.ci.lower", "rmsea.ci.upper","aic", "bic"), caption = "(\\#ttab:tab:sem_path_mod_complex_results2) Results of a second full path model for the legacy motive data.")
 }
 ```
 
-@soto2017next suggest that participants' responses to the BFI-2 might be affected by their "acquiescent response style". This refers to the tendency of an individual to
-consistently agree or consistently disagree with questionnaire items, regardless of their content. This would distort the factor loadings. They suggest to account for Acquiescence by including a second factor in the model, with fixed factor loadings on all items. By setting the factor loadings as identical for all items, this factor can account for a general tendency to provide low or high scores on all items. 
+The poor model fit of the single factor model indicates that the correlations between answers on the 12 items are not completely accounted for by a single factor.  @soto2017next suggest that participants' responses to the BFI-2 might be affected by their "acquiescent response style". This refers to the tendency of an individual to
+consistently agree or consistently disagree with questionnaire items, regardless of their content. Such general (dis)agreement would distort the factor loadings. They suggest to account for Acquiescence by including a second factor in the model, with fixed factor loadings on all items. By fixing the factor loadings to be identical for all items, this factor can account for a general tendency to provide low or high scores on all items, as such a tendency would be expected to affect answers on all items in the same way. 
 
 ```{r BFI2-extr-1acq-plot, fig.cap="Graphical representation of a single factor model for Extraversion with an additional Acquiescence factor.", fig.width=8, fig.height=3.5, out.width="100%"}
 semPlot::semPaths(BFI2_extr_1acq, whatLabels = "est", layout="tree2")
 # 3, 4, 5, 8, 9, 11, 12, 16, 17, 22, 23, 24, 25, 26, 28, 29, 30, 31, 36, 37, 42, 44, 45, 47, 48, 49, 50, 51, 55, and 58
 ```
 
-By fixing all the factor loadings, this additional factor only requires a single additional parameter which reflects the variance of the latent Acquiescence factor. The resulting model is depicted in Figure \@ref(fig:BFI2-extr-1acq-plot) and the resulting estimates and fit measures are provided in Table \@ref(tab:BFI2-extr-1acq-results). Whilst there are now a few negative factor loadings and the fit is somewhat improved, the model is still not adequate. 
+By fixing all the factor loadings, this additional factor only requires one additional parameter for the variance of the latent Acquiescence factor. The resulting model is depicted in Figure \@ref(fig:BFI2-extr-1acq-plot) and the resulting estimates and fit measures are provided in Table \@ref(tab:BFI2-extr-1acq-results). Whilst there are now a few negative factor loadings and the fit is somewhat improved, the model is still not adequate. 
 
 ```{r, results="asis"}
 if(knitr::is_html_output()) {
   cat("<table><caption>(\\#tab:BFI2-extr-1acq-results) Results of a single factor model for Extraversion with an additional Acquiescence factor.</caption>")
-  semTable::semTable(BFI2_extr_1acq, type="html", fits = c("chisq", "cfi", "srmr", "rmsea", "rmsea.ci.lower", "rmsea.ci.upper"), fitLabels = c(rmsea.ci.lower = "RMSEA (lower bound)", rmsea.ci.upper = "RMSEA (upper bound)"))
+  semTable::semTable(BFI2_extr_1acq, type="html", fits = c("chisq", "cfi", "srmr", "rmsea", "rmsea.ci.lower", "rmsea.ci.upper","aic", "bic"), fitLabels = c(rmsea.ci.lower = "RMSEA (lower bound)", rmsea.ci.upper = "RMSEA (upper bound)"))
   cat("</table>")
 } else {
-  semTable::semTable(fmod_complex2, type="latex", table.float = TRUE, fits = c("chisq", "cfi", "srmr", "rmsea", "rmsea.ci.lower", "rmsea.ci.upper"), caption = "(\\#ttab:tab:sem_path_mod_complex_results2) Results of a second full path model for the legacy motive data.")
+  semTable::semTable(fmod_complex2, type="latex", table.float = TRUE, fits = c("chisq", "cfi", "srmr", "rmsea", "rmsea.ci.lower", "rmsea.ci.upper","aic", "bic"), caption = "(\\#ttab:tab:sem_path_mod_complex_results2) Results of a second full path model for the legacy motive data.")
 }
 ```
 
+The BFI-2 was designed to cover different aspects of each personality trait. For example, extraversion was assumed to consist of the "facets" sociability, assertiveness, and energy level. The BFI-2 contains four items for each of these facets. Insofar as these facets reflect different aspects of extraversion, we might expect then to be related to general extraversion, but to also be somewhat independent. To allow for this possibility, we could consider a model where general extraversion "causes" values on each facet, which in turn cause scores on the different items. Adding and Aqcuiescence factor, the resulting model is depicted in Figure \@ref(fig:BFI2-extr-31acq-plot).
 
-### CFA with multiple latent 
+```{r BFI2-extr-31acq-plot, fig.cap="Graphical representation of a hierarchical factor model for Extraversion with an additional Acquiescence factor. Es represents extraversion-sociability, Ea  extraversion-assertiveness, and Ee extraversion-energy-level", fig.width=8, fig.height=3.5, out.width="100%"}
+semPlot::semPaths(BFI2_extr_31acq, whatLabels = "est", layout="tree")
+# 3, 4, 5, 8, 9, 11, 12, 16, 17, 22, 23, 24, 25, 26, 28, 29, 30, 31, 36, 37, 42, 44, 45, 47, 48, 49, 50, 51, 55, and 58
+```
+Table \@ref(tab:BFI2-extr-31acq-results) provides more detailed results. 
+
+```{r, results="asis"}
+if(knitr::is_html_output()) {
+  cat("<table><caption>(\\#tab:BFI2-extr-31acq-results) Results of a hierarchical factor model for Extraversion with an additional Acquiescence factor.</caption>")
+  semTable::semTable(BFI2_extr_31acq, type="html", fits = c("chisq", "cfi", "srmr", "rmsea", "rmsea.ci.lower", "rmsea.ci.upper","aic", "bic"), fitLabels = c(rmsea.ci.lower = "RMSEA (lower bound)", rmsea.ci.upper = "RMSEA (upper bound)"))
+  cat("</table>")
+} else {
+  semTable::semTable(BFI2_extr_31acq, type="latex", table.float = TRUE, fits = c("chisq", "cfi", "srmr", "rmsea", "rmsea.ci.lower", "rmsea.ci.upper","aic", "bic"), caption = "(\\#ttab:tab:sem_path_mod_complex_results2) Results of a hierarchical factor model for Extraversion with an additional Acquiescence factor.")
+}
+```
+Although the model is rejected by the overall fit chi-square test, the fit indices indicate a mostly reasonable fit. 
+
 
 ```{r SEM-estimate-BFI2-full-factor-models}
-data(BFI2, package = "ShinyItemAnalysis")
-dat <- BFI2
-library(lavaan)
 mod_spec <- '
 E =~ i1 + i16 + i31 + i46 + i6 + i21 + i36 + i51 + i11 + i26 + i41 + i56
 A =~ i2 + i17 + i32 + i47 + i7 + i22 + i37 + i52 + i12 + i27 + i42 + i57
@@ -206,60 +229,67 @@ BFI2_cfa <- lavaan::cfa(mod_spec, data=dat, orthogonal=TRUE)
 BFI2_cfa_dep <- lavaan::cfa(mod_spec, data=dat)
 ```
 
+## Full hierarchical factor model for the BFI-2
 
-
-$$\texttt{measurement} = \beta_0 + \beta_1 \times \textrm{temperature} + \epsilon \quad \quad \epsilon \sim \mathbf{Normal}(0, \sigma_\epsilon)$$
-where the error term $\epsilon$ is the combination of all factors that lead to measurement error, and the constants $\beta_0$ and $\beta_1$ define the scale used (e.g. Celcius, or Fahrenheit). As the scale is -- to some extent -- arbitrary, we could assume a scale where $\beta_0 = 0$ and $\beta_1 = 1$, leading to the model
-$$\textrm{temperature}  =  \frac{\texttt{measurement} - \beta_0 - \epsilon}{\beta_1} \quad \quad \epsilon \sim \mathbf{Normal}(0, \sigma_\epsilon)$$
-
-## Factor analysis
-
-```{r}
-library(psychTools)
-data(bfi)
-```
-
-
-## Modification indices
-
-Modification indices 
-
-## General SEMs with latent variables
-
-The BFI2 was designed with a hierarchical structure in mind. Indeed, each of the "big five" factors was assumed to be further broken down into three facets: extraversion into sociability, assertiveness and energ level, Agreeableness into compassion, respectfulness, and trust, conscientiousness into organization, productiveness, and responsibility, neuroticism into anxiety, depression, and emotional volatility, and openness into intellectual curiosity, aesthetic sensitivity, and creative imagination. 
+The BFI-2 was designed with a hierarchical structure in mind. Indeed, each of the "big five" factors was assumed to be further broken down into three facets: extraversion into sociability, assertiveness and energy level, agreeableness into compassion, respectfulness, and trust, conscientiousness into organization, productiveness, and responsibility, negative emotionality into anxiety, depression, and emotional volatility, and open-mindedness into intellectual curiosity, aesthetic sensitivity, and creative imagination. 
 
 
 ```{r}
 mod_spec <- '
-E =~ E1 + E2 + E3
-E1 =~ i1 + i16 + i31 + i46 
-E2 =~ i6 + i21 + i36 + i51 
-E3 =~ i11 + i26 + i41 + i56
+E =~ Es + Ea + Ee
+Es =~ i1 + i16 + i31 + i46 
+Ea =~ i6 + i21 + i36 + i51
+Ee =~ i11 + i26 + i41 + i56
 
-A =~ A1 + A2 + A3
-A1 =~ i2 + i17 + i32 + i47
-A2 =~ i7 + i22 + i37 + i52
-A3 =~ i12 + i27 + i42 + i57
+A =~ Ac + Ar + At
+Ac =~ i2 + i17 + i32 + i47
+Ar =~ i7 + i22 + i37 + i52
+At =~ i12 + i27 + i42 + i57
 
-C =~ C1 + C2 + C3
-C1 =~ i3 + i18 + i33 + i48
-C2 =~ i8 + i23 + i38 + i53
-C3 =~ i13 + i28 + i43 + i58
+C =~ Co + Cp + Cr
+Co =~ i3 + i18 + i33 + i48
+Cp =~ i8 + i23 + i38 + i53
+Cr =~ i13 + i28 + i43 + i58
 
-N =~ N1 + N2 + N3
-N1 =~ i4 + i19 + i34 + i49
-N2 =~ i9 + i24 + i39 + i54 
-N3 =~ i14 + i29 + i44 + i59
+N =~ Na + Nd + Ne
+Na =~ i4 + i19 + i34 + i49
+Nd =~ i9 + i24 + i39 + i54 
+Ne =~ i14 + i29 + i44 + i59
 
-O =~ O1 + O2 + O3
-O1 =~ i10 + i25 + i40 + i55
-O2 =~ i5 + i20 + i35 + i50 
-O3 =~ i15 + i30 + i45 + i60
+O =~ Oi + Oa + Oc
+Oi =~ i10 + i25 + i40 + i55
+Oa =~ i5 + i20 + i35 + i50 
+Oc =~ i15 + i30 + i45 + i60
+
+Acq =~ 1*i1 + 1*i16 + 1*i31 + 1*i46 + 1*i6 + 1*i21 + 1*i36 + 1*i51 + 1*i11 + 1*i26 + 1*i41 + 1*i56 1*i2 + 1*i17 + 1*i32 + 1*i47 + 1*i7 + 1*i22 + 1*i37 + 1*i52 + 1*i12 + 1*i27 + 1*i42 + 1*i57 + 1*i3 + 1*i18 + 1*i33 + 1*i48 + 1*i8 + 1*i23 + 1*i38 + 1*i53 + 1*i13 + 1*i28 + 1*i43 + 1*i58 + 1*i4 + 1*i19 + 1*i34 + 1*i49 + 1*i9 + 1*i24 + 1*i39 + 1*i54 + 1*i14 + 1*i29 + 1*i44 + 1*i59 + 1*i10 + 1*i25 + 1*i40 + 1*i55 + 1*i5 + 1*i20 + 1*i35 + 1*i50 + 1*i15 + 1*i30 + 1*i45 + 1*i60
 '
 BFI2_cfa_hier <- lavaan::cfa(mod_spec, data=dat, orthogonal=TRUE)
 ```
 
-```{r}
+```{r BFI2-full-31acq-plot, fig.cap="Graphical representation of a hierarchical factor model for all personality domains and an additional Acquiescence factor.", fig.width=30, fig.height=20, out.width="100%"}
+semPlot::semPaths(BFI2_cfa_hier, whatLabels = "est", layout="tree")
+# 3, 4, 5, 8, 9, 11, 12, 16, 17, 22, 23, 24, 25, 26, 28, 29, 30, 31, 36, 37, 42, 44, 45, 47, 48, 49, 50, 51, 55, and 58
+```
+
+```{r, results="asis"}
+if(knitr::is_html_output()) {
+  cat("<table><caption>(\\#tab:BFI2_cfa_hier-results) Results of a hierarchical factor model for Extraversion with an additional Acquiescence factor.</caption>")
+  semTable::semTable(BFI2_cfa_hier, paramSets=c("latentvariances","fits"), type="html", fits = c("chisq", "cfi", "srmr", "rmsea", "rmsea.ci.lower", "rmsea.ci.upper", "aic", "bic"), fitLabels = c(rmsea.ci.lower = "RMSEA (lower bound)", rmsea.ci.upper = "RMSEA (upper bound)"))
+  cat("</table>")
+} else {
+  semTable::semTable(BFI2_cfa_hier, paramSets=c("latentvariances","fits"), type="latex", table.float = TRUE, fits = c("chisq", "cfi", "srmr", "rmsea", "rmsea.ci.lower", "rmsea.ci.upper","aic", "bic"), caption = "(\\#ttab:tab:BFI2_cfa_hier_results) Results of a hierarchical factor model for Extraversion with an additional Acquiescence factor.")
+}
+```
+
+### Indentification
+
+<!-- Hayward case (negative errors) -->
+
+## Multiple groups and measurement invariance
+
+## Exploratory factor and principal components analysis
+
+```{r, message=FALSE, eval=FALSE}
 library(sdamr)
 data(speeddate)
 speed_cor <- cor(speeddate[,c("other_attr", "other_sinc", "other_intel", "other_fun", "other_amb")], use="pairwise.complete.obs")
@@ -268,25 +298,7 @@ speed_cor <- cor(speeddate[,c("other_attr", "other_sinc", "other_intel", "other_
 psych::fa(speeddate[,c("other_attr", "other_sinc", "other_intel", "other_fun", "other_amb")], nfactors = 4, rotate="none")
 ```
 
-### Measurement model
-
-The relations between a latent variable and the observed variables are called a **measurement model**.
-
-```{r}
-
-```
-
-### Structural (path) model
-
-### Indentification
-
-Hayward case (negative errors)
-
-## Multiple groups and measurement invariance
-
-## Exploratory factor and principal components analysis
-
-```{r}
+```{r, eval=FALSE}
 library(psychTools)
 data(bfi)
 
@@ -298,6 +310,7 @@ bfi_pca <- psych::principal(bfi_cor)
 summary(bfi_pca)
 ```
 
+<!-- 
 Although not really a part of Structural Equation Models, it is instructive to also briefly discuss **data reduction** techniques such as principal components analysis and exploratory factor analysis. These methods aim to describe a $P \times P$ covariance (or correlation) matrix by means of relatively small set of variables. Essentially, both methods rely on saturated models which can replicate the sample covariance matrix perfectly.
 
 The differences between principal component analysis and exploratory factor analysis are somewhat subtle. **Principal components analysis** (PCA) can be seen as applying a **formative model**, where observed variables "cause" the latent variables (called a principal components in this context). **Principal components** (which we will denote as $\text{PC}_j$) are simply linear functions of the variables:
@@ -318,6 +331,8 @@ Y_m &= \lambda_{m,1} \times F_{1} + \lambda_{m,2} \times F_{2} + \ldots + \lambd
 \end{aligned}
 (\#eq:sem-2-efa-definition)$$
 with the number of factors $q < m$. In a EFA, the observed variables $Y_j$ are considered conditionally independent, given the factors $F_k$. This is evident from the (independently distributed) error terms $\epsilon_j$. 
+
+--> 
 
 ```{r}
 library(lavaan)
@@ -367,26 +382,11 @@ library(lavaan)
 
 ### Factor rotation
 
-There are two main types of factor rotation: in **orthogonal rotation**, the factors are constrained to be independent of each other (i.e. there is no residual covariation between the factors). In **oblique rotation**, factors are allowed to have residual covariation. 
+<!-- There are two main types of factor rotation: in **orthogonal rotation**, the factors are constrained to be independent of each other (i.e. there is no residual covariation between the factors). In **oblique rotation**, factors are allowed to have residual covariation. 
+-->
 
-### Confirmatory factor analysis
 
-Like EFA, confirmatory factor analysis (CFA) concerns a reflective model, where a factor causes the item values. But unlike PCA and EFA, CFA does not generally employ a saturated model. Items generally have paths from only a small set of the total number of factors. Th
-
-```{r}
-### bfi CFA
-mod_spec <- '
-Fa =~ A1 + A2 + A3 + A4 + A5 
-Fc =~ C1 + C2 + C3 + C4 + C5
-Fe =~ E1 + E2 + E3 + E4 + E5
-Fn =~ N1 + N2 + N3 + N4 + N5
-Fo =~ O1 + O2 + O3 + O4 + O5
-'
-
-bfi_cfa <- lavaan::cfa(mod_spec, data=bfi)
-```
-
-## Ordinal variables
+<!-- ## Ordinal variables -->
 
 ## Conclusion
 

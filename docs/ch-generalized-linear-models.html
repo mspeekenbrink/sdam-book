@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 12 Generalized Linear Models | Statistics: Data analysis and modelling</title>
   <meta name="description" content="A book about statistics for data analysis, with a main focus on statistical modelling." />
-  <meta name="generator" content="bookdown 0.29 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.36 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 12 Generalized Linear Models | Statistics: Data analysis and modelling" />
   <meta property="og:type" content="book" />
@@ -23,7 +23,7 @@
 <meta name="author" content="Maarten Speekenbrink" />
 
 
-<meta name="date" content="2022-12-11" />
+<meta name="date" content="2023-11-19" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -52,382 +52,49 @@
 <link href="book_assets/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
 <link href="book_assets/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
 <script src="book_assets/anchor-sections-1.1.0/anchor-sections.js"></script>
-<script src="book_assets/htmlwidgets-1.5.4/htmlwidgets.js"></script>
+<script src="book_assets/htmlwidgets-1.6.2/htmlwidgets.js"></script>
 <script src="book_assets/viz-1.8.2/viz.js"></script>
 <link href="book_assets/DiagrammeR-styles-0.2/styles.css" rel="stylesheet" />
-<script src="book_assets/grViz-binding-1.0.9/grViz.js"></script>
-<script src="book_assets/plotly-binding-4.10.0/plotly.js"></script>
+<script src="book_assets/grViz-binding-1.0.10/grViz.js"></script>
+<script src="book_assets/plotly-binding-4.10.3/plotly.js"></script>
 <script src="book_assets/typedarray-0.1/typedarray.min.js"></script>
 <link href="book_assets/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet" />
 <script src="book_assets/crosstalk-1.2.0/js/crosstalk.min.js"></script>
-<link href="book_assets/plotly-htmlwidgets-css-2.5.1/plotly-htmlwidgets.css" rel="stylesheet" />
-<script src="book_assets/plotly-main-2.5.1/plotly-latest.min.js"></script>
+<link href="book_assets/plotly-htmlwidgets-css-2.11.1/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="book_assets/plotly-main-2.11.1/plotly-latest.min.js"></script>
 <link href="book_assets/combineWidgetStyle-0.1/combineWidgets.css" rel="stylesheet" />
 <script src="book_assets/combineWidgets-binding-0.11.1/combineWidgets.js"></script>
-<script src="book_assets/rglWebGL-binding-0.110.2/rglWebGL.js"></script>
-<link href="book_assets/rglwidgetClass-0.110.2/rgl.css" rel="stylesheet" />
-<script src="book_assets/rglwidgetClass-0.110.2/rglClass.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.110.2/utils.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.110.2/buffer.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.110.2/subscenes.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.110.2/shaders.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.110.2/textures.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.110.2/projection.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.110.2/mouse.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.110.2/init.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.110.2/pieces.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.110.2/draw.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.110.2/controls.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.110.2/selection.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.110.2/rglTimer.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.110.2/pretty.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.110.2/axes.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.110.2/animation.src.js"></script>
-<!--html_preserve--><script type = "text/plain" id = "rgl-vertex-shader">
-#line 2 1
-// File 1 is the vertex shader
-#ifdef GL_ES
-#ifdef GL_FRAGMENT_PRECISION_HIGH
-precision highp float;
-#else
-precision mediump float;
-#endif
-#endif
-
-attribute vec3 aPos;
-attribute vec4 aCol;
-uniform mat4 mvMatrix;
-uniform mat4 prMatrix;
-varying vec4 vCol;
-varying vec4 vPosition;
-
-#ifdef NEEDS_VNORMAL
-attribute vec3 aNorm;
-uniform mat4 normMatrix;
-varying vec4 vNormal;
-#endif
-
-#if defined(HAS_TEXTURE) || defined (IS_TEXT)
-attribute vec2 aTexcoord;
-varying vec2 vTexcoord;
-#endif
-
-#ifdef FIXED_SIZE
-uniform vec3 textScale;
-#endif
-
-#ifdef FIXED_QUADS
-attribute vec3 aOfs;
-#endif
-
-#ifdef IS_TWOSIDED
-#ifdef HAS_NORMALS
-varying float normz;
-uniform mat4 invPrMatrix;
-#else
-attribute vec3 aPos1;
-attribute vec3 aPos2;
-varying float normz;
-#endif
-#endif // IS_TWOSIDED
-
-#ifdef FAT_LINES
-attribute vec3 aNext;
-attribute vec2 aPoint;
-varying vec2 vPoint;
-varying float vLength;
-uniform float uAspect;
-uniform float uLwd;
-#endif
-
-
-void main(void) {
-  
-#ifndef IS_BRUSH
-#if defined(NCLIPPLANES) || !defined(FIXED_QUADS) || defined(HAS_FOG)
-  vPosition = mvMatrix * vec4(aPos, 1.);
-#endif
-  
-#ifndef FIXED_QUADS
-  gl_Position = prMatrix * vPosition;
-#endif
-#endif // !IS_BRUSH
-  
-#ifdef IS_POINTS
-  gl_PointSize = POINTSIZE;
-#endif
-  
-  vCol = aCol;
-  
-#ifdef NEEDS_VNORMAL
-  vNormal = normMatrix * vec4(-aNorm, dot(aNorm, aPos));
-#endif
-  
-#ifdef IS_TWOSIDED
-#ifdef HAS_NORMALS
-  /* normz should be calculated *after* projection */
-  normz = (invPrMatrix*vNormal).z;
-#else
-  vec4 pos1 = prMatrix*(mvMatrix*vec4(aPos1, 1.));
-  pos1 = pos1/pos1.w - gl_Position/gl_Position.w;
-  vec4 pos2 = prMatrix*(mvMatrix*vec4(aPos2, 1.));
-  pos2 = pos2/pos2.w - gl_Position/gl_Position.w;
-  normz = pos1.x*pos2.y - pos1.y*pos2.x;
-#endif
-#endif // IS_TWOSIDED
-  
-#ifdef NEEDS_VNORMAL
-  vNormal = vec4(normalize(vNormal.xyz/vNormal.w), 1);
-#endif
-  
-#if defined(HAS_TEXTURE) || defined(IS_TEXT)
-  vTexcoord = aTexcoord;
-#endif
-  
-#if defined(FIXED_SIZE) && !defined(ROTATING)
-  vec4 pos = prMatrix * mvMatrix * vec4(aPos, 1.);
-  pos = pos/pos.w;
-  gl_Position = pos + vec4(aOfs*textScale, 0.);
-#endif
-  
-#if defined(IS_SPRITES) && !defined(FIXED_SIZE)
-  vec4 pos = mvMatrix * vec4(aPos, 1.);
-  pos = pos/pos.w + vec4(aOfs,  0.);
-  gl_Position = prMatrix*pos;
-#endif
-  
-#ifdef FAT_LINES
-  /* This code was inspired by Matt Deslauriers' code in 
-   https://mattdesl.svbtle.com/drawing-lines-is-hard */
-  vec2 aspectVec = vec2(uAspect, 1.0);
-  mat4 projViewModel = prMatrix * mvMatrix;
-  vec4 currentProjected = projViewModel * vec4(aPos, 1.0);
-  currentProjected = currentProjected/currentProjected.w;
-  vec4 nextProjected = projViewModel * vec4(aNext, 1.0);
-  vec2 currentScreen = currentProjected.xy * aspectVec;
-  vec2 nextScreen = (nextProjected.xy / nextProjected.w) * aspectVec;
-  float len = uLwd;
-  vec2 dir = vec2(1.0, 0.0);
-  vPoint = aPoint;
-  vLength = length(nextScreen - currentScreen)/2.0;
-  vLength = vLength/(vLength + len);
-  if (vLength > 0.0) {
-    dir = normalize(nextScreen - currentScreen);
-  }
-  vec2 normal = vec2(-dir.y, dir.x);
-  dir.x /= uAspect;
-  normal.x /= uAspect;
-  vec4 offset = vec4(len*(normal*aPoint.x*aPoint.y - dir), 0.0, 0.0);
-  gl_Position = currentProjected + offset;
-#endif
-  
-#ifdef IS_BRUSH
-  gl_Position = vec4(aPos, 1.);
-#endif
-}
-</script>
-<script type = "text/plain" id = "rgl-fragment-shader">
-#line 2 2
-// File 2 is the fragment shader
-#ifdef GL_ES
-#ifdef GL_FRAGMENT_PRECISION_HIGH
-precision highp float;
-#else
-precision mediump float;
-#endif
-#endif
-varying vec4 vCol; // carries alpha
-varying vec4 vPosition;
-#if defined(HAS_TEXTURE) || defined (IS_TEXT)
-varying vec2 vTexcoord;
-uniform sampler2D uSampler;
-#endif
-
-#ifdef HAS_FOG
-uniform int uFogMode;
-uniform vec3 uFogColor;
-uniform vec4 uFogParms;
-#endif
-
-#if defined(IS_LIT) && !defined(FIXED_QUADS)
-varying vec4 vNormal;
-#endif
-
-#if NCLIPPLANES > 0
-uniform vec4 vClipplane[NCLIPPLANES];
-#endif
-
-#if NLIGHTS > 0
-uniform mat4 mvMatrix;
-#endif
-
-#ifdef IS_LIT
-uniform vec3 emission;
-uniform float shininess;
-#if NLIGHTS > 0
-uniform vec3 ambient[NLIGHTS];
-uniform vec3 specular[NLIGHTS]; // light*material
-uniform vec3 diffuse[NLIGHTS];
-uniform vec3 lightDir[NLIGHTS];
-uniform bool viewpoint[NLIGHTS];
-uniform bool finite[NLIGHTS];
-#endif
-#endif // IS_LIT
-
-#ifdef IS_TWOSIDED
-uniform bool front;
-varying float normz;
-#endif
-
-#ifdef FAT_LINES
-varying vec2 vPoint;
-varying float vLength;
-#endif
-
-void main(void) {
-  vec4 fragColor;
-#ifdef FAT_LINES
-  vec2 point = vPoint;
-  bool neg = point.y < 0.0;
-  point.y = neg ? (point.y + vLength)/(1.0 - vLength) :
-                 -(point.y - vLength)/(1.0 - vLength);
-#if defined(IS_TRANSPARENT) && defined(IS_LINESTRIP)
-  if (neg && length(point) <= 1.0) discard;
-#endif
-  point.y = min(point.y, 0.0);
-  if (length(point) > 1.0) discard;
-#endif // FAT_LINES
-  
-#ifdef ROUND_POINTS
-  vec2 coord = gl_PointCoord - vec2(0.5);
-  if (length(coord) > 0.5) discard;
-#endif
-  
-#if NCLIPPLANES > 0
-  for (int i = 0; i < NCLIPPLANES; i++)
-    if (dot(vPosition, vClipplane[i]) < 0.0) discard;
-#endif
-    
-#ifdef FIXED_QUADS
-    vec3 n = vec3(0., 0., 1.);
-#elif defined(IS_LIT)
-    vec3 n = normalize(vNormal.xyz);
-#endif
-    
-#ifdef IS_TWOSIDED
-    if ((normz <= 0.) != front) discard;
-#endif
-    
-#ifdef IS_LIT
-    vec3 eye = normalize(-vPosition.xyz/vPosition.w);
-    vec3 lightdir;
-    vec4 colDiff;
-    vec3 halfVec;
-    vec4 lighteffect = vec4(emission, 0.);
-    vec3 col;
-    float nDotL;
-#ifdef FIXED_QUADS
-    n = -faceforward(n, n, eye);
-#endif
-    
-#if NLIGHTS > 0
-    for (int i=0;i<NLIGHTS;i++) {
-      colDiff = vec4(vCol.rgb * diffuse[i], vCol.a);
-      lightdir = lightDir[i];
-      if (!viewpoint[i])
-        lightdir = (mvMatrix * vec4(lightdir, 1.)).xyz;
-      if (!finite[i]) {
-        halfVec = normalize(lightdir + eye);
-      } else {
-        lightdir = normalize(lightdir - vPosition.xyz/vPosition.w);
-        halfVec = normalize(lightdir + eye);
-      }
-      col = ambient[i];
-      nDotL = dot(n, lightdir);
-      col = col + max(nDotL, 0.) * colDiff.rgb;
-      col = col + pow(max(dot(halfVec, n), 0.), shininess) * specular[i];
-      lighteffect = lighteffect + vec4(col, colDiff.a);
-    }
-#endif
-    
-#else // not IS_LIT
-    vec4 colDiff = vCol;
-    vec4 lighteffect = colDiff;
-#endif
-    
-#ifdef IS_TEXT
-    vec4 textureColor = lighteffect*texture2D(uSampler, vTexcoord);
-#endif
-    
-#ifdef HAS_TEXTURE
-#ifdef TEXTURE_rgb
-    vec4 textureColor = lighteffect*vec4(texture2D(uSampler, vTexcoord).rgb, 1.);
-#endif
-    
-#ifdef TEXTURE_rgba
-    vec4 textureColor = lighteffect*texture2D(uSampler, vTexcoord);
-#endif
-    
-#ifdef TEXTURE_alpha
-    vec4 textureColor = texture2D(uSampler, vTexcoord);
-    float luminance = dot(vec3(1.,1.,1.), textureColor.rgb)/3.;
-    textureColor =  vec4(lighteffect.rgb, lighteffect.a*luminance);
-#endif
-    
-#ifdef TEXTURE_luminance
-    vec4 textureColor = vec4(lighteffect.rgb*dot(texture2D(uSampler, vTexcoord).rgb, vec3(1.,1.,1.))/3., lighteffect.a);
-#endif
-    
-#ifdef TEXTURE_luminance_alpha
-    vec4 textureColor = texture2D(uSampler, vTexcoord);
-    float luminance = dot(vec3(1.,1.,1.),textureColor.rgb)/3.;
-    textureColor = vec4(lighteffect.rgb*luminance, lighteffect.a*textureColor.a);
-#endif
-    
-    fragColor = textureColor;
-
-#elif defined(IS_TEXT)
-    if (textureColor.a < 0.1)
-      discard;
-    else
-      fragColor = textureColor;
-#else
-    fragColor = lighteffect;
-#endif // HAS_TEXTURE
-    
-#ifdef HAS_FOG
-    // uFogParms elements: x = near, y = far, z = fogscale, w = (1-sin(FOV/2))/(1+sin(FOV/2))
-    // In Exp and Exp2: use density = density/far
-    // fogF will be the proportion of fog
-    // Initialize it to the linear value
-    float fogF;
-    if (uFogMode > 0) {
-      fogF = (uFogParms.y - vPosition.z/vPosition.w)/(uFogParms.y - uFogParms.x);
-      if (uFogMode > 1)
-        fogF = mix(uFogParms.w, 1.0, fogF);
-      fogF = fogF*uFogParms.z;
-      if (uFogMode == 2)
-        fogF = 1.0 - exp(-fogF);
-      // Docs are wrong: use (density*c)^2, not density*c^2
-      // https://gitlab.freedesktop.org/mesa/mesa/-/blob/master/src/mesa/swrast/s_fog.c#L58
-      else if (uFogMode == 3)
-        fogF = 1.0 - exp(-fogF*fogF);
-      fogF = clamp(fogF, 0.0, 1.0);
-      gl_FragColor = vec4(mix(fragColor.rgb, uFogColor, fogF), fragColor.a);
-    } else gl_FragColor = fragColor;
-#else
-    gl_FragColor = fragColor;
-#endif // HAS_FOG
-    
-}
-</script><!--/html_preserve-->
-<script src="book_assets/CanvasMatrix4-0.110.2/CanvasMatrix.src.js"></script>
-<script src="book_assets/rglPlayer-binding-0.110.2/rglPlayer.js"></script>
+<script src="book_assets/rglWebGL-binding-1.2.1/rglWebGL.js"></script>
+<link href="book_assets/rglwidgetClass-1.2.1/rgl.css" rel="stylesheet" />
+<script src="book_assets/rglwidgetClass-1.2.1/rglClass.src.js"></script>
+<script src="book_assets/rglwidgetClass-1.2.1/utils.src.js"></script>
+<script src="book_assets/rglwidgetClass-1.2.1/buffer.src.js"></script>
+<script src="book_assets/rglwidgetClass-1.2.1/subscenes.src.js"></script>
+<script src="book_assets/rglwidgetClass-1.2.1/shaders.src.js"></script>
+<script src="book_assets/rglwidgetClass-1.2.1/shadersrc.src.js"></script>
+<script src="book_assets/rglwidgetClass-1.2.1/textures.src.js"></script>
+<script src="book_assets/rglwidgetClass-1.2.1/projection.src.js"></script>
+<script src="book_assets/rglwidgetClass-1.2.1/mouse.src.js"></script>
+<script src="book_assets/rglwidgetClass-1.2.1/init.src.js"></script>
+<script src="book_assets/rglwidgetClass-1.2.1/pieces.src.js"></script>
+<script src="book_assets/rglwidgetClass-1.2.1/draw.src.js"></script>
+<script src="book_assets/rglwidgetClass-1.2.1/controls.src.js"></script>
+<script src="book_assets/rglwidgetClass-1.2.1/selection.src.js"></script>
+<script src="book_assets/rglwidgetClass-1.2.1/rglTimer.src.js"></script>
+<script src="book_assets/rglwidgetClass-1.2.1/pretty.src.js"></script>
+<script src="book_assets/rglwidgetClass-1.2.1/axes.src.js"></script>
+<script src="book_assets/rglwidgetClass-1.2.1/animation.src.js"></script>
+<script src="book_assets/CanvasMatrix4-1.2.1/CanvasMatrix.src.js"></script>
+<script src="book_assets/rglPlayer-binding-1.2.1/rglPlayer.js"></script>
 <script src="book_assets/kePrint-0.0.1/kePrint.js"></script>
 <link href="book_assets/lightable-0.0.1/lightable.css" rel="stylesheet" />
 
 
 
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
 <style type="text/css">
 /* Used with Pandoc 2.11+ new --citeproc when CSL is used */
 div.csl-bib-body { }
@@ -738,21 +405,43 @@ div.csl-indent {
 </ul></li>
 <li class="chapter" data-level="13.5" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#model-fit"><i class="fa fa-check"></i><b>13.5</b> Model fit</a>
 <ul>
-<li class="chapter" data-level="13.5.1" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#fit-indices"><i class="fa fa-check"></i><b>13.5.1</b> Fit indices</a></li>
-<li class="chapter" data-level="13.5.2" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#comparative-fit-to-a-baseline"><i class="fa fa-check"></i><b>13.5.2</b> Comparative fit to a baseline</a></li>
-<li class="chapter" data-level="13.5.3" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#errors-of-approximation"><i class="fa fa-check"></i><b>13.5.3</b> Errors of approximation</a></li>
+<li class="chapter" data-level="13.5.1" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#test-of-overall-model-fit"><i class="fa fa-check"></i><b>13.5.1</b> Test of overall model fit</a></li>
+<li class="chapter" data-level="13.5.2" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#approximate-fit-indices"><i class="fa fa-check"></i><b>13.5.2</b> Approximate fit indices</a></li>
 </ul></li>
-<li class="chapter" data-level="13.6" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#model-comparison-1"><i class="fa fa-check"></i><b>13.6</b> Model comparison</a></li>
-<li class="chapter" data-level="13.7" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#evaluation-and-selection-of-the-mediation-path-models"><i class="fa fa-check"></i><b>13.7</b> Evaluation and selection of the mediation path models</a></li>
-<li class="chapter" data-level="13.8" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#a-more-complex-path-model"><i class="fa fa-check"></i><b>13.8</b> A more complex path model</a></li>
-<li class="chapter" data-level="13.9" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#principles-in-constructing-path-models"><i class="fa fa-check"></i><b>13.9</b> Principles in constructing path models</a>
+<li class="chapter" data-level="13.6" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#modification-indices"><i class="fa fa-check"></i><b>13.6</b> Modification indices</a></li>
+<li class="chapter" data-level="13.7" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#model-comparison-1"><i class="fa fa-check"></i><b>13.7</b> Model comparison</a></li>
+<li class="chapter" data-level="13.8" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#evaluation-and-selection-of-the-mediation-path-models"><i class="fa fa-check"></i><b>13.8</b> Evaluation and selection of the mediation path models</a></li>
+<li class="chapter" data-level="13.9" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#a-more-complex-path-model"><i class="fa fa-check"></i><b>13.9</b> A more complex path model</a></li>
+<li class="chapter" data-level="13.10" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#principles-in-constructing-path-models"><i class="fa fa-check"></i><b>13.10</b> Principles in constructing path models</a>
 <ul>
-<li class="chapter" data-level="13.9.1" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#identifiability"><i class="fa fa-check"></i><b>13.9.1</b> Identifiability</a></li>
+<li class="chapter" data-level="13.10.1" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#identifiability"><i class="fa fa-check"></i><b>13.10.1</b> Identifiability</a></li>
 </ul></li>
-<li class="chapter" data-level="13.10" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#model-equivalence"><i class="fa fa-check"></i><b>13.10</b> Model equivalence</a></li>
-<li class="chapter" data-level="13.11" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#correlation-vs-causation"><i class="fa fa-check"></i><b>13.11</b> Correlation vs causation</a></li>
+<li class="chapter" data-level="13.11" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#model-equivalence"><i class="fa fa-check"></i><b>13.11</b> Model equivalence</a></li>
+<li class="chapter" data-level="13.12" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#correlation-vs-causation"><i class="fa fa-check"></i><b>13.12</b> Correlation vs causation</a></li>
 </ul></li>
-<li class="chapter" data-level="14" data-path="ch-SEM-latent-variable-models.html"><a href="ch-SEM-latent-variable-models.html"><i class="fa fa-check"></i><b>14</b> Latent variable models (SEM 2)</a></li>
+<li class="chapter" data-level="14" data-path="ch-SEM-latent-variable-models.html"><a href="ch-SEM-latent-variable-models.html"><i class="fa fa-check"></i><b>14</b> Latent variable models (SEM 2)</a>
+<ul>
+<li class="chapter" data-level="14.1" data-path="ch-SEM-latent-variable-models.html"><a href="ch-SEM-latent-variable-models.html#measurement-of-latent-variables"><i class="fa fa-check"></i><b>14.1</b> Measurement of latent variables</a>
+<ul>
+<li class="chapter" data-level="14.1.1" data-path="ch-SEM-latent-variable-models.html"><a href="ch-SEM-latent-variable-models.html#scaling-and-identification"><i class="fa fa-check"></i><b>14.1.1</b> Scaling and identification</a></li>
+</ul></li>
+<li class="chapter" data-level="14.2" data-path="ch-SEM-latent-variable-models.html"><a href="ch-SEM-latent-variable-models.html#confirmatory-factor-analysis"><i class="fa fa-check"></i><b>14.2</b> Confirmatory factor analysis</a>
+<ul>
+<li class="chapter" data-level="14.2.1" data-path="ch-SEM-latent-variable-models.html"><a href="ch-SEM-latent-variable-models.html#a-single-factor-model"><i class="fa fa-check"></i><b>14.2.1</b> A single factor model</a></li>
+</ul></li>
+<li class="chapter" data-level="14.3" data-path="ch-SEM-latent-variable-models.html"><a href="ch-SEM-latent-variable-models.html#full-hierarchical-factor-model-for-the-bfi-2"><i class="fa fa-check"></i><b>14.3</b> Full hierarchical factor model for the BFI-2</a>
+<ul>
+<li class="chapter" data-level="14.3.1" data-path="ch-SEM-latent-variable-models.html"><a href="ch-SEM-latent-variable-models.html#indentification"><i class="fa fa-check"></i><b>14.3.1</b> Indentification</a></li>
+</ul></li>
+<li class="chapter" data-level="14.4" data-path="ch-SEM-latent-variable-models.html"><a href="ch-SEM-latent-variable-models.html#multiple-groups-and-measurement-invariance"><i class="fa fa-check"></i><b>14.4</b> Multiple groups and measurement invariance</a></li>
+<li class="chapter" data-level="14.5" data-path="ch-SEM-latent-variable-models.html"><a href="ch-SEM-latent-variable-models.html#exploratory-factor-and-principal-components-analysis"><i class="fa fa-check"></i><b>14.5</b> Exploratory factor and principal components analysis</a>
+<ul>
+<li class="chapter" data-level="14.5.1" data-path="ch-SEM-latent-variable-models.html"><a href="ch-SEM-latent-variable-models.html#determining-the-number-of-factors"><i class="fa fa-check"></i><b>14.5.1</b> Determining the number of factors</a></li>
+<li class="chapter" data-level="14.5.2" data-path="ch-SEM-latent-variable-models.html"><a href="ch-SEM-latent-variable-models.html#factor-rotation"><i class="fa fa-check"></i><b>14.5.2</b> Factor rotation</a></li>
+</ul></li>
+<li class="chapter" data-level="14.6" data-path="ch-SEM-latent-variable-models.html"><a href="ch-SEM-latent-variable-models.html#conclusion"><i class="fa fa-check"></i><b>14.6</b> Conclusion</a></li>
+<li class="chapter" data-level="14.7" data-path="ch-SEM-latent-variable-models.html"><a href="ch-SEM-latent-variable-models.html#in-practice-6"><i class="fa fa-check"></i><b>14.7</b> In practice</a></li>
+</ul></li>
 <li class="chapter" data-level="15" data-path="ch-Bayes-estimation.html"><a href="ch-Bayes-estimation.html"><i class="fa fa-check"></i><b>15</b> Introduction to Bayesian estimation</a>
 <ul>
 <li class="chapter" data-level="15.1" data-path="ch-Bayes-estimation.html"><a href="ch-Bayes-estimation.html#fundamentals-of-bayesian-inference"><i class="fa fa-check"></i><b>15.1</b> Fundamentals of Bayesian inference</a>
@@ -784,7 +473,7 @@ div.csl-indent {
 <li class="chapter" data-level="16.5.3" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#results-of-a-nhst-are-often-misinterpreted"><i class="fa fa-check"></i><b>16.5.3</b> Results of a NHST are often misinterpreted</a></li>
 </ul></li>
 <li class="chapter" data-level="16.6" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#to-bayes-or-not-to-bayes-a-pragmatic-view"><i class="fa fa-check"></i><b>16.6</b> To Bayes or not to Bayes? A pragmatic view</a></li>
-<li class="chapter" data-level="16.7" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#in-practice-6"><i class="fa fa-check"></i><b>16.7</b> In practice</a></li>
+<li class="chapter" data-level="16.7" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#in-practice-7"><i class="fa fa-check"></i><b>16.7</b> In practice</a></li>
 <li class="chapter" data-level="16.8" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#summary-3"><i class="fa fa-check"></i><b>16.8</b> “Summary”</a></li>
 </ul></li>
 <li class="chapter" data-level="17" data-path="ch-responsible-data-analyst.html"><a href="ch-responsible-data-analyst.html"><i class="fa fa-check"></i><b>17</b> Being a responsible data analyst</a>
@@ -821,7 +510,7 @@ div.csl-indent {
 <div id="ch-generalized-linear-models" class="section level1 hasAnchor" number="12">
 <h1><span class="header-section-number">Chapter 12</span> Generalized Linear Models<a href="ch-generalized-linear-models.html#ch-generalized-linear-models" class="anchor-section" aria-label="Anchor link to header"></a></h1>
 <!-- References: McCullagh and Nelder, Dobson, Agresti. -->
-<p>Up to now, we have considered models for which the residuals (model errors) could be assumed to follow a Normal distribution. This is equivalent to modelling the conditional distribution of a dependent variable <span class="math inline">\(Y\)</span>, given the values of predictor variables <span class="math inline">\(X_j\)</span>, as a Normal distribution. Many of the techniques and ideas of such models can be generalised to situations where we can assume that the distribution of a dependent variable, conditional upon the values of predictor variables, follows a different distribution from a class of probability distributions known as the <em>exponential family</em>. Such models are known as <em>generalized</em> linear models <span class="citation">(<a href="#ref-mccullagh2019generalized" role="doc-biblioref">McCullagh &amp; Nelder, 2019</a>)</span>. This name makes for easy confusion with the <em>general</em> linear model, so make sure you don’t ignore the presence or absence of “-ized”!</p>
+<p>Up to now, we have considered models for which the residuals (model errors) could be assumed to follow a Normal distribution. This is equivalent to modelling the conditional distribution of a dependent variable <span class="math inline">\(Y\)</span>, given the values of predictor variables <span class="math inline">\(X_j\)</span>, as a Normal distribution. Many of the techniques and ideas of such models can be generalised to situations where we can assume that the distribution of a dependent variable, conditional upon the values of predictor variables, follows a different distribution from a class of probability distributions known as the <em>exponential family</em>. Such models are known as <em>generalized</em> linear models <span class="citation">(<a href="#ref-mccullagh2019generalized">McCullagh &amp; Nelder, 2019</a>)</span>. This name makes for easy confusion with the <em>general</em> linear model, so make sure you don’t ignore the presence or absence of “-ized”!</p>
 <p>The Normal distribution is part of the exponential family of distributions, as are many other distributions. These other distributions include the Binomial, Poisson, and Gamma distributions. Some of these distributions concern non-negative integer variables (i.e. variables with values <span class="math inline">\(0, 1, 2, \ldots\)</span>), others positive continuous variables (i.e. variables with values <span class="math inline">\(&gt;0\)</span>), or unbounded continuous variables (i.e. variables with values between <span class="math inline">\(-\infty\)</span> and <span class="math inline">\(\infty\)</span>). Exponential-family distributions can all be expressed in the same form, but we won’t go into the details of that here.<a href="#fn30" class="footnote-ref" id="fnref30"><sup>30</sup></a> What is important is that there are a wide variety of statistical distributions beyond the Normal distribution. And that there are many variables which are <em>not</em> continuous and unbounded. It generally does not make sense to assume a Normal distribution for such variables. But because exponential-family distributions share important characteristics with the Normal distribution, assuming a different exponential-family distributions allows you to choose a distribution which is more natural for the variable in question, whilst still being able to formulate useful models for it. This is what we can do with generalized linear models. A generalized linear model consists of three components:</p>
 <ol style="list-style-type: decimal">
 <li>A <em>random</em> part, which describes the variability in the data by means of an exponential-family probability distribution with a conditional mean <span class="math inline">\(\mu_{Y|X_1, \ldots, X_m}\)</span>.</li>
@@ -910,7 +599,7 @@ with degrees-of-freedom equal to the difference in the number of estimated param
 \end{equation}\]</span>
 Here, <span class="math inline">\(z_{1-\tfrac{1}{2}\alpha}\)</span> is the <span class="math inline">\(1 - \tfrac{1}{2}\alpha\)</span> quantile of the standard Normal distribution (e.g., the value <span class="math inline">\(z\)</span> such that <span class="math inline">\(p(Z \leq z) = 1 - \tfrac{1}{2}\alpha\)</span>). For example, for a 95% confidence interval, we use <span class="math inline">\(\alpha = .05\)</span> and the computation would be
 <span class="math display">\[\hat{\beta}_j \pm z_{.975} \times \text{SE}(\hat{\beta}_j) \approx \hat{\beta}_j \pm 1.96 \times \text{SE}(\hat{\beta}_j)\]</span>
-More accurate (although still approximate) confidence intervals for small samples can be computed through the <strong>profile likelihood</strong> <span class="citation">(<a href="#ref-venzon1988method" role="doc-biblioref">Venzon &amp; Moolgavkar, 1988</a>)</span>.^[Roughly, this method computes a confidence interval for one parameter, e.g. <span class="math inline">\(\beta_j\)</span>, by constructing a profile log-likelihood function
+More accurate (although still approximate) confidence intervals for small samples can be computed through the <strong>profile likelihood</strong> <span class="citation">(<a href="#ref-venzon1988method">Venzon &amp; Moolgavkar, 1988</a>)</span>. Roughly, this method computes a confidence interval for one parameter, e.g. <span class="math inline">\(\beta_j\)</span>, by constructing a profile log-likelihood function
 <span class="math display">\[l_p(\beta_j) = \log p(\text{DATA}|\beta_j, \hat{\theta}_{\neg j|\beta_j})\]</span>
 where <span class="math inline">\(\beta_j\)</span> is free to vary, and the remaining parameters of the model, denoted as <span class="math inline">\(\hat{\theta}_{\neg j|\beta_j}\)</span>, are replaced by their maximum likelihood estimates given <span class="math inline">\(\beta_j\)</span>. We can alternatively write this as
 <span class="math display">\[l_p(\beta_j) = \max_{\theta_{\neg j}} \left(\log p(\text{DATA}|\beta_j, \theta_{\neg j})\right)\]</span></p>
@@ -919,7 +608,7 @@ where <span class="math inline">\(\beta_j\)</span> is free to vary, and the rema
 &amp;= 2 \left(l(\hat{\theta}) - l_p(\beta_j) \right) \end{aligned}\]</span>
 where <span class="math inline">\(l(\hat{\theta}) = \log p(\text{DATA}|\hat{\theta})\)</span> denotes the maximum of the log likelihood over all parameters (including <span class="math inline">\(\beta_j\)</span>). As the likelihood-ratio statistic is approximately Chi-squared distributed, we can use the Chi-square distribution (with <span class="math inline">\(\text{df} = 1\)</span> degree of freedom) to determine a critical value, e.g. <span class="math inline">\(\chi^2_{1; 1 - \alpha}\)</span>. We can then finally find the left and right bounds of the confidence interval by finding values <span class="math inline">\(\beta_\text{left}\)</span> and <span class="math inline">\(\beta_\text{right}\)</span> such that
 <span class="math display">\[2 \left(l(\hat{\theta}) - l_p(\beta_\text{left}) \right) = 2 \left(l(\hat{\theta}) - l_p(\beta_\text{right}) \right) = \chi^2_{1; 1 - \alpha}\]</span>
-] In contrast to the confidence interval based on the Normal approximation (Equation <a href="ch-generalized-linear-models.html#eq:glm-confidence-interval-normal-approximation">(12.3)</a>), confidence intervals based on the profile-likelihood can be non-symmetrical (i.e. the left- and right-bound don’t necessarily have the same distance from the estimate). For non-linear models such as generalized linear models, confidence intervals will often not be symmetrical, unless the number of observations in large. As such, confidence intervals based on the profile likelihood are likely to be more accurate. Yet another way to compute confidence intervals is by a <strong>parametric bootstrap</strong>.<a href="#fn33" class="footnote-ref" id="fnref33"><sup>33</sup></a></p>
+In contrast to the confidence interval based on the Normal approximation (Equation <a href="ch-generalized-linear-models.html#eq:glm-confidence-interval-normal-approximation">(12.3)</a>), confidence intervals based on the profile-likelihood can be non-symmetrical (i.e. the left- and right-bound don’t necessarily have the same distance from the estimate). For non-linear models such as generalized linear models, confidence intervals will often not be symmetrical, unless the number of observations in large. As such, confidence intervals based on the profile likelihood are likely to be more accurate. Yet another way to compute confidence intervals is by a <strong>parametric bootstrap</strong>.<a href="#fn33" class="footnote-ref" id="fnref33"><sup>33</sup></a></p>
 </div>
 </div>
 <div id="sec-generalized-linear-models-overall-model-fit" class="section level2 hasAnchor" number="12.4">
@@ -1026,12 +715,12 @@ So the odds at <span class="math inline">\(X = 2\)</span> is the odds at <span c
 </div>
 <div id="sec-logistic-regression-metacognition" class="section level3 hasAnchor" number="12.5.2">
 <h3><span class="header-section-number">12.5.2</span> Example: Metacognition in visual perception<a href="ch-generalized-linear-models.html#sec-logistic-regression-metacognition" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>Metacognition broadly refers to awareness of our thought processes. One aspect of metacognition is the ability to ascertain how (un)certain we are in our inferences about the world. For example, <span class="citation">Rausch &amp; Zehetleitner (<a href="#ref-rausch2016visibility" role="doc-biblioref">2016</a>)</span> asked participants to judge whether visually presented stimuli (so-called grating patterns) had a horizontal to vertical direction. To make this task difficult for their participants, they presented each stimulus only briefly (200 ms) and on a variety of relatively low-contrast displays. They also asked participants to indicate their confidence (on a scale from 0 to 100) that their judgement was correct. Participants each completed a total of 378 trials. If metacognition is accurate, then participants should be more confident when they made more accurate responses.</p>
+<p>Metacognition broadly refers to awareness of our thought processes. One aspect of metacognition is the ability to ascertain how (un)certain we are in our inferences about the world. For example, <span class="citation">Rausch &amp; Zehetleitner (<a href="#ref-rausch2016visibility">2016</a>)</span> asked participants to judge whether visually presented stimuli (so-called grating patterns) had a horizontal to vertical direction. To make this task difficult for their participants, they presented each stimulus only briefly (200 ms) and on a variety of relatively low-contrast displays. They also asked participants to indicate their confidence (on a scale from 0 to 100) that their judgement was correct. Participants each completed a total of 378 trials. If metacognition is accurate, then participants should be more confident when they made more accurate responses.</p>
 <p>For two participants in the experiment, Figure <a href="ch-generalized-linear-models.html#fig:metacognition-confidence-correct-plot">12.2</a> shows the proportion of correct responses as a function of different levels of stated confidence. For Participant 1, there appears to be quite a good correspondence between confidence and correctness, with accuracy increasing for higher levels of confidence. For Participant 2, the relation does not look so neat, with average correctness higher in the lowest range of confidence, and then decreasing in the next two ranges, before rapidly increasing to almost 100% for the highest two confidence ranges. However, as is evident from the width of the confidence bands, this participant gave relatively few confidence ratings between 20 and 60.</p>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:metacognition-confidence-correct-plot"></span>
 <img src="12-GenLM_files/figure-html/metacognition-confidence-correct-plot-1.svg" alt="Confidence and proportion correct for two participants in the study by @rausch2016visibility on metacognition." width="768" />
 <p class="caption">
-Figure 12.2: Confidence and proportion correct for two participants in the study by <span class="citation">Rausch &amp; Zehetleitner (<a href="#ref-rausch2016visibility" role="doc-biblioref">2016</a>)</span> on metacognition.
+Figure 12.2: Confidence and proportion correct for two participants in the study by <span class="citation">Rausch &amp; Zehetleitner (<a href="#ref-rausch2016visibility">2016</a>)</span> on metacognition.
 </p>
 </div>
 <p>As the relation between confidence and accuracy likely differs between participants (e.g. participants might interpret the confidence scale differently, or have different levels of metacognition), estimating a single logistic regression model for both participants seems inappropriate. Hence, we will estimate separate logistic regression models for the two participants. In our model, we will allow the effect of confidence to be moderated by contrast (i.e., we allow metacognition to be affected by contrast). For easier interpretation, we first center both variables, and then estimate the following logistic regression model:</p>
@@ -1183,7 +872,7 @@ As for the general linear model, tests of the intercept are usually not of inter
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:metacognition-data-and-logistic-fit-plot"></span>
 <img src="12-GenLM_files/figure-html/metacognition-data-and-logistic-fit-plot-1.svg" alt="Observed and model-predicted response accuracy as a function of confidence and contrast, for two participants in the study by @rausch2016visibility on metacognition." width="768" />
 <p class="caption">
-Figure 12.3: Observed and model-predicted response accuracy as a function of confidence and contrast, for two participants in the study by <span class="citation">Rausch &amp; Zehetleitner (<a href="#ref-rausch2016visibility" role="doc-biblioref">2016</a>)</span> on metacognition.
+Figure 12.3: Observed and model-predicted response accuracy as a function of confidence and contrast, for two participants in the study by <span class="citation">Rausch &amp; Zehetleitner (<a href="#ref-rausch2016visibility">2016</a>)</span> on metacognition.
 </p>
 </div>
 </div>
@@ -1224,7 +913,7 @@ We can easily turn this perceived difference into a standard-Normal variable
 <span class="math display">\[
 \frac{(P_r - P_l) -  (\tau_r - \tau_l)}{\sqrt{2} \sigma_{\epsilon}} \sim \textbf{Normal}(0, 1)
 \]</span>
-This allows us to use a Probit function to determine the probability that the person decides the right line is larger than the left, as a function of the true difference between the line-lengths. Letting <span class="math inline">\(X = \tau_r - \tau_l\)</span>, and the model <span class="math inline">\(\text{Probit}\left(p(\text{right})\right) = \beta_0 + \beta_1 \times X\)</span>, this would imply the following true parameters: <span class="math inline">\(\beta_0 = 0\)</span> and <span class="math inline">\(\beta_1 = \frac{1}{\sqrt{2}\sigma_\epsilon}\)</span>. As such, the slope of this Probit regression model would allow us to estimate the perceptual noise <span class="math inline">\(\sigma_\epsilon\)</span>. The model also allows to estimate a possible response bias (e.g., where person is biased by being more likely to respond right, even if the true line lengths are equal) via the intercept <span class="math inline">\(\beta_0\)</span>. A construction like this links the model to widely-used frameworks like Signal Detection Theory <span class="citation">(<a href="#ref-green1966signal" role="doc-biblioref">Green &amp; Swets, 1966</a>)</span>. It should be noted that the logit link function can be provided with a similar latent variable justification, if it is assumed that the difference in errors <span class="math inline">\(\epsilon_l - \epsilon_r\)</span> is logistic-distributed <span class="citation">(<a href="#ref-mcfadden1973conditional" role="doc-biblioref">McFadden, 1973</a>)</span></p>
+This allows us to use a Probit function to determine the probability that the person decides the right line is larger than the left, as a function of the true difference between the line-lengths. Letting <span class="math inline">\(X = \tau_r - \tau_l\)</span>, and the model <span class="math inline">\(\text{Probit}\left(p(\text{right})\right) = \beta_0 + \beta_1 \times X\)</span>, this would imply the following true parameters: <span class="math inline">\(\beta_0 = 0\)</span> and <span class="math inline">\(\beta_1 = \frac{1}{\sqrt{2}\sigma_\epsilon}\)</span>. As such, the slope of this Probit regression model would allow us to estimate the perceptual noise <span class="math inline">\(\sigma_\epsilon\)</span>. The model also allows to estimate a possible response bias (e.g., where person is biased by being more likely to respond right, even if the true line lengths are equal) via the intercept <span class="math inline">\(\beta_0\)</span>. A construction like this links the model to widely-used frameworks like Signal Detection Theory <span class="citation">(<a href="#ref-green1966signal">Green &amp; Swets, 1966</a>)</span>. It should be noted that the logit link function can be provided with a similar latent variable justification, if it is assumed that the difference in errors <span class="math inline">\(\epsilon_l - \epsilon_r\)</span> is logistic-distributed <span class="citation">(<a href="#ref-mcfadden1973conditional">McFadden, 1973</a>)</span></p>
 </div>
 <p>Table <a href="ch-generalized-linear-models.html#tab:metacognition-probit-regression-results-z-and-LR-participant-1">12.3</a> shows the results of applying a Probit regression to the data of Participant 1. The estimated parameters are around 0.588 times those of the logistic regression model, and while the test results are not identical to those in Table <a href="ch-generalized-linear-models.html#tab:metacognition-logistic-regression-results-z-and-LR-participant-1">12.1</a>, they are mostly similar. The test of the deviance of this model is <span class="math inline">\(X^2(374) = 272.289\)</span>, <span class="math inline">\(p = 1.00\)</span>, indicating a good fit of the model. The main purpose of this additional example is to illustrate that other link functions can be used. The logit and Probit models imply different Data Generating Processes, and so their distinction may be interesting from a theoretical viewpoint. From a data-analytic perspective, however, they are very similar and as such the choice may seem somewhat arbitrary and up to personal preference.</p>
 <table>
@@ -1301,7 +990,7 @@ This allows us to use a Probit function to determine the probability that the pe
 <span class="math display">\[\begin{aligned} \text{MODEL R:}&amp;&amp; \log\left(\frac{\pi_1}{1-\pi_1}\right) &amp;= 0 \\
 \text{MODEL G:} &amp;&amp; \log\left(\frac{\pi_1}{1-\pi_1}\right) &amp;= \beta_0
 \end{aligned}\]</span>
-For the data at hand (12 correct and 2 incorrect predictions by Paul), estimate of the intercept is <span class="math inline">\(\hat{\beta}_0 = 1.946\)</span> for MODEL G, which corresponds to a predicted probability of <span class="math inline">\(\hat{\pi}_1 = \frac{\exp(1.946)}{1 + \exp(1.946)} = 0.875\)</span>. The test result of the model comparison is <span class="math inline">\(G^2(1) = 10.124\)</span>, <span class="math inline">\(p = .001\)</span>. Hence, in correspondence with the results from Chapter <a href="ch-modeling.html#ch-modeling">2</a>, we can reject the null-hypothesis that Paul was randomly guessing. <!-- You were truly amazing Paul (even after applying a generalized linear model ;-).--></p>
+For the data at hand (12 correct and 2 incorrect predictions by Paul), estimate of the intercept is <span class="math inline">\(\hat{\beta}_0 = 1.792\)</span> for MODEL G, which corresponds to a predicted probability of <span class="math inline">\(\hat{\pi}_1 = \frac{\exp(1.792)}{1 + \exp(1.792)} = 0.857\)</span>. The test result of the model comparison is <span class="math inline">\(G^2(1) = 7.925\)</span>, <span class="math inline">\(p = .005\)</span>. Hence, in correspondence with the results from Chapter <a href="ch-modeling.html#ch-modeling">2</a>, we can reject the null-hypothesis that Paul was randomly guessing. <!-- You were truly amazing Paul (even after applying a generalized linear model ;-).--></p>
 </div>
 </div>
 <div id="poisson-regression" class="section level2 hasAnchor" number="12.6">
@@ -1323,7 +1012,7 @@ The inverse link function is the inverse-log or <strong>exponential</strong> fun
 <span class="math display">\[h\left(\beta_0 + \sum_{j=1}^m \beta_j \times X_{j}\right) = \exp \left( \beta_0 + \sum_{j=1}^m \beta_j \times X_{j} \right)\]</span></p>
 <div id="sec-poisson-regression-gestures" class="section level3 hasAnchor" number="12.6.1">
 <h3><span class="header-section-number">12.6.1</span> Example: Gestures in different social contexts<a href="ch-generalized-linear-models.html#sec-poisson-regression-gestures" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>As an example of Poisson regression, we will consider data also analysed by <span class="citation">Winter &amp; Bürkner (<a href="#ref-winter2021poisson" role="doc-biblioref">2021</a>)</span>. The data is from a study on the use of hand gestures by 27 participants (Catalan or Korean speakers) each conversing with either a friend (equal-status person) or a professor (higher-status person). The duration of the conversation was free and not experimentally controlled. The variable of interest is the count of the number of gestures used by the participants throughout the conversation Figure <a href="ch-generalized-linear-models.html#fig:gestures-histogram">12.6</a> shows the numbers of gestures for the different conditions in the experiment. This Figure doesn’t immediately provide a clear idea of differences between the conditions.</p>
+<p>As an example of Poisson regression, we will consider data also analysed by <span class="citation">Winter &amp; Bürkner (<a href="#ref-winter2021poisson">2021</a>)</span>. The data is from a study on the use of hand gestures by 27 participants (Catalan or Korean speakers) each conversing with either a friend (equal-status person) or a professor (higher-status person). The duration of the conversation was free and not experimentally controlled. The variable of interest is the count of the number of gestures used by the participants throughout the conversation Figure <a href="ch-generalized-linear-models.html#fig:gestures-histogram">12.6</a> shows the numbers of gestures for the different conditions in the experiment. This Figure doesn’t immediately provide a clear idea of differences between the conditions.</p>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:gestures-histogram"></span>
 <img src="12-GenLM_files/figure-html/gestures-histogram-1.svg" alt="Counts of the number of hand gestures during conversations with a friend or professor for 14 Catalan and 13 Korean speakers." width="672" />
 <p class="caption">
@@ -1520,7 +1209,7 @@ Figure 12.7: Hisogram of standardized Pearson residuals for the Poisson regressi
 <!-- A crude test for overdispersion is based on the sum of squared standardized Pearson residuals, which is approximately Chi-squared distributed with degrees equal to $\text{df} = n - \text{npar}(M)$, where $M$ is the model. In this case, the sum of the squared standardized Pearson residuals is 272.01, and $p(\chisq > 272.01|\text{df} = 46) < .001$. As such, we can reject -->
 <p>Overdispersion does not bias the parameter estimates <span class="math inline">\(\hat{\beta}\)</span>. So, on average, the parameter estimates are equal to the true parameters. However, overdispersion makes parameter estimates less reliable (i.e. the variance of the sampling distribution of the parameter estimates is larger than without overdispersion). As a result, the standard errors of the parameter estimates reported in Table <a href="ch-generalized-linear-models.html#tab:gestures-pois-glm-results">12.4</a> are incorrect, as they assume no overdispersion (or underdispersion for that matter). When there is overdispersion, the true standard errors are higher. As a result, the <span class="math inline">\(p\)</span>-values of the Wald test are also incorrect. And as data with overdispersion is not truly Poisson-distributed, the same applies to the <span class="math inline">\(p\)</span>-values of the likelihood ratio tests.</p>
 <p>Whilst not exactly straightforward, there are ways to account for overdispersion in generalized linear models. In <strong>quasi-Poisson regression</strong>, it is assumed that the variance is not equal to the mean <span class="math inline">\(\mu\)</span>, but scaled by a dispersion parameter <span class="math inline">\(\phi\)</span>, such that <span class="math inline">\(\text{Var}(Y) = \phi \times \mu\)</span>. Note that usual Poisson regression is nested in this more general model. When <span class="math inline">\(\phi = 1\)</span>, then there is no overdispersion, and we revert to the standard Poisson regression model. If <span class="math inline">\(\phi &gt; 1\)</span>, there is overdispersion. By estimating the dispersion parameter, quasi-Poisson regression allows to account for overdispersion and computation of more accurate standard errors. A downside of quasi-Poisson regression is that the distribution of the dependent variable is no longer a member of the exponential family. In fact, quasi-Poisson regression does not specify a clear probability distribution for the dependent variable at all. As a result, the likelihood of the parameters, <span class="math inline">\(p(\text{DATA}|\theta)\)</span> is not properly defined either. What remains is a <em>quasi-likelihood</em>, where only the conditional means and variances are specified. In the absence of a likelihood function, parameters can not be estimated by maximum likelihood; rather, they are estimated by maximum quasi-likelihood. Nevertheless, maximum quasi-likelihood estimators share many aspects with maximum likelihood estimators. In particular, the quasi-likelihood estimators are unbiased for the regression parameters <span class="math inline">\(\beta_j\)</span>.</p>
-<p>For the gestures data, the estimated dispersion parameter is <span class="math inline">\(\hat{\phi} = 5.913\)</span>, which is clearly much larger than 1. Results of the quasi-Poisson regression are provided in Table <a href="ch-generalized-linear-models.html#tab:gestures-quasi-poisson-model-results">12.6</a>. Note that this Table contains Wald and <span class="math inline">\(F\)</span>-tests. Wald tests are justified by the asymptotic properties of quasi-likelihood estimation. The use of <span class="math inline">\(F\)</span>-tests when the dispersion is estimated is recommended by <span class="citation">Dunn &amp; Smyth (<a href="#ref-dunn2018generalized" role="doc-biblioref">2018</a>)</span>. <!-- TODO: chevk that this is appropriate --></p>
+<p>For the gestures data, the estimated dispersion parameter is <span class="math inline">\(\hat{\phi} = 5.913\)</span>, which is clearly much larger than 1. Results of the quasi-Poisson regression are provided in Table <a href="ch-generalized-linear-models.html#tab:gestures-quasi-poisson-model-results">12.6</a>. Note that this Table contains Wald and <span class="math inline">\(F\)</span>-tests. Wald tests are justified by the asymptotic properties of quasi-likelihood estimation. The use of <span class="math inline">\(F\)</span>-tests when the dispersion is estimated is recommended by <span class="citation">Dunn &amp; Smyth (<a href="#ref-dunn2018generalized">2018</a>)</span>. <!-- TODO: chevk that this is appropriate --></p>
 <table style="width:100%;">
 <caption><span id="tab:gestures-quasi-poisson-model-results">Table 12.6: </span>Results of a quasi-Poisson regression model for the number of gestures in conversations.</caption>
 <colgroup>
@@ -1661,7 +1350,7 @@ where <span class="math inline">\(\lambda_{i,j}^{(A,B)} = \left( \log(\pi_{i,j} 
 <p>Log-linear models are similar in spirit to a factorial ANOVA, in the sense that the counts are decomposed into main effects, two-way interactions, three-way interactions, etc. For a two-way contingency table, the counts <span class="math inline">\(\mu_{i,j}\)</span> can always be decomposed exactly as
 <span class="math display">\[\log \mu_{i,j} = \lambda + \lambda^{(A)}_i + \lambda^{(B)}_j + \lambda^{(AB)}_{i,j}\]</span>
 where <span class="math inline">\(\lambda\)</span> acts as an intercept, <span class="math inline">\(\lambda^{(A)}_i\)</span> as a “main effect” for factor <span class="math inline">\(A\)</span>, <span class="math inline">\(\lambda^{(B)}_j\)</span> as a “main effect” for factor <span class="math inline">\(B\)</span>, and <span class="math inline">\(\lambda^{(AB)}_{i,j}\)</span> as an “interaction effect” between factors <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span>. Just like a factorial ANOVA model can perfectly fit the sample means, this log-linear model can perfectly fit the sample counts. This is hence an example of a <strong>saturated model</strong>, where the total number of parameters equals the total number of possible combinations minus 1.<a href="#fn39" class="footnote-ref" id="fnref39"><sup>39</sup></a></p>
-<p>Although they seem rather different, log-linear models can be formulated in terms of equivalent Poisson regression models (by using contrast-coded predictors to account for the cells or combinations of categories in the multi-way contingency table). As such, they are an instance of generalized linear models, and all the tools available for the latter apply to log-linear models <span class="citation">(<a href="#ref-dobson2018introduction" role="doc-biblioref">Dobson &amp; Barnett, 2018</a>)</span>.</p>
+<p>Although they seem rather different, log-linear models can be formulated in terms of equivalent Poisson regression models (by using contrast-coded predictors to account for the cells or combinations of categories in the multi-way contingency table). As such, they are an instance of generalized linear models, and all the tools available for the latter apply to log-linear models <span class="citation">(<a href="#ref-dobson2018introduction">Dobson &amp; Barnett, 2018</a>)</span>.</p>
 <!--
 For a random sample of people from the general population, we can then count how often people who report voting for the Conservative Party also report reading the Daily Mail, and how many report reading the Guardian, etc (see e.g. https://www.statista.com/chart/9897/general-election-voting-by-newspaper-readership/ and https://yougov.co.uk/topics/politics/articles-reports/2017/06/13/how-britain-voted-2017-general-election for an example of such data).
 
@@ -2004,7 +1693,7 @@ has <span class="math inline">\(8-1 = 7\)</span> parameters <span class="math in
 </div>
 <div id="a-three-way-table-example-rock-paper-scissors" class="section level3 hasAnchor" number="12.7.2">
 <h3><span class="header-section-number">12.7.2</span> A three-way table example: Rock-Paper-Scissors<a href="ch-generalized-linear-models.html#a-three-way-table-example-rock-paper-scissors" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p><span class="citation">Guennouni &amp; Speekenbrink (<a href="#ref-guennouni2022transfer" role="doc-biblioref">2022</a>)</span> let participants repeatedly play the well-known game of Rock-Paper-Scissors against artificial (AI) opponents. The AI agents were endowed with different human-like strategies. The “level-1” AI player would expect the human player to repeat their last chosen action, and would pick the action that beats this. For example, if the human player had previously chosen “Rock”, then they would expect the human player to play “Rock” again, therefore choosing “Paper” as this is the action that beats “Rock”. The “level-2” AI player would expect the human player to adopt a “level-1” strategy, choosing actions to beat this. For example, if the AI player had previously chosen “Rock”, the human would be expected to next play “Paper”, as this beats “Rock”. The AI player would therefore play “Scissors”, as this beats “Paper” (the expected action of the human player). Results showed that people could pick-up on the strategy of the AI player, using this to their advantage. Moreover, they could transfer this learned strategy to other games.</p>
+<p><span class="citation">Guennouni &amp; Speekenbrink (<a href="#ref-guennouni2022transfer">2022</a>)</span> let participants repeatedly play the well-known game of Rock-Paper-Scissors against artificial (AI) opponents. The AI agents were endowed with different human-like strategies. The “level-1” AI player would expect the human player to repeat their last chosen action, and would pick the action that beats this. For example, if the human player had previously chosen “Rock”, then they would expect the human player to play “Rock” again, therefore choosing “Paper” as this is the action that beats “Rock”. The “level-2” AI player would expect the human player to adopt a “level-1” strategy, choosing actions to beat this. For example, if the AI player had previously chosen “Rock”, the human would be expected to next play “Paper”, as this beats “Rock”. The AI player would therefore play “Scissors”, as this beats “Paper” (the expected action of the human player). Results showed that people could pick-up on the strategy of the AI player, using this to their advantage. Moreover, they could transfer this learned strategy to other games.</p>
 <p>If we focus on the “level-1” AI player, we can say that their actions depend completely on the previous action of the human player.<a href="#fn40" class="footnote-ref" id="fnref40"><sup>40</sup></a> If the human player is sensitive to the AI player’s strategy and able to exploit the weaknesses of the AI player, then the humans’ strategy should also completely depend on their previous actions. For example, they should choose to play “Scissors” after playing “Rock”, as they should expect the AI player to play “Paper”. If this is the case, then we might expect the current action of the human player to be independent of the previous action of the AI player. We can test this hypothesis with log-linear models.</p>
 <p>Table <a href="ch-generalized-linear-models.html#tab:rps-table">12.8</a> shows the actions chosen by the human player (in the last half of the game) as a function of the previous actions of the AI and human player.</p>
 <table>
@@ -2352,7 +2041,7 @@ Table <a href="ch-generalized-linear-models.html#tab:rps-loglm-results">12.9</a>
 </div>
 <div id="sparse-data-and-empty-cells" class="section level3 hasAnchor" number="12.7.3">
 <h3><span class="header-section-number">12.7.3</span> Sparse data and empty cells<a href="ch-generalized-linear-models.html#sparse-data-and-empty-cells" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>Problems can arise when tables have many small counts. This can happen when the total sample size is small, or when the number of cells in the table is relatively large compared to the total number of observations. A particular problem is when cells are empty (have a count of 0). As <span class="math inline">\(\log(0) = -\infty\)</span> this may lead to problems estimating the parameters (the estimates may become infinite). A <em>structural zero</em> refers to a case where the expected count for a cell is truly zero, because a combination of values can not occur (i.e. the probability of that combination equals 0). Such cells should be ignored (removed) from the analysis. A <em>sampling zero</em> occurs when the expected count is larger than 0, but a particular combination has not been observed in the data due to chance. For such cells, a correction factor may be applied. When zero-count cells are present, <span class="citation">Agresti (<a href="#ref-agresti2018introduction" role="doc-biblioref">2018</a>)</span> recommends to add a value of <span class="math inline">\(\tfrac{1}{2}\)</span> to all cells of saturated models (including cells with non-zero counts). For non-saturated models, this correction is too large however, and <span class="citation">Agresti (<a href="#ref-agresti2018introduction" role="doc-biblioref">2018</a>)</span> recommends to add a much smaller value to each cell (e.g. .00000001, or .0001).</p>
+<p>Problems can arise when tables have many small counts. This can happen when the total sample size is small, or when the number of cells in the table is relatively large compared to the total number of observations. A particular problem is when cells are empty (have a count of 0). As <span class="math inline">\(\log(0) = -\infty\)</span> this may lead to problems estimating the parameters (the estimates may become infinite). A <em>structural zero</em> refers to a case where the expected count for a cell is truly zero, because a combination of values can not occur (i.e. the probability of that combination equals 0). Such cells should be ignored (removed) from the analysis. A <em>sampling zero</em> occurs when the expected count is larger than 0, but a particular combination has not been observed in the data due to chance. For such cells, a correction factor may be applied. When zero-count cells are present, <span class="citation">Agresti (<a href="#ref-agresti2018introduction">2018</a>)</span> recommends to add a value of <span class="math inline">\(\tfrac{1}{2}\)</span> to all cells of saturated models (including cells with non-zero counts). For non-saturated models, this correction is too large however, and <span class="citation">Agresti (<a href="#ref-agresti2018introduction">2018</a>)</span> recommends to add a much smaller value to each cell (e.g. .00000001, or .0001).</p>
 <!-- But even when not zero, cells with much smaller counts than others can also have undue influence on the analysis. -->
 </div>
 </div>
@@ -2962,7 +2651,7 @@ where $p(Y_{i,j} = 1)$ is the probability that person $i$ answers item $j$ corre
 </div>
 <div id="further-reading" class="section level2 hasAnchor" number="12.11">
 <h2><span class="header-section-number">12.11</span> Further reading<a href="ch-generalized-linear-models.html#further-reading" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>This chapter can only provide an introduction to generalized linear models. <!--I did my best in providing the basics and highlighting important issues.--> Whole books have been written on the topic. If you want to read more about generalized linear models, <span class="citation">Agresti (<a href="#ref-agresti2018introduction" role="doc-biblioref">2018</a>)</span> provides a good and relatively readable introduction. <span class="citation">Dobson &amp; Barnett (<a href="#ref-dobson2018introduction" role="doc-biblioref">2018</a>)</span> provides a more succinct and technical text. <span class="citation">Fox (<a href="#ref-fox2015applied" role="doc-biblioref">2015</a>)</span> provides an extensive and unified account of the GLM and extensions into generalized linear models, covering much more ground than I am able to do here. There are also sources covering more specialized topics. <span class="citation">Hosmer, Lemeshow, &amp; Sturdivant (<a href="#ref-hosmer2013applied" role="doc-biblioref">2013</a>)</span> offer a readable and practical book on logistic regression. <span class="citation">Wickens (<a href="#ref-wickens2014multiway" role="doc-biblioref">2014</a>)</span> provides a very extensive book on log-linear models.</p>
+<p>This chapter can only provide an introduction to generalized linear models. <!--I did my best in providing the basics and highlighting important issues.--> Whole books have been written on the topic. If you want to read more about generalized linear models, <span class="citation">Agresti (<a href="#ref-agresti2018introduction">2018</a>)</span> provides a good and relatively readable introduction. <span class="citation">Dobson &amp; Barnett (<a href="#ref-dobson2018introduction">2018</a>)</span> provides a more succinct and technical text. <span class="citation">Fox (<a href="#ref-fox2015applied">2015</a>)</span> provides an extensive and unified account of the GLM and extensions into generalized linear models, covering much more ground than I am able to do here. There are also sources covering more specialized topics. <span class="citation">Hosmer, Lemeshow, &amp; Sturdivant (<a href="#ref-hosmer2013applied">2013</a>)</span> offer a readable and practical book on logistic regression. <span class="citation">Wickens (<a href="#ref-wickens2014multiway">2014</a>)</span> provides a very extensive book on log-linear models.</p>
 
 </div>
 </div>

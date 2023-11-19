@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 6 Moderation and mediation | Statistics: Data analysis and modelling</title>
   <meta name="description" content="A book about statistics for data analysis, with a main focus on statistical modelling." />
-  <meta name="generator" content="bookdown 0.29 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.36 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 6 Moderation and mediation | Statistics: Data analysis and modelling" />
   <meta property="og:type" content="book" />
@@ -23,7 +23,7 @@
 <meta name="author" content="Maarten Speekenbrink" />
 
 
-<meta name="date" content="2022-12-11" />
+<meta name="date" content="2023-11-19" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -52,382 +52,49 @@
 <link href="book_assets/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
 <link href="book_assets/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
 <script src="book_assets/anchor-sections-1.1.0/anchor-sections.js"></script>
-<script src="book_assets/htmlwidgets-1.5.4/htmlwidgets.js"></script>
+<script src="book_assets/htmlwidgets-1.6.2/htmlwidgets.js"></script>
 <script src="book_assets/viz-1.8.2/viz.js"></script>
 <link href="book_assets/DiagrammeR-styles-0.2/styles.css" rel="stylesheet" />
-<script src="book_assets/grViz-binding-1.0.9/grViz.js"></script>
-<script src="book_assets/plotly-binding-4.10.0/plotly.js"></script>
+<script src="book_assets/grViz-binding-1.0.10/grViz.js"></script>
+<script src="book_assets/plotly-binding-4.10.3/plotly.js"></script>
 <script src="book_assets/typedarray-0.1/typedarray.min.js"></script>
 <link href="book_assets/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet" />
 <script src="book_assets/crosstalk-1.2.0/js/crosstalk.min.js"></script>
-<link href="book_assets/plotly-htmlwidgets-css-2.5.1/plotly-htmlwidgets.css" rel="stylesheet" />
-<script src="book_assets/plotly-main-2.5.1/plotly-latest.min.js"></script>
+<link href="book_assets/plotly-htmlwidgets-css-2.11.1/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="book_assets/plotly-main-2.11.1/plotly-latest.min.js"></script>
 <link href="book_assets/combineWidgetStyle-0.1/combineWidgets.css" rel="stylesheet" />
 <script src="book_assets/combineWidgets-binding-0.11.1/combineWidgets.js"></script>
-<script src="book_assets/rglWebGL-binding-0.110.2/rglWebGL.js"></script>
-<link href="book_assets/rglwidgetClass-0.110.2/rgl.css" rel="stylesheet" />
-<script src="book_assets/rglwidgetClass-0.110.2/rglClass.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.110.2/utils.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.110.2/buffer.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.110.2/subscenes.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.110.2/shaders.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.110.2/textures.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.110.2/projection.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.110.2/mouse.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.110.2/init.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.110.2/pieces.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.110.2/draw.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.110.2/controls.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.110.2/selection.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.110.2/rglTimer.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.110.2/pretty.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.110.2/axes.src.js"></script>
-<script src="book_assets/rglwidgetClass-0.110.2/animation.src.js"></script>
-<!--html_preserve--><script type = "text/plain" id = "rgl-vertex-shader">
-#line 2 1
-// File 1 is the vertex shader
-#ifdef GL_ES
-#ifdef GL_FRAGMENT_PRECISION_HIGH
-precision highp float;
-#else
-precision mediump float;
-#endif
-#endif
-
-attribute vec3 aPos;
-attribute vec4 aCol;
-uniform mat4 mvMatrix;
-uniform mat4 prMatrix;
-varying vec4 vCol;
-varying vec4 vPosition;
-
-#ifdef NEEDS_VNORMAL
-attribute vec3 aNorm;
-uniform mat4 normMatrix;
-varying vec4 vNormal;
-#endif
-
-#if defined(HAS_TEXTURE) || defined (IS_TEXT)
-attribute vec2 aTexcoord;
-varying vec2 vTexcoord;
-#endif
-
-#ifdef FIXED_SIZE
-uniform vec3 textScale;
-#endif
-
-#ifdef FIXED_QUADS
-attribute vec3 aOfs;
-#endif
-
-#ifdef IS_TWOSIDED
-#ifdef HAS_NORMALS
-varying float normz;
-uniform mat4 invPrMatrix;
-#else
-attribute vec3 aPos1;
-attribute vec3 aPos2;
-varying float normz;
-#endif
-#endif // IS_TWOSIDED
-
-#ifdef FAT_LINES
-attribute vec3 aNext;
-attribute vec2 aPoint;
-varying vec2 vPoint;
-varying float vLength;
-uniform float uAspect;
-uniform float uLwd;
-#endif
-
-
-void main(void) {
-  
-#ifndef IS_BRUSH
-#if defined(NCLIPPLANES) || !defined(FIXED_QUADS) || defined(HAS_FOG)
-  vPosition = mvMatrix * vec4(aPos, 1.);
-#endif
-  
-#ifndef FIXED_QUADS
-  gl_Position = prMatrix * vPosition;
-#endif
-#endif // !IS_BRUSH
-  
-#ifdef IS_POINTS
-  gl_PointSize = POINTSIZE;
-#endif
-  
-  vCol = aCol;
-  
-#ifdef NEEDS_VNORMAL
-  vNormal = normMatrix * vec4(-aNorm, dot(aNorm, aPos));
-#endif
-  
-#ifdef IS_TWOSIDED
-#ifdef HAS_NORMALS
-  /* normz should be calculated *after* projection */
-  normz = (invPrMatrix*vNormal).z;
-#else
-  vec4 pos1 = prMatrix*(mvMatrix*vec4(aPos1, 1.));
-  pos1 = pos1/pos1.w - gl_Position/gl_Position.w;
-  vec4 pos2 = prMatrix*(mvMatrix*vec4(aPos2, 1.));
-  pos2 = pos2/pos2.w - gl_Position/gl_Position.w;
-  normz = pos1.x*pos2.y - pos1.y*pos2.x;
-#endif
-#endif // IS_TWOSIDED
-  
-#ifdef NEEDS_VNORMAL
-  vNormal = vec4(normalize(vNormal.xyz/vNormal.w), 1);
-#endif
-  
-#if defined(HAS_TEXTURE) || defined(IS_TEXT)
-  vTexcoord = aTexcoord;
-#endif
-  
-#if defined(FIXED_SIZE) && !defined(ROTATING)
-  vec4 pos = prMatrix * mvMatrix * vec4(aPos, 1.);
-  pos = pos/pos.w;
-  gl_Position = pos + vec4(aOfs*textScale, 0.);
-#endif
-  
-#if defined(IS_SPRITES) && !defined(FIXED_SIZE)
-  vec4 pos = mvMatrix * vec4(aPos, 1.);
-  pos = pos/pos.w + vec4(aOfs,  0.);
-  gl_Position = prMatrix*pos;
-#endif
-  
-#ifdef FAT_LINES
-  /* This code was inspired by Matt Deslauriers' code in 
-   https://mattdesl.svbtle.com/drawing-lines-is-hard */
-  vec2 aspectVec = vec2(uAspect, 1.0);
-  mat4 projViewModel = prMatrix * mvMatrix;
-  vec4 currentProjected = projViewModel * vec4(aPos, 1.0);
-  currentProjected = currentProjected/currentProjected.w;
-  vec4 nextProjected = projViewModel * vec4(aNext, 1.0);
-  vec2 currentScreen = currentProjected.xy * aspectVec;
-  vec2 nextScreen = (nextProjected.xy / nextProjected.w) * aspectVec;
-  float len = uLwd;
-  vec2 dir = vec2(1.0, 0.0);
-  vPoint = aPoint;
-  vLength = length(nextScreen - currentScreen)/2.0;
-  vLength = vLength/(vLength + len);
-  if (vLength > 0.0) {
-    dir = normalize(nextScreen - currentScreen);
-  }
-  vec2 normal = vec2(-dir.y, dir.x);
-  dir.x /= uAspect;
-  normal.x /= uAspect;
-  vec4 offset = vec4(len*(normal*aPoint.x*aPoint.y - dir), 0.0, 0.0);
-  gl_Position = currentProjected + offset;
-#endif
-  
-#ifdef IS_BRUSH
-  gl_Position = vec4(aPos, 1.);
-#endif
-}
-</script>
-<script type = "text/plain" id = "rgl-fragment-shader">
-#line 2 2
-// File 2 is the fragment shader
-#ifdef GL_ES
-#ifdef GL_FRAGMENT_PRECISION_HIGH
-precision highp float;
-#else
-precision mediump float;
-#endif
-#endif
-varying vec4 vCol; // carries alpha
-varying vec4 vPosition;
-#if defined(HAS_TEXTURE) || defined (IS_TEXT)
-varying vec2 vTexcoord;
-uniform sampler2D uSampler;
-#endif
-
-#ifdef HAS_FOG
-uniform int uFogMode;
-uniform vec3 uFogColor;
-uniform vec4 uFogParms;
-#endif
-
-#if defined(IS_LIT) && !defined(FIXED_QUADS)
-varying vec4 vNormal;
-#endif
-
-#if NCLIPPLANES > 0
-uniform vec4 vClipplane[NCLIPPLANES];
-#endif
-
-#if NLIGHTS > 0
-uniform mat4 mvMatrix;
-#endif
-
-#ifdef IS_LIT
-uniform vec3 emission;
-uniform float shininess;
-#if NLIGHTS > 0
-uniform vec3 ambient[NLIGHTS];
-uniform vec3 specular[NLIGHTS]; // light*material
-uniform vec3 diffuse[NLIGHTS];
-uniform vec3 lightDir[NLIGHTS];
-uniform bool viewpoint[NLIGHTS];
-uniform bool finite[NLIGHTS];
-#endif
-#endif // IS_LIT
-
-#ifdef IS_TWOSIDED
-uniform bool front;
-varying float normz;
-#endif
-
-#ifdef FAT_LINES
-varying vec2 vPoint;
-varying float vLength;
-#endif
-
-void main(void) {
-  vec4 fragColor;
-#ifdef FAT_LINES
-  vec2 point = vPoint;
-  bool neg = point.y < 0.0;
-  point.y = neg ? (point.y + vLength)/(1.0 - vLength) :
-                 -(point.y - vLength)/(1.0 - vLength);
-#if defined(IS_TRANSPARENT) && defined(IS_LINESTRIP)
-  if (neg && length(point) <= 1.0) discard;
-#endif
-  point.y = min(point.y, 0.0);
-  if (length(point) > 1.0) discard;
-#endif // FAT_LINES
-  
-#ifdef ROUND_POINTS
-  vec2 coord = gl_PointCoord - vec2(0.5);
-  if (length(coord) > 0.5) discard;
-#endif
-  
-#if NCLIPPLANES > 0
-  for (int i = 0; i < NCLIPPLANES; i++)
-    if (dot(vPosition, vClipplane[i]) < 0.0) discard;
-#endif
-    
-#ifdef FIXED_QUADS
-    vec3 n = vec3(0., 0., 1.);
-#elif defined(IS_LIT)
-    vec3 n = normalize(vNormal.xyz);
-#endif
-    
-#ifdef IS_TWOSIDED
-    if ((normz <= 0.) != front) discard;
-#endif
-    
-#ifdef IS_LIT
-    vec3 eye = normalize(-vPosition.xyz/vPosition.w);
-    vec3 lightdir;
-    vec4 colDiff;
-    vec3 halfVec;
-    vec4 lighteffect = vec4(emission, 0.);
-    vec3 col;
-    float nDotL;
-#ifdef FIXED_QUADS
-    n = -faceforward(n, n, eye);
-#endif
-    
-#if NLIGHTS > 0
-    for (int i=0;i<NLIGHTS;i++) {
-      colDiff = vec4(vCol.rgb * diffuse[i], vCol.a);
-      lightdir = lightDir[i];
-      if (!viewpoint[i])
-        lightdir = (mvMatrix * vec4(lightdir, 1.)).xyz;
-      if (!finite[i]) {
-        halfVec = normalize(lightdir + eye);
-      } else {
-        lightdir = normalize(lightdir - vPosition.xyz/vPosition.w);
-        halfVec = normalize(lightdir + eye);
-      }
-      col = ambient[i];
-      nDotL = dot(n, lightdir);
-      col = col + max(nDotL, 0.) * colDiff.rgb;
-      col = col + pow(max(dot(halfVec, n), 0.), shininess) * specular[i];
-      lighteffect = lighteffect + vec4(col, colDiff.a);
-    }
-#endif
-    
-#else // not IS_LIT
-    vec4 colDiff = vCol;
-    vec4 lighteffect = colDiff;
-#endif
-    
-#ifdef IS_TEXT
-    vec4 textureColor = lighteffect*texture2D(uSampler, vTexcoord);
-#endif
-    
-#ifdef HAS_TEXTURE
-#ifdef TEXTURE_rgb
-    vec4 textureColor = lighteffect*vec4(texture2D(uSampler, vTexcoord).rgb, 1.);
-#endif
-    
-#ifdef TEXTURE_rgba
-    vec4 textureColor = lighteffect*texture2D(uSampler, vTexcoord);
-#endif
-    
-#ifdef TEXTURE_alpha
-    vec4 textureColor = texture2D(uSampler, vTexcoord);
-    float luminance = dot(vec3(1.,1.,1.), textureColor.rgb)/3.;
-    textureColor =  vec4(lighteffect.rgb, lighteffect.a*luminance);
-#endif
-    
-#ifdef TEXTURE_luminance
-    vec4 textureColor = vec4(lighteffect.rgb*dot(texture2D(uSampler, vTexcoord).rgb, vec3(1.,1.,1.))/3., lighteffect.a);
-#endif
-    
-#ifdef TEXTURE_luminance_alpha
-    vec4 textureColor = texture2D(uSampler, vTexcoord);
-    float luminance = dot(vec3(1.,1.,1.),textureColor.rgb)/3.;
-    textureColor = vec4(lighteffect.rgb*luminance, lighteffect.a*textureColor.a);
-#endif
-    
-    fragColor = textureColor;
-
-#elif defined(IS_TEXT)
-    if (textureColor.a < 0.1)
-      discard;
-    else
-      fragColor = textureColor;
-#else
-    fragColor = lighteffect;
-#endif // HAS_TEXTURE
-    
-#ifdef HAS_FOG
-    // uFogParms elements: x = near, y = far, z = fogscale, w = (1-sin(FOV/2))/(1+sin(FOV/2))
-    // In Exp and Exp2: use density = density/far
-    // fogF will be the proportion of fog
-    // Initialize it to the linear value
-    float fogF;
-    if (uFogMode > 0) {
-      fogF = (uFogParms.y - vPosition.z/vPosition.w)/(uFogParms.y - uFogParms.x);
-      if (uFogMode > 1)
-        fogF = mix(uFogParms.w, 1.0, fogF);
-      fogF = fogF*uFogParms.z;
-      if (uFogMode == 2)
-        fogF = 1.0 - exp(-fogF);
-      // Docs are wrong: use (density*c)^2, not density*c^2
-      // https://gitlab.freedesktop.org/mesa/mesa/-/blob/master/src/mesa/swrast/s_fog.c#L58
-      else if (uFogMode == 3)
-        fogF = 1.0 - exp(-fogF*fogF);
-      fogF = clamp(fogF, 0.0, 1.0);
-      gl_FragColor = vec4(mix(fragColor.rgb, uFogColor, fogF), fragColor.a);
-    } else gl_FragColor = fragColor;
-#else
-    gl_FragColor = fragColor;
-#endif // HAS_FOG
-    
-}
-</script><!--/html_preserve-->
-<script src="book_assets/CanvasMatrix4-0.110.2/CanvasMatrix.src.js"></script>
-<script src="book_assets/rglPlayer-binding-0.110.2/rglPlayer.js"></script>
+<script src="book_assets/rglWebGL-binding-1.2.1/rglWebGL.js"></script>
+<link href="book_assets/rglwidgetClass-1.2.1/rgl.css" rel="stylesheet" />
+<script src="book_assets/rglwidgetClass-1.2.1/rglClass.src.js"></script>
+<script src="book_assets/rglwidgetClass-1.2.1/utils.src.js"></script>
+<script src="book_assets/rglwidgetClass-1.2.1/buffer.src.js"></script>
+<script src="book_assets/rglwidgetClass-1.2.1/subscenes.src.js"></script>
+<script src="book_assets/rglwidgetClass-1.2.1/shaders.src.js"></script>
+<script src="book_assets/rglwidgetClass-1.2.1/shadersrc.src.js"></script>
+<script src="book_assets/rglwidgetClass-1.2.1/textures.src.js"></script>
+<script src="book_assets/rglwidgetClass-1.2.1/projection.src.js"></script>
+<script src="book_assets/rglwidgetClass-1.2.1/mouse.src.js"></script>
+<script src="book_assets/rglwidgetClass-1.2.1/init.src.js"></script>
+<script src="book_assets/rglwidgetClass-1.2.1/pieces.src.js"></script>
+<script src="book_assets/rglwidgetClass-1.2.1/draw.src.js"></script>
+<script src="book_assets/rglwidgetClass-1.2.1/controls.src.js"></script>
+<script src="book_assets/rglwidgetClass-1.2.1/selection.src.js"></script>
+<script src="book_assets/rglwidgetClass-1.2.1/rglTimer.src.js"></script>
+<script src="book_assets/rglwidgetClass-1.2.1/pretty.src.js"></script>
+<script src="book_assets/rglwidgetClass-1.2.1/axes.src.js"></script>
+<script src="book_assets/rglwidgetClass-1.2.1/animation.src.js"></script>
+<script src="book_assets/CanvasMatrix4-1.2.1/CanvasMatrix.src.js"></script>
+<script src="book_assets/rglPlayer-binding-1.2.1/rglPlayer.js"></script>
 <script src="book_assets/kePrint-0.0.1/kePrint.js"></script>
 <link href="book_assets/lightable-0.0.1/lightable.css" rel="stylesheet" />
 
 
 
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
 <style type="text/css">
 /* Used with Pandoc 2.11+ new --citeproc when CSL is used */
 div.csl-bib-body { }
@@ -738,21 +405,43 @@ div.csl-indent {
 </ul></li>
 <li class="chapter" data-level="13.5" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#model-fit"><i class="fa fa-check"></i><b>13.5</b> Model fit</a>
 <ul>
-<li class="chapter" data-level="13.5.1" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#fit-indices"><i class="fa fa-check"></i><b>13.5.1</b> Fit indices</a></li>
-<li class="chapter" data-level="13.5.2" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#comparative-fit-to-a-baseline"><i class="fa fa-check"></i><b>13.5.2</b> Comparative fit to a baseline</a></li>
-<li class="chapter" data-level="13.5.3" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#errors-of-approximation"><i class="fa fa-check"></i><b>13.5.3</b> Errors of approximation</a></li>
+<li class="chapter" data-level="13.5.1" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#test-of-overall-model-fit"><i class="fa fa-check"></i><b>13.5.1</b> Test of overall model fit</a></li>
+<li class="chapter" data-level="13.5.2" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#approximate-fit-indices"><i class="fa fa-check"></i><b>13.5.2</b> Approximate fit indices</a></li>
 </ul></li>
-<li class="chapter" data-level="13.6" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#model-comparison-1"><i class="fa fa-check"></i><b>13.6</b> Model comparison</a></li>
-<li class="chapter" data-level="13.7" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#evaluation-and-selection-of-the-mediation-path-models"><i class="fa fa-check"></i><b>13.7</b> Evaluation and selection of the mediation path models</a></li>
-<li class="chapter" data-level="13.8" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#a-more-complex-path-model"><i class="fa fa-check"></i><b>13.8</b> A more complex path model</a></li>
-<li class="chapter" data-level="13.9" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#principles-in-constructing-path-models"><i class="fa fa-check"></i><b>13.9</b> Principles in constructing path models</a>
+<li class="chapter" data-level="13.6" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#modification-indices"><i class="fa fa-check"></i><b>13.6</b> Modification indices</a></li>
+<li class="chapter" data-level="13.7" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#model-comparison-1"><i class="fa fa-check"></i><b>13.7</b> Model comparison</a></li>
+<li class="chapter" data-level="13.8" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#evaluation-and-selection-of-the-mediation-path-models"><i class="fa fa-check"></i><b>13.8</b> Evaluation and selection of the mediation path models</a></li>
+<li class="chapter" data-level="13.9" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#a-more-complex-path-model"><i class="fa fa-check"></i><b>13.9</b> A more complex path model</a></li>
+<li class="chapter" data-level="13.10" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#principles-in-constructing-path-models"><i class="fa fa-check"></i><b>13.10</b> Principles in constructing path models</a>
 <ul>
-<li class="chapter" data-level="13.9.1" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#identifiability"><i class="fa fa-check"></i><b>13.9.1</b> Identifiability</a></li>
+<li class="chapter" data-level="13.10.1" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#identifiability"><i class="fa fa-check"></i><b>13.10.1</b> Identifiability</a></li>
 </ul></li>
-<li class="chapter" data-level="13.10" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#model-equivalence"><i class="fa fa-check"></i><b>13.10</b> Model equivalence</a></li>
-<li class="chapter" data-level="13.11" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#correlation-vs-causation"><i class="fa fa-check"></i><b>13.11</b> Correlation vs causation</a></li>
+<li class="chapter" data-level="13.11" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#model-equivalence"><i class="fa fa-check"></i><b>13.11</b> Model equivalence</a></li>
+<li class="chapter" data-level="13.12" data-path="ch-SEM-path-models.html"><a href="ch-SEM-path-models.html#correlation-vs-causation"><i class="fa fa-check"></i><b>13.12</b> Correlation vs causation</a></li>
 </ul></li>
-<li class="chapter" data-level="14" data-path="ch-SEM-latent-variable-models.html"><a href="ch-SEM-latent-variable-models.html"><i class="fa fa-check"></i><b>14</b> Latent variable models (SEM 2)</a></li>
+<li class="chapter" data-level="14" data-path="ch-SEM-latent-variable-models.html"><a href="ch-SEM-latent-variable-models.html"><i class="fa fa-check"></i><b>14</b> Latent variable models (SEM 2)</a>
+<ul>
+<li class="chapter" data-level="14.1" data-path="ch-SEM-latent-variable-models.html"><a href="ch-SEM-latent-variable-models.html#measurement-of-latent-variables"><i class="fa fa-check"></i><b>14.1</b> Measurement of latent variables</a>
+<ul>
+<li class="chapter" data-level="14.1.1" data-path="ch-SEM-latent-variable-models.html"><a href="ch-SEM-latent-variable-models.html#scaling-and-identification"><i class="fa fa-check"></i><b>14.1.1</b> Scaling and identification</a></li>
+</ul></li>
+<li class="chapter" data-level="14.2" data-path="ch-SEM-latent-variable-models.html"><a href="ch-SEM-latent-variable-models.html#confirmatory-factor-analysis"><i class="fa fa-check"></i><b>14.2</b> Confirmatory factor analysis</a>
+<ul>
+<li class="chapter" data-level="14.2.1" data-path="ch-SEM-latent-variable-models.html"><a href="ch-SEM-latent-variable-models.html#a-single-factor-model"><i class="fa fa-check"></i><b>14.2.1</b> A single factor model</a></li>
+</ul></li>
+<li class="chapter" data-level="14.3" data-path="ch-SEM-latent-variable-models.html"><a href="ch-SEM-latent-variable-models.html#full-hierarchical-factor-model-for-the-bfi-2"><i class="fa fa-check"></i><b>14.3</b> Full hierarchical factor model for the BFI-2</a>
+<ul>
+<li class="chapter" data-level="14.3.1" data-path="ch-SEM-latent-variable-models.html"><a href="ch-SEM-latent-variable-models.html#indentification"><i class="fa fa-check"></i><b>14.3.1</b> Indentification</a></li>
+</ul></li>
+<li class="chapter" data-level="14.4" data-path="ch-SEM-latent-variable-models.html"><a href="ch-SEM-latent-variable-models.html#multiple-groups-and-measurement-invariance"><i class="fa fa-check"></i><b>14.4</b> Multiple groups and measurement invariance</a></li>
+<li class="chapter" data-level="14.5" data-path="ch-SEM-latent-variable-models.html"><a href="ch-SEM-latent-variable-models.html#exploratory-factor-and-principal-components-analysis"><i class="fa fa-check"></i><b>14.5</b> Exploratory factor and principal components analysis</a>
+<ul>
+<li class="chapter" data-level="14.5.1" data-path="ch-SEM-latent-variable-models.html"><a href="ch-SEM-latent-variable-models.html#determining-the-number-of-factors"><i class="fa fa-check"></i><b>14.5.1</b> Determining the number of factors</a></li>
+<li class="chapter" data-level="14.5.2" data-path="ch-SEM-latent-variable-models.html"><a href="ch-SEM-latent-variable-models.html#factor-rotation"><i class="fa fa-check"></i><b>14.5.2</b> Factor rotation</a></li>
+</ul></li>
+<li class="chapter" data-level="14.6" data-path="ch-SEM-latent-variable-models.html"><a href="ch-SEM-latent-variable-models.html#conclusion"><i class="fa fa-check"></i><b>14.6</b> Conclusion</a></li>
+<li class="chapter" data-level="14.7" data-path="ch-SEM-latent-variable-models.html"><a href="ch-SEM-latent-variable-models.html#in-practice-6"><i class="fa fa-check"></i><b>14.7</b> In practice</a></li>
+</ul></li>
 <li class="chapter" data-level="15" data-path="ch-Bayes-estimation.html"><a href="ch-Bayes-estimation.html"><i class="fa fa-check"></i><b>15</b> Introduction to Bayesian estimation</a>
 <ul>
 <li class="chapter" data-level="15.1" data-path="ch-Bayes-estimation.html"><a href="ch-Bayes-estimation.html#fundamentals-of-bayesian-inference"><i class="fa fa-check"></i><b>15.1</b> Fundamentals of Bayesian inference</a>
@@ -784,7 +473,7 @@ div.csl-indent {
 <li class="chapter" data-level="16.5.3" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#results-of-a-nhst-are-often-misinterpreted"><i class="fa fa-check"></i><b>16.5.3</b> Results of a NHST are often misinterpreted</a></li>
 </ul></li>
 <li class="chapter" data-level="16.6" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#to-bayes-or-not-to-bayes-a-pragmatic-view"><i class="fa fa-check"></i><b>16.6</b> To Bayes or not to Bayes? A pragmatic view</a></li>
-<li class="chapter" data-level="16.7" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#in-practice-6"><i class="fa fa-check"></i><b>16.7</b> In practice</a></li>
+<li class="chapter" data-level="16.7" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#in-practice-7"><i class="fa fa-check"></i><b>16.7</b> In practice</a></li>
 <li class="chapter" data-level="16.8" data-path="ch-Bayes-factors.html"><a href="ch-Bayes-factors.html#summary-3"><i class="fa fa-check"></i><b>16.8</b> “Summary”</a></li>
 </ul></li>
 <li class="chapter" data-level="17" data-path="ch-responsible-data-analyst.html"><a href="ch-responsible-data-analyst.html"><i class="fa fa-check"></i><b>17</b> Being a responsible data analyst</a>
@@ -831,7 +520,7 @@ Figure 6.1: Graphical depiction of the difference between moderation and mediati
 <h2><span class="header-section-number">6.1</span> Moderation<a href="ch-moderation-mediation.html#moderation" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <div id="physical-attractiveness-and-intelligence-in-speed-dating" class="section level3 hasAnchor" number="6.1.1">
 <h3><span class="header-section-number">6.1.1</span> Physical attractiveness and intelligence in speed dating<a href="ch-moderation-mediation.html#physical-attractiveness-and-intelligence-in-speed-dating" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p><span class="citation">Fisman, Iyengar, Kamenica, &amp; Simonson (<a href="#ref-fisman2006gender" role="doc-biblioref">2006</a>)</span> conducted a large scale experiment<a href="#fn15" class="footnote-ref" id="fnref15"><sup>15</sup></a> on dating behaviour. They placed their participants in a speed dating context, where they were randomly matched with a number of potential partners (between 5 and 20) and could converse for four minutes. As part of the study, after each meeting, participants rated how much they liked their speed dating partners, as well as more specifically on their attractiveness, sincerity, intelligence, fun, and ambition. We will focus in particular on ratings of physical attractiveness, fun, and intelligence, and how these are related to the general liking of a person. Ratings were given on a 10-point scale, from 1 (“awful”) to 10 (“great”). A multiple regression analysis predicting general liking from attractiveness, fun, and intelligence (Table <a href="ch-moderation-mediation.html#tab:multiple-regression-speed-dating-just-main-effects">6.1</a>) shows that all three predictors have a significant and positive relation with general liking.</p>
+<p><span class="citation">Fisman, Iyengar, Kamenica, &amp; Simonson (<a href="#ref-fisman2006gender">2006</a>)</span> conducted a large scale experiment<a href="#fn15" class="footnote-ref" id="fnref15"><sup>15</sup></a> on dating behaviour. They placed their participants in a speed dating context, where they were randomly matched with a number of potential partners (between 5 and 20) and could converse for four minutes. As part of the study, after each meeting, participants rated how much they liked their speed dating partners, as well as more specifically on their attractiveness, sincerity, intelligence, fun, and ambition. We will focus in particular on ratings of physical attractiveness, fun, and intelligence, and how these are related to the general liking of a person. Ratings were given on a 10-point scale, from 1 (“awful”) to 10 (“great”). A multiple regression analysis predicting general liking from attractiveness, fun, and intelligence (Table <a href="ch-moderation-mediation.html#tab:multiple-regression-speed-dating-just-main-effects">6.1</a>) shows that all three predictors have a significant and positive relation with general liking.</p>
 <table>
 <caption><span id="tab:multiple-regression-speed-dating-just-main-effects">Table 6.1: </span>Multiple regression predicting liking from attractiveness, intelligence, and fun.</caption>
 <colgroup>
@@ -1192,7 +881,7 @@ Figure 6.3: Liking as a function of centered attractiveness for different levels
 <h2><span class="header-section-number">6.2</span> Mediation<a href="ch-moderation-mediation.html#sec-glm-mediation" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <div id="legacy-motives-and-pro-environmental-behaviours" class="section level3 hasAnchor" number="6.2.1">
 <h3><span class="header-section-number">6.2.1</span> Legacy motives and pro-environmental behaviours<a href="ch-moderation-mediation.html#legacy-motives-and-pro-environmental-behaviours" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p><span class="citation">Zaval, Markowitz, &amp; Weber (<a href="#ref-zaval_how_2015" role="doc-biblioref">2015</a>)</span> investigated whether there is a relation between individuals’ motivation to leave a positive legacy in the world, and their pro-environmental behaviours and intentions. The authors reasoned that long time horizons and social distance are key psychological barriers to pro-environmental action, particularly regarding climate change. But if people with a legacy motivation put more emphasis on future others than those without such motivation, they may also be motivated to behave more pro-environmentally in order to benefit those future others. In a pilot study, they recruited a diverse sample of 245 U.S. participants through Amazon’s Mechanical Turk. Participants answered three sets of questions: one assessing individual differences in legacy motives, one assessing their beliefs about climate change, and one assessing their willingness to take pro-environmental action. Following these sets of questions, participants were told they would be entered into a lottery to win a $10 bonus. They were then given the option to donate part (between $0 and $10) of their bonus to an environmental cause (Trees for the Future). This last measure was meant to test whether people actually act on any intention to act pro-environmentally.</p>
+<p><span class="citation">Zaval, Markowitz, &amp; Weber (<a href="#ref-zaval_how_2015">2015</a>)</span> investigated whether there is a relation between individuals’ motivation to leave a positive legacy in the world, and their pro-environmental behaviours and intentions. The authors reasoned that long time horizons and social distance are key psychological barriers to pro-environmental action, particularly regarding climate change. But if people with a legacy motivation put more emphasis on future others than those without such motivation, they may also be motivated to behave more pro-environmentally in order to benefit those future others. In a pilot study, they recruited a diverse sample of 245 U.S. participants through Amazon’s Mechanical Turk. Participants answered three sets of questions: one assessing individual differences in legacy motives, one assessing their beliefs about climate change, and one assessing their willingness to take pro-environmental action. Following these sets of questions, participants were told they would be entered into a lottery to win a $10 bonus. They were then given the option to donate part (between $0 and $10) of their bonus to an environmental cause (Trees for the Future). This last measure was meant to test whether people actually act on any intention to act pro-environmentally.</p>
 <p>For ease of analysis, the three sets of questions measuring legacy motive, belief about the reality of climate change, and intention to take pro-environmental action, were transformed into three overall scores by computing the average over the items in each set. After eliminating participants who did not answer all questions, we have data from <span class="math inline">\(n = 237\)</span> participants. Figure <a href="ch-moderation-mediation.html#fig:ggpairs-plot-legacy2015">6.4</a> depicts the pairwise relations between the four variables. As can be seen, all variables are significantly correlated. The relation is most obvious for <span class="math inline">\(\texttt{belief}\)</span> and <span class="math inline">\(\texttt{intention}\)</span>. Looking at the histogram of <span class="math inline">\(\texttt{donation}\)</span>, you can see that although all whole amounts between $0 and $10 have been chosen at least once, it looks like three values were particularly popular, namely $0, $5, and to a lesser extent $10. This results in what looks like a tri-modal distribution. This is not necessarily an issue when modelling <span class="math inline">\(\texttt{donation}\)</span> with a regression model, as the assumptions in a regression model concern the <em>prediction errors</em>, and not the dependent variable itself.</p>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:ggpairs-plot-legacy2015"></span>
 <img src="06-GLM-moderation_files/figure-html/ggpairs-plot-legacy2015-1.svg" alt="Pairwise plots for legacy motives, climate change belief, intention for pro-environmental action, and donations." width="672" />
@@ -1200,11 +889,11 @@ Figure 6.3: Liking as a function of centered attractiveness for different levels
 Figure 6.4: Pairwise plots for legacy motives, climate change belief, intention for pro-environmental action, and donations.
 </p>
 </div>
-<p>According to the <a href="https://en.wikipedia.org/wiki/Theory_of_planned_behavior">Theory of Planned Behavior</a> <span class="citation">(<a href="#ref-ajzen1991theory" role="doc-biblioref">Ajzen, 1991</a>)</span>, attitudes and norms shape a person’s behavioural intentions, which in turn result in behaviour itself. In the context of the present example, that could mean that legacy motive and climate change beliefs do not directly determine whether someone behaves in a pro-environmental way. Rather, these factors shape a person’s intentions towards pro-environmental behaviour, which in turn may actually lead to said pro-environmental behaviour. This is an example of an assumed <strong>causal chain</strong>, where legacy motive (partly) determines behavioural intention, and intention determines behaviour. <strong>Mediation analysis</strong> is aimed at detecting an <strong>indirect effect</strong> of a predictor (e.g. <span class="math inline">\(\texttt{legacy}\)</span>) on the dependent variable (e.g. <span class="math inline">\(\texttt{donation}\)</span>), via another variable called the <strong>mediator</strong> (e.g. <span class="math inline">\(\texttt{intention}\)</span>), which is the middle variable in the causal chain.</p>
+<p>According to the <a href="https://en.wikipedia.org/wiki/Theory_of_planned_behavior">Theory of Planned Behavior</a> <span class="citation">(<a href="#ref-ajzen1991theory">Ajzen, 1991</a>)</span>, attitudes and norms shape a person’s behavioural intentions, which in turn result in behaviour itself. In the context of the present example, that could mean that legacy motive and climate change beliefs do not directly determine whether someone behaves in a pro-environmental way. Rather, these factors shape a person’s intentions towards pro-environmental behaviour, which in turn may actually lead to said pro-environmental behaviour. This is an example of an assumed <strong>causal chain</strong>, where legacy motive (partly) determines behavioural intention, and intention determines behaviour. <strong>Mediation analysis</strong> is aimed at detecting an <strong>indirect effect</strong> of a predictor (e.g. <span class="math inline">\(\texttt{legacy}\)</span>) on the dependent variable (e.g. <span class="math inline">\(\texttt{donation}\)</span>), via another variable called the <strong>mediator</strong> (e.g. <span class="math inline">\(\texttt{intention}\)</span>), which is the middle variable in the causal chain.</p>
 </div>
 <div id="causal-steps" class="section level3 hasAnchor" number="6.2.2">
 <h3><span class="header-section-number">6.2.2</span> Causal steps<a href="ch-moderation-mediation.html#causal-steps" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>A traditional method to assess mediation is the so-called <strong>causal steps</strong> approach <span class="citation">(<a href="#ref-baron1986moderator" role="doc-biblioref">Baron &amp; Kenny, 1986</a>)</span>. The basic idea behind the causal steps approach is as follows: if there is a causal chain from predictor (<span class="math inline">\(X\)</span>) to mediator (<span class="math inline">\(M\)</span>) to dependent variable (<span class="math inline">\(Y\)</span>), then, ignoring the mediator for the moment, we should be able to see a relation between the predictor and dependent variable. This relation reflects the indirect effect of the predictor on the dependent variable. We should also be able to detect an effect of the predictor on the mediator, as well as an effect of the mediator on the dependent variable. Crucially, if there is a true causal chain, then the predictor should not offer any additional predictive power over the mediator. Because the effect of the predictor is assumed to go only “through” the mediator, once we know the value of the mediator, this should be all we need to predict the dependent variable. In more fancy statistical terms, this means that conditional on the mediator, the dependent variable is independent of the predictor, i.e. <span class="math inline">\(p(Y \mid M, X) = p(Y \mid M)\)</span>. In the context of a multiple regression model, we could say that in a model where we predict <span class="math inline">\(Y\)</span> from <span class="math inline">\(M\)</span>, the predictor <span class="math inline">\(X\)</span> would not have a unique effect on <span class="math inline">\(Y\)</span> (i.e. its slope would equal <span class="math inline">\(\beta_X = 0\)</span>).</p>
+<p>A traditional method to assess mediation is the so-called <strong>causal steps</strong> approach <span class="citation">(<a href="#ref-baron1986moderator">Baron &amp; Kenny, 1986</a>)</span>. The basic idea behind the causal steps approach is as follows: if there is a causal chain from predictor (<span class="math inline">\(X\)</span>) to mediator (<span class="math inline">\(M\)</span>) to dependent variable (<span class="math inline">\(Y\)</span>), then, ignoring the mediator for the moment, we should be able to see a relation between the predictor and dependent variable. This relation reflects the indirect effect of the predictor on the dependent variable. We should also be able to detect an effect of the predictor on the mediator, as well as an effect of the mediator on the dependent variable. Crucially, if there is a true causal chain, then the predictor should not offer any additional predictive power over the mediator. Because the effect of the predictor is assumed to go only “through” the mediator, once we know the value of the mediator, this should be all we need to predict the dependent variable. In more fancy statistical terms, this means that conditional on the mediator, the dependent variable is independent of the predictor, i.e. <span class="math inline">\(p(Y \mid M, X) = p(Y \mid M)\)</span>. In the context of a multiple regression model, we could say that in a model where we predict <span class="math inline">\(Y\)</span> from <span class="math inline">\(M\)</span>, the predictor <span class="math inline">\(X\)</span> would not have a unique effect on <span class="math inline">\(Y\)</span> (i.e. its slope would equal <span class="math inline">\(\beta_X = 0\)</span>).</p>
 <p>The causal steps (Figure <a href="ch-moderation-mediation.html#fig:causal-steps-models">6.5</a>) approach involves assessing a pattern of significant relations in three different regression models. The first model is a simple regression model where we predict <span class="math inline">\(Y\)</span> from <span class="math inline">\(X\)</span>. In this model, we should find evidence for a relation between <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>, meaning that we can reject the null hypothesis that the slope of <span class="math inline">\(X\)</span> on <span class="math inline">\(Y\)</span> (referred to here as <span class="math inline">\(\beta_X = c\)</span>) equals 0. The second model is a simple regression model where we predict <span class="math inline">\(M\)</span> from <span class="math inline">\(X\)</span>. In this model, we should find evidence for a relation between <span class="math inline">\(X\)</span> and <span class="math inline">\(M\)</span>, meaning that we can reject the null hypothesis that the slope of <span class="math inline">\(X\)</span> on <span class="math inline">\(M\)</span> (referred to here as <span class="math inline">\(\beta_X = a\)</span> here) equals 0. The third model is a multiple regression model where we predict <span class="math inline">\(Y\)</span> from both <span class="math inline">\(M\)</span> and <span class="math inline">\(X\)</span>. In this model, we should find evidence for a unique relation between <span class="math inline">\(M\)</span> and <span class="math inline">\(Y\)</span>, meaning that we can reject the null hypothesis that the slope of <span class="math inline">\(M\)</span> on <span class="math inline">\(Y\)</span> (referred to here as <span class="math inline">\(\beta_M = b\)</span> here) equals 0. Controlling for the effect of <span class="math inline">\(M\)</span> on <span class="math inline">\(Y\)</span>, in a true causal chain, there should no longer be evidence for a relation between <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> (as any relation between <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> is captured through <span class="math inline">\(M\)</span>). Hence, we should not be able to reject the null hypothesis that the slope of <span class="math inline">\(X\)</span> on <span class="math inline">\(Y\)</span> in this model (referred to here as <span class="math inline">\(\beta_X = c\)</span>’, to distinguish it from the relation between <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> in the first model, which was labelled as <span class="math inline">\(c\)</span>) equals 0. If this is so, then we speak of <strong>full mediation</strong>. When there is still evidence of a unique relation between <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> in the model that includes <span class="math inline">\(M\)</span>, but the relation is reduced (i.e. <span class="math inline">\(|c&#39;| &lt; |c|\)</span>), we speak of <strong>partial mediation</strong>.</p>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:causal-steps-models"></span>
 <img src="06-GLM-moderation_files/figure-html/causal-steps-models-1.svg" alt="Assessing mediation with the causal steps approach involves testing parameters of three models. MODEL 1 is a simple regression model predicting $Y$ from $X$ and the slope of $X$ ($c$)  should be significant MODEL 2 is a simple regression model predicting $M$ from $X$ and the slope of $X$ ($a$) should be significant. MODEL 3 is a multiple regression model predicting $Y$ from both $X$ and $M$. The slope of $M$ ($b$) should be significant. The slope of $X$ ($c$') should not be significant (&quot;full&quot; mediation) or be substantially smaller in absolute value (&quot;partial&quot; mediation)." width="672" />
@@ -1335,14 +1024,14 @@ Figure 6.5: Assessing mediation with the causal steps approach involves testing 
 </div>
 <div id="estimating-the-mediated-effect" class="section level3 hasAnchor" number="6.2.3">
 <h3><span class="header-section-number">6.2.3</span> Estimating the mediated effect<a href="ch-moderation-mediation.html#estimating-the-mediated-effect" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>One potential problem with the causal steps approach is that it is based on a pattern of significance in four hypothesis tests (one for each parameter <span class="math inline">\(a\)</span>, <span class="math inline">\(b\)</span>, <span class="math inline">\(c\)</span>, and <span class="math inline">\(c&#39;\)</span>). This can result in a rather low power of the procedure <span class="citation">(<a href="#ref-mackinnon2007mediation" role="doc-biblioref">MacKinnon, Fairchild, &amp; Fritz, 2007</a>)</span>, which seems to be particularly related to the requirement of a significant <span class="math inline">\(c\)</span> (the direct effect of <span class="math inline">\(X\)</span> on <span class="math inline">\(Y\)</span> in the model without the mediator).</p>
-<p>An alternative to the causal steps approach is to estimate the mediated (indirect) effect of the predictor on the dependent variable directly. Algebraically, this mediated effect can be worked out as <span class="citation">(<a href="#ref-mackinnon2007mediation" role="doc-biblioref">MacKinnon et al., 2007</a>)</span>:</p>
+<p>One potential problem with the causal steps approach is that it is based on a pattern of significance in four hypothesis tests (one for each parameter <span class="math inline">\(a\)</span>, <span class="math inline">\(b\)</span>, <span class="math inline">\(c\)</span>, and <span class="math inline">\(c&#39;\)</span>). This can result in a rather low power of the procedure <span class="citation">(<a href="#ref-mackinnon2007mediation">MacKinnon, Fairchild, &amp; Fritz, 2007</a>)</span>, which seems to be particularly related to the requirement of a significant <span class="math inline">\(c\)</span> (the direct effect of <span class="math inline">\(X\)</span> on <span class="math inline">\(Y\)</span> in the model without the mediator).</p>
+<p>An alternative to the causal steps approach is to estimate the mediated (indirect) effect of the predictor on the dependent variable directly. Algebraically, this mediated effect can be worked out as <span class="citation">(<a href="#ref-mackinnon2007mediation">MacKinnon et al., 2007</a>)</span>:</p>
 <p><span class="math display">\[\begin{equation}
 \text{mediated effect} = a \times b
 \end{equation}\]</span></p>
 <p>The rationale behind this is reasonably straightforward. The slope <span class="math inline">\(a\)</span> reflects the increase in the mediator <span class="math inline">\(M\)</span> for every one-unit increase in the predictor <span class="math inline">\(X\)</span>. The slope <span class="math inline">\(b\)</span> reflects the increase in the dependent variable <span class="math inline">\(Y\)</span> for every one unit increase in the mediator. So a one-unit increase in <span class="math inline">\(X\)</span> implies an increase in <span class="math inline">\(M\)</span> by <span class="math inline">\(a\)</span> units, which in turn implies an increase in <span class="math inline">\(Y\)</span> of <span class="math inline">\(a \times b\)</span> units. Hence, the mediated effect can be expressed as <span class="math inline">\(a \times b\)</span>.</p>
 <p>In a single mediator model such as the one looked at here, the mediated effect <span class="math inline">\(a \times b\)</span> turns out to be equal to <span class="math inline">\(c - c&#39;\)</span>, i.e. the difference between the direct effect of <span class="math inline">\(X\)</span> on <span class="math inline">\(Y\)</span> in a model without the mediator, and the unique direct effect of <span class="math inline">\(X\)</span> on <span class="math inline">\(Y\)</span> in a model which includes the mediator.</p>
-<p>To test whether the mediated effect differs from 0, we can try to work out the sampling distribution of the estimated effect <span class="math inline">\(\hat{a} \times \hat{b}\)</span>, under the null-hypothesis that in reality, <span class="math inline">\(a \times b = 0\)</span>. Note that this null hypothesis can be true when <span class="math inline">\(a = 0\)</span>, <span class="math inline">\(b = 0\)</span>, or both <span class="math inline">\(a = b = 0\)</span>. In the so-called Sobel-Aroian test, this sampling distribution is assumed to be Normal. However, it has been found that this assumption is often inaccurate. As there is no method to derive an accurate sampling distribution analytically, modern procedures rely on simulation. There are different ways to do this, but we’ll focus on one, namely the <strong>nonparametric bootstrap</strong> approach <span class="citation">(<a href="#ref-preacher2008asymptotic" role="doc-biblioref">Preacher &amp; Hayes, 2008</a>)</span>. This involves generating a large number (e.g. <span class="math inline">\(&gt;1000\)</span>) of simulated datasets by randomly sampling <span class="math inline">\(n\)</span> cases with replacement from the original dataset. This means that any given case (i.e. a row in the dataset) can occur 0, 1, 2, times in a simulated dataset. For each simulated dataset, we can estimate <span class="math inline">\(\hat{a} \times \hat{b}\)</span> by fitting the two corresponding regression models. The variance in these estimates over the different datasets forms an estimate of the variance of the sampling distribution. A 95% confidence interval can then also be computed through by determining the 2.5 and 97.5 percentiles. Because just the original data is used, there is no direct assumption made about the distribution of the variables, apart from that the original data is a representative sample from the Data Generating Process. Applying this procedure (with 1000 simulated datasets) provides a 95% confidence interval for <span class="math inline">\(a \times b\)</span> of <span class="math inline">\([0.104, 0.446]\)</span>. As this interval does not contain the value 0, we reject the null hypothesis that the mediated effect of <span class="math inline">\(\texttt{legacy}\)</span> on <span class="math inline">\(\texttt{donation}\)</span> “via” <span class="math inline">\(\texttt{intention}\)</span> equals 0.</p>
+<p>To test whether the mediated effect differs from 0, we can try to work out the sampling distribution of the estimated effect <span class="math inline">\(\hat{a} \times \hat{b}\)</span>, under the null-hypothesis that in reality, <span class="math inline">\(a \times b = 0\)</span>. Note that this null hypothesis can be true when <span class="math inline">\(a = 0\)</span>, <span class="math inline">\(b = 0\)</span>, or both <span class="math inline">\(a = b = 0\)</span>. In the so-called Sobel-Aroian test, this sampling distribution is assumed to be Normal. However, it has been found that this assumption is often inaccurate. As there is no method to derive an accurate sampling distribution analytically, modern procedures rely on simulation. There are different ways to do this, but we’ll focus on one, namely the <strong>nonparametric bootstrap</strong> approach <span class="citation">(<a href="#ref-preacher2008asymptotic">Preacher &amp; Hayes, 2008</a>)</span>. This involves generating a large number (e.g. <span class="math inline">\(&gt;1000\)</span>) of simulated datasets by randomly sampling <span class="math inline">\(n\)</span> cases with replacement from the original dataset. This means that any given case (i.e. a row in the dataset) can occur 0, 1, 2, times in a simulated dataset. For each simulated dataset, we can estimate <span class="math inline">\(\hat{a} \times \hat{b}\)</span> by fitting the two corresponding regression models. The variance in these estimates over the different datasets forms an estimate of the variance of the sampling distribution. A 95% confidence interval can then also be computed through by determining the 2.5 and 97.5 percentiles. Because just the original data is used, there is no direct assumption made about the distribution of the variables, apart from that the original data is a representative sample from the Data Generating Process. Applying this procedure (with 1000 simulated datasets) provides a 95% confidence interval for <span class="math inline">\(a \times b\)</span> of <span class="math inline">\([0.104, 0.446]\)</span>. As this interval does not contain the value 0, we reject the null hypothesis that the mediated effect of <span class="math inline">\(\texttt{legacy}\)</span> on <span class="math inline">\(\texttt{donation}\)</span> “via” <span class="math inline">\(\texttt{intention}\)</span> equals 0.</p>
 <p>Note that in solely focusing on the mediated effect, we do not address the issue of total vs partial mediation. Using our simulated datasets, we can however also compute a bootstrap confidence interval for <span class="math inline">\(c&#39;\)</span>. For the present set of simulations, the 95% confidence interval for <span class="math inline">\(c&#39;\)</span> is <span class="math inline">\([0.189, 0.807]\)</span>. As this interval does not contain the value 0, we reject the null hypothesis that the unique direct effect of <span class="math inline">\(\texttt{legacy}\)</span> on <span class="math inline">\(\texttt{donation}\)</span> equals 0. This thus provides a similar conclusion to the causal steps approach.</p>
 <!-- In a single mediator model such as the one looked at here, this mediated effect 
 To test whether this mediated effect equals 0 (in which case there is no mediation), we can attempt to work out the sampling -->
