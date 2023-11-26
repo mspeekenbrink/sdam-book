@@ -30,7 +30,7 @@ temperature =~ measurement
 mod <- lavaan::cfa(mod_spec, data=dat)
 spmod <- semPlotModel(mod)
 #spmmod@Pars <- spmmod@Pars[-5,]
-semPaths(spmod, sizeMan=7, sizeInt = 4, style="mx", residuals=TRUE, normalize=FALSE, width=3, height=2, rotation=2, nCharNodes = 0, fixedStyle = 1)
+semPaths(spmod, sizeMan=7, sizeInt = 4, style="mx", residuals=TRUE, normalize=FALSE, width=2, height=2, rotation=2, nCharNodes = 0, fixedStyle = 1)
 ```
 
 
@@ -127,38 +127,40 @@ E =~ i1 + i16 + i31 + i46 + i6 + i21 + i36 + i51 + i11 + i26 + i41 + i56
 BFI2_extr_1 <- lavaan::cfa(mod_spec, data=dat, orthogonal=TRUE)
 mod_spec <- '
 E =~ i1 + i16 + i31 + i46 + i6 + i21 + i36 + i51 + i11 + i26 + i41 + i56
-A =~ 1*i1 + 1*i16 + 1*i31 + 1*i46 + 1*i6 + 1*i21 + 1*i36 + 1*i51 + 1*i11 + 1*i26 + 1*i41 + 1*i56
+Acq =~ 1*i1 + 1*i16 + 1*i31 + 1*i46 + 1*i6 + 1*i21 + 1*i36 + 1*i51 + 1*i11 + 1*i26 + 1*i41 + 1*i56
 '
 BFI2_extr_1acq <- lavaan::cfa(mod_spec, data=dat, orthogonal=TRUE)
+
 mod_spec <- '
-E =~ Es + Ea + Ee
+E =~ 1*Es + Ea + Ee
 Es =~ 1*i1 + i16 + i31 + i46 
 Ea =~ 1*i6 + i21 + i36 + i51 
 Ee =~ i11 + i26 + 1*i41 + i56
-E ~~ 1*E
 '
-BFI2_extr_31 <- lavaan::lavaan(mod_spec, data=dat, int.ov.free = TRUE, int.lv.free = FALSE, auto.fix.first = FALSE, auto.fix.single = TRUE, auto.var = TRUE, auto.cov.lv.x = TRUE, auto.efa = TRUE, auto.th = TRUE, auto.delta = TRUE, auto.cov.y = TRUE)
+BFI2_extr_31 <- lavaan::cfa(mod_spec, data=dat, orthogonal=TRUE)
+#BFI2_extr_31 <- lavaan::lavaan(mod_spec, data=dat, int.ov.free = TRUE, int.lv.free = FALSE, auto.fix.first = FALSE, auto.fix.single = TRUE, auto.var = TRUE, auto.cov.lv.x = TRUE, auto.efa = TRUE, auto.th = TRUE, auto.delta = TRUE, auto.cov.y = TRUE)
+
 mod_spec <- '
-E =~ Es + Ea + Ee
+E =~ 1*Es + Ea + Ee
 Es =~ 1*i1 + i16 + i31 + i46 
 Ea =~ 1*i6 + i21 + i36 + i51 
 Ee =~ i11 + i26 + 1*i41 + i56
-A =~ 1*i1 + 1*i16 + 1*i31 + 1*i46 + 1*i6 + 1*i21 + 1*i36 + 1*i51 + 1*i11 + 1*i26 + 1*i41 + 1*i56
-E ~~ 0*A
-E ~~ 1*E
+Acq =~ 1*i1 + 1*i16 + 1*i31 + 1*i46 + 1*i6 + 1*i21 + 1*i36 + 1*i51 + 1*i11 + 1*i26 + 1*i41 + 1*i56
+E ~~ 0*Acq
 '
-BFI2_extr_31acq <- lavaan::lavaan(mod_spec, data=dat, int.ov.free = TRUE, int.lv.free = FALSE, auto.fix.first = FALSE, auto.fix.single = TRUE, auto.var = TRUE, auto.cov.lv.x = TRUE, auto.efa = TRUE, auto.th = TRUE, auto.delta = TRUE, auto.cov.y = TRUE)
+BFI2_extr_31acq <- lavaan::cfa(mod_spec, data=dat, orthogonal=TRUE)
+#BFI2_extr_31acq <- lavaan::lavaan(mod_spec, data=dat, int.ov.free = TRUE, int.lv.free = FALSE, auto.fix.first = FALSE, auto.fix.single = TRUE, auto.var = TRUE, auto.cov.lv.x = TRUE, auto.efa = TRUE, auto.th = TRUE, auto.delta = TRUE, auto.cov.y = TRUE)
 ```
 
-### A single factor model
+### A one-factor model
 
-The BFI-2 contains $k=12$ items which relate to extraversion. As these items pertain to the same psychological dimension, we would expect answers to them to be correlated. A confirmatory factor model aims to account for these correlations by assuming that all answers are "caused" by a single underlying latent variable (factor). The single factor model can be expressed as
+The BFI-2 contains $k=12$ items which relate to extraversion. As these items pertain to the same psychological dimension, we would expect answers to them to be correlated. A confirmatory one-factor model aims to account for these correlations by assuming that all answers are "caused" by a single underlying latent variable (factor). The one-factor model can be expressed as
 $$\begin{aligned}
 Y_{j,i} &= \alpha_j + \lambda_j \times \eta_{i} + \epsilon_{j,i} && j=1,\ldots,k\\
 \eta_i &\sim \mathbf{Normal}(0, \sigma_\eta)\\
 \epsilon_{j,i} &\sim \mathbf{Normal}(0, \sigma_{\epsilon_j}) && j=1,\ldots,k
 \end{aligned}$$
-In the context of factor analysis, the latent variable $\eta$ is referred to as a factor, and the parameters $\lambda_j$ which relate the factor to measured variables $Y_j$ as **factor loadings**. 
+In the context of factor analysis, the latent variable $\eta$ is referred to as a latent factor, and the parameters $\lambda_j$ which relate the factor to the indicators (measured variables) $Y_j$ as **factor loadings**. Each indicator is allowed to have measurement errors, such that none provides a perfect measurement of the latent factor. But a key assumption is that the measurement errors of different indicators are independent and therefore uncorrelated. Any correlation between scores on the indicators is then fully accounted for by the underlying latent factor. This independence of measurement errors allow indicators to be more informative about the latent factor. Going back to our temperature example, if one thermometer provides a too high measurement, that would not imply that other thermometers would also provide too high measurements, allowing the measurement errors to cancel each other out. Correlated measurement errors, on the other hand, make this more difficult. Positively correlated measurement errors would imply that if one thermometer provides a too high measurement, so would others. And if one thermometer provides a too low measurement, so would others. When measurement errors are highly correlated, there is then relatively little to gain from adding more measurement instruments.  
 
 ```{r BFI2-extr-1-plot, fig.cap="Graphical representation of a single factor model for Extraversion. Items i1, i16, i31, and i46 relate to the Sociability facet of Extraversion, with items i16 and i31 stated in the negative direction. Items i6, i21, i36, and i51 relate to the Assertiveness facet of Extraversion, with items i36 and i51 stated in the negative direction. Items 11, 26, 41, 56 relate to the Energy Level facet of Extraversion, with items i11 and i26 stated in the negative direction.", fig.width=8, fig.height=3.5, out.width="100%"}
 semPlot::semPaths(BFI2_extr_1, whatLabels = "est")
@@ -197,13 +199,14 @@ if(knitr::is_html_output()) {
 }
 ```
 
-The BFI-2 was designed to cover different aspects of each personality trait. For example, extraversion was assumed to consist of the "facets" sociability, assertiveness, and energy level. The BFI-2 contains four items for each of these facets. Insofar as these facets reflect different aspects of extraversion, we might expect then to be related to general extraversion, but to also be somewhat independent. To allow for this possibility, we could consider a model where general extraversion "causes" values on each facet, which in turn cause scores on the different items. Adding and Aqcuiescence factor, the resulting model is depicted in Figure \@ref(fig:BFI2-extr-31acq-plot).
+The BFI-2 was designed to cover different aspects of each personality trait. For example, extraversion was assumed to consist of the "facets" sociability, assertiveness, and energy level. The BFI-2 contains four items for each of these facets. Insofar as these facets reflect different aspects of extraversion, we might expect then to be related to general extraversion, but to also be somewhat independent. To allow for this possibility, we could consider a model where general extraversion "causes" values on each latent facet, which in turn cause scores on the different items. Including the Aqcuiescence factor, the resulting model is depicted in Figure \@ref(fig:BFI2-extr-31acq-plot). Note that the three facets have additional residual variance, but any correlation between the facets is entirely accounted for by the higher-order factor. As there are just three facets for the higher-order extraversion factor, that factor is "just-identified" (similar to needing at least three indicators to measure one factor). The part of the model consisting of one higher-order factor and three lower-order factors is saturated, meaning that the model can perfectly account for any the variances and covariances of the facets. Because each facet loads onto four indicators, the part of the model linking facets to indicators is not saturated. As there are 12 observed variables, there are 12 means, 12 variances, and $\frac{12 \times 11}{2} = 66$ covariances. A fully saturated model would thus have $\text{npar}(S) = 90$ parameters. The present model is more constrained, using $\text{npar}(M) = 49$ parameters.
+
 
 ```{r BFI2-extr-31acq-plot, fig.cap="Graphical representation of a hierarchical factor model for Extraversion with an additional Acquiescence factor. Es represents extraversion-sociability, Ea  extraversion-assertiveness, and Ee extraversion-energy-level", fig.width=8, fig.height=3.5, out.width="100%"}
 semPlot::semPaths(BFI2_extr_31acq, whatLabels = "est", layout="tree")
 # 3, 4, 5, 8, 9, 11, 12, 16, 17, 22, 23, 24, 25, 26, 28, 29, 30, 31, 36, 37, 42, 44, 45, 47, 48, 49, 50, 51, 55, and 58
 ```
-Table \@ref(tab:BFI2-extr-31acq-results) provides more detailed results. 
+Table \@ref(tab:BFI2-extr-31acq-results) provides more detailed results. Although the model is rejected by the overall fit chi-square test, the fit indices indicate a mostly reasonable fit. Inspecting the estimated variance of the latent variables shows something peculiar though: the variance of the $\texttt{Es}$ factor is estimated to be negative. A variance can never be smaller than 0, so this estimate is by definition not a good representation of the true variance in the DGP. Negative variance estimates are  common in structural equation modelling [@kolenikov2012testing]. 
 
 ```{r, results="asis"}
 if(knitr::is_html_output()) {
@@ -214,8 +217,12 @@ if(knitr::is_html_output()) {
   semTable::semTable(BFI2_extr_31acq, type="latex", table.float = TRUE, fits = c("chisq", "cfi", "srmr", "rmsea", "rmsea.ci.lower", "rmsea.ci.upper","aic", "bic"), caption = "(\\#ttab:tab:sem_path_mod_complex_results2) Results of a hierarchical factor model for Extraversion with an additional Acquiescence factor.")
 }
 ```
-Although the model is rejected by the overall fit chi-square test, the fit indices indicate a mostly reasonable fit. 
 
+### Heywood cases
+
+Negative variance estimates (and estimated correlations with an absolute value larger than 1) are also called "**Heywood cases**" (after the statistician H. B. Heywood). Such illogical estimates can be problematic, as they may indicate model misspecification. Other reasons for negative variance estimates include sampling fluctuations and true variances close to 0, outliers, missing data, nonconvergence of the numerical estimation procedure, and empirical underidentification (e.g. the parameters cannot be estimated adequately due to extremely low or high correlations).
+
+For negative variances, @kolenikov2012testing suggest to perform a hypothesis test whether the "true variance" is smaller than 0. If the best possible value of a variance with respect to the DGP is negative, that would indicate a structural misspecification of the model (i.e. the structural model does not correspond to the structure of the DGP). Confidence intervals can also be used for the same purpose. In the example above, the Wald test for the variance of Es is not significant. As such, there is no strong evidence for a misspecification, and we could conclude that the negative error variance might be due to estimation error.
 
 ```{r SEM-estimate-BFI2-full-factor-models}
 mod_spec <- '
@@ -229,10 +236,13 @@ BFI2_cfa <- lavaan::cfa(mod_spec, data=dat, orthogonal=TRUE)
 BFI2_cfa_dep <- lavaan::cfa(mod_spec, data=dat)
 ```
 
-## Full hierarchical factor model for the BFI-2
+### Full hierarchical factor model for the BFI-2
 
-The BFI-2 was designed with a hierarchical structure in mind. Indeed, each of the "big five" factors was assumed to be further broken down into three facets: extraversion into sociability, assertiveness and energy level, agreeableness into compassion, respectfulness, and trust, conscientiousness into organization, productiveness, and responsibility, negative emotionality into anxiety, depression, and emotional volatility, and open-mindedness into intellectual curiosity, aesthetic sensitivity, and creative imagination. 
+The BFI-2 was designed with a hierarchical structure in mind for each of the "big five" factors. Each factor was assumed to be further broken down into three facets: Extraversion (E) into sociability (Es), assertiveness (Ea) and energy level (Ee), Agreeableness into compassion (Ac), respectfulness (Ar), and trust (At), Conscientiousness into organization (Co), productiveness (Cp), and responsibility (Cr), Negative Emotionality into anxiety (Na), depression (Nd), and emotional volatility (Ne), and Open-Mindedness into intellectual curiosity (Oi), aesthetic sensitivity (Oa), and creative imagination (Oc. Earlier, we estimated a hierarchical factor model for extraversion. Here, we estimate a hierarchical factor model for all "big five" factors, also including the additional Acquiescence factor.
 
+Figure \@ref(fig:BFI2-full-31acq-plot) shows the estimated model. Note that the higher-order latent factors were assumed to be independent (i.e. their covariances were fixed to 0). Independence of the factors implies that each represents a separable aspect of personality, in the sense that knowing someone's relative extraversion would not help you infer their relative agreeableness. Each higher-order factor loads on three lower-order factors (the "facets"). These facets have additional residual variance, but any correlation between the facets is entirely accounted for by the higher-order factors. As in the earlier hierarchical model for extraversion, these higher-order factors are "just-identified".
+
+The BFI-2 consists of $P=60$ items. Hence, there are 60 means, 60 variances, and $\frac{60 \times 59}{2} = 1770$ covariances. A saturated model for this data would thus have a total of $\text{npar}(S) = \frac{P \times (P-1)}{2} + 2 \times P = 1890$ parameters. The estimated model has a total of $\text{npar}(M) = 196$ parameters. Whilst complex, the model is rather restricted as compared to a saturated model. Detailed results are provided in Table \@ref(tab:BFI2-cfa-hier-results) at the end of this chapter. 
 
 ```{r}
 mod_spec <- '
@@ -261,33 +271,118 @@ Oi =~ i10 + i25 + i40 + i55
 Oa =~ i5 + i20 + i35 + i50 
 Oc =~ i15 + i30 + i45 + i60
 
-Acq =~ 1*i1 + 1*i16 + 1*i31 + 1*i46 + 1*i6 + 1*i21 + 1*i36 + 1*i51 + 1*i11 + 1*i26 + 1*i41 + 1*i56 1*i2 + 1*i17 + 1*i32 + 1*i47 + 1*i7 + 1*i22 + 1*i37 + 1*i52 + 1*i12 + 1*i27 + 1*i42 + 1*i57 + 1*i3 + 1*i18 + 1*i33 + 1*i48 + 1*i8 + 1*i23 + 1*i38 + 1*i53 + 1*i13 + 1*i28 + 1*i43 + 1*i58 + 1*i4 + 1*i19 + 1*i34 + 1*i49 + 1*i9 + 1*i24 + 1*i39 + 1*i54 + 1*i14 + 1*i29 + 1*i44 + 1*i59 + 1*i10 + 1*i25 + 1*i40 + 1*i55 + 1*i5 + 1*i20 + 1*i35 + 1*i50 + 1*i15 + 1*i30 + 1*i45 + 1*i60
+Acq =~ 1*i1 + 1*i16 + 1*i31 + 1*i46 + 1*i6 + 1*i21 + 1*i36 + 1*i51 + 1*i11 + 1*i26 + 1*i41 + 1*i56 + 1*i2 + 1*i17 + 1*i32 + 1*i47 + 1*i7 + 1*i22 + 1*i37 + 1*i52 + 1*i12 + 1*i27 + 1*i42 + 1*i57 + 1*i3 + 1*i18 + 1*i33 + 1*i48 + 1*i8 + 1*i23 + 1*i38 + 1*i53 + 1*i13 + 1*i28 + 1*i43 + 1*i58 + 1*i4 + 1*i19 + 1*i34 + 1*i49 + 1*i9 + 1*i24 + 1*i39 + 1*i54 + 1*i14 + 1*i29 + 1*i44 + 1*i59 + 1*i10 + 1*i25 + 1*i40 + 1*i55 + 1*i5 + 1*i20 + 1*i35 + 1*i50 + 1*i15 + 1*i30 + 1*i45 + 1*i60
 '
 BFI2_cfa_hier <- lavaan::cfa(mod_spec, data=dat, orthogonal=TRUE)
+
+mod_spec <- '
+E =~ Es + Ea + Ee
+Es =~ i1 + i16 + i31 + i46 
+Ea =~ i6 + i21 + i36 + i51
+Ee =~ i11 + i26 + i41 + i56
+
+A =~ Ac + Ar + At
+Ac =~ i2 + i17 + i32 + i47
+Ar =~ i7 + i22 + i37 + i52
+At =~ i12 + i27 + i42 + i57
+
+C =~ Co + Cp + Cr
+Co =~ i3 + i18 + i33 + i48
+Cp =~ i8 + i23 + i38 + i53
+Cr =~ i13 + i28 + i43 + i58
+
+N =~ Na + Nd + Ne
+Na =~ i4 + i19 + i34 + i49
+Nd =~ i9 + i24 + i39 + i54 
+Ne =~ i14 + i29 + i44 + i59
+
+O =~ Oi + Oa + Oc
+Oi =~ i10 + i25 + i40 + i55
+Oa =~ i5 + i20 + i35 + i50 
+Oc =~ i15 + i30 + i45 + i60
+
+Acq =~ 1*i1 + 1*i16 + 1*i31 + 1*i46 + 1*i6 + 1*i21 + 1*i36 + 1*i51 + 1*i11 + 1*i26 + 1*i41 + 1*i56 + 1*i2 + 1*i17 + 1*i32 + 1*i47 + 1*i7 + 1*i22 + 1*i37 + 1*i52 + 1*i12 + 1*i27 + 1*i42 + 1*i57 + 1*i3 + 1*i18 + 1*i33 + 1*i48 + 1*i8 + 1*i23 + 1*i38 + 1*i53 + 1*i13 + 1*i28 + 1*i43 + 1*i58 + 1*i4 + 1*i19 + 1*i34 + 1*i49 + 1*i9 + 1*i24 + 1*i39 + 1*i54 + 1*i14 + 1*i29 + 1*i44 + 1*i59 + 1*i10 + 1*i25 + 1*i40 + 1*i55 + 1*i5 + 1*i20 + 1*i35 + 1*i50 + 1*i15 + 1*i30 + 1*i45 + 1*i60
+
+Acq ~~ 0*E
+Acq ~~ 0*A
+Acq ~~ 0*C
+Acq ~~ 0*N
+Acq ~~ 0*O
+'
+BFI2_cfa_hier2 <- lavaan::cfa(mod_spec, data=dat, orthogonal=FALSE)
 ```
 
-```{r BFI2-full-31acq-plot, fig.cap="Graphical representation of a hierarchical factor model for all personality domains and an additional Acquiescence factor.", fig.width=30, fig.height=20, out.width="100%"}
-semPlot::semPaths(BFI2_cfa_hier, whatLabels = "est", layout="tree")
+```{r BFI2-full-31acq-plot, fig.cap="Graphical representation of a hierarchical factor model for all personality domains and an additional Acquiescence factor.", fig.width=16, fig.height=4, out.width="100%"}
+semPlot::semPaths(BFI2_cfa_hier, whatLabels = "est", layout="tree", width=16, height=4, normalize=FALSE)
 # 3, 4, 5, 8, 9, 11, 12, 16, 17, 22, 23, 24, 25, 26, 28, 29, 30, 31, 36, 37, 42, 44, 45, 47, 48, 49, 50, 51, 55, and 58
 ```
 
-```{r, results="asis"}
-if(knitr::is_html_output()) {
-  cat("<table><caption>(\\#tab:BFI2_cfa_hier-results) Results of a hierarchical factor model for Extraversion with an additional Acquiescence factor.</caption>")
-  semTable::semTable(BFI2_cfa_hier, paramSets=c("latentvariances","fits"), type="html", fits = c("chisq", "cfi", "srmr", "rmsea", "rmsea.ci.lower", "rmsea.ci.upper", "aic", "bic"), fitLabels = c(rmsea.ci.lower = "RMSEA (lower bound)", rmsea.ci.upper = "RMSEA (upper bound)"))
-  cat("</table>")
-} else {
-  semTable::semTable(BFI2_cfa_hier, paramSets=c("latentvariances","fits"), type="latex", table.float = TRUE, fits = c("chisq", "cfi", "srmr", "rmsea", "rmsea.ci.lower", "rmsea.ci.upper","aic", "bic"), caption = "(\\#ttab:tab:BFI2_cfa_hier_results) Results of a hierarchical factor model for Extraversion with an additional Acquiescence factor.")
-}
+Table \@ref(tab:BFI2-cfa-hier-comparison) shows selected fit measures of this model, as well as of an alternative Dependent model which allows the "big five" factors to be correlated whilst all are independent from the Acquiescence factor. Fit measures for the Independent model are less then convincing, with a significant overall model fit test, a too low value for the CFI, and a too high one for the SRMR. The Dependent model fits better, and is acceptable according to the RMSEA and SRMR, but the CFI indicates relatively poor fit, and this model is also rejected by the overall model fit. As the Independent model is nested in the Dependent model, the models can be compared with a likelihood ratio test. The result is significant, indicating that the Dependent model provides a better fit and hence the factors are unlikely to be independent. 
+
+
+```{r BFI2-cfa-hier-comparison}
+semTable::compareLavaan(models=list("Independent" = BFI2_cfa_hier, "Dependent" =  BFI2_cfa_hier2), fitmeas = c("chisq","df","pvalue","cfi","rmsea","srmr"), print.results=FALSE) |>
+  mutate(dchi = as.numeric(stringr::str_remove(dchi,"a"))) |>
+  knitr::kable(digits = c(2,0,3,2,2,2,0,0,2,0,3), col.names = c("$\\chi^2$","df","$p$","CFI", "RMSEA","SRMR","$\\Delta \\chi^2$","df","$p$"), escape=FALSE, caption = 'Fit measures for hierarchical factor models for the BFI-2 with an additional Acquiescence factor. The Independent model assumes all factors are independent. The Dependent model allows dependence between the "big five" factors, but assumes these are independent from the Acquiescence factor')
+
+# if(knitr::is_html_output()) {
+#   cat('<table><caption>(\\#tab:BFI2-cfa-hier-comparison) Fit measures for hierarchical factor models for the BFI-2 with an additional Acquiescence factor. The Independent model assumes all factors are independent. The Dependent model allows dependence between the "big five" factors, but assumes these are independent from the Acquiescence factor.</caption>')
+#   semTable::compareLavaan(models=list("Independent" = BFI2_cfa_hier, "Dependent" =  BFI2_cfa_hier2), type="html", fitmeas = c("chisq","df","pvalue","cfi","rmsea","srmr"))
+#   cat("</table>")
+# } else {
+#   semTable::compareLavaan(models=list("Independent" = BFI2_cfa_hier, "Dependent" =  BFI2_cfa_hier2), type="html", fitmeas = c("chisq","df","pvalue","cfi","rmsea","srmr"), type="latex", table.float = TRUE, caption = '(\\#ttab:tab:BFI2_cfa_hier_results) Fit measures for hierarchical factor models for the BFI-2 with an additional Acquiescence factor. The Independent model assumes all factors are independent. The Dependent model allows dependence between the "big five" factors, but assumes these are independent from the Acquiescence factor.')
+# }
 ```
 
-### Indentification
+Whilst the Dependent model fits better, there are still signs of misfit. Table \@ref(tab:BFI2-cfa-hier2-modification) shows the fixed-to-zero parameters with the ten highest modification indices. These indicate several routes for improvement in model fit. The highest modification index is for the residual covariance between the Negative Emotionality factor and Acquiescence factor. The expected parameter change indicates that this parameter would be estimated to be negative (i.e. there would be a negative correlation between these factors). This could indicate that those with higher Negative Emotionality are less likely to agree to statements in general. Whilst that could be plausible in one way or another, it is not something that was *a priori* expected. More importantly, the idea of the latent Acquiescence factor was to account for a tendency to agree or disagree with statements irrespective of their content, and by controlling for such a tendency to allow for better measurement of the remaining latent factors. Introducing a correlation between the Acquiescence factor and the factors of substantial interest would counteract this goal. When considering to change a model to improve empirical fit, such theoretical concerns are more important than high modification indices. The second-highest modification index is for the residual covariance between items 54 and 39, which appear to have a positive correlation which is not fully accounted for by the model. Item 54 and 39 both loads directly onto the $\texttt{Nd}$ facet. 
 
-<!-- Hayward case (negative errors) -->
+```{r BFI2-cfa-hier2-modification, cache=TRUE}
+BFI2_cfa_hier_mi <- lavaan::modificationindices(BFI2_cfa_hier2, sort=TRUE, standardized = FALSE)
+BFI2_cfa_hier_mi[1:10,] |>
+  mutate(parameter = if_else(op == "=~", paste0("$\\texttt{",rhs,"} \\rightarrow \\texttt{",lhs,"}$"), paste0("$\\texttt{",rhs,"} \\leftrightarrow \\texttt{",lhs,"}$"))) |>
+  select(parameter, mi, epc) |>
+  knitr::kable(align=c("l","r","r"), caption = "Modification indices and expected change in parameter values for fixed-to-zero parameters in the hierarchical factor model for the BFI-2.", col.names=c("Parameter","Modification index", "Expected change"), escape = FALSE, row.names = FALSE, digits=3)
+```
 
+
+### Predicting factor scores
+
+Once a SEM with latent variables is estimated, we may be interested in inferring the values of the latent variables underlying each observation. For example, given their answers to the items in the BFI-2, is participant A relatively extravert? And how much more than participant B? In a confirmatory factor analysis model, the latent factors are assumed to cause the values of the observed variables. Factor loadings then represent the effect of the latent variable upon the observed variables. When predicting latent factor values, we need to go in the opposite direction, from observed to latent variables. Such reverse inference is not necessarily straightforward, and there are many possible methods which are all consistent with the underlying model, yet give different results. This is called "**factor indeterminancy**" [@maraun1996metaphor]. 
+
+Factor score predictions are weighted sums of the values of the observed variables (indicators). The weights given to each variable are not identical to the factor loadings, but related to these. The factor prediction weights take other aspects into consideration as well, such as residual variances and covariances between factors. There are two widely-used methods to predict the values of the latent variables: the regression predictor and the Bartlett predictor [@devlieger2023using]. It is beyond the scope of this book to go into the details of these methods. Predicting factor scores is a controversial issue. @bartholomew2009origin argue that the regression method has a more relevant justification than the Bartlett method. <!-- Predictions according to the regression method aim to maximise the correlation between predicted factor scores and the true values on the factor.
+see https://stats.oarc.ucla.edu/spss/seminars/introduction-to-factor-analysis/a-practical-introduction-to-factor-analysis/ -->
+
+<!--
 ## Multiple groups and measurement invariance
+-->
 
 ## Exploratory factor and principal components analysis
+
+Although not really a part of Structural Equation Models, it is instructive to also briefly discuss **data reduction** techniques such as principal components analysis (PCA) and exploratory factor analysis (EFA). These methods aim to describe a $P \times P$ covariance (or correlation) matrix by via a relatively small set of latent variables. Essentially, both methods rely on saturated models which can replicate the sample covariance matrix perfectly. Neither method concerns the means of the observed variables $Y_j$, and assume that these are centered beforehand such that all means are equal to 0.
+
+The differences between principal component analysis and exploratory factor analysis are somewhat subtle. **Principal components analysis** (PCA) can be seen as applying a **formative model**, where observed variables "cause" the latent variables (called a principal components in this context). **Principal components** (which we will denote as $\text{PC}_j$) are simply linear functions of the variables:
+$$\begin{aligned}
+\text{PC}_{1,i} &= w_{1,1} \times Y_{1,i} + w_{1,2} \times Y_{2,i} + \ldots + w_{1,P} \times  Y_{P,i} \\
+\text{PC}_2 &= w_{2,1} \times Y_{1,i} + w_{2,2} \times Y_{2,i} + \ldots + w_{2,m} \times Y_{P,i} \\
+& \vdots \\
+\text{PC}_P &= w_{P,1} \times Y_{1,i} + w_{P,2} \times Y_{2,i} + \ldots + w_{P,P} \times Y_{P,i}
+\end{aligned}$$
+Note that the principal components $\text{PC}_j$ have no error terms. They don't need to be estimated, but rather are *computed* from the variables $Y_j$. Also note that we use a total of $P$ principal components to model a total of $P$ variables. In a PCA, the weights are chosen such that the principal components are uncorrelated. In addition, they are chosen such that the variances of the principal components are ordered, such that the first principal component $\text{PC}_1$ has the largest variance, then the second component $\text{PC}_2$, etc. Whilst there are an infinite number of other saturated models which also match the observed covariances in the data perfectly, these restrictions provide a unique solution to computing the weights.
+
+By contrast, **exploratory factor analysis** (EFA) concerns a **reflective model**, where the latent variables "cause" the observed variables. A EFA model can be written as:
+$$\begin{aligned}
+Y_{1,i} &= \lambda_{1,1} \times \eta_{1,i} + \lambda_{1,2} \times \eta_{2,i} + \ldots + \lambda_{1,P} \times \eta_{P,i} + \epsilon_{1,i} && \epsilon_{1,i} \sim \mathbf{Normal}(0, \sigma_{\epsilon_1}) \\
+Y_{2,i} &= \lambda_{2,1} \times \eta_{1,i} + \lambda_{2,2} \times \eta_{2,i} + \ldots + \lambda_{2,P} \times \eta_{P,i} + \epsilon_{2,i} && \epsilon_{2,i} \sim \mathbf{Normal}(0, \sigma_{\epsilon_2}) \\
+\vdots \\
+Y_{P,i} &= \lambda_{P,1} \times \eta_{1,i} + \lambda_{P,2} \times \eta_{2,i} + \ldots + \lambda_{P,P} \times  \eta_{P,i} + \epsilon_{P,i} && \epsilon_{P,i} \sim \mathbf{Normal}(0, \sigma_{\epsilon_P}) \\
+\eta_j &\sim \mathbf{Normal}(0,1) 
+\end{aligned}$$
+Whilst scaling the latent factors to be standard Normal variables, this model has still more parameters than unique values in the variance-covariance matrix. Compared to the PCA model, the EFA model contains additional residual variances $\sigma^2_{\epsilon_j}$. To allow some form of identification, EFA therefore first removes the (estimated) residual variances from the variance-covariance matrix. After this, the reduced variance-covariance matrix only contains variation in the observed variables which is shared with the latent factors, and there is no need to estimate the residual variances. After this step, a saturated model is possible, although factor loadings can not be uniquely estimated without further constraints.
+
+Both PCA and EFA use saturated models. The key difference is that PCA targets the full variance-covariance matrix of the observed variables, whilst EFA targets a reduced variance-covariance matrix with the unique residual variance of each variable removed. PCA imposes further restrictions (independent components and maximising the variance of successive components) in order to arrive at a unique solution. These restrictions can also be applied in EFA, but are often relaxed to provide a potentially more meaningful solution.
+
+<!-- with the number of factors $q < m$. In a EFA, the observed variables $Y_j$ are considered conditionally independent, given the factors $F_k$. This is evident from the (independently distributed) error terms $\epsilon_j$.  -->
+
 
 ```{r, message=FALSE, eval=FALSE}
 library(sdamr)
@@ -380,6 +475,29 @@ library(lavaan)
 
 ### Determining the number of factors
 
+A main aim in both PCA and EFA is to determine the number of factors that could sufficiently explain the inter-relations between the variables in the data. For both PCA and EFA, a model with the same number of latent factors as observed variables will always fit the data perfectly (as each component or factor is allowed to be connected to all variables, unlike in CFA, where particular loadings tend to be fixed to zero).
+
+A key consideration is how much variability in the dataset each component or factor accounts for (or "explains"). Underlying both PCA and EFA is a mathematical technique called "**eigendecomposition**", which represents symmetric matrices such as covariance or correlation matrices in a unified manner by decomposing it into "eigenvalues" and "eigenvectors". The specifics of this go beyond the scope of this book. Roughly, the elements in eigenvectors are related to component loadings: the values in the eigenvector multiplied by the square root of the eigenvalue gives the component loadings, which can be interpreted as the correlation of each item with the principal component. The eigenvalues represent the variance accounted for by each component on a standardized scale where each variable has a variance of 1. You can think of this is applying the analysis to the variables after $Z$-transforming each variable so they have a mean of 0 and a variance (and standard deviation) of 1. The sum of eigenvalues is equal to the number of variable, so each variable adds a value of 1 to the total amount of variability to be accouted for. An eigenvalue of 1 then tells you that a component accounts for more variance than  a single variable. In other words, it accounts for shared variability in at least two variables. As we are looking for latent variables that account for relations between measured variables, it is reasonable to search for components that can account for more than the variance of a single variable. So an eigenvalue of at least 1 is a reasonable lower bound.
+
+One method for determining the number of components of factors is then to determine how many have eigenvalues larger than 1. Ideally, one would consider the sampling error in this evaluation. This is not straightforward, as the sampling distribution of eigenvalues is complex. The current "gold standard" is to conduct a **parallel analysis**, which is effectively a bootstrap method method to compare estimated eigenvalues to those of randomly simulated data. Figure \@ref(fig:BFI-parallel-analysis) shows the results of a parallel analysis for both PCA and EFA. Note that as EFA targets the shared, and not the unique variance of the variables in the dataset, the eigenvalues are expected to be less than 1. Hence, the comparison line is lower for EFA compared to PCA. For both, the main idea is to consider components or factors which account for more variation than those based on randomly generated data. Using this criterion, PCA would select 9 components, and EFA 12 factors. 
+
+```{r BFI-parallel-analysis, fig.cap="Results of a parallel PCA and EFA to determine the number of componentd/factors for the BFI-2 data."}
+psych::fa.parallel(dat, fa="both")
+```
+
+### Factor rotation
+
+The initial solution for a EFA is obtained by eigendecopmposition. This constrains the solution to have independent factors which are ordered in the amount the variance they account for. Whilst these restrictions provide a unique solution, there are an infinite number of equivalent models which fit the date equally well. In EFA, it is common practice to search for equivalent solutions which might be more easily interpretable. The main aim is to search for a **simple structure**, such that each item loads highly only on a single factor. 
+
+There are two main types of factor rotation: in **orthogonal rotation**, the factors are constrained to be independent of each other (i.e. there is no residual covariation between the factors). In **oblique rotation**, factors are allowed to have residual covariation. 
+
+
+<!-- As EFA targets the shared variance -- and not the unique variance - of the variables in the dataset, the eigenvalues are expected to be less than 1. 
+
+After $Z$-transforming each variable, the covariance matrix is identical to the correlation matrix. Using such standardized variables (and hence correlation matrices) makes it easier to devise general methods for determining the number of factors underlying a dataset, as the scale of the measured variables is no longer relevant. -->
+
+<!-- The **eigenvalues** of an eigendecomposition reflect the variability that each factor can account for. An eigenvalue of 1 -> 
+
 ### Factor rotation
 
 <!-- There are two main types of factor rotation: in **orthogonal rotation**, the factors are constrained to be independent of each other (i.e. there is no residual covariation between the factors). In **oblique rotation**, factors are allowed to have residual covariation. 
@@ -388,7 +506,7 @@ library(lavaan)
 
 <!-- ## Ordinal variables -->
 
-## Conclusion
+<!-- ## Conclusion -->
 
 
 
@@ -397,3 +515,17 @@ library(lavaan)
 <!-- ## Multi-group SEM -->
 
 ## In practice
+
+1. Structural Equation modelling is a **large sample technique**. To give meaningful results, the means and (co-)variances in the data should be close to the true values in the DGP. So, the more observations, the better. But how many observations is enough? There is no definite answer to that question, but you could consider the $n/\text{npar}(M)$ heuristic [@kline2015principles], which refers to the ratio of observations to model parameters. The recommended ratio is to have at least 20 observations for each parameter in the model. For example, if the model has $\text{npar}(M) = 30$ parameters, you would want to have at least $n=600$ observations. This is not a hard limit, as the required sample size depends on various aspects of the data. If the data is truly continuous and multivariate-Normal distributed, with linear relations between the variables, less observations may be needed. But when the data does not respect the assumptions of SEM, substantially more data may be needed to allow inferences to be meaningful. The $n/\text{npar}(M) = 20$ heuristic aims to provide a reasonable guideline for most cases.
+2. SEM is commonly applied to data which is not truly continuous. The BFI-2 data considered here are responses to statements on a Likert scale wth 5 options. Such data can be consider ordinal, but is not metric or continuous. Whilst the assumption of multivariate-Normal distributed variables is therefore violated by definition, SEM may still be a reasonable technique to model the inter-relations between the variables. When there are at least 5 response options scored in a numerical way (e.g. as $1, 2, \ldots, 5$), covariances assuming continuity may not differ too much from those computed when respecting the ordinal nature of the data. The more principled way of dealing with ordinal data is to use **polychoric correlations**, which assume the ordinal responses are generated by an underlying continuous variable (based on the assumption that each ordinal response corresponds to a region or "bin" of the continuous variable) and aim to capture the correlation between these underlying continuous variables from the ordinal responses. Most SEM software allows you to estimate models based purely on sample correlation matrices. This could provide a reasonable alternative to the assumption of multivariate-Normal distributed variables. That said, the results will often not differ too much when the ordinal responses have at least 5 values and the data is sufficiently large.
+3. The flexibility of SEM, especially when introducing latent variables, opens up a world of theorizing. Always remember though that a SEM is just a way to identify the means and (co-)variances between variables. Although SEMs may contain causal links between variables, **correlation is not causation**. Keep in mind that there will be equivalent other models, with other causal paths, which imply *exactly the same means and covariances*. 
+
+```{r, results="asis"}
+if(knitr::is_html_output()) {
+  cat("<table><caption>(\\#tab:BFI2-cfa-hier-results) Results of a hierarchical factor model for the BFI-2 with an additional Acquiescence factor.</caption>")
+  semTable::semTable(BFI2_cfa_hier, type="html", fits = c("chisq", "cfi", "srmr", "rmsea", "rmsea.ci.lower", "rmsea.ci.upper", "aic", "bic"), fitLabels = c(rmsea.ci.lower = "RMSEA (lower bound)", rmsea.ci.upper = "RMSEA (upper bound)"))
+  cat("</table>")
+} else {
+  semTable::semTable(BFI2_cfa_hier, type="latex", table.float = TRUE, fits = c("chisq", "cfi", "srmr", "rmsea", "rmsea.ci.lower", "rmsea.ci.upper","aic", "bic"), caption = "(\\#ttab:tab:BFI2_cfa_hier_results) Results of a hierarchical factor model for the BFI-2 with an additional Acquiescence factor.")
+}
+```
