@@ -288,13 +288,15 @@ tmp %>%
   ggplot(aes(x=value)) + geom_histogram(bins=100) + facet_wrap(~parameter, scales = "free_x")
 ```
 
-Table \@ref(tab:brms-multiple-regression-model-summary) contains a summary measures of the posterior distribution of the main parameters of interest. The $\hat{R}$ values are close to 1, and the effective sample size (ESS) is close to 4000 (the actual number of samples) for all parameters. This indicates a reasonably successful MCMC estimate. Note that unlike maximum likelihood estimation, Bayesian estimation provides a posterior distribution, not a single parameter estimates. But it is common to use the posterior mean as the parameter estimate, insofar as a single number is needed. The standard deviation of the posterior distribution can indicate the extent to which the data has restricted the plausible parameter values. The Highest Density Interval is used in a similar way to a confidence interval. For all parameters, the HDI excludes 0, which indicates that the predictors have an effect on the dependent variable. Comparing the results to those in Table \@ref(tab:t-test-results-multiple-regression-table) shows that the posterior means are close, but not identical, to the maximum likelihood parameter estimates.
+Table \@ref(tab:brms-multiple-regression-model-summary) contains a summary measures of the posterior distribution of the main parameters of interest. The $\hat{R}$ values are close to 1, and the effective sample size (ESS) is close to 4000 (the actual number of samples) for all parameters. This indicates a reasonably successful MCMC estimate. Note that unlike maximum likelihood estimation, Bayesian estimation provides a posterior distribution, not a single parameter estimates. But it is common to use the posterior mean as the parameter estimate, insofar as a single number is needed. Comparing the results to those in Table \@ref(tab:t-test-results-multiple-regression-table) shows that the posterior means are close, but not identical, to the maximum likelihood parameter estimates. The standard deviation of the posterior distribution can indicate the extent to which the data has restricted the plausible parameter values. The Credible Interval (CI) is used in a similar way to a confidence interval. For all parameters, the CI excludes 0, which indicates that the predictors have an effect on the dependent variable. 
+
+There are two main ways to compute a credible interval. The easiest is via quantiles in the posterior sample. This method is also called the **Equal-tailed Interval** (EIT). For example, a 95% ETI credible interval would be defined via the minimum and maximum value in the posterior sample *after excluding the 2.5% lowest and 2.5% highest values*. The 95% CI reported in Table \@ref(tab:brms-multiple-regression-model-summary) is based on this method. The second method is the **Highest Density Interval** (HDI), which is a little more involved to compute. The HDI computes a range such that all values within the interval have a higher probability density than values outside the interval. For symmetric posterior distributions, the ETI and HDI provide the same results. For skewed distributions, the ETI and HDI will differ. 
 
 ```{r brms-multiple-regression-model-summary}
 tmp <- summary(mod)$fixed[,-7]
 rownames(tmp) <- c("Intercept", "Hate_groups", "Education")
 tmp %>%
-  knitr::kable(col.names=c("mean", "SD", "lower 95% HDI", "upper 95% HDI", "$\\hat{R}$", "ESS"), escape=FALSE, digits=c(2,2,2,2,5,2), caption="Results from a Hamiltonian MCMC estimation of the multiple regression model predicting votes for Trump in 2016 by the number of hate groups and level of education in US states.")
+  knitr::kable(col.names=c("mean", "SD", "lower 95% CI", "upper 95% CI", "$\\hat{R}$", "ESS"), escape=FALSE, digits=c(2,2,2,2,5,2), caption="Results from a Hamiltonian MCMC estimation of the multiple regression model predicting votes for Trump in 2016 by the number of hate groups and level of education in US states.")
 ```
 
 ```{r brms-multiple-regression-model-2, cache=TRUE, include=FALSE, results='hide'}
@@ -320,6 +322,6 @@ Table \@ref(tab:brms-multiple-regression-model-2-summary) shows the results are 
 tmp <- summary(mod2)$fixed[,-7]
 rownames(tmp) <- c("Intercept", "Hate_groups", "Education")
 tmp %>%
-  knitr::kable(col.names=c("mean", "SD", "lower 95% HDI", "upper 95% HDI", "$\\hat{R}$", "ESS"), escape=FALSE, digits=c(2,2,2,2,5,2), caption="Results from a Hamiltonian MCMC estimation of the multiple regression model predicting votes for Trump in 2016 by the number of hate groups and level of education in US states, using Normal priors with smaller standard deviation.")
+  knitr::kable(col.names=c("mean", "SD", "lower 95% CI", "upper 95% CI", "$\\hat{R}$", "ESS"), escape=FALSE, digits=c(2,2,2,2,5,2), caption="Results from a Hamiltonian MCMC estimation of the multiple regression model predicting votes for Trump in 2016 by the number of hate groups and level of education in US states, using Normal priors with smaller standard deviation.")
 ```
 
