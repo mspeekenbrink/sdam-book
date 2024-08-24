@@ -1,0 +1,745 @@
+# Path models (SEM 1) {#sec-ch-SEM-path-models}
+
+```{r}
+#| label: setup
+#| echo: false
+set.seed(20221010)
+source("run_before.R")
+```
+
+<!-- https://www.joophox.net/publist/semfamre.pdf -->
+<!-- https://stats.oarc.ucla.edu/r/seminars/rsem/ -->
+
+Up to now, we have mostly considered models with a single dependent variable, allowing the value of this variable to depend on multiple predictors or independent variables. Although flexible, this can still be restrictive. There are situations where we would like to simultaneously model the inter-relations within a set of variables. We saw an example of this when we considered *mediation* (see Chapter @sec-ch-moderation-mediation), where we were interested in how an independent variable affects a mediator variable, and how this mediator variable subsequently affects a dependent variable. Such a *causal chain* can not be directly modelled in a single regression model. Applying the causal steps approach, we needed to estimate three separate models, with inference being based on a comparison of the parameters between these models.
+
+In this chapter, and the next, we will consider how to account for the relations between multiple dependent variables. We will focus on a class of models called **Structural Equation Models** (SEM). As we will see, this class incorporates a wide variety of models, including many of those we have discussed before. Structural equation models also allow us to incorporate **latent variables**, which are variables that are not directly observed, but whose values can be inferred (or measured) from their relations with observed variables. Such latent variable models are the focus of Chapter @sec-ch-SEM-latent-variable-models. Here, we will focus on models which contain only observed variables. These models are commonly referred to as **path models**.
+
+Path models were introduced by @wright1920relative, who used regression equations to define direct and indirect effects of observed variables onto others in population genetics, and applied causal interpretations to these effects. @fig-wright-path-model-image shows one of the first illustrations of a path model by Sewell Wright, to depict genetic relations between generations of guinea pigs.
+
+|[Graphical representation of a path model by Sewell Wright. Source: [OpenMx
+#|   ](https://openmx.ssri.psu.edu/sites/default/files/Wright20aFigure5_1.jpg)](https://openmx.ssri.psu.edu/sites/default/files/Wright20aFigure5_1.jpg){#fig-wright-path-model-image}
+
+```{r}
+#| label: wright-path-model-image
+#| eval: false
+#| fig-cap: 'Graphical representation of a path model by Sewell Wright. Source: [OpenMx
+#|   ](https://openmx.ssri.psu.edu/sites/default/files/Wright20aFigure5_1.jpg)'
+if(knitr::is_html_output()) {
+  knitr::include_graphics("https://openmx.ssri.psu.edu/sites/default/files/Wright20aFigure5_1.jpg")
+} else {
+  download.file("https://openmx.ssri.psu.edu/sites/default/files/Wright20aFigure5_1.jpg", "Wright20aFigure5_1.jpg", mode = 'wb')
+  knitr::include_graphics("Wright20aFigure5_1.jpg")
+}
+```
+
+<!--
+However, we will let go of the clear distinction between predictor variables and dependent variables. We will simply denote each observed variable as $Y_j$. 
+
+Structural Equation Models are, at their heart, *linear* models. The conditional mean $\mu_{Y_j|Y_1, \ldots, Y_{j-1}, Y_{j+1}, \ldots, Y_m}$ of each variable $Y_j$ is assumed to be expressible as a linear function of the other variables $Y_1,\ldots, Y_{j-1}, Y_{j+1}, \ldots, Y_m$ in the model. It is possible to include link functions, as in Chapter @sec-ch-generalized-linear-models, to allow for a wide variety in the conditional distributions of the variables $Y_j$. But we will stick to the simpler case, where these conditional distributions are Normal.
+-->
+
+## Graphical models
+
+Structural Equation Models are often expressed in a graphical form, where **nodes** represent variables, and **edges** (arrows) represent relations between the nodes (variables). Graphical depictions of SEM models have some conventions to allow a straightforward interpretation. These are:
+
+* Squares or rectangles represent *observed* variables
+* Circles or ovals represent *latent* variables
+* Triangles represent (known) *constants*
+* One-directional (single-headed) arrows represent a *causal relation* between two variables. The arrow starts from the cause (independent variable), and ends on its effect (dependent variable).
+* Bi-directional (double-headed) arrows represent *non-causal relations* (e.g. covariance or correlation). A bi-directional arrow from one variable onto itself represents the (residual) variance of a variable (which technically is equal to the covariance of a variable with itself)
+* Broken arrows represent *fixed* parameters. These parameters are assumed to be equal to the true parameter values, rather than estimates of the true values.
+
+We will see several examples of graphical depictions of SEM models in this chapter, and the next.
+
+<!--
+
+Graph theory is a branch of mathematics, which provides an abstract way to analyse relations between objects. A graph in this context consists of a set of **nodes** (the objects), and a set of **edges** between them (the relations). A well-known example is a social network. Here, the nodes represent people, and the edges represent friendship relations, or lines of communication. The edges can be bidirectional, when both people connected call each other friends or communicate with each other, or uni-directional, when only one person calls the other a friend or communicates with them, but not vice versa. Such networks can be represented as a matrix, with rows and columns representing people, and the entries in the matrix representing e.g. whether a row-person states they are a friend of a column-person.
+
+### Probabilistic graphical models
+
+In the context of statistical models, **nodes** are (random) variables, and **edges** indicate  conditional dependencies between these variables.
+
+**Probabilistic graphical models** refer to an abstract way to represent dependencies and independences in a set of random variables. ...  
+
+Probabilistic graphical models take many guises. For one thing, edges can be directed, or undirected. A directed edge means that the relation goes one way. For instance, the value of one variable can cause the value of another. SO a directed edge represents a **causal relation**. An undirected relation means that two variables covary, but a causal relation is not assumed. This can be also represented by a dual-directed edge (indicating that both variables influence each other).
+
+A nice aspect of graphical models is that they visualise often complex multiple relations in a large set of variables. This can aid our understanding of a model. Graphs are, in a sense, a visual language to express models. The model itself doesn't need the graph, but our understanding of them often does.
+
+In **directed graphs** with directed edges (arrows), nodes (variables) can have parents (edges coming in from other nodes) and children (edges going out to other nodes). Relations between parents and children can be viewed as lines of communication. Parents can send messages to their children, but in a directed graph, not the other way round.
+
+### Conventions in graphical representations of structural equation models
+
+Graphical representations of structural equation models are often slightly more detailed than general probabilistic graphical models. In particular, different symbols are used to distinguish between observed variables, latent (unobserved) variables, constants (e.g. intercepts).
+
+* Squares or rectangles: observed variables
+* Circles or ovals: errors, factors, latent variables
+* Triangles: constants
+* One-directional (single-headed) arrows: linear relationship between two variables. Starts from an independent variable and ends on a dependent variable.
+* Bi-directional (double-headed) arrows: variance of a variable or covariance between two variables
+
+-->
+
+### Exogenous and endogenous variables
+
+An important distinction in SEM models is that between exogenous and endogenous variables. **Exogenous variables** are variables that are not (partially) caused by the other variables in the model. The word "exogenous" means "from without (the outside)". In terms of a graphical model, these variables have no "parents" (i.e. incoming one-directional arrows from other variables). Exogenous variables have causes that are not incorporated in the model; their causes are unknown as far as the model is concerned. In the language of the general linear model, exogenous variables are the independent variables. This term is somewhat confusing though, as exogenous variables are often assumed to be correlated to each other. **Endogenous variables** are variables which are (partly) caused by other variables in the model. The word "endogenous" means "from within (the inside)". In terms of a graphical model, endogenous variables have parents (e.g. incoming one-directional arrows from other variables in the model). In terms of the general linear model, endogenous variables are dependent variables. In SEM models, endogenous variables can be related to each other, in the sense that one endogenous variable can (partially) cause another endogenous variable. Linking endogenous variables in this way is a main objective in path models.
+
+We will follow the convention to denote exogenous variables as $X_j$, $j=1, \ldots, m$, and endogenous variables as $Y_j$, $j=1, \ldots, k$. Combining the exogenous and endogenous variables, a SEM model accounts for a total of $P = m + k$ variables.
+
+## Regression models
+
+```{r}
+#| label: fig-SEM-simple-regression-structural-plot
+#| fig-cap: Graphical representation of a simple regression model
+#| fig-width: !expr 1.2 * 4
+#| fig-height: !expr 1.2 * 1
+#| out-width: 80%
+library(sdamr)
+library(lavaan)
+library(semPlot)
+data("trump2016")
+dat <- subset(trump2016,state != "District of Columbia")
+dat$X <- dat$hate_groups_per_million
+#dat$X2 <- dat$percent_bachelors_degree_or_higher
+dat$Y <- dat$percent_Trump_votes
+sregmod <-   '
+  # regressions
+    Y ~ 1 + X
+'
+fsregmod <- lavaan::sem(sregmod, data=dat)
+spmod <- semPlotModel(fsregmod)
+#spmmod@Pars <- spmmod@Pars[-5,]
+semPaths(spmod, layout="tree2", sizeMan=7, sizeInt = 4, style="mx", residuals=TRUE, normalize=FALSE, width=4, height=2, rotation=2)
+```
+
+The simplest example of a path model is a simple (bivariate) regression model. @fig-SEM-simple-regression-structural-plot depicts a simple regression model in graphical form. The model has two observed variables, $X$ and $Y$, indicated by rectangles. The model has two constant terms, indicated by triangles. Variable $X$ is an exogenous variable. It has an incoming one-directional arrow only from a constant, not from a variable. The path from the constant term to $X$ is an intercept term to represent the mean of this variable. The bi-directional arrow from $X$ onto itself represents the (residual) variance of this variable around its mean. The implied model for $X$ can be written as
+$$X = \beta_{0,x} \times 1 + \epsilon_{x} \quad \quad \epsilon_{x} \sim \mathbf{Normal}(0, \sigma_{\epsilon_{x}}) $$
+Variable $Y$ is an endogenous variable. It has two incoming uni-directional arrows. One from another constant term, indicated by a triangle, and one from variable $X$. The bi-directional arrow from $Y$ to itself allows for residual variation in $Y$ that is not explained by the causal relation with $X$. The implied model for $Y$ can be stated as
+$$Y = \beta_{0,y} \times 1 + \beta_{x} \times X + \epsilon_{y} \quad \quad \epsilon_{y} \sim \mathbf{Normal}(0, \sigma_{\epsilon_{y}}) $$
+The exogenous variable $X$ is assumed fixed, in the sense that the values it takes are not random. Although a fixed variable can still be assigned an intercept ($\beta_{0,x}$) and residual variation term ($\sigma_{\epsilon_{x}}$), these parameters do not need to be estimated. For a fixed variable, we assume that all the possible values are in the data. Hence, its parameters can be computed directly from the data. They do not need to be estimated. This is indicated by the broken lines in the arrows, which represent non-estimated (i.e. fixed) parameters.
+
+A multiple regression model has multiple exogenous variables $X_j$, and a single endogenous variable $Y$. @fig-SEM-multiple-regression-speeddate-plot shows a graphical depiction of a multiple regression model, predicting whether participants in a speed-dating experiment (see Section @sec-glm-mediation) like their partner ($\texttt{like}$), as a function of how attractive ($\texttt{attr}$), sincere ($\texttt{sinc}$), intelligent ($\texttt{intel}$), fun ($\texttt{fun}$), and ambitious ($\texttt{amb}$) they rate them. The predictors $\texttt{attr}$, $\texttt{sinc}$, $\texttt{intel}$, $\texttt{fun}$, and $\texttt{amb}$, are all exogenous variables. They are allowed to covary, which is indicated by the bi-directional arrows linking them. They also have variances, which are indicated by the self-pointing bi-directional arrows. And their means are indicated through the constant terms (triangles). All the arrows are labelled by the values of the corresponding parameters. Note that as before, the parameters for the means and variances of the exogenous variables are treated as fixed. This is indicated by the broken lines of the arrows. Variable $\texttt{like}$  is an endogenous variable. It has incoming uni-directional arrows from all the predictors. In addition, the endogenous variable has an intercept (shown as the arrow from the triangle), and residual variance (shown as the bi-directional arrow from $\texttt{like}$ onto itself).
+
+```{r}
+#| label: fig-SEM-multiple-regression-speeddate-plot
+#| fig-cap: Graphical representation of a multiple regression model
+#| fig-width: 8
+#| fig-height: 3.5
+#| out-width: 100%
+library(dplyr)
+data("speeddate")
+dat <- speeddate %>%
+  mutate(like=other_like,
+         attr = other_attr,
+         sinc = other_sinc,
+         intel = other_intel,
+         fun = other_fun,
+         amb=other_amb)
+regmod <-   '
+  # regressions
+    like ~ 1 + attr + sinc + intel + fun + amb
+'
+fregmod <- lavaan::sem(regmod, data=dat)
+spmmod <- semPlotModel(fregmod)
+#spmmod@Pars
+semPaths(spmmod, layout="tree", sizeMan=7, sizeInt = 4, style="ram", residuals=TRUE, rotation=1, intAtSide = FALSE, whatLabels = "est", nCharNodes = 0, curvature=3) #, whatLabels="est", nodeLabels=list("y",expression(x[1]),expression(x[2])))
+```
+
+Graphical depictions of SEM models, such as @fig-SEM-multiple-regression-speeddate-plot, contain a wealth of information about the assumed relations between the variables and the estimated parameters. However, sometimes we need more precise information, as well as parameter tests, which can be provided in a table such as @tbl-sem-table-multiple-regression-speeddate. This table lists all the parameters of the path model in order (regression slopes, intercepts, residual variances, residual covariances). For estimated parameters, the table also shows the standard error of the estimate, and the results of Wald tests of the null-hypothesis that the parameter equals 0. For fixed parameters, only the value of the parameter is shown. Fixed parameters can be computed, rather than estimated, and hence they do not have a standard error. The final part of the table contains so-called *fit indices*. We will discuss these later on.
+
+```{r}
+#| results: asis
+
+# if(knitr::is_html_output()) {
+#   cat("<table><caption>(\\#tab:sem-table-multiple-regression-speeddate) Results of a SEM analysis of a multiple regression model.</caption>")
+#   semTable::semTable(fregmod, type="html", fits = c("chisq", "cfi", "srmr", "rmsea"))
+#   cat("</table>")
+# } else {
+#   semTable::semTable(fregmod, type="latex", table.float = TRUE, caption = "(\\#tab:sem-table-multiple-regression-speeddate) Results of a SEM analysis of a multiple regression model.", fits = c("chisq", "nfi", "tli", "srmr", "rmsea"))
+# }
+
+semoutput::sem_tables(fregmod)
+
+cat(": Results of a SEM analysis of a multiple regression model {tbl-sem-table-multiple-regression-speeddate}")
+```
+
+@tbl-sem-table-multiple-regression-speeddate indicates that all the exogenous variables have a significant and positive effect on the endogenous variable. The intercept of the endogenous variable is also significant, which indicates that the mean of the endogenous variable can not be predicted accurately from the means of the exogenous variables. The residual variance indicates that not all the variation in the endogenous variable is accounted for by the causal relation with the exogenous variables. The residual covariances account for multi-collinearity between the predictors. Unlike a standard multiple regression model, this path model accounts for the covariation between all the (independent and dependent) variables in the model. 
+
+## Mediation {#sec-sem-path-model-mediation}
+
+Mediation involves a causal chain from an exogenous variable $(X)$ to a mediating endogenous variable $(Y_1)$, which in turn is causally related to a final endogenous variable $(Y_2)$. For example, @zaval_how_2015 considered whether the motive to leave a positive legacy in the world would result in an intention to behave in a pro-environmental manner, which in turn would result in actual pro-environmental behaviours. In Section @sec-glm-mediation we discussed using three different regression models to assess whether there is evidence that the relation between legacy motive ($\texttt{legacy}$) and behaviour ($\texttt{donation}$; donating to an environmental cause) is mediated by intention ($\texttt{intention}$). Here, we will use a path model to analyse this causal chain in a single model.
+
+```{r}
+#| label: full-mediation-sem-estimation
+data("legacy2015")
+dat <- legacy2015 %>%
+  mutate(intention = intention,
+         legacy = legacy,
+         donation = donation)
+
+mod1 <-   '
+  # regressions
+    intention ~ 1 + legacy
+    donation ~ 1 + intention
+'
+fmod1 <- lavaan::sem(mod1, data=dat)
+```
+
+The *full mediation* path model has one exogenous variable $(\texttt{legacy})$. This exogenous variable has a causal link to the first endogenous variable $(\texttt{intention})$, which is the mediator variable. This endogenous mediator variable is causally linked to the second endogenous variable $(\texttt{donation})$. The estimated full mediation model is depicted in @fig-path-full-mediation-legacy-motive. This model assumes an indirect effect of $\texttt{legacy}$ on $\texttt{donation}$, which is equal to the product of the regression terms in the path from $\texttt{legacy}$, via $\texttt{intention}$, to $\texttt{donation}$. This indirect effect is equal to $`r round(summary(fmod1)$pe$est[2],2)` \times `r round(summary(fmod1)$pe$est[4],2)` = `r round(summary(fmod1)$pe$est[2]*summary(fmod1)$pe$est[4],2)`$. 
+
+```{r}
+#| label: fig-path-full-mediation-legacy-motive
+#| fig-cap: A full mediation model
+#| fig-width: !expr 0.8 * 6
+#| fig-height: !expr 0.8 * 4
+#| out-width: 80%
+
+
+spmmod <- semPlotModel(fmod1)
+semPaths(spmmod, layout="tree", sizeMan=7, sizeInt = 4, style="ram", residuals=TRUE, rotation=2, intAtSide = FALSE, whatLabels = "est", nCharNodes = 0, normalize = FALSE)
+```
+
+A path model allows us to estimate an assumed causal chain, or other patterns of relations between exogenous and endogenous variables, with a single model. However, we do not know whether the estimated model provides the best -- or even a good -- description of the data. Other path models are possible for this data. For example, we could also allow motivation to have a direct effect on behaviour, in addition to its indirect effect via intention. This model is depicted in @fig-path-partial-mediation-legacy-motive.
+
+```{r}
+#| label: fig-path-partial-mediation-legacy-motive
+#| fig-cap: A partial mediation model
+#| fig-width: !expr 0.8 * 6
+#| fig-height: !expr 0.8 * 4
+#| out-width: 80%
+#summary(fmod1)
+
+mod2 <-   '
+  # regressions
+    intention ~ 1 + legacy
+    donation ~ 1 + intention + legacy
+'
+fmod2 <- lavaan::sem(mod2, data=dat)
+
+spmmod <- semPlotModel(fmod2)
+semPaths(spmmod, layout="tree", sizeMan=7, sizeInt = 5, style="ram", residuals=TRUE, rotation=2, intAtSide = FALSE, whatLabels = "est", nCharNodes = 0, normalize=FALSE)
+
+#summary(fmod2)
+
+```
+
+Alternatively, we might assume that motivation causes both intention and behaviour, but that intention and behaviour are conditionally independent. This is also called a **common cause model**. This model is depicted in @fig-path-common-cause-legacy-motive. Note the broken bi-directional arrow between $\texttt{donation}$ and $\texttt{intention}$ with a value of 0. This indicates that the residual covariance between these variables is fixed to 0.
+
+```{r}
+#| label: fig-path-common-cause-legacy-motive
+#| fig-cap: A common cause model
+#| fig-width: !expr 0.8 * 6
+#| fig-height: !expr 0.8 * 4
+#| out-width: 80%
+#summary(fmod1)
+
+mod3 <-   '
+  # regressions
+    intention ~ 1 + legacy
+    donation ~ 1 + legacy
+    donation ~~ 0*intention
+'
+fmod3 <- lavaan::sem(mod3, data=dat)
+
+spmmod <- semPlotModel(fmod3)
+semPaths(spmmod, layout="tree", sizeMan=7, sizeInt = 5, style="ram", residuals=TRUE, rotation=2, intAtSide = FALSE, whatLabels = "est", nCharNodes = 0, normalize=FALSE)
+
+#summary(fmod2)
+
+```
+
+We now have three alternative models for the relations between legacy motive, intention, and donation. An obvious question is: which one provides the best account of the data? 
+
+## Assumptions and estimation
+
+Before we consider how well a SEM accounts for the data, we first need to consider the assumptions underlying the model. Traditional SEM models assume the variables in the model follow a multivariate Normal distribution. 
+
+### The multivariate Normal distribution
+
+We have introduced the multivariate Normal distribution in Chapter @sec-ch-linear-mixed-effects-models. A **multivariate Normal distribution** is a distribution over _vectors_ of values. An example for a vector of two variables, e.g. $[X_1,Y_1]$, is shown in @fig-bivariate-normal-distribution-interactive-plot.
+
+```{r}
+#| label: rgl-setup-sem
+#| include: false
+
+#widget <- rglwidget(elementId = "interactive-3dplot-multiple-regression", controllers = "interactive-3dplot-multiple-regression-controller") %>%
+#  playwidget(par3dinterpControl(fn, 0, 2*3*.75, steps=30),
+#       step = 0.01, loop = TRUE, rate = 0.5)
+
+#options(rgl.printRglwidget = TRUE)
+library(rgl)
+knitr::knit_hooks$set(webgl = hook_webgl)
+if(!require("manipulateWidget")) install.packages("manipulateWidget")
+rgl::setupKnitr(autoprint = TRUE)
+```
+
+```{r}
+#| label: fig-bivariate-normal-distribution-interactive-plot
+#| cache: true
+#| fig-cap: A multivariate Normal distribution for two variables. You can rotate the
+#|   plot with a mouse by clicking and moving the mouse.
+#| fig-align: center
+
+# parameters:
+n<-50; ngrid<-40
+
+# generate samples:
+set.seed(31415)
+x<-rnorm(n); y<-rnorm(n)
+
+# estimate non-parameteric density surface via kernel smoothing
+denobj <- MASS::kde2d(x, y, n=ngrid)
+den.z <-denobj$z
+
+# generate parametric density surface of a bivariate normal distribution
+xgrid <- denobj$x
+ygrid <- denobj$y
+bi.z <- dnorm(xgrid)%*%t(dnorm(ygrid, sd = .8))
+
+# visualize:
+zscale<-20
+
+# New window
+#open3d()
+
+# clear scene:
+#clear3d("all")
+
+# setup env:
+bg3d(color="#887777")
+light3d()
+
+# Draws the simulated data as spheres on the baseline
+#spheres3d(x,y,rep(0,n),radius=0.1,color="#CCCCFF")
+spheres3d(0,0,rep(0,1),radius=0.1,color="#CCCCFF")
+
+# Draws non-parametric density
+#surface3d(xgrid,ygrid,den.z*zscale,color="#FF2222",alpha=0.5)
+
+# Draws parametric density
+surface3d(xgrid,ygrid,bi.z*zscale,color="#CCCCFF",front="lines")
+
+#view3d(theta=0,phi=0, fov=90)
+#par3d(userMatrix = rotationMatrix(20*pi/180, 0,0,1) 
+#                   %*% par3d("userMatrix"))
+
+#par3d(userMatrix = rbind(c(1,0,0,0), c(0,.966, .259, 0), c(0,-.259,.966,0), c(0,0,0,1)))
+
+#library(rglwidget)
+#options(rgl.printRglwidget = TRUE)
+
+
+
+# coefs <- coef(mod)
+# a <- coefs["hate_groups_per_million"]
+# b <- coefs["percent_bachelors_degree_or_higher"]
+# c <- -1
+# d <- coefs["(Intercept)"]
+# plt <- plot3d(x=dat$hate_groups_per_million, y=dat$percent_bachelors_degree_or_higher, z=dat$percent_Trump_votes, xlab="Hate groups", ylab="% bachelors degree or higher", zlab="% Trump votes", type = "s", col = "purple", size = 1) + planes3d(a, b, c, d, alpha = 0.5)
+# userMat <- matrix(c(0.04618797,-0.998904467,-0.005153618,0,0.02906432,-0.003813314,0.999554276,0,-0.99849236,-0.046314929,0.028857738,0,0.00000000,0.000000000,0.000000000,1), ncol=4, byrow = TRUE)
+# rgl.viewpoint(userMatrix = userMat)
+# 
+# fn <- rgl::par3dinterp(time = (0:3)*0.75, userMatrix = list(userMat,
+#                                       rotate3d(userMat, pi/2, 0, 0, -1),
+#                                       rotate3d(userMat, pi/2, 0, 0, 1),
+#                                       rotate3d(userMat, pi/2, 1, 0, 0)))
+# 
+# #rglwidget(elementId = "interactive-3dplot-multiple-regression", controllers = "interactive-3dplot-multiple-regression-controller") %>%
+# rglwidget(scene3d(plt)) %>%
+#   playwidget(par3dinterpControl(fn, 0, 2*3*.75, steps=30),
+#        step = 0.01, loop = TRUE, rate = 0.5)
+
+#rglwidget(elementId = "interactive-3dplot-multiple-regression", controllers = "interactive-3dplot-multiple-regression-controller")
+#playwidget(sceneId = "interactive-3dplot-multiple-regression", controls=par3dinterpControl(fn, 0, 2*3*.75, steps=30),
+#       step = 0.01, loop = TRUE, rate = 0.5, elementId = "interactive-3dplot-multiple-regression-controller")
+
+# widget
+
+```
+
+A multivariate Normal distribution is parametrized by a mean vector $\boldsymbol{{\mu}}$ and a variance-covariance matrix $\boldsymbol{{\Sigma}}$.
+
+The **mean vector** contains the means for all variables in the model
+
+$$\boldsymbol{{\mu}} = \left[ \begin{matrix} \mu_1 \\ \mu_2 \\ \vdots \\ \mu_P \end{matrix} \right]$$
+In a path model, the means are determined by the intercepts and regressions from parents of variables.
+
+The **variance-covariance matrix** contains the variances $\sigma_j^2$ of each variable in the model, as well as the covariances $\sigma_{i,j}$ between all pairs of variables in the model:
+$$\boldsymbol{{\Sigma}} = \left[ \begin{matrix} \sigma^2_1 & \sigma_{1,2} & \ldots & \sigma_{1,P} \\ \sigma_{2,1} & \sigma_{2}^2 & \ldots & \sigma_{2,P} \\ \vdots & \vdots & & \vdots \\ \sigma_{P,1} & \sigma_{P,2} & \ldots & \sigma_{P}^2 \end{matrix} \right]$$
+The theoretical variances and covariances, as implied by a SEM model, are determined by regression relations and (residual) variances. For example, in a simple regression model
+$$Y = \beta_0 + \beta_x \times X + \epsilon \quad \quad \epsilon \sim \mathbf{Normal}(0, \sigma_\epsilon)$$
+the implied theoretical variance of $Y$, denoted as $\sigma^2_y$, is a function of the regression coefficient $\beta_x$, the variance of $X$ $(\sigma_x^2)$, and the residual variance $(\sigma_\epsilon^2)$:
+$$\sigma_y^2 = \beta^2_x \times \sigma_x^2 + \sigma^2_\epsilon$$
+The covariance between $X$ and $Y$ is a function of the regression coefficient and the variance of $X$:
+$$\sigma_{x,y} = \beta_x \times \sigma_x^2$$
+As $X$ is an exogenous variable, its variance is not implied by the model. If $X$ is considered fixed, then its true variance $\sigma_x^2$ can be computed from the data directly.
+
+A multivariate Normal distribution is completely determined by the mean vector and variance-covariance matrix. The basic idea underlying estimation of SEM model parameters is to minimize the discrepancy between the sample means and (co-)variances, and the model-implied theoretical means and (co-)variances. There are a number of ways in which to do this. The most commonly employed way is by maximum likelihood. If the data follows a multivariate distribution, it can be shown that the likelihood is a function of the sample means $\overline{\mathbf{C}} = (\overline{X}_1, \ldots, \overline{X}_m, \overline{Y}_1, \ldots, \overline{Y}_k)$ (i.e. $\overline{\mathbf{C}}$ is a vector with the sample averages for all $m$ exogenous variables and $k$ endogenous variables), the sample variance-covariance matrix $\mathbf{S}$ (a $P$ by $P$ matrix, where $P=m+k$, with all the covariances of the endogenous and exogenous variables and their variances on the diagonal), and the model-implied mean vector $\boldsymbol{\mu}(\theta)$ and covariance matrix $\boldsymbol{\Sigma}(\theta)$, where $\theta$ denotes all the parameters in the model.^[Maximum likelihood estimation of SEM models consists of finding the parameter values $\theta$ that minimize the following function [@bollen2011structural]: $$F_\text{ML} = \log |\boldsymbol{\Sigma}(\theta)| - \log | \mathbf{S} |  + \text{trace}\left( \boldsymbol{\Sigma}^{-1}(\theta) \mathbf{S}\right) - \text{dim}(\overline{\mathbf{C}}) + \left(\overline{\mathbf{C}} - \boldsymbol{\mu}(\theta)\right)^\top \boldsymbol{\Sigma}^{-1}(\theta) \left(\overline{\mathbf{C}} - \boldsymbol{\mu}(\theta)\right)$$ where $|\cdot|$ denotes the determinant of a matrix, $\text{trace}(\cdot)$ the trace of a matrix, $\text{dim}(\cdot)$ refers to the dimension (number of elements) in a vector, $\cdot^{-1}$ denotes the matrix inverse, and $\cdot^\top$ for the matrix transpose. Unless you know some matrix algebra, these terms of the formula are probably not meaningful. The key is that the observations $X_{1,i},\ldots,X_{m,i},Y_{1,i}\ldots,Y_{k,i}$, $i=1,\ldots,n$, are **not** needed in the computation of this, just the means $\overline{\mathbf{C}}$ and covariances $\mathbf{S}$. The log likelihood of the full data is simply $n\times F_{\text{ML}}$, where $n$ is the number of observations.] This implies that you don't need the full dataset to estimate a SEM model by maximum likelihood: you just need the sample means and (co-)variances. 
+
+The assumption of multivariate Normality is necessary to derive maximum likelihood estimators, and corresponding standard errors of the estimates and sampling distributions for test statistics. Estimation and tests are however reasonably robust against (mild) deviation from multivariate Normality, e.g. as long as the distribution is not overly skewed [@bollen2011structural]. Alternatives to maximum likelihood are Generalized Least Squares (GLS), which is also based on the assumption of multivariate Normality, and Weighted Least Squares (WLS; also called asymptotically distribution free or ADF), which does not require the assumption of multivariate Normality.
+<!-- see https://web.pdx.edu/~newsomj/semclass/ho_estimate.pdf for estimation methods -->
+
+#### Variance-Covariance algebra {#sec-SEM-path-models-variance-covariance-algebra}
+
+The elements of the model-implied variance-covariance matrix can be determined using the following rules for variances and covariances (where $X$, $Y$, and $Z$ are variables, and $c$ a constant):
+
+$$
+\begin{aligned}
+(1) && \text{Var}(X + Y) &= \text{Var}(X) + \text{Var}(Y) + 2 \times \text{Cov}(X,Y) \\
+(2) && \text{Var}(X - Y) &= \text{Var}(X) + \text{Var}(Y) - 2 \times \text{Cov}(X,Y) \\
+(3) && \text{Var}(c + Y) &= \text{Var}(Y) \\
+(4) &&\text{Var}(c \times Y) &= c^2 \times \text{Var}(Y) \\
+(5) &&\text{Cov}(c, Y) &= 0 \\
+(6) &&\text{Cov}(c\times X, Y) &= c \times \text{Cov}(X,Y) \\
+(7) &&\text{Cov}(X+Y, Z) &= \text{Cov}(X,Z) + \text{Cov}(Y,Z)
+\end{aligned}
+$$
+For example, if we take the simple regression model:
+$$Y = \beta_0 + \beta_x \times X + \epsilon_y \quad \quad \epsilon_y \sim \mathbf{Normal}(0, \sigma_{\epsilon_y})$$
+we can use rule 4 to work out the variance of $\beta_x \times X$ (which is $\beta_x^2 \times \text{Var}(X)$), and then apply rule 1 to work out the variance of the sum $\beta_x \times X + \epsilon_y$ (which is $\beta_x^2 \times \text{Var}(X) + \sigma^2_{\epsilon_y}$), and then use rule 3 to work out the variance of $\beta_0 + \beta_x \times X + \epsilon_y$ (which remains $\beta_x^2 \times \text{Var}(X) + \sigma^2_{\epsilon_y}$). The model-implied variance is thus $\sigma^2_y = \beta_x^2 \times \sigma^2_x + \sigma^2_{\epsilon_y}$.
+
+In principle, these rules can be used recursively to work out the total implied variance-covariance matrix for a given model. This can become rather tedious, however. Matrix algebra provides an easier way to determine the predicted mean vector and variance-covariance matrix. However, an introduction to matrix algebra is beyond the scope of this book. The key thing to understand is that SEM models imply a variance-covariance matrix and mean vector, which can be compared to the sample variance-covariance matrix and mean vector.
+
+<!-- TODO: could consider Wright's path tracing rules. See e.g. http://sachaepskamp.com/files/SEM2_2020/SEM2Week1_2020_path.pdf -->
+
+### Assumptions: Exogenous vs endogenous variables
+
+The assumption that the set of *all* variables in the model follows a multivariate Normal distribution is different from the assumptions of multiple regression and the General Linear Model. In the GLM, the assumptions solely concern the *residuals* of the dependent variable. No assumptions have to be made about the distributions of the predictors. So how can a SEM model be equivalent to a GLM?
+
+The easiest way to deal with non-normal exogenous variables is to treat them as fixed. As fixed variables are not random and as such have no probability distribution, they don't need to be included in the calculation of the likelihood (although they are needed to calculate the model-implied parameters of the endogenous variables). Assuming exogenous variables are fixed allows you to also include *categorical* exogenous variables, using e.g. contrast-codes. Fixed exogenous variables are still included in the sample and model-implied mean vectors and variance-covariance matrices. However, the model-implied values are identical to the corresponding sample values, as these parameters can be computed from the data. As a result, for fixed exogenous variables, the fit is perfect. 
+
+Exogenous variables can be treated as random as well, in which case their sample means and (co-)variances should be treated as estimates of the corresponding true (or "population") parameters. In that case, assumptions about their distribution are important. In general however, the assumption of multivariate Normality is mainly of importance for the *endogenous* variables. If it cannot be assumed that they are approximately (conditionally) multivariate Normal-distributed, special techniques should be employed to account for this. This is particularly relevant for dichotomous or polytomous endogenous variables. Specialised software (e.g. [Mplus](https://www.statmodel.com/)) can estimate SEM models with such categorical endogenous variables. Currently, the R package [lavaan](https://www.lavaan.ugent.be/) can deal with *ordinal* categorical variables. Here, we will focus on continuous endogenous variables which can be assumed to follow a multivariate Normal distribution.
+<!--
+So what do we do if some of our variables are not Normal-distributed? Well, it depends. If these variables are *exogenous* variables, there is no need to worry. The target of ML estimation for SEMs is the sample mean vector and variance-covariance matrix. By including the prerequisite parameters, we can fit the mean and variance of these exogenous variables perfectly. As such, deviations from Normality for exogenous variables don't affect the fit of the model; it also does not affect the parameter estimates. 
+
+For *endogenous* variables, however, we do need a similar assumption as in the GLM, namely that the conditional distribution follows a Normal distribution, with a constant variance. In practice, this implies that the residuals of the endogenous variables should follow a multivariate Normal distribution. -->
+
+## Model fit
+
+A first consideration for any SEM model is whether it describes the observed data well. As in any statistical model, describing the data well means that the implied distribution of the data is more-or-less equal to the empirical distribution of the data.
+
+### Test of overall model fit
+
+A test of overall model fit is similar to that used for generalized linear models (see Section @sec-generalized-linear-models-overall-model-fit), which is based on likelihood-ratio test comparing the model under consideration (MODEL M) to a saturated MODEL S:
+$$\begin{aligned}
+\hat{\chi}^2_M &= -2 \log \frac{p(\text{DATA}|\text{MODEL M})}{p(\text{DATA}|\text{MODEL S})} 
+\end{aligned}$$
+Note that we use the symbol $\hat{\chi}^2$ here, rather than the residual deviance $D_R$ used in the context of generalized linear models, as the former is more common in the SEM literature. As usual, this statistic approximately follows a Chi-squared distribution with degrees of freedom equal to $\text{df} = \text{npar}(S) - \text{npar}(M)$. The saturated MODEL S sets $\boldsymbol{\Sigma}(\theta) = \mathbf{S}$ and $\boldsymbol{\mu}(\theta) = \overline{C}$. In words, for the saturated model, the model-implied means and (co-)variances are set to their sample values. For a model with a total of $P = m+k$ observed variables, the saturated MODEL S therefore uses a total of 
+$$
+\text{npar}(S) = \frac{P \times (P - 1)}{2} + 2 \times P
+$$ {#eq-npar-saturated-sem-model}
+parameters. The covariance matrix contains $\frac{P \times (P - 1)}{2} + P$ unique terms ($P$ variances, and $\frac{P \times (P-1)}{2}$ unique covariances^[A covariance $\sigma_{1,2}$ above the diagonal is equal to the covariance $\sigma_{2,1}$ below the diagonal.]). The mean vector contains $P$ unique parameters (a mean for each variable). Adding these up provides the specification above. 
+
+If the model under consideration uses less parameters, then the test result can provide a meaningful assessment of the overall model fit. 
+There are some issues however. Particularly, the number of observations $n$ should be sufficient (e.g. $n > 200$), and the data should follow a multivariate Normal distribution. But if the number of observations $n$ is very large, the test becomes very powerful. The test will then often be significant, even when the model provides a good (but not perfect) account of the data. Due to these issues (and others), a wide variety of approximate fit indices have been proposed.
+
+### Approximate fit indices
+
+Fit indices can be grouped into those that concern comparative fit to a baseline model and  measures based on errors of approximation [@kaplan2001sem]. We will discuss commonly used measures in each group in turn.
+
+#### Comparative fit to a baseline
+
+The idea behind measures that compare the fit of a MODEL M to that of a baseline MODEL B is that a simple baseline model may already fit the data well. We should therefore be interested in how much the added complexity of MODEL M contributes. The baseline MODEL B is usually one which specifies complete independence between the observed variables (i.e. all the covariances are equal to 0).
+
+Comparing a MODEL M to a baseline MODEL B via a likelihood-ratio test is a first option. This leads to the baseline Chi-squared test:
+$$\begin{aligned}
+\text{baseline } \hat{\chi}^2_M &= -2 \log \frac{p(\text{DATA}|\text{MODEL B})}{p(\text{DATA}|\text{MODEL M})} 
+\end{aligned}$$
+with $\text{df} = \text{npar}(B) - \text{npar}(M)$. This statistic can be used to test the null-hypothesis that the baseline MODEL B describes the data equally well as the more complex MODEL M. One would generally like to reject this null-hypothesis (so a significant test result is good).
+
+The **normed fit index** (NFI) is computed from the overall model fit tests of MODEL M and MODEL B as a ratio similar to that of the $R^2$ measure for the GLM:
+$$
+\text{NFI} = \frac{\hat{\chi}^2_B - \hat{\chi}^2_M}{\hat{\chi}^2_B}
+$$ {#eq-sem-NFI-definition}
+Note that as the baseline MODEL B is simpler than MODEL M, it can never perform better, so $\hat{\chi}^2_B \geq \hat{\chi}^2_M$. The NFI therefore ranges between 0 (same fit as baseline model) and 1 (perfect fit compared to the baseline model). Values of the NFI larger than .95 are considered to indicate a good fit of the model.
+
+The **comparative fit index** (CFI) is another common fit index comparing a model to a baseline. Like the NFI, it uses the overall model fit statistics $\hat{\chi}^2_M$ and $\hat{\chi}^2_B$, but considers how these deviate from their expected values (under the null-hypothesis that each model is equal to MODEL S). For a Chi-squared distribution, the expected value (the mean) is equal to the degrees of freedom. Hence, the expected values are $\text{df}_M = \text{npar}(S) - \text{npar}(M)$ and $\text{df}_B = \text{npar}(S) - \text{npar}(B)$ respectively. The CFI is computed as
+$$
+\text{CFI} = \frac{\max(\hat{\chi}^2_B - \text{df}_B, 0) - \max(\hat{\chi}^2_M - \text{df}_M, 0)}{\max(\hat{\chi}^2_B - \text{df}_B, 0)}
+$$ {#eq-sem-CFI-definition}
+The values of the CFI range between 0 (bad) and 1 (good), and a value larger than .95 can be considered satisfactory [@hu1999cutoff].
+
+The **Tucker-Lewis index** (TLI) has a similar aim to the CFI. The TLI (also called the non-normed fit index, NNFI) is computed as:
+$$
+\text{TLI} = \frac{\hat{\chi}^2_B/\text{df}_B - \hat{\chi}^2_M/\text{df}_M}{\hat{\chi}^2_B/\text{df}_B - 1}
+$$ {#eq-sem-TLI-definition}
+The TLI is often interpreted as a measure between 0 (bad) and 1 (good), although it technically can have values below 0 or above 1. In any case, a value larger than .95 can be considered satisfactory [@hu1999cutoff].
+
+#### Errors of approximation
+
+The **Standardized Root Mean Residual** (SRMR) is an absolute measure of fit. It is a standardized measure of the discrepancy between the sample (co-)variances $s_{ij}$ and the model-implied (co-)variances $\sigma_{ij}(\theta)$. This measure can be computed as [cf. @hu1999cutoff]:
+$$
+\text{SRMR} = \sqrt{\frac{2 \sum_{i=2}^T \sum_{j=1}^i \left(\frac{s_{ij} - \sigma_{ij}(\theta)}{s_{ii} \times s_{jj}}\right)^2}{P \times (P+1)}}
+$$ {#eq-sem-SRMR-definition}
+If the model matches the sample (co-)variances perfectly, then the value would be 0. Smaller values indicate better fit, and a value of $\text{SRMR} \leq .08$ is considered satisfactory [@hu1999cutoff].
+
+Like the SRMR, the **Root Mean Square Error of Approximation** (RMSEA) is a an absolute fit index, with 0 indicating perfect fit. It is based on $\hat{\chi}^2_M$, the likelihood-ratio statistic comparing a MODEL M to the saturated MODEL S. But like the TLI, it considers the deviation of this statistic from its expected value (under the null-hypothesis that MODEL M is equal to MODEL S), which is $\text{df}_M = \text{npar}(S) - \text{npar}(M)$. The test statistic would never be significant for a MODEL M with $\hat{\chi}^2_M \leq \text{df}_M$. For such a model, the RMSEA measure is set to 0. For other models, the measure is larger than 0, with its magnitude reflecting "misfit", corrected for the degrees of freedom. The RMSEA is defined as:
+$$
+\text{RMSEA} = \sqrt{\frac{\max(0, \hat{\chi}^2_M - \text{df}_M)}{\text{df}_M (n-1)}}
+$$ {#eq-sem-RMSEA-definition}
+where $\text{max}(0,\hat{\chi}^2_M - \text{df}_M)$ returns either $0$ or $\hat{\chi}^2_M - \text{df}_M$ (whichever is larger), and $n$ denotes the number of observations in the data. As confidence intervals can be computed for this measure, it is common to report these. Values of $\text{RMSEA} \leq .06$ are considered satisfactory [@hu1999cutoff].
+
+@kline2015principles proposes to, when possible, report the following "minimal set" of fit measures:
+
+1. Model chi-square $\hat{\chi}^2_M$ with its degrees of freedom and $p$ value.
+2. Root Mean Square Error of Approximation (RMSEA) and its 90% confidence interval.
+3. Bentler Comparative Fit Index (CFI).
+4. Standardized Root Mean Square Residual (SRMR).
+
+
+<!-- ### Modification indices
+
+Modification indices -->
+
+## Modification indices
+
+When a SEM does not fit the data adequately, it *may* be reasonable to change it by allowing some parameters which were fixed to 0 to be estimated. When doing so, the main guide should be theory: Does the model still make sense after adding the new parameters? Is the model still identifiable? Modification indices can provide another guide. The **modification index** for a fixed-to-zero parameter is an estimate of the improvement in the model chi-square $\hat{\chi}^2_M$ that would result from allowing the parameter to be freely estimated. As such, a fixed-to-zero parameter with a large modification index might be a good candidate for improving model fit.
+
+Allowing fixed-to-zero parameters to be freely estimated increases the complexity of the model, and should therefore be done with caution. Blindly following modification indices to respecify a model is not advised. A main concern is that a model specification search via modification indices is data-driven. Data is noisy. A parameter that appears a cause of misspecification in one sample might not pose a problem in another. In other words, by changing a model to fit one sample, we may arrive at a model that fits less well to new data. This is also referred to as *capitalization on chance*, and @maccallum1992model show its detrimental effects rather clearly. Used sparingly, modification indices can provide a useful guide for model improvement, but whether freeing a parameter makes theoretical sense is more important.
+
+Differences in the observed correlations between variables, and the "predicted" correlations in the estimated model, provide another guide for model improvement. These differences in correlations are also called **residual correlations**. For example, when the observed correlation between two variables is much larger than predicted, it may make sense to add a direct path between these variables.
+
+## Model comparison
+
+Nested models can, as usual, be compared via a likelihood-ratio test.^[Technically, this assumes that the simpler MODEL R does not fix some free parameters of the more complex MODEL G at the bounds of their admissible values. For instance, if MODEL R can **not** fix a variance term of MODEL G to 0, as variances cannot be smaller than 0, this is exactly on the bound of the permissible values.] However, in SEM, we often want to compare non-nested models. In that case, we can revert to model selection criteria such as the Akaike Information Criterion [@Akaike1973] or Bayesian Information Criterion [@Schwarz1978]. Both criteria are derived in order to select the best model from a set. And both measures can be viewed as correcting the "minus 2 log-likelihood" measure for model complexity. The **Akaike Information Criterion**^[@Akaike1973 actually called it "An Information Criterion", but as the first letter of his last name matches that of "An", and Akaike Information Criterion seems more specific, the latter is what it is now known as.] (AIC) is defined as 
+$$
+\text{AIC} = -2 \log p(\text{DATA}|\text{MODEL M}) + 2 \times \text{npar}(M)
+$$ {#eq-AIC-definition}
+where $\text{npar}(M)$ denotes the number of freely estimated parameters in MODEL M. The AIC can be viewed as a measure of how well the model will generalize to new data sets. The **Bayesian Information Criterion** (BIC) is defined as
+$$
+\text{BIC} = -2 \log p(\text{DATA}|\text{MODEL M}) + \text{npar}(M) \times \log (n)
+$$ {#eq-BIC-definition}
+where $n$ is the number of (multivariate) observations. The BIC can be viewed as an approximation to the Bayesian "marginal likelihood". We will consider what this means in a later chapter.
+
+For both measures, lower values are better. The measures are not test statistics in the sense that their sampling distribution can be used to compute $p$-values. And the absolute value of each measure is not obvious. Their application is straightforward however: Pick the model with the lowest AIC or BIC. Both criteria add an additional penalty to the "minus two log likelihood" measure of misfit. The penalty of the AIC ($2 \times \text{npar}(M)$) is only based on the number of freely estimated parameters in MODEL M. For the BIC, the penalty ($\text{npar}(M) \times \log (n)$) is also based on the number of observations. The larger the dataset, the larger the relative penalty for additional parameters.
+
+## Evaluation and selection of the mediation path models
+
+With these technical details behind us, we can finally assess the fit of the three models proposed in Section @sec-sem-path-model-mediation. These were the full mediation, partial mediation, and the common cause model. The overall fit tests and fit measures of these models are provided in @tbl-sem-medation-fit-measures.
+
+```{r}
+#| label: tbl-sem-medation-fit-measures
+#| tbl-cap: "Fit tests and measures for three candidate path models for relating legacy motive, intention, and donations."
+options(knitr.kable.NA = '')
+myFitTab <- function(mod) {
+  fm <- fitmeasures(mod)
+  tab <- data.frame(c("$\\hat{\\chi}^2$","baseline $\\hat{\\chi}^2$", "CFI", "SRMR", "RMSEA", "AIC", "BIC"),
+        fm[c("chisq", "baseline.chisq", "cfi", "srmr", "rmsea", "aic", "bic")],
+        fm[c("df","baseline.df", NA, NA, NA, NA, NA)],
+        fm[c("pvalue","baseline.pvalue", NA, NA, NA, NA, NA)],
+        fm[c(NA, NA, NA, NA, "rmsea.ci.lower", NA, NA)],
+        fm[c(NA, NA, NA, NA, "rmsea.ci.upper", NA, NA)]
+        )
+  rownames(tab) <- NULL
+  colnames(tab) <- c("measure", "value", "df", "$p$","90% lower", "90% upper")
+  return(tab)
+}
+tab <- rbind(myFitTab(fmod1), myFitTab(fmod2), myFitTab(fmod3))
+tab[,4] <- sapply(tab[,4], format_p)
+knitr::kable(tab, digits=c(0,3,1,0,3,3), align="r") %>%
+  kableExtra::pack_rows("Full Mediation",1,7) %>%
+  kableExtra::pack_rows("Partial Mediation",8,14) %>%
+  kableExtra::pack_rows("Common Cause",15,21)
+```
+
+The Full Mediation model is rejected by the overall model fit test. The comparative fit to baseline test is significant, indicating that the model does fit better than the baseline model. Whilst the SRMR is below the cutoff value of .08, the CFI is below the cutoff value .95, and the RMSEA above the cutoff value .06, indicating relatively poor fit. 
+
+The Partial Mediation model is a saturated model. As such, it fits the data perfectly according to most measures. The only statistics of relevance are the AIC and BIC, which can be compared against those of the other models.
+
+The Common Cause model performs worse than the Full Mediation model. The Full Mediation and Common Cause model are both nested under the (saturated) Partial Mediation model (each sets one of the regression parameters to 0). As the Partial Mediation model is a saturated model, the $\hat{\chi}^2$ overall model fit tests for the Full Mediation and Common Cause model are equal to a model comparison with the Partial Mediation model. Hence, both can be said to fit significantly worse than the Partial Mediation model. 
+As the Full Mediation model and Common Cause model are not nested, they cannot be compared with a likelihood ratio test. For comparison of non-nested models, the AIC and BIC can be used. Both the AIC and the BIC are lowest for the Partial Mediation model. However, the difference in the BIC measure between the Full and Partial mediation model is very small. Taking a Bayesian viewpoint, the evidence for the Partial over the Full Mediation model is not strong. 
+
+## A more complex path model
+
+There are a number of additional variables in the dataset from the study on legacy beliefs in pro-environmental behaviour [@zaval_how_2015]. These are participants' age and income, as well as their belief in climate change. Relying solely on intuition, I hypothesized that education would be causally related to belief and income, and age to legacy motive (older people being more concerned with their legacy) and income (due to e.g. superannuation). I further hypothesized that belief would be causally related to intention. I also thought income might be related to intention, reasoning that richer people having less intention to behave pro-environmentally as that might hurt their investments and bank balance.^[This reasoning is not entirely independent from the current political developments in the United Kingdom at the time of writing this  (17 November 2022).] I also thought income might be causally related to donation (richer people being able to donate more). This rather haphazard "theory" led to the path model depicted in @fig-complex-path-legacy-motive-1 (for clarity, the constant terms are hidden in this plot). Age and education are exogenous variables in this model, and allowed to covariate. The remaining variables are endogenous, and apart from residual variances, are assumed to be fully explained by the other variables in the model. 
+
+```{r}
+#| label: fig-complex-path-legacy-motive-1
+#| fig-cap: A more complex path model.
+#| fig-width: !expr 0.9 * 6
+#| fig-height: !expr 0.9 * 4
+#| out-width: 100%
+mod_complex <-   '
+  # regressions
+    belief ~ 1 + education
+    legacy ~ 1 + age
+    income ~ 1 + age + education
+    intention ~ 1 + belief + legacy + income
+    donation ~ 1 + intention + income
+'
+fmod_complex <- lavaan::sem(mod_complex, data=legacy2015)
+
+spmmod <- semPlotModel(fmod_complex)
+semPaths(spmmod, layout="tree2", sizeMan=7, sizeInt = 5, style="ram", intercepts=FALSE, residuals=TRUE, rotation=2, intAtSide = FALSE, whatLabels = "est", nCharNodes = 0, normalize=FALSE)
+
+#summary(fmod2)
+
+```
+
+Perhaps surprisingly, apart from the effect of age on legacy and income, all the paths in the model were significant. @tbl-sem-path-mod-complex-results shows the results in more detail. Unfortunately, the model fit indices indicate that this model does not provide a satisfactory account of all the relations in the data. 
+
+```{r}
+#| results: asis
+# if(knitr::is_html_output()) {
+#   cat("<table><caption>(\\#tab:sem-path-mod-complex-results)Results of an initial full path model for the legacy motive data. Only results for regression parameters and selected model fit indices are included.</caption>")
+#   semTable::semTable(fmod_complex, type="html", paramSets = c("slopes","fits"), fits = c("chisq", "cfi", "srmr", "rmsea","aic", "bic"))
+#   cat("</table>")
+# } else {
+#   semTable::semTable(fmod_complex, type="latex", table.float = TRUE, fits = c("chisq", "cfi", "srmr", "rmsea","aic", "bic"), caption = "(\\#ttab:tab:sem_path_mod_complex_results) Results of an initial full path model for the legacy motive data.")
+# }
+
+semoutput::sem_tables(fmod_complex)
+
+cat(": Results of a SEM analysis of a multiple regression model {tbl-sem-path-mod-complex-results}")
+```
+
+@tbl-complex-path-legacy-motive-mi shows the modification indices for fixed-to-zero parameters in this model, ordered by magnitude and ignoring parameters for which the modification index is smaller than 2. 
+
+
+```{r}
+#| label: tbl-complex-path-legacy-motive-mi
+#| tbl-cap: "Modification indices and expected change in parameter values for fixed-to-zero parameters."
+fmod_complex_mi <- lavaan::modificationindices(fmod_complex, sort=TRUE, standardized = FALSE, minimum.value = 2)
+fmod_complex_mi |>
+  mutate(parameter = if_else(op == "~", paste0("$\\texttt{",rhs,"} \\rightarrow \\texttt{",lhs,"}$"), paste0("$\\texttt{",rhs,"} \\leftrightarrow \\texttt{",lhs,"}$"))) |>
+  select(parameter, mi, epc) |>
+  knitr::kable(align=c("l","r","r"), col.names=c("Parameter","Modification index", "Expected change"), escape = FALSE, row.names = FALSE, digits=3)
+```
+
+The parameter with the largest modification index is the direct path from belief to legacy motive. Whilst one might be tempted to therefore add a direct path from belief to legacy motive, I do not find it immediately plausible that belief in climate change would cause motivation to leave a positive legacy in the world. I also did not think it plausible that intention to act in a pro-environmental manner would cause a legacy motive (this effect having the second largest modification index). Instead, given that age appears unrelated to income and legacy motive, I reasoned that age was perhaps better placed as an exogenous influence on intention. I also reasoned that legacy motive might cause belief in climate change, as someone who is concerned with leaving a legacy in the world might be interested in knowing whether the world will continue to exist to sustain this legacy. @fig-complex-path-legacy-motive-2 depicts the estimated relations in this revised path model. This model assumes that in addition to age and education, legacy motive is also an exogenous variable. The remaining variables are endogenous.
+
+```{r}
+#| label: fig-complex-path-legacy-motive-2
+#| fig-cap: A more complex path model.
+#| fig-width: !expr 0.9 * 6
+#| fig-height: !expr 0.9 * 4
+#| out-width: 100%
+mod_complex2 <-   '
+  # regressions
+    belief ~ 1 + education + legacy
+    income ~ 1 + education
+    intention ~ 1 + belief + legacy + income + age
+    donation ~ 1 + intention + income
+'
+fmod_complex2 <- lavaan::sem(mod_complex2, data=legacy2015)
+
+spmmod <- semPlotModel(fmod_complex2)
+semPaths(spmmod, layout="tree2", sizeMan=7, sizeInt = 5, style="ram", intercepts=FALSE, residuals=TRUE, rotation=2, intAtSide = FALSE, whatLabels = "est", nCharNodes = 0, normalize=FALSE)
+```
+
+Clearly, the model in @fig-complex-path-legacy-motive-2 is based on post-hoc inferences, and so we are in the territory of *exploratory* data analysis. But my original model was not based on strong theory anyway, and the key idea of mediation of legacy motive and belief by intention is kept in the new model. That said, you should keep in mind that changing and refining a path model based on the results of a prior analysis is an exploratory exercise. A model arrived with a procedure like this should be taken with a grain of salt and ideally be tested properly with a new data set. 
+
+@tbl-sem-path-mod-complex-results2 provides more detailed results. These results show that all regression coefficients of the paths included in the model are significant. Moreover, the overall model test is not significant, indicating good fit. This conclusion is also supported by satisfactory values for the SRMR and RSMEA, and CFI.
+
+```{r}
+#| results: asis
+
+# if(knitr::is_html_output()) {
+#   cat("<table><caption>(\\#tab:sem-path-mod-complex-results2) Results of a second full path model for the legacy motive data. Only results for regression parameters and selected model fit indices are included.</caption>")
+#   semTable::semTable(fmod_complex2, type="html", paramSets = c("slopes","fits"), fits = c("chisq", "cfi", "srmr", "rmsea","aic", "bic"))
+#   cat("</table>")
+# } else {
+#   semTable::semTable(fmod_complex2, type="latex", table.float = TRUE, fits = c("chisq", "cfi", "srmr", "rmsea","aic", "bic"), caption = "(\\#ttab:tab:sem_path_mod_complex_results2) Results of a second full path model for the legacy motive data.")
+# }
+
+semoutput::sem_tables(fmod_complex2)
+
+cat(": Results of a second full path model for the legacy motive data. Only results for regression parameters and selected model fit indices are included {tbl-sem-path-mod-complex-results2}")
+```
+
+## Principles in constructing path models
+
+As you may have noticed, path modelling provides a lot of freedom to the analyst. Which variables do you take to be exogenous, and which ones as endogenous? And which variables have causal links to other variables? And we haven't even considered adding residual covariances between endogenous variables. In the example above with seven variables, the number of possible models is huge. But even for a smaller set of three variables, as in the mediation example, the number of possible models is large. How do you choose one model when the possibilities are seemingly endless?
+
+The main guiding principle in defining and comparing SEM models should be:  **theory**! Particular causal links are often implausible. For example, I would consider a causal relation from income to age implausible, at least for the present data.^[Income is likely to have some effect on how long people live (due to e.g. better healthcare) and as such will likely be predictive of age in the sense that, on average, the oldest people are likely to be those ones with a higher income.] And causal links from donation to any of the other variables are implausible too (if only because the donation question was unannounced and posed at end of the experiment). If you have *no* theory to identify the likely causes and effects to guide your model building, it is probably best to steer clear from SEM. I certainly would not advise completely data-driven SEM modelling. A first reason is that an exhaustive search over all possible models is generally infeasible. A second reason is that, unless you have a *very* large dataset, conducting an exhaustive search through all possible structural models and selecting the one that fits that data best is ill-advised, as you are likely to *overfit* particular quirks in a dataset. Furthermore, there are generally multiple equivalent models, which propose different causal relations, but end up providing exactly the same fit to the data when estimated.
+
+### Identifiability
+
+Beyond theory, a main consideration is model identifiability, which refers to whether the parameters of a model can be estimated in the first place. Identifiability is a general concept in statistical modelling. In its essence, identifiability means that, for a given model, there should not be two different parameter settings, $\theta$ and $\theta'$, which always give the same likelihood value for any data. So a model is *not* identifiable if:
+$$p(\text{DATA}|\theta) = p(\text{DATA}|\theta') \quad \quad \text{for any } \theta \neq \theta'$$ 
+
+In the context of SEM, an unidentified model often implies the model has too many parameters. A first and simple rule is that a model is not identifiable if it has more parameters than unique values in the sample variance-covariance matrix and mean vector (assuming that the means are part of the model specification). In other words, the model can not have more parameters than the saturated model (@eq-npar-saturated-sem-model). 
+
+Not all models with $\text{npar}(M) \leq \text{npar}(S)$ are identifiable, however. There are additional conditions. To get an intuition about non-identifiability, consider the following equation:
+$$x + y = 2$$
+We can solve this equation for $x$ (i.e. $x = 2 -y$) or $y$ (i.e. $y = 2-x$), but we can not determine the exact value of both $x$ and $y$ simultaneously. There are an infinite number of values of $x$ and $y$ that respect the equality above, such as
+$$(x=1, y=1), (x=2, y=0), (x = \tfrac{1}{300}, y = \tfrac{599}{300}), \ldots$$
+As another example, consider the following regression model:
+$$Y_i = \beta_0 + \beta_1 \times X_i + \beta_2 \times X_i + \epsilon_i$$
+where we include the same predictor ($X$) twice, but with separate slopes ($\beta_1$ and $\beta_2$). In a simple regression equation, where $X$ is included only once
+$$Y_i = \beta_0 + \beta_x \times X_i + \epsilon_i$$
+we would be able to estimate the slope of $X$ as $\hat{\beta}_x = \frac{\text{Cov}(X,Y)}{\text{Var}(X)}$. But we can not estimate two slopes for the same predictor. To see why, we can rewrite the earlier regression equation as
+$$Y_i = \beta_0 + (\beta_1 + \beta_2) \times X_i + \epsilon_i$$
+As such, we could say that 
+$$\hat{\beta}_x = \hat{\beta}_1 + \hat{\beta}_2$$
+but then we have exactly the same problem as before, when dealing with $x + y = 2$: there are an infinite number of possible values of $\hat{\beta}_1$ and $\hat{\beta}_2$ such that their sum equals $\hat{\beta}_x$. This is the reason why perfectly correlated predictors can not be entered into a regression model. In a path model, similar issues may arise, although they may be harder to identify initially.
+
+When considering the identifiability of SEM models, it is useful to distinguish between recursive and non-recursive models [@kline2015principles]. In a **recursive model**, there are no "causal loops", and endogenous variables have no residual covariances. Technically, this implies that the endogenous variables are conditionally independent, given the exogenous variables. Less technically, this implies that for a graphical representation such as in @fig-complex-path-legacy-motive-2, if we pick any starting variable and then follow any outwards arrow (excluding the dotted fixed arrows and any arrows pointing from a variable onto itself), we should not be able to find a path back to the starting variable. For example, you could start with $\texttt{eduction}$, then follow the outwards arrow to $\texttt{belief}$, and then follow the outgoing arrow to $\texttt{intention}$, and then to $\texttt{donation}$. But from there, there is no path back to $\texttt{education}$. Such recursive models are *always* identifiable [@kline2015principles].
+
+**Non-recursive models** may have causal feedback loops, or endogenous variables with residual covariances. For such models, it is more difficult to establish whether they are identifiable or not. @kline2015principles provides a relatively readable exposition on this topic (Chapters 7 and 8). Problems of identification generally lead to errors or warnings from the software used to estimate a SEM model, or implausible parameter estimates. If your theory allows, it is safer to stick to recursive models, as these are much easier to estimate and interpret.
+
+## Model equivalence
+
+Another tricky issue with path models, and SEM models in general, is that different structural models can -- when estimated from the data -- imply exactly the same variance-covariance matrix and mean vector. This is related to the issue of identifiability, as these models have the same likelihood. But rather than identifiability of the parameters, this is an issue of **model identifiability**.
+
+As a simple example, let's consider a regression model where we predict votes for Donald Trump as a function of the number of active hate groups in a state. In SEM terms, we would place a causal direction from the number of hate groups to the percentage of votes for Trump. <!-- As an exogenous variable, we would not be able to predict the variance in the the number of hate groups over states. We would just take this as given. However, as an endogenous variable, we would account for some of the variation in votes for Trump via its causal relation with the number of hate groups.--> Let $V$ denote the percentage of votes for Trump, and $H$ the number of hate groups, then our model states 
+$$V_i = \beta_{0,V} + \beta_{H} \times H_i + \epsilon_{V} \quad \quad \epsilon_V \sim \mathbf{Normal}(0, \sigma_{\epsilon_V})$$
+But what if we would consider the causal direction in this model to be reversed, so that votes for Trump cause the number of hate groups in a state. The model then becomes  
+$$H_i = \beta_{0,H} + \beta_{V} \times V_i + \epsilon_{H} \quad \quad \epsilon_H \sim \mathbf{Normal}(0, \sigma_{\epsilon_H})$$
+These two models are equivalent, in the sense that if we would estimate them from the same dataset, we would obtain *exactly* the same fit to the data. The model-implied variance-covariance matrix of the first model is
+$$\boldsymbol{\Sigma}(\theta_1) = \left[ \begin{matrix}
+\sigma^2_H & \beta_H \times \sigma^2_H \\
+\beta_H \times \sigma^2_H & \beta_{H}^2 \times \sigma_{H}^2 + \sigma^2_{\epsilon_V}
+\end{matrix} \right]$$
+with parameters $\theta_1 = (\sigma_H, \beta_H, \sigma_{\epsilon_V})$
+The model-implied variance-covariance matrix of the second model is
+$$\boldsymbol{\Sigma}(\theta_1) = \left[ \begin{matrix}
+\beta_{V}^2 \times \sigma_{V}^2 + \sigma^2_{\epsilon_H} & \beta_V \times \sigma^2_V \\
+\beta_V \times \sigma^2_V & \sigma^2_V
+\end{matrix} \right]$$
+with parameters $\theta_2 = (\sigma_V, \beta_V, \sigma_{\epsilon_H})$.
+The parameter sets $\theta_1$ and $\theta_2$ can be translated from one into the other. Equating the elements in the model-implied variance-covariance matrices, we have
+$$\begin{aligned}
+\sigma^2_H &= \beta_{V}^2 \times \sigma_{V}^2 + \sigma^2_{\epsilon_H} \\
+\beta_H \times \sigma^2_H &= \beta_V \times \sigma^2_V \\
+\beta_{H}^2 \times \sigma_{H}^2 + \sigma^2_{\epsilon_V} &= \sigma^2_V
+\end{aligned}$$
+Solving this system of equations for the parameters $\theta_1$, we get
+$$\begin{aligned}
+\sigma_H &= \sqrt{\beta_{V}^2 \times \sigma_{V}^2 + \sigma^2_{\epsilon_H}} \\
+\beta_H  &= \frac{\beta_V \times \sigma^2_V}{\beta_{V}^2 \times \sigma_{V}^2 + \sigma^2_{\epsilon_H}} \\
+\sigma_{\epsilon_V} &= \sqrt{\sigma^2_V - \frac{(\beta_V \times \sigma^2_V)^2}{\beta_{V}^2 \times \sigma_{V}^2 + \sigma^2_{\epsilon_H}}}
+\end{aligned}$$
+Alternatively, we can solve for the parameters $\theta_2$ and get
+$$\begin{aligned}
+\sigma_V &= \sqrt{\beta_{H}^2 \times \sigma_{H}^2 + \sigma^2_{\epsilon_V}} \\
+\beta_V  &= \frac{\beta_H \times \sigma^2_H}{\beta_{H}^2 \times \sigma_{H}^2 + \sigma^2_{\epsilon_V}} \\
+\sigma_{\epsilon_H} &= \sqrt{\sigma^2_H - \frac{(\beta_H \times \sigma^2_H)^2}{\beta_{H}^2 \times \sigma_{H}^2 + \sigma^2_{\epsilon_V}}}
+\end{aligned}$$
+The key thing is that the parameters $\theta_1$ can be defined as a function of parameters $\theta_2$, and vice versa. If parameters $\theta_1$ maximise the likelihood of the data, there are translated parameters $\theta_2$ which would do the same. Hence, we can get exactly the same fit for both models.
+
+This was a very simple example of equivalent models, but the general idea extends to more complex SEM models. It is beyond the scope of this Chapter to go into further details, but @raykov1999structural discuss rules for determining the set of equivalent SEM models for a given target model. The main thing to keep in mind for now is that, for a given SEM model, there may be equivalent models that fit the data equally well, but have a different causal interpretation. As a result, it is generally not possible to uniquely identify a single SEM model from its fit to data.
+
+## Correlation vs causation
+
+Whilst SEM models are constructed as causal models, they just reflect the means of and (co-)variation between variables. A variance-covariation matrix can easily be converted into a correlation matrix.^[A correlation coefficient is just the covariation divided by the product of the standard deviation of the variables: $$\rho_{x,y} = \frac{\sigma_{x,y}}{\sigma_x \times \sigma_y}$$. And if all variables in the variance-covariance matrix are $Z$-transformed, the variance-covariance matrix is identical to the correlation matrix.] So SEM models effectively target the correlation between variables. And as the well-worn adage goes: **Correlation does not imply causation**!
+
+When conducting SEM analyses, it is important to keep this in mind. Although SEM models provide a useful and effective way to formulate a causal theory  in terms of a statistical model, the evidence for this model is based on correlation. Whilst model comparison may be used to rule out particular alternative models, for a given model, there are usually several equivalent models which will fit any data equally well, but which have a different causal interpretation. As such, a SEM analysis does not provide proof for the causal relations it entails. The gold standard for proving a causal relation is to intervene on the cause with e.g. an experiment. Proving causation from purely observational data is generally not possible. Nevertheless, this does not prevent you from applying a causal interpretation to SEM models, as long as you keep in mind that you have not excluded other causal patterns [see also @pearl2012causal; and @rohrer2018thinking].
+
+<!-- https://journals.sagepub.com/doi/full/10.1177/2515245917745629 -->
+
+<!--
+
+### Multivariate Normal distribution
+
+### Covariation and correlation matrices
+
+-->
+
+
+
+<!-- ### A little bit of matrix algebra -->
+
+<!-- https://bookdown.org/compfinezbook/introFinRbook/Matrix-Algebra-Review.html -->
+<!-- https://bkenkel.com/pdaps/matrix.html -->
+
+<!-- ## Errors-in-variable models -->

@@ -1,0 +1,2 @@
+# The General Linear Model {#sec-GLM-intro .unnumbered}
+

@@ -1,0 +1,458 @@
+# Moderation and mediation {#sec-ch-moderation-mediation}
+
+```{r}
+#| label: setup
+#| echo: false
+set.seed(20221010)
+source("run_before.R")
+```
+
+In this chapter, we will focus on two ways in which one predictor variable may affect the relation between another predictor variable and the dependent variable. Moderation means the strength of the relation (in terms of the slope) of a predictor variable is determined by the value of another predictor variable. For instance, while physical attractiveness is generally positively related to mating success, for very rich people, physical attractiveness may not be so important. This is also called an interaction between the two predictor variables. Mediation is a different way in which two predictors affect a dependent variable. It is best thought of as a __causal chain__, where one predictor variable determines the value of another predictor variable, which then in turn determines the value of the dependent variable. the difference between moderation and mediation is illustrated in @fig-moderation-mediation-difference-graph.
+
+```{tikz}
+%| label: fig-moderation-mediation-difference-graph
+%| fig-cap: Graphical depiction of the difference between moderation and mediation. Moderation
+%|   means that the effect of a predictor ($X_1$) on the dependent variable ($Y$) depends
+%|   on the value of another predictor ($X_2$). Mediation means that a predictor ($X_1$)
+%|   affects the dependent variable ($Y$) indirectly, through its relation to another
+%|   predictor ($X_2$) which is directly related to the dependent variable.
+%| out-width: 80%
+\usetikzlibrary{calc}
+\usetikzlibrary{arrows}
+\begin{tikzpicture}
+	\begin{scope}{
+		\pgfsetxvec{\pgfpoint{2cm}{0cm}}
+		\pgfsetyvec{\pgfpoint{0cm}{1.5cm}}
+		\tikzstyle{every node}=[minimum size=.95cm,circle]
+		\draw node[draw] (x1) at (0,0) {$X_1$};
+		\draw node[draw] (x2) at (1,1) {$X_2$};
+		\draw node[draw] (y) at (2,0) {$Y$};
+		\coordinate (c) at ($ (x1)!.5!(y)$);
+		
+		\draw node[align=center] at (1,2) {\textbf{moderation}};
+
+		\draw[->, line width=.5mm] (x1) -- (y);
+		\draw[->, line width=.5mm] (x2) -- (c);
+	}
+	\end{scope}
+
+		\begin{scope}[shift={(7,0)}]{
+			\pgfsetxvec{\pgfpoint{2cm}{0cm}}
+			\pgfsetyvec{\pgfpoint{0cm}{1.5cm}}
+			\tikzstyle{every node}=[minimum size=.95cm,circle]
+			\draw node[draw] (x1) at (0,0) {$X_1$};
+			\draw node[draw] (x2) at (1,1) {$X_2$};
+			\draw node[draw] (y) at (2,0) {$Y$};
+			
+			\draw node[align=center] at (1,2) {\textbf{mediation}};
+
+			\draw[->, line width=.5mm] (x1) -- (x2);
+			\draw[->, line width=.5mm] (x2) -- (y);
+		}
+		\end{scope}
+\end{tikzpicture}
+```
+
+## Moderation
+
+```{r}
+#| label: load-data 
+library(sdamr)
+data("speeddate")
+```
+
+### Physical attractiveness and intelligence in speed dating
+
+@fisman2006gender conducted a large scale experiment^[Here, we analyse only a subset of their data.] on dating behaviour. They placed their participants in a speed dating context, where they were randomly matched with a number of potential partners (between `r min(table(speeddate$iid))` and `r max(table(speeddate$iid))`) and could converse for four minutes. As part of the study, after each meeting, participants rated how much they liked their speed dating partners, as well as more specifically on their attractiveness, sincerity, intelligence, fun, and ambition. We will focus in particular on ratings of physical attractiveness, fun, and intelligence, and how these are related to the general liking of a person. Ratings were given on a 10-point scale, from 1 ("awful") to 10 ("great"). A multiple regression analysis predicting general liking from attractiveness, fun, and intelligence (@tbl-multiple-regression-speed-dating-just-main-effects) shows that all three predictors have a significant and positive relation with general liking.
+
+```{r}
+#| label: tbl-multiple-regression-speed-dating-just-main-effects
+#| tbl-cap: "Multiple regression predicting liking from attractiveness, intelligence, and fun."
+modg <- lm(other_like ~ other_attr + other_intel + other_fun, data=speeddate)
+tab <- summary(modg)$coefficients
+rownames(tab) <- c("Intercept","Attractiveness","Intelligence","Fun")
+colnames(tab) <- c("$\\hat{\\beta}$","$\\text{SE}(\\hat{\\beta})$", "$t$", "$p(\\geq \\lvert t \\rvert)$")
+knitr::kable(tab, escape=FALSE, booktabs=TRUE, linesep="")
+```
+
+### Conditional slopes
+
+If we were to model the relation between overall liking and physical attractiveness and intelligence, we might use a multiple regression model such as:^[Note that I'm using more descriptive labels here. If you prefer the more abstract version, then you can replace $Y_i = \texttt{like}_i$, $\beta_1 = \beta_{\texttt{attr}}$,  $X_{1,i} = \texttt{attr}_i$. $\beta_2 = \beta_{\texttt{intel}}$,  $X_{2,i} = \texttt{intel}_i$.]
+$$\texttt{like}_i = \beta_0 + \beta_{\texttt{attr}} \times \texttt{attr}_i + \beta_\texttt{intel} \times \texttt{intel}_i + \epsilon_i \quad \quad \epsilon_i \sim \mathbf{Normal}(0,\sigma_\epsilon)$$
+which is estimated as 
+$$`r mod <- lm(other_like ~ other_attr + other_intel, data=speeddate); write_GLM_equation(mod, dv_name = "like", iv_names = c("attr","intel"), digits=3)`$$
+The estimates indicate a positive relation to liking of both attractiveness and intelligence. Note that the values of the slopes are different from those in @tbl-multiple-regression-speed-dating-just-main-effects. The reason for this is that the model in the Table also includes fun as a predictor. Because the slopes reflect _unique effects_, these depend on all predictors included in the model. When there is dependence between the predictors (i.e. there is multicollinearity) both the estimates of the slopes and the corresponding significance tests will vary when you add or remove predictors from the model. 
+
+```{r}
+#| label: predicted-values
+coef <- coefficients(mod)
+vals1 <- c(8,2)
+like1 <- sum(coef*c(1,vals1))
+vals2 <- c((like1 - coef[1] - coef[3]*8)/(coef[2]) , 8)
+```
+
+In the model above, a relative lack in physical attractiveness can be overcome by high intelligence, because in the end, the general liking of someone depends on the sum of both attractiveness and intelligence (each "scaled" by their corresponding slope). For example, someone with an attractiveness rating of $\texttt{attr}_i = `r vals1[1]`$ and an intelligence rating of $\texttt{intel}_i = `r vals1[2]`$ would be expected to be liked as much as a partner as someone with an attractiveness rating of $\texttt{attr}_i = `r vals2[1]`$ and an intelligence rating of $\texttt{intel}_i = `r vals2[2]`$:
+$$\begin{aligned}
+\texttt{like}_i &= `r coef[1]` + `r coef[2]` \times `r vals1[1]` + `r coef[3]` \times `r vals1[2]` = `r like1` \\
+\texttt{like}_i &= `r coef[1]` + `r coef[2]` \times `r vals2[1]` + `r coef[3]` \times `r vals2[2]` = `r like1`
+\end{aligned}$$
+
+But what if for those lucky people who are very physically attractive, their intelligence doesn't matter _that much_, or even _at all_? And what if, for those lucky people who are very intelligent, their physical attractiveness doesn't really matter much or at all? In other words, what if the more attractive people are, the less intelligence determines how much other people like them as a potential partner, and conversely, the more intelligent people are, the less attractiveness determines how much others like them as a potential partner? This implies that the effect of attractiveness on liking depends on intelligence, and that the effect of intelligence on liking depends on attractiveness. Such dependence is not captured by the multiple regression model above. While a relative lack of intelligence might be overcome by a relative abundance of attractiveness, for any level of intelligence, the additional effect of attractiveness is the same (i.e., an increase in attractiveness by one unit will always result in an increase of the predicted liking of `r coef[2]`).
+
+Let's define $\beta_{\texttt{attr}|\texttt{intel}_i}$ as the slope of $\texttt{attr}$ conditional on the value of $\texttt{intel}_i$. That is, we allow the slope of $\texttt{attr}$ to vary as a function of $\texttt{intel}$. Similarly, we can define $\beta_{\texttt{intel}|\texttt{attr}_i}$ as the slope of $\texttt{intel}$ conditional on the value of $\texttt{attr}$. Our regression model can then be written as:
+$$
+\texttt{like}_i = \beta_0 + \beta_{\texttt{attr}|\texttt{intel}_i} \times \texttt{attr}_i + \beta_{\texttt{intel} | \texttt{attr}_i} \times \texttt{intel}_i + \epsilon_i
+$$ {#eq-reg-like-attr-intel-interactions}
+That's a good start, but what would the value of $\beta_{\texttt{attr}|\texttt{intel}_i}$ be? Estimating the slope of $\texttt{attr}$ for each value of $\texttt{intel}$ by fitting regression models to each subset of data with a particular value of $\texttt{intel}$ is not really doable. We'd need lots and lots of data, and furthermore, we wouldn't also be able to simultaneously estimate the value of $\beta_{\texttt{intel} | \texttt{attr}_i}$. We need to supply some structure to $\beta_{\texttt{attr}|\texttt{intel}_i}$ to allow us to estimate its value without overcomplicating things. 
+
+### Modeling slopes with linear models
+
+One idea is to define $\beta_{\texttt{attr}|\texttt{intel}_i}$ with a linear model:
+$$\beta_{\texttt{attr}|\texttt{intel}_i} = \beta_{\texttt{attr},0} + \beta_{\texttt{attr},1} \times \texttt{intel}_i$$
+This is just like a simple linear regression model, but now the "dependent variable" is the slope of $\texttt{attr}$. Defined in this way, the slope of $\texttt{attr}$ is $\beta_{\texttt{attr},0}$ when $\texttt{intel}_i = 0$, and for every one-unit increase in $\texttt{intel}_i$, the slope of $\texttt{attr}$ increases (or decreases) by $\beta_{\texttt{attr},1}$. For example, let's assume $\beta_{\texttt{attr},0} = 1$ and $\beta_{\texttt{attr},1} = 0.5$. For someone with an intelligence rating of $\texttt{intel}_i = 0$, the slope of $\texttt{attr}$ is
+$$\beta_{\texttt{attr}|\texttt{intel}_i} = 1 + 0.5 \times 0 = 1$$
+For someone with an intelligence rating of $\texttt{intel}_i = 1$, the slope of $\texttt{attr}$ is
+$$\beta_{\texttt{attr}|\texttt{intel}_i} = 1 + 0.5 \times 1 = 1.5$$
+For someone with an intelligence rating of $\texttt{intel}_i = 2$, the slope of $\texttt{attr}$ is
+$$\beta_{\texttt{attr}|\texttt{intel}_i} = 1 + 0.5 \times 2 = 2$$
+As you can see, for every increase in intelligence rating by 1 point, the slope of $\texttt{attr}$ increases by 0.5. In such a model, there will be values of $\texttt{intel}$ which result in a negative slope of $\texttt{attr}$. For instance, for $\texttt{intel}_i = -4$, the slope of $\texttt{attr}$ is
+$$\beta_{\texttt{attr}|\texttt{intel}_i} = 1 + 0.5 \times (-4) = - 1$$
+
+We can define the slope of $\texttt{intel}$ in a similar manner as
+$$\beta_{\texttt{intel}|\texttt{attr}_i} = \beta_{\texttt{intel},0} + \beta_{\texttt{intel},1} \times \texttt{attr}_i$$
+When we plug these definitions into @eq-reg-like-attr-intel-interactions, we get
+$$\begin{aligned}
+\texttt{like}_i &= \beta_0 + (\beta_{\texttt{attr},0} + \beta_{\texttt{attr},1} \times \texttt{intel}_i) \times \texttt{attr}_i + (\beta_{\texttt{intel},0} + \beta_{\texttt{intel},1} \times \texttt{attr}_i) \times \texttt{intel}_i + \epsilon_i \\
+&= \beta_0 + \beta_{\texttt{attr},0} \times \texttt{attr}_i + \beta_{\texttt{intel},0} \times \texttt{intel}_i + (\beta_{\texttt{attr},1} + \beta_{\texttt{intel},1}) \times (\texttt{attr}_i \times \texttt{intel}_i) + \epsilon_i
+\end{aligned}$$
+
+Looking carefully at this formula, you can recognize a multiple regression model with three predictors: $\texttt{attr}$, $\texttt{intel}$, and a new predictor $\texttt{attr}_i \times \texttt{intel}_i$, which is computed as the product of these two variables. While it is thus related to both variables, we can treat this product as just another predictor in the model. The slope of this new predictor is the sum of two terms, $\beta_{\texttt{attr},1} + \beta_{\texttt{intel},1}$. Although we have defined these as different things (i.e. as the effect of $\texttt{intel}$ on the slope of $\texttt{attr}$, and the effect of $\texttt{attr}$ on the slope of $\texttt{intel}$, respectively), their value can not be estimated uniquely. We can only estimate their summed value. That means that moderation in regression is "symmetric", in the sense that each predictor determines the slope of the other one. We can not say that it is just intelligence that determines the effect of attraction on liking, nor can we say that it is just attraction that determines the effect of intelligence on liking. The two variables __interact__ and each determine the other's effect on the dependent variable.
+
+With that in mind, we can simplify the notation of the resulting model somewhat, by renaming the slopes of the two predictors to $\beta_{\texttt{attr}} = \beta_{\texttt{attr},0}$ and $\beta_{\texttt{intel}} = \beta_{\texttt{intel},0}$, and using a single parameter for the sum $\beta_{\texttt{attr} \times \texttt{intel}} =  \beta_{\texttt{attr},1} + \beta_{\texttt{intel},1}$:
+
+$$
+\texttt{like}_i = \beta_0 + \beta_{\texttt{attr}} \times \texttt{attr}_i + \beta_{\texttt{intel}} \times \texttt{intel}_i + \beta_{\texttt{attr} \times \texttt{intel}} \times (\texttt{attr} \times \texttt{intel})_i + \epsilon_i
+$$
+
+```{r}
+#| label: like-compare-main-interaction
+mod0 <- lm(other_like ~ other_attr + other_intel, data=speeddate)
+mod1 <- lm(other_like ~ other_attr*other_intel, data=speeddate)
+```
+
+Estimating this model gives
+$$`r write_GLM_equation(mod1, dv_name = "like", iv_names = c("attr","intel","(attr}\\times\\texttt{intel)"), digits=3, include_sde = FALSE)`$$
+The estimate of the slope of the interaction, $\hat{\beta}_{\texttt{attr} \times \texttt{intel}} = `r coefficients(mod1)[4]`$, is negative. That means that the _higher_ the value of $\texttt{intel}$, the _less_ steep the regression line relating $\texttt{attr}$ to $\texttt{like}$. At the same time, the _higher_ the value of $\texttt{attr}$, the _less_ steep the regression line relating $\texttt{intel}$ to $\texttt{like}$. You can interpret this as meaning that for more intelligent people, physical attractiveness is less of a defining factor in their liking by a potential partner. And for more attractive people, intelligence is less important.
+
+A graphical view of this model, and the earlier one without moderation, is provided in @fig-speeddate-multiple-regression-interaction-exaggerated. The plot on the left represents the model which does not allow for interaction. You can see that, for different values of intelligence, the model predicts parallel regression lines for the relation between attractiveness and liking. While intelligence affects the intercept of these regression lines, it does not affect the slope. In the plot on the right -- although subtle -- you can see that the regression lines are _not_ parallel. This is a model with an interaction between intelligence and attractiveness. For different values of intelligence, the model predicts a linear relation between attractiveness and liking, but crucially, intelligence determines both the intercept _and_ slope of these lines.
+
+```{r}
+#| label: fig-speeddate-multiple-regression-interaction-exaggerated
+#| fig-cap: "Liking as a function of attractiveness (intelligence) for different levels of intelligence (attractiveness), either without moderation or with moderation of the slope of attraciveness by intelligence. Note that the actual values of liking, attractiveness, and intelligence, are whole numbers (ratings on a scale between 1 and 10). For visualization purposes, the values have been randomly jittered by adding a Normal-distributed displacement term."
+#| fig-width: 5
+#| fig-height: 5
+#| out-width: 49%
+#| fig-show: hold
+set.seed(23487610)
+coefs <- coefficients(mod0)
+adj <- 5
+dat <- subset(speeddate, !(is.na(other_like) | is.na(other_attr) | is.na(other_intel))) 
+dat$other_like <- dat$other_like + rnorm(nrow(dat),0,.2)
+dat$other_attr <- dat$other_attr + rnorm(nrow(dat),0,.2)
+dat$other_intel <- dat$other_intel + rnorm(nrow(dat),0,.2)
+p1 <- ggplot(dat,aes(x=other_attr, y=other_like, colour=other_intel)) + geom_point() + geom_abline(intercept = coefs[1] + (min(dat$other_intel)- adj)*coefs[3], slope = coefs[2], colour=viridis::viridis_pal()(3)[1]) + geom_abline(intercept = coefs[1] + (min(dat$other_intel) -adj + (max(dat$other_intel) - min(dat$other_intel) + 2*adj)/2)*coefs[3], slope = coefs[2], colour=viridis::viridis_pal()(3)[2]) + geom_abline(intercept = coefs[1] + (max(dat$other_intel) + adj)*coefs[3], slope = coefs[2], colour = viridis::viridis_pal()(3)[3]) + theme(legend.position = "bottom") + labs(colour = "intelligence") + xlab("attractiveness") + ylab("liking") + ggtitle("Without moderation") + expand_limits(colour = c(min(dat$other_intel)- adj, max(dat$other_intel) + adj))
+
+coefs <- coefficients(mod1)
+p2 <- ggplot(dat,aes(x=other_attr, y=other_like, colour=other_intel)) + geom_point() + geom_abline(intercept = coefs[1] + (min(dat$other_intel) - adj)*coefs[3], slope = coefs[2] + (min(dat$other_intel) - adj)*coefs[4], colour=viridis::viridis_pal()(3)[1]) + geom_abline(intercept = coefs[1] + (min(dat$other_intel) - adj + ((max(dat$other_intel) - min(dat$other_intel)) + 2*adj)/2) *coefs[3], slope = coefs[2] + (min(dat$other_intel) - adj + (max(dat$other_intel) - min(dat$other_intel) + 2*adj)/2) * coefs[4], colour=viridis::viridis_pal()(3)[2]) + geom_abline(intercept = coefs[1] + (max(dat$other_intel) + adj)*coefs[3], slope = coefs[2] + (max(dat$other_intel) + adj)*coefs[4], colour = viridis::viridis_pal()(3)[3]) + theme(legend.position = "bottom") + labs(colour = "intelligence") + xlab("attractiveness") + ylab("liking") + ggtitle("With moderation")  + expand_limits(colour = c(min(dat$other_intel)- adj, max(dat$other_intel) + adj))
+
+p3 <- ggplot(dat,aes(x=other_intel, y=other_like, colour=other_attr)) + geom_point() + geom_abline(intercept = coefs[1] + (min(dat$other_attr)- adj)*coefs[3], slope = coefs[2], colour=viridis::viridis_pal()(3)[1]) + geom_abline(intercept = coefs[1] + (min(dat$other_attr) -adj + (max(dat$other_attr) - min(dat$other_attr) + 2*adj)/2)*coefs[3], slope = coefs[2], colour=viridis::viridis_pal()(3)[2]) + geom_abline(intercept = coefs[1] + (max(dat$other_attr) + adj)*coefs[3], slope = coefs[2], colour = viridis::viridis_pal()(3)[3]) + theme(legend.position = "bottom") + labs(colour = "attractiveness") + xlab("intelligence") + ylab("liking") + ggtitle("Without moderation") + expand_limits(colour = c(min(dat$other_attr)- adj, max(dat$other_attr) + adj))
+
+coefs <- coefficients(mod1)
+p4 <- ggplot(dat,aes(x=other_intel, y=other_like, colour=other_attr)) + geom_point() + geom_abline(intercept = coefs[1] + (min(dat$other_attr) - adj)*coefs[3], slope = coefs[2] + (min(dat$other_attr) - adj)*coefs[4], colour=viridis::viridis_pal()(3)[1]) + geom_abline(intercept = coefs[1] + (min(dat$other_attr) - adj + ((max(dat$other_attr) - min(dat$other_attr)) + 2*adj)/2) *coefs[3], slope = coefs[2] + (min(dat$other_attr) - adj + (max(dat$other_attr) - min(dat$other_attr) + 2*adj)/2) * coefs[4], colour=viridis::viridis_pal()(3)[2]) + geom_abline(intercept = coefs[1] + (max(dat$other_attr) + adj)*coefs[3], slope = coefs[2] + (max(dat$other_attr) + adj)*coefs[4], colour = viridis::viridis_pal()(3)[3]) + theme(legend.position = "bottom") + labs(colour = "attractiveness") + xlab("intelligence") + ylab("liking") + ggtitle("With moderation")  + expand_limits(colour = c(min(dat$other_attr)- adj, max(dat$other_attr) + adj))
+
+gridExtra::grid.arrange(p1, p2, p3, p4, ncol=2)
+
+```
+
+Note that we have constructed this model by simply including a new predictor in the model, which is computed by multiplying the values of $\texttt{attr}$ and $\texttt{intel}$. While including such an "interaction predictor" has important implications for the resulting relations between $\texttt{attr}$ and $\texttt{like}$ for different values of $\texttt{intel}$, as well as the relations between $\texttt{intel}$ and $\texttt{like}$ for different values of $\texttt{attr}$, the model itself is just like any other regression model. Thus, parameter estimation and inference are exactly the same as before. @tbl-multiple-regression-with-interaction-ANOVA shows the results of comparing the full MODEL G (with three predictors) to different versions of MODEL R, where in each we fix one of the parameters to 0. As you can see, these comparisons indicate that we can reject the null hypothesis $H_0$: $\beta_0 = 0$, as well as $H_0$: $\beta_{\texttt{attr}} = 0$ and $H_0$: $\beta_{\texttt{intel}} = 0$. However, as the p-value is above the conventional significance level of $\alpha=.05$, we would not reject the null hypothesis $H_0$: $\beta_{\texttt{attr} \times \texttt{intel}} = 0$. That implies that, in the context of this model, there is not sufficient evidence that there is an interaction. That may seem a little disappointing. We've done a lot of work to construct a model where we allow the effect of attractiveness to depend on intelligence, and vice versa. And now the hypothesis test indicates that there is no evidence that this moderation is present. As we will see later, there is evidence of this moderation when we also include $\texttt{fun}$ in the model. I have left this predictor out of the model for now to keep things as simple as possible.
+
+```{r}
+#| label: tbl-multiple-regression-with-interaction-ANOVA
+#| tbl-cap: "Multiple regression predicting liking from attractiveness, intelligence, and their interaction."
+opts <- options()
+options(knitr.kable.NA = "")
+tab <- cbind(estimate = c(coefficients(mod1),Error=NA),car::Anova(mod1, type=3))
+rownames(tab) <- c("Intercept","$\\texttt{attr}$", "$\\texttt{intel}$","$\\texttt{intel} \\times \\texttt{attr}$","Error")
+colnames(tab) <- c("$\\hat{\\beta}$","$\\text{SS}$", "$\\text{df}$", "$F$", "$p(\\geq \\lvert F \\rvert)$")
+knitr::kable(tab, escape = FALSE, booktabs=TRUE, linesep="")
+options(opts)
+
+# tab <- summary(mod1)$coefficients
+# rownames(tab) <- c("Intercept","Attractiveness","Intelligence","Attr $\\times$ Intel")
+# colnames(tab) <- c("$\\hat{\\beta}$","$\\text{SE}(\\hat{\\beta})$", "$t$", "$p(\\geq \\lvert t \\rvert)$")
+# knitr::kable(tab, caption="Multiple regression predicting liking from attractiveness, intelligence, and their interaction.")
+```
+
+### Simple slopes and centering
+
+It is very important to realise that in a model with interactions, there is no single slope for any of the predictors involved in an interaction, that is particularly meaningful in principle. An interaction means that the slope of one predictor varies as a function of another predictor. Depending on which value of that other predictor you focus on, the slope of the predictor can be positive, negative, or zero. Let's consider the model we estimated again:
+$$`r write_GLM_equation(mod1, dv_name = "like", iv_names = c("attr","intel","(attr}\\times\\texttt{intel)"), digits=3, include_sde = FALSE)`$$
+If we fill in a particular value for intelligence, say $\texttt{intel} = 1$, we can write this as 
+```{r}
+#| label: mod1-coefficients
+coef <- coefficients(mod1)
+```
+$$\begin{aligned}
+\texttt{intel}_i &= `r coef[1]` + `r coef[2]` \times \texttt{attr}_i + `r coef[3]` \times 1 `r coef[4]` \times (\texttt{attr} \times 1)_i + \epsilon_i \\
+&= (`r coef[1]` + `r coef[3]`) + (`r coef[2]` `r coef[4]`) \times \texttt{attr}_i + \epsilon_i \\
+&= `r coef[1] + coef[3]` + `r coef[2] + coef[4]` \times \texttt{attr}_i + \epsilon_i
+\end{aligned}$$
+
+If we pick a different value, say $\texttt{intel} = 10$, the the model becomes 
+$$\begin{aligned}
+\texttt{intel}_i &= `r coef[1]` + `r coef[2]` \times \texttt{attr}_i + `r coef[3]` \times 10  `r coef[4]` \times (\texttt{attr} \times 10)_i + \epsilon_i \\
+&= (`r coef[1]` + `r coef[3]` \times 10) + (`r coef[2]` `r coef[4]`\times 10) \times \texttt{attr}_i + \epsilon_i \\
+&= `r coef[1] + 10*coef[3]` + `r coef[2] + 10*coef[4]` \times \texttt{attr}_i + \epsilon_i
+\end{aligned}$$
+This shows that the higher the value of intelligence, the lower the slope of $\texttt{attr}$ becomes. If you'd pick $\texttt{intel} = `r coef[2]/(-coef[4])`$, the slope would be exactly equal to 0.^[The value for which the slope is 0 is easily worked out as $\frac{\hat{\beta}_\texttt{attr}}{- \hat{\beta}_{\texttt{attr} \times \texttt{intel}}}$.] Because there is not just a single value of the slope, testing whether "the" slope of $\texttt{attr}$ is equal to 0 doesn't really make sense, because there is no single value to represent "the" slope. What, then, does $\hat{\beta}_\texttt{attr} =  `r coef[2]`$ represent? Well, it is the (estimated) slope of $\texttt{attr}$ when $\texttt{intel}_i = 0$. Similarly, $\hat{\beta}_\texttt{intel} =  `r coef[3]`$ is the estimated slope of $\texttt{intel}$ when $\texttt{attr}_i = 0$ 
+
+A significance test of the null hypothesis $H_0$: $\beta_\texttt{attr} = 0$ is thus a test whether, when $\texttt{intel} = 0$, the slope of $\texttt{attr}$ is 0. This test is easy enough to perform, but is it interesting to know whether liking is related to attractiveness for people who's intelligence was rated as 0? Perhaps not. For one thing, the ratings were on a scale from 1 to 10, so no one could actually receive a rating of 0. Because the slope depends on $\texttt{intel}$ and we know that for some value of $\texttt{intel}$, the slope of $\texttt{attr}$ will equal 0, the hypothesis test will not be significant for some values of $\texttt{intel}$, and will be significant for others. At which value of $\texttt{intel}$ we might want to perform such a test is up to us, but the result seems somewhat arbitrary. 
+
+That said, we might be interested in assessing whether there is an effect of $\texttt{attr}$ for particular values of $\texttt{intel}$. For instance, whether, for someone with an average intelligence rating, their physical attractiveness matters for how much someone likes them as a potential partner. We can obtain this test by __centering__ the predictors. Centering is basically just subtracting the sample mean of each value of a variable. So for example, we can center $\texttt{attr}$ as follows: $$\texttt{attr\_cent}_i = \texttt{attr}_i - \overline{\texttt{attr}}$$
+Centering does not affect the relation between variables. You can view it as a simple relabelling of the values, where the value which was the sample mean is now $\texttt{attr\_cent}_i = \overline{\texttt{attr}} - \overline{\texttt{attr}} = 0$, all values below the mean are now negative, and values above the mean are now positive. The important part of this is that the centered predictor is 0 where the original predictor was at the sample mean. In a model with centered predictors
+\begin{align}
+\texttt{like}_i =& \beta_0 + \beta_{\texttt{attr\_cent}} \times \texttt{attr\_cent}_i + \beta_{\texttt{intel\_cent}} \times \texttt{intel\_cent}_i \\
+&+ \beta_{\texttt{attr\_cent} \times \texttt{intel\_cent}} \times (\texttt{attr\_cent} \times \texttt{intel\_cent})_i + \epsilon_i
+\end{align}
+the slope $\beta_{\texttt{attr\_cent}}$ is, as usual, the slope of $\texttt{attr\_cent}$ whenever $\texttt{intel\_cent}_i = 0$. We know that $\texttt{intel\_cent}_i = 0$ when $\texttt{intel}_i = \overline{\texttt{intel}}$. Hence, $\beta_{\texttt{attr\_cent}}$ is the slope of $\texttt{attr}$ when $\texttt{intel} = \overline{\texttt{intel}}$, i.e. it represents the effect of $\texttt{attr}$ for those with an average intelligence ratings.
+
+@fig-speeddate-multiple-regression-interaction-exaggerated-centered shows the resulting model after centering both attractiveness and intelligence. When you compare this to the corresponding plot in @fig-speeddate-multiple-regression-interaction-exaggerated, you can see that the only real difference is in the labels for the x-axis and the scale for intelligence. In all other respects, the uncentered and centered models predict the same relations between attractiveness and liking, and the models provide an equally good account, providing the same prediction errors. <!-- By changing the 0-point for both predictors, however, the centered and uncentered models can make different inferences about the "simple slopes" for attractiveness and intelligence, however. For example, in the centered model, the simple slope $\beta_\texttt{attr}$ reflects the   
+-->
+
+```{r}
+#| label: fig-speeddate-multiple-regression-interaction-exaggerated-centered
+#| fig-cap: Liking as a function of centered attractiveness for different levels of (centered)
+#|   intelligence in a model including an interaction between attractiveness and intelligence.
+#|   Note that the actual values of liking, attractiveness, and intelligence, are whole
+#|   numbers (ratings on a scale between 1 and 10). For visualization purposes, the values
+#|   have been randomly jittered by adding a Normal-distributed displacement term.
+#| fig-width: 5
+#| fig-height: 5
+#| out-width: 49%
+#| fig-show: hold
+library(dplyr)
+mod1c <- speeddate %>%
+  mutate(attr_cent = scale(other_attr,scale=FALSE), intel_cent = scale(other_intel, scale=FALSE)) %>%
+    lm(other_like ~ attr_cent*intel_cent, data = .)
+coefs <- coefficients(mod1c)
+
+set.seed(23487610)
+adj <- 5
+dat <- subset(speeddate, !(is.na(other_like) | is.na(other_attr) | is.na(other_intel))) 
+dat$other_like <- dat$other_like + rnorm(nrow(dat),0,.2)
+dat$other_attr <- dat$other_attr - mean(dat$other_attr) + rnorm(nrow(dat),0,.2)
+dat$other_intel <- dat$other_intel - mean(dat$other_intel) + rnorm(nrow(dat),0,.2)
+ggplot(dat,aes(x=other_attr, y=other_like, colour=other_intel)) + geom_point() + geom_abline(intercept = coefs[1] + (min(dat$other_intel) - adj)*coefs[3], slope = coefs[2] + (min(dat$other_intel) - adj)*coefs[4], colour=viridis::viridis_pal()(3)[1]) + geom_abline(intercept = coefs[1] + (min(dat$other_intel) - adj + ((max(dat$other_intel) - min(dat$other_intel)) + 2*adj)/2) *coefs[3], slope = coefs[2] + (min(dat$other_intel) - adj + (max(dat$other_intel) - min(dat$other_intel) + 2*adj)/2) * coefs[4], colour=viridis::viridis_pal()(3)[2]) + geom_abline(intercept = coefs[1] + (max(dat$other_intel) + adj)*coefs[3], slope = coefs[2] + (max(dat$other_intel) + adj)*coefs[4], colour = viridis::viridis_pal()(3)[3]) + theme(legend.position = "bottom") + labs(colour = "intelligence") + xlab("attractiveness") + ylab("liking")  + expand_limits(colour = c(min(dat$other_intel)- adj, max(dat$other_intel) + adj))
+```
+
+
+The results of all model comparisons after centering are given in @tbl-multiple-regression-with-interaction-ANOVA-centered. A first important thing to notice is that __centering does not affect the estimate and test of the interaction term__. The slope of the interaction predictor reflects the increase in the slope relating $\texttt{attr}$ to $\texttt{like}$ for every one-unit increase in $\texttt{intel}$. Such changes to the steepness of the relation between $\texttt{attr}$ and $\texttt{like}$ should not -- and are not -- affected by changing the 0-point of the predictors through centering.  A second thing to notice is that __centering changes the estimates and test of the "simple slopes" and intercept__. In the centered model, the simple slope $\hat{\beta}_\texttt{attr\_cent}$ reflects the effect of $\texttt{attr}$ on $\texttt{like}$ for cases with an average rating on $\texttt{intel}$. In @fig-speeddate-multiple-regression-interaction-exaggerated-centered, this is (approximately) the regression line in the middle. In the uncentered model, the simple slope $\hat{\beta}_\texttt{attr}$ reflects the effect of $\texttt{attr}$ on $\texttt{like}$ for cases with $\texttt{intel} = 0$. In the top right plot in @fig-speeddate-multiple-regression-interaction-exaggerated, this is (approximately) the lower regression line. This latter regression line is quite far removed from most of the data, because there are no cases with an intelligence rating of 0. The regression line for people with an average intelligence rating lies much more "within the cloud of data points", and reflects the model predictions for many more cases in the data. As a result, the reduction in the SSE that can be attributed to the simple slope is much higher in the centered model (@tbl-multiple-regression-with-interaction-ANOVA-centered) than the uncentered one (@tbl-multiple-regression-with-interaction-ANOVA). This results in a much higher $F$ statistic. You can also think of this as follows: because there are hardly any cases with an intelligence rating close to 0, estimating the effect of attractiveness on liking for these cases is rather difficult and unreliable. Estimating the effect of attractiveness on liking for cases with an average intelligence rating is much more reliable, because there are many more cases with a close-to-average intelligence rating.
+
+```{r}
+#| label: tbl-multiple-regression-with-interaction-ANOVA-centered
+#| tbl-cap: "Null-hypothesis significance tests after centering both predictors."
+opts <- options()
+options(knitr.kable.NA = "")
+tab <- cbind(estimate = c(coefficients(mod1c),Error=NA),car::Anova(mod1c, type=3))
+rownames(tab) <- c("Intercept","$\\texttt{attr\\_cent}$", "$\\texttt{intel\\_cent}$","$\\texttt{intel\\_cent} \\times \\texttt{attr\\_cent}$","Error")
+colnames(tab) <- c("$\\hat{\\beta}$","$\\text{SS}$", "$\\text{df}$", "$F$", "$p(\\geq \\lvert F \\rvert)$")
+knitr::kable(tab, escape = FALSE, booktabs=TRUE, linesep="")
+options(opts)
+```
+
+### Don't forget about fun! A model with multiple interactions {#sec-05-dont-forget-about-the-fun}
+
+Up to now, we have looked at a model with two predictors, attractiveness and intelligence, and have allowed for an interaction between these. To simplify the discussion a little, we have not included $\texttt{fun}$ in the model. It is relatively straightforward to extend this idea to multiple predictors. For instance, it might also be the case that the effect of $\texttt{fun}$ is moderated by $\texttt{intel}$. To investigate this, we can estimate the following regression model:
+
+$$\begin{aligned}
+\texttt{like}_i =& \beta_0 + \beta_{\texttt{attr}} \times \texttt{attr}_i + \beta_{\texttt{intel}} \times \texttt{intel}_i + \beta_{\texttt{fun}} \times \texttt{fun}_i \\
+&+ \beta_{\texttt{attr} \times \texttt{intel}} \times (\texttt{attr} \times \texttt{intel})_i + \beta_{\texttt{fun} \times \texttt{intel}} \times (\texttt{fun} \times \texttt{intel})_i + \epsilon_i
+\end{aligned}$$
+
+The results, having centered all predictors, are given in @tbl-full-model-like. As you can see there, the simple slopes of $\texttt{attr}$, $\texttt{intel}$, and $\texttt{fun}$ are all positive. Each of these represents the effect of that predictor when the other predictors have the value 0. Because the predictors are centered, that means that e.g. the slope of $\texttt{attr}$ reflects the effect of attractiveness for people with an average rating on intelligence and fun. As before, the estimated interaction between $\texttt{attr}$ and $\texttt{intel}$ is negative, indicating that attractiveness has less of an effect on liking for those seen as more intelligent, and that intelligence has less of an effect for those seen as more attractive. The hypothesis test of this effect is now also significant, indicating that we have reliable evidence for this moderation. This shows that by including more predictors in a model, it is possible to increase the reliability of the estimates for other predictors. There is also a significant interaction between $\texttt{fun}$ and $\texttt{intel}.$ The estimated interaction is positive here. This indicates that fun has more of an effect on liking for those seen as more intelligent, and that intelligence has more of an effect for those seen as more fun. Perhaps you can think of a reason why intelligence appears to lessen the effect of attractiveness, but appears to strengthen the effect of fun... 
+
+```{r}
+#| label: tbl-full-model-like
+#| tbl-cap: "A model predicting liking from attractiveness, intelligence, and fun, and their interactions. All predictors are centered."
+modg <- lm(other_like ~ scale(other_attr, scale=FALSE)*scale(other_intel, scale=FALSE) + scale(other_fun,scale=FALSE)*scale(other_intel,scale=FALSE), data=speeddate)
+
+opts <- options()
+options(knitr.kable.NA = "")
+tab <- cbind(estimate = c(coefficients(modg),Error=NA),car::Anova(modg, type=3))
+rownames(tab) <- c("Intercept","$\\texttt{attr}$", "$\\texttt{intel}$","$\\texttt{fun}$","$\\texttt{attr} \\times \\texttt{intel}$", "$\\texttt{fun} \\times \\texttt{intel}$", "Error")
+colnames(tab) <- c("$\\hat{\\beta}$","$\\text{SS}$", "$\\text{df}$", "$F$", "$p(\\geq \\lvert F \\rvert)$")
+knitr::kable(tab, escape = FALSE, booktabs=TRUE, linesep="")
+options(opts)
+
+```
+
+
+## Mediation {#sec-glm-mediation}
+
+```{r}
+#| label: load-legacy-data
+data("legacy2015")
+```
+
+
+### Legacy motives and pro-environmental behaviours
+
+@zaval_how_2015 investigated whether there is a relation between individuals' motivation to leave a positive legacy in the world, and their pro-environmental behaviours and intentions. The authors reasoned that long time horizons and social distance are key psychological barriers to pro-environmental action, particularly regarding climate change. But if people with a legacy motivation put more emphasis on future others than those without such motivation, they may also be motivated to behave more pro-environmentally in order to benefit those future others. In a pilot study, they recruited a diverse sample of 245 U.S. participants through Amazon’s Mechanical Turk. Participants answered three sets of questions: one assessing individual differences in legacy motives, one assessing their beliefs about climate change, and one assessing their willingness to take pro-environmental action. Following these sets of questions, participants were told they would be entered into a lottery to win a $10 bonus. They were then given the option to donate part (between $0 and $10) of their bonus to an environmental cause (Trees for the Future). This last measure was meant to test whether people actually act on any intention to act pro-environmentally.
+
+For ease of analysis, the three sets of questions measuring legacy motive, belief about the reality of climate change, and intention to take pro-environmental action, were transformed into three overall scores by computing the average over the items in each set. After eliminating participants who did not answer all questions, we have data from $n = `r nrow(legacy2015)`$ participants. @fig-ggpairs-plot-legacy2015 depicts the pairwise relations between the four variables. As can be seen, all variables are significantly correlated. The relation is most obvious for $\texttt{belief}$ and $\texttt{intention}$. Looking at the histogram of $\texttt{donation}$, you can see that although all whole amounts between $0 and $10 have been chosen at least once, it looks like three values were particularly popular, namely $0, $5, and to a lesser extent $10. This results in what looks like a tri-modal distribution. This is not necessarily an issue when modelling $\texttt{donation}$ with a regression model, as the assumptions in a regression model concern the _prediction errors_, and not the dependent variable itself.  
+
+```{r}
+#| label: fig-ggpairs-plot-legacy2015
+#| fig-cap: Pairwise plots for legacy motives, climate change belief, intention for pro-environmental
+#|   action, and donations.
+library(GGally)
+ggpairs(legacy2015, columns = c("legacy", "belief", "intention", "donation"), diag=list(continuous=wrap(ggally_barDiag, bins=11, colour="black")),upper = list(continuous = wrap(ggally_cor, size = 5,family="sans")))
+```
+
+According to the [Theory of Planned Behavior](https://en.wikipedia.org/wiki/Theory_of_planned_behavior) [@ajzen1991theory], attitudes and norms shape a person's behavioural intentions, which in turn result in behaviour itself. In the context of the present example, that could mean that legacy motive and climate change beliefs do not directly determine whether someone behaves in a pro-environmental way. Rather, these factors shape a person's intentions towards pro-environmental behaviour, which in turn may actually lead to said pro-environmental behaviour. This is an example of an assumed __causal chain__, where legacy motive (partly) determines behavioural intention, and intention determines behaviour. __Mediation analysis__ is aimed at detecting an __indirect effect__ of a predictor (e.g. $\texttt{legacy}$) on the dependent variable (e.g. $\texttt{donation}$), via another variable called the __mediator__ (e.g. $\texttt{intention}$), which is the middle variable in the causal chain.
+
+
+### Causal steps
+
+A traditional method to assess mediation is the so-called __causal steps__ approach [@baron1986moderator]. The basic idea behind the causal steps approach is as follows: if there is a causal chain from predictor ($X$) to mediator ($M$) to dependent variable ($Y$), then, ignoring the mediator for the moment, we should be able to see a relation between the predictor and dependent variable. This relation reflects the indirect effect of the predictor on the dependent variable. We should also be able to detect an effect of the predictor on the mediator, as well as an effect of the mediator on the dependent variable. Crucially, if there is a true causal chain, then the predictor should not offer any additional predictive power over the mediator. Because the effect of the predictor is assumed to go only "through" the mediator, once we know the value of the mediator, this should be all we need to predict the dependent variable. In more fancy statistical terms, this means that conditional on the mediator, the dependent variable is independent of the predictor, i.e. $p(Y \mid M, X) = p(Y \mid M)$. In the context of a multiple regression model, we could say that in a model where we predict $Y$ from $M$, the predictor $X$ would not have a unique effect on $Y$ (i.e. its slope would equal $\beta_X = 0$).
+
+The causal steps (@fig-causal-steps-models) approach involves assessing a pattern of significant relations in three different regression models. The first model is a simple regression model where we predict $Y$ from $X$. In this model, we should find evidence for a relation between $X$ and $Y$, meaning that we can reject the null hypothesis that the slope of $X$ on $Y$ (referred to here as $\beta_X = c$) equals 0. The second model is a simple regression model where we predict $M$ from $X$. In this model, we should find evidence for a relation between $X$ and $M$, meaning that we can reject the null hypothesis that the slope of $X$ on $M$ (referred to here as $\beta_X = a$ here) equals 0. The third model is a multiple regression model where we predict $Y$ from both $M$ and $X$. In this model, we should find evidence for a unique relation between $M$ and $Y$, meaning that we can reject the null hypothesis that the slope of $M$ on $Y$ (referred to here as $\beta_M = b$ here) equals 0. Controlling for the effect of $M$ on $Y$, in a true causal chain, there should no longer be evidence for a relation between $X$ and $Y$ (as any relation between $X$ and $Y$ is captured through $M$). Hence, we should not be able to reject the null hypothesis that the slope of $X$ on $Y$ in this model (referred to here as $\beta_X = c$', to distinguish it from the relation between $X$ and $Y$ in the first model, which was labelled as $c$) equals 0. If this is so, then we speak of __full mediation__. When there is still evidence of a unique relation between $X$ and $Y$ in the model that includes $M$, but the relation is reduced (i.e. $|c'| < |c|$), we speak of __partial mediation__.
+
+```{tikz}
+%| label: fig-causal-steps-models
+%| fig-cap: Assessing mediation with the causal steps approach involves testing parameters
+%|   of three models. MODEL 1 is a simple regression model predicting $Y$ from $X$ and
+%|   the slope of $X$ ($c$)  should be significant MODEL 2 is a simple regression model
+%|   predicting $M$ from $X$ and the slope of $X$ ($a$) should be significant. MODEL
+%|   3 is a multiple regression model predicting $Y$ from both $X$ and $M$. The slope
+%|   of $M$ ($b$) should be significant. The slope of $X$ ($c$') should not be significant
+%|   ("full" mediation) or be substantially smaller in absolute value ("partial" mediation).
+\usetikzlibrary{calc}
+\usetikzlibrary{arrows}
+\begin{tikzpicture}
+	\begin{scope}{
+		\pgfsetxvec{\pgfpoint{2cm}{0cm}}
+		\pgfsetyvec{\pgfpoint{0cm}{1.5cm}}
+		\tikzstyle{every node}=[minimum size=.95cm,circle]
+		\draw node[draw] (x1) at (0,0) {$X$};
+		\draw node[draw, opacity=0.4] (x2) at (1,1) {$M$};
+		\draw node[draw] (y) at (2,0) {$Y$};
+
+		\draw[->, line width=.5mm] (x1) -- node [sloped,below] {$c$} (y);
+		
+		\draw node[align=center] at (1,2) {\textbf{MODEL 1}};
+	}
+	\end{scope}
+	\begin{scope}[shift={(7,0)}]{
+		\pgfsetxvec{\pgfpoint{2cm}{0cm}}
+		\pgfsetyvec{\pgfpoint{0cm}{1.5cm}}
+		\tikzstyle{every node}=[minimum size=.95cm,circle]
+		\draw node[draw] (x1) at (0,0) {$X$};
+		\draw node[draw] (x2) at (1,1) {$M$};
+		\draw node[draw, opacity=0.4] (y) at (2,0) {$Y$};		
+		
+		\draw[->, line width=.5mm] (x1) -- node [sloped,above] {$a$} (x2);
+		
+		\draw node[align=center] at (1,2) {\textbf{MODEL 2}};
+	}
+	\end{scope}
+		
+	\begin{scope}[shift={(14,0)}]{
+		\pgfsetxvec{\pgfpoint{2cm}{0cm}}
+		\pgfsetyvec{\pgfpoint{0cm}{1.5cm}}
+		\tikzstyle{every node}=[minimum size=.95cm,circle]
+		\draw node[draw] (x1) at (0,0) {$X$};
+		\draw node[draw] (x2) at (1,1) {$M$};
+		\draw node[draw] (y) at (2,0) {$Y$};		
+		
+		\draw[->, line width=.5mm] (x2) -- node [sloped,above] {$b$} (y);
+		\draw[->, dashed, line width=.5mm] (x1) -- node [sloped,below] {$c$'} (y);
+		
+		\draw node[align=center] at (1,2) {\textbf{MODEL 3}};
+		
+	}
+	\end{scope}
+\end{tikzpicture}
+
+```
+
+#### Testing mediation of legacy motive by intention with the causal steps approach
+
+Let's see how the causal steps approach works in practice by assessing whether the relation between $\texttt{legacy}$ on $\texttt{donation}$ is mediated by $\texttt{intention}$.
+
+In MODEL 1 (@tbl-causal-steps-mod1-results), we assess the relation between $\texttt{legacy}$ and $\texttt{donation}$. In this model, we find a significant and positive relation between legacy motives and donations, such that people with stronger legacy motives donate more of their potential bonus to a pro-environmental cause. The question is now whether this is a direct effect of legacy motive, or an indirect effect "via" behavioural intent.
+
+```{r}
+#| label: tbl-causal-steps-mod1-results
+#| tbl-cap: "Model 1: Simple regression model predicting donations from legacy motive"
+mod1 <- lm(donation ~ legacy, data=legacy2015)
+tab <- summary(mod1)$coefficients
+rownames(tab) <- c("Intercept","Legacy motive")
+colnames(tab) <- c("$\\hat{\\beta}$","$\\text{SE}(\\hat{\\beta})$", "$t$", "$p(\\geq \\lvert t \\rvert)$")
+knitr::kable(tab, escape=FALSE, booktabs=TRUE, linesep="")
+```
+
+In MODEL 2 (@tbl-causal-steps-mod2-results), we assess the relation between $\texttt{legacy}$ and $\texttt{intention}$. In this model, we find a significant and positive relation between legacy motives and intention to act pro-environmentally, such that people with stronger legacy motives have a stronger intention to act pro-environmentally.
+
+```{r}
+#| label: tbl-causal-steps-mod2-results
+#| tbl-cap: "Model 2: Simple regression model predicting pro-environmental intent from legacy motive"
+mod2 <- lm(intention ~ legacy, data=legacy2015)
+tab <- summary(mod2)$coefficients
+rownames(tab) <- c("Intercept","Legacy motive")
+colnames(tab) <- c("$\\hat{\\beta}$","$\\text{SE}(\\hat{\\beta})$", "$t$", "$p(\\geq \\lvert t \\rvert)$")
+knitr::kable(tab, escape=FALSE, booktabs=TRUE, linesep="")
+```
+
+In MODEL 3 (@tbl-causal-steps-mod3-results), we assess the relation between $\texttt{legacy}$, $\texttt{intention}$, and $\texttt{donation}$. In this model, we find a significant and positive relation between intention to act pro-environmentally and donation to a pro-environmental cause, such that people with stronger intentions donate more. We also find evidence of a unique and positive effect of legacy motive on donation, such that people with stronger legacy motives donate more. Because there is still evidence of an effect of legacy motive on donations, after controlling for the effect of behavioural intent, we would not conclude that the effect of legacy motive is _fully mediated_ by intent. When you compare the slope of $\texttt{legacy}$ in MODEL 3 to that in MODEL 1, you can however see that the (absolute) value is smaller. Hence, when controlling for the effect of behavioural intent, a one-unit increase in $\texttt{legacy}$ is estimated to increase the amount of donation less then in a model where $\texttt{intention}$ is not taken into account.  
+
+
+```{r}
+#| label: tbl-causal-steps-mod3-results
+#| tbl-cap: "Model 3: Multiple regression model predicting donations from legacy motive and pro-environmental intent."
+mod3 <- lm(donation ~ legacy + intention, data=legacy2015)
+tab <- summary(mod3)$coefficients
+rownames(tab) <- c("Intercept","Legacy motive", "Behavioral intent")
+colnames(tab) <- c("$\\hat{\\beta}$","$\\text{SE}(\\hat{\\beta})$", "$t$", "$p(\\geq \\lvert t \\rvert)$")
+knitr::kable(tab, escape=FALSE, booktabs=TRUE, linesep="")
+```
+
+In conclusion, the causal steps approach indicates that the effect of legacy motive of pro-environmental action (donations) is _partially mediated_ by pro-environmental behavioural intentions. There is a residual direct effect of legacy motive on donations that is not captured by behavioural intentions. 
+
+### Estimating the mediated effect
+
+One potential problem with the causal steps approach is that it is based on a pattern of significance in four hypothesis tests (one for each parameter $a$, $b$, $c$, and $c'$). This can result in a rather low power of the procedure  [@mackinnon2007mediation], which seems to be particularly related to the requirement of a significant $c$ (the direct effect of $X$ on $Y$ in the model without the mediator).
+
+An alternative to the causal steps approach is to estimate the mediated (indirect) effect of the predictor on the dependent variable directly. Algebraically, this mediated effect can be worked out as [@mackinnon2007mediation]:
+
+\begin{equation}
+\text{mediated effect} = a \times b
+\end{equation}
+
+The rationale behind this is reasonably straightforward. The slope $a$ reflects the increase in the mediator $M$ for every one-unit increase in the predictor $X$. The slope $b$ reflects the increase in the dependent variable $Y$ for every one unit increase in the mediator. So a one-unit increase in $X$ implies an increase in $M$ by $a$ units, which in turn implies an increase in $Y$ of $a \times b$ units. Hence, the mediated effect can be expressed as $a \times b$.
+
+In a single mediator model such as the one looked at here, the mediated effect $a \times b$ turns out to be equal to $c - c'$, i.e. the difference between the direct effect of $X$ on $Y$ in a model without the mediator, and the unique direct effect of $X$ on $Y$ in a model which includes the mediator. 
+
+```{r}
+#| label: legacy-mediation-analysis
+set.seed(20201026)
+med_boot <- mediation::mediate(mod2,mod3,treat="legacy",mediator="intention", boot=TRUE)
+```
+
+To test whether the mediated effect differs from 0, we can try to work out the sampling distribution of the estimated effect $\hat{a} \times \hat{b}$, under the null-hypothesis that in reality, $a \times b = 0$. Note that this null hypothesis can be true when $a = 0$, $b = 0$, or both $a = b = 0$. In the so-called Sobel-Aroian test, this sampling distribution is assumed to be Normal. However, it has been found that this assumption is often inaccurate. As there is no method to derive an accurate sampling distribution analytically, modern procedures rely on simulation. There are different ways to do this, but we'll focus on one, namely the __nonparametric bootstrap__ approach [@preacher2008asymptotic]. This involves generating a large number (e.g. $>1000$) of simulated datasets by randomly sampling $n$ cases with replacement from the original dataset. This means that any given case (i.e. a row in the dataset) can occur 0, 1, 2, \ldots times in a simulated dataset. For each simulated dataset, we can estimate $\hat{a} \times \hat{b}$ by fitting the two corresponding regression models. The variance in these estimates over the different datasets forms an estimate of the variance of the sampling distribution. A 95% confidence interval can then also be computed through by determining the 2.5 and 97.5 percentiles. Because just the original data is used, there is no direct assumption made about the distribution of the variables, apart from that the original data is a representative sample from the Data Generating Process. Applying this procedure (with 1000 simulated datasets) provides a 95% confidence interval for $a \times b$ of $[`r paste0(format(summary(med_boot)$d0.ci,digits=3), collapse=", ")`]$. As this interval does not contain the value 0, we reject the null hypothesis that the mediated effect of $\texttt{legacy}$ on $\texttt{donation}$ "via" $\texttt{intention}$ equals 0.
+
+Note that in solely focusing on the mediated effect, we do not address the issue of total vs partial mediation. Using our simulated datasets, we can however also compute a bootstrap confidence interval for $c'$. For the present set of simulations, the 95% confidence interval for $c'$ is $[`r paste0(format(summary(med_boot)$z0.ci,digits=3), collapse=", ")`]$. As this interval does not contain the value 0, we reject the null hypothesis that the unique direct effect of $\texttt{legacy}$ on $\texttt{donation}$ equals 0. This thus provides a similar conclusion to the causal steps approach. 
+
+<!-- In a single mediator model such as the one looked at here, this mediated effect 
+To test whether this mediated effect equals 0 (in which case there is no mediation), we can attempt to work out the sampling -->
+

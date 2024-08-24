@@ -1,0 +1,366 @@
+# Introduction to Bayesian estimation {#sec-ch-Bayes-estimation}
+
+```{r}
+#| label: setup
+#| echo: false
+set.seed(20221010)
+source("run_before.R")
+```
+
+In this chapter, we will introduce an alternative to maximum likelihood estimation of statistical models: Bayesian estimation. Bayesian estimation concerns revising beliefs in light of observed data. It does not produce a single parameter estimate, but rather a distribution over the possible parameter values. Prior beliefs about the possible parameter values are encoded in the prior distribution. In light of observed data, this is then updated to the posterior distribution.
+
+## Fundamentals of Bayesian inference
+
+### Probability in times of Covid
+
+Let's start with a classic example in a topical guise. With the aim to move to a new phase in the Covid-19 pandemic, the UK government  planned to employ mass testing as part of a wider strategy also involving general vaccination ([Guardian, 1 December 2020](https://www.theguardian.com/world/2020/dec/01/funds-for-mass-covid-testing-offered-to-local-authorities-in-tier-3)).^[I originally wrote most of this chapter in the first week of December 2020. Revising the chapter in the first week of December 2021, not too much has changed.] The testing involves lateral flow tests, which are relatively inexpensive and give a result in about 20 minutes. At the time, estimates were that these tests give a positive test result in 76.8% of cases of Covid-19, and a negative test result in 99.68% of cases ([Department of Health and Social Care, 11 November 2020](https://www.gov.uk/government/news/oxford-university-and-phe-confirm-high-sensitivity-of-lateral-flow-tests)).^[Later evidence indicates that the tests may be more accurate than thought at first ([BBC, 14 October 2021](https://www.bbc.co.uk/news/health-58899612))]. The true positive rate (76.8%) is also called the __sensitivity__ of a test, and the true negative rate (99.68%) the __specificity__. On 26 November 2020, the [Office of National Statistics ](https://www.ons.gov.uk/peoplepopulationandcommunity/healthandsocialcare/conditionsanddiseases/bulletins/coronaviruscovid19infectionsurveypilot/26november2020) estimated the rate of Covid-19 cases in the general population of England to be 1.17%. That implies that about 1 in 85 people carried the virus, which is also called the __base rate__. Suppose someone is tested and the test result is positive. What is the probability that they are actually infected with Covid-19? Perhaps surprisingly, this probability does _not_ equal .768. This is the conditional probability $p(\text{positive test}|\text{Covid-19})$, i.e. the sensitivity. What we would like to know however is a different conditional probability, namely $p(\text{Covid-19}|\text{positive test})$. And these are _not_ the same!
+
+We can work out the desired probability using the rules of probability discussed in Section @sec:02-rules-of-probability. 
+$$p(\text{Covid-19}|\text{positive test}) = \frac{p(\text{Covid-19 and positive test})}{p(\text{positive test})}$$
+From the multiplication rule, we know that
+$$p(\text{Covid-19 and positive test}) = p(\text{positive test}|\text{Covid-19}) \times p(\text{Covid-19})$$ 
+To work out $p(\text{positive test})$, we need to consider all the ways in which someone can obtain a positive test result. In this situation, there are two: the person can carry Covid-19 and have a positive test result, or the person can not carry Covid-19 and obtain a positive test result. Thus 
+$$p(\text{positive test}) = p(\text{Covid-19 and positive test}) + p(\text{no Covid-19 and positive test})$$
+We have already specified how to calculate $p(\text{Covid-19 and positive test})$. Similarly, we can compute $p(\text{no Covid-19 and positive test})$ as
+$$p(\text{no Covid-19 and positive test}) = p(\text{positive test}|\text{no Covid-19}) \times p(\text{no Covid-19})$$
+Now we are in a position to calculate $p(\text{Covid-19}|\text{positive test})$ from the sensitivity and specificity of the test, and the base rate of Covid-19 infection. We know that $p(\text{Covid-19}) = .0117$, hence $p(\text{no Covid-19}) = 1 - p(\text{Covid-19}) = 1 - .0117 = .9883$. Putting all the numbers in a table:
+```{r}
+#| label: covid-mass-test-sensitivy-specificty
+tab <- data.frame(c("76.8%","23.2%"),c("0.32%","99.68%"))
+rownames(tab) <- c("positive test","negative test")
+knitr::kable(tab, col.names = c("Covid-19 (1.17%)","no Covid-19 (98.83%)"), align=c("r","r"), booktabs=TRUE, linesep="")
+```
+
+$$\begin{aligned}
+p(\text{Covid-19}|\text{positive test}) &= \frac{p(\text{Covid-19 and positive test})}{p(\text{positive test})} \\
+&= \frac{p(\text{positive test}|\text{Covid-19}) p(\text{Covid-19})}{p(\text{pos. test}|\text{Covid-19}) p(\text{Covid-19}) + p(\text{pos. test}|\text{no Covid-19}) p(\text{no Covid-19})} \\
+&= \frac{.768 \times .0117}{.768 \times .0117 + .0032 \times .9883} \\
+&= 0.7396
+\end{aligned}$$
+So just under 3 out of all 4 people that test positive in this scenario would actually carry Covid-19. As a result, 1 out of 4 people might be asked to quarantine without really needing to do so. Although of course very unfortunate for those people, that does not seem like a too-high price to pay to me. But the base-rate is very important here. If the rate of Covid-19 infections is lowered to $p(\text{Covid-19}) = .001$ (i.e. 0.1%), then the result would be $p(\text{Covid-19}|\text{positive test}) = 0.1937$, which means that only about one in five people who test positive are actually infected by Covid-19! When the base-rate is lowered, massive testing seems like a much less useful procedure.
+
+Perhaps the equations seem a little abstract. Another way to explain the resulting conditional probability is through the tree diagram of @fig-covid-19-test-tree. The tree represents a group of 100,000 people from the general population, of which 1,176 would have Covid-19, and 903 of these would also get a positive test result. Of the 98,824 people without Covid-19, 316 would receive a positive test result. While the change of a false positive is very low, because so many people do not have Covid-19, the actual frequency of people without Covid-19 who obtain a positive test result is not that much smaller than the number of people with Covid-19 who obtain a positive test result. The conditional probability can then be computed simply as 
+$$p(\text{Covid-19}|\text{positive test}) = \frac{903}{903 + 316} = .74$$
+which is equal to the value computed earlier (up to rounding error resulting from converting probabilities to whole people).
+
+```{dot}
+//| label: fig-covid-19-test-tree
+//| fig-cap: "Outcome tree representing mass testing for Covid-19"
+
+digraph covid_tree_plot {
+
+  graph [layout = dot,
+         rankdir = LR]
+
+  node [shape = box]
+  S [label = "100,000 people"]
+  
+  node [shape = oval, style = filled]
+  H [label = "Covid-19", fillcolor = "#cc0000"]
+  T [label = "no Covid-19", fillcolor = "#00cc00"]
+  HH [label = "positive test", fillcolor = "#ff0000"]
+  HT [label = "negative test", fillcolor = "#990000"]
+  TH [label = "positive-test", fillcolor = "#00ff00"]
+  TT [label = "negative-test", fillcolor = "#009900"]
+  
+  edge [label = "1,176"]
+  S -> {H}
+  
+  edge [label = "98,824", labelloc=b]
+  S -> {T}
+  
+  edge [label = "903"]
+  H -> {HH}
+  
+  edge [label = "273", labelloc=b]
+  H -> {HT}
+  
+  edge [label = "316"]
+  T -> {TH}
+  
+  edge [label = "98,508", labelloc=b]
+  T -> {TT}
+}
+
+```
+
+### Bayes' rule
+
+In calculating a conditional probability from other conditional probabilities and base-rates, we have just applied the general rules of probability. That's nothing special, really. In abstract notation, the formula known as Bayes' rule is
+
+$$
+p(A|B) = \frac{p(B|A) p(A)}{p(B|A)p(A) + p(B|\neg A) p(\neg A)}
+$$ {#eq-bayes-rule}
+
+Again, there is nothing special about this formula itself, it follows from the rules of probability. These rules were however not clearly specified when Reverend Thomas Bayes defined the rule in an essay which was posthumously published [@bayes1763]. More importantly, he used the rule to infer an unknown parameter of a statistical model. According to the Frequentist View (see Section @sec-02-probability-definition), a parameter has a true value, but you cannot assign a probability to it, because it is not a random event that has a long-run frequency. It just has one value: the true value.
+
+In assigning probabilities to parameters, Thomas Bayes can be seen as the founding father of the Subjectivist View of probability. There has been quite a lot of philosophical discussion about probability interpretations. The subjectivist view is that a probability represents a rational degree of belief. This belief can be about anything, whether actual events in the world, or more abstract concepts such as hypotheses or model parameters. Bayesian inference concerns adjusting prior beliefs in light of evidence. The resulting adjusted belief is called the posterior belief. In the previous example, the base-rate of Covid-19 infections can be seen as a rational prior belief that a randomly chosen person from the general population in England has Covid-19. Upon observing a positive test result, this __prior probability__ $p(\text{Covid-19})$ can be adjusted to become the __posterior probability__  $p(\text{Covid-19}|\text{positive test})$.
+
+### We missed you Paul!
+
+In Bayesian statistics, we can apply the principles of Bayesian inference to anything we can assign degrees of belief to. For instance, our belief that Paul the Octopus had psychic abilities. In our general model of Paul's predictions (Section @sec-02-binomial-model, @eq-definition-binomial-distribution), we assumed there was a probability that he made a correct prediction, which we denoted by $\theta$. This parameter probability could in principle take any value $0 \leq \theta \leq 1$. The idea of a prior distribution for such a parameter is to assign to each possible value of $\theta$ a "degree of belief" that this is the true value. These degrees of belief should obey the rules of probability. In the coin-flipping model, which assumed Paul was randomly guessing, there was only one possible value, namely $\theta=.5$. That means that, if we were to believe this model is true, we would consequently  believe that any other value is impossible: $p(\theta \neq .5) = 0$, which implies $p(\theta = .5) = 1$. If we don't believe that Paul is necessarily randomly guessing, then the parameter could have other values as well. @fig-prior-distributions-Paul shows two possible prior distributions. In the plot on the left, the prior assigns an equal probability to any possible value of $\theta$. This is also called a uniform distribution, and reflects the beliefs of someone who considers that "anything goes" when it comes to Paul's ability to predict the outcome of football matches. In the plot on the right, the prior distribution reflects the beliefs of someone who quite strongly considers Paul a good predictor of the outcome of football matches.  
+
+```{r}
+#| label: fig-prior-distributions-Paul
+#| fig-cap: Two different prior distributions for the probability that Paul makes a correct
+#|   prediction, the normalised likelihood function ($p(Y|\theta)/p(Y)$) and the resulting
+#|   posterior distributions after observing that Paul made $Y=12$ out of $n=14$ correct
+#|   predictions. Wherever the normalised likelihood is larger than 1, the posterior
+#|   probability is larger than the prior probability, while the posterior probability
+#|   is lower than the prior probability wherever the normalised likelihood is lower
+#|   than 1. Note that in MODEL 1, the normalised likelihood and posterior distribution
+#|   are identical and therefore overlapping on the plot.
+#| fig-width: 6
+#| fig-height: 3.5
+#| out-width: 90%
+library(dplyr)
+library(ggplot2)
+
+data.frame(model=rep(c("MODEL 1","MODEL 2"),each=3*100),type=rep(c("prior","likelihood","posterior"),each=100),x=seq(0,1,length=100)) %>%
+  mutate(type=factor(type,levels=c("prior","likelihood","posterior")), y=if_else(model == "MODEL 1",case_when(type=="prior" ~ dbeta(x,1,1), type=="likelihood" ~ dbinom(12,14,x)/(choose(14,12)*(beta(1+12,1+2)/beta(1,1))), type == "posterior" ~ dbeta(x,1+12,1+2)),case_when(type=="prior" ~ dbeta(x,12,2), type=="likelihood" ~ dbinom(12,14,x)/(choose(14,12)*(beta(12+12,2+2)/beta(12,2))), type == "posterior" ~ dbeta(x,12+12,2+2)))) %>%
+  ggplot(aes(x=x,y=y,colour=type, group=type)) + geom_line(lwd=1.5,alpha=.5) + facet_wrap(~model) + xlab(expression(theta)) + ylab(expression(p(theta))) + theme(legend.position="bottom", legend.title = element_blank())
+```
+
+We can write the posterior distribution for the parameter $\theta$, conditional upon observed data $Y$ (e.g., $Y=12$ out of $n=14$ correct predictions) as:
+$$
+p(\theta|Y) &= \frac{p(Y|\theta) \times p(\theta)}{P(Y)} \\
+&= \frac{p(Y|\theta)}{p(Y)} \times p(\theta)
+$$ {#eq-posterior-parameter-specification}
+Here, $p(Y|\theta)$ is the likelihood function (the probability of the observed data $Y$ given a particular value of $\theta$), $p(\theta)$ is the prior distribution of the parameter $\theta$, and $p(Y)$ is the probability of the data over all possible values of $\theta$ (weighted by their prior probability). This is also called the __marginal likelihood__, and technically is defined as
+$$p(Y) = \int p(Y|\theta) p(\theta) d \theta$$
+i.e. as the integral of the product of the likelihood function and prior over all possible values of $\theta$, but you don't need to worry about this. The formulation on the second line of @eq-posterior-parameter-specification is just a rearrangement of the terms, but is meant to show that you can think of the posterior probability as the product of the prior probability and the __normalised likelihood__ (the likelihood of the data for a particular value of $\theta$ compared to the marginal likelihood of $Y$ over all possible values of $\theta$).  
+
+In words, we can describe @eq-posterior-parameter-specification as:
+$$\begin{aligned}
+\text{posterior} &= \frac{\text{likelihood} \times \text{prior}}{\text{marginal likelihood}} \\
+&= \frac{\text{likelihood}}{\text{marginal likelihood}} \times \text{prior} \\
+&= \text{normalised likelihood} \times \text{prior}
+\end{aligned}$$
+The values of the normalized likelihood and the resulting posterior distribution are also shown in @fig-prior-distributions-Paul. Because the posterior probabilities are calculated by multiplying the prior probability by the normalised likelihood, the posterior probability will be _higher_ than the prior probability when the normalised likelihood is _larger_ than 1. You can think of the normalised likelihood as an average likelihood over all possible values of $\theta$ (we will discuss this in a little more detail soon). So when a particular value of $\theta$ assigns a higher likelihood to the data than the average likelihood of the data, i.e. $\frac{p(Y|\theta)}{p(Y)} > 1$, the evidence that this value of $\theta$ is the true value increases. Conversely, the posterior probability will be _lower_ than the prior probability when the normalised likelihood is _smaller_ than 1. So when a particular value of $\theta$ assigns a lower likelihood to the data than average, the evidence that this value of $\theta$ is the true value decreases. This, in a nutshell, is how Bayesian inference of parameters works.
+
+Inspecting the posterior distributions resulting from the two models in @fig-prior-distributions-Paul, you can see that the posterior distribution is mostly located at the higher values of $\theta$, because small values of $\theta$ are not very likely given Paul's success rate of 12 out of 14 correct predictions. Comparing the posterior distributions between the two models, you may also see that the posterior distribution for MODEL 2 is less dispersed (i.e. "narrower") than for MODEL 1. This is a direct consequence of the difference in the prior distributions. The uniform distribution of MODEL 1 does not make very precise predictions regarding the likely values of $\theta$ ("anything goes"). The more dispersed the prior is, the more dispersed the posterior will be. The prior distribution of MODEL 2 is, in some sense, much more daring, indicating that low values of $\theta$ are very unlikely _a priori_. Because these values are not believed to be true in the first place, they are also relatively less likely after observing the data. 
+
+### The marginal likelihood and prior predictive distribution
+
+A Bayesian statistical model consists of both the prior distribution and the likelihood function. Both are integral parts of a Bayesian model. This is different from statistical models in the Frequentist tradition, which only focus on the likelihood. One way to view a Bayesian model is as a _hierarchical model_, similar to how linear mixed-effects models can be viewed as hierarchical models. With this formulation, it is straightforward to simulate a Bayesian model, by first sampling a random parameter value from the prior distribution $p(\theta)$, and then using this to sample a value of the dependent variable from the conditional distribution $p(Y|\theta)$. The resulting marginal distribution of the dependent variable, $p(Y)$, is also called the __prior predictive__ distribution. The sampling scheme is
+$$\begin{aligned}
+Y_j &\sim p(Y|\theta_j) \\
+\tilde{\theta}_j &\sim p(\theta)
+\end{aligned}$$
+Not only can we use each sampled parameter value $\tilde{\theta}_j$ to sample a value of the dependent variable, we can also use each to compute the likelihood of the data actually observed, e.g. $p(Y=12|\tilde{\theta}_j)$. @fig-prior-predictive-samples-binomial-bayesian-models shows 1000 sampled parameter values (prior samples), corresponding samples of the dependent variable (prior predictive samples), and the likelihood value for Paul's predictions (sampled likelihood), for both models in @fig-prior-distributions-Paul. Note that all these are based on the same set of sampled parameter values $\tilde{\theta}$. 
+
+```{r}
+#| label: fig-prior-predictive-samples-binomial-bayesian-models
+#| fig-width: 6
+#| fig-height: 3.5
+#| fig-cap: Number of correct predictions (out of 14) for 1000 simulations from both
+#|   Bayesian models of @fig-prior-distributions-Paul.
+#| fig-show: hold
+set.seed(91237898)
+tdat <- rbind(
+  data.frame(model = "MODEL 1", theta = rbeta(1000,1,1)),
+  data.frame(model = "MODEL 2", theta = rbeta(1000,12,2))
+) %>% mutate(likelihood=dbinom(12,14,prob=theta))
+tdat$Y = rbinom(2000,size=14,prob=tdat$theta)
+tdat %>%
+  ggplot(aes(x=theta)) + geom_histogram(colour="black", binwidth=.025) + facet_wrap(~model) + ggtitle("Prior samples") + xlab(expression(theta))
+
+tdat %>%
+  ggplot(aes(x=Y)) + geom_histogram(colour="black", binwidth=1) + facet_wrap(~model) + ggtitle("Prior predictive samples")
+
+tdat %>%
+  ggplot(aes(x=likelihood)) + geom_histogram(colour="black", binwidth=.01) + facet_wrap(~model) + ggtitle("Sampled likelihood") + xlab("Likelihood (k=12, n=14)")
+
+```
+
+You can see that the prior predictive distribution looks quite similar in shape to the prior distribution, which is because for this model, there is a close link between the probability of a correct prediction ($\theta$), and the total number of correct predictions ($Y$). You can also see that the likelihood value is relatively low for many sampled parameters from MODEL 1. That is because there are many relatively low sampled values $\tilde{\theta}$ in MODEL 1, for which the likelihood of 12 out of 14 correct predictions, $p(Y=12|n=14, \theta = \tilde{\theta})$ is low. Model 2 does better in accounting for the observed data, with generally higher likelihood values for the sampled parameters. This better fit to the observed data can also be seen in the prior predictive distribution of MODEL 2, where 12 correct predictions is a common occurrence. In MODEL 1, all numbers of correct predictions are sampled roughly equally often.
+
+The sampled likelihoods can be used to compute an average likelihood for each model. This average is an estimate of the marginal likelihood, and computed simply as
+$$\hat{p}(Y=12) = \frac{\sum_{j=1}^n p(Y=12|\tilde{\theta}_j)}{n}$$
+Because most of the sampled likelihoods are low for MODEL 1, the average is relatively low as well: $\hat{p}(Y=12) = `r format(mean(tdat$likelihood[tdat$model == "MODEL 1"]),digits=3)`$. For MODEL 3, most of the sampled likelihoods are relatively high, and hence the average is higher than for MODEL 1:  $\hat{p}(Y=12) = `r format(mean(tdat$likelihood[tdat$model == "MODEL 2"]),digits=3)`$. Because MODEL 2 on average assigns a higher probability to the observed data, it offers a better account of the observed data than MODEL 1. As we will see in Chapter @sec-ch-Bayes-factors, a Bayesian version of the likelihood ratio called the *Bayes factor* which reflects the ratio of marginal likelihoods for different models, is central in a Bayesian version of hypothesis testing.
+
+There is a close correspondence between the marginal likelihood and the prior predictive distribution. In fact, the marginal likelihood is just the prior predictive distribution evaluated at the observed data points. The prior predictive distribution is the marginal distribution of the data according to the model, whilst the marginal likelihood is the value of this distribution for particular values of the dependent variable. So in this case, with a single observed value, we can also estimate the marginal likelihood by computing the relative frequency of $Y=12$ in the prior predictive distribution. For MODEL 1, this gives $\hat{p}(Y=12) = `r sum(tdat$Y[tdat$model == "MODEL 1"] == 12)/1000`$, and for MODEL 2, it is $\hat{p}(Y=12) = `r sum(tdat$Y[tdat$model == "MODEL 2"] == 12)/1000`$. These two ways of estimating the marginal likelihood are not exactly the same, because they approach the same quantity via a different route.^[The first method is generally more reliable.] And both are subject to random sampling variation due to simulating a limited number of parameter values. Accurately computing marginal likelihoods is, for most models, a rather complicated thing, but we won't go into the details here.
+
+## Markov chain Monte Carlo (MCMC)
+
+For most prior distributions $p(\theta)$, the posterior distribution $p(\theta|Y_1, \ldots, Y_n)$ does not have a closed-form expression, meaning that it is not possible to calculate the posterior probability of each parameter value analytically.^[Analytical expressions for the posterior distribution tend to require a so-called **conjugate prior** distribution, which means that the prior distribution is in the same class of distributions as the posterior distribution. For the Binomial likelihood of the Paul example, the conjugate prior is a *Beta distribution*, which results in a Beta posterior distribution. For a Normal likelihood, the conjugate prior on the mean $\mu$ is a Normal distribution and the conjugate prior for the variance $\sigma^2$ is an inverse-Gamma distribution. The posterior distribution is then a $t$-distribution. Conjugate prior distributions are mathematically convenient, but generally too constrictive to adequately represent prior beliefs.] In these cases, it is possible to obtain an "empirical" estimate of the posterior distribution via sampling. The set of sampled parameter values can be used to compute descriptive statics such as the mean and variance. These are estimates of the posterior mean and variance. The set of samples can also be used to compute a Bayesian version of a confidence interval, which is called the (posterior) highest density interval (HDI). The HDI represents a range of the most plausible parameter values.  
+
+We used sampling above to obtain a representation of the prior predictive and sampled likelihood functions. There, we sampled parameters directly from the prior distribution, and then looked at the prior predictive distribution and observed data likelihood for those sampled parameters. In principle, it is possible to use a similar scheme to obtain a representation of the posterior distribution, by weighting each sampled parameter value $\tilde{\theta}$ by its likelihood $p(Y_1, \ldots, Y_n|\tilde{\theta})$. This is a form of *Importance Sampling*. It tends to not be very efficient for representing the posterior distribution, however, as many parameter values that may have a high probability in the prior distribution may have a low probability in the posterior distribution. Therefore, many sampled parameters $\tilde{\theta}$ will have such a low probability that they end up having little impact on the posterior distribution. This is why alternative sampling schemes have been proposed, which aim to be more efficient. These sampling schemes are generally *sequential*, in the sense that a new sampled parameter $\tilde{\theta}_{j}$ depends on the previously sampled value $\tilde{\theta}_{j-1}$. This dependency is only between the new sample and the last sampled value, not any earlier sampled values. In technical terms, such a dependency is called the first-order *Markov condition*. Therefore, these sampling techniques are referred to as **Markov Chain Monte Carlo**, where *Markov Chain* refers to the series of dependent samples, and *Monte Carlo* refers to the random aspect of sampling.^[Monte Carlo being famous for its casino's with various games of chance.] 
+
+Two classic methods of MCMC are the **Metropolis-Hastings** algorithm, and **Gibbs sampling**. A relatively new addition is **Hamiltonian Monte Carlo**. We won't go into the technical details of these sampling schemes here. Modern software has robust implementations of the techniques, requiring little or no contribution from the user in implementing them. However, we will highlight some important issues that affect all these methods.
+
+Markov chains are a probabilistic model of how a variable transitions from one "state" to another. In first-order Markov Chains, the current state depends only on the previous state. A well-behaved Markov Chain is said to be ergodic, which means that it is:
+
+1. **irreducible**: From any state $\tilde{\theta}_j$, the chain can reach any other possible value $\theta'$ eventually. If the chain is reducible, it is not possible to arrive at a state from some other states. That implies the chain can get "stuck", never visiting some states which are actually possible.
+
+2. **aperiodic**: The chain does not have any periodic states. In a periodic chain, some states can only be visited on every $k$-th iteration.
+
+3. **recurrent**: The probability of returning to any state $\theta'$, given sufficient iterations, equals 1. In words, if the chain runs long enough, it is guaranteed to eventually get to the state $\theta'$.
+
+The conditions above guarantee that Markov chain will converge to a so-called *stationary distribution*. Together with some other conditions, this stationary distribution will be equal to the posterior distribution. That implies that after a certain large number of iterations, the samples from the chain can be considered a random (but correlated) draw from the posterior distribution.
+
+### Convergence
+
+MCMC techniques rely on a proof that after a sufficient number of samples, the algorithms provide samples according to the posterior distribution. That means that at some point, the sampled parameter values can be used directly as an empirical measure for the posterior probability. Unfortunately, it is very difficult to determine when this point has been reached. One idea is to use several chains simultaneously and checking whether their distribution of samples overlaps sufficiently to conclude that all are likely to be sampling from the posterior distribution. The measure of this, usually denoted as $\hat{R}$, is the ratio of the variance of the sampled values $\tilde{\theta}$ within a chain, to the variance between chains. If all chains have converged to the posterior distribution, this ratio should equal 1. Values $\hat{R} \leq 1.04$ are considered satisfactory. If the value is larger, it is unlikely that the chain has converged. This test is by no means guaranteed to prove convergence, but nonetheless can be a useful indicator of non-convergence.
+
+Usually, the first part of the samples is discarded as a "warm-up" or "burn-in" sample, as the initial samples will likely not have been drawn from the posterior distribution (as the chain needs to converge first). Depending on the complexity of the model, this burn-in period may have to be quite long. Apart from computation time, there is no benefit to make the burn-in sample smaller. Hence, the more initial samples that can be discarded, the more likely the subsequent samples are an accurate reflection of the posterior distribution.
+
+### Autocorrelation
+
+Markov chains have inherent dependencies, as each sample parameter $\tilde{\theta}_j$ is dependent on the previous sample $\tilde{\theta}_{j-1}$. Large correlation between sampled values can bias the overall sample. Therefore, it may help to **thin** the samples by discarding intermediate values (e.g. every second, and/or third, and/or fourth sample, etc).
+
+### Effective sample size
+
+Due to the autocorrelation, each sample provides less information about the posterior distribution than if the samples were independent. The effective sample size is a rough measure of how many independent bits of information is contained in an MCMC sample. Ideally, the effective sample size should equal the number of samples (after burn-in), or at least not be much smaller. 
+
+
+## Concerning prior distributions^[This section contains some material adapted from [An Introduction to Bayesian Reasoning and Methods](https://bookdown.org/kevin_davisross/bayesian-reasoning-and-methods/) by Kevin Ross.]
+
+
+One of the most commonly asked questions when one first encounters Bayesian statistics is "how do we choose a prior?"  While there is never one "perfect" prior in any situation, we'll discuss some issues to consider when choosing a prior.  But first, here are a few big picture ideas to keep in mind.
+
+- Bayesian inference is based on the *posterior* distribution, not the prior. Therefore, the posterior requires much more attention than the prior.
+- The prior is only one part of the Bayesian model.  The likelihood is the other part.  And there is the data that is used to fit the model.  Choice of prior is just one of many modeling assumptions that should be evaluated and checked.
+- In many situations, the posterior distribution is not too sensitive to reasonable changes in prior.  In these situations, the important question isn't "what is the prior?" but rather "is there a prior at all"? That is, are you adopting a Bayesian approach, treating parameters as random variables, and quantifying uncertainty about parameters with probability distributions?
+- One criticism of Bayesian statistics in general and priors in particular is that they are subjective.
+However, any statistical analysis is inherently subjective, filled with many assumptions and decisions along the way.
+Except in the simplest situations, if you ask five statisticians how to approach a particular problem, you will likely get five different answers.
+Priors and Bayesian data analysis are no more inherently subjective than any of the myriad other assumptions made in statistical analysis.
+
+Subjectivity is OK, and often beneficial. Choosing a subjective prior allows us to explicitly incorporate a wealth of past experience into our analysis.
+
+Bayesian data analysis treats parameters as random variables with probability distributions.
+The prior distribution quantifies the researcher's uncertainty about parameters *before* observing data.  Some issues to consider when choosing a prior include, in no particular order:
+
+- The researcher's prior beliefs! A prior distribution is part of a statistical model, and should be consistent with knowledge about the underlying scientific problem. Researchers are often experts with a wealth of past experience that can be explicitly incorporated into the analysis via the prior distribution. Such a prior is called an informative or weakly informative prior.
+- Noninformative prior a.k.a., (reference, vague, flat prior).  A prior is sought that plays a minimal role in inference so that "the data can speak for itself".
+<!--- A regularizing prior.  A prior which, when tuned properly, reduces overfitting or "overreacting" to the data.-->
+- Mathematical convenience.  The prior is chosen so that computation of the posterior is simplified, as in the case for so-called *conjugate priors*.
+<!--- Interpretation.  The posterior is a compromise between the data and prior.  Some priors allow for easy interpretation of the relative contributions of data and prior to the posterior.  For example, think of the "prior successes and prior failures" interpretation in the Beta-Binomial model.-->
+- Prior based on *past* data.  Bayesian updating can be viewed as an iterative process.  The posterior distribution obtained from one round of data collection can inform the prior distribution for another round.
+
+For those initially sceptical of prior distributions at all, the strategy of always choosing an noninformative or flat prior might be appealing.  Flat priors are common, but are rarely ever the best choices from a modelling perspective. Just like you would not want to assume a Normal distribution for the likelihood in every problem, you would not want to use a flat prior in every problem.
+
+Furthermore, there are some subtle issues that arise when attempting to choose a flat or noninformative prior. Flat priors are generally not preserved under transformations of parameters.  So a prior that is flat under one parametrization of the problem will generally not be flat under another. For example, when trying to estimate a population SD $\sigma$, assuming a flat prior for $\sigma$ will result in a non-flat prior for the population variance $\sigma^2$, and vice versa.
+
+<!--
+An *improper* prior distribution is a prior distribution that does not integrate to 1, so is not a proper probability density. However, an improper prior often results in a proper posterior distribution.  Thus, improper prior distributions are sometimes used in practice.
+
+Flat priors are common choices in some situations, but are rarely ever the best choices from a modeling perspective.  Furthermore, flat priors are generally not preserved under transformations of parameters.  So a prior that is flat under one parametrization of the problem will generally not be flat under another. For example, when trying to estimate a population SD $\sigma$, assuming a flat prior for $\sigma$ will result in a non-flat prior for the population variance $\sigma^2$, and vice versa.
+-->
+
+It is not possible to provide clear guidelines on choosing prior distributions for all data analysis problems. Ideally, the prior should reflect the beliefs of the analyst. But it can be difficult to formulate beliefs about parameters of statistical models. Without clear beliefs, a noninformative or flat prior is reasonable. 
+
+In all cases, it is a good idea to check the sensibility of the prior distribution by inspecting the *prior predictive distribution*. The prior predictive distribution can be used to check the reasonableness of a prior for a given situation before observing sample data. Do the simulated samples seem consistent with what you might expect of the data based on your background knowledge of the situation? If not, another prior might be more reasonable.
+
+## Multiple regression example
+
+As a final example of a Bayesian analysis, we will revisit the data analysed in Chapter @sec-ch-multiple-regression, predicting votes for Trump as a function of the number of hate groups and education level.
+
+Our model is like a usual regression model:
+$$\texttt{trump_votes}_i = \beta_0 + \beta_1 \times \texttt{hate_groups}_i + \beta_2 \times \texttt{education}_i + \epsilon_i \quad \quad \epsilon_i \sim \mathbf{Normal}(0,\sigma_\epsilon)$$
+The regression model above defines the likelihood. For a Bayesian analysis, we need to set priors for all parameters. We use the following prior distributions:
+$$\begin{aligned} \beta_0 &\sim \mathbf{Normal}(0, 100) \\
+\beta_1  &\sim \mathbf{Normal}(0, 5) \\
+\beta_2  &\sim \mathbf{Normal}(0, 5) \\
+\sigma_\epsilon  &\sim \mathbf{half-Normal}(0, 10) \\
+\end{aligned}$$
+Note that a half-Normal distribution is used for the standard deviation of the model errors, truncated below at 0. This is because a standard deviation can not be negative.
+
+The model was estimated by running four Hamiltonian MCMC chains in parallel, each for 2000 iterations, discarding the first 1000 samples as burn-in. The final 1000 samples of each chain was then left as an estimate of the posterior distribution (so 4000 samples in total).
+
+```{r}
+#| label: brms-multiple-regression-model
+#| cache: true
+#| include: false
+#| results: hide
+library(sdamr)
+library(brms)
+data("trump2016")
+dat <- subset(trump2016,state != "District of Columbia")
+
+mod <- brms::brm(formula = percent_Trump_votes ~ hate_groups_per_million + percent_bachelors_degree_or_higher,data=dat, seed=101, sample_prior = TRUE, prior = c(prior(normal(0, 100), class = Intercept),
+                prior(normal(0, 5), class = b, coef = "hate_groups_per_million"),
+                prior(normal(0, 5), class = b, coef = "percent_bachelors_degree_or_higher"),
+                prior(normal(0, 10), class = sigma)))
+```
+
+@fig-brms-multiple-regression-model-prior-samples shows sampled values of the four parameters from the prior distributions. @fig-brms-multiple-regression-model-posterior-samples shows corresponding plots, but now sampling from the posterior distribution. Note that the scales on the x-axis is very different in @fig-brms-multiple-regression-model-posterior-samples compared to @fig-brms-multiple-regression-model-prior-samples. The range of parameter values in the approximate posterior distributions is much smaller, which shows how the data constrains the posterior distribution as compared to the prior distributions. 
+
+```{r}
+#| label: fig-brms-multiple-regression-model-prior-samples
+#| fig-cap: Samples from the prior distributions of the parameters of the multiple regression
+#|   model predicting votes for Trump in 2016 by the number of hate groups and level
+#|   of education in US states.
+library(ggplot2)
+tmp <- brms::as_draws_df(mod)
+tmp <- tidyr::pivot_longer(tmp, !starts_with("."), names_to = "parameter", values_to = "value")
+tmp %>%
+  filter(parameter %in% c("prior_Intercept", "prior_b_hate_groups_per_million", "prior_b_percent_bachelors_degree_or_higher", "prior_sigma")) %>%
+  mutate(parameter = factor(parameter)) %>%
+  mutate(parameter = forcats::fct_recode(parameter, "intercept" = "prior_Intercept", "hate_groups" = "prior_b_hate_groups_per_million", "education" = "prior_b_percent_bachelors_degree_or_higher", "sigma_epsilon" = "prior_sigma")) %>%
+  mutate(parameter = forcats::fct_inorder(parameter)) %>%
+  ggplot(aes(x=value)) + geom_histogram(bins=100) + facet_wrap(~parameter, scales = "free_x")
+```
+
+```{r}
+#| label: fig-brms-multiple-regression-model-posterior-samples
+#| fig-cap: Samples from the posterior distributions of the parameters of the multiple
+#|   regression model predicting votes for Trump in 2016 by the number of hate groups
+#|   and level of education in US states.
+library(ggplot2)
+tmp <- brms::as_draws_df(mod)
+tmp <- tidyr::pivot_longer(tmp, !starts_with("."), names_to = "parameter", values_to = "value")
+tmp %>%
+  filter(parameter %in% c("b_Intercept", "b_hate_groups_per_million", "b_percent_bachelors_degree_or_higher", "sigma")) %>%
+  mutate(parameter = factor(parameter)) %>%
+  mutate(parameter = forcats::fct_recode(parameter, "intercept" = "b_Intercept", "hate_groups" = "b_hate_groups_per_million", "education" = "b_percent_bachelors_degree_or_higher", "sigma_epsilon" = "sigma")) %>%
+  mutate(parameter = forcats::fct_inorder(parameter)) %>%
+  ggplot(aes(x=value)) + geom_histogram(bins=100) + facet_wrap(~parameter, scales = "free_x")
+```
+
+@tbl-brms-multiple-regression-model-summary contains a summary measures of the posterior distribution of the main parameters of interest. The $\hat{R}$ values are close to 1, and the effective sample size (ESS) is close to 4000 (the actual number of samples) for all parameters. This indicates a reasonably successful MCMC estimate. Note that unlike maximum likelihood estimation, Bayesian estimation provides a posterior distribution, not a single parameter estimates. But it is common to use the posterior mean as the parameter estimate, insofar as a single number is needed. Comparing the results to those in @tbl-t-test-results-multiple-regression-table) shows that the posterior means are close, but not identical, to the maximum likelihood parameter estimates. The standard deviation of the posterior distribution can indicate the extent to which the data has restricted the plausible parameter values. The Credible Interval (CI) is used in a similar way to a confidence interval. For all parameters, the CI excludes 0, which indicates that the predictors have an effect on the dependent variable. 
+
+There are two main ways to compute a credible interval. The easiest is via quantiles in the posterior sample. This method is also called the **Equal-tailed Interval** (ETI). For example, a 95% ETI credible interval would be defined via the minimum and maximum value in the posterior sample *after excluding the 2.5% lowest and 2.5% highest values*. The 95% CI reported in @tbl-brms-multiple-regression-model-summary is based on this method. The second method is the **Highest Density Interval** (HDI), which is a little more involved to compute. The HDI computes a range such that all values within the interval have a higher probability density than values outside the interval. For symmetric posterior distributions, the ETI and HDI provide the same results. For skewed distributions, the ETI and HDI will differ. 
+
+```{r}
+#| label: tbl-brms-multiple-regression-model-summary
+#| tbl-cap: "Results from a Hamiltonian MCMC estimation of the multiple regression model predicting votes for Trump in 2016 by the number of hate groups and level of education in US states."
+tmp <- summary(mod)$fixed[,-7]
+rownames(tmp) <- c("Intercept", "Hate_groups", "Education")
+tmp %>%
+  knitr::kable(col.names=c("mean", "SD", "lower 95% CI", "upper 95% CI", "$\\hat{R}$", "ESS"), escape=FALSE, digits=c(2,2,2,2,5,2))
+```
+
+```{r}
+#| label: brms-multiple-regression-model-2
+#| cache: true
+#| include: false
+#| results: hide
+mod2 <- brms::brm(formula = percent_Trump_votes ~ hate_groups_per_million + percent_bachelors_degree_or_higher,data=dat, seed=101, sample_prior = TRUE, prior = c(prior(normal(0, 1), class = Intercept),
+                prior(normal(0, 1), class = b, coef = "hate_groups_per_million"),
+                prior(normal(0, 1), class = b, coef = "percent_bachelors_degree_or_higher"),
+                prior(normal(0, 1), class = sigma)))
+```
+
+To get an idea of how much the parameter estimates are affected, we also present results from a model where we use the following prior distributions:
+
+$$\begin{aligned} \beta_0 &\sim \mathbf{Normal}(0, 1) \\
+\beta_1  &\sim \mathbf{Normal}(0, 1) \\
+\beta_2  &\sim \mathbf{Normal}(0, 1) \\
+\sigma_\epsilon  &\sim \mathbf{half-Normal}(0, 1) \\
+\end{aligned}$$
+
+Note that the standard deviations are much smaller than before. These prior distributions will constrain the parameters to be closer to 0, as very large values are very unlikely in these distributions.
+
+@tbl-brms-multiple-regression-model-2-summary shows the results are rather different. In this case, the prior distributions were too restrictive, putting too much prior constraint on the parameters. This is particularly evident for the intercept. A normal distribution with a mean of 0 and a standard deviation of 1 makes a value such as 82 very unlikely. 
+
+```{r}
+#| label: tbl-brms-multiple-regression-model-2-summary
+#| tbl-cap: "Results from a Hamiltonian MCMC estimation of the multiple regression model predicting votes for Trump in 2016 by the number of hate groups and level of education in US states, using Normal priors with smaller standard deviation."
+tmp <- summary(mod2)$fixed[,-7]
+rownames(tmp) <- c("Intercept", "Hate_groups", "Education")
+tmp %>%
+  knitr::kable(col.names=c("mean", "SD", "lower 95% CI", "upper 95% CI", "$\\hat{R}$", "ESS"), escape=FALSE, digits=c(2,2,2,2,5,2))
+```
+

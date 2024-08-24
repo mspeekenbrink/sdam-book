@@ -1,16 +1,28 @@
-# Introduction {#ch-intro}
+# Introduction {#sec-ch-intro}
 
-```{r, echo=FALSE}
+```{r}
+#| label: setup
+#| echo: false
 set.seed(20221010)
 ```
 
 ```{r}
 #| label: setup2
 #| echo: false
-knitr::opts_chunk$set(echo = FALSE,
-                      fig.align = "center")
+
+#knitr::opts_chunk$set(echo = FALSE,
+# fig.align = "center")
+
 library(sdamr)
 ```
+
+::: {.callout-note title="learning goals"}
+* Understand the difference between observational and experimental data 
+* Know the different types of data and their measurement scales
+* Define the Data Generating Process
+* Describe data with summary statistics
+* Visually explore data with graphs
+:::
 
 In this chapter we will introduce some fundamental concepts, such as experiments, data, analysis, and modelling. We will also introduce you to Paul the octopus.
 
@@ -20,50 +32,45 @@ In this chapter we will introduce some fundamental concepts, such as experiments
 > _Oliver Walenciak_, Paul's keeper   
 > Source: [Irish central](https://www.irishcentral.com/sports/paul-the-psychic-octopus-picks-all-the-world-cup-winners-98010019-238038511)
 
-Paul the Octopus (26 January 2008 – 26 October 2010) was born in the Sea Life Centre in Weymouth, England, and subsequently moved to the aquarium chain's centre in Oberhausen, Germany. It was there he found world-wide fame as a cephalopod oracle. 
+Paul the Octopus (26 January 2008 – 26 October 2010) was born in the Sea Life Centre in Weymouth, England, and subsequently moved to the aquarium chain's centre in Oberhausen, Germany. It was there he found world-wide fame as a cephalopod oracle.
 
-```{r} 
+![Paul the octopus predicts Spain to win the final of the 2010 FIFA World
+#|   Cup. Source: [The Guardian](https://www.theguardian.com/football/2010/jul/09/psychic-octopus-paul-picks-spain)](https://static.guim.co.uk/sys-images/Guardian/Pix/pictures/2010/7/15/1279193684789/Paul-the-octopus-005.jpg){#fig-paul-the-octopus-image}
+
+```{r}
 #| label: paul-the-octopus-image
-#| fig-cap: "Paul the octopus predicts Spain to win the final of the 2010 FIFA World Cup. Source: [The Guardian](https://www.theguardian.com/football/2010/jul/09/psychic-octopus-paul-picks-spain)"
-
-
-![Paul the Octopus](https://static.guim.co.uk/sys-images/Guardian/Pix/pictures/2010/7/15/1279193684789/Paul-the-octopus-005.jpg)
-
-# if(knitr::is_html_output()) {
-#   knitr::include_graphics("https://static.guim.co.uk/sys-images/Guardian/Pix/pictures/2010/7/15/1279193684789/Paul-the-octopus-005.jpg")
-# } else {
-#   download.file("https://static.guim.co.uk/sys-images/Guardian/Pix/pictures/2010/7/15/1279193684789/Paul-the-octopus-005.jpg", "Paul-the-octopus-005.jpg", mode = 'wb')
-#   knitr::include_graphics("Paul-the-octopus-005.jpg")
-# }
+#| fig-cap: 'Paul the octopus predicts Spain to win the final of the 2010 FIFA World
+#|   Cup. Source: [The Guardian](https://www.theguardian.com/football/2010/jul/09/psychic-octopus-paul-picks-spain)'
+#| eval: false
+if(knitr::is_html_output()) {
+  knitr::include_graphics("https://static.guim.co.uk/sys-images/Guardian/Pix/pictures/2010/7/15/1279193684789/Paul-the-octopus-005.jpg")
+} else {
+  download.file("https://static.guim.co.uk/sys-images/Guardian/Pix/pictures/2010/7/15/1279193684789/Paul-the-octopus-005.jpg", "Paul-the-octopus-005.jpg", mode = 'wb')
+  knitr::include_graphics("Paul-the-octopus-005.jpg")
+}
 ```
 
-Paul began his career during the UEFA Euro 2008 football tournament. In the lead-up to Germany's international football matches, Paul was presented with two clear plastic boxes, each containing food (a mussel or an oyster). Each container was marked with the flag of a team, one the flag of Germany, and the other the flag of Germany's opponent. The box which Paul opened first (and ate its contents) was deemed to be the predicted winner of the match. Paul predicted Germany to win all of their games, a correct prediction in 4 out of 6 cases. He failed to predict their defeats by Croatia in the group stage, and by Spain in the championship's final.
+Paul began his career during the UEFA Euro 2008 football tournament. In the lead-up to Germany's international football matches, Paul was presented with two clear plastic boxes, each containing food (a mussel or an oyster). Each container was marked with the flag of a team, one the flag of Germany, and the other the flag of Germany's opponent. The box which Paul opened first (and subsequently ate its contents) was deemed to be the predicted winner of the match. In this scheme, Paul predicted Germany to win all of their games, a correct prediction in 4 out of 6 cases (@tbl-uefa2008). He failed to predict their defeats by Croatia in the group stage, and by Spain in the championship's final.
 
 ```{r}
-#| label: uefa2008
+#| label: tbl-uefa2008
 #| echo: false
-#| tbl-cap: "Paul's predictions for the UEFA Euro 2008"
 data(uefa2008)
-# knitr::kable(uefa2008, caption = "Paul's predictions for the UEFA Euro 2008",label = "uefa2008", booktabs = TRUE, linesep="")
-knitr::kable(uefa2008, booktabs = TRUE, linesep="")
+knitr::kable(uefa2008,caption = "Paul's predictions for the UEFA Euro 2008",label = "uefa2008", booktabs = TRUE, linesep="")
 ```
 
-Two years later, during the 2010 FIFA World Cup football tournament, Paul obtained celebrity status and his divinations were broadcast live on German TV. This time, Paul made correct predictions for all matches in which Germany played, as well as the final between Spain and the Netherlands. 
+Two years later, during the 2010 FIFA World Cup football tournament, Paul obtained celebrity status and his divinations were broadcast live on German TV. This time, Paul made correct predictions for all matches in which Germany played, as well as the final between Spain and the Netherlands (@tbl-fifa2010). Paul's record of 8/8 correct predictions in the 2010 World Cup is quite amazing. The common octopus (_Octopus vulgaris_) is indeed an intelligent species. But was Paul actually psychic? Could he truly foresee the future?
 
 ```{r}
-#| label: fifa2010
+#| label: tbl-fifa2010
 #| echo: false
-#| tbl-cap: "Paul's predictions for the 2010 FIFA World Cup"
 data(fifa2010)
-# knitr::kable(fifa2010,caption = "Paul's predictions for the 2010 FIFA World Cup",  booktabs = TRUE, linesep="")
-knitr::kable(fifa2010, booktabs = TRUE, linesep="")
+knitr::kable(fifa2010,caption = "Paul's predictions for the 2010 FIFA World Cup",  booktabs = TRUE, linesep="")
 ```
-
-Paul's record of 8/8 correct predictions in the 2010 world cup is quite amazing. The common octopus (_Octopus vulgaris_) is indeed quite an intelligent species. But was Paul really psychic? Could he really foresee the future?
 
 ## Experiments and observations
 
-We can view Paul's divinations as the result of an experiment to test his psychic abilities. Paul's predictions were derived under more or less controlled conditions: The keeper didn't put Paul's favourite food in the box representing the team he'd hope to win, and didn't always place the box representing Germany on one side of the tank. Had he done one or more of these things, he might have biased the results. 
+We can view Paul's predictions as the result of an experiment to test his psychic abilities. Paul's predictions were derived under more or less controlled conditions: His keeper didn't put Paul's favourite food in the box representing the team he'd hope to win, and didn't always place the box representing Germany on one side of the tank. Had he done one or more of these things, he might have biased the results. Scientific experiments aim to remove such potential biases.
 
 A paradigmatic example of an experiment is a randomized-control trial, as common in studies assessing the effectiveness of medication or other therapeutic interventions. In such experiments, a sample of participants is taken from a population of interest, and each participant is randomly assigned to either an experimental condition or control condition. For example, participants in the experimental condition might be given a new drug, while participants in the control condition receive a placebo. Ideally, this is done in a "double-blind" setting, where neither the participant nor the person delivering the treatment or otherwise interacting with the participant knows which condition the participant is assigned to. Randomization is key here: By letting chance determine who gets which treatment, characteristics of the participants (e.g. age, sex, severity of symptoms, etc.) will not be tied to the treatment they get. As such, it will be reasonable to assume that the experimental and control condition differ only in their treatment, such that any differences in outcome can be attributed to the treatment, and not to other differences between the groups of participants. 
 
@@ -92,7 +99,7 @@ Sometimes it is tricky to determine what the measurement scale is. For instance,
 
 ### The Data Generating Process
 
-In addition to considering the type or measurement scale of the data, you will generally also need to consider the process that in the end led to the data at hand. This process can be called the __Data Generating Process__. 
+In addition to considering the type or measurement scale of the data, you will generally also need to consider the process that provided the data at hand. This process is called the __Data Generating Process__. 
 
 As the section on experimental vs observational data indicated, the way the data were obtained can affect and limit the inferences that can be made. It is also important to consider to which group or population our data speaks. This is generally related to how we have selected the subjects of a study. For instance, in the case of Paul, we have data from a single octopus, and we are mostly interested in assessing whether he was psychic. We are not interested in Paul's psychic abilities for just those games for which he made predictions though. If Paul indeed had psychic abilities (but let's restrict that to the context of football games), we would expect him to make accurate predictions for other games as well. So here we would like to generalize beyond the data. We would like to generalize from the games for which Paul actually made predictions to all games in the UEFA Euro 2008 and 2010 FIFA World cups, or even to all international football matches. We then need to consider how __representative__ the data is for the more general group we want to make claims about. As Paul mainly made predictions for games in which one of the teams was Germany, the sample is not a good representation of all the games played in both cups. If it is in one way or the other easier to determine the winner in games involving Germany than it is to determine the winner in other games, then the test of Paul's abilities that was conducted is different than the test that would be conducted if we included other games. This, then, limits the claims we can make from the test. If we were interested in whether octopuses in general have psychic abilities, then using a single octopus would not be a great choice. Paul may be unique in many ways, so again he might not be representative of all octopuses. 
 
@@ -109,12 +116,11 @@ Once you have collected data, you may feel the urge to immediately apply some st
 As the distribution of Paul's predictions is not so interesting to look into exploration of data, we will focus on other data. We will stay in the context of the 2010 FIFA World Cup, and consider team statistics such as the number of goals scored and the number of games played.
 
 ```{r}
-#| label: fifa2010teams-table
+#| label: tbl-fifa2010teams-table
 #| tbl-cap: "Team statistics in the 2010 FIFA World cup"
 data("fifa2010teams")
 dat <- fifa2010teams[,c(2,3,4,6,9,11)]
 dat <- dat[order(dat$team),]
-# knitr::kable(dat, col.names = stringr::str_replace_all(stringr::str_to_sentence(colnames(dat)),"_"," "), caption = "Team statistics in the 2010 FIFA World cup", booktabs = TRUE, row.names = FALSE)
 knitr::kable(dat, col.names = stringr::str_replace_all(stringr::str_to_sentence(colnames(dat)),"_"," "), booktabs = TRUE, row.names = FALSE)
 ```
 
@@ -127,13 +133,13 @@ Summary statistics are calculated values that aim to summarize key aspects of th
 There are three common measures of location: the mean, median, and mode. Let's consider each in turn.
 
 The __mean__ is the average of a set of values, computed by adding all the values up and then dividing this sum by the total number of values. More formally, the mean of a variable $Y$ is usually denoted by drawing a straight line over the variable (i.e. as $\overline{Y}$), and the formula for its computation is 
-\begin{equation}
+$$
 \overline{Y} = \frac{\sum_{i=1}^n Y_i}{n}
-(\#eq:definition-sample-mean)
-\end{equation}
+$$ {#eq-definition-sample-mean}
 Perhaps this is the first time you have seen the "summation operator" $\Sigma$, so let's go over how to work with this. Basically, the summation operator states that you should sum up every value of a variable that is placed to the right of it. Below the summation operator (or on the lower-right side) is an _iterator_ $i$, which gives more information about which values to sum. The iterator goes from the value it is given below or on the bottom-right side (here, the iterator is assigned the value 1), to the value on the top (or top-right) of the summation operator (in this case $n$). So here, the operator states that we should sum up all values $Y_i$, where $i$ goes from 1 to $n$, i.e. all values $Y_1, Y_2, \ldots, Y_n$:
 $$\sum_{i=1}^n Y_i = Y_1 + Y_2 + Y_3 + \ldots + Y_n$$ 
 ```{r}
+#| label: goals-for
 y <- dat$goals_for
 ```
 For the FIFA 2010 World Cup, we have $n=32$ teams, so to compute the mean number of goals scored, we would sum from $Y_1$ (the number of goals scored by the first team) to $Y_{32}$ (the number of goals scored by the final team), and get
@@ -143,11 +149,12 @@ The __median__ is defined as the value in the set of values such that 50% of the
 
 The goals scored by each team, ordered in increasing magnitude are:
 ```{r}
+#| label: goals-for-ordered
 y <- dat$goals_for[order(dat$goals_for)]
 ```
 `r paste(y,collapse=", ")`
 
-There are $n=32$ values, so the first 16 values in the ordered sequence above are the lowest 50% of the values, and the second 16 values are the highest 50% values. If we had one value less, i.e. if $n=31$, then the 16th value would be the median. In our case, the median is a value between the 16th and 17th value. If you go along the sequence and stop at the 16th value, you will see that it equals `r y[16]`. The next value is the 17th value, which also equals `r y[17]`. So in this case, the median must be `r  y[16]`, as this is the only value between `r y[16]` and `r y[17]`. If the 17th value happened to be `r y[17] + 1`, then we would have determined the median as the value halfway between `r y[16]` and `r y[17] + 1`, i.e. as `r y[16] + .5`.
+There are $n=32$ values, so the first 16 values in the ordered sequence above are the lowest 50% of the values, and the second 16 values are the highest 50% values. If we had one value less, i.e. if $n=31$, then the 16th value would be the median. In our case, the median is a value between the 16th and 17th value. If you go along the sequence and stop at the 16th value, you will see that it equals `r y[16]`. The next value is the 17th value, which also equals `r y[17]`. So in this case, the median must be `r  y[16]`, as this is the only value between `r y[16]` and `r y[17]`. If the 17th value happened to be `r y[17] + 1`, then we could have determined the median as the value halfway between `r y[16]` and `r y[17] + 1`, i.e. as `r y[16] + .5`.
 
 The __mode__ is the most frequently occurring value. This measure is really only useful for relatively large data sets with a limited number of possible values. For a continuous variable, there is generally no value that occurs more than once in a data set, and hence all values could be considered a mode. If we look at the total goals scored, we see that the mode is 3, as this is the most frequent value (there are 8 teams who scored 3 points, while there are 4 teams who scored 2 points, and 4 teams who scored 4 points). 
 
@@ -165,15 +172,15 @@ which means we can take the 24th value in the ordered list, which equals `r y[24
 $$\text{IQR} = [`r y[8]`, `r y[24]`]$$
 
 ```{r}
+#| label: reinstate-goals-for
 y <- dat$goals_for
 ```
 The __variance__ is the average squared deviation of values from the mean. One reason for using _squared_ deviations rather than the average deviation itself is that the average deviation 
 $$\frac{\sum_{i=1}^n (Y_i - \overline{Y})}{n}$$
 is always 0. An alternative is of course to then calculate the average of the _absolute_ deviations. While this is a sensible measure of the spread of values, there are technical reasons to prefer the average squared deviation (i.e. the variance), which we won't go into now. Let's just plough on with how to calculate the variance. The variance of a collection of observed values, which is also referred to as the sample variance, is usually denoted as $S^2_Y$, and defined as:
-\begin{equation}
+$$
 S^2_{Y} = \frac{\sum_{i=1}^n (Y_i - \overline{Y})^2}{n}
-(\#eq:definition-sample-variance)
-\end{equation}
+$$ {#eq-definition-sample-variance}
 So you simply subtract from each value the average value (the sample mean), and then raise each deviation to the power of 2. Then you add those squared deviations up, and divide the sum by the total number of observations. For the total goals scored, the variance is calculated as:
 $$\begin{aligned}
 S^2_Y &= \frac{(`r y[1]` - `r mean(y)`)^2 + (`r y[2]` - `r mean(y)`)^2 + (`r y[3]` - `r mean(y)`)^2 + \ldots + (`r y[31]` - `r mean(y)`)^2 + (`r y[32]` - `r mean(y)`)^2}{`r length(y)`} \\
@@ -186,10 +193,9 @@ S^2_Y &= \frac{(`r y[1]` - `r mean(y)`)^2 + (`r y[2]` - `r mean(y)`)^2 + (`r y[3
 A downside of the variance is that its value is difficult to interpret. By squaring each deviation, the value of the variance is on a different scale of magnitude than the original values. The __standard deviation__ aims to provide a more interpretable measure of spread, by transforming the variance back to the scale of the original values. The standard deviation of a collection of observed values, usually denoted as $S_Y$, is simply the square-root of the variance, so
 $$S_Y = \sqrt{S^2_Y}$$
 or written out in more detail as
-\begin{equation}
+$$
 S_{Y} = \sqrt{\frac{\sum_{i=1}^n (Y_i - \overline{Y})^2}{n}}
-(\#eq:definition-sample-standard-deviation)
-\end{equation}
+$$ {#eq-definition-sample-standard-deviation}
 For the total goals scored, the standard deviation is
 $$S_Y = \sqrt{`r sum((y - mean(y))^2)/length(y)`} = `r sqrt(sum((y - mean(y))^2)/length(y))`$$
 
@@ -200,37 +206,38 @@ Exploring a data set is generally done visually, using various plots such as his
 scatterplots, etc. A good plot can immediately provide a lot more information than summary measures. So before proceeding with statistical analysis: plot your data! Visualizing data in the most effective and pleasant way is an art form in itself. But here are some standard plots that are helpful and relatively easy to produce:
 
 ```{r}
-#| label: example-histogram-and-boxplot
-#| fig-show: 'hold'
-#| fig-width: 4
-#| out-width: '49%'
-#| fig-cap: "A histogram and boxplot of the total goals scored by each team"
+#| label: fig-example-histogram-and-boxplot
+#| fig-width: 8
+#| fig-height: 4
+#| fig-cap: A histogram and boxplot of the total goals scored by each team
 library(ggplot2)
-ggplot(dat,aes(x=goals_for)) + geom_histogram(binwidth=1,colour="black") + xlab("Goals scored")
-
-ggplot(dat,aes(x="",y=goals_for)) + geom_boxplot(width=.5) + ylab("Goals scored") + xlab("")
+gridExtra::grid.arrange(
+  ggplot(dat,aes(x=goals_for)) + geom_histogram(binwidth=1,colour="black") + xlab("Goals scored"),
+  ggplot(dat,aes(x="",y=goals_for)) + geom_boxplot(width=.5) + ylab("Goals scored") + xlab(""), ncol=2)
 ```
 
-A __histogram__ (left plot in Figure \@ref(fig:example-histogram-and-boxplot)) counts the number of occurrences of values, or ranges of values in the case of continuous variables with a lot of possible values. For the latter, it divides the range of possible values into "bins" (equally sized ranges of values). The count of observations in each bin is then plotted as the height of a bar, and the width of the bar reflects the range (in the case of discrete values, the range is defined by the midpoints between these values. A histogram is useful to depict the distribution of values of a variable. The size of the bins is important though, as it determines how smooth or rough the histogram looks, and often requires some tweaking. If you make the bins too wide, it may be hard to spot the intricacies in a distribution. If you make the bins too narrow, on the other hand, each bin will contain only a small number of values and you won't summarize the distribution in a visually meaningful way. In the extreme case, each bin will either contain just one observation, or none.
+A __histogram__ (left plot in @fig-example-histogram-and-boxplot) counts the number of occurrences of values, or ranges of values in the case of continuous variables with a lot of possible values. For the latter, it divides the range of possible values into "bins" (equally sized ranges of values). The count of observations in each bin is then plotted as the height of a bar, and the width of the bar reflects the range (in the case of discrete values, the range is defined by the midpoints between these values. A histogram is useful to depict the distribution of values of a variable. The size of the bins is important though, as it determines how smooth or rough the histogram looks, and often requires some tweaking. If you make the bins too wide, it may be hard to spot the intricacies in a distribution. If you make the bins too narrow, on the other hand, each bin will contain only a small number of values and you won't summarize the distribution in a visually meaningful way. In the extreme case, each bin will either contain just one observation, or none.
 
-A __boxplot__ (right plot in Figure \@ref(fig:example-histogram-and-boxplot)), also called a box and whiskers plot, depicts the inter-quartile range as a box, in which a line is placed to depict the median. Two lines extend from either side of the box. These are the "whiskers" and they depict the range of values in the data excluding any potential outliers. More precisely, the endpoints of the whiskers are the smallest and largest value in the data which are no more than $1.5 \times \text{IQR}$ away from the 25% and 75% quartiles, respectively. If there are values in the data which extend beyond these endpoints, they are considered "outliers", and plotted as points outside of the whiskers. In the example boxplot, you can see that there are three such outliers. 
+A __boxplot__ (right plot in @fig-example-histogram-and-boxplot), also called a box and whiskers plot, depicts the inter-quartile range as a box, in which a line is placed to depict the median. Two lines extend from either side of the box. These are the "whiskers" and they depict the range of values in the data excluding any potential outliers. More precisely, the endpoints of the whiskers are the smallest and largest value in the data which are no more than $1.5 \times \text{IQR}$ away from the 25% and 75% quartiles, respectively. If there are values in the data which extend beyond these endpoints, they are considered "outliers", and plotted as points outside of the whiskers. In the example boxplot, you can see that there are three such outliers. 
 
-A __scatterplot__ is useful to see the relation between the values of two variables. For instance, it is likely that the total goals scored by each team will depend on the number of games they played. We can visually inspect this by plotting each team as a point with the value of the x-axis representing the value of one variable, and the value on the y-axis as the value of the other variable. This is done in Figure \@ref(fig:example-scatter-plot), from which it seems quite clear that those teams who played more games generally also scored more points. 
+A __scatterplot__ is useful to see the relation between the values of two variables. For instance, it is likely that the total goals scored by each team will depend on the number of games they played. We can visually inspect this by plotting each team as a point with the value of the x-axis representing the value of one variable, and the value on the y-axis as the value of the other variable. This is done in @fig-example-scatter-plot, from which it seems quite clear that those teams who played more games generally also scored more points. 
 ```{r}
-#| label: example-scatter-plot
+#| label: fig-example-scatter-plot
 #| fig-width: 4
-#| out-width: '50%'
-#| fig-cap: "A scatter plot of total goals scored by total matches played"
+#| fig-height: 4
+#| out-width: 50%
+#| fig-cap: A scatter plot of total goals scored by total matches played
 ggplot(dat,aes(x=matches_played,y=goals_for)) + geom_point() + xlab("Matches played") + ylab("Goals scored")
 ```
 
-As all the plots above can tell us something meaningful about the data, and they often highlight different aspects of the data, it can be useful to combine them. One form of such a combination plot has been called a  __raincloud plot__ [@allen2019raincloud]. A raincloud plot combines a boxplot with a scatterplot of the observed values and a type of continuous histogram called a nonparametric density plot. In my version of such plots (\@ref(fig:example-raincloud-plot)), a boxplot is placed in the middle, with an additional point representing the sample mean. On the left are the observed values, where the points are "jittered" (randomly displaced on the x-axis) to try to avoid overlapping points. On the right of the boxplot is the nonparametric density plot. This part aims to depict the distribution in a smooth, continuous way. 
+As all the plots above can tell us something meaningful about the data, and they often highlight different aspects of the data, it can be useful to combine them. One form of such a combination plot has been called a  __raincloud plot__ [@allen2019raincloud]. A raincloud plot combines a boxplot with a scatterplot of the observed values and a type of continuous histogram called a nonparametric density plot. In my version of such plots (@fig-example-raincloud-plot), a boxplot is placed in the middle, with an additional point representing the sample mean. On the left are the observed values, where the points are "jittered" (randomly displaced on the x-axis) to try to avoid overlapping points. On the right of the boxplot is the nonparametric density plot. This part aims to depict the distribution in a smooth, continuous way. 
 
 ```{r}
-#| label: example-raincloud-plot
+#| label: fig-example-raincloud-plot
 #| fig-width: 4
-#| out-width: '50%'
-#| fig-cap: "A raincloud plot of the average goals scored per match"
+#| fig-height: 4
+#| out-width: 50%
+#| fig-cap: A raincloud plot of the average goals scored per match
 set.seed(5678)
 dat$average_goals_for <- dat$goals_for/dat$matches_played
 plot_raincloud(dat,y = average_goals_for, point_size=1) + ylab("Average goals scored")
@@ -238,24 +245,24 @@ plot_raincloud(dat,y = average_goals_for, point_size=1) + ylab("Average goals sc
 
 ## Analysis and modelling
 
-Analysing data can mean lots of things. According to [WikiPedia](https://en.wikipedia.org/wiki/Data_analysis) "Data analysis is a process of inspecting, cleansing, transforming and modelling data with the goal of discovering useful information, informing conclusions and supporting decision-making." That is a reasonably accurate, but also a quite lengthy and boring definition. An alternative to this I quite like is that data analysis is _identifying a signal within noise_. 
+Analysing data can mean lots of things. According to [WikiPedia](https://en.wikipedia.org/wiki/Data_analysis) "Data analysis is a process of inspecting, cleansing, transforming and modelling data with the goal of discovering useful information, informing conclusions and supporting decision-making." That is a reasonably accurate but also quite lengthy and boring definition. I like to think of data analysis as _identifying signals within noise_. 
 
 Data is noisy for many reasons. For one thing, the data that we have access to is generally limited, in the sense that we could have obtained other and/or more data. Other sources of noise include measurement error. Such sources of noise imply that the data set we have only gives a limited, incomplete, and corrupted view on the process that generated it (the Data Generating Process). We are not interested solely in describing the data set we have, we generally want to infer something about the Data Generating Process. We don't just want to state that Paul made 8 out of 8 accurate predictions in the 2010 FIFA World Cup, we want to use this data to assess whether Paul had psychic abilities. Whether, had Paul's keeper allowed Paul to make predictions for other matches, he would have also been correct. Such inferences go beyond the data that we have. Perhaps Paul was just lucky in those 8 predictions, and his 100% hit rate is not a good reflection of his hit rate in general. 
 
-Statistical modelling can be viewed as describing the Data Generating Process in the language of mathematics. At its core, a statistical model defines the distribution of possible values of variables. In an ideal world, this model distribution is identical to the true distribution that follows from the Data Generating Process. In general, though, there will be some mismatch between the model distribution and the DGP distribution. Models are simplifications and idealizations. As statistician George Box famously noted "all models are wrong, but some are useful" [@Box1987]. What do we mean by this? Consider the famous London tube map (Figure \@ref(fig:london-tube-map)). This map is "wrong" because as any map, it is a simplification of reality. It does not provide a completely accurate representation of the world. But what is special about the tube map is that, unlike standard maps, it does not even attempt to reflect the geographical location of the different underground (or "tube") lines and stations. Its initial designer, Harry Beck, realised that because the lines run mostly underground, the exact physical locations of the stations were largely irrelevant to the traveller wanting to know how to get from one station to another. What matters to them is the relation between the stations, and which lines connect them. Hence, he designed the map as a schematic diagram which clearly shows the lines connecting stations. If you used the map to determine the walking distance between stations, you'd be very disappointed. But to determine your underground journey, the map is very useful. 
+Statistical modelling can be viewed as describing the Data Generating Process in the language of mathematics. At its core, a statistical model defines the distribution of possible values of variables. In an ideal world, this model distribution is identical to the true distribution that follows from the Data Generating Process. In reality, there will be some mismatch between the model distribution and the true distribution of the DGP. Models are simplifications and idealizations. As statistician George Box famously noted "all models are wrong, but some are useful" [@Box1987]. What do we mean by this? Consider the famous London tube map (@fig-london-tube-map). This map is "wrong" because as any map, it is a simplification of reality. It does not provide a completely accurate representation of the world. But what is special about the tube map is that, unlike standard maps, it does not even attempt to reflect the geographical location of the different underground (or "tube") lines and stations. Its initial designer, Harry Beck, realised that because the lines run mostly underground, the exact physical locations of the stations were largely irrelevant to the traveller wanting to know how to get from one station to another. What matters to them is the relation between the stations, and which lines connect them. Hence, he designed the map as a schematic diagram which clearly shows the lines connecting stations. If you used the map to determine the walking distance between stations, you'd be very disappointed. But to determine your underground journey, the map is very useful.
+
+![London tube map. Source: [TfL](https://tfl.gov.uk/maps/track/tube)](https://tfl.gov.uk/cdn/static/cms/images/tube-map.gif){#fig-london-tube-map}
 
 ```{r}
-#| label: london-tube-map
-#| fig-cap: "London tube map. Source: [TfL](https://tfl.gov.uk/maps/track/tube)"
-![Tube Map](https://tfl.gov.uk/cdn/static/cms/images/tube-map.gif)
-
-# if(knitr::is_html_output()) {
-#   knitr::include_graphics("https://tfl.gov.uk/cdn/static/cms/images/tube-map.gif")
-# } else {
-#   webshot::webshot("https://tfl.gov.uk/cdn/static/cms/images/tube-map.gif", "tube-map.png")
-#   knitr::include_graphics("tube-map.png")
-# }
-
+#| label: fig-london-tube-map
+#| fig-cap: 'London tube map. Source: [TfL](https://tfl.gov.uk/maps/track/tube)'
+#| eval: false
+if(knitr::is_html_output()) {
+  knitr::include_graphics("https://tfl.gov.uk/cdn/static/cms/images/tube-map.gif")
+} else {
+  webshot::webshot("https://tfl.gov.uk/cdn/static/cms/images/tube-map.gif", "tube-map.png")
+  knitr::include_graphics("tube-map.png")
+}
 #knitr::include_graphics("https://tfl.gov.uk/cdn/static/cms/images/tube-map.gif")
 ```
 

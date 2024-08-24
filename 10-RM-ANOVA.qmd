@@ -1,0 +1,784 @@
+# Repeated-measures ANOVA {#sec-ch-RM-ANOVA}
+
+```{r}
+#| label: setup
+#| echo: false
+set.seed(20221010)
+source("run_before.R")
+```
+
+In this chapter, we will discuss how to deal with the non-independence of errors that can result from repeated measures of the same individual or from other groupings in the data, within the context of ANOVA-type analyses (i.e. a GLM with only categorical predictors). The resulting class of models is known as repeated-measures ANOVA. We will consider one way to construct this class of models, by constructing new dependent variables by applying orthogonal contrasts to create difference scores between the observed dependent variables. For each of these new dependent variables, we can use a GLM as usual. The main conceptual leap will be in interpreting these new dependent variables, which we'll call _within-subjects composite scores_. The alternative approach is to apply contrast codes to the different "units of observation" (e.g. participants), and then treat this as a factorial design involving a mix of fixed and random experimental factors. As random and fixed effects are more straightforwardly dealt with in mixed-effects regression models -- the topic of the next chapter -- we will leave such considerations until later. The way we'll will discuss repeated-measures ANOVA is close to how most modern computational approaches actually conduct these analyses.
+
+## Non-independence in linear models
+
+The General Linear Model we have considered thus far can be stated as follows:
+
+$$Y_i = \beta_0 + \beta_1 \times X_{1,i} + \beta_2 \times X_{2,i} + \ldots + \beta_m \times X_{m,i} + \epsilon_i \quad \quad \quad \epsilon_i \sim \mathbf{Normal}(0,\sigma_\epsilon)$$
+The assumptions of this model concern the errors, or residuals, $\epsilon_i$. These are assumed to be _independent and identically distributed_ (iid), following a Normal distribution with a mean of 0 and a standard deviation $\sigma_\epsilon$.
+
+You can expect violations of the _iid_ assumption if data are collected from "units of observation" that are clustered in groups. A common example of this in psychology is when you repeatedly observe behaviour from the same person.^[Other examples of such clustering in data are when data is collected in group settings, such as students within classrooms, or patients within hospitals. In such situations one could expect again that observations within each cluster (i.e., a specific group, classroom, or hospital) are more similar to each other than observations across clusters.] For example, suppose participants in an experiment perform two tests to measure their working memory capacity. A person with a high working memory capacity would likely score high on both tests, whilst a person with a low working memory capacity would likely score low on both. In that case, the scores in the two tests are correlated and hence _not_ independent. If the model does not adequately account for this, then the errors (residuals) would also not be independent. Violating the independence or errors assumption implies that the General Linear Model is misspecified, and does not account for all the structure in the data. This has consequences for the tests of parameters of the model. In addition to the test statistics no following the assumed distributions, the tests often have less power than when properly accounting for the dependencies. Following @judd2011data, the approach we take here is to remove the dependencies by transforming the data. In a nutshell, using orthogonal contrast codes, we transform a set of correlated dependent variables (e.g. two tests of working memory) into a set of orthogonal (uncorrelated) dependent variables. We then apply General Linear Models to each of these transformed dependent variables. 
+
+<!-- As another example of dependency between model residuals, let's go back to the simplest version of the GLM, the model with just an intercept that was the focus of Chapter \@ref(sec-ch-simple-GLM):
+\begin{equation}
+Y_i = \beta_0 + \epsilon_i
+(\#eq:simple-glm-ch08)
+\end{equation}
+Suppose the dependent variable $Y$ again reflects judgements of the height of Mount Everest, but that one of the labs in the ManyLabs study that collected the data, was based in Nepal. We might expect participants in Nepal to have a more accurate idea of the height of Mount Everest than participants in Poland (the country the participants were from in the subset of the data we considered in Chapter \@ref(ch-simple-GLM)). As a result, participants in Nepal would likely be less influenced by the low anchor than those with less knowledge of Mount Everest. If $\beta_0$ represents the mean judgement over all participants, then participants in Nepal would generally provide judgements which are higher than $\beta_0$ (i.e positive errors), whilst participants in Poland would generally provide judgements that are lower than $\beta_0$ (i.e. negative errors). If our model does not account for such grouping in the data, then the errors for cases from Nepal would be correlated, because all would tend to be positive. Similarly, the errors for cases from Poland would also be correlated, as all would tend to be negative. 
+
+What this example points to is that the simple model does not account for the fact that participants from different countries might have a different average judgement. As such, the model is misspecified. Here, that leads to dependent errors. Unfortunately, compared to violations of other assumptions, such as the normality assumption or the assumption of variance homogeneity, standard statistical procedures are usually _not_ robust to violations of the independence assumption [@kenny_consequences_1986;@judd_treating_2012]. They often lead to considerably increased Type I errors (i.e., false positives) and more generally can produce overconfident results (e.g., too narrow standard errors).
+
+In the example above, we could alleviate the problem of dependent errors by including an effect for country, using a contrast-coding predictor $X_1$ to reflect the difference between participants from Nepal ($X_1 = \tfrac{1}{2}$) and Poland ($X_1 = -\tfrac{1}{2}$) in an expanded model
+$$Y_i = \beta_0 + \beta_1 \times X_{1,i} + \epsilon_i$$
+This model would allow for a different mean judgement for cases from Nepal ($\beta_0 + \tfrac{1}{2} \times \beta_1$) and cases from Poland ($\beta_0 - \tfrac{1}{2} \times \beta_1$). Effectively, this is the strategy employed in repeated-measures ANOVA: include an additional grouping factor in the model.
+
+<!-- The assumption that the errors are independent means that knowing the value of the error for one case $i$ in the data does not give you any information to determine the value of the error for another case $j$. More formally, statistical independence is defined in terms of conditional probabilities. Remember when we discussed the rules of probability (Section \@ref(sec:02-rules-of-probability))? In particular, we used independence to state rule 7, which is a specific case of the multiplication rule (rule 6). We can define the distribution of the error for case $i$ as a conditional probability $p(\epsilon_i | \epsilon_i, X_{1,i}, \ldots, X_{m,i})$, where we conditionalise on all the predictor values, as well as another error term $\epsilon_j$. The errors are independent when 
+$$p(\epsilon_i | \epsilon_j, X_{1,i}, \ldots, X_{m,i}) = p(\epsilon_i |  X_{1,i}, \ldots, X_{m,i})$$
+i.e. the distribution of $\epsilon_i$, conditional upon knowing the value of the predictors and the error $\epsilon_j$ of another case $j$, is the same as the distribution conditional upon just knowing the value of the predictors. This means that error $\epsilon_j$ provides no information about the error $\epsilon_i$.
+-->
+
+## The cheerleader effect
+
+The attractiveness of a person's face is traditionally considered to be related to physical features, such as how symmetrical the features are, how close a face is to the "average" face over many people, and sexual dimorphism (whether a face looks exclusively male or female). However, there is also evidence that perceived facial attractiveness can vary due to factors outside of the face. In what has become known as the "cheerleader effect", the same face is perceived to be more attractive when seen in a group, as compared to when it is seen alone. @walker2014hierarchical proposed that the cheerleader effect arises due to people encoding faces in a hierarchical manner. When presented with a group of faces, people encode the display by first calculating an average face for the group, and then encoding individual faces as deviations from the group average. Because faces which are closer to the average face tend to be perceived as more attractive than individual faces, the encoded group average lifts the attractiveness of each face in the group, resulting in each face in the group being perceived as more attractive than if it were presented by itself. 
+
+@carragher2019limited set out to test this explanation. In one part of their study (Experiment 1), they let participants rate the attractiveness of a face when presented by itself (the Alone condition), as part of a group of different faces (the Different condition), or as part of a group of similar faces (the Similar condition). There were two variants of the latter condition, and participants encountered only one of them in the experiment. In the Identical condition, the group consisted of three copies of exactly the same photo. In the Variant condition, the group consisted of three different photos of the same face.^[@carragher2019limited use different names for the conditions. They call the Different condition the Control condition, the Similar condition the Distractor condition, the Identical condition the Identical-distractors condition, and the Variant condition the Self-distractors condition.] The authors argued that if the hierarchical-encoding explanation for the cheerleader effect is true, then the cheerleader effect should not be observed in the Identical condition. This is because the average of three identical photos is just the photo itself, so there should be no difference between an encoded average face and the face itself. In the Variant condition however, variability between the different photos of the same face might still lead to an average face which is deemed more attractive than each individual face. 
+
+The design of the study is an example of a 2 (Version: Identical, Variant) by 3 (Presentation: Alone, Different, or Similar) design. The first factor (Version) varied between people, and the second (Presentation) within people (each participant rated a face in each of the three conditions). The rated attractiveness of the faces in the different conditions are provided in @fig-cheerleader-raincloud-plot.
+
+```{r}
+#| label: fig-cheerleader-raincloud-plot
+#| fig-cap: Attractiveness ratings for photo's of faces when presented alone, as part
+#|   of a group of dissimilar faces (Different), or as part of a group of similar faces
+#|   (Similar), which are either identical (Identical) or different photos (Variant)
+#|   of the same face.
+#| fig-width: 6
+#| fig-height: 3
+library(dplyr)
+library(ggplot2)
+library(sdamr)
+data("cheerleader")
+dat <- subset(cheerleader, Excluded == 0) %>%
+  mutate(Item = factor(Item)) %>%
+  mutate(Item = forcats::fct_recode(Item, Different = "Control_Group", Similar = "Distractor_Manipulation"),
+         Task = forcats::fct_recode(Task, Identical = "Identical-Distractors", Variant = "Self-Distractors"))
+dat %>%
+  # group_by(Task,Item) %>%
+  sdamr::plot_raincloud(y=Response, groups = Item) + facet_wrap(~Task)
+```
+
+## As a oneway ANOVA
+
+```{r}
+#| label: dat-for-aov 
+dat <- dat %>%
+  filter(Task == "Variant") %>%
+  mutate(Item = factor(Item))
+```
+
+To keep matters relatively simple, we will for now just consider the $n=`r length(unique(dat$Participant))`$ participants in the Variant conditions. We can now treat the study as a oneway design, with three levels (Presentation: Alone, Different, or Similar) that all vary within-participants. As the cheerleader effect predicts that faces presented as part of a group will be rated as more attractive, and that this effect will be larger if there is more variety in the faces within the group, a reasonable set of contrast codes is:
+```{r}
+#| label: helmert-contrast-cheerleader
+tab <- data.frame(c1 = c("$-\\tfrac{2}{3}$","$\\tfrac{1}{3}$","$\\tfrac{1}{3}$"),
+                  c2 = c("$0$","$\\tfrac{1}{2}$","$-\\tfrac{1}{2}$"))
+colnames(tab) <- c("$c_1$","$c_2$")
+rownames(tab) <- c("Alone","Different", "Similar")
+knitr::kable(tab, booktabs=TRUE, linesep="", align="r")
+```
+The first contrast code reflects the expectation that a face in a group (Different or Similar) will be rated as more attractive than faces in the Alone condition. The second contrast reflects the expectation that a face surrounded by different faces will be rated as more attractive than when surrounded by more similar faces.
+
+If we were to (wrongly!) treat all ratings as independent, and analyse the data with a regular oneway ANOVA, we would obtain the results in @tbl-cheerleader-oneway-ANOVA-results. As you can see, this analysis indicates there is no effect of presenting a face alone or in a group.
+
+```{r}
+#| label: tbl-cheerleader-oneway-ANOVA-results
+#| tbl-cap: "Linear model predicting attractiveness ratings in the three conditions, wrongly assuming independence."
+codes <- cbind(c(-2/3,1/3,1/3),
+               c(0,1/2,-1/2))
+contrasts(dat$Item) <- codes
+modg <- lm(Response ~ Item, data=dat)
+opts <- options()
+opts <- options()
+options(knitr.kable.NA = "")
+tab <- cbind(estimate = c(coefficients(modg)[1],NA,coefficients(modg)[2:3],Error=NA),rbind(car::Anova(modg, type=3)[1:2,],expand_Anova(modg, type=3)[-1,]))
+rownames(tab) <- c("Intercept","Presentation","$\\quad X_1$ (D+S vs A)","$\\quad X_2$ (D vs S)", "Error")
+colnames(tab) <- c("$\\hat{\\beta}$","$\\text{SS}$", "$\\text{df}$", "$F$", "$p(\\geq \\lvert F \\rvert)$")
+knitr::kable(tab, escape = FALSE, digits=c(3,0,0,2,3), booktabs=TRUE, linesep="")
+options(opts)
+```
+
+<!-- If we let $Y_{i,j}$ denote a response by person $i$ in condition $j$, the errors in this model are $\hat{\epsilon}_{i,j} = Y_{i,j} - \overline{Y}_{\cdot,j}$. But if you consider Table \@ref(tab:cheerleader-self-attractiveness-table), you might realise that we can much more specific in considering what the effect of displaying a face amongst in a group is. -->
+
+The problem with this analysis is that it ignores the (on occasion rather large) differences between participants in how attractive they find a face on average (i.e. over the three conditions). @tbl-cheerleader-self-attractiveness-table shows the attractiveness ratings for 10 participants in the Variant condition. You can see there that when a participant rates a face as relatively attractive when presented alone, (s)he also tends to rate the face as relatively attractive when shown in a group of faces. Some participants (e.g. participant 37) rate the face as relatively unattractive in all conditions. This indicates individual differences in how attractive people find a face. Simply put: people's tastes differ. Whilst that may be interesting in its own right, for the purposes of the experiment, we do not care about such individual differences. What we want to know is whether the attractiveness of a face increases when presented as part of a group vs when presented in isolation. To answer this question, we can't completely ignore individual differences. 
+
+```{r}
+#| label: tbl-cheerleader-self-attractiveness-table
+#| tbl-cap: "Attractiveness ratings in the Alone, Different, and Similar condition for 10 participants in the Variant condition. Also shown is the average over the three ratings for each participant, as well as differences between the rating in the Different and Alone condition (D-A) and between the Similar and Alone condition (S-A)."
+
+dat %>%
+  group_by(Participant) %>%
+  tidyr::pivot_wider(id_cols = Participant, names_from = Item, values_from = Response) %>%
+  ungroup() %>%
+  filter(row_number() <= 10) %>%
+  mutate("Average" = (Alone + Different + Similar)/3, 
+         "D-A" = Different - Alone,
+         "S-A" = Similar - Alone) %>%
+  mutate(Alone = format(Alone, digits=2, nsmall=2),
+         Different = format(Different, digits=2, nsmall=2),
+         Similar = format(Similar, digits=2, nsmall=2)) %>%
+  knitr::kable(row.names = FALSE, col.names = c("Participant","Alone", "Different", "Similar", "Average", "D-A", "S-A"), digits=2)  
+
+#  summarize(Response = mean(Response)) %>%
+#  ggplot(aes(x=Response)) + geom_histogram(bins=10)
+
+```
+
+<!-- This individual variability makes the ratings within each condition also highly variable. By ignoring that we have repeated measures for each participant, the model errors are the differences between each rating in a condition and the average in that condition. --> 
+
+
+## Oneway repeated-measures ANOVA
+
+For each participant, we could consider whether the rating in e.g. the Different condition is higher than the rating in the Alone condition. These difference scores are provided in the D-A and S-A columns in @tbl-cheerleader-self-attractiveness-table. For participant 36, the rating in the Different condition is a little lower than their rating in the Alone condition, and for participant 37, it is a little higher. These difference scores remove variability in how attracted people are to a face in general. The difference scores just reflect whether people find a face more or less attractive when presented in the context of a group of faces, compared to when presented alone. We can then simply ask whether these differences are, on average, positive (indicating increased attractiveness) or negative (indicating decreased attractiveness). We can answer this question by using a one-sample t-test on the difference scores, comparing a general intercept-only MODEL G to an even simpler MODEL R where we fix the intercept to 0. If we can reject the null hypothesis that the mean of the difference is equal to 0, that is evidence of an effect of the experimental manipulation. 
+
+For example, we can compare attractiveness ratings between the Different and Alone conditions by, for the D-A difference scores, comparing a MODEL G 
+$$\begin{aligned} (\text{D - A})_i &= Y_{i,\text{D}} - Y_{i,\text{A}} \\ &= \beta_0 + \epsilon_{\text{D-A},i} \end{aligned}$$
+to a MODEL R:
+$$\begin{aligned} (\text{D - A})_i &= Y_{i,\text{D}} - Y_{i,\text{A}} \\ &= 0 + \epsilon_{\text{D-A},i} \end{aligned}$$
+```{r}
+#| label: compute-AOVs
+wdat <- dat %>%
+  group_by(Participant) %>%
+  tidyr::pivot_wider(id_cols = Participant, names_from = Item, values_from = Response) %>%
+  ungroup() %>%
+  mutate("Average" = (Alone + Different + Similar)/3, 
+         "D_A" = Different - Alone,
+         "S_A" = Similar - Alone)
+aov1 <- anova(lm(`D_A`~0, data=wdat), lm(`D_A`~1, data=wdat))
+aov2 <- anova(lm(`S_A`~0, data=wdat), lm(`S_A`~1, data=wdat))
+```
+This comparison is a test whether the mean of the D-A difference score is equal to 0. The result of this test is `r write_anova_results(aov1)`. We can therefore conclude there is evidence for a difference between the Different and Alone presentions, as would be expected from the "cheerleader effect".
+
+Using a similar model comparison
+approach for the S-A difference scores, we obtain a test result of `r write_anova_results(aov2)`. So, if we focus on differences between the conditions "within persons" (by computing differences between the conditions for each person), we find evidence that both the Different and Similar condition differ from the Alone condition. On average, participants' rating of the attractiveness of a face was `r  round(coefficients(lm(D_A~1, data=wdat))[1],2)` points higher when presented amongst a group of different faces, and `r  round(coefficients(lm(S_A~1, data=wdat))[1],2)` points higher when presented amongst a group of similar faces, compared to when the face was presented by itself. Given that attractiveness was rated on a scale between 1-100, these are not large differences, but they are statistically significant.
+
+### Within-subjects composite scores
+
+The idea of computing difference scores and then using these in linear models is essentially how we will test for effects of manipulations that vary within persons. To do this more generally, we will apply orthogonal contrast codes to compute such difference scores. We will refer to the resulting within-person-difference-scores as __within-subjects composite scores__. 
+
+We will use the same contrast codes as before, but denote them as $d_j$ to separate them from between-subjects contrasts ($c_j$):
+```{r}
+#| label: contrast-code-table
+tab <- data.frame(c1 = c("$-\\tfrac{2}{3}$","$\\tfrac{1}{3}$","$\\tfrac{1}{3}$"),
+                  c2 = c("$0$","$\\tfrac{1}{2}$","$-\\tfrac{1}{2}$"))
+colnames(tab) <- c("$d_1$","$d_2$")
+rownames(tab) <- c("Alone","Different", "Similar")
+knitr::kable(tab, booktabs=TRUE, linesep="", align="r")
+```
+<!-- The first contrast code reflects the expectation that a face in a group (Different or Similar) will be rated as more attractive than faces in the Alone condition. The second contrast reflects the expectation that a face surrounded by different faces will be rated as more attractive than when surrounded by more similar faces.-->
+
+For each within-subjects contrast $d_j$, we compute a within-subjects composite score as:
+\begin{equation}
+W_{j,i} = \frac{\sum_{k=1}^g d_{j,k} Y_{i,k}}{\sqrt{\sum_{k=1}^g d_{j,k}^2}}
+(\#eq:within-subjects-composite-scores-ch08)
+\end{equation}
+The top part of this equation (the numerator) is just the sum of a participant $i$'s score in each condition $k$ multiplied by the corresponding value of contrast code $d_j$. The bottom part (the denominator) is a scaling factor, computed as the square-root of the sum of the squared contrast values. The reason for applying this scaling factor is to make the sums of squares of the resulting analyses add up to the total sum of squares (i.e. the Sum of Squared Error of an intercept-only model). Otherwise, it is not of theoretical importance. 
+
+As an example, let's compute the within-subjects composite scores for participant 36 in @tbl-cheerleader-self-attractiveness-table. For contrast $d_1$, we compute
+$$\begin{aligned}
+W_{1,36} &= \frac{-\tfrac{2}{3} \times 56.32 + \tfrac{1}{3} \times 55.92 + \tfrac{1}{3} \times 54.30}{\sqrt{ \left(-\tfrac{2}{3}\right)^2 + \left(\tfrac{1}{3}\right)^2 + \left(\tfrac{1}{3}\right)^2)}} \\
+&= \frac{-0.81}{\sqrt{\tfrac{6}{9}}} = `r round((-(2/3)*56.32 + (1/3)*55.92 + (1/3)*54.3)/sqrt(6/9),2)`
+\end{aligned}$$
+For contrast $d_2$, the within-subjects composite is computed as:
+$$\begin{aligned}
+W_{2,36} &= \frac{\tfrac{1}{2} \times 55.92 + (-\tfrac{1}{2}) \times 54.30}{\sqrt{\left(\tfrac{1}{2}\right)^2 + \left(-\tfrac{1}{2}\right)^2)}} \\
+&= \frac{-0.81}{\sqrt{\tfrac{2}{4}}} = `r round(((1/2)*55.92 + (-1/2)*54.3)/sqrt(2/4),2)`
+\end{aligned}$$
+@tbl-cheerleader-self-composite-table shows the resulting values for other participants as well.
+```{r}
+#| label: tbl-cheerleader-self-composite-table
+#| tbl-cap: "Attractiveness ratings in the Alone, Different, and Similar condition for 10 participants in the Variant condition. Also shown are three within-subjects composite scores."
+#options(pillar.sigfig = 2)
+dat %>%
+  group_by(Participant) %>%
+  tidyr::pivot_wider(id_cols = Participant, names_from = Item, values_from = Response) %>%
+  ungroup() %>%
+  filter(row_number() <= 10) %>%
+  mutate("W0" = (Alone + Different + Similar)/sqrt(3), 
+         "W1" = (-(2/3)*Alone + (1/3)*Different + (1/3)*Similar)/sqrt((2/3)^2 + (1/3)^2 + (1/3)^2),
+         "W2" = (-(1/2)*Similar + (1/2)*Different)/sqrt(1/2)) %>%
+  mutate(Alone = format(Alone, digits=2, nsmall=2),
+         Different = format(Different, digits=2, nsmall=2),
+         Similar = format(Similar, digits=2, nsmall=2)) %>%
+  knitr::kable(row.names = FALSE, col.names = c("Participant","Alone", "Different", "Similar", "$W_0$", "$W_1$", "$W_2$"), digits=c(0,2,2,2,2,2,2))  
+
+```
+
+```{r}
+#| label: compute-aovs-2
+wdat <- dat %>%
+  group_by(Participant) %>%
+  tidyr::pivot_wider(id_cols = Participant, names_from = Item, values_from = Response) %>%
+  ungroup() %>%
+  mutate(#"W0" = ((1/3)*Alone + (1/3)*Different + (1/3)*Similar)/sqrt(1/3), 
+         "W0" = (1*Alone + 1*Different + 1*Similar)/sqrt(3), 
+         "W1" = (-(2/3)*Alone + (1/3)*Different + (1/3)*Similar)/sqrt((2/3)^2 + (1/3)^2 + (1/3)^2),
+         "W2" = (-(1/2)*Similar + (1/2)*Different)/sqrt(1/2))
+aov0 <- anova(lm(W0~0, data=wdat), lm(W0~1, data=wdat))
+aov1 <- anova(lm(W1~0, data=wdat), lm(W1~1, data=wdat))
+aov2 <- anova(lm(W2~0, data=wdat), lm(W2~1, data=wdat))
+```
+
+The first within-subjects composite variable ($W_1$) reflects the difference between the average of the Different and Similar conditions and the Alone condition. If the mean of this composite variable is positive, that indicates that faces in the Different and Similar condition are on average rated as more attractive than in the Alone condition. If the mean of this composite variable is negative, that indicates that faces in the Different and Similar condition are on average rated as less attractive than in the Alone condition. If the mean is equal to 0, that indicates there is no difference in attractiveness ratings between the marginal mean of the Different and Similar conditions, compared to the Alone condition. To test whether this latter option is truem we can compare a MODEL G
+$$W_{1,i} = \beta_0 + \epsilon_i$$
+to a MODEL R:
+$$W_{1,i} = 0 + \epsilon_i$$
+The Sum of Squared Error of MODEL R is $\text{SSE}(R) = `r round(sum(residuals(lm(W1~0, data=wdat))^2),2)`$, and for MODEL G this is $\text{SSE}(G) = `r round(sum(residuals(lm(W1~1, data=wdat))^2),2)`$. There are $n=`r nrow(wdat)`$ participants, and $\text{npar}(R) = 0$ and $\text{npar}(G) = 1$. The test result of the model comparison is therefore `r write_anova_results(aov1)`. We can thus reject the null hypothesis that there is no difference between the Alone condition and the marginal mean of the other two conditions. The estimated intercept of MODEL G is $\hat{\beta}_0 = `r round(coefficients(lm(W1~1, data=wdat))[1],2)`$. Due to the scaling applied in the within-subjects composite, this intercept does _not_ equal the average of $\frac{Y_{i,D} + Y_{i,S}}{2} - Y_{i,A}$. To get this value, we need to __rescale__ the within-subjects composite to the scale of the dependent variable. We do this by dividing the estimated parameter by the scaling factor. The scaling factor equals $\sqrt{ \left(-\tfrac{2}{3}\right)^2 + \left(\tfrac{1}{3}\right)^2 + \left(\tfrac{1}{3}\right)^2} = \sqrt{\tfrac{6}{9}}$. So
+$$\frac{\overline{Y}_{D} + \overline{Y}_{S}}{2} - \overline{Y}_{A} = \frac{`r round(coefficients(lm(W1~1, data=wdat))[1],2)`}{\sqrt{\tfrac{6}{9}}} = `r round(coefficients(lm(W1~1, data=wdat))[1]/sqrt(6/9),2)`$$
+We can conduct a similar model comparison for the second within-subjects composite, $W_2$. The Sum of Squared Error of MODEL R is $\text{SSE}(R) = `r round(sum(residuals(lm(W2~0, data=wdat))^2),2)`$, and for MODEL G this is $\text{SSE}(G) = `r round(sum(residuals(lm(W2~1, data=wdat))^2),2)`$. The results of this comparison are then `r write_anova_results(aov2)`. Hence, we can not reject the null hypothesis that there is no difference between the Different and Alone condition. The estimated intercept of MODEL G is $\hat{\beta}_0 = `r round(coefficients(lm(W2~1, data=wdat))[1],2)`$. Rescaling this to the scale of the dependent variable indicates that
+$$\overline{Y}_{D} - \overline{Y}_{S} = \frac{`r round(coefficients(lm(W2~1, data=wdat))[1],2)`}{\sqrt{\tfrac{2}{4}}} = `r round(coefficients(lm(W2~1, data=wdat))[1]/sqrt(2/4),2)`$$
+
+Comparing the results to the oneway ANOVA of @tbl-cheerleader-oneway-ANOVA-results shows that we get the same parameter estimates (after rescaling), but different test results. That is because the analyses using within-subjects composite scores consider the effects of the within-subjects effects regardless of whether someone is generally attracted to that face or not. In the oneway ANOVA, a substantial part of the variation within the conditions is due to individual differences in how attracted people are to a particular face. Some participants gave higher attractiveness ratings (regardless of condition) than other participants (see @tbl-cheerleader-self-attractiveness-table). This relatively high variability within the conditions can't be "explained" in the oneway ANOVA. This leads to relatively large errors, and with that relatively low power for the tests of condition. If we know that one participant is relatively more attracted to a face than other participants, we could use that knowledge to make better predictions of their attractiveness ratings. This is, roughly, what repeated-measures ANOVA is about: separating individual differences in average scores (over all within-subjects conditions) from effects of the within-subjects manipulations. 
+
+### A composite for between-subjects effects
+
+In the analyses above, we did not consider individual differences in how attractive people found a face in general. For each participant, we can compute an average attractiveness rating over all conditions as:
+
+$$\overline{Y}_{i,\cdot} = \frac{Y_{i,A} + Y_{i,D} + Y_{i,S}}{3}$$
+(see @tbl-cheerleader-self-attractiveness-table). Variation in these averages reflects variation between participants. 
+
+To analyze this variation between participants, we can use another composite score by applying a special "contrast" $d_0 = (1, 1, 1)$. This is not really a contrast in the usual sense, as it does not compare conditions. Also, you don't have freedom in choosing the values: you have to use a 1 for each condition to make this work in the same way as the within-subjects composite scores.^[You might think that it would make sense to use the values $\left(\tfrac{1}{3}, \tfrac{1}{3}, \tfrac{1}{3}\right)$. Whilst this would give you exactly the same computed values of $W_{0,i}$, rescaling back to $Y$ from $\sqrt{\left(\tfrac{1}{3}\right)^2 + \left(\tfrac{1}{3}\right)^2 + \left(\tfrac{1}{3}\right)^2}$ does not work then. You have to rescale from $\sqrt{3}$.] Plugging these values into @eq-within-subjects-composite-scores-ch08 provides us with the $W_0$ composite score. For example, the computation of this score for participant 36 is:
+$$\begin{aligned}
+W_{0,36} &= \frac{56.32 + 55.92 + 54.30}{\sqrt{ 1^2 + 1^2 + 1^2 }} \\
+&= \frac{166.54}{\sqrt{3}} = `r round((56.32 + 55.92 + 54.3)/sqrt(3),2)`
+\end{aligned}$$
+Values for the other participants are provided in @tbl-cheerleader-self-composite-table. Like the values of the $W_1$ and $W_2$ composite scores, these are _scaled_ values to ensure that the Sums of Squares add up appropriately. But you can think of them conceptually as averages, for each participant, over the three conditions.
+
+We can apply a similar analysis to these $W_0$ scores as for $W_1$ and $W_2$, comparing a MODEL G
+$$W_{0,i} = \beta_0 + \epsilon_i$$
+to a MODEL R:
+$$W_{0,i} = 0 + \epsilon_i$$
+The Sum of Squared Error of MODEL R is $\text{SSE}(R) = `r format(sum(residuals(lm(W0~0, data=wdat))^2),scientific=FALSE)`$, and for MODEL G this is $\text{SSE}(G) = `r round(sum(residuals(lm(W0~1, data=wdat))^2),2)`$. The results of this comparison are then `r write_anova_results(aov0)`. Hence, we can reject the null hypothesis that the average rating of attractiveness is equal to 0. The estimated intercept of MODEL G is $\hat{\beta}_0 = `r round(coefficients(lm(W0~1, data=wdat))[1],2)`$. Rescaling this to the scale of the dependent variable indicates that
+$$\overline{Y} = \frac{`r round(coefficients(lm(W0~1, data=wdat))[1],2)`}{\sqrt{3}} = `r round(coefficients(lm(W0~1, data=wdat))[1]/sqrt(3),2)`$$
+Note that this is equal to the intercept of the oneway ANOVA in @tbl-cheerleader-oneway-ANOVA-results. As in that model, a test of the hypothesis that the intercept equals 0 is not overly interesting. But when we consider between-subjects effects, the composite score $W_0$ is crucial. 
+
+Presently, a main realisation is that through the models for the three composite scores ($W_0$, $W_1$, and $W_2$), we can compute SSR terms which together add up to the "total SS". The "total SS" is the Sum of Squared Error of the intercept-only model:
+$$Y_{i,j} = \beta_0 + \epsilon_{i,j}$$
+(i.e. a model which makes a single prediction all the observations, both over participants and over conditions).
+
+### Collecting all results and omnibus tests
+
+@tbl-rm-anova-model-summary summarizes the results we have obtained thus far. This is admittedly not an easy table to read. But it does highlight some important aspects of repeated-measures ANOVA. So let's give it a go. The first thing to remember is that we have just performed three different model comparisons, one for $W_0$, one for $W_1$, and one for $W_2$. Each of these model comparisons used a different dependent variable, and therefore each had a different $\text{SSE}(G)$. The Sum of Squares attributable to an effect is simply the difference between these SSE terms: $\text{SSR} = \text{SSE}(R) - \text{SSE}(G)$. The degrees of freedom associated to this Sum of Squares Reduced is $\text{df}_1 = \text{npar}(G) - \text{npar}(R)$, i.e. the number of additional parameters in MODEL G used to reduce the SSE. The degrees of freedom associated to $\text{SSE}(G)$ is $\text{df}_2 = n - \text{npar}(G)$. For each model comparison, the $F$-statistic is, as usual
+$$F = \frac{\text{SSR}/\text{df}_1}{\text{SSE}(G)/\text{df}_2}$$
+The resulting statistics are provided in @tbl-rm-anova-model-summary. For easy comparison, the results of the oneway ANOVA are repeated in @tbl-cheerleader-oneway-ANOVA-results-2.
+
+```{r}
+#| label: tbl-rm-anova-model-summary
+#| tbl-cap: "(Rescaled) parameter estimates, model comparison SS terms, degrees of freedom, and $F$ values, for the three composite scores. The last three rows show different summations over these, where relevant."
+opts <- options()
+options(knitr.kable.NA = "")
+tab <- data.frame(beta = c(coefficients(lm(W0~1, data=wdat))[1]/sqrt(3),
+                           coefficients(lm(W1~1, data=wdat))[1]/sqrt(6/9),
+                           coefficients(lm(W2~1, data=wdat))[1]/sqrt(1/2)),
+           SSER = c(sum(residuals(lm(W0~0, data=wdat))^2),
+                   sum(residuals(lm(W1~0, data=wdat))^2),
+                   sum(residuals(lm(W2~0, data=wdat))^2)),
+           SSEG = c(sum(residuals(lm(W0~1, data=wdat))^2),
+                   sum(residuals(lm(W1~1, data=wdat))^2),
+                   sum(residuals(lm(W2~1, data=wdat))^2))) %>%
+  mutate(SSR = SSER-SSEG)
+tab$df1 <- c(1,1,1)
+tab$df2 <- rep(nrow(wdat) - 1,3)
+tab <- tab %>%
+  mutate(F = SSR/(SSEG/df2))
+tab <- rbind(tab,c(NA, colSums(tab[1,2:6]), NA), c(NA, colSums(tab[2:3,2:6]), NA), c(NA, colSums(tab[2:6]), NA))
+rownames(tab) <- c("$W_0$","$W_1$","$W_2$", "Sum Between ($W_0$)", "Sum Within ($W_1 + W_2$)", "Sum Total ($W_0 + W_1 + W_2$)")
+tab %>%
+  knitr::kable(col.names=c("$\\hat{\\beta}$","$\\text{SSE}(R)$", "$\\text{SSE}(G)$", "$\\text{SSR}$", "$\\text{df}_1$", "$\\text{df}_2$", "$F$"), escape=FALSE, booktabs=TRUE, digits=c(2,0,0,0,0,0,2))
+options(opts)
+```
+
+```{r}
+#| label: tbl-cheerleader-oneway-ANOVA-results-2
+#| tbl-cap: "Linear model predicting attractiveness ratings in the three conditions, wrongly assuming independence."
+modg <- lm(Response ~ Item, data=dat)
+opts <- options()
+options(knitr.kable.NA = "")
+tab <- cbind(estimate = c(coefficients(modg)[1],NA,coefficients(modg)[2:3],Error=NA),rbind(car::Anova(modg, type=3)[1:2,],expand_Anova(modg, type=3)[-1,]))
+rownames(tab) <- c("Intercept","Presentation","$\\quad X_1$ (D+S vs A)","$\\quad X_2$ (D vs S)", "Error")
+colnames(tab) <- c("$\\hat{\\beta}$","$\\text{SS}$", "$\\text{df}$", "$F$", "$p(\\geq \\lvert F \\rvert)$")
+knitr::kable(tab, escape = FALSE, digits=c(3,0,0,2,3), booktabs=TRUE, linesep="")
+options(opts)
+```
+
+Comparing the results between the oneway ANOVA which wrongly assumed independence, and the results of the repeated-measured ANOVA, you can see that the parameter estimates and the SSR terms for the effects are identical between the two. However, the values of the $F$-statistic are different. The main reason for this is that the oneway ANOVA compares different MODEL Rs to the _same_ MODEL G. In other words, the $\text{SSE}(G)$ term is the same for each test. In the repeated-measures ANOVA with composite scores, each test uses a different MODEL G, and hence a different $\text{SSE}(G)$ term. The sum of these three SSE terms is equal to the SS Error term in the oneway ANOVA (which equals 9127). But each test uses a different part of this overall error. As the SSR terms are the same between the two analyses, that implies that the relative value of the SSR terms compared to the SSE term(s) is _larger_ in the repeated-measures ANOVA. This will increase $F$-values and the power of the tests. However, by splitting the analysis into different models for the between-subjects effects and within-subjects contrasts, the $\text{df}_2$ values are smaller in the repeated-measures ANOVA. This in turn reduces the $F$ values and decreases the power of the tests. Although it would be wrong to say that you can choose whichever analysis provides you the highest $F$ values (the assumptions of a standard ANOVA are generally violated with repeated-measures data), understanding how the Sums of Squares Reduced (SSR), Sums of Squared Errors (SSE), and degrees of freedom (df) terms relate between the two analyses is important in understanding the nuances of these different approaches.
+
+```{r}
+#| label: compute-table-sses
+tab <- data.frame(beta = c(coefficients(lm(W0~1, data=wdat))[1]/sqrt(3),
+                           coefficients(lm(W1~1, data=wdat))[1]/sqrt(6/9),
+                           coefficients(lm(W2~1, data=wdat))[1]/sqrt(1/2)),
+           SSER = c(sum(residuals(lm(W0~0, data=wdat))^2),
+                   sum(residuals(lm(W1~0, data=wdat))^2),
+                   sum(residuals(lm(W2~0, data=wdat))^2)),
+           SSEG = c(sum(residuals(lm(W0~1, data=wdat))^2),
+                   sum(residuals(lm(W1~1, data=wdat))^2),
+                   sum(residuals(lm(W2~1, data=wdat))^2))) %>%
+  mutate(SSR = SSER-SSEG)
+tab$df1 <- c(1,1,1)
+tab$df2 <- rep(nrow(wdat) - 1,3)
+tab <- tab %>%
+  mutate(F = SSR/(SSEG/df2))
+```
+
+There is one test in the oneway ANOVA that we haven't yet considered an alternative for: the omnibus test for Presentation. It is possible to conduct such a test, by aggregating results over the within-subjects composites $W_1$ and $W_2$. Like the contrasts in the oneway ANOVA ($c_1$ and $c_2$), the set of within-subjects contrasts ($d_1$ and $d_2$) together allow you to reconstruct all differences between the (marginal) means of conditions. By fixing both $\beta_0$ in MODEL G for $W_1$ and MODEL G for $W_2$ to $\beta_0 = 0$), we obtain two models which together imply that there are no differences between these (marginal) means. A complication of such aggregation over models is that we need an additional assumption to the standard assumptions of the GLM. This assumption is called sphericity, and we will discuss it later. For the moment, let's focus on how you would compute this omnibus test. Computationally, it is actually straightforward: we compute the omnibus SSR, SSE, $\text{df}_1$, and $\text{df}_2$ terms, simply by summing for each of these the respective terms for $W_1$ and $W_2$. So the $F$-statistic for the omnibus test of Presentation can be computed as
+
+$$\begin{aligned} 
+F &= \frac{\text{SSR}/\text{df}_1}{\text{SSE}(G)/\text{df}_2} \\
+&= \frac{(`r round(tab[2,4],0)` + `r round(tab[3,4],0)`)/(1+1)}{(`r round(tab[2,3],0)` + `r round(tab[3,3],0)`)/(30 + 30)} \\
+&= `r round(((tab[2,4] + tab[3,4])/(2))/((tab[2,3] + tab[3,3])/(30 + 30)),2)`
+\end{aligned}$$
+To determine the $p$-value, we can compute the exceedance probability of this value in an $F$-distribution with $\text{df}_1 = 2$ and $\text{df}_2 = 60$, and find that $p < .001$. Hence, the omnibus test is significant. But, as I said before, this omnibus test rests on a new assumption of sphericity. We will discuss this after generalizing a repeated-measures ANOVA to a so-called "mixed design", with some experimental manipulations that vary within, and other manipulations that vary between participants. Before we take this step, let's summarize what we have done so far. @tbl-collated-results-oneway-rm-anova-cheerleader collates the results of all previous analyses. 
+```{r}
+#| label: tbl-collated-results-oneway-rm-anova-cheerleader
+#| tbl-cap: "Complete results of the oneway (Presentation: Alone, Different, Similar) repeated-measures ANOVA for the data in the Variant condition."
+wdat <- dat %>%
+  group_by(Participant) %>%
+  tidyr::pivot_wider(id_cols = Participant, names_from = Item, values_from = Response) %>%
+  ungroup() %>%
+  mutate(#"W0" = ((1/3)*Alone + (1/3)*Different + (1/3)*Similar)/sqrt(1/3), 
+         "W0" = (1*Alone + 1*Different + 1*Similar)/sqrt(3), 
+         "W1" = (-(2/3)*Alone + (1/3)*Different + (1/3)*Similar)/sqrt((2/3)^2 + (1/3)^2 + (1/3)^2),
+         "W2" = (-(1/2)*Similar + (1/2)*Different)/sqrt(1/2))
+
+mod0 <- lm(W0 ~ 1, data=wdat)
+mod1 <- lm(W1 ~ 1, data=wdat)
+mod2 <- lm(W2 ~ 1, data=wdat)
+
+tab0 <- cbind(estimate = c(coefficients(mod0)/sqrt(3),Error=NA),car::Anova(mod0, type=3))
+tab1 <- cbind(estimate = c(coefficients(mod1)/sqrt(1/3),Error=NA),car::Anova(mod1, type=3))
+tab2 <- cbind(estimate = c(coefficients(mod2)/sqrt(1/2),Error=NA),car::Anova(mod2, type=3))
+
+atab <- rbind(
+  c(NA, sum(tab0[,2]), sum(tab0[,3]), NA, NA),
+  tab0,
+  c(NA, sum(c(tab1[,2],tab2[,2])), sum(c(tab1[,3],tab2[,3])), NA, NA),
+  tab1,
+  tab2,
+  c(NA, sum(c(tab0[,2], tab1[,2], tab2[,2])), sum(c(tab0[,3], tab1[,3], tab2[,3])), NA, NA)
+)
+rownames(atab) <- c("*Between-subjects*", "&nbsp;&nbsp;Intercept", "&nbsp;&nbsp;Error between", "*Within-subjects*", "&nbsp;&nbsp;$d_1$ (D + S vs A)", "&nbsp;&nbsp;Error ($d_1$)", "&nbsp;&nbsp;$d_2$ (D vs S)", "&nbsp;&nbsp;Error ($d_2$)", "*Total*")
+colnames(atab) <- c("$\\hat{\\beta}$","$\\text{SS}$", "$\\text{df}$", "$F$",  "$p(\\geq F)$")
+opts <- options()
+options(knitr.kable.NA = "")
+knitr::kable(atab, digits=c(3,0,0,2,3), escape = FALSE, booktabs = TRUE, linesep="")
+options(opts)
+```
+
+
+## Partitioning the variance
+
+The crux of repeated-measures ANOVA is that we can separate between-subjects effects (e.g. individual differences) from within-subjects effects. This means we can separate the total variance in $Y_{j,i}$ scores into parts that are due to between-subjects effects (e.g. individual differences) and within-subjects effects (e.g. differences due to within-subjects manipulations). This often provides more powerful tests, at least for the within-subjects effects. A graphical representation of the partitioning of the total variation into the between and within parts is provided in @fig-partitioning-variance-rm-anova.
+
+<!-- TODO: why is svg not working well with fonts? -->
+
+```{tikz}
+%| label: fig-partitioning-variance-rm-anova
+%| fig-cap: Partitioning the total Sum of Squares in a oneway repeated-measures ANOVA.
+%| dev-args: !expr list(pointsize = 12)
+%| fig-format: png
+  \usetikzlibrary{arrows}
+	\begin{tikzpicture}
+	\pgfsetxvec{\pgfpoint{2cm}{0cm}}
+	\pgfsetyvec{\pgfpoint{0cm}{2cm}}
+  \tikzstyle{every node}=[minimum size=2cm, text width=8em, text badly centered, minimum height=4em]
+
+  \draw node at (0,-.5) (SST) {SS Total};
+  \draw node at (-2,-2) (SSB) {SS Between};
+  \draw node at (2,-2) (SSW) {SS Within};
+  \draw node at (1,-3.5) (SSt) {SS Presentation};
+  \draw node at (0.5,-4.5) (SSd1) {SS $d_1$};
+  \draw node at (1.5,-4.5) (SSd2) {SS $d_2$};
+  \draw node at (3, -3.5) (SSE) {SSE Within};
+  \draw node at (2.5,-4.5) (SSEd1) {SSE $d_1$};
+  \draw node at (3.5,-4.5) (SSEd2) {SSE $d_2$};
+
+	\draw[->] (SST) -- (SSB);
+  \draw[->] (SST) -- (SSW);
+  \draw[->] (SSW) -- (SSt);
+  \draw[->] (SSW) -- (SSE);
+  \draw[->] (SSt) -- (SSd1);
+  \draw[->] (SSt) -- (SSd2);
+  \draw[->] (SSE) -- (SSEd1);
+  \draw[->] (SSE) -- (SSEd2);
+
+	\end{tikzpicture}
+```
+
+## A mixed ANOVA with between- and within-subjects effects
+
+```{r}
+#| label: data-for-mixed-aov
+dat <- subset(cheerleader, Excluded == 0) %>%
+  mutate(Item = factor(Item)) %>%
+  mutate(Item = forcats::fct_recode(Item, Different = "Control_Group", Similar = "Distractor_Manipulation"),
+         Task = forcats::fct_recode(Task, Identical = "Identical-Distractors", Variant = "Self-Distractors"))
+```
+
+Up to now, we just considered the data from the Variant conditions. Having worked out how to perform effective comparisons of the within-subjects conditions, we are now in a position to consider the data from the whole experiment. Whether the other faces in the Similar condition where exact copies of a single photograph, or different photographs of the same person, was a manipulation that varied _between participants_ (i.e., a participant was only assigned to one of these manipulations, not both). The full design of the study is thus a 2 (Version: Identical, Variant) by 3 (Presentation: Alone, Different, Similar) design, where the first factor (Version) varied between, and the last factor (Presentation) varied within participants.
+
+Just like in a "normal" factorial ANOVA, we would like to consider main effects of, and the interaction between, these two experimental manipulations. And just like in a "normal" factorial ANOVA, we will focus on defining contrasts for the main effects, and let the interactions follow from these. We have already defined our $d_j$ contrasts for the within-subjects effects. There is no need to change these when considering the full experiment, as we still would expect the attractiveness ratings to be different for the Alone conditions compared to the Different and Similar conditions. And while the theory would predict no difference between the Alone condition and the Similar condition when the Version is Identical, we could expect a higher attractiveness rating when the Version is Variant. So, aggregating over the levels of Version, we could still expect a higher attractiveness rating for the Similar conditions. So we just have to define a suitable contrast for the Identical and Variant manipulation. This manipulation only affected the nature of the Similar conditions, and as already indicated, according to the theory, we should expect a higher attractiveness rating when the Version is Variant compared to Identical. So a reasonable contrast code for our single between-subjects manipulation is $c_1 = (-\tfrac{1}{2},\tfrac{1}{2})$ for the Identical and Variant levels respectively.
+
+Having defined the contrast codes for the main effects, we would normally proceed by defining product-contrasts to reflect the interactions. But in this mixed design, the within-subjects contrasts ($d$) are used to transform a set of correlated dependent variables ($Y$) in a set of orthogonal dependent variables ($W$), whilst the between-subjects contrast ($c$) are used to compare different subsets for each of these dependent variables (i.e. because some of the $W$ values are obtained for the Version: Identical manipulation, and the remainder for the Version: Variant manipulation). Rather than computing product-contrasts, what we will do now is to consider the effect of a contrast-coded predictor $X_1$ (which takes its values from $c_1$) on our three composite variables. As $W_0$ effectively encodes the marginal mean over all within-subjects conditions, the effect of this contrast-coded predictor on $W_0$ is equal to a main effect of the between-subjects manipulation. As the within-subjects composite scores encode differences between the within-subjects conditions, an effect of the between-subjects manipulation on such differences is identical to an interaction: The effect of within-subjects manipulations is moderated by the between-subjects manipulation.
+
+To make this less abstract, let's apply this idea now. @tbl-cheerleader-all-composite-table shows the values of the composite variables (computed in the same way as before), as well as the contrast-coded predictor ($X$) which codes for Version.
+```{r}
+#| label: tbl-cheerleader-all-composite-table
+#| tbl-cap: "Attractiveness ratings in the Alone, Different, and Similar condition for 5 participants in the Identical and 5 participants in the Variant condition. Also shown are three within-subjects composite scores."
+#options(pillar.sigfig = 2)
+dat %>%
+  group_by(Participant) %>%
+  tidyr::pivot_wider(id_cols = c("Participant", "Task"), names_from = Item, values_from = Response) %>%
+  ungroup() %>%
+  group_by(Task) %>%
+  filter(row_number() <= 5) %>%
+  mutate(X = ifelse(Task == "Identical", -0.5, 0.5)) %>%
+  mutate("W0" = (Alone + Different + Similar)/sqrt(3), 
+         "W1" = (-(2/3)*Alone + (1/3)*Different + (1/3)*Similar)/sqrt((2/3)^2 + (1/3)^2 + (1/3)^2),
+         "W2" = (-(1/2)*Similar + (1/2)*Different)/sqrt(1/2)) %>%
+  mutate(Alone = format(Alone, digits=2, nsmall=2),
+         Different = format(Different, digits=2, nsmall=2),
+         Similar = format(Similar, digits=2, nsmall=2)) %>%
+  knitr::kable(row.names = FALSE, col.names = c("Participant","Version","Alone", "Different", "Similar", "$X_1$", "$W_0$", "$W_1$", "$W_2$"), digits=c(0,2,2,2,2,2,2,2,2))
+
+```
+
+Let's start with the tests for $W_0$, the composite variable for between-subjects effects. We formulate a MODEL G as:
+$$W_{0,i} = \beta_0 + \beta_1 \times X_{1,i} + \epsilon_{i}$$
+The main effect of between-subjects contrast $c_1$ is tested by comparing this model to a MODEL R:
+$$W_{0,i} = \beta_0 + \epsilon_{i}$$
+A test of the hypothesis that $\beta_0 = 0$ is, as usual, obtained by comparing MODEL G to an alternative MODEL R:
+$$W_{0,i} = \beta_1 \times X_{1,i} + \epsilon_{i}$$
+The results of these two model comparisons are provided in @tbl-cheerleader-W0-ANOVA-table. We can see that the test of the intercept is significant, tells us that the grand mean of the attractiveness ratings is not likely to equal 0. More interesting is the test of $X_1$, which compares the marginal means of the attractiveness ratings between the Variant and Identical versions. This test is not significant. Hence, the main effect of Version is not significant: aggregating over the levels of Presentation, there are no differences between the two levels of Version. This is perhaps not overly surprising, as the Version manipulation only concerned the identity of the Similar presentation (whether identical photos or different photos of the same face). The Alone and Different presentations were the same between the Variant and Identical presentation conditions. Therefore, any effect of Version should only affect the attractiveness ratings in the Similar presentation. If the effect on Similar is large enough, this might also show as a difference in the average over Alone, Different, and Similar. But we see here that this is not the case.
+
+```{r}
+#| label: wdat
+wdat <- dat %>%
+  group_by(Participant) %>%
+  tidyr::pivot_wider(id_cols = c("Participant", "Task"), names_from = Item, values_from = Response) %>%
+  ungroup() %>%
+  mutate(X = ifelse(Task == "Identical", -0.5, 0.5)) %>%
+  mutate("W0" = (Alone + Different + Similar)/sqrt(3), 
+         "W1" = (-(2/3)*Alone + (1/3)*Different + (1/3)*Similar)/sqrt((2/3)^2 + (1/3)^2 + (1/3)^2),
+         "W2" = (-(1/2)*Similar + (1/2)*Different)/sqrt(1/2))
+```
+
+```{r}
+#| label: tbl-cheerleader-W0-ANOVA-table
+#| tbl-cap: "Results of the model for $W_0$, testing for between-subjects effects."
+mod <- lm(W0 ~ X, data=wdat)
+opts <- options()
+options(knitr.kable.NA = "")
+tab0 <- cbind(estimate = c(coefficients(mod)/sqrt(3),Error=NA),car::Anova(mod, type=3))
+rownames(tab0) <- c("Intercept","$X_1$ (Variant vs Identical)","Error")
+colnames(tab0) <- c("$\\hat{\\beta}$","$\\text{SS}$", "$\\text{df}$", "$F$",  "$p(\\geq F)$")
+knitr::kable(tab0, digits=c(3,0,0,2,3), escape = FALSE, booktabs = TRUE, linesep="")
+options(opts)
+```
+
+We now turn to the analysis of the first within-subjects composite variable, $W_1$. Remember that this variable encodes the first within-subjects contrast $d_1$, which compares the  Different and Similar conditions to the Alone condition. We formulate a MODEL G as:
+$$W_{1,i} = \beta_0 + \beta_1 \times X_{1,i} + \epsilon_{i}$$
+As when we conducted a oneway repeated-measures ANOVA, a difference between the Alone vs Different and Similar conditions would show itself through a non-zero intercept. Hence, the main effect of the within-subjects contrast $d_1$ is tested by comparing this model to a MODEL R where we fix the intercept to 0:
+$$W_{1,i} = \beta_1 \times X_{1,i} + \epsilon_{i}$$
+Note that this model allows the value of $W_1$ to be non-zero through the effect of $X_1$. Crucially, however, as we are using a sum-to-zero contrast in the construction of $X_1$ (i.e. the values in $c_1 = (-\tfrac{1}{2}, \tfrac{1}{2})$ sum to 0), the intercept represents the marginal mean of $W_1$ over the Identical and Variant versions. In other words, it represents the midpoint of the Identical and Variant versions, or the average effect of the within-subjects contrast $d_1$ over the levels of the between-subjects factor.
+
+To test whether the effect of $d_1$ is moderated by $c_1$, we compare MODEL G to an alternative MODEL R:
+$$W_{1,i} = \beta_0 + \epsilon_{i}$$
+If the D + S vs A difference varies over the Identical and Variant groups, then the value of $W_1$ would be different over these groups. If the D + S vs A difference is not affected by Version, then this last MODEL R would be just as good as MODEL G.
+
+The results of these two model comparisons are provided in @tbl-cheerleader-W1-ANOVA-table. We see a significant and positive intercept. In this model, the intercept is highly relevant, as it reflects a main effect of the $d_1$ contrast. We thus find evidence that the attractiveness ratings are on average higher in the Different and Similar conditions, compared to the Alone condition. In other words, when presented in the context of a group of faces, a face is rated as more attractive then when presented alone. The test for the slope of $X_1$, which reflects an interaction between $d_1$ and $c_1$, is not significant. Hence, there is no evidence that the D + S vs A contrast is moderated by Version.
+
+```{r}
+#| label: tbl-cheerleader-W1-ANOVA-table
+#| tbl-cap: "Results of the model for $W_1$, testing for the within-subjects difference between the Different and Similar vs Alone presentations, and the interaction of this effect with Version."
+mod <- lm(W1 ~ X, data=wdat)
+opts <- options()
+options(knitr.kable.NA = "")
+tab1 <- cbind(estimate = c(coefficients(mod)/sqrt(6/9),Error=NA),car::Anova(mod, type=3))
+rownames(tab1) <- c("Intercept","$X_1$ (Variant vs Identical)","Error")
+colnames(tab1) <- c("$\\hat{\\beta}$","$\\text{SS}$", "$\\text{df}$", "$F$",  "$p(\\geq F)$")
+knitr::kable(tab1, digits=c(3,2,0,2,3), escape = FALSE, booktabs = TRUE, linesep="")
+options(opts)
+```
+
+The procedure for $W_2$ is the same as for $W_1$. The results of the two model comparisons are provided in @tbl-cheerleader-W2-ANOVA-table. Here, we see that the intercept is not significant. Hence, there is no evidence of a main effect of $d_2$, which compares the Different presentation to the Similar presentation. But the slope of $X_1$, which reflects the $d_2$ by $c_1$ interaction, is significant and estimated as negative. There is thus evidence that the difference between the Different and Similar presentation varies over the two versions of the Similar presentation.
+```{r}
+#| label: tbl-cheerleader-W2-ANOVA-table
+#| tbl-cap: "Results of the model for $W_2$, testing for the within-subjects difference between the Different and Similar vs Alone presentations, and the interaction of this effect with Version."
+mod <- lm(W2 ~ X, data=wdat)
+opts <- options()
+options(knitr.kable.NA = "")
+tab2 <- cbind(estimate = c(coefficients(mod)/sqrt(1/2),Error=NA),car::Anova(mod, type=3))
+rownames(tab2) <- c("Intercept","$X_1$ (Variant vs Identical)","Error")
+colnames(tab2) <- c("$\\hat{\\beta}$","$\\text{SS}$", "$\\text{df}$", "$F$",  "$p(\\geq F)$")
+knitr::kable(tab2, digits=c(3,2,0,2,3), escape = FALSE, booktabs = TRUE, linesep="")
+options(opts)
+```
+To interpret the $d_2$ by $c_1$ interaction, we can The predicted D - S difference for the Variant condition is:
+$$\hat{W}_{2,V} = \hat{\beta}_0 + \hat{\beta}_1 \times X_{1,i} = `r round(coefficients(mod)[1],3)` + `r round(coefficients(mod)[2],3)` \times \tfrac{1}{2} = `r round(coefficients(mod)[1] + coefficients(mod)[2]*.5,3)`$$
+For the Identical condition, it is 
+$$\hat{W}_{2,I} = `r round(coefficients(mod)[1],3)` + `r round(coefficients(mod)[2],3)` \times (-\tfrac{1}{2}) = `r round(coefficients(mod)[1] - coefficients(mod)[2]*.5,3)`$$
+Thus, there appears to be a relatively small difference between presenting a face in the context of a group if different faces, or a group of different images of the same face (Variant version). However, compared to presenting a face within a group of identical photos of the same face (Identical version), a face presented within a group of dissimilar faces is rated as more attractive. This is consistent with the hierarchical encoding hypothesis.
+
+We have considered the effect of Presentation, and the Version by Presentation interaction, through two separate contrasts ($d_1$ and $d_2$). We can also perform omnibus tests of these effects. This is done by summing the relevant SSR, SSE, and df terms. For the main effect of Presentation, we sum the SS terms for the intercept in @tbl-cheerleader-W1-ANOVA-table and @tbl-cheerleader-W2-ANOVA-table to obtain an omnibus SSR for Presentation: 
+$$\text{SSR}(\text{Presentation}) = `r round(tab1[1,2],2)` + `r round(tab2[1,2],2)` = `r round(tab1[1,2] + tab2[1,2],2)`$$
+The error term for this test is computed by summing the SS Error values in these tables:
+$$\text{SSE}(\text{Presentation}) = `r round(tab1[3,2],2)` + `r round(tab2[3,2],2)` = `r round(tab1[3,2] + tab2[3,2],2)`$$
+The value of $\text{df}_1$ is the sum of the df terms for the intercept ($\text{df}_1 = 1 + 1 = 2$), and the value of $\text{df}_2$ is the sum of the df terms for the Error ($\text{df}_2 = 57 + 57 = 114)$. So the resulting $F$-statistic is
+$$F = \frac{`r round(tab1[1,2] + tab2[1,2],2)`/2}{`r round(tab1[3,2] + tab2[3,2],2)`/114} = `r round( ((tab1[1,2] + tab2[1,2])/2)/( (tab1[3,2] + tab2[3,2])/114),2)`$$
+The exceedence probability of this value in an $F$-distribution with $\text{df}_1 = 2$ and $\text{df}_2 = 114$ degrees of freedom is $p(F_{2,114} \geq `r round( ((tab1[1,2] + tab2[1,2])/2)/( (tab1[3,2] + tab2[3,2])/114),2)`) < .001$, and hence this omnibus test is significant.
+
+Similarly, for the Version by Presentation interaction, the omnibus test statistic is computed as
+$$F = \frac{(`r round(tab1[2,2],2)` + `r round(tab2[2,2],2)`)/2}{(`r round(tab1[3,2],2)` + `r round(tab2[3,2],2)`)/114} = `r round( ((tab1[2,2] + tab2[2,2])/2)/( (tab1[3,2] + tab2[3,2])/114),2)`$$
+The exceedence probability of this value is $p(F_{2,114} \geq `r round( ((tab1[2,2] + tab2[2,2])/2)/( (tab1[3,2] + tab2[3,2])/114),2)`) = `r pvalue(round(1-pf(((tab1[2,2] + tab2[2,2])/2)/( (tab1[3,2] + tab2[3,2])/114), 2, 114),3))`$, and hence this omnibus test is not significant. However, we know from our earlier analysis of $W_2$ that there is evidence for an interaction between $d_2$ and $c_1$. Looking at specific contrasts can provide more powerful and interesting tests than an omnibus test whether there is _any_ moderation.
+
+The collated results of all analyses are provided in @tbl-cheerleader-rm-anova-collated-results-table. This table is separated in a between-subjects part, and a within-subjects part. Relevant omnibus tests and tests for specific contrasts are provided for each. The final row shows the Total Sum of Squares, which is the sum over the between-subjects and within-subjects Sum of Squares. This shows how the Total Sum of Squares is partitioned in the different (between- and within-subjects) effects. 
+```{r}
+#| label: tbl-cheerleader-rm-anova-collated-results-table
+#| tbl-cap: "Complete results of the 2 (Version: Identical, Variant) by 3 (Presentation: Alone, Different, Similar) ANOVA with repeated-measures on the last factor."
+atab <- rbind(
+  c(NA, sum(tab0[,2]), sum(tab0[,3]), NA, NA),
+  tab0,
+  c(NA, sum(c(tab1[,2],tab2[,2])), sum(c(tab1[,3],tab2[,3])), NA, NA),
+  c(NA, tab1[1,2] + tab2[1,2], 2, ((tab1[1,2] + tab2[1,2])/2)/( (tab1[3,2] + tab2[3,2])/114), 1-pf( ((tab1[1,2] + tab2[1,2])/2)/( (tab1[3,2] + tab2[3,2])/114), 2, 114)),
+  #c(NA, (tab1[3,2] + tab2[3,2]), 114, NA, NA),
+  tab1[c(1,3),],
+  tab2[c(2,3),],
+  c(NA, tab1[2,2] + tab2[2,2], 2, ((tab1[2,2] + tab2[2,2])/2)/( (tab1[3,2] + tab2[3,2])/114), 1-pf( ((tab1[2,2] + tab2[2,2])/2)/( (tab1[3,2] + tab2[3,2])/114), 2, 114)),
+  # c(NA, (tab1[3,2] + tab2[3,2]), 114, NA, NA),
+  tab1[c(2,3),],
+  tab2[c(2,3),],
+  c(NA, (tab1[3,2] + tab2[3,2]), 114, NA, NA),
+  c(NA, sum(c(tab0[,2], tab1[,2], tab2[,2])), sum(c(tab0[,3], tab1[,3], tab2[,3])), NA, NA)
+)
+rownames(atab) <- c("*Between-subjects*", "&nbsp;&nbsp;Intercept", "&nbsp;&nbsp;$c_1$ (Variant vs Identical)", "&nbsp;&nbsp;Error between", "*Within-subjects*", "&nbsp;&nbsp;Presentation", "&nbsp;&nbsp;&nbsp;&nbsp;$d_1$ (D + S vs A)", "&nbsp;&nbsp;&nbsp;&nbsp;Error ($d_1$)", "&nbsp;&nbsp;&nbsp;&nbsp;$d_2$ (D vs S)", "&nbsp;&nbsp;&nbsp;&nbsp;Error ($d_2$)", "&nbsp;&nbsp;Version $\\times$ Presentation", "&nbsp;&nbsp;&nbsp;&nbsp;$c_1 \\times d_1$", "&nbsp;&nbsp;&nbsp;&nbsp;Error ($c_1 \\times d_1$)", "&nbsp;&nbsp;&nbsp;&nbsp;$c_1 \\times d_2$", "&nbsp;&nbsp;&nbsp;&nbsp;Error ($c_1 \\times d_2$)", "&nbsp;&nbsp;Error within", "*Total*")
+colnames(atab) <- c("$\\hat{\\beta}$","$\\text{SS}$", "$\\text{df}$", "$F$",  "$p(\\geq F)$")
+opts <- options()
+options(knitr.kable.NA = "")
+knitr::kable(atab, digits=c(3,2,0,2,3), escape = FALSE, booktabs = TRUE, linesep="")
+options(opts)
+```
+
+A graphical overview of how the variation in $Y$ is partitioned in this analysis is provided in @fig-partitioning-variance-rm-anova-full.
+
+```{tikz}
+%| label: fig-partitioning-variance-rm-anova-full
+%| fig-cap: Partitioning the total Sum of Squares in a 2 by 3 mixed repeated-measures
+%|   ANOVA.
+%| dev-args: !expr list(pointsize = 12)
+%| fig-format: png
+  \usetikzlibrary{arrows}
+	\begin{tikzpicture}
+	\pgfsetxvec{\pgfpoint{2cm}{0cm}}
+	\pgfsetyvec{\pgfpoint{0cm}{2cm}}
+  \tikzstyle{every node}=[minimum size=2cm, text width=8em, text badly centered, minimum height=4em]
+
+  \draw node at (-1,-.5) (SST) {SS Total};
+  \draw node at (-3,-2) (SSB) {SS Between};
+  \draw node at (-4,-3.5) (SSV) {SS Version (V)};
+  \draw node at (-2,-3.5) (SSEB) {SSE Between};
+  \draw node at (2,-2) (SSW) {SS Within};
+  \draw node at (0,-3.5) (SSP) {SS Presentation (P)};
+  \draw node at (-0.5,-4.5) (SSd1) {SS $d_1$};
+  \draw node at (0.5,-4.5) (SSd2) {SS $d_2$};
+  \draw node at (2,-3.5) (SSPV) {SS P $\times$ V};
+  \draw node at (1.5,-4.5) (SSc1d1) {SS $c_1 \times d_1$};
+  \draw node at (2.5,-4.5) (SSc1d2) {SS $c_1 \times d_2$};
+  \draw node at (4,-3.5) (SSE) {SSE Within};
+  \draw node at (3.5,-4.5) (SSEd1) {SSE $d_1$};
+  \draw node at (4.5,-4.5) (SSEd2) {SSE $d_2$};
+
+	\draw[->] (SST) -- (SSB);
+  \draw[->] (SSB) -- (SSV);
+  \draw[->] (SSB) -- (SSEB);
+  \draw[->] (SST) -- (SSW);
+  \draw[->] (SSW) -- (SSP);
+  \draw[->] (SSW) -- (SSPV);
+  \draw[->] (SSW) -- (SSE);
+  \draw[->] (SSP) -- (SSd1);
+  \draw[->] (SSP) -- (SSd2);
+  \draw[->] (SSPV) -- (SSc1d1);
+  \draw[->] (SSPV) -- (SSc1d2);
+  \draw[->] (SSE) -- (SSEd1);
+  \draw[->] (SSE) -- (SSEd2);
+
+	\end{tikzpicture}
+```
+
+<!--
+We could do this for any pair of conditions, but that might result in a large number of tests. A repeated-measures ANOVA allows us to to essentially this within a single analysis.
+
+### Including effects for participants
+
+In a repeated-measures ANOVA, we include Person as another factor in the design, in addition to the Condition factor. As the design includes each combination of Person and Condition, this can be treated as a Person by Item factorial design. We can state an ANOVA model as
+<!--
+\begin{equation}
+Y_{i,j} = \mu + \tau^{(P)}_i + \tau^{(A)}_j + \epsilon_{i,j}
+(\#eq:glm-oneway-RM-ANOVA-model)
+\end{equation}
+But this assumes that the effect of a treatment $j$ is the same for all
+individuals $i$. If we would allow the effect of a treatment to be different
+for participants, that would amount to including an interaction term (the 
+effect of treatment $j$ is moderated by individual $i$). This could be stated as
+
+\begin{equation}
+Y_{i,j} = \mu + \pi_i + \tau_j + (\pi \tau)_{i,j} + \epsilon_{i,j}
+(\#eq:one-RM-ANOVA-model-ch08)
+\end{equation}
+Here, I'm using a somewhat different notation than in @eq-glm-factorial-ANOVA-model. Here, $\pi_i$ stands for the person-effect of participant $i$:
+$$\pi_i = \mu_{i,\cdot} - \mu$$
+and as usual, $\tau_j$ represents the treatment-effect of level $j$ of the experimental factor (Condition):
+$$\tau_j = \mu_{\cdot, j} - \mu$$
+$(\pi \tau)_{i,j}$ reflects the person-by-treatment interaction effect:
+$$(\pi \tau)_{i,j} = \mu_{i,j} - (\mu+\pi_i + \tau_j)$$
+There is one complication, however. We only have a single observation for each combination of person and condition. That means that the average for each combination of person and condition, $\overline{Y}_{i,j} = \hat{\mu}_{i,j}$, which is what the model aims to predict, equals the observation $Y_{i,j}$. As such, the errors of the estimated model would all be equal to $\hat{\epsilon}_{i,j} = 0$. In other words, the model fits the data perfectly!
+
+Although you might think that a perfectly fitting model is ideal (why wouldn't you be happy when a model predicts the data perfectly?), that is far from the case here. Let's consider the number of parameters in the model. If we have $P$ people, and $A$ levels for condition, our model estimates $1 + (P-1) + (A-1) + (P-1)\times(A-1) = P \times A$ parameters, which is equal to the total number of observations: $n = P \times A$. A model with as many parameters as observations is bound to _overfit_ the data.
+
+The model of @eq-one-RM-ANOVA-model-ch08 makes intuitive sense. In practice, however, because there is just one observation for each participant/condition combination, we can not distinguish between the interaction term $\pi\tau_{i,j}$ and the error term $\epsilon_{i,j}$. To make this explicit, we could rewrite the model as
+\begin{equation}
+Y_{i,j} = \mu + \pi_i + \tau_j + (\tau\pi + \epsilon)_{i,j}
+\end{equation}
+This is just notational, and does not resolve anything. A more practical version is the following MODEL G:
+\begin{equation}
+Y_{i,j} = \mu + \pi_i + \tau_j + \epsilon_{i,j}
+\end{equation}
+which is a model that can be estimated by assigning appropriate contrasts to the Item and Participant factors. 
+<!--
+both $\tau_{i,j}$ and $\epsilon_{i,j}$ target the same difference between observation $Y_{i,j}$ and $\mu + \tau^{(P)}_i + \tau^{(A)}_j$. Whilst it is straightforward to compute this difference
+$$Y_{i,j} - (\mu + \tau^{(P)}_i + \tau^{(A)}_j)$$
+we cannot determine which part of this belongs to $\tau^{(P\times A)}_{i,j}$, and which part to $\epsilon_{i,j}$.
+-->
+
+<!-- It's like a pizza,  where some part is yours, and some part belongs to a random stranger. Halves may seem fair, but what if you haven't eaten for days, and perhaps the stranger is starving. Without knowing anything else, it could be just as fair to give on person everything and the other nothing, as splitting in equal halves. The right way to split is, in that case, indeterminate. When two terms in an equation "fight" for the same slice of the pie, that is similar. There is no way to  determine what belongs to what. -->
+
+<!--
+To test for the main effect of Condition, we can compare MODEL G above to a reduced model where we set $\tau_j = 0$ for all $j$. This provides MODEL R:
+\begin{equation}
+Y_{i,j} = \mu + \pi_i + \epsilon_{i,j}
+\end{equation}
+
+```{r}
+#| label: compute-aov-with-item
+dat$Participant <- factor(dat$Participant)
+contrasts(dat$Participant) <- contr.sum(length(unique(dat$Participant)))
+anova(lm(Response ~ Participant, data=dat), lm(Response ~ Participant + Item, data=dat))
+```
+
+Comparing MODEL G to MODEL R provides an appropriate (omnibus) test for the main effect of Condition. [INCLUDE RESULTS] You might wonder if you can or should also test for the main effect of Person. The short answer is: no. The longer answer is that the inability to distinguish between the interaction term $(\pi\tau)_{i,j}$ and the error term $\epsilon_{i,j}$ affects the sampling distribution of the estimates of the person effects $\hat{\pi}_i$ and treatment effects $\hat{\tau}_j$ differently. That is because Person should usually be treated as a __random effect__, whilst an experimental manipulation such as Condition should be treated as a __fixed effect__.
+
+### Random vs fixed effects
+
+Unlike Condition, Person is not really an experimental manipulation. Whilst the levels of Condition (i.e. whether participants viewed a photo by itself, in the context of a group of different faces, or in the context of a group of similar faces) were carefully designed to test a hypothesis of interest, the persons participating in a study are generally sampled from a wider population. We don't want to make claims just about those persons who happened to be available as participants in a study. We want to generalize the results to the wider population. For the levels of Condition, however, we are just interested in claims about these carefully designed levels. We wouldn't pretend that the study would also speak to what would have happened if the face was presented surrounded by photos of a participant's own face, for example. That implies that if we were to replicate the experiment a second or third time, the true effects of Condition would be the same, as we would use exactly the same condition. However, as we would include different participants, the effects of Person would vary from replication to replication. As the Data Generating Process concerns how data varies over repetitions of an experiment or scientific procedure, the status of fixed and random effects is different. Obtaining more observations means we should have better estimates of fixed effects. But by adding other people to an experiment, we cannot obtain a better estimate of how one particular participant differs from the average person. 
+
+Insofar as we want to make any claims about random effects, these would concern the variability of those effects, rather than each specific effect for each person. To make such leaps from sample to population, we need a DGP for person effects. Commonly, we might assume that each person effect is drawn from a Normal distribution:
+$$\pi_i \sim \mathbf{Normal}(0,\sigma_\pi)$$
+Similarly, for the interaction effect, which is also random (as the persons are sample from the population), we might make a similar assumption:
+$$(\pi\tau)_{i,j} \sim \mathbf{Normal}(0,\sigma_{\pi\tau})$$
+For fixed effects, we would not need to make any assumption about their distribution, because we don't need to generalize beyond the specific effects included in the design.
+
+Whilst the variance of the sampling distribution of the estimated treatment effects $\hat{\tau}_j$ depends on both the variance in the interaction term $(\pi\tau)_{i,j}$ and the error term $\epsilon_{i,j}$, whilst the variance of the sampling distribution of the person effects depends only on the variance of the error term $\epsilon_{i,j}$. 
+<!--
+$$\hat{\tau}_j \sim \mathbf{Normal}(\tau_j,\sqrt{\sigma^2_{\pi\tau} + \sigma^2_\epsilon})$$
+$$\hat{\pi}_i \sim \mathbf{Normal}(\pi_i,\sigma_\epsilon)$$
+-->
+
+<!-- 
+Intuitively, you might think of this as follows: whilst the treatment effects may differ between persons (as reflected in the interaction term $(\pi\tau)_{i,j}$), these deviations from the average treatment effects (as reflected in the treatment term $\tau_{j}$) are random, and will cancel each other out.  
+
+<!--
+A set of participants in a study is generally a sample from a (much) larger population of potential participants. Insofar as we are interested in differences between participants (i.e., an effect of P), we are not so much interested in whether there are differences between the actual participants included in the study, but whether there are differences between the people in the whole population. In other words, we would like to infer from variability between participants in a study whether there are differences between people in the population of interest. That means we want to generalize person effects in a particular sample of participants to person effects in the general population. To make such a leap from sample to population, we need a DGP for person effects, and commonly we might assume that each person effect is drawn from a Normal distribution:
+$$\tau_i^{(P)} \sim \mathbf{Normal}(0,\sigma_\text{P})$$
+Our objective here is to estimate the variability between persons, i.e. $\sigma_\text{P}$, and _not_ to estimate each $\tau^{P}_i$ as precisely as possible. 
+
+The generalization problem for fixed effects (experimental manipulations) is different: our objective is to infer from a sample what effect precisely these experimental manipulations will have in the whole population. The objective here is to get the most precise estimation of each $\tau_j^{(A)}$. 
+-->
+
+## Assumptions
+
+The assumptions for the analyses for each composite variable are the same as for any General Linear Model: the errors are assumed to be independent and Normal-distributed, with a mean of 0 and a constant variance. If the model includes between-subjects groups, then this translates in the assumption that within these groups, each composite score is Normal distributed with the same variance, but a possibly different mean. These assumptions are not guaranteed to hold. However, by focusing on separate analyses of composite scores which, by construction, are orthogonal to each other, there is no immediate reason to suspect a violation of the independence assumption.
+
+When performing omnibus tests of main or interaction effects with a within-subjects component, an additional assumption is required: the assumption of sphericity. 
+
+### Omnibus tests and sphericity
+
+Omnibus tests involving within-subjects components were performed by aggregating SSR and SSE terms over different models. This is sensible only insofar as the SSE terms are comparable between the models. If the true variances of the errors are substantially different between the models of the within-subjects composite scores, then aggregating them to perform an omnibus test is like treating apples and oranges as the same fruit. As a result, the $F$-statistic will not follow the assumed $F$-distribution. The omnibus tests are valid when the Data Generating Process is fulfills the requirement of __sphericity__. 
+
+Sphericity means that the variances of all pairwise differences between within-subjects measurements are equal. In our example, there were three within-subjects measurements: the Alone, Different, and Similar attractiveness ratings. As these are ratings by the same person, they are likely to be correlated (the reason for going through the effort in performing a repeated-measures ANOVA). For a more precise definition of sphericity, let's consider the true variance-covariance matrix of these three measures:
+
+$$\Sigma = \left[ \begin{matrix} \sigma_A^2 & \sigma_{A,D} & \sigma_{A,S} \\ \sigma_{D,A} & \sigma_D^2 & \sigma_{D,S} \\ \sigma_{S,A} & \sigma_{S,D} & \sigma_S^2 \end{matrix} \right]$$ 
+Here, $\sigma^2_A$ represents the true variance of the Alone measurement in the DGP, and $\sigma_{A,D}$ the true covariance between the Alone and Different measurement. Note that this matrix is symmetric, as the covariance between the Alone and Different measurement is the same as the covariance between the Different and Alone measurement, i.e. $\sigma_{A,D} = \sigma_{D,A}$. <!--Homogeneity of variance means that
+$$\sigma_A^2 = \sigma_D^2 = \sigma_S^2$$
+For omnibus tests in repeated-measures analyses, an additional assumption is necessary for the covariances, namely that of __sphericity__. This assumption means that the _variances of all pairwise differences are equal_. -->
+The variance of a pairwise difference between e.g. the Alone and Different measures is $\sigma_A^2 + \sigma_D^2 - 2 \sigma_{A,D}$, i.e. the sum of the variances of the two variables, minus twice the covariance. Hence, the assumption of sphericity can be stated as:
+$$\sigma_j^2 + \sigma_k^2 - 2\sigma_{jk} = \sigma_{l}^2 + \sigma_{m}^2 - 2 \sigma_{lm} \quad \quad \text{for all } j,k,l,m$$
+For example, for our three variables, there are 3 pairwise differences, and hence the assumption is 
+
+$$\sigma_A^2 + \sigma_D^2 - 2\sigma_{A,D} = \sigma_{A}^2 + \sigma_{S}^2 - 2 \sigma_{A,S} = \sigma_{D}^2 + \sigma_{S}^2 - 2 \sigma_{D,S}$$
+If that seems like a complicated and stringent assumption: it is! And it is not that easy to check. Moreover, if there are between-subjects groups, then the variance-covariance matrix should be equal for each of those groups as well. Sphericity holds when a more stringent condition, called __compound symmetry__ holds. Compound symmetry means that all variances are identical to each other (i.e. $\sigma_A^2 = \sigma_D^2 = \sigma^2_S = \sigma^2$), and all covariances are identical to each other (i.e. $\sigma_{A,D} = \sigma_{A,S} = \sigma_{D,S} = \sigma_{\cdot,\cdot}$). The variance-covariance can then be stated as
+$$\Sigma = \left[ \begin{matrix} \sigma^2 & \sigma_{\cdot,\cdot} & \sigma_{\cdot,\cdot} \\ \sigma_{\cdot,\cdot} & \sigma^2 & \sigma_{\cdot,\cdot} \\ \sigma_{\cdot,\cdot} & \sigma_{\cdot,\cdot} & \sigma^2 \end{matrix} \right]$$ 
+
+### Correcting for non-sphericity
+
+When the assumption of sphericity does _not_ hold (the assumption is violated) the $F$-statistic still (approximately) follows an $F$ distribution, but with a smaller value for $\text{df}_1$ and $\text{df}_2$ than usual. @greenhouse1959methods showed that the correct degrees of freedom can be stated as $\zeta \times \text{df}_1$ and $\zeta \times \text{df}_2$, where $0 \geq \zeta \geq 1$ is a correction fraction.^[The correction factor is usually denoted by $\epsilon$, but I'm using $\zeta$ ("zeta") as we are already using $\epsilon$ for the error terms.] Whilst the value of $\zeta$ depends on the true (co)variances underlying the data, it's value can be estimated. The estimator proposed by @greenhouse1959methods is known as the Greenhouse-Geisser estimate, and the corrected degrees of freedom using this estimate as the Greenhouse-Geisser correction. @huynh1976estimation showed that, if the true value is close to or higher than $\zeta = 0.75$, the Greenhouse-Geisser correction tends to be too conservative. They suggested a correction which provides an upward-adjusted estimate of $\zeta$, which will increase the power of the tests. The suggestion is thus to use the Huynh-Feldt correction when the Greenhouse-Geisser estimate of $\zeta$ is close to or higher than $\hat{\zeta} = 0.75$.
+
+A statistical test for the assumption of sphericity was developed by @mauchly1940significance and is known as Mauchly's sphericity test. Whilst routinely provided by statistical software, it is not an ideal test, as it rests strongly on the assumption of normality and it commonly has low power. Rather than only correcting the degrees of freedom after a significant Mauchly test, @howell2012statistical suggests to _always_ adjust the degrees of freedom according to the either the Greenhouse-Geisser or Huynh-Feldt correction (whichever is more appropriate given the estimated $\hat{\zeta}$). As sphericity is only required for omnibus tests, another consideration is to avoid these omnibus tests, and only focus on tests for individual within-subjects contrasts [@judd2011data].
+
+```{r}
+#| label: sphericity
+dat <- subset(cheerleader, Excluded == 0) %>%
+  mutate(Item = factor(Item)) %>%
+  mutate(Item = forcats::fct_recode(Item, Different = "Control_Group", Similar = "Distractor_Manipulation"),
+         Task = forcats::fct_recode(Task, Identical = "Identical-Distractors", Variant = "Self-Distractors"))
+cmod <- afex::aov_car(Response ~ Task*Item + Error(Participant/Item), data=dat)
+scmod <- summary(cmod$Anova, multivariate=FALSE)
+```
+
+For the present analysis, the Greenhouse-Geisser estimate is $\hat{\zeta} = `r round(scmod$pval.adjustments[1,1],3)`$. This is very close to 1, and hence there is no strong evidence for a violation of sphericity. In this case, that is supported by a non-significant Mauchly test for sphericity, $W = `r scmod$sphericity.tests[1,1]`$, $p = `r pvalue(round(scmod$sphericity.tests[1,2],3))`$. Whilst there is little need to do this in this case, if we were to apply the Greenhouse-Geisser correction for the omnibus test of presentation, we would compare the value of the $F$-statistic to an $F$-distribution with $\text{df}_1' = \hat{\zeta} \times \text{df}_1 = `r round(scmod$pval.adjustments[1,1],3)` \times 2 = `r round(scmod$pval.adjustments[1,1]*2,3)`$ and $\text{df}_2' = \hat{\zeta} \times \text{df}_2 = `r round(scmod$pval.adjustments[1,1],3)` \times 114 = `r round(scmod$pval.adjustments[1,1]*114,3)`$ degrees of freedom. The exceedence probability is then $p(F_{`r round(scmod$pval.adjustments[1,1]*2,3)`,`r round(scmod$pval.adjustments[1,1]*114,3)`} \geq `r round( ((tab1[1,2] + tab2[1,2])/2)/( (tab1[3,2] + tab2[3,2])/114),2)`) < .001$. The Greenhouse-Geisser corrected test of the Version by Presentation interaction is $p(F_{`r round(scmod$pval.adjustments[1,1]*2,3)`,`r round(scmod$pval.adjustments[1,1]*114,3)`} \geq `r round( ((tab1[2,2] + tab2[2,2])/2)/( (tab1[3,2] + tab2[3,2])/114),2)`) = `r pvalue(round(1-pf(((tab1[2,2] + tab2[2,2])/2)/( (tab1[3,2] + tab2[3,2])/114), scmod$pval.adjustments[1,1]*2, scmod$pval.adjustments[1,1]*114),3))`$. As the correction is only minor, neither test result is changed much.
+
+<!-- ## Effect size -->
+<!-- 
+## Mixed ANOVA with between and within factors
+
+\begin{equation}
+Y_{i,j,k} = \mu + \tau^{(P)}_i + \tau^{(A)}_j + \tau^{(B)}_k + \tau^{(P \times A)}_{i,j} + \tau^{(P \times B)}_{i,k} + \tau^{(A \times B)}_{j,k} + \epsilon_{i,j,k}
+(\#eq:glm-mixed-RM-ANOVA-model)
+\end{equation}
+Note that we are excluding the three-way interaction term $\tau^{(P \times A \times B)}_{i,j,k}$ as again, this can not be distinguished from the error term $\epsilon_{i,j,k}$.
+-->
+
+## In practice
+
+Performing a repeated-measures ANOVA is, as you may have noticed, a somewhat laborious affair. It is therefore usually left to statistical software to conduct the various model comparisons. The steps are mostly similar to that of a factorial ANOVA:
+
+1. Explore the data. For each repeated measure, check the distribution of the scores within each between-subjects condition. Are there outlying or otherwise "strange" observations? If so, you may consider removing these from the dataset. Note that as repeated-measures ANOVA requires complete data for each participant, this implies that you would remove all data from a participant with outlying data.
+
+2. Define a useful set of contrast codes for the main effects of the within-subjects factors, and any between-subjects factors. Aim for these codes to represent the most important comparisons between the levels of the experimental factors. Then, separately for the within- and between-subjects factors, compute the interaction contrasts as (pairwise, threeway, fourway, ...) products of the main-effects contrasts. Compute within-subjects composite scores for all within-subjects effects. Then, for each composite score, estimate a linear model with the relevant contrast-coded predictors for the between-subjects effects. For each of these models, check again for potential issues in the assumptions with e.g. histograms for the residuals and QQ-plots. If there are clear outliers in the data, remove these, and then re-estimate the models.
+
+3. If you want to compute omnibus tests, check whether the assumption of sphericity is likely to hold. This is best assessed through the Greenhouse-Geisser estimate of the correction factor (which was denoted as $\hat{\zeta}$ here, but most software will refer to this as $\hat{\epsilon}$). If the estimate is far from 1, then the sphericity assumption is likely violated. If the estimate is $\hat{\zeta} \geq .75$, consider using a Huynh-Feldt correction, rather than Greenhouse-Geisser correction. 
+
+4. If the contrasts do not encode all the comparisons you wish to make, perform follow-up tests with other contrasts. If there are many of these tests, consider correcting for this by using e.g. a Scheffe-adjusted critical value. 
+
+5. Interpret and report the results. When reporting the results, make sure that you include all relevant statistics. For example, one way to write the results of the analysis of @tbl-cheerleader-rm-anova-collated-results-table, is as follows:
+
+> Attractiveness ratings were analysed with a 2 (Version: Identical, Variant) by 3 (Presentation: Alone, Different, Similar) ANOVA, with repeated-measures on the last factor. A Greenhouse-Geisser correction was applied to the degrees of freedom, to correct for any potential problems of non-sphericity. The analysis showed a significant effect of Presentation, `r papaja::apa_print(scmod, mse=FALSE, es="pes")$full_result$Item`. Contrast analysis showed that attractiveness ratings were higher in the Different and Similar conditions compared to the Alone conditions, `r papaja::apa_print(lm(W1 ~ X, data=wdat))$full_result$Intercept`. The contrast between the Different and Similar conditions was not significant, `r papaja::apa_print(lm(W2 ~ X, data=wdat))$full_result$Intercept`. Whilst the omnibus test for the interaction between Version and Presentation was not significant, `r papaja::apa_print(scmod, mse=FALSE, es="pes")$full_result$Task_Item`, contrast analysis indicates that the difference between the Different and Similar conditions varied between the two Versions, `r papaja::apa_print(lm(W2 ~ X, data=wdat))$full_result$X`. When the Similar condition corresponded to a group of identical photos, the attractiveness ratings were `r round(sum(coefficients(lm(W2 ~ X, data=wdat))*c(1,-.5)),3)` points higher in the Different compared to the Similar condition. This difference was only `r round(sum(coefficients(lm(W2 ~ X, data=wdat))*c(1,.5)),3)` when the Similar condition corresponded to a group of different photos of the same individual. The analysis showed no further significant results. 
+
+<!-- 
+### Defining and estimating the model
+
+### Assessing the assumptions
+
+### Reporting the results
+
+## Summary
+
+-->
+
+
+
