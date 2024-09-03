@@ -68,7 +68,8 @@ codes <- cbind(c(-1/2,-1/2,1/2,1/2),
 
 Estimating a linear regression model with the corresponding contrast-coded predictors gives the results provided in @tbl-expBelief-oneway-ANOVA-results.
 ```{r}
-#| label: expBelief-oneway-ANOVA-results
+#| label: tbl-expBelief-oneway-ANOVA-results
+#| tbl-cap: "Linear model predicting $\\texttt{ApproachAdvantage}$ by three orthogonal contrast-coded predictors."
 contrasts(dat$condition) <- codes
 modg <- lm(ApproachAdvantage ~ condition, data=dat)
 opts <- options()
@@ -76,7 +77,7 @@ options(knitr.kable.NA = "")
 tab <- cbind(estimate = c(coefficients(modg)[1],NA,coefficients(modg)[2:4],Error=NA),rbind(car::Anova(modg, type=3)[1:2,],expand_Anova(modg, type=3)[-1,]))
 rownames(tab) <- c("Intercept","Condition","$\\quad X_1$","$\\quad X_2$", "$\\quad X_3$", "Error")
 colnames(tab) <- c("$\\hat{\\beta}$","$\\text{SS}$", "$\\text{df}$", "$F$", "$p(\\geq \\lvert F \\rvert)$")
-knitr::kable(tab, caption = "Linear model predicting $\\texttt{ApproachAdvantage}$ by three orthogonal contrast-coded predictors.", escape = FALSE, digits=3, booktabs=TRUE, linesep="")
+knitr::kable(tab, escape = FALSE, digits=3, booktabs=TRUE, linesep="")
 options(opts)
 ```
 The estimate of the intercept is positive and differs significantly from 0. Remember that in a model with sum-to-zero contrasts, the intercept reflects the grand mean (average of group means). Thus, we can conclude that, on average, participants were quicker in making approach than in making avoid responses. The scale of the dependent variable ($\texttt{ApproachAdvantage}$) is in milliseconds, so approach responses were on average `r format(coefficients(modg)[1],digits=3)` milliseconds faster than avoid responses. The omnibus test of Condition is significant, indicating that the mean of at least one condition differs from that of another. Each individual contrast represents the difference between one combination of two conditions and another combination of two conditions. Only the effect of $X_2$ (the predictor corresponding to contrast $c_2$) is significant. This indicates that when the experimenter believed a participant was in the high-power condition, the average `ApproachAdvantage` score was `r format(coefficients(modg)[3],digits=3)` milliseconds larger than when the experimenter believed a participant was in the low-power condition. Interestingly, the effect of $X_1$, the contrast-coded predictor corresponding to $c_1$ is _not_ significant. Hence, we can _not_ reject the null hypothesis that the difference in approach advantage between the high-power and low-power primes is 0. We have thus not found evidence for the social-priming hypothesis. The results are in line however with the experimenter-belief hypothesis.
@@ -97,7 +98,8 @@ Before showing you that this is actually the case, let's consider what we might 
 
 The results of estimating a model with this alternative version of the third contrast code (keeping the others the same) is given in @tbl-expBelief-factorial-ANOVA-results. In the table, I have given the predictors more informative labels: $X_1$ becomes $\texttt{P}$ (for the main effect of Prime), $X_2$ becomes $\texttt{B}$ (for the main effect of experimenter Belief), and $X_3'$ becomes $\texttt{P} \times \texttt{B}$ (for the interaction between Prime and Belief). I have also omitted the omnibus test for Condition. In a factorial ANOVA, main effects and interaction effects can be omnibus tests themselves (we will see an example of this later). Besides these stylistic changes, the only real difference in these new results is the estimate of the slope of $\texttt{P} \times \texttt{B}$, which is twice the value of the corresponding slope of $X_3$ in @tbl-expBelief-oneway-ANOVA-results. 
 ```{r}
-#| label: expBelief-factorial-ANOVA-results
+#| label: tbl-expBelief-factorial-ANOVA-results
+#| tbl-cap: "Linear model predicting $\\texttt{ApproachAdvantage}$ by factorial contrast-coded predictors"
 codes <- cbind(c(-1/2,-1/2,1/2,1/2),
                c(-1/2,1/2,-1/2,1/2),
                c(1/4,-1/4,-1/4,1/4))
@@ -111,7 +113,7 @@ options(knitr.kable.NA = "")
 tab <- cbind(estimate = c(coefficients(modg)[1],coefficients(modg)[2:4],Error=NA),rbind(car::Anova(modg, type=3)[1,],expand_Anova(modg, type=3)[-1,]))
 rownames(tab) <- c("Intercept","$\\texttt{P}$","$\\texttt{B}$", "$\\texttt{P} \\times \\texttt{B}$", "Error")
 colnames(tab) <- c("$\\hat{\\beta}$","$\\text{SS}$", "$\\text{df}$", "$F$", "$p(\\geq \\lvert F \\rvert)$")
-knitr::kable(tab, caption = "Linear model predicting $\\texttt{ApproachAdvantage}$ by factorial contrast-coded predictors.", escape = FALSE, digits=3, booktabs=TRUE, linesep="")
+knitr::kable(tab, escape = FALSE, digits=3, booktabs=TRUE, linesep="")
 options(opts)
 ```
 
@@ -151,7 +153,8 @@ Treating experimenter as another factor, we now have a 2 (Prime: low power vs hi
 
 The full set of 15 contrast codes, with values for all 16 conditions, is given in the (rather large) @tbl-expBelief-threeway-ANOVA-codes.
 ```{r}
-#| label: expBelief-threeway-ANOVA-codes
+#| label: tbl-expBelief-threeway-ANOVA-codes
+#| tbl-cap: "A set of 15 orthogonal contrast codes for the Experimenter Belief study"
 tab <- data.frame(c1 = rep(c("$-\\tfrac{1}{2}$","$-\\tfrac{1}{2}$","$\\tfrac{1}{2}$","$\\tfrac{1}{2}$"),each=4),
                   c2 = rep(c("$-\\tfrac{1}{2}$","$\\tfrac{1}{2}$","$-\\tfrac{1}{2}$","$\\tfrac{1}{2}$"),each=4),
                   c3 = c("$-\\tfrac{1}{2}$","$\\tfrac{1}{2}$","$0$","$0$"),
@@ -172,7 +175,7 @@ tab$c15 <- sapply(paste(tab$c1,tab$c12, sep="$\\times$"),gsub,pattern="$$\\times
 colnames(tab) <- c("$\\texttt{P}$","$\\texttt{B}$","$\\texttt{E}_1$", "$\\texttt{E}_2$", "$\\texttt{E}_3$", "$\\texttt{P} \\times \\texttt{B}$", "$\\texttt{P} \\times \\texttt{E}_1$", "$\\texttt{P} \\times \\texttt{E}_2$", "$\\texttt{P} \\times \\texttt{E}_3$", "$\\texttt{B} \\times \\texttt{E}_1$", "$\\texttt{B} \\times \\texttt{E}_2$", "$\\texttt{B} \\times \\texttt{E}_3$", "$\\texttt{P} \\times \\texttt{B} \\times \\texttt{E}_1$", "$\\texttt{P} \\times \\texttt{B} \\times \\texttt{E}_2$", "$\\texttt{P} \\times \\texttt{B} \\times \\texttt{E}_3$")
 rownames(tab) <- paste(rep(c("PL,EL","PL,EH", "PH,EL", "PH,EH"),each=4), c("E1","E2","E3","E4"), sep=",")
 library(kableExtra)
-knitr::kable(tab, escape=FALSE,align=rep('r', 3), caption="A set of 15 orthogonal contrast codes for the Experimenter Belief study.", booktabs=TRUE, longtable = TRUE, linesep="") %>% kable_styling() %>%
+knitr::kable(tab, escape=FALSE,align=rep('r', 3), booktabs=TRUE, longtable = TRUE, linesep="") %>% kable_styling() %>%
   scroll_box(width = "100%", box_css = "border: 0px;")
 
 # means <- means$mean

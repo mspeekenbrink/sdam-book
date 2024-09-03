@@ -25,7 +25,7 @@ i.e. the distribution of $\epsilon_i$, conditional upon knowing the value of the
 When might such independence _not_ hold? Let's for the moment go back to the simplest version of the GLM, the model with just an intercept that was the focus of Chapter @sec-ch-simple-GLM:
 $$
 Y_i = \beta_0 + \epsilon_i
-$$ {#eq:simple-glm-ch09}
+$$ {#eq-simple-glm-ch09}
 Suppose $Y$ are again judgements of the height of Mount Everest, but that one of the labs in the ManyLabs study that collected the data, was based in Nepal. We might expect participants in Nepal to have a more accurate idea of the height of Mount Everest than participants in Poland (the country the participants were from in the subset of the data we considered in Chapter @sec-ch-simple-GLM). As a result, participants in Nepal would likely be less influenced by the low anchor than those with less knowledge of Mount Everest. If $\beta_0$ represents the mean judgement over all participants, then participants in Nepal would generally provide judgements which are higher than $\beta_0$ (i.e positive errors), whilst participants in Poland would generally provide judgements that are lower than $\beta_0$ (i.e. negative errors). If our model does not account for such grouping in the data, then the errors for cases from Nepal would be correlated, because all would tend to be positive. Similarly, the errors for cases from Poland would also be correlated, as all would tend to be negative. What this example points to is that the simple model does not account for the fact that participants from different countries might have a different average judgement. As such, the model is misspecified. We could of course alleviate this problem by including an effect for country, using a contrast-coded predictor $X_1$ to reflect the difference between participants from Nepal ($X_1 = \tfrac{1}{2}$) and Poland ($X_1 = -\tfrac{1}{2}$) in an expanded model
 $$Y_i = \beta_0 + \beta_1 \times X_{1,i} + \epsilon_i$$
 This model would allow for a different mean judgement for cases from Nepal ($\beta_0 + \tfrac{1}{2} \times \beta_1$) and cases from Poland ($\beta_0 - \tfrac{1}{2} \times \beta_1$). Doing so for all labs in the data quickly becomes cumbersome, however. In this study, there were `r library(sdamr); data("anchoring"); length(unique(anchoring$referrer))` labs involved, meaning we would need `r length(unique(anchoring$referrer)) - 1` contrast-coded predictors to reflect possible differences between them. Moreover, differences between the labs are not of primary interest here. The question we posed in Chapter @sec-ch-simple-GLM was whether people in general would, on average, give an accurate judgement of the hight of Mount Everest, not whether the country they reside in influences this.  Thus, country, if it has an effect, can be seen as a _nuisance effect_, something we have to consider for a valid model, but we would otherwise rather ignore. __Linear mixed-effects models__ allow you to solve this conundrum gracefully, providing a way for effects to differ between groupings in the data, without dramatically increasing the number of to-be-estimated parameters. They do so by treating such effects as random, rather than fixed, effects. The model then focuses on estimating the distribution of these random effects, rather than estimating each separately.
@@ -37,7 +37,7 @@ You can expect violations of the _iid_ assumption if data are collected from uni
 We will now define a model which allows for each grouping (e.g., lab) in the data to have a different mean. To help define the model, let $Y_{i,j}$ denote the judgement of the height of Mount Everest for participant $i = 1,\ldots,n_j$ in grouping (lab) $j = 1, \ldots, n_g$. The double subscript is solely to distinguish between participants and groupings. We still consider a single dependent variable $Y$. We will allow each group $j$ to have a different mean judgement. The first step to do so is to rewrite the simple model of @eq-simple-glm-ch09 as
 $$
 Y_{i,j} = \beta_{0,j} + \epsilon_{i,j} \quad \quad \quad  \epsilon_{i,j} \sim \mathbf{Normal}(0,\sigma_{\epsilon})
-$$ {#eq:random-intercept-model-level-1}
+$$ {#eq-random-intercept-model-level-1}
 For each observation $Y_{i,j}$, we thus assume the intercept $\beta_{0,j}$ which is different for each group $j$. In other respects, the model is exactly the same as the one of Equation @eq-simple-glm-ch09, and observations can deviate from the intercept (which represents the mean in group $j$) through the error term $\epsilon_{i,j}$, which is assumed Normal-distributed with a mean of 0 and constant (homogeneous) standard deviation $\sigma_\epsilon$. Whilst the model effectively states that the structural part $\beta_{0,j}$ is different for each grouping level $j$, the groupings are linked because they share the same distribution for the error term. 
 
 The second step is to define a model for the grouping-dependent intercepts:
@@ -406,13 +406,14 @@ The results for the fixed effects of the model, where $\texttt{attr}$ and $\text
 
 
 ```{r}
-#| label: cross-mixed-fixed-results-table
+#| label: tbl-cross-mixed-fixed-results-table
+#| tbl-cap: "Estimates and tests (Kenward-Roger approximation) for the fixed-effects of a model with crossed random Person and Item effects."
 #| cache: true
 #| message: false
 
 tab_fix <- cbind(summary(modai$full_model)$coefficients[,1],modai$anova_table)
 rownames(tab_fix) <- c("Intercept","$\\texttt{attr}$", "$\\texttt{intel}$", "$\\texttt{attr}\\times\\texttt{intel}$")
-knitr::kable(tab_fix, col.names = c("$\\hat{\\beta}$", "$\\text{df}_1$", "$\\text{df}_2$", "$F$", "$p(\\geq F)$"), booktabs=TRUE, digits=c(3,0,2,2,3), caption="Estimates and tests (Kenward-Roger approximation) for the fixed-effects of a model with crossed random Person and Item effects.")
+knitr::kable(tab_fix, col.names = c("$\\hat{\\beta}$", "$\\text{df}_1$", "$\\text{df}_2$", "$F$", "$p(\\geq F)$"), booktabs=TRUE, digits=c(3,0,2,2,3))
 
 #data("speeddate")
 #dat <- speeddate

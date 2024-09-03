@@ -123,8 +123,10 @@ data.frame(model=rep(c("MODEL 1","MODEL 2"),each=3*100),type=rep(c("prior","like
 
 We can write the posterior distribution for the parameter $\theta$, conditional upon observed data $Y$ (e.g., $Y=12$ out of $n=14$ correct predictions) as:
 $$
+\begin{aligned}
 p(\theta|Y) &= \frac{p(Y|\theta) \times p(\theta)}{P(Y)} \\
 &= \frac{p(Y|\theta)}{p(Y)} \times p(\theta)
+\end{aligned}
 $$ {#eq-posterior-parameter-specification}
 Here, $p(Y|\theta)$ is the likelihood function (the probability of the observed data $Y$ given a particular value of $\theta$), $p(\theta)$ is the prior distribution of the parameter $\theta$, and $p(Y)$ is the probability of the data over all possible values of $\theta$ (weighted by their prior probability). This is also called the __marginal likelihood__, and technically is defined as
 $$p(Y) = \int p(Y|\theta) p(\theta) d \theta$$
@@ -151,26 +153,25 @@ Not only can we use each sampled parameter value $\tilde{\theta}_j$ to sample a 
 
 ```{r}
 #| label: fig-prior-predictive-samples-binomial-bayesian-models
+#| fig-cap: "Number of correct predictions (out of 14) for 1000 simulations from both
+#|   Bayesian models of @fig-prior-distributions-Paul."
 #| fig-width: 6
 #| fig-height: 3.5
-#| fig-cap: Number of correct predictions (out of 14) for 1000 simulations from both
-#|   Bayesian models of @fig-prior-distributions-Paul.
-#| fig-show: hold
 set.seed(91237898)
 tdat <- rbind(
   data.frame(model = "MODEL 1", theta = rbeta(1000,1,1)),
   data.frame(model = "MODEL 2", theta = rbeta(1000,12,2))
 ) %>% mutate(likelihood=dbinom(12,14,prob=theta))
 tdat$Y = rbinom(2000,size=14,prob=tdat$theta)
-tdat %>%
-  ggplot(aes(x=theta)) + geom_histogram(colour="black", binwidth=.025) + facet_wrap(~model) + ggtitle("Prior samples") + xlab(expression(theta))
 
-tdat %>%
-  ggplot(aes(x=Y)) + geom_histogram(colour="black", binwidth=1) + facet_wrap(~model) + ggtitle("Prior predictive samples")
-
-tdat %>%
-  ggplot(aes(x=likelihood)) + geom_histogram(colour="black", binwidth=.01) + facet_wrap(~model) + ggtitle("Sampled likelihood") + xlab("Likelihood (k=12, n=14)")
-
+gridExtra::grid.arrange(
+  tdat %>%
+    ggplot(aes(x=theta)) + geom_histogram(colour="black", binwidth=.025) + facet_wrap(~model) + ggtitle("Prior samples") + xlab(expression(theta)),
+  tdat %>%
+    ggplot(aes(x=Y)) + geom_histogram(colour="black", binwidth=1) + facet_wrap(~model) + ggtitle("Prior predictive samples"),
+  tdat %>%
+    ggplot(aes(x=likelihood)) + geom_histogram(colour="black", binwidth=.01) + facet_wrap(~model) + ggtitle("Sampled likelihood") + xlab("Likelihood (k=12, n=14)"),
+  ncol=3)
 ```
 
 You can see that the prior predictive distribution looks quite similar in shape to the prior distribution, which is because for this model, there is a close link between the probability of a correct prediction ($\theta$), and the total number of correct predictions ($Y$). You can also see that the likelihood value is relatively low for many sampled parameters from MODEL 1. That is because there are many relatively low sampled values $\tilde{\theta}$ in MODEL 1, for which the likelihood of 12 out of 14 correct predictions, $p(Y=12|n=14, \theta = \tilde{\theta})$ is low. Model 2 does better in accounting for the observed data, with generally higher likelihood values for the sampled parameters. This better fit to the observed data can also be seen in the prior predictive distribution of MODEL 2, where 12 correct predictions is a common occurrence. In MODEL 1, all numbers of correct predictions are sampled roughly equally often.
@@ -258,7 +259,7 @@ In all cases, it is a good idea to check the sensibility of the prior distributi
 As a final example of a Bayesian analysis, we will revisit the data analysed in Chapter @sec-ch-multiple-regression, predicting votes for Trump as a function of the number of hate groups and education level.
 
 Our model is like a usual regression model:
-$$\texttt{trump_votes}_i = \beta_0 + \beta_1 \times \texttt{hate_groups}_i + \beta_2 \times \texttt{education}_i + \epsilon_i \quad \quad \epsilon_i \sim \mathbf{Normal}(0,\sigma_\epsilon)$$
+$$\texttt{trump\_votes}_i = \beta_0 + \beta_1 \times \texttt{hate\_groups}_i + \beta_2 \times \texttt{education}_i + \epsilon_i \quad \quad \epsilon_i \sim \mathbf{Normal}(0,\sigma_\epsilon)$$
 The regression model above defines the likelihood. For a Bayesian analysis, we need to set priors for all parameters. We use the following prior distributions:
 $$\begin{aligned} \beta_0 &\sim \mathbf{Normal}(0, 100) \\
 \beta_1  &\sim \mathbf{Normal}(0, 5) \\
@@ -345,11 +346,13 @@ mod2 <- brms::brm(formula = percent_Trump_votes ~ hate_groups_per_million + perc
 
 To get an idea of how much the parameter estimates are affected, we also present results from a model where we use the following prior distributions:
 
-$$\begin{aligned} \beta_0 &\sim \mathbf{Normal}(0, 1) \\
+$$
+\begin{aligned} \beta_0 &\sim \mathbf{Normal}(0, 1) \\
 \beta_1  &\sim \mathbf{Normal}(0, 1) \\
 \beta_2  &\sim \mathbf{Normal}(0, 1) \\
 \sigma_\epsilon  &\sim \mathbf{half-Normal}(0, 1) \\
-\end{aligned}$$
+\end{aligned}
+$$
 
 Note that the standard deviations are much smaller than before. These prior distributions will constrain the parameters to be closer to 0, as very large values are very unlikely in these distributions.
 

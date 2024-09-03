@@ -174,10 +174,9 @@ knitr::kable(tab, booktabs=TRUE, linesep="", align="r")
 <!-- The first contrast code reflects the expectation that a face in a group (Different or Similar) will be rated as more attractive than faces in the Alone condition. The second contrast reflects the expectation that a face surrounded by different faces will be rated as more attractive than when surrounded by more similar faces.-->
 
 For each within-subjects contrast $d_j$, we compute a within-subjects composite score as:
-\begin{equation}
+$$
 W_{j,i} = \frac{\sum_{k=1}^g d_{j,k} Y_{i,k}}{\sqrt{\sum_{k=1}^g d_{j,k}^2}}
-(\#eq:within-subjects-composite-scores-ch08)
-\end{equation}
+$$ {#eq-within-subjects-composite-scores-ch08}
 The top part of this equation (the numerator) is just the sum of a participant $i$'s score in each condition $k$ multiplied by the corresponding value of contrast code $d_j$. The bottom part (the denominator) is a scaling factor, computed as the square-root of the sum of the squared contrast values. The reason for applying this scaling factor is to make the sums of squares of the resulting analyses add up to the total sum of squares (i.e. the Sum of Squared Error of an intercept-only model). Otherwise, it is not of theoretical importance. 
 
 As an example, let's compute the within-subjects composite scores for participant 36 in @tbl-cheerleader-self-attractiveness-table. For contrast $d_1$, we compute

@@ -16,8 +16,7 @@ In this chapter, and the next, we will consider how to account for the relations
 
 Path models were introduced by @wright1920relative, who used regression equations to define direct and indirect effects of observed variables onto others in population genetics, and applied causal interpretations to these effects. @fig-wright-path-model-image shows one of the first illustrations of a path model by Sewell Wright, to depict genetic relations between generations of guinea pigs.
 
-|[Graphical representation of a path model by Sewell Wright. Source: [OpenMx
-#|   ](https://openmx.ssri.psu.edu/sites/default/files/Wright20aFigure5_1.jpg)](https://openmx.ssri.psu.edu/sites/default/files/Wright20aFigure5_1.jpg){#fig-wright-path-model-image}
+|[Graphical representation of a path model by Sewell Wright. Source: [OpenMx](https://openmx.ssri.psu.edu/sites/default/files/Wright20aFigure5_1.jpg)](https://openmx.ssri.psu.edu/sites/default/files/Wright20aFigure5_1.jpg){#fig-wright-path-model-image}
 
 ```{r}
 #| label: wright-path-model-image
@@ -147,7 +146,8 @@ semPaths(spmmod, layout="tree", sizeMan=7, sizeInt = 4, style="ram", residuals=T
 Graphical depictions of SEM models, such as @fig-SEM-multiple-regression-speeddate-plot, contain a wealth of information about the assumed relations between the variables and the estimated parameters. However, sometimes we need more precise information, as well as parameter tests, which can be provided in a table such as @tbl-sem-table-multiple-regression-speeddate. This table lists all the parameters of the path model in order (regression slopes, intercepts, residual variances, residual covariances). For estimated parameters, the table also shows the standard error of the estimate, and the results of Wald tests of the null-hypothesis that the parameter equals 0. For fixed parameters, only the value of the parameter is shown. Fixed parameters can be computed, rather than estimated, and hence they do not have a standard error. The final part of the table contains so-called *fit indices*. We will discuss these later on.
 
 ```{r}
-#| results: asis
+#| label: tbl-sem-table-multiple-regression-speeddate
+#| tbl-cap: "Results of a SEM analysis of a multiple regression model"
 
 # if(knitr::is_html_output()) {
 #   cat("<table><caption>(\\#tab:sem-table-multiple-regression-speeddate) Results of a SEM analysis of a multiple regression model.</caption>")
@@ -157,9 +157,10 @@ Graphical depictions of SEM models, such as @fig-SEM-multiple-regression-speedda
 #   semTable::semTable(fregmod, type="latex", table.float = TRUE, caption = "(\\#tab:sem-table-multiple-regression-speeddate) Results of a SEM analysis of a multiple regression model.", fits = c("chisq", "nfi", "tli", "srmr", "rmsea"))
 # }
 
-semoutput::sem_tables(fregmod)
+semoutput::sem_paths(fregmod) |> 
+  gt::cols_hide(stars)
 
-cat(": Results of a SEM analysis of a multiple regression model {tbl-sem-table-multiple-regression-speeddate}")
+# cat(": Results of a SEM analysis of a multiple regression model {tbl-sem-table-multiple-regression-speeddate}")
 ```
 
 @tbl-sem-table-multiple-regression-speeddate indicates that all the exogenous variables have a significant and positive effect on the endogenous variable. The intercept of the endogenous variable is also significant, which indicates that the mean of the endogenous variable can not be predicted accurately from the means of the exogenous variables. The residual variance indicates that not all the variation in the endogenous variable is accounted for by the causal relation with the exogenous variables. The residual covariances account for multi-collinearity between the predictors. Unlike a standard multiple regression model, this path model accounts for the covariation between all the (independent and dependent) variables in the model. 
@@ -522,7 +523,7 @@ With these technical details behind us, we can finally assess the fit of the thr
 options(knitr.kable.NA = '')
 myFitTab <- function(mod) {
   fm <- fitmeasures(mod)
-  tab <- data.frame(c("$\\hat{\\chi}^2$","baseline $\\hat{\\chi}^2$", "CFI", "SRMR", "RMSEA", "AIC", "BIC"),
+  tab <- data.frame(c("$\hat{\chi}^2$","baseline $\hat{\chi}^2$", "CFI", "SRMR", "RMSEA", "AIC", "BIC"),
         fm[c("chisq", "baseline.chisq", "cfi", "srmr", "rmsea", "aic", "bic")],
         fm[c("df","baseline.df", NA, NA, NA, NA, NA)],
         fm[c("pvalue","baseline.pvalue", NA, NA, NA, NA, NA)],
@@ -578,7 +579,9 @@ semPaths(spmmod, layout="tree2", sizeMan=7, sizeInt = 5, style="ram", intercepts
 Perhaps surprisingly, apart from the effect of age on legacy and income, all the paths in the model were significant. @tbl-sem-path-mod-complex-results shows the results in more detail. Unfortunately, the model fit indices indicate that this model does not provide a satisfactory account of all the relations in the data. 
 
 ```{r}
-#| results: asis
+#| label: tbl-sem-path-mod-complex-results
+#| tbl-cap: "Results of a SEM analysis of a multiple regression model"
+#| 
 # if(knitr::is_html_output()) {
 #   cat("<table><caption>(\\#tab:sem-path-mod-complex-results)Results of an initial full path model for the legacy motive data. Only results for regression parameters and selected model fit indices are included.</caption>")
 #   semTable::semTable(fmod_complex, type="html", paramSets = c("slopes","fits"), fits = c("chisq", "cfi", "srmr", "rmsea","aic", "bic"))
@@ -587,9 +590,10 @@ Perhaps surprisingly, apart from the effect of age on legacy and income, all the
 #   semTable::semTable(fmod_complex, type="latex", table.float = TRUE, fits = c("chisq", "cfi", "srmr", "rmsea","aic", "bic"), caption = "(\\#ttab:tab:sem_path_mod_complex_results) Results of an initial full path model for the legacy motive data.")
 # }
 
-semoutput::sem_tables(fmod_complex)
+semoutput::sem_paths(fmod_complex) |> 
+  gt::cols_hide(stars)
 
-cat(": Results of a SEM analysis of a multiple regression model {tbl-sem-path-mod-complex-results}")
+# cat(": Results of a SEM analysis of a multiple regression model {tbl-sem-path-mod-complex-results}")
 ```
 
 @tbl-complex-path-legacy-motive-mi shows the modification indices for fixed-to-zero parameters in this model, ordered by magnitude and ignoring parameters for which the modification index is smaller than 2. 
@@ -631,7 +635,8 @@ Clearly, the model in @fig-complex-path-legacy-motive-2 is based on post-hoc inf
 @tbl-sem-path-mod-complex-results2 provides more detailed results. These results show that all regression coefficients of the paths included in the model are significant. Moreover, the overall model test is not significant, indicating good fit. This conclusion is also supported by satisfactory values for the SRMR and RSMEA, and CFI.
 
 ```{r}
-#| results: asis
+#| label: tbl-sem-path-mod-complex-results2
+#| tbl-cap: "Results of a second full path model for the legacy motive data. Only results for regression parameters and selected model fit indices are included"
 
 # if(knitr::is_html_output()) {
 #   cat("<table><caption>(\\#tab:sem-path-mod-complex-results2) Results of a second full path model for the legacy motive data. Only results for regression parameters and selected model fit indices are included.</caption>")
@@ -641,9 +646,10 @@ Clearly, the model in @fig-complex-path-legacy-motive-2 is based on post-hoc inf
 #   semTable::semTable(fmod_complex2, type="latex", table.float = TRUE, fits = c("chisq", "cfi", "srmr", "rmsea","aic", "bic"), caption = "(\\#ttab:tab:sem_path_mod_complex_results2) Results of a second full path model for the legacy motive data.")
 # }
 
-semoutput::sem_tables(fmod_complex2)
+semoutput::sem_paths(fmod_complex2) |> 
+  gt::cols_hide(stars)
 
-cat(": Results of a second full path model for the legacy motive data. Only results for regression parameters and selected model fit indices are included {tbl-sem-path-mod-complex-results2}")
+#cat(": Results of a second full path model for the legacy motive data. Only results for regression parameters and selected model fit indices are included {tbl-sem-path-mod-complex-results2}")
 ```
 
 ## Principles in constructing path models

@@ -1,0 +1,118 @@
+project:
+  type: book
+  output-dir: _book
+  pre-render: run_before.R
+
+book:
+  title: "Statistics: Data analysis and modelling"
+  author:
+    - name: Maarten Speekenbrink
+    - orcid: 0000-0003-3221-1091
+  # date: "`r Sys.Date()`"
+  date: last-modified
+  repo-url: https://github.com/mspeekenbrink/sdam-book
+  repo-actions: [source, issue]
+  downloads: [pdf]
+  sidebar:
+    style: "docked"
+  chapters: 
+    - index.qmd
+    - part: "Foundations"
+      chapters: 
+        - 01-intro.qmd
+        - 02-modelling.qmd
+    - part: "The General Linear Model"
+      chapters:
+        - 03-GLM-simple.qmd
+        - 04-GLM-regression.qmd
+        - 05-GLM-multiple-regression.qmd
+        - 06-GLM-moderation.qmd
+        - 07-ANOVA.qmd
+        - 08-factorial-ANOVA.qmd
+        - 09-ANCOVA.qmd
+        - 10-RM-ANOVA.qmd
+    - part: "Extending the GLM"
+      chapters:
+       - 11-LMER.qmd
+       - 12-genLM.qmd
+    - part: "Multivariate models"
+      chapters:
+       - 13-SEM.qmd
+       - 14-SEM-2.qmd
+    - part: "Bayesian modelling"
+      chapters:
+       - 15-Bayes-estimation.qmd
+       - 16-Bayes-testing.qmd
+    - 17-responsible.qmd
+      
+bibliography: [book.bib, packages.bib]
+reference-section-title: References
+reference-location: margin # footnotes in margin
+link-citations: true       # citations link to references
+
+format:
+  html:
+    theme:
+      light: [flatly, resources/scss/global.scss]
+      dark: [darkly, resources/scss/global.scss]
+    published-title: "Updated"
+    
+  pdf:
+    documentclass: scrreprt
+    keep-tex: true
+    include-in-header: resources/tex/preamble.tex
+    citeproc: false # don't run pandoc default citation handling
+    filters:
+      - section-bibliographies
+    toc-depth: 1 # level 1 headings (i.e. parts and chapters)
+    toc-title: Contents # title of table of contents
+    links-as-notes: true # turn URLs into sidenotes
+    # lof: true
+    # lot: true
+    citecolor: DarkGreen # tufte color
+    linkcolor: DarkBlue # tufte color
+    urlcolor: DarkGreen # tufte color
+
+execute: 
+  echo: false
+  message: false
+  warning: false
+  error: false
+  cache: true
+  code-overflow: wrap
+  tidy: true
+  
+df-print: kable
+
+filters:
+  - boxes
+  
+# site: bookdown::bookdown_site
+# documentclass: krantz
+
+#bibliography: [book.bib, packages.bib]
+#biblio-style: apalike
+#csl: apa-no-doi-no-issue.csl
+#link-citations: yes
+#reference-section-title: References
+
+# github-repo: mspeekenbrink/sdam-book
+# description: "A book about statistics for data analysis, with a main focus on statistical modelling."
+
+
+
+# book_filename: "sdam-book.Rmd"
+# delete_merged_file: false
+# keep_md: false
+# language:
+#   ui:
+#     chapter_name: "Chapter "
+# before_chapter_script: "run_before.R"
+# new_session: yes
+
+# after_chapter_script: "script3.R"
+#view: https://github.com/mspeekenbrink/sdam-book/blob/master/%s
+#edit: https://github.com/mspeekenbrink/sdam-book/edit/master/%s
+#output_dir: "book-output"
+# clean: ["sdam.bbl", "R-packages.bib"]
+# rmd_files: ["index.Rmd", "01-intro.Rmd", "02-modeling.Rmd", "03-GLM-simple.Rmd", "04-GLM-regression.Rmd", "05-GLM-multiple-regression.Rmd", "06-GLM-moderation.Rmd", "07-ANOVA.Rmd", "08-Factorial-ANOVA.Rmd", "09-ANCOVA.Rmd", "10-RM-ANOVA.Rmd", "11-LMER.Rmd", "12-GenLM.Rmd", "13-SEM.Rmd", "14-SEM-2.Rmd", "15-Bayes-estimation.Rmd", "16-Bayes-testing.Rmd", "17-responsible.Rmd", "999-references.Rmd"]

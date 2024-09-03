@@ -160,7 +160,8 @@ The suggested default prior distributions can be generalized straightforwardly t
 
 @tab-bayesian-lm-speedate shows the results of a Bayesian equivalent to the moderated regression model discussed in Section @sec-05-dont-forget-about-the-fun. The results generally confirm the results of the frequenist tests employed there, although evidence for the interaction between fun and intelligence can be classified as "anecdotal". 
 ```{r}
-#| label: bayesian-lm-speedate
+#| label: tbl-bayesian-lm-speedate
+#| tbl-cap: "Results of a Bayesian regression analysis for the Speed Dating data (cf Table @tbl-full-model-like) with a default JZS prior with 'medium' scaling factor $r = \\sqrt{2}/4$ (for regression models, default scaling factors are  $\\sqrt{2}/4$, $1/2$, and $\\sqrt{2}/2$ for medium, wide, and ultrawide, respectively). The test of each effect compares the full model to one with that effect excluded."
 #| cache: true
 set.seed(239472493)
 data("speeddate")
@@ -178,14 +179,15 @@ if(knitr::is_latex_output()) {
 } else {
   tmp$BF[tmp$BF > 1000] <- "&gt; 1000"
 }
-knitr::kable(tmp, escape=FALSE, booktabs=TRUE, linesep="", caption = "Results of a Bayesian regression analysis for the Speed Dating data (cf Table @tbl-full-model-like) with a default JZS prior with 'medium' scaling factor $r = \\sqrt{2}/4$ (for regression models, default scaling factors are  $\\sqrt{2}/4$, $1/2$, and $\\sqrt{2}/2$ for medium, wide, and ultrawide, respectively). The test of each effect compares the full model to one with that effect excluded.", format.args = list(scientific = FALSE))
+knitr::kable(tmp, escape=FALSE, booktabs=TRUE, linesep="", format.args = list(scientific = FALSE))
 
 ```
 
 @tbl-bayesian-anova-expBelief shows the Bayesian equivalent of the factorial ANOVA reported in Section @sec-06-main-effects-and-interactions. The results show "extreme" evidence for an effect of experimenter belief, and no evidence for an effect of power prime, nor for an interaction between power prime and experimenter belief. In the Frequentist null-hypothesis significance test, the absence of a significant test result can not be taken as direct evidence for the null hypothesis. There is actually no straightforward way to quantify the evidence for the null hypothesis in a Frequentist framework. This is not so for the Bayesian hypothesis tests. Indeed, the Bayes factor directly quantifies the relative evidence for either the alternative or null hypothesis. Hence, we find "moderate" evidence that the null hypothesis is true for power prime, and for the interaction between power prime and experimenter belief. This ability to quantify evidence both for and against the null hypothesis is one of the major benefits of a Bayesian hypothesis testing procedure. 
 
 ```{r}
-#| label: bayesian-anova-expBelief
+#| label: tbl-bayesian-anova-expBelief
+#| tbl-cap: "Results of a Bayesian factorial ANOVA analysis for the social priming data (cf @tbl-expBelief-factorial-ANOVA-results) with a default JZS prior with a 'medium' scaling factor of $r = 1/2$ (for ANOVA models, default scaling factors are $1/2$, $\\sqrt{2}/2$, and $1$ for medium, wide, and ultrawide, respectively; this assumes standard effect coding for the contrast-coded predictors, which then matches the priors to those set for the linear regression model). The test of each effect compares the full model to one with that effect excluded."
 #| cache: true
 set.seed(23987423)
 options(contrasts = c("contr.sum", "contr.poly"))
@@ -193,7 +195,7 @@ data("expBelief")
 BFanova <- expBelief %>%
   mutate(experimenterBelief = factor(experimenterBelief), primeCond = factor(primeCond)) %>%
     anovaBF(ApproachAdvantage ~ experimenterBelief * primeCond, whichModels = "top", data=., iterations = 500000, progress=FALSE)
-knitr::kable(data.frame(effect = c("$\\texttt{P}$","$\\texttt{B}$","$\\texttt{P} \\times \\texttt{B}$"), BF =  exp(-BFanova@bayesFactor$bf)[c(2,3,1)]), escape=FALSE, booktabs=TRUE, linesep="", caption = "Results of a Bayesian factorial ANOVA analysis for the social priming data (cf @tbl-expBelief-factorial-ANOVA-results) with a default JZS prior with a 'medium' scaling factor of $r = 1/2$ (for ANOVA models, default scaling factors are $1/2$, $\\sqrt{2}/2$, and $1$ for medium, wide, and ultrawide, respectively; this assumes standard effect coding for the contrast-coded predictors, which then matches the priors to those set for the linear regression model). The test of each effect compares the full model to one with that effect excluded.")
+knitr::kable(data.frame(effect = c("$\\texttt{P}$","$\\texttt{B}$","$\\texttt{P} \\times \\texttt{B}$"), BF =  exp(-BFanova@bayesFactor$bf)[c(2,3,1)]), escape=FALSE, booktabs=TRUE, linesep="")
 ```
 
 <!-- ## The Savage-Dickey ratio -->
@@ -217,15 +219,11 @@ Another thing worth pointing out is that, if the null hypothesis is true, any $p
 
 ```{r}
 #| label: fig-simulation-p-value-distribution
+#| fig-cap: "Distribution of $p$-values for 10,000 simulations of a one-sample  $t$-test. $\\delta = \\frac{\\mu - \\mu_0}{\\sigma}$ refers to the effect size. Under the null hypothesis (left plot; $\\delta = 0$) the distribution of the $p$-values is uniform. When the null-hypothesis is false ($\\delta = .3$), the distribution is skewed, with smaller $p$-values being more probable, especially when the sample size is larger (compare the middle plot with $n=10$ to the right-hand plot with $n=50$)."
 #| cache: true
 #| fig-width: 8
 #| fig-height: 3
-#| fig-cap: Distribution of $p$-values for 10,000 simulations of a one-sample $t$-test.
-#|   $\delta = \frac{\mu - \mu_0}{\sigma}$ refers to the effect size. Under the null
-#|   hypothesis (left plot; $\delta = 0$) the distribution of the $p$-values is uniform.
-#|   When the null-hypothesis is false ($\delta = .3$), the distribution is skewed, with
-#|   smaller $p$-values being more probable, especially when the sample size is larger
-#|   (compare the middle plot with $n=10$ to the right-hand plot with $n=50$).
+
 set.seed(234876234)
 tmp <- rbind(data.frame(situation="δ = 0 (n=50)", p = apply(matrix(rnorm(500000),nrow=50),2,function(x) t.test(x)$p.value)),
       data.frame(situation="δ; = .3 (n=10)", p = apply(matrix(rnorm(100000, mean=.3),nrow=10),2,function(x) t.test(x)$p.value)),

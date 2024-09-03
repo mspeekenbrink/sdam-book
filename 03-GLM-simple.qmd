@@ -36,15 +36,14 @@ Before diving into statistical modelling, as discussed, it is always good to exp
 ```{r}
 #| label: fig-anchoring-eda-plots
 #| echo: false
-#| layout-ncol: 2
 #| fig-cap: Histogram and raincloud plot of participants' judgments
-#| fig-subcap: true
-#| fig-width: 3
+#| fig-width: 6
 #| fig-height: 3
-ggplot(dat,aes(x=everest_meters)) + geom_histogram(binwidth=500) + xlab("Height of Mount Everest in meters")
 
+gridExtra::grid.arrange(
+  ggplot(dat,aes(x=everest_meters)) + geom_histogram(binwidth=500) + xlab("Height of Mount Everest in meters"),
 # ggplot(dat,aes(y=everest_meters, x="")) + geom_violin() + geom_boxplot(width=.1) + ylab("Height of Mount Everest in meters") + xlab("") + stat_summary(fun=mean, geom="point", shape=16, size=2)
-plot_raincloud(dat,y = everest_meters, point_size=1) + ylab("Height of Mount Everest in meters")
+  plot_raincloud(dat,y = everest_meters, point_size=1) + ylab("Height of Mount Everest in meters"), ncol=2)
 ```
 
 Looking at @fig-anchoring-eda-plots, you can see a peak in the distribution around the true height of Mount Everest (8848 meters), but the judgements are also quite varying, with a large number of judgements substantially below the actual height. This may be due to some people knowing the correct answer, whilst others don't and have to guess. Those guessing would likely be more influenced by the low anchor. The question is whether, on average, the group's judgements are equal to the actual height of Mount Everest.
@@ -92,7 +91,7 @@ levels <- c(bquote(mu %+-% sigma %~~% .683),bquote(mu %+-% 2 %*% sigma %~~% .954
 rbind(data.frame(interval=1,x=c(-3,seq(-3,3,length=100),1),y=c(0,dnorm(seq(-3,3,length=100)),0)),
       data.frame(interval=2,x=c(-2,seq(-2,2,length=100),2),y=c(0,dnorm(seq(-2,2,length=100)),0)),
       data.frame(interval=3,x=c(-1,seq(-1,1,length=100),1),y=c(0,dnorm(seq(-1,1,length=100)),0))) %>%
-  ggplot(aes(x=x,y=y,fill=factor(interval,labels=levels))) + stat_function(aes(fill=NULL),fun=function(x) dnorm(x,mean=0,sd=1)) + xlim(-4,4) + ylab("p(y)") + xlab("y") + geom_polygon(alpha=.8) + scale_fill_discrete(name="interval",labels = parse_format()) + theme(legend.title=element_text("interval"))
+  ggplot(aes(x=x,y=y,fill=factor(interval,labels=levels))) + stat_function(aes(fill=NULL),fun=function(x) dnorm(x,mean=0,sd=1)) + xlim(-4,4) + ylab("p(y)") + xlab("y") + geom_polygon(alpha=.8) + scale_fill_discrete(name="interval",labels = parse_format()) #+ theme(legend.title=element_text("interval"))
 ```
 
 Because the Normal distribution is symmetric, with a single peak in the middle at $\mu$, the parameter $\mu$ not only equals the mean, but also the median (50% of all values are lower than $\mu$, and 50% are higher), and the mode.

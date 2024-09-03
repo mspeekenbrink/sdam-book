@@ -55,7 +55,7 @@ knitr::kable(tab, escape=FALSE,align=rep('r', 3), booktabs=TRUE, linesep="")#, c
 We can then estimate a linear model predicting $\texttt{post-power}$, the subjective feeling of power after the priming manipulation, as:
 $$
 \texttt{post-power}_i = \beta_0 + \beta_\text{P} \times \texttt{P}_i + \beta_\text{B} \times \texttt{B}_i + \beta_{\text{P}\times \text{B}} \times (\texttt{P} \times \texttt{B})_i + \epsilon_i
-$$ {#eq:post-power-ANOVA}
+$$ {#eq-post-power-ANOVA}
 The estimates and hypothesis tests of the parameters of this model are given in @tbl-expBelief-power-post-ANOVA.
 
 ```{r}
@@ -107,14 +107,15 @@ $$ {#eq-post-power-ANCOVA}
 Parameter estimates and tests are provided in @tbl-expBelief-power-post-ANCOVA. The results show a significant effect of prime ($\texttt{P}$), as well as the pre-test power score ($\texttt{pre-power}$). The latter effect is expected, and can be interpreted as usual: the positive slope indicates that participants who scored relatively high in the pre-test also score relatively high in the post-test. Comparing the effect of power prime to that obtained earlier (@tbl-expBelief-power-post-ANOVA), we can notice two things: the slope is somewhat higher, and the value of the $F$ statistic is substantially higher. We will consider the interpretation of the slope in the next section, and the reason for the higher $F$ statistic in Section @sec-9-ANCOVA-power. 
 
 ```{r}
-#| label: expBelief-power-post-ANCOVA
+#| label: tbl-expBelief-power-post-ANCOVA
+#| tbl-cap: "Linear model predicting $\\texttt{post-power}$ by $\\texttt{pre-power}$ and factorial contrast-coded predictors"
 modpostpre <- update(modpost, .~. + powerPRE)
 opts <- options()
 options(knitr.kable.NA = "")
 tab <- cbind(estimate = c(coefficients(modpostpre)[1],coefficients(modpostpre)[2:5],Error=NA),rbind(car::Anova(modpostpre, type=3)[1,],expand_Anova(modpostpre, type=3)[-1,]))
 rownames(tab) <- c("Intercept","$\\texttt{P}$","$\\texttt{B}$", "$\\texttt{pre-power}$", "$\\texttt{P} \\times \\texttt{B}$", "Error")
 colnames(tab) <- c("$\\hat{\\beta}$","$\\text{SS}$", "$\\text{df}$", "$F$", "$p(\\geq \\lvert F \\rvert)$")
-knitr::kable(tab, caption = "Linear model predicting $\\texttt{post-power}$ by $\\texttt{pre-power}$ and factorial contrast-coded predictors.", escape = FALSE, digits=c(3,0,0,2,3), booktabs=TRUE, linesep="")
+knitr::kable(tab, escape = FALSE, digits=c(3,0,0,2,3), booktabs=TRUE, linesep="")
 options(opts)
 ```
 
@@ -277,14 +278,15 @@ $$\begin{aligned}
 Parameter estimates and tests are provided in @tbl-expBelief-ApproachAdvantage-ANCOVA. As in the earlier ANOVA (@tbl-expBelief-oneway-ANOVA-results), we obtain a significant effect of experimenter belief. None of the other effects are significant. Neither the subjective feeling of power before or after the priming manipulation appears to affect the approach advantage scores. Interestingly, whilst not significant, the slope of $\texttt{post-power}$ is positive, and the slope of $\texttt{pre-power}$ negative, which is what one would expect when the difference between the two is related to the dependent variable.
 
 ```{r}
-#| label: expBelief-ApproachAdvantage-ANCOVA
+#| label: tbl-expBelief-ApproachAdvantage-ANCOVA
+#| tbl-cap: "Linear model predicting $\\texttt{ApproachAdvantage}$ by $\\texttt{pre-power}$, $\\texttt{post-power}$,  and factorial contrast-coded predictors"
 modg <- lm(ApproachAdvantage ~ primeCond*experimenterBelief + powerPRE + powerPOST, data=dat)
 opts <- options()
 options(knitr.kable.NA = "")
 tab <- cbind(estimate = c(coefficients(modg)[1],coefficients(modg)[2:6],Error=NA),rbind(car::Anova(modg, type=3)[1,],expand_Anova(modg, type=3)[-1,]))
 rownames(tab) <- c("Intercept","$\\texttt{P}$","$\\texttt{B}$", "$\\texttt{pre-power}$","$\\texttt{post-power}$", "$\\texttt{P} \\times \\texttt{B}$", "Error")
 colnames(tab) <- c("$\\hat{\\beta}$","$\\text{SS}$", "$\\text{df}$", "$F$", "$p(\\geq \\lvert F \\rvert)$")
-knitr::kable(tab, caption = "Linear model predicting $\\texttt{ApproachAdvantage}$ by $\\texttt{pre-power}$, $\\texttt{post-power}$,  and factorial contrast-coded predictors.", escape = FALSE, digits=3, booktabs=TRUE, linesep="")
+knitr::kable(tab, escape = FALSE, digits=3, booktabs=TRUE, linesep="")
 options(opts)
 ```
 
@@ -301,14 +303,15 @@ The finding that experimenter belief has an effect on participants' approach adv
 At the end of the experiment, participants rated how attractive, competent, friendly, and trustworthy they found their experimenter. Preliminary analysis (not shown here for brevity) indicates that when experimenters believed participants were assigned to the high-power condition, they were rated as more attractive, friendly, and trustworthy. If the effect of experimenter belief is mediated by these changes in perception, then after including the ratings of attractiveness, friendliness, and trustworthiness, we would expect the effect of experimenter belief to be reduced. However, the results of the analysis (see @tbl-expBelief-ApproachAdvantage-mediation-ANCOVA) are only slighly suggestive of this. Controlling for attractiveness, friendliness, and trustworthiness, we still obtain a highly significant effect of experimenter belief, with a slope which is a little lower than in a model without these covariates. But none of the covariates appears to be related to the approach advantage. 
 
 ```{r}
-#| label: expBelief-ApproachAdvantage-mediation-ANCOVA
+#| label: tbl-expBelief-ApproachAdvantage-mediation-ANCOVA
+#| tbl-cap: "Linear model predicting $\\texttt{ApproachAdvantage}$ by $\\texttt{pre-power}$, $\\texttt{post-power}$,  and factorial contrast-coded predictors"
 modg2 <- lm(ApproachAdvantage ~ primeCond*experimenterBelief + attractive + friendly + trustworthy, data=dat)
 opts <- options()
 options(knitr.kable.NA = "")
 tab <- cbind(estimate = c(coefficients(modg2)[1],coefficients(modg2)[2:7],Error=NA),rbind(car::Anova(modg2, type=3)[1,],expand_Anova(modg2, type=3)[-1,]))
 rownames(tab) <- c("Intercept","$\\texttt{P}$","$\\texttt{B}$", "$\\texttt{attractive}$","$\\texttt{friendly}$", "$\\texttt{trustworthy}$", "$\\texttt{P} \\times \\texttt{B}$", "Error")
 colnames(tab) <- c("$\\hat{\\beta}$","$\\text{SS}$", "$\\text{df}$", "$F$", "$p(\\geq \\lvert F \\rvert)$")
-knitr::kable(tab, caption = "Linear model predicting $\\texttt{ApproachAdvantage}$ by $\\texttt{pre-power}$, $\\texttt{post-power}$,  and factorial contrast-coded predictors.", escape = FALSE, digits=3, booktabs=TRUE, linesep="")
+knitr::kable(tab, escape = FALSE, digits=3, booktabs=TRUE, linesep="")
 options(opts)
 ```
 
@@ -319,7 +322,8 @@ $$\texttt{diff-power}_i = \beta_0 + \beta_\text{P} \times \texttt{P}_i + \beta_\
 The model results are given in @tbl-expBelief-diff-power-ANOVA. We again find a significant and positive effect of power prime. We also find that the intercept is close to 0 and non-significant. That indicates that averaged over all conditions, the subjective feeling of power seems to neither increase or decrease. However, the significant positive slope of power prime then shows that the high-power prime increased, and the low-power prime decreased, subjective feeling of power. 
 
 ```{r}
-#| label: expBelief-diff-power-ANOVA
+#| label: tbl-expBelief-diff-power-ANOVA
+#| tbl-cap: "Linear model predicting $\\texttt{diff-power}$ by factorial contrast-coded predictors"
 dat$powerDIFF <- dat$powerPOST - dat$powerPRE
 modgdiff <- lm(powerDIFF ~ primeCond*experimenterBelief, data=dat)
 opts <- options()
@@ -327,7 +331,7 @@ options(knitr.kable.NA = "")
 tab <- cbind(estimate = c(coefficients(modgdiff)[1],coefficients(modgdiff)[2:4],Error=NA),rbind(car::Anova(modgdiff, type=3)[1,],expand_Anova(modgdiff, type=3)[-1,]))
 rownames(tab) <- c("Intercept","$\\texttt{P}$","$\\texttt{B}$", "$\\texttt{P} \\times \\texttt{B}$", "Error")
 colnames(tab) <- c("$\\hat{\\beta}$","$\\text{SS}$", "$\\text{df}$", "$F$", "$p(\\geq \\lvert F \\rvert)$")
-knitr::kable(tab, caption = "Linear model predicting $\\texttt{diff-power}$ by factorial contrast-coded predictors.", escape = FALSE, digits=3, booktabs=TRUE, linesep="")
+knitr::kable(tab, escape = FALSE, digits=3, booktabs=TRUE, linesep="")
 options(opts)
 ```
 

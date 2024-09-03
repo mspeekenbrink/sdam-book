@@ -189,6 +189,8 @@ fn <- rgl::par3dinterp(time = (0:3)*0.75, userMatrix = list(userMat,
 
 #rglwidget(elementId = "interactive-3dplot-multiple-regression", controllers = "interactive-3dplot-multiple-regression-controller") %>%
 # rglwidget(scene3d(plt)) %>%
+
+if(doc_format == "html") {
 rglwidget(scene3d()) %>%
   playwidget(par3dinterpControl(fn, 0, 2*3*.75, steps=30),
        step = 0.01, loop = TRUE, rate = 0.5)
@@ -198,6 +200,13 @@ rglwidget(scene3d()) %>%
 #       step = 0.01, loop = TRUE, rate = 0.5, elementId = "interactive-3dplot-multiple-regression-controller")
 
 # widget
+
+} else {
+  rgl::writeASY(title = "fig-3d-regression-plane", prc = FALSE)
+  knitr::include_graphics("fig-3d-regression-plane.asy")
+}
+
+#
 
 ```
 

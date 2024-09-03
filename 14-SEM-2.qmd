@@ -189,7 +189,8 @@ semPlot::semPaths(BFI2_extr_1, whatLabels = "est")
 @fig-BFI2-extr-1-plot shows the estimated parameters of a single factor model for the 12 items related to extraversion in the BFI-2. The factor loading of the first item was fixed to 1 in order to scale the latent factor. Note that all estimated factor loadings are positive, whilst 6 of the 12 items were stated in a negative direction (i.e. higher scores should indicate *less* extraversion). If all items relate to extraversion in the intended manner, we should expect a mix of positive and negative factor loadings. @tbl-BFI2-extr-1-results shows the parameter estimates and test results, as well as the model fit indices. As can be seen there, the single factor model is rejected by the overall model $\chi^2$ test, and the CFI, SRMR and RMSEA indicate relatively poor model fit.
 
 ```{r}
-#| results: asis
+#| label: tbl-BFI2-extr-1-results
+#| tbl-cap: "Results of a single factor model for extraversion"
 # if(knitr::is_html_output()) {
 #   cat("<table><caption>(\\#tab:BFI2-extr-1-results) Results of a single factor model for extraversion.</caption>")
 #   semTable::semTable(BFI2_extr_1, type="html", fits = c("chisq", "cfi", "srmr", "rmsea", "rmsea.ci.lower", "rmsea.ci.upper","aic", "bic"), fitLabels = c(rmsea.ci.lower = "RMSEA (lower bound)", rmsea.ci.upper = "RMSEA (upper bound)"))
@@ -198,9 +199,19 @@ semPlot::semPaths(BFI2_extr_1, whatLabels = "est")
 #   semTable::semTable(fmod_complex2, type="latex", table.float = TRUE, fits = c("chisq", "cfi", "srmr", "rmsea", "rmsea.ci.lower", "rmsea.ci.upper","aic", "bic"), caption = "(\\#ttab:tab:sem_path_mod_complex_results2) Results of a second full path model for the legacy motive data.")
 # }
 
-semoutput::sem_tables(BFI2_extr_1)
+tmp <- semoutput::sem_tables(BFI2_extr_1)
 
-cat(": Results of a single factor model for extraversion. {#tbl-BFI2-extr-1-results}\n\n")
+tmp[[1]][[2]][[3]] |> 
+  gt::cols_hide(stars)
+
+tmp[[1]][[2]][[4]] |> 
+  gt::cols_hide(stars)
+
+tmp[[1]][[2]][[1]]
+
+tmp[[1]][[2]][[2]]
+
+# cat(": Results of a single factor model for extraversion. {#tbl-BFI2-extr-1-results}\n\n")
 
 ```
 
@@ -221,7 +232,9 @@ semPlot::semPaths(BFI2_extr_1acq, whatLabels = "est", layout="tree2")
 By fixing all the factor loadings, this additional factor only requires one additional parameter for the variance of the latent Acquiescence factor. The resulting model is depicted in @fig-BFI2-extr-1acq-plot and the resulting estimates and fit measures are provided in @tbl-BFI2-extr-1acq-results. Whilst there are now a few negative factor loadings and the fit is somewhat improved, the model is still not adequate. 
 
 ```{r}
-#| results: asis
+#| label: tbl-BFI2-extr-1acq-results
+#| tbl-cap: "Results of a single factor model for Extraversion with an additional Acquiescence factor"
+
 # if(knitr::is_html_output()) {
 #   cat("<table><caption>(\\#tab:BFI2-extr-1acq-results) Results of a single factor model for Extraversion with an additional Acquiescence factor.</caption>")
 #   semTable::semTable(BFI2_extr_1acq, type="html", fits = c("chisq", "cfi", "srmr", "rmsea", "rmsea.ci.lower", "rmsea.ci.upper","aic", "bic"), fitLabels = c(rmsea.ci.lower = "RMSEA (lower bound)", rmsea.ci.upper = "RMSEA (upper bound)"))
@@ -230,9 +243,19 @@ By fixing all the factor loadings, this additional factor only requires one addi
 #   semTable::semTable(fmod_complex2, type="latex", table.float = TRUE, fits = c("chisq", "cfi", "srmr", "rmsea", "rmsea.ci.lower", "rmsea.ci.upper","aic", "bic"), caption = "(\\#ttab:tab:sem_path_mod_complex_results2) Results of a second full path model for the legacy motive data.")
 # }
 
-semoutput::sem_tables(BFI2_extr_1acq)
+tmp <- semoutput::sem_tables(BFI2_extr_1acq)
 
-cat(": Results of a single factor model for Extraversion with an additional Acquiescence factor. {#tbl-BFI2-extr-1acq-results}\n\n")
+tmp[[1]][[2]][[3]] |> 
+  gt::cols_hide(stars)
+
+tmp[[1]][[2]][[4]] |> 
+  gt::cols_hide(stars)
+
+tmp[[1]][[2]][[1]]
+
+tmp[[1]][[2]][[2]]
+
+# cat(": Results of a single factor model for Extraversion with an additional Acquiescence factor. {#tbl-BFI2-extr-1acq-results}\n\n")
 ```
 
 The BFI-2 was designed to cover different aspects of each personality trait. For example, extraversion was assumed to consist of the "facets" sociability, assertiveness, and energy level. The BFI-2 contains four items for each of these facets. Insofar as these facets reflect different aspects of extraversion, we might expect then to be related to general extraversion, but to also be somewhat independent. To allow for this possibility, we could consider a model where general extraversion "causes" values on each latent facet, which in turn cause scores on the different items. Including the Aqcuiescence factor, the resulting model is depicted in @fig-BFI2-extr-31acq-plot. Note that the three facets have additional residual variance, but any correlation between the facets is entirely accounted for by the higher-order factor. As there are just three facets for the higher-order extraversion factor, that factor is "just-identified" (similar to needing at least three indicators to measure one factor). The part of the model consisting of one higher-order factor and three lower-order factors is saturated, meaning that the model can perfectly account for any the variances and covariances of the facets. Because each facet loads onto four indicators, the part of the model linking facets to indicators is not saturated. As there are 12 observed variables, there are 12 means, 12 variances, and $\frac{12 \times 11}{2} = 66$ covariances. A fully saturated model would thus have $\text{npar}(S) = 90$ parameters. The present model is more constrained, using $\text{npar}(M) = 49$ parameters.
@@ -252,7 +275,9 @@ semPlot::semPaths(BFI2_extr_31acq, whatLabels = "est", layout="tree")
 @tbl-BFI2-extr-31acq-results provides more detailed results. Although the model is rejected by the overall fit chi-square test, the fit indices indicate a mostly reasonable fit. Inspecting the estimated variance of the latent variables shows something peculiar though: the variance of the $\texttt{Es}$ factor is estimated to be negative. A variance can never be smaller than 0, so this estimate is by definition not a good representation of the true variance in the DGP. Negative variance estimates are  common in structural equation modelling [@kolenikov2012testing]. 
 
 ```{r}
-#| results: asis
+#| label: tbl-BFI2_extr_31acq
+#| tbl-cap: "Results of a single factor model for Extraversion with an additional Acquiescence factor"
+#| 
 # if(knitr::is_html_output()) {
 #   cat("<table><caption>(\\#tab:BFI2-extr-31acq-results) Results of a hierarchical factor model for Extraversion with an additional Acquiescence factor.</caption>")
 #   semTable::semTable(BFI2_extr_31acq, type="html", fits = c("chisq", "cfi", "srmr", "rmsea", "rmsea.ci.lower", "rmsea.ci.upper","aic", "bic"), fitLabels = c(rmsea.ci.lower = "RMSEA (lower bound)", rmsea.ci.upper = "RMSEA (upper bound)"))
@@ -261,9 +286,19 @@ semPlot::semPaths(BFI2_extr_31acq, whatLabels = "est", layout="tree")
 #   semTable::semTable(BFI2_extr_31acq, type="latex", table.float = TRUE, fits = c("chisq", "cfi", "srmr", "rmsea", "rmsea.ci.lower", "rmsea.ci.upper","aic", "bic"), caption = "(\\#ttab:tab:sem_path_mod_complex_results2) Results of a hierarchical factor model for Extraversion with an additional Acquiescence factor.")
 # }
 
-semoutput::sem_tables(BFI2_extr_31acq)
+tmp <- semoutput::sem_tables(BFI2_extr_31acq)
 
-cat(": Results of a single factor model for Extraversion with an additional Acquiescence factor. {tbl-BFI2_extr_31acq}\n\n")
+tmp[[1]][[2]][[3]] |> 
+  gt::cols_hide(stars)
+
+tmp[[1]][[2]][[4]] |> 
+  gt::cols_hide(stars)
+
+tmp[[1]][[2]][[1]]
+
+tmp[[1]][[2]][[2]]
+
+#cat(": Results of a single factor model for Extraversion with an additional Acquiescence factor. {tbl-BFI2_extr_31acq}\n\n")
 ```
 
 ### Heywood cases
@@ -376,16 +411,28 @@ semPlot::semPaths(BFI2_cfa_hier, whatLabels = "est", layout="tree", width=16, he
 
 
 ```{r}
-#| label: BFI2-cfa-hier-comparison
+#| label: tbl-BFI2-cfa-hier-comparison
+#| tbl-cap: "Fit measures for hierarchical factor models for the BFI-2 with an additional Acquiescence factor. The Independent model assumes all factors are independent. The Dependent model allows dependence between the 'big five' factors, but assumes these are independent from the Acquiescence factor"
+
+
 # semTable::compareLavaan(models=list("Independent" = BFI2_cfa_hier, "Dependent" =  BFI2_cfa_hier2), fitmeas = c("chisq","df","pvalue","cfi","rmsea","srmr"), print.results=FALSE) |>
 #   mutate(dchi = as.numeric(stringr::str_remove(dchi,"a"))) |>
 #   knitr::kable(digits = c(2,0,3,2,2,2,0,0,2,0,3), col.names = c("$\\chi^2$","df","$p$","CFI", "RMSEA","SRMR","$\\Delta \\chi^2$","df","$p$"), escape=FALSE, caption = 'Fit measures for hierarchical factor models for the BFI-2 with an additional Acquiescence factor. The Independent model assumes all factors are independent. The Dependent model allows dependence between the "big five" factors, but assumes these are independent from the Acquiescence factor')
 
-semoutput::sem_modelcomp(BFI2_cfa_hier, BFI2_cfa_hier2)
+tmp <- semoutput::sem_modelcomp(BFI2_cfa_hier, BFI2_cfa_hier2)
 
-cat(": Fit measures for hierarchical factor models for the BFI-2 with an additional Acquiescence factor. The Independent model assumes all factors are independent. The Dependent model allows dependence between the 'big five' factors, but assumes these are independent from the Acquiescence factor. {tbl-BFI2-cfa-hier-comparison}\n\n")
+tmp[[1]][[2]][[3]] |> 
+  gt::cols_hide(stars)
+
+tmp[[1]][[2]][[4]] |> 
+  gt::cols_hide(stars)
+
+tmp[[1]][[2]][[1]]
+
+tmp[[1]][[2]][[2]]
 
 
+# cat(": Fit measures for hierarchical factor models for the BFI-2 with an additional Acquiescence factor. The Independent model assumes all factors are independent. The Dependent model allows dependence between the 'big five' factors, but assumes these are independent from the Acquiescence factor. {tbl-BFI2-cfa-hier-comparison}\n\n")
 
 # if(knitr::is_html_output()) {
 #   cat('<table><caption>(\\#tab:BFI2-cfa-hier-comparison) Fit measures for hierarchical factor models for the BFI-2 with an additional Acquiescence factor. The Independent model assumes all factors are independent. The Dependent model allows dependence between the "big five" factors, but assumes these are independent from the Acquiescence factor.</caption>')
@@ -591,7 +638,10 @@ After $Z$-transforming each variable, the covariance matrix is identical to the 
 3. The flexibility of SEM, especially when introducing latent variables, opens up a world of theorizing. Always remember though that a SEM is just a way to identify the means and (co-)variances between variables. Although SEMs may contain causal links between variables, **correlation is not causation**. Keep in mind that there will be equivalent other models, with other causal paths, which imply *exactly the same means and covariances*. 
 
 ```{r}
-#| results: asis
+#| label: tbl-BFI2-cfa-hier-results
+#| tbl-cap: "Results of a hierarchical factor model for the BFI-2 with an additional Acquiescence factor"
+
+
 # if(knitr::is_html_output()) {
 #   cat("<table><caption>(\\#tab:BFI2-cfa-hier-results) Results of a hierarchical factor model for the BFI-2 with an additional Acquiescence factor.</caption>")
 #   semTable::semTable(BFI2_cfa_hier, type="html", fits = c("chisq", "cfi", "srmr", "rmsea", "rmsea.ci.lower", "rmsea.ci.upper", "aic", "bic"), fitLabels = c(rmsea.ci.lower = "RMSEA (lower bound)", rmsea.ci.upper = "RMSEA (upper bound)"))
@@ -600,7 +650,17 @@ After $Z$-transforming each variable, the covariance matrix is identical to the 
 #   semTable::semTable(BFI2_cfa_hier, type="latex", table.float = TRUE, fits = c("chisq", "cfi", "srmr", "rmsea", "rmsea.ci.lower", "rmsea.ci.upper","aic", "bic"), caption = "(\\#ttab:tab:BFI2_cfa_hier_results) Results of a hierarchical factor model for the BFI-2 with an additional Acquiescence factor.")
 # }
 
-semoutput::sem_tables(BFI2_cfa_hier)
+tmp <- semoutput::sem_tables(BFI2_cfa_hier)
 
-cat(": Results of a hierarchical factor model for the BFI-2 with an additional Acquiescence factor. {tbl-BFI2-cfa-hier-results}\n\n")
+tmp[[1]][[2]][[3]] |> 
+  gt::cols_hide(stars)
+
+tmp[[1]][[2]][[4]] |> 
+  gt::cols_hide(stars)
+
+tmp[[1]][[2]][[1]]
+
+tmp[[1]][[2]][[2]]
+
+# cat(": Results of a hierarchical factor model for the BFI-2 with an additional Acquiescence factor. {tbl-BFI2-cfa-hier-results}\n\n")
 ```

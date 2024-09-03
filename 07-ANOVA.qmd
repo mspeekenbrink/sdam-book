@@ -53,7 +53,7 @@ library(ggplot2)
 ggplot(dat, aes(y = Days_One_to_Seven_Number_of_Intrusions, colour=Condition)) + geom_boxplot() + ylab("Number of intrusions") + theme(legend.position = "bottom")
 ```
 
-## Comparing two groups {#sec:06-two-groups}
+## Comparing two groups {#sec-06-two-groups}
 
 ```{r}
 #| label: tetris-dummy-coding
@@ -451,7 +451,7 @@ For the third question, finally, we would like to compare the Reactivation-Only 
 The values of the three contrast codes $c_1$, $c_2$, and $c_3$ (for questions 1 to 3 respectively) for each of the four conditions, are summarized given in the table below:
 
 ```{r}
-#| label: tetris-orthogonal-contrast-codes
+#| label: tbl-tetris-orthogonal-contrast-codes
 #| tbl-cap: "A set of orthogonal contrast codes."
 tab <- data.frame(c1 = c("$\\tfrac{3}{4}$","$-\\tfrac{1}{4}$","$-\\tfrac{1}{4}$","$-\\tfrac{1}{4}$"),
                   c2 = c("0","$-\\tfrac{1}{3}$","$\\tfrac{2}{3}$","$-\\tfrac{1}{3}$"),
@@ -597,7 +597,8 @@ In the absence of any comparisons of interest, you shouldn't really be conductin
 __Helmert coding__ involves a set of contrast codes in which each code compares a group mean to the average of all group means that come before it. You can find these contrast, for situations with a group size of $g=1, 2, \ldots, 6$, in @tbl-Helmert-contrasts. Using Helmert contrasts will always provide a set of orthogonal contrasts. And if you reorder the conditions in @tbl-tetris-orthogonal-contrast-codes as Tetris+Reactivation, Reactivation-Only, tetris-Only, Control, you should recognize that this was actually an example of Helmert coding for $g=4$. 
 
 ```{r}
-#| label: Helmert-contrasts
+#| label: tbl-Helmert-contrasts
+#| tbl-cap: "Helmert contrast codes for situations with two to six groups"
 options(knitr.kable.NA = "")
 tmp <- data.frame(group = NA, H2=NA, H3 = NA, H4 = NA, H5 = NA, H6 = NA)
 tab <- as.data.frame(codingMatrices::code_helmert(2))
@@ -614,13 +615,13 @@ for(g in 3:6) {
   #tab <- dplyr::bind_rows(tab, tmp)
 }
 colnames(tab)[2:6] <- paste0("$c_",1:(6-1),"$")
-knitr::kable(tab, escape = FALSE, caption = "Helmert contrast codes for situations with two to six groups.", row.names = FALSE, booktabs=TRUE, linesep="")
+knitr::kable(tab, escape = FALSE, row.names = FALSE, booktabs=TRUE, linesep="")
 ```
 
 __Polynomial contrast codes__ tend to be used when the groups can be ordered in a meaningful way. For instance, a study might involve different age groups, e.g. "18-30 year old", "31-40 year old", and "41-50 year old". Using polynomial contrast coding, you can then determine a linear trend over these age groups with a _linear_ contrast $c_1 = (-1,0,1)$, as well as whether the average of the middle age group is lower (or higher) than would be expected from the linear contrast through a _quadratic_ contrast $c_2 = (1,-2,1)$. Examples of polynomial contrast codes for situations with between 2 and 6 groups are provided in @tbl-polynomial-contrasts. 
 
 ```{r}
-#| label: polynomial-contrasts
+#| label: tbl-polynomial-contrasts
 #| tbl-cap: "Polynomial contrast codes for situations with two to six groups."
 options(knitr.kable.NA = "")
 tmp <- data.frame(group = NA, ".I"=NA, ".II" = NA, ".III" = NA, ".IV" = NA, ".V" = NA)
