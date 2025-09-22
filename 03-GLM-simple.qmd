@@ -9,6 +9,14 @@ set.seed(20221010)
 source("run_before.R")
 ```
 
+::: {.callout-note title="learning goals"}
+* Understand the basic characteristics of the Normal distribution and how its parameters (mean and standard deviation) can be estimated
+* Learn how a hypothesis about the value of the mean can be tested via a standardized sampling distribution of the mean (t distribution), and via model comparison
+* Learn how confidence intervals for the mean are computed and used
+* Understand the assumptions underlying the t-test and how they relate to the distribution of the test statistic
+* Develop an intuitive understanding of the principle of statistical bootstrapping
+:::
+
 In this chapter, we will start our journey into the General Linear Model with the most basic example within the GLM: a model concerning a single Normal distribution, where we are interested in statements about the mean of that distribution. The resulting test is also known as the one-sample t-test. We will look at the Normal distribution in detail, and cover estimation of its parameters, before focusing on testing hypotheses about the mean. We will also introduce confidence intervals as an alternative, but mostly equivalent means to make inferences about parameters. We end the chapter by looking at the assumptions of the model, and what happens to the testing procedure if those assumptions are false. <!-- with a look ahead towards the other chapters, by providing a brief overview of the General Linear Model. -->
 
 ## Numeric judgement and anchoring

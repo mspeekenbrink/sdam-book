@@ -168,9 +168,9 @@ lm(dev_everest_meters ~ 1, data=.) %>% car::Anova(type=3)
 The estimated model (by REML) can be written as
 $$\begin{aligned}
 Y_{i,j} &= \beta_0 + \gamma_{0,j} + \epsilon_{i,j} \\
-&= `r format(fixef(modg$full_model),digits=3, nsmall=2)` + \gamma_{0,j} + \epsilon_{i,j} \\
-\gamma_{0,j} &\sim \mathbf{Normal}(0,`r format(attr(VarCorr(modg$full_model)$referrer,"stddev"), digits=3, nsmall=2)`) \\
-\epsilon_{i,j} &\sim \mathbf{Normal}(0,`r format(attr(VarCorr(modg$full_model),"sc"), digits=3, nsmall=2)`)
+&= `r format(lme4::fixef(modg$full_model),digits=3, nsmall=2)` + \gamma_{0,j} + \epsilon_{i,j} \\
+\gamma_{0,j} &\sim \mathbf{Normal}(0,`r format(attr(lme4::VarCorr(modg$full_model)$referrer,"stddev"), digits=3, nsmall=2)`) \\
+\epsilon_{i,j} &\sim \mathbf{Normal}(0,`r format(attr(lme4::VarCorr(modg$full_model),"sc"), digits=3, nsmall=2)`)
 \end{aligned}$$
 
 We can compare this to an estimated model without random intercepts:
@@ -189,7 +189,7 @@ tab <- data.frame(mean = aggregate(everest_meters ~ referrer, data=dat, mean)$ev
 knitr::kable(tab, col.names = c("$\\overline{Y}_j$","$n_j$","$\\hat{\\beta}_{0}$", "$\\hat{\\beta}_{0,j}$", "$\\hat{\\gamma}_{0,j}$", "$(\\overline{Y}_j - \\hat{\\beta}_{0})$"), digits=2, escape=FALSE, booktabs=TRUE, linesep="")
 ```
 
-As you can see, the random intercepts $\hat{\beta}_{0,j}$ are closer to the fixed intercept $\hat{\beta}_0 = `r format(fixef(modg$full_model),digits=3, nsmall=2)`$ than the sample means $\overline{Y}_j$. In statistical terms, this is usually called __shrinkage__. Due to the assumption that the random effects are Normal-distributed, the random intercepts are pulled towards the average of that distribution, which is the fixed intercept $\beta_0$. This is because in a Normal distribution, large deviations from the mean are unlikely. Hence, if the average in a grouping is far from the overall average (the average over all the groupings), that is perhaps due to a random fluke in this particular dataset. Adjusting the estimated mean of the grouping to be closer to those of the other groupings then makes sense: although each grouping can differ, there will be some similarities between the groupings. The relative adjustment depends not only on the difference between the sample mean from the overall mean, but also on the sample size ($n_j$) of each grouping level. The smaller the sample size, the more the estimate will be adjusted towards the overall mean, because there is less information in smaller samples to precisely estimate a parameter. Hence, because estimates are more noisy, the true mean can be expected to be further away from the sample mean.
+As you can see, the random intercepts $\hat{\beta}_{0,j}$ are closer to the fixed intercept $\hat{\beta}_0 = `r format(lme4::fixef(modg$full_model),digits=3, nsmall=2)`$ than the sample means $\overline{Y}_j$. In statistical terms, this is usually called __shrinkage__. Due to the assumption that the random effects are Normal-distributed, the random intercepts are pulled towards the average of that distribution, which is the fixed intercept $\beta_0$. This is because in a Normal distribution, large deviations from the mean are unlikely. Hence, if the average in a grouping is far from the overall average (the average over all the groupings), that is perhaps due to a random fluke in this particular dataset. Adjusting the estimated mean of the grouping to be closer to those of the other groupings then makes sense: although each grouping can differ, there will be some similarities between the groupings. The relative adjustment depends not only on the difference between the sample mean from the overall mean, but also on the sample size ($n_j$) of each grouping level. The smaller the sample size, the more the estimate will be adjusted towards the overall mean, because there is less information in smaller samples to precisely estimate a parameter. Hence, because estimates are more noisy, the true mean can be expected to be further away from the sample mean.
 
 Because the groupings are not completely dissimilar, when estimating the mean for one grouping, we can partly rely on the data from other groupings. This is also called __partial pooling__. It can be contrasted with __complete pooling__, where all the data is treated as if from one single group (i.e. as in the model of @eq-simple-glm-ch09). Complete pooling is inappropriate here, because when there are effective groupings in the data, this will violate the _iid_ assumption which the complete pooling model relies on. The opposite of complete pooling is __no pooling__. This means that you would estimate a model for each grouping separately. If the sample sizes of the groupings are sufficiently large to allow for reliable parameter estimation, this approach is not unreasonable and would not violate the _iid_ assumption. However, compared to partial pooling, there are several disadvantages, most notably that there is no easy way to combine the results of the separate analyses to obtain inferences over the whole set of groupings. 
 
@@ -245,10 +245,10 @@ modg <- mixed(everest_meters ~ anchor + (anchor||referrer), data=dat, check_cont
 The estimated model (obtained with REML) can be stated as
 $$\begin{aligned}
 Y_{i,j} &= \beta_0 + \gamma_{0,j} + (\beta_1 + \gamma_{1,j}) \times X_{1,i,j} + \epsilon_{i,j} \\
-&= `r format(fixef(modg$full_model)[1],digits=3, nsmall=2)` + \gamma_{0,j} + (`r format(fixef(modg$full_model)[2],digits=3, nsmall=2)` + \gamma_{1,j}) \times X_{1,i,j} + \epsilon_{i,j} \\
-\gamma_{0,j} &\sim \mathbf{Normal}(0,`r format(attr(VarCorr(modg$full_model)$referrer,"stddev"), digits=3, nsmall=2)`) \\
-\gamma_{1,j} &\sim \mathbf{Normal}(0,`r format(attr(VarCorr(modg$full_model)$referrer.1,"stddev"), digits=3, nsmall=2)`) \\
-\epsilon_{i,j} &\sim \mathbf{Normal}(0,`r format(attr(VarCorr(modg$full_model),"sc"), digits=3, nsmall=2)`)
+&= `r format(lme4::fixef(modg$full_model)[1],digits=3, nsmall=2)` + \gamma_{0,j} + (`r format(lme4::fixef(modg$full_model)[2],digits=3, nsmall=2)` + \gamma_{1,j}) \times X_{1,i,j} + \epsilon_{i,j} \\
+\gamma_{0,j} &\sim \mathbf{Normal}(0,`r format(attr(lme4::VarCorr(modg$full_model)$referrer,"stddev"), digits=3, nsmall=2)`) \\
+\gamma_{1,j} &\sim \mathbf{Normal}(0,`r format(attr(lme4::VarCorr(modg$full_model)$referrer.1,"stddev"), digits=3, nsmall=2)`) \\
+\epsilon_{i,j} &\sim \mathbf{Normal}(0,`r format(attr(lme4::VarCorr(modg$full_model),"sc"), digits=3, nsmall=2)`)
 \end{aligned}$$
 In terms of inference, we are mainly interested in the fixed effect of anchor. A test of the hypothesis that the slope of anchor is $\beta_1 = 0$, again using the Kenward-Roger approximation for the degrees of freedom, gives us $F(`r modg$anova_table[2,1]`, `r modg$anova_table[2,2]`) = `r modg$anova_table[2,3]`$, $p `r pvalue(modg$anova_table[2,4], limit=TRUE)`$. Hence, we reject the null hypothesis that the true effect of the anchor equals 0. There clearly is a difference between the low and high anchor condition, such that the judgements in the former are lower on average than in the latter conditions.
 
@@ -308,13 +308,13 @@ aov_rg <- anova(modr, modg)
 The estimated model can be written as
 $$\begin{aligned}
 Y_{i,j} &= \beta_0 + \gamma_{0,j} + (\beta_1 + \gamma_{1,j}) \times X_{1,i,j} + \epsilon_{i,j} \\
-&= `r format(fixef(modg$full_model)[1],digits=3, nsmall=2)` + \gamma_{0,j} + (`r format(fixef(modg$full_model)[2],digits=3, nsmall=2)` + \gamma_{1,j}) \times X_{1,i,j} + \epsilon_{i,j} \\
+&= `r format(lme4::fixef(modg$full_model)[1],digits=3, nsmall=2)` + \gamma_{0,j} + (`r format(lme4::fixef(modg$full_model)[2],digits=3, nsmall=2)` + \gamma_{1,j}) \times X_{1,i,j} + \epsilon_{i,j} \\
 \left( \begin{matrix} \gamma_{0,j} \\ \gamma_{1,j} \end{matrix} \right)
 &\sim \mathbf{Normal}\left( \left[ \begin{matrix} 0 \\ 0 \end{matrix} \right] , \left[ \begin{matrix} \sigma^2_{\gamma_0}&\rho_{\gamma_0,\gamma_1}\sigma_{\gamma_0}\sigma_{\gamma_1} \\ \rho_{\gamma_0,\gamma_1}\sigma_{\gamma_0}\sigma_{\gamma_1}&\sigma^2_{\gamma_1} \end{matrix} \right] \right) \\
-& \sim \mathbf{Normal}\left( \left[ \begin{matrix} 0 \\ 0 \end{matrix} \right] , \left[ \begin{matrix}  (`r attr(VarCorr(modg$full_model)$referrer,"stddev")[1]`)^2 & `r attr(VarCorr(modg$full_model)$referrer,"correlation")[2,1]` \times `r attr(VarCorr(modg$full_model)$referrer,"stddev")[1]` \times `r attr(VarCorr(modg$full_model)$referrer,"stddev")[2]` \\ `r attr(VarCorr(modg$full_model)$referrer,"correlation")[2,1]` \times `r attr(VarCorr(modg$full_model)$referrer,"stddev")[1]` \times `r attr(VarCorr(modg$full_model)$referrer,"stddev")[2]` & (`r attr(VarCorr(modg$full_model)$referrer,"stddev")[2]`)^2 \end{matrix} \right] \right) \\
-\epsilon_{i,j} &\sim \mathbf{Normal}(0,`r format(attr(VarCorr(modg$full_model),"sc"), digits=3, nsmall=2)`)
+& \sim \mathbf{Normal}\left( \left[ \begin{matrix} 0 \\ 0 \end{matrix} \right] , \left[ \begin{matrix}  (`r attr(lme4::VarCorr(modg$full_model)$referrer,"stddev")[1]`)^2 & `r attr(lme4::VarCorr(modg$full_model)$referrer,"correlation")[2,1]` \times `r attr(lme4::VarCorr(modg$full_model)$referrer,"stddev")[1]` \times `r attr(lme4::VarCorr(modg$full_model)$referrer,"stddev")[2]` \\ `r attr(lme4::VarCorr(modg$full_model)$referrer,"correlation")[2,1]` \times `r attr(lme4::VarCorr(modg$full_model)$referrer,"stddev")[1]` \times `r attr(lme4::VarCorr(modg$full_model)$referrer,"stddev")[2]` & (`r attr(lme4::VarCorr(modg$full_model)$referrer,"stddev")[2]`)^2 \end{matrix} \right] \right) \\
+\epsilon_{i,j} &\sim \mathbf{Normal}(0,`r format(attr(lme4::VarCorr(modg$full_model),"sc"), digits=3, nsmall=2)`)
 \end{aligned}$$
-This shows a negative correlation between the random intercepts and the random slopes: $\hat{\rho}_{\gamma_0,\gamma_1} = `r round(attr(VarCorr(modg$full_model)$referrer,"correlation")[2,1],3)`.$ This can be interpreted as indicating that the higher the average judgements in a grouping (the intercept), the smaller the difference is between the low and high anchor conditions within that grouping (the slope). 
+This shows a negative correlation between the random intercepts and the random slopes: $\hat{\rho}_{\gamma_0,\gamma_1} = `r round(attr(lme4::VarCorr(modg$full_model)$referrer,"correlation")[2,1],3)`.$ This can be interpreted as indicating that the higher the average judgements in a grouping (the intercept), the smaller the difference is between the low and high anchor conditions within that grouping (the slope). 
 
 To assess whether there is sufficient evidence to include this correlation between the random intercepts and slopes, we can perform a model comparison, comparing the MODEL G just estimated, to a MODEL R where we fix the correlation to 0. As we are testing for random effects, we will use the likelihood-ratio test. The result of this test is $\chi^2(1) = `r round(aov_rg$Chisq[2],3)`$, $p `r apa_pvalue(aov_rg$"Pr(>Chisq)"[2])`$. Hence, we would reject the null-hypothesis that in the Data Generating Process, the correlation between the random effects is 0. 
 
@@ -427,7 +427,7 @@ The estimated covariance matrix for the random Person effects is provided in @tb
 ```{r}
 #| label: tbl-random-P-effects-covariance-speeddating
 #| tbl-cap: "Variance-covariance matrix for the Person random effects for the linear mixed-effects model predicting liking from attractiveness, intelligence, and their interaction."
-tab <- VarCorr(modai$full_model)$iid
+tab <- lme4::VarCorr(modai$full_model)$iid
 rownames(tab) <- c("$\\gamma_{P,0}$", "$\\gamma_{P,1}$", "$\\gamma_{P,2}$","$\\gamma_{P,3}$")
 tab %>%
   knitr::kable(col.names = rownames(tab), digits=3)
@@ -438,7 +438,7 @@ The estimated covariance matrix for the random Item effects is provided in @tbl-
 ```{r}
 #| label: tbl-random-I-effects-covariance-speeddating
 #| tbl-cap: "Variance-covariance matrix for the Item random effects for the linear mixed-effects model predicting liking from attractiveness, intelligence, and their interaction."
-tab <- VarCorr(modai$full_model)$pid
+tab <- lme4::VarCorr(modai$full_model)$pid
 rownames(tab) <- c("$\\gamma_{I,0}$", "$\\gamma_{I,1}$", "$\\gamma_{I,2}$","$\\gamma_{PI,3}$")
 tab %>%
   knitr::kable(col.names = rownames(tab), digits=3)
@@ -450,7 +450,7 @@ As you can see, the item variability is generally estimated to be higher than th
 The estimated model can be written as
 $$\begin{aligned}
 Y_{i,j} &= \beta_0 + \gamma_{0,i} + \gamma_{0,j} + (\beta_1 + \gamma_{1,i} + \gamma_{1,j}) \times X_{1,i,j} + \epsilon_{i,j} \\
-&= `r format(fixef(modg$full_model)[1],digits=3, nsmall=2)` + \gamma_{0,i} + \gamma_{0,j} + (`r format(fixef(modg$full_model)[2],digits=3, nsmall=2)` + \gamma_{1,i} + \gamma_{1,j}) \times X_{1,i,j} + \epsilon_{i,j} \\
+&= `r format(lme4::fixef(modg$full_model)[1],digits=3, nsmall=2)` + \gamma_{0,i} + \gamma_{0,j} + (`r format(lme4::fixef(modg$full_model)[2],digits=3, nsmall=2)` + \gamma_{1,i} + \gamma_{1,j}) \times X_{1,i,j} + \epsilon_{i,j} \\
 \left( \begin{matrix} \gamma_{0,i} \\ \gamma_{1,i} \\ \gamma_{0,j} \\ \gamma_{1,j} \end{matrix} \right)
 &\sim \sim \mathbf{Normal}\left( \left[ \begin{matrix} 0 \\ 0 \\ 0 \\ 0 \end{matrix} \right] , \left[ \begin{matrix} 
 \sigma^2_{\gamma_{0,r}} & \rho_{\gamma_{0,r},\gamma_{1,r}} \sigma_{\gamma_{0,r}}\sigma_{\gamma_{1,r}} & 0 & 0 \\
@@ -459,13 +459,13 @@ Y_{i,j} &= \beta_0 + \gamma_{0,i} + \gamma_{0,j} + (\beta_1 + \gamma_{1,i} + \ga
 0 & 0 & \rho_{\gamma_{0,o},\gamma_{1,o}} \sigma_{\gamma_{0,o}} \sigma_{\gamma_{1,o}} & \sigma^2_{\gamma_{1,o}}
 \end{matrix} \right] \right) \\
 & \sim \mathbf{Normal}\left( \left[ \begin{matrix} 0 \\ 0 \\ 0 \\ 0 \end{matrix} \right] , \left[ \begin{matrix} 
-(`r attr(VarCorr(moda$full_model)$iid,"stddev")[1]`)^2 &`r attr(VarCorr(moda$full_model)$iid,"correlation")[2,1]` \times `r attr(VarCorr(moda$full_model)$iid,"stddev")[1]` \times `r attr(VarCorr(moda$full_model)$iid,"stddev")[2]` & 0 & 0 \\
-`r attr(VarCorr(moda$full_model)$iid,"correlation")[2,1]` \times `r attr(VarCorr(moda$full_model)$iid,"stddev")[1]` \times `r attr(VarCorr(moda$full_model)$iid,"stddev")[2]` & (`r attr(VarCorr(moda$full_model)$iid,"stddev")[1]`)^2 & 0 & 0 \\
-0 & 0 & (`r attr(VarCorr(moda$full_model)$pid,"stddev")[1]`)^2 & \rho_{\gamma_{0,o},\gamma_{1,o}} \sigma_{\gamma_{0,o}} \sigma_{\gamma_{1,o}} \\ 
-0 & 0 & `r attr(VarCorr(moda$full_model)$pid,"correlation")[2,1]` \times `r attr(VarCorr(moda$full_model)$pid,"stddev")[1]` \times `r attr(VarCorr(moda$full_model)$pid,"stddev")[2]` & (`r attr(VarCorr(moda$full_model)$pid,"stddev")[1]`)^2
+(`r attr(lme4::VarCorr(moda$full_model)$iid,"stddev")[1]`)^2 &`r attr(lme4::VarCorr(moda$full_model)$iid,"correlation")[2,1]` \times `r attr(lme4::VarCorr(moda$full_model)$iid,"stddev")[1]` \times `r attr(lme4::VarCorr(moda$full_model)$iid,"stddev")[2]` & 0 & 0 \\
+`r attr(lme4::VarCorr(moda$full_model)$iid,"correlation")[2,1]` \times `r attr(lme4::VarCorr(moda$full_model)$iid,"stddev")[1]` \times `r attr(lme4::VarCorr(moda$full_model)$iid,"stddev")[2]` & (`r attr(lme4::VarCorr(moda$full_model)$iid,"stddev")[1]`)^2 & 0 & 0 \\
+0 & 0 & (`r attr(lme4::VarCorr(moda$full_model)$pid,"stddev")[1]`)^2 & \rho_{\gamma_{0,o},\gamma_{1,o}} \sigma_{\gamma_{0,o}} \sigma_{\gamma_{1,o}} \\ 
+0 & 0 & `r attr(lme4::VarCorr(moda$full_model)$pid,"correlation")[2,1]` \times `r attr(lme4::VarCorr(moda$full_model)$pid,"stddev")[1]` \times `r attr(lme4::VarCorr(moda$full_model)$pid,"stddev")[2]` & (`r attr(lme4::VarCorr(moda$full_model)$pid,"stddev")[1]`)^2
 \end{matrix} \right] \right)
 \\
-\epsilon_{i,j} &\sim \mathbf{Normal}(0,`r format(attr(VarCorr(moda$full_model),"sc"), digits=3, nsmall=2)`)
+\epsilon_{i,j} &\sim \mathbf{Normal}(0,`r format(attr(lme4::VarCorr(moda$full_model),"sc"), digits=3, nsmall=2)`)
 \end{aligned}$$
 -->
 

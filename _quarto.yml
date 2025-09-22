@@ -78,7 +78,7 @@ execute:
   message: false
   warning: false
   error: false
-  cache: true
+  cache: false
   code-overflow: wrap
   tidy: true
   

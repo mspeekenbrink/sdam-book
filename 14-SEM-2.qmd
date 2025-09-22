@@ -3,8 +3,14 @@
 ```{r}
 #| label: setup
 #| echo: false
+#| cache: false
 set.seed(20221010)
 source("run_before.R")
+library(lavaan)
+library(semPlot)
+library(tidyverse)
+library(sdamr)
+library(psychTools)
 ```
 
 The previous chapter concerned a multivariate model to describe relations between *observed* variables. In this Chapter, we will extend this idea by adding **latent variables**. Latent variables are variables which can not be directly observed. Instead, they can be measured or inferred via their relation with observed variables. A classic example in psychology is intelligence. Another example are personality traits such as extraversion. People's tendency to be outwards facing is not directly observable. However, there are indicators (e.g., someone actively seeking out busy social situations, liking to be the centre of attention, etc.) which together may allow one to determine a person's level of extraversion. 
@@ -421,16 +427,17 @@ semPlot::semPaths(BFI2_cfa_hier, whatLabels = "est", layout="tree", width=16, he
 
 tmp <- semoutput::sem_modelcomp(BFI2_cfa_hier, BFI2_cfa_hier2)
 
-tmp[[1]][[2]][[3]] |> 
-  gt::cols_hide(stars)
+#tmp[[1]][[2]][[3]] |> 
+#  gt::cols_hide(stars)
 
-tmp[[1]][[2]][[4]] |> 
-  gt::cols_hide(stars)
+#tmp[[1]][[2]][[4]] |> 
+#  gt::cols_hide(stars)
 
-tmp[[1]][[2]][[1]]
+#tmp[[1]][[2]][[1]]
 
-tmp[[1]][[2]][[2]]
+#tmp[[1]][[2]][[2]]
 
+tmp
 
 # cat(": Fit measures for hierarchical factor models for the BFI-2 with an additional Acquiescence factor. The Independent model assumes all factors are independent. The Dependent model allows dependence between the 'big five' factors, but assumes these are independent from the Acquiescence factor. {tbl-BFI2-cfa-hier-comparison}\n\n")
 

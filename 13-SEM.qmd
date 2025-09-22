@@ -523,7 +523,7 @@ With these technical details behind us, we can finally assess the fit of the thr
 options(knitr.kable.NA = '')
 myFitTab <- function(mod) {
   fm <- fitmeasures(mod)
-  tab <- data.frame(c("$\hat{\chi}^2$","baseline $\hat{\chi}^2$", "CFI", "SRMR", "RMSEA", "AIC", "BIC"),
+  tab <- data.frame(c("$\\hat{\\chi}^2$","baseline $\\hat{\\chi}^2$", "CFI", "SRMR", "RMSEA", "AIC", "BIC"),
         fm[c("chisq", "baseline.chisq", "cfi", "srmr", "rmsea", "aic", "bic")],
         fm[c("df","baseline.df", NA, NA, NA, NA, NA)],
         fm[c("pvalue","baseline.pvalue", NA, NA, NA, NA, NA)],

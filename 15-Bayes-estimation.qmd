@@ -272,7 +272,7 @@ The model was estimated by running four Hamiltonian MCMC chains in parallel, eac
 
 ```{r}
 #| label: brms-multiple-regression-model
-#| cache: true
+#| cache: false
 #| include: false
 #| results: hide
 library(sdamr)
@@ -335,7 +335,7 @@ tmp %>%
 
 ```{r}
 #| label: brms-multiple-regression-model-2
-#| cache: true
+#| cache: false
 #| include: false
 #| results: hide
 mod2 <- brms::brm(formula = percent_Trump_votes ~ hate_groups_per_million + percent_bachelors_degree_or_higher,data=dat, seed=101, sample_prior = TRUE, prior = c(prior(normal(0, 1), class = Intercept),
